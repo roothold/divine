@@ -99,7 +99,34 @@
       overflow: hidden;
       transition: width 0.22s cubic-bezier(0.4,0,0.2,1), opacity 0.18s ease;
     }
-    .sidebar.collapsed { width:0; opacity:0; pointer-events:none; }
+    .sidebar.collapsed { width:56px; opacity:1; pointer-events:auto; }
+
+    /* Icon-only collapsed state — desktop */
+    .sidebar.collapsed .nav-item { justify-content:center; padding:10px 0; position:relative; }
+    .sidebar.collapsed .nav-item span,
+    .sidebar.collapsed .nav-item-label { display:none; }
+    .sidebar.collapsed .nav-item svg { margin:0; }
+    .sidebar.collapsed .nav-new-perspective { margin-bottom:6px; border-radius:var(--r-sm); width:calc(100% - 12px); margin-left:6px; }
+    .sidebar.collapsed .recents-header,
+    .sidebar.collapsed .recents-wrap,
+    .sidebar.collapsed .sidebar-divider,
+    .sidebar.collapsed .conn-bar,
+    .sidebar.collapsed .profile-text,
+    .sidebar.collapsed .profile-dots { display:none; }
+    .sidebar.collapsed .profile-btn { justify-content:center; padding:12px 0; }
+    .sidebar.collapsed .profile-menu-popup { left:56px; right:auto; bottom:8px; min-width:180px; }
+    .sidebar.collapsed .sidebar-nav { padding:12px 6px 8px; }
+
+    /* Tooltip on hover for collapsed icons */
+    .sidebar.collapsed .nav-item::after {
+      content: attr(data-tip);
+      position:absolute; left:calc(100% + 10px); top:50%; transform:translateY(-50%);
+      background:var(--text-0); color:#fff; font-size:12px; font-weight:500;
+      padding:4px 10px; border-radius:6px; white-space:nowrap;
+      opacity:0; pointer-events:none; transition:opacity 0.12s;
+      z-index:300;
+    }
+    .sidebar.collapsed .nav-item:hover::after { opacity:1; }
 
     @media (max-width:680px) {
       .sidebar {
@@ -474,14 +501,14 @@
   <nav class="sidebar" id="sidebar">
     <div class="sidebar-top">
       <div class="sidebar-nav">
-        <button class="nav-item nav-new-perspective" onclick="newPerspective()">
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="2" x2="8" y2="14"/><line x1="2" y1="8" x2="14" y2="8"/></svg>New Perspective
+        <button class="nav-item nav-new-perspective" data-tip="New Perspective" onclick="newPerspective()">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="2" x2="8" y2="14"/><line x1="2" y1="8" x2="14" y2="8"/></svg><span class="nav-item-label">New Perspective</span>
         </button>
-        <button class="nav-item" id="nav-search" onclick="showView('search')">
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5l3 3"/></svg>Search
+        <button class="nav-item" id="nav-search" data-tip="Search" onclick="showView('search')">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5l3 3"/></svg><span class="nav-item-label">Search</span>
         </button>
-        <button class="nav-item" id="nav-projects" onclick="showView('projects')">
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75"><rect x="2" y="2" width="5" height="5" rx="1.5"/><rect x="9" y="2" width="5" height="5" rx="1.5"/><rect x="2" y="9" width="5" height="5" rx="1.5"/><rect x="9" y="9" width="5" height="5" rx="1.5"/></svg>Projects
+        <button class="nav-item" id="nav-projects" data-tip="Projects" onclick="showView('projects')">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75"><rect x="2" y="2" width="5" height="5" rx="1.5"/><rect x="9" y="2" width="5" height="5" rx="1.5"/><rect x="2" y="9" width="5" height="5" rx="1.5"/><rect x="9" y="9" width="5" height="5" rx="1.5"/></svg><span class="nav-item-label">Projects</span>
         </button>
       </div>
       <div class="sidebar-divider"></div>
