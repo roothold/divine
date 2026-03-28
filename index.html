@@ -129,6 +129,11 @@
     .nav-item:hover { background:var(--surface-2); color:var(--text-1); }
     .nav-item.active { background:var(--accent-lt); color:var(--accent); }
     .nav-item svg { flex-shrink:0; }
+    .nav-new-perspective {
+      background:var(--accent); color:#fff !important; font-weight:600;
+      margin-bottom:6px;
+    }
+    .nav-new-perspective:hover { background:#2e2683; color:#fff; }
 
     .sidebar-divider { height:1px; background:var(--border); margin:8px 10px; flex-shrink:0; }
 
@@ -469,6 +474,9 @@
   <nav class="sidebar" id="sidebar">
     <div class="sidebar-top">
       <div class="sidebar-nav">
+        <button class="nav-item nav-new-perspective" onclick="newPerspective()">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="2" x2="8" y2="14"/><line x1="2" y1="8" x2="14" y2="8"/></svg>New Perspective
+        </button>
         <button class="nav-item" id="nav-search" onclick="showView('search')">
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5l3 3"/></svg>Search
         </button>
@@ -1033,6 +1041,14 @@ function goBack(id) { show(id); }
 function goHome() {
   document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
   show('screen-0');
+}
+
+function newPerspective() {
+  decisionText = ''; sessionQs = []; sessionAnswers = []; currentSession = null;
+  document.getElementById('decision-input').value = '';
+  document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+  show('screen-0');
+  setTimeout(() => document.getElementById('decision-input').focus(), 120);
 }
 
 function startOver() {
