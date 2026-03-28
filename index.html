@@ -1466,7 +1466,7 @@ async function startSession() {
       </div>`).join('');
   } catch(e) {
     document.getElementById('q-list').innerHTML =
-      `<p style="color:var(--text-2);font-size:14px;padding:20px 0">⚠️ Add your Anthropic API key in Settings</p>`;
+      `<p style="color:var(--text-2);font-size:14px;padding:20px 0">⚠️ Could not connect to AI — please try again shortly</p>`;
     document.getElementById('context-next').disabled = false;
   }
 }
@@ -1503,7 +1503,7 @@ async function goToMatch() {
     document.getElementById('match-footer').style.display = 'flex';
   } catch {
     document.getElementById('match-content').innerHTML =
-      `<p style="color:var(--text-2);font-size:14px">⚠️ Add your Anthropic API key in Settings</p>`;
+      `<p style="color:var(--text-2);font-size:14px">⚠️ Could not connect to AI — please try again shortly</p>`;
     document.getElementById('match-footer').style.display = 'flex';
   }
 }
@@ -1540,7 +1540,7 @@ async function goToReframe() {
     document.getElementById('reframe-footer').style.display = 'flex';
   } catch {
     document.getElementById('reframe-content').innerHTML =
-      `<p style="color:var(--text-2);font-size:14px">⚠️ Add your Anthropic API key in Settings</p>`;
+      `<p style="color:var(--text-2);font-size:14px">⚠️ Could not connect to AI — please try again shortly</p>`;
     document.getElementById('reframe-footer').style.display = 'flex';
   }
 }
