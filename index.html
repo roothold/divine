@@ -497,10 +497,7 @@
 
       <!-- Profile popup -->
       <div class="profile-menu-popup" id="profile-menu">
-        <button class="profile-menu-item" onclick="showView('settings')">
-          <svg width="15" height="15" viewBox="0 0 15 15" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="7.5" cy="7.5" r="2"/><path d="M7.5 1v1.5M7.5 12.5V14M1 7.5h1.5M12.5 7.5H14M2.9 2.9l1.1 1.1M10.9 10.9l1.1 1.1M2.9 12.1l1.1-1.1M10.9 4.1l1.1-1.1"/></svg>
-          Settings
-        </button>
+        <!-- Settings entry point hidden pending redesign -->
         <button class="profile-menu-item" onclick="showView('downloads')">
           <svg width="15" height="15" viewBox="0 0 15 15" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M7.5 1v9M4 7l3.5 3.5L11 7"/><rect x="1" y="11" width="13" height="3" rx="1"/></svg>
           Downloads
@@ -1106,7 +1103,7 @@ async function checkConnection(quiet=false) {
     throw new Error('not ok');
   } catch {
     dot.className = 'conn-dot disconnected';
-    text.innerHTML = `Offline · <a onclick="showView('settings')">Setup</a>`;
+    text.innerHTML = `Offline`;
     return false;
   }
 }
@@ -1469,7 +1466,7 @@ async function startSession() {
       </div>`).join('');
   } catch(e) {
     document.getElementById('q-list').innerHTML =
-      `<p style="color:var(--text-2);font-size:14px;padding:20px 0">⚠️ Add your Anthropic API key in <a href="#" onclick="showView('settings');return false;" style="color:var(--accent)">Settings →</a></p>`;
+      `<p style="color:var(--text-2);font-size:14px;padding:20px 0">⚠️ Add your Anthropic API key in Settings</p>`;
     document.getElementById('context-next').disabled = false;
   }
 }
@@ -1506,7 +1503,7 @@ async function goToMatch() {
     document.getElementById('match-footer').style.display = 'flex';
   } catch {
     document.getElementById('match-content').innerHTML =
-      `<p style="color:var(--text-2);font-size:14px">⚠️ Add your Anthropic API key in <a href="#" onclick="showView('settings');return false;" style="color:var(--accent)">Settings →</a></p>`;
+      `<p style="color:var(--text-2);font-size:14px">⚠️ Add your Anthropic API key in Settings</p>`;
     document.getElementById('match-footer').style.display = 'flex';
   }
 }
@@ -1543,7 +1540,7 @@ async function goToReframe() {
     document.getElementById('reframe-footer').style.display = 'flex';
   } catch {
     document.getElementById('reframe-content').innerHTML =
-      `<p style="color:var(--text-2);font-size:14px">⚠️ Add your Anthropic API key in <a href="#" onclick="showView('settings');return false;" style="color:var(--accent)">Settings →</a></p>`;
+      `<p style="color:var(--text-2);font-size:14px">⚠️ Add your Anthropic API key in Settings</p>`;
     document.getElementById('reframe-footer').style.display = 'flex';
   }
 }
