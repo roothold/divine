@@ -1,0 +1,14 @@
+{
+  "name": "divine-intelligence-api",
+  "version": "1.0.0",
+  "description": "API proxy for Divine Intelligence — zero dependencies, Node 18+ only.",
+  "type": "module",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev":   "node --watch server.js"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

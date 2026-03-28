@@ -1,0 +1,1584 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Divine Intelligence</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='white'/%3E%3Cdefs%3E%3CradialGradient id='g' cx='50%25' cy='50%25' r='70%25'%3E%3Cstop offset='0%25' stop-color='%238B8BF5'/%3E%3Cstop offset='100%25' stop-color='%23C4B5FD'/%3E%3C/radialGradient%3E%3C/defs%3E%3Crect width='100' height='100' rx='20' fill='url(%23g)' opacity='0.18'/%3E%3Ctext x='12' y='82' font-family='Georgia,serif' font-size='78' font-weight='700' fill='%235B5BD6'%3ED%3C/text%3E%3Ccircle cx='82' cy='76' r='11' fill='%23F06070'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg:        #F7F5F1;
+      --surface:   #FFFFFF;
+      --surface-2: #F2EEE7;
+      --surface-3: #E8E3DA;
+      --text-0:   #0F0E0C;
+      --text-1:   #2C2820;
+      --text-2:   #6B6357;
+      --text-3:   #A39B8E;
+      --accent:     #3B31A4;
+      --accent-mid: #4E43C4;
+      --accent-lt:  #EDEAFF;
+      --accent-bdr: #C5BFFF;
+      --border:    rgba(0,0,0,0.07);
+      --border-md: rgba(0,0,0,0.13);
+      --border-hi: rgba(0,0,0,0.22);
+      --r: 14px; --r-sm: 8px; --r-pill: 100px;
+      --sh-sm: 0 1px 3px rgba(0,0,0,0.07),0 1px 2px rgba(0,0,0,0.04);
+      --sh-md: 0 4px 16px rgba(0,0,0,0.09),0 2px 6px rgba(0,0,0,0.05);
+      --sh-lg: 0 16px 48px rgba(0,0,0,0.13),0 4px 12px rgba(0,0,0,0.07);
+      --header-h: 60px; --sidebar-w: 240px; --col-w: 672px;
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family:'Inter',system-ui,sans-serif; background:var(--bg); color:var(--text-1); font-size:15px; line-height:1.6; min-height:100vh; }
+
+    /* ═══ HEADER ═══ */
+    .header {
+      position: sticky; top: 0; z-index: 100;
+      height: var(--header-h);
+      background: rgba(247,245,241,0.92);
+      backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; padding: 0 16px; gap: 8px;
+    }
+    .hamburger {
+      width: 36px; height: 36px; border-radius: 8px;
+      border: none; background: transparent; cursor: pointer;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: 4.5px; flex-shrink: 0; transition: background 0.15s;
+    }
+    .hamburger:hover { background: var(--surface-2); }
+    .hamburger span { display:block; width:18px; height:1.5px; background:var(--text-2); border-radius:2px; }
+    .logo { display:flex; align-items:center; gap:8px; text-decoration:none; flex:1; }
+    .logo-mark { width:30px; height:30px; background:var(--accent); border-radius:7px; display:flex; align-items:center; justify-content:center; color:#fff; font-family:'Cormorant Garamond',serif; font-size:17px; font-weight:600; flex-shrink:0; }
+    .logo-text { font-family:'Cormorant Garamond',serif; font-size:18px; font-weight:600; color:var(--text-0); letter-spacing:-0.2px; }
+    @media (max-width:380px) { .logo-text { display:none; } }
+    /* Lens switcher — clearly about perspective, not profile */
+    .lens-switcher {
+      display: flex; align-items: center; gap: 10px;
+      background: var(--surface);
+      border: 1px solid var(--border-md);
+      border-radius: var(--r-pill);
+      padding: 6px 14px 6px 10px;
+      cursor: pointer;
+      transition: box-shadow 0.15s, border-color 0.15s, background 0.15s;
+      box-shadow: var(--sh-sm);
+      flex-shrink: 0;
+    }
+    .lens-switcher:hover { border-color: var(--accent-bdr); box-shadow: var(--sh-md); background: var(--accent-lt); }
+
+    .lens-swap-icon {
+      display: flex; align-items: center; justify-content: center;
+      color: var(--accent); flex-shrink: 0;
+    }
+
+    .lens-info { display: flex; flex-direction: column; line-height: 1.2; }
+    .lens-eyebrow { font-size: 9px; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase; color: var(--accent); }
+    .lens-name { font-size: 13px; font-weight: 600; color: var(--text-0); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 140px; }
+
+    .lens-color-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      flex-shrink: 0; transition: background 0.2s;
+    }
+
+    @media (max-width: 520px) { .lens-info { display: none; } }
+    @media (max-width: 380px) { .lens-switcher { padding: 7px 10px; } }
+
+    /* ═══ APP BODY ═══ */
+    .app-body { display:flex; min-height:calc(100vh - var(--header-h)); }
+
+    /* ═══ SIDEBAR ═══ */
+    .sidebar {
+      width: var(--sidebar-w); flex-shrink: 0;
+      background: var(--surface); border-right: 1px solid var(--border);
+      display: flex; flex-direction: column;
+      position: sticky; top: var(--header-h);
+      height: calc(100vh - var(--header-h));
+      overflow: hidden;
+      transition: width 0.22s cubic-bezier(0.4,0,0.2,1), opacity 0.18s ease;
+    }
+    .sidebar.collapsed { width:0; opacity:0; pointer-events:none; }
+
+    @media (max-width:680px) {
+      .sidebar {
+        position:fixed; top:var(--header-h); left:0; bottom:0; z-index:90;
+        width:var(--sidebar-w); height:auto;
+        transform:translateX(0); opacity:1;
+        transition:transform 0.22s cubic-bezier(0.4,0,0.2,1);
+        box-shadow:var(--sh-lg);
+      }
+      .sidebar.collapsed { transform:translateX(-100%); width:var(--sidebar-w); opacity:1; pointer-events:none; }
+    }
+
+    .sidebar-backdrop { display:none; position:fixed; inset:0; top:var(--header-h); background:rgba(15,14,12,0.28); z-index:89; backdrop-filter:blur(2px); }
+    .sidebar-backdrop.visible { display:block; }
+
+    /* Sidebar internal layout */
+    .sidebar-top { display:flex; flex-direction:column; flex:1; overflow:hidden; min-height:0; }
+    .sidebar-nav { padding:12px 10px 8px; display:flex; flex-direction:column; gap:2px; flex-shrink:0; }
+
+    .nav-item {
+      display:flex; align-items:center; gap:10px; padding:9px 12px;
+      border-radius:var(--r-sm); border:none; background:transparent;
+      cursor:pointer; color:var(--text-2); font-family:'Inter',sans-serif;
+      font-size:13.5px; font-weight:500; width:100%; text-align:left;
+      transition:background 0.13s,color 0.13s; white-space:nowrap;
+    }
+    .nav-item:hover { background:var(--surface-2); color:var(--text-1); }
+    .nav-item.active { background:var(--accent-lt); color:var(--accent); }
+    .nav-item svg { flex-shrink:0; }
+
+    .sidebar-divider { height:1px; background:var(--border); margin:8px 10px; flex-shrink:0; }
+
+    /* Recents scrollable area */
+    .recents-wrap { flex:1; overflow-y:auto; overflow-x:hidden; scrollbar-width:thin; scrollbar-color:var(--border-md) transparent; }
+    .recents-header { display:flex; align-items:center; justify-content:space-between; padding:6px 12px 4px 22px; flex-shrink:0; }
+    .recents-label { font-size:10px; font-weight:600; letter-spacing:0.08em; text-transform:uppercase; color:var(--text-3); }
+    .recents-list { padding:2px 10px 8px; display:flex; flex-direction:column; gap:2px; }
+    .recents-empty { padding:12px 22px; font-size:12.5px; color:var(--text-3); line-height:1.5; }
+
+    .recent-item { display:flex; align-items:flex-start; gap:9px; padding:9px 12px; border-radius:var(--r-sm); cursor:pointer; transition:background 0.13s; border:none; background:transparent; text-align:left; width:100%; }
+    .recent-item:hover { background:var(--surface-2); }
+    .recent-item.active-recent { background:var(--accent-lt); }
+    .recent-avatar { width:22px; height:22px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:8px; font-weight:700; color:#fff; flex-shrink:0; margin-top:1px; }
+    .recent-info { flex:1; min-width:0; }
+    .recent-decision { font-size:12.5px; color:var(--text-1); font-weight:500; line-height:1.35; overflow:hidden; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; margin-bottom:3px; }
+    .recent-meta { font-size:10.5px; color:var(--text-3); display:flex; align-items:center; gap:5px; }
+    .recent-meta-dot { width:2px; height:2px; border-radius:50%; background:var(--text-3); }
+
+    /* ═══ SIDEBAR BOTTOM — Profile ═══ */
+    .sidebar-bottom { flex-shrink:0; border-top:1px solid var(--border); position:relative; }
+
+    /* Connection status bar */
+    .conn-bar { display:flex; align-items:center; gap:8px; padding:8px 14px; }
+    .conn-dot { width:7px; height:7px; border-radius:50%; flex-shrink:0; transition:background 0.3s; }
+    .conn-dot.checking { background:#E5A800; animation:pulse-dot 1.2s ease-in-out infinite; }
+    .conn-dot.connected { background:#22C55E; }
+    .conn-dot.disconnected { background:#EF4444; }
+    @keyframes pulse-dot { 0%,100%{opacity:0.4} 50%{opacity:1} }
+    .conn-text { font-size:11.5px; color:var(--text-3); }
+    .conn-text a { color:var(--accent); text-decoration:none; cursor:pointer; }
+    .conn-text a:hover { text-decoration:underline; }
+
+    /* Profile popup */
+    .profile-menu-popup {
+      position:absolute; bottom:calc(100% + 6px); left:10px; right:10px;
+      background:var(--surface); border:1px solid var(--border-md);
+      border-radius:var(--r); box-shadow:var(--sh-lg); overflow:hidden;
+      display:none; z-index:200;
+      animation:popup-up 0.15s ease;
+    }
+    .profile-menu-popup.open { display:block; }
+    @keyframes popup-up { from{opacity:0;transform:translateY(6px)} to{opacity:1;transform:translateY(0)} }
+
+    .profile-menu-item {
+      display:flex; align-items:center; gap:10px; padding:11px 16px;
+      border:none; background:transparent; width:100%; text-align:left;
+      font-family:'Inter',sans-serif; font-size:13.5px; font-weight:500;
+      color:var(--text-1); cursor:pointer; transition:background 0.13s;
+    }
+    .profile-menu-item:hover { background:var(--surface-2); }
+    .profile-menu-item.danger { color:#D63030; }
+    .profile-menu-item svg { flex-shrink:0; color:var(--text-3); }
+    .profile-menu-item.danger svg { color:#D63030; }
+    .profile-menu-sep { height:1px; background:var(--border); margin:4px 0; }
+
+    /* Profile button */
+    .profile-btn {
+      display:flex; align-items:center; gap:10px; padding:12px 14px;
+      border:none; background:transparent; cursor:pointer; width:100%;
+      text-align:left; transition:background 0.13s;
+    }
+    .profile-btn:hover { background:var(--surface-2); }
+    .profile-avatar-badge { width:32px; height:32px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:700; color:#fff; flex-shrink:0; background:var(--accent); }
+    .profile-text { flex:1; min-width:0; }
+    .profile-name { font-size:13px; font-weight:600; color:var(--text-0); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .profile-email { font-size:11px; color:var(--text-3); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .profile-dots { color:var(--text-3); flex-shrink:0; }
+
+    /* ═══ MAIN ═══ */
+    .main { flex:1; min-width:0; display:flex; flex-direction:column; }
+    .main-inner { max-width:var(--col-w); margin:0 auto; padding:0 20px; width:100%; }
+    .screen { display:none; }
+    .screen.active { display:block; }
+    .screen-inner { padding-top:56px; padding-bottom:100px; }
+
+    .progress-wrap { height:2px; background:var(--surface-3); }
+    .progress-fill { height:100%; background:var(--accent); transition:width 0.5s ease; }
+
+    .screen-label { font-size:11px; font-weight:600; letter-spacing:0.08em; text-transform:uppercase; color:var(--accent); margin-bottom:8px; }
+    .screen-title { font-family:'Cormorant Garamond',serif; font-size:clamp(24px,5vw,34px); font-weight:500; color:var(--text-0); line-height:1.15; letter-spacing:-0.3px; margin-bottom:6px; }
+    .screen-sub { font-size:15px; color:var(--text-2); line-height:1.6; }
+    .screen-header { margin-bottom:32px; }
+    .nav-row { display:flex; align-items:center; justify-content:space-between; margin-bottom:32px; }
+
+    /* Buttons */
+    .btn-primary { display:inline-flex; align-items:center; gap:8px; background:var(--accent); color:#fff; border:none; border-radius:var(--r-pill); padding:11px 22px; font-family:'Inter',sans-serif; font-size:14px; font-weight:500; cursor:pointer; transition:background 0.15s,transform 0.15s,box-shadow 0.15s; white-space:nowrap; }
+    .btn-primary:hover { background:var(--accent-mid); transform:translateY(-1px); box-shadow:var(--sh-md); }
+    .btn-primary:active { transform:translateY(0); }
+    .btn-primary:disabled { opacity:0.4; cursor:not-allowed; transform:none; box-shadow:none; }
+    .btn-back { display:inline-flex; align-items:center; gap:6px; font-size:13px; font-weight:500; color:var(--text-2); background:var(--surface); border:1px solid var(--border-md); border-radius:var(--r-pill); padding:7px 14px; cursor:pointer; transition:all 0.15s; }
+    .btn-back:hover { border-color:var(--border-hi); color:var(--text-1); }
+    .btn-ghost { display:inline-flex; align-items:center; gap:8px; font-size:14px; font-weight:500; color:var(--text-2); background:var(--surface); border:1px solid var(--border-md); border-radius:var(--r-pill); padding:10px 20px; cursor:pointer; transition:all 0.15s; box-shadow:var(--sh-sm); }
+    .btn-ghost:hover { border-color:var(--border-hi); color:var(--text-1); box-shadow:var(--sh-md); }
+    .btn-danger { display:inline-flex; align-items:center; gap:8px; font-size:14px; font-weight:500; color:#D63030; background:#FFF0F0; border:1px solid #FFCDD2; border-radius:var(--r-pill); padding:10px 20px; cursor:pointer; transition:all 0.15s; }
+    .btn-danger:hover { background:#FFE5E5; }
+    .screen-footer { display:flex; justify-content:flex-end; margin-top:32px; }
+
+    /* Dots */
+    .dots { display:flex; gap:6px; justify-content:center; padding:48px 0; }
+    .dots span { width:7px; height:7px; border-radius:50%; background:var(--accent); opacity:0.3; animation:dot-pulse 1.2s ease-in-out infinite; }
+    .dots span:nth-child(2) { animation-delay:0.2s; }
+    .dots span:nth-child(3) { animation-delay:0.4s; }
+    @keyframes dot-pulse { 0%,80%,100%{opacity:0.3;transform:scale(0.85)} 40%{opacity:1;transform:scale(1)} }
+
+    /* ═══ SCREEN 0 HOME ═══ */
+    .thinker-callout { display:flex; align-items:flex-start; gap:14px; background:var(--surface); border:1px solid var(--border); border-radius:var(--r); padding:18px 18px 18px 20px; margin-bottom:36px; box-shadow:var(--sh-sm); }
+    .callout-avatar { width:46px; height:46px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:16px; font-weight:600; color:#fff; flex-shrink:0; margin-top:2px; }
+    .callout-info { flex:1; min-width:0; }
+    .callout-name { font-size:15px; font-weight:600; color:var(--text-0); margin-bottom:2px; }
+    .callout-title { font-size:12px; color:var(--text-3); margin-bottom:8px; }
+    .callout-lens { font-size:13.5px; color:var(--text-2); line-height:1.55; }
+    .callout-change { font-size:12px; font-weight:500; color:var(--accent); background:var(--accent-lt); border:1px solid var(--accent-bdr); border-radius:var(--r-pill); padding:5px 12px; cursor:pointer; white-space:nowrap; flex-shrink:0; align-self:flex-start; transition:opacity 0.15s; }
+    .callout-change:hover { opacity:0.75; }
+    .home-headline { font-family:'Cormorant Garamond',serif; font-size:clamp(32px,7vw,52px); font-weight:500; color:var(--text-0); line-height:1.1; letter-spacing:-0.5px; margin-bottom:14px; }
+    .home-sub { font-size:16px; color:var(--text-2); line-height:1.65; margin-bottom:36px; }
+    .decision-box { background:var(--surface); border:1.5px solid var(--border-md); border-radius:var(--r); box-shadow:var(--sh-md); overflow:hidden; transition:border-color 0.2s; }
+    .decision-box:focus-within { border-color:var(--accent-bdr); }
+    .decision-box textarea { width:100%; min-height:130px; padding:20px 22px 12px; font-family:'Inter',sans-serif; font-size:15px; color:var(--text-0); background:transparent; border:none; outline:none; resize:none; line-height:1.65; }
+    .decision-box textarea::placeholder { color:var(--text-3); }
+    .decision-box-footer { display:flex; align-items:center; justify-content:space-between; padding:10px 14px 14px; border-top:1px solid var(--border); }
+    .decision-hint { font-size:12px; color:var(--text-3); }
+
+    /* ═══ SCREEN 1 CONTEXT ═══ */
+    .decision-echo { background:var(--accent-lt); border-left:3px solid var(--accent); border-radius:0 var(--r-sm) var(--r-sm) 0; padding:12px 16px; font-size:14px; color:var(--text-1); line-height:1.5; margin-bottom:28px; }
+    .q-list { display:flex; flex-direction:column; gap:16px; }
+    .q-item { background:var(--surface); border:1px solid var(--border); border-radius:var(--r); padding:20px; box-shadow:var(--sh-sm); }
+    .q-num { font-size:11px; font-weight:600; letter-spacing:0.07em; text-transform:uppercase; color:var(--text-3); margin-bottom:6px; }
+    .q-text { font-size:15px; font-weight:500; color:var(--text-0); line-height:1.5; margin-bottom:14px; }
+    .q-item textarea { width:100%; background:var(--surface-2); border:1px solid var(--border); border-radius:var(--r-sm); padding:12px 14px; font-family:'Inter',sans-serif; font-size:14px; color:var(--text-0); outline:none; resize:none; min-height:80px; transition:border-color 0.15s,background 0.15s; line-height:1.55; }
+    .q-item textarea:focus { border-color:var(--accent-bdr); background:var(--surface); }
+    .q-item textarea::placeholder { color:var(--text-3); }
+
+    /* ═══ SCREEN 2 MATCH ═══ */
+    .match-card { background:var(--surface); border:1px solid var(--border); border-radius:var(--r); padding:36px 28px; text-align:center; box-shadow:var(--sh-sm); }
+    .match-avatar { width:68px; height:68px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:22px; font-weight:600; color:#fff; margin:0 auto 20px; }
+    .match-score { font-family:'Cormorant Garamond',serif; font-size:60px; font-weight:500; color:var(--accent); line-height:1; margin-bottom:4px; }
+    .match-headline { font-size:16px; font-weight:600; color:var(--text-0); margin-bottom:6px; }
+    .match-sub { font-size:13px; color:var(--text-3); margin-bottom:22px; }
+    .match-reasoning { text-align:left; background:var(--surface-2); border-radius:var(--r-sm); padding:16px 18px; font-size:14px; color:var(--text-2); line-height:1.6; }
+
+    /* ═══ SCREEN 3 REFRAME ═══ */
+    .reframe-key { background:var(--accent); border-radius:var(--r); padding:28px; color:#fff; margin-bottom:16px; }
+    .reframe-key-label { font-size:11px; font-weight:600; letter-spacing:0.08em; text-transform:uppercase; opacity:0.7; margin-bottom:10px; }
+    .reframe-key-title { font-family:'Cormorant Garamond',serif; font-size:26px; font-weight:500; line-height:1.2; margin-bottom:10px; }
+    .reframe-key-body { font-size:14px; line-height:1.65; opacity:0.88; }
+    .reframe-grid { display:grid; grid-template-columns:1fr; gap:12px; }
+    @media (min-width:520px) { .reframe-grid { grid-template-columns:1fr 1fr; } }
+    @media (min-width:800px) { .reframe-grid { grid-template-columns:1fr 1fr 1fr; } }
+    .reframe-card { background:var(--surface); border:1px solid var(--border); border-radius:var(--r); padding:22px; box-shadow:var(--sh-sm); }
+    .reframe-card-icon { font-size:20px; margin-bottom:12px; }
+    .reframe-card-label { font-size:10px; font-weight:600; letter-spacing:0.09em; text-transform:uppercase; color:var(--accent); margin-bottom:6px; }
+    .reframe-card-title { font-family:'Cormorant Garamond',serif; font-size:19px; font-weight:500; color:var(--text-0); line-height:1.25; margin-bottom:8px; }
+    .reframe-card-body { font-size:13.5px; color:var(--text-2); line-height:1.6; }
+
+    /* ═══ SCREEN 4 DONE ═══ */
+    #screen-done .screen-inner { text-align:center; padding-top:80px; }
+    .done-glyph { font-family:'Cormorant Garamond',serif; font-size:52px; color:var(--accent); line-height:1; margin-bottom:24px; }
+    .done-title { font-family:'Cormorant Garamond',serif; font-size:36px; font-weight:500; color:var(--text-0); margin-bottom:12px; }
+    .done-sub { font-size:16px; color:var(--text-2); margin-bottom:40px; line-height:1.6; max-width:420px; margin-left:auto; margin-right:auto; }
+    .done-actions { display:flex; gap:12px; justify-content:center; flex-wrap:wrap; }
+
+    /* ═══ SEARCH ═══ */
+    .search-box { display:flex; align-items:center; gap:10px; background:var(--surface); border:1.5px solid var(--border-md); border-radius:var(--r); padding:12px 16px; box-shadow:var(--sh-sm); margin-bottom:28px; transition:border-color 0.2s; }
+    .search-box:focus-within { border-color:var(--accent-bdr); }
+    .search-box input { flex:1; border:none; outline:none; font-family:'Inter',sans-serif; font-size:15px; color:var(--text-0); background:transparent; }
+    .search-box input::placeholder { color:var(--text-3); }
+    .search-results { display:flex; flex-direction:column; gap:12px; }
+    .search-result-card { background:var(--surface); border:1px solid var(--border); border-radius:var(--r); padding:18px 20px; cursor:pointer; transition:box-shadow 0.15s,border-color 0.15s; box-shadow:var(--sh-sm); }
+    .search-result-card:hover { border-color:var(--border-hi); box-shadow:var(--sh-md); }
+    .src-meta { display:flex; align-items:center; gap:8px; margin-bottom:8px; }
+    .src-avatar { width:22px; height:22px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:8px; font-weight:700; color:#fff; }
+    .src-thinker { font-size:12px; font-weight:600; color:var(--text-2); }
+    .src-date { font-size:11px; color:var(--text-3); margin-left:auto; }
+    .src-decision { font-size:14px; font-weight:500; color:var(--text-0); line-height:1.45; margin-bottom:6px; }
+    .src-insight { font-size:13px; color:var(--text-2); line-height:1.5; }
+    .no-results { text-align:center; padding:60px 0; color:var(--text-3); font-size:14px; }
+    .no-results-icon { font-size:32px; margin-bottom:12px; display:block; }
+
+    /* ═══ PROJECTS ═══ */
+    .projects-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(180px,1fr)); gap:12px; margin-bottom:24px; }
+    .project-card { background:var(--surface); border:1px solid var(--border); border-radius:var(--r); padding:20px 18px; cursor:pointer; transition:box-shadow 0.15s,border-color 0.15s; box-shadow:var(--sh-sm); }
+    .project-card:hover { border-color:var(--border-hi); box-shadow:var(--sh-md); }
+    .project-dot { width:10px; height:10px; border-radius:50%; margin-bottom:12px; }
+    .project-name { font-size:14px; font-weight:600; color:var(--text-0); margin-bottom:4px; }
+    .project-count { font-size:12px; color:var(--text-3); }
+    .new-project-card { background:transparent; border:1.5px dashed var(--border-hi); border-radius:var(--r); padding:20px 18px; cursor:pointer; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:8px; transition:background 0.15s,border-color 0.15s; min-height:96px; }
+    .new-project-card:hover { background:var(--surface); border-color:var(--accent); }
+    .new-project-card span { font-size:13px; font-weight:500; color:var(--text-3); }
+    .project-form { background:var(--surface); border:1px solid var(--border); border-radius:var(--r); padding:24px; box-shadow:var(--sh-sm); display:none; margin-bottom:24px; }
+    .project-form.visible { display:block; }
+    .project-form input { width:100%; border:1.5px solid var(--border-md); border-radius:var(--r-sm); padding:11px 14px; font-family:'Inter',sans-serif; font-size:14px; color:var(--text-0); outline:none; margin-bottom:12px; transition:border-color 0.15s; }
+    .project-form input:focus { border-color:var(--accent-bdr); }
+    .project-form input::placeholder { color:var(--text-3); }
+    .color-swatches { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:16px; }
+    .swatch { width:24px; height:24px; border-radius:50%; cursor:pointer; border:2px solid transparent; transition:border-color 0.15s,transform 0.15s; }
+    .swatch.selected { border-color:var(--text-0); transform:scale(1.15); }
+    .form-actions { display:flex; gap:10px; }
+
+    /* ═══ REPLAY ═══ */
+    .replay-screen { padding-top:56px; padding-bottom:100px; }
+    .replay-key { background:var(--accent); border-radius:var(--r); padding:28px; color:#fff; margin-bottom:16px; }
+    .replay-key-label { font-size:11px; font-weight:600; letter-spacing:0.08em; text-transform:uppercase; opacity:0.7; margin-bottom:8px; }
+    .replay-key-title { font-family:'Cormorant Garamond',serif; font-size:24px; font-weight:500; line-height:1.2; margin-bottom:8px; }
+    .replay-key-body { font-size:14px; opacity:0.88; line-height:1.6; }
+
+    /* ═══ SETTINGS ═══ */
+    .settings-section { background:var(--surface); border:1px solid var(--border); border-radius:var(--r); padding:24px; box-shadow:var(--sh-sm); margin-bottom:20px; }
+    .settings-section-title { font-size:14px; font-weight:600; color:var(--text-0); margin-bottom:16px; display:flex; align-items:center; gap:8px; }
+    .settings-row { display:flex; align-items:center; justify-content:space-between; gap:16px; padding:12px 0; border-bottom:1px solid var(--border); }
+    .settings-row:last-child { border-bottom:none; padding-bottom:0; }
+    .settings-row-label { font-size:14px; color:var(--text-1); font-weight:500; }
+    .settings-row-sub { font-size:12px; color:var(--text-3); margin-top:2px; }
+    .settings-input { flex:1; max-width:260px; border:1.5px solid var(--border-md); border-radius:var(--r-sm); padding:8px 12px; font-family:'Inter',sans-serif; font-size:13.5px; color:var(--text-0); outline:none; transition:border-color 0.15s; background:var(--surface-2); }
+    .settings-input:focus { border-color:var(--accent-bdr); background:var(--surface); }
+    .settings-select { flex:1; max-width:200px; border:1.5px solid var(--border-md); border-radius:var(--r-sm); padding:8px 12px; font-family:'Inter',sans-serif; font-size:13.5px; color:var(--text-0); outline:none; background:var(--surface-2); cursor:pointer; }
+    .test-btn { font-size:12px; font-weight:500; color:var(--accent); background:var(--accent-lt); border:1px solid var(--accent-bdr); border-radius:var(--r-pill); padding:6px 14px; cursor:pointer; white-space:nowrap; transition:opacity 0.15s; }
+    .test-btn:hover { opacity:0.75; }
+    .status-pill { display:inline-flex; align-items:center; gap:5px; font-size:12px; font-weight:500; border-radius:var(--r-pill); padding:4px 10px; }
+    .status-pill.ok { background:#D1FAE5; color:#065F46; }
+    .status-pill.err { background:#FEE2E2; color:#991B1B; }
+    .status-pill.idle { background:var(--surface-2); color:var(--text-3); }
+
+    /* ═══ DOWNLOADS ═══ */
+    .downloads-list { display:flex; flex-direction:column; gap:12px; }
+    .download-item { background:var(--surface); border:1px solid var(--border); border-radius:var(--r); padding:18px 20px; display:flex; align-items:center; gap:14px; box-shadow:var(--sh-sm); }
+    .dl-icon { width:40px; height:40px; border-radius:var(--r-sm); background:var(--accent-lt); display:flex; align-items:center; justify-content:center; font-size:18px; flex-shrink:0; }
+    .dl-info { flex:1; min-width:0; }
+    .dl-name { font-size:14px; font-weight:600; color:var(--text-0); margin-bottom:3px; }
+    .dl-meta { font-size:12px; color:var(--text-3); }
+    .dl-btn { font-size:12px; font-weight:500; color:var(--accent); background:var(--accent-lt); border:1px solid var(--accent-bdr); border-radius:var(--r-pill); padding:6px 14px; cursor:pointer; white-space:nowrap; transition:opacity 0.15s; flex-shrink:0; }
+    .dl-btn:hover { opacity:0.75; }
+    .downloads-empty { text-align:center; padding:60px 0; color:var(--text-3); }
+
+    /* ═══ HELP ═══ */
+    .faq-item { background:var(--surface); border:1px solid var(--border); border-radius:var(--r); margin-bottom:8px; overflow:hidden; box-shadow:var(--sh-sm); }
+    .faq-q { display:flex; align-items:center; justify-content:space-between; padding:16px 20px; cursor:pointer; font-size:14px; font-weight:500; color:var(--text-0); transition:background 0.13s; }
+    .faq-q:hover { background:var(--surface-2); }
+    .faq-chevron { color:var(--text-3); transition:transform 0.2s; flex-shrink:0; }
+    .faq-item.open .faq-chevron { transform:rotate(180deg); }
+    .faq-a { display:none; padding:0 20px 16px; font-size:14px; color:var(--text-2); line-height:1.65; }
+    .faq-item.open .faq-a { display:block; }
+    .help-cards { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:28px; }
+    @media (max-width:480px) { .help-cards { grid-template-columns:1fr; } }
+    .help-card { background:var(--surface); border:1px solid var(--border); border-radius:var(--r); padding:20px; box-shadow:var(--sh-sm); cursor:pointer; transition:border-color 0.15s,box-shadow 0.15s; }
+    .help-card:hover { border-color:var(--border-hi); box-shadow:var(--sh-md); }
+    .help-card-icon { font-size:24px; margin-bottom:10px; }
+    .help-card-title { font-size:14px; font-weight:600; color:var(--text-0); margin-bottom:4px; }
+    .help-card-sub { font-size:13px; color:var(--text-2); }
+
+    /* ═══ UPGRADE ═══ */
+    .plans-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:16px; }
+    .plan-card { background:var(--surface); border:1.5px solid var(--border); border-radius:var(--r); padding:28px 22px; box-shadow:var(--sh-sm); position:relative; }
+    .plan-card.featured { border-color:var(--accent); }
+    .plan-badge { position:absolute; top:-11px; left:50%; transform:translateX(-50%); background:var(--accent); color:#fff; font-size:10px; font-weight:700; letter-spacing:0.06em; text-transform:uppercase; border-radius:var(--r-pill); padding:3px 12px; white-space:nowrap; }
+    .plan-name { font-size:13px; font-weight:600; color:var(--text-3); text-transform:uppercase; letter-spacing:0.06em; margin-bottom:8px; }
+    .plan-price { font-family:'Cormorant Garamond',serif; font-size:42px; font-weight:500; color:var(--text-0); line-height:1; margin-bottom:4px; }
+    .plan-price span { font-family:'Inter',sans-serif; font-size:14px; font-weight:400; color:var(--text-3); }
+    .plan-desc { font-size:13px; color:var(--text-2); margin-bottom:20px; line-height:1.5; }
+    .plan-features { list-style:none; display:flex; flex-direction:column; gap:8px; margin-bottom:24px; }
+    .plan-features li { font-size:13.5px; color:var(--text-1); display:flex; align-items:flex-start; gap:8px; }
+    .plan-features li::before { content:'✓'; color:var(--accent); font-weight:700; flex-shrink:0; margin-top:1px; }
+    .plan-cta { width:100%; }
+
+    /* ═══ THINKER PICKER ═══ */
+    .modal-bg { display:none; position:fixed; inset:0; background:rgba(15,14,12,0.4); backdrop-filter:blur(6px); -webkit-backdrop-filter:blur(6px); z-index:300; align-items:flex-end; justify-content:center; }
+    .modal-bg.open { display:flex; }
+    @media (min-width:640px) { .modal-bg { align-items:center; } }
+    .picker-sheet { background:var(--surface); border-radius:20px 20px 0 0; width:100%; max-width:640px; max-height:82vh; display:flex; flex-direction:column; box-shadow:var(--sh-lg); animation:sheet-up 0.25s cubic-bezier(0.32,0.72,0,1); }
+    @media (min-width:640px) { .picker-sheet { border-radius:20px; max-height:72vh; } }
+    @keyframes sheet-up { from{transform:translateY(24px);opacity:0} to{transform:translateY(0);opacity:1} }
+    .picker-handle { width:36px; height:4px; background:var(--border-md); border-radius:2px; margin:10px auto 0; flex-shrink:0; }
+    @media (min-width:640px) { .picker-handle { display:none; } }
+    .picker-head { display:flex; align-items:center; justify-content:space-between; padding:18px 22px 16px; border-bottom:1px solid var(--border); flex-shrink:0; }
+    .picker-title { font-size:16px; font-weight:600; color:var(--text-0); }
+    .picker-count { font-size:12px; color:var(--text-3); margin-left:6px; }
+    .picker-close { width:28px; height:28px; border-radius:50%; border:1px solid var(--border-md); background:var(--surface-2); cursor:pointer; display:flex; align-items:center; justify-content:center; color:var(--text-2); font-size:15px; transition:all 0.15s; }
+    .picker-close:hover { background:var(--surface-3); }
+    .picker-search-wrap { padding:14px 22px; border-bottom:1px solid var(--border); flex-shrink:0; }
+    .picker-search { width:100%; background:var(--surface-2); border:1px solid var(--border); border-radius:var(--r-sm); padding:10px 14px; font-family:'Inter',sans-serif; font-size:14px; color:var(--text-0); outline:none; transition:border-color 0.15s; }
+    .picker-search:focus { border-color:var(--accent-bdr); background:var(--surface); }
+    .picker-search::placeholder { color:var(--text-3); }
+    .picker-scroll { overflow-y:auto; flex:1; padding:16px 22px 24px; }
+    .picker-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(140px,1fr)); gap:10px; }
+    .picker-card { border:1.5px solid var(--border); border-radius:var(--r); padding:18px 12px 16px; cursor:pointer; transition:all 0.15s; text-align:center; background:var(--surface); position:relative; }
+    .picker-card:hover { border-color:var(--accent-bdr); box-shadow:var(--sh-sm); }
+    .picker-card.selected { border-color:var(--accent); background:var(--accent-lt); }
+    .picker-card.unavailable { opacity:0.55; cursor:not-allowed; }
+    .picker-card.unavailable:hover { border-color:var(--border); box-shadow:none; }
+    .picker-card-avatar { width:44px; height:44px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:14px; font-weight:600; color:#fff; margin:0 auto 10px; }
+    .picker-card-name { font-size:13px; font-weight:600; color:var(--text-0); margin-bottom:3px; line-height:1.3; }
+    .picker-card-role { font-size:11px; color:var(--text-3); }
+    .soon-badge { display:inline-block; margin-top:6px; font-size:9px; font-weight:600; letter-spacing:0.06em; text-transform:uppercase; background:var(--surface-3); color:var(--text-3); border-radius:4px; padding:2px 6px; }
+    .selected-check { position:absolute; top:8px; right:8px; width:18px; height:18px; background:var(--accent); border-radius:50%; display:flex; align-items:center; justify-content:center; color:#fff; font-size:10px; }
+
+    /* ═══ RESPONSIVE ═══ */
+    @media (max-width:480px) {
+      .decision-box-footer { flex-direction:column; align-items:flex-start; gap:10px; }
+      .decision-box-footer .btn-primary { width:100%; justify-content:center; }
+      .screen-footer .btn-primary { width:100%; justify-content:center; }
+      .done-actions { flex-direction:column; }
+      .done-actions button { width:100%; justify-content:center; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="header">
+  <button class="hamburger" id="hamburger" onclick="toggleSidebar()" aria-label="Toggle menu">
+    <span></span><span></span><span></span>
+  </button>
+  <a class="logo" href="#" onclick="goHome(); return false;">
+    <div class="logo-mark">D</div>
+    <span class="logo-text">Divine Intelligence</span>
+  </a>
+  <button class="lens-switcher" onclick="openPicker()" aria-label="Switch perspective">
+    <!-- Switch arrows — signals this is about changing the cognitive lens -->
+    <span class="lens-swap-icon">
+      <svg width="15" height="15" viewBox="0 0 15 15" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M2 5h9M8 2l3 3-3 3"/>
+        <path d="M13 10H4M7 7l-3 3 3 3"/>
+      </svg>
+    </span>
+    <div class="lens-info">
+      <span class="lens-eyebrow">Perspective</span>
+      <span class="lens-name" id="lens-name">Michael Akindele</span>
+    </div>
+    <div class="lens-color-dot" id="lens-dot" style="background:#3B31A4"></div>
+  </button>
+</header>
+
+<div class="sidebar-backdrop" id="sidebar-backdrop" onclick="toggleSidebar()"></div>
+
+<div class="app-body">
+
+  <!-- SIDEBAR -->
+  <nav class="sidebar" id="sidebar">
+    <div class="sidebar-top">
+      <div class="sidebar-nav">
+        <button class="nav-item" id="nav-search" onclick="showView('search')">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5l3 3"/></svg>Search
+        </button>
+        <button class="nav-item" id="nav-projects" onclick="showView('projects')">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75"><rect x="2" y="2" width="5" height="5" rx="1.5"/><rect x="9" y="2" width="5" height="5" rx="1.5"/><rect x="2" y="9" width="5" height="5" rx="1.5"/><rect x="9" y="9" width="5" height="5" rx="1.5"/></svg>Projects
+        </button>
+      </div>
+      <div class="sidebar-divider"></div>
+      <div class="recents-header">
+        <span class="recents-label">Recents</span>
+      </div>
+      <div class="recents-wrap">
+        <div class="recents-list" id="recents-list">
+          <p class="recents-empty">Your perspectives appear here after each session.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- BOTTOM: status + profile -->
+    <div class="sidebar-bottom">
+      <div class="conn-bar" id="conn-bar">
+        <div class="conn-dot checking" id="conn-dot"></div>
+        <span class="conn-text" id="conn-text">Checking connection…</span>
+      </div>
+      <div class="sidebar-divider" style="margin:0 10px"></div>
+
+      <!-- Profile popup -->
+      <div class="profile-menu-popup" id="profile-menu">
+        <button class="profile-menu-item" onclick="showView('settings')">
+          <svg width="15" height="15" viewBox="0 0 15 15" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="7.5" cy="7.5" r="2"/><path d="M7.5 1v1.5M7.5 12.5V14M1 7.5h1.5M12.5 7.5H14M2.9 2.9l1.1 1.1M10.9 10.9l1.1 1.1M2.9 12.1l1.1-1.1M10.9 4.1l1.1-1.1"/></svg>
+          Settings
+        </button>
+        <button class="profile-menu-item" onclick="showView('downloads')">
+          <svg width="15" height="15" viewBox="0 0 15 15" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M7.5 1v9M4 7l3.5 3.5L11 7"/><rect x="1" y="11" width="13" height="3" rx="1"/></svg>
+          Downloads
+        </button>
+        <div class="profile-menu-sep"></div>
+        <button class="profile-menu-item" onclick="showView('help')">
+          <svg width="15" height="15" viewBox="0 0 15 15" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="7.5" cy="7.5" r="6"/><path d="M5.5 5.5a2 2 0 113 1.7c-.5.3-.8.8-.8 1.3v.5"/><circle cx="7.5" cy="11" r=".5" fill="currentColor"/></svg>
+          Get Help
+        </button>
+        <button class="profile-menu-item" onclick="showView('upgrade')" style="color:var(--accent)">
+          <svg width="15" height="15" viewBox="0 0 15 15" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M7.5 1L9.5 5.5H14L10.5 8.5l1.5 5L7.5 11l-4.5 2.5 1.5-5L1 5.5h4.5z"/></svg>
+          Upgrade Plans
+        </button>
+        <div class="profile-menu-sep"></div>
+        <button class="profile-menu-item danger" onclick="signOut()">
+          <svg width="15" height="15" viewBox="0 0 15 15" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M5 2H2a1 1 0 00-1 1v9a1 1 0 001 1h3M10 10l3.5-2.5L10 5M5 7.5h8"/></svg>
+          Sign out
+        </button>
+      </div>
+
+      <button class="profile-btn" id="profile-btn" onclick="toggleProfileMenu()">
+        <div class="profile-avatar-badge" id="profile-badge">MA</div>
+        <div class="profile-text">
+          <div class="profile-name" id="profile-name">Michael Akindele</div>
+          <div class="profile-email" id="profile-email">michael@surpluspods.com</div>
+        </div>
+        <svg class="profile-dots" width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><circle cx="8" cy="3" r="1.5"/><circle cx="8" cy="8" r="1.5"/><circle cx="8" cy="13" r="1.5"/></svg>
+      </button>
+    </div>
+  </nav>
+
+  <!-- MAIN -->
+  <main class="main" id="main-content">
+
+    <!-- SCREEN 0: Home -->
+    <div class="screen active" id="screen-0">
+      <div class="main-inner"><div class="screen-inner">
+        <div class="thinker-callout">
+          <div class="callout-avatar" id="callout-avatar" style="background:#3B31A4">MA</div>
+          <div class="callout-info">
+            <div class="callout-name" id="callout-name">Michael Akindele</div>
+            <div class="callout-title" id="callout-title">Builder · Designer · Founder</div>
+            <div class="callout-lens" id="callout-lens">Validates whether the problem is real, audits the market landscape, and tells you — directly — if you're not thinking big enough.</div>
+          </div>
+          <button class="callout-change" onclick="openPicker()">Change</button>
+        </div>
+        <h1 class="home-headline">Get world-class perspective on your toughest decisions.</h1>
+        <p class="home-sub">Tell us what you're working through. Your selected thinker applies their cognitive framework to your specific situation — in 30 minutes.</p>
+        <div class="decision-box">
+          <textarea id="decision-input" placeholder="Describe the decision you're working through — the more specific, the sharper the perspective..."></textarea>
+          <div class="decision-box-footer">
+            <span class="decision-hint">Specific beats vague. Every time.</span>
+            <button class="btn-primary" onclick="startSession()">Get perspective <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 7h10M7.5 3l4 4-4 4"/></svg></button>
+          </div>
+        </div>
+      </div></div>
+    </div>
+
+    <!-- SCREEN 1: Context -->
+    <div class="screen" id="screen-context">
+      <div class="progress-wrap"><div class="progress-fill" style="width:25%"></div></div>
+      <div class="main-inner"><div class="screen-inner">
+        <div class="nav-row"><button class="btn-back" onclick="goBack('screen-0')">← Back</button></div>
+        <div class="screen-header">
+          <div class="screen-label">Step 1 of 3 — Context</div>
+          <h2 class="screen-title">A few questions first</h2>
+          <p class="screen-sub" id="context-sub">Help your thinker see the full picture.</p>
+        </div>
+        <div class="decision-echo" id="context-echo"></div>
+        <div class="q-list" id="q-list"><div class="dots"><span></span><span></span><span></span></div></div>
+        <div class="screen-footer">
+          <button class="btn-primary" id="context-next" onclick="goToMatch()" disabled>See your match <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 7h10M7.5 3l4 4-4 4"/></svg></button>
+        </div>
+      </div></div>
+    </div>
+
+    <!-- SCREEN 2: Match -->
+    <div class="screen" id="screen-match">
+      <div class="progress-wrap"><div class="progress-fill" style="width:60%"></div></div>
+      <div class="main-inner"><div class="screen-inner">
+        <div class="nav-row"><button class="btn-back" onclick="goBack('screen-context')">← Back</button></div>
+        <div class="screen-header">
+          <div class="screen-label">Step 2 of 3 — Perspective match</div>
+          <h2 class="screen-title">How well does this fit?</h2>
+        </div>
+        <div id="match-content"><div class="dots"><span></span><span></span><span></span></div></div>
+        <div class="screen-footer" id="match-footer" style="display:none">
+          <button class="btn-primary" onclick="goToReframe()">Get my reframe <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 7h10M7.5 3l4 4-4 4"/></svg></button>
+        </div>
+      </div></div>
+    </div>
+
+    <!-- SCREEN 3: Reframe -->
+    <div class="screen" id="screen-reframe">
+      <div class="progress-wrap"><div class="progress-fill" style="width:90%"></div></div>
+      <div class="main-inner"><div class="screen-inner">
+        <div class="nav-row"><button class="btn-back" onclick="goBack('screen-match')">← Back</button></div>
+        <div class="screen-header">
+          <div class="screen-label">Step 3 of 3 — Reframe</div>
+          <h2 class="screen-title">Your perspective is ready.</h2>
+        </div>
+        <div id="reframe-content"><div class="dots"><span></span><span></span><span></span></div></div>
+        <div class="screen-footer" id="reframe-footer" style="display:none">
+          <button class="btn-primary" onclick="goToDone()">Done <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 7h10M7.5 3l4 4-4 4"/></svg></button>
+        </div>
+      </div></div>
+    </div>
+
+    <!-- SCREEN 4: Done -->
+    <div class="screen" id="screen-done">
+      <div class="main-inner"><div class="screen-inner">
+        <div class="done-glyph">✦</div>
+        <div class="done-title">Session complete.</div>
+        <p class="done-sub">You've just seen your decision through a different lens. Now act on it.</p>
+        <div class="done-actions">
+          <button class="btn-primary" onclick="startOver()">Start a new session</button>
+          <button class="btn-ghost" onclick="showView('recents')">View recents</button>
+        </div>
+      </div></div>
+    </div>
+
+    <!-- SCREEN: Search -->
+    <div class="screen" id="screen-search">
+      <div class="main-inner"><div class="screen-inner">
+        <div class="screen-header">
+          <div class="screen-label">Search</div>
+          <h2 class="screen-title">Find a perspective</h2>
+          <p class="screen-sub">Search all saved sessions by keyword, thinker, or topic.</p>
+        </div>
+        <div class="search-box">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="var(--text-3)" stroke-width="1.75"><circle cx="8" cy="8" r="5"/><path d="M12 12l4 4"/></svg>
+          <input type="search" id="search-input" placeholder="Try 'market positioning', 'launch', 'partnership'..." oninput="runSearch(this.value)">
+        </div>
+        <div class="search-results" id="search-results">
+          <div class="no-results"><span class="no-results-icon">🔍</span>Start typing to search your perspectives.</div>
+        </div>
+      </div></div>
+    </div>
+
+    <!-- SCREEN: Projects -->
+    <div class="screen" id="screen-projects">
+      <div class="main-inner"><div class="screen-inner">
+        <div class="screen-header">
+          <div class="screen-label">Projects</div>
+          <h2 class="screen-title">Organise your perspectives</h2>
+          <p class="screen-sub">Group sessions by initiative, company, or theme.</p>
+        </div>
+        <div class="project-form" id="project-form">
+          <input type="text" id="project-name-input" placeholder="Project name…" maxlength="40">
+          <div class="color-swatches" id="color-swatches"></div>
+          <div class="form-actions">
+            <button class="btn-primary" onclick="saveProject()">Create project</button>
+            <button class="btn-ghost" onclick="hideProjectForm()">Cancel</button>
+          </div>
+        </div>
+        <div class="projects-grid" id="projects-grid"></div>
+      </div></div>
+    </div>
+
+    <!-- SCREEN: Replay -->
+    <div class="screen" id="screen-replay">
+      <div class="main-inner">
+        <div class="replay-screen">
+          <div class="nav-row">
+            <button class="btn-back" onclick="goHome()">← Home</button>
+            <button class="btn-ghost" onclick="startOver()">New session</button>
+          </div>
+          <div class="screen-header" id="replay-header"></div>
+          <div id="replay-content"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SCREEN: Settings -->
+    <div class="screen" id="screen-settings">
+      <div class="main-inner"><div class="screen-inner">
+        <div class="screen-header">
+          <div class="screen-label">Settings</div>
+          <h2 class="screen-title">Account & API</h2>
+        </div>
+
+        <!-- API Connection -->
+        <div class="settings-section">
+          <div class="settings-section-title">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M6 10L4 12a2.8 2.8 0 000 4h0a2.8 2.8 0 004 0l2-2"/><path d="M10 6l2-2a2.8 2.8 0 000-4h0a2.8 2.8 0 00-4 0L6 2"/><line x1="6" y1="10" x2="10" y2="6"/></svg>
+            API Connection
+          </div>
+
+          <!-- Direct API key (primary for browser mode) -->
+          <div class="settings-row">
+            <div>
+              <div class="settings-row-label">Anthropic API Key</div>
+              <div class="settings-row-sub">Stored locally in your browser only — never sent to our servers</div>
+            </div>
+            <div style="display:flex;align-items:center;gap:10px;flex:1;max-width:320px">
+              <input class="settings-input" type="password" id="settings-api-key" placeholder="sk-ant-..." style="flex:1;max-width:none" oninput="updateApiKey(this.value)">
+              <button class="test-btn" onclick="testDirectKey()" style="flex-shrink:0">Test</button>
+            </div>
+          </div>
+          <div class="settings-row" style="align-items:flex-start">
+            <div style="flex:1">
+              <div class="settings-row-label">Key status</div>
+            </div>
+            <span class="status-pill idle" id="key-status">Not tested</span>
+          </div>
+
+          <div class="settings-row">
+            <div>
+              <div class="settings-row-label">Model</div>
+              <div class="settings-row-sub">Anthropic model for perspectives</div>
+            </div>
+            <select class="settings-select" id="settings-model" onchange="updateModel(this.value)">
+              <option value="claude-opus-4-5">Claude Opus 4.5</option>
+              <option value="claude-sonnet-4-5">Claude Sonnet 4.5</option>
+              <option value="claude-haiku-4-5-20251001">Claude Haiku 4.5</option>
+            </select>
+          </div>
+
+          <!-- Optional proxy server (advanced) -->
+          <details style="margin-top:12px">
+            <summary style="font-size:12.5px;color:var(--text-3);cursor:pointer;padding:4px 0;list-style:none;display:flex;align-items:center;gap:6px">
+              <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 4l4 4 4-4"/></svg>
+              Advanced: proxy server (optional)
+            </summary>
+            <div style="margin-top:12px;border-top:1px solid var(--border);padding-top:12px">
+              <div class="settings-row" style="border:none;padding-bottom:0">
+                <div>
+                  <div class="settings-row-label">Proxy server URL</div>
+                  <div class="settings-row-sub">Run server.js locally to keep your key off the browser</div>
+                </div>
+                <div style="display:flex;align-items:center;gap:10px">
+                  <input class="settings-input" type="text" id="settings-api-base" value="http://localhost:3001" oninput="updateApiBase(this.value)">
+                  <button class="test-btn" onclick="testConnection()">Test</button>
+                </div>
+              </div>
+              <div style="margin-top:8px">
+                <span class="status-pill idle" id="settings-status">Not tested</span>
+              </div>
+            </div>
+          </details>
+        </div>
+
+        <!-- Server setup instructions -->
+        <div class="settings-section">
+          <div class="settings-section-title">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="1" y="3" width="14" height="10" rx="2"/><path d="M4 7l2 2-2 2M8 11h4"/></svg>
+            Server Setup
+          </div>
+          <div style="font-size:13.5px;color:var(--text-2);line-height:1.8">
+            <p style="margin-bottom:10px">Run the proxy server locally to connect to the Anthropic API:</p>
+            <code style="display:block;background:var(--surface-2);border:1px solid var(--border);border-radius:var(--r-sm);padding:12px 16px;font-size:12.5px;color:var(--text-0);line-height:1.8">
+              cp .env.example .env<br>
+              # Add ANTHROPIC_API_KEY=sk-ant-... to .env<br>
+              node server.js
+            </code>
+          </div>
+        </div>
+
+        <!-- Profile -->
+        <div class="settings-section">
+          <div class="settings-section-title">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="8" cy="5" r="3"/><path d="M2 14c0-3.3 2.7-6 6-6s6 2.7 6 6"/></svg>
+            Profile
+          </div>
+          <div class="settings-row">
+            <div><div class="settings-row-label">Name</div></div>
+            <input class="settings-input" type="text" id="settings-name" value="Michael Akindele" oninput="updateProfile()">
+          </div>
+          <div class="settings-row">
+            <div><div class="settings-row-label">Email</div></div>
+            <input class="settings-input" type="email" id="settings-email" value="michael@surpluspods.com" oninput="updateProfile()">
+          </div>
+        </div>
+
+        <!-- Danger zone -->
+        <div class="settings-section" style="border-color:#FFCDD2">
+          <div class="settings-section-title" style="color:#D63030">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M8 2L14 13H2L8 2z"/><line x1="8" y1="7" x2="8" y2="10"/><circle cx="8" cy="12" r=".5" fill="currentColor"/></svg>
+            Danger Zone
+          </div>
+          <div class="settings-row">
+            <div>
+              <div class="settings-row-label">Clear all data</div>
+              <div class="settings-row-sub">Permanently delete all saved sessions and projects</div>
+            </div>
+            <button class="btn-danger" onclick="clearAllData()">Clear data</button>
+          </div>
+        </div>
+      </div></div>
+    </div>
+
+    <!-- SCREEN: Downloads -->
+    <div class="screen" id="screen-downloads">
+      <div class="main-inner"><div class="screen-inner">
+        <div class="screen-header">
+          <div class="screen-label">Downloads</div>
+          <h2 class="screen-title">Export your perspectives</h2>
+          <p class="screen-sub">Download saved sessions as JSON or share them as reports.</p>
+        </div>
+        <div id="downloads-content"></div>
+      </div></div>
+    </div>
+
+    <!-- SCREEN: Help -->
+    <div class="screen" id="screen-help">
+      <div class="main-inner"><div class="screen-inner">
+        <div class="screen-header">
+          <div class="screen-label">Help</div>
+          <h2 class="screen-title">How can we help?</h2>
+        </div>
+        <div class="help-cards">
+          <div class="help-card" onclick="window.open('mailto:michael@surpluspods.com')">
+            <div class="help-card-icon">✉️</div>
+            <div class="help-card-title">Email support</div>
+            <div class="help-card-sub">Get a response within 24 hours</div>
+          </div>
+          <div class="help-card" onclick="window.open('https://getdivine.ai/docs','_blank')">
+            <div class="help-card-icon">📖</div>
+            <div class="help-card-title">Documentation</div>
+            <div class="help-card-sub">Guides and API reference</div>
+          </div>
+        </div>
+        <h3 style="font-size:16px;font-weight:600;color:var(--text-0);margin-bottom:16px">Frequently asked questions</h3>
+        <div id="faq-list"></div>
+      </div></div>
+    </div>
+
+    <!-- SCREEN: Upgrade -->
+    <div class="screen" id="screen-upgrade">
+      <div class="main-inner"><div class="screen-inner">
+        <div class="screen-header">
+          <div class="screen-label">Plans</div>
+          <h2 class="screen-title">Upgrade Divine Intelligence</h2>
+          <p class="screen-sub">Access more thinkers, unlimited sessions, and team features.</p>
+        </div>
+        <div class="plans-grid">
+          <div class="plan-card">
+            <div class="plan-name">Free</div>
+            <div class="plan-price">$0<span>/mo</span></div>
+            <div class="plan-desc">For founders getting started</div>
+            <ul class="plan-features">
+              <li>1 active thinker</li>
+              <li>5 sessions per month</li>
+              <li>Basic reframes</li>
+              <li>Session history (30 days)</li>
+            </ul>
+            <button class="btn-ghost plan-cta" disabled>Current plan</button>
+          </div>
+          <div class="plan-card featured">
+            <div class="plan-badge">Most popular</div>
+            <div class="plan-name">Pro</div>
+            <div class="plan-price">$49<span>/mo</span></div>
+            <div class="plan-desc">For serious founders making critical calls</div>
+            <ul class="plan-features">
+              <li>All available thinkers</li>
+              <li>Unlimited sessions</li>
+              <li>Deep reframes + follow-up</li>
+              <li>Projects & organisation</li>
+              <li>Export & downloads</li>
+              <li>Unlimited history</li>
+            </ul>
+            <button class="btn-primary plan-cta" onclick="alert('Billing coming soon!')">Upgrade to Pro</button>
+          </div>
+          <div class="plan-card">
+            <div class="plan-name">Enterprise</div>
+            <div class="plan-price">Custom</div>
+            <div class="plan-desc">For teams and investment firms</div>
+            <ul class="plan-features">
+              <li>Everything in Pro</li>
+              <li>Custom thinker onboarding</li>
+              <li>Team workspace</li>
+              <li>SSO & admin controls</li>
+              <li>SLA & dedicated support</li>
+            </ul>
+            <button class="btn-ghost plan-cta" onclick="window.open('mailto:michael@surpluspods.com')">Contact us</button>
+          </div>
+        </div>
+      </div></div>
+    </div>
+
+  </main>
+</div>
+
+<!-- THINKER PICKER -->
+<div class="modal-bg" id="picker-modal" onclick="closeBgClick(event)">
+  <div class="picker-sheet">
+    <div class="picker-handle"></div>
+    <div class="picker-head">
+      <div><span class="picker-title">Choose your perspective</span><span class="picker-count" id="picker-count"></span></div>
+      <button class="picker-close" onclick="closePicker()">✕</button>
+    </div>
+    <div class="picker-search-wrap">
+      <input class="picker-search" type="search" placeholder="Search thinkers…" id="picker-search" oninput="filterThinkers(this.value)">
+    </div>
+    <div class="picker-scroll"><div class="picker-grid" id="picker-grid"></div></div>
+  </div>
+</div>
+
+<script>
+/* ════════════════════════════════
+   DATA
+════════════════════════════════ */
+const THINKERS = [
+  { id:'michael', name:'Michael Akindele', initials:'MA', color:'#3B31A4', title:'Builder · Designer · Founder', role:'Founder',
+    lens:"Validates whether the problem is real, audits the market landscape, and tells you — directly — if you're not thinking big enough.", available:true,
+    aiFrame:`validate whether the problem is real before evaluating any solution — ask what signals prove real people experience this pain; audit what already exists in the market before building anything — ask what is different about this, what can be learned from competitors' mistakes, what does this reveal about positioning, how can it be made 10x better; challenge the founder to think bigger — surface where they have artificially constrained their vision by current resources or market; examine how the founder is showing up externally (brand, presentation, email, deck) and whether the signal undermines the idea before it gets a fair hearing; be direct, specific, and willing to say what others won't` },
+  { id:'indra',   name:'Indra Nooyi',   initials:'IN', color:'#0F7A5E', title:'Global CEO · Strategist',  role:'CEO',      lens:"Applies performance with purpose.", available:false, aiFrame:'' },
+  { id:'brian',   name:'Brian Chesky',  initials:'BC', color:'#C0392B', title:'Co-founder · Design CEO',  role:'Founder',  lens:'Works backward from a 5-star experience.', available:false, aiFrame:'' },
+  { id:'oprah',   name:'Oprah Winfrey', initials:'OW', color:'#8E5A02', title:'Media · Human Connection', role:'Media',    lens:'Finds the human story in every decision.', available:false, aiFrame:'' },
+  { id:'sara',    name:'Sara Blakely',  initials:'SB', color:'#7B2D8B', title:'Founder · Bootstrapper',   role:'Founder',  lens:'Questions every assumption about the right way.', available:false, aiFrame:'' },
+  { id:'satya',   name:'Satya Nadella', initials:'SN', color:'#005B9E', title:'CEO · Culture Builder',    role:'CEO',      lens:'Applies growth mindset to strategic inflection.', available:false, aiFrame:'' },
+  { id:'reid',    name:'Reid Hoffman',  initials:'RH', color:'#1D4E89', title:'VC · Network Theorist',    role:'Investor', lens:'Thinks in networks and leverage at scale.', available:false, aiFrame:'' },
+  { id:'jessica', name:'Jessica Alba',  initials:'JA', color:'#B5451B', title:'Founder · Consumer Brand', role:'Founder',  lens:"Builds brands around authentic personal conviction.", available:false, aiFrame:'' },
+];
+
+const PROJECT_COLORS = ['#3B31A4','#0F7A5E','#C0392B','#8E5A02','#7B2D8B','#005B9E','#1D4E89','#B5451B'];
+
+const FAQS = [
+  { q:'How does Divine Intelligence work?', a:'You describe a decision, answer a few context questions, and your selected thinker applies their specific cognitive framework to your situation. The AI has been trained on how that thinker sees the world — not what they would do, but how they would see it.' },
+  { q:'Who are the thinkers?', a:'Thinkers are real experts whose cognitive frameworks have been captured and licensed to the platform. Michael Akindele is the first available thinker — more are coming soon.' },
+  { q:'How do I connect the AI backend?', a:'Run server.js locally (node server.js), add your Anthropic API key to .env, and make sure the server URL in Settings points to http://localhost:3001. The connection indicator in the sidebar will turn green when you\'re live.' },
+  { q:'Are my sessions private?', a:'Yes. Sessions are stored locally in your browser using localStorage. Nothing is sent to our servers — only to the Anthropic API via your proxy server.' },
+  { q:'Can I export my sessions?', a:'Yes. Go to Downloads in the left navigation to export any saved session as a JSON file. PDF exports are coming in a future update.' },
+];
+
+let activeThinker   = THINKERS[0];
+let decisionText    = '';
+let sessionQs       = [];
+let sessionAnswers  = [];
+let currentSession  = null;
+let selectedColor   = PROJECT_COLORS[0];
+let profileMenuOpen = false;
+
+// Settings (persisted)
+const _defaultBase = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
+  ? 'http://localhost:3001'
+  : window.location.origin;
+let API_BASE       = localStorage.getItem('di_api_base')  || _defaultBase;
+let ACTIVE_MODEL   = localStorage.getItem('di_model')     || 'claude-opus-4-5';
+let userProfile    = JSON.parse(localStorage.getItem('di_profile') || '{"name":"Michael Akindele","email":"michael@surpluspods.com"}');
+let DIRECT_API_KEY = localStorage.getItem('di_api_key')   || '';
+
+/* ════════════════════════════════
+   PERSISTENCE
+════════════════════════════════ */
+function loadRecents()  { try { return JSON.parse(localStorage.getItem('di_recents')  || '[]'); } catch { return []; } }
+function loadProjects() { try { return JSON.parse(localStorage.getItem('di_projects') || '[]'); } catch { return []; } }
+function saveRecents(r)  { localStorage.setItem('di_recents',  JSON.stringify(r)); }
+function saveProjects(p) { localStorage.setItem('di_projects', JSON.stringify(p)); }
+
+function saveSession(s) {
+  const r = loadRecents();
+  r.unshift(s);
+  if (r.length > 100) r.pop();
+  saveRecents(r);
+  renderRecents();
+}
+
+/* ════════════════════════════════
+   SIDEBAR TOGGLE
+════════════════════════════════ */
+let sidebarOpen = window.innerWidth > 680;
+document.getElementById('sidebar').classList.toggle('collapsed', !sidebarOpen);
+
+function toggleSidebar() {
+  sidebarOpen = !sidebarOpen;
+  document.getElementById('sidebar').classList.toggle('collapsed', !sidebarOpen);
+  document.getElementById('sidebar-backdrop').classList.toggle('visible', sidebarOpen && window.innerWidth <= 680);
+}
+
+window.addEventListener('resize', () => {
+  if (window.innerWidth > 680) document.getElementById('sidebar-backdrop').classList.remove('visible');
+});
+
+/* ════════════════════════════════
+   PROFILE MENU
+════════════════════════════════ */
+function toggleProfileMenu() {
+  profileMenuOpen = !profileMenuOpen;
+  document.getElementById('profile-menu').classList.toggle('open', profileMenuOpen);
+}
+
+function closeProfileMenu() {
+  profileMenuOpen = false;
+  document.getElementById('profile-menu').classList.remove('open');
+}
+
+document.addEventListener('click', e => {
+  if (!document.getElementById('profile-btn').contains(e.target) &&
+      !document.getElementById('profile-menu').contains(e.target)) {
+    closeProfileMenu();
+  }
+});
+
+function signOut() {
+  closeProfileMenu();
+  alert('Sign out — auth coming in a future release.');
+}
+
+/* ════════════════════════════════
+   VIEW ROUTING
+════════════════════════════════ */
+function showView(view) {
+  closeProfileMenu();
+  document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+
+  const views = {
+    search:    () => { document.getElementById('nav-search').classList.add('active'); show('screen-search'); setTimeout(() => document.getElementById('search-input').focus(), 120); },
+    projects:  () => { document.getElementById('nav-projects').classList.add('active'); renderProjects(); show('screen-projects'); },
+    settings:  () => show('screen-settings'),
+    downloads: () => { renderDownloads(); show('screen-downloads'); },
+    help:      () => { renderFAQ(); show('screen-help'); },
+    upgrade:   () => show('screen-upgrade'),
+    recents:   () => show('screen-0'),
+  };
+  (views[view] || (() => {}))();
+
+  if (window.innerWidth <= 680 && sidebarOpen) toggleSidebar();
+  window.scrollTo({ top:0, behavior:'smooth' });
+}
+
+/* ════════════════════════════════
+   SCREEN NAV
+════════════════════════════════ */
+function show(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo({ top:0, behavior:'smooth' });
+}
+
+function goBack(id) { show(id); }
+
+function goHome() {
+  document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+  show('screen-0');
+}
+
+function startOver() {
+  decisionText = ''; sessionQs = []; sessionAnswers = []; currentSession = null;
+  document.getElementById('decision-input').value = '';
+  document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+  show('screen-0');
+}
+
+/* ════════════════════════════════
+   API + CONNECTION
+════════════════════════════════ */
+async function callClaude(system, user) {
+  // Mode 1: try proxy server (keeps key off the browser)
+  try {
+    const res = await fetch(`${API_BASE}/api/chat`, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ system, user, model: ACTIVE_MODEL }),
+      signal: AbortSignal.timeout(5000)
+    });
+    if (res.ok) return (await res.json()).text;
+  } catch { /* server offline — fall through */ }
+
+  // Mode 2: direct browser → Anthropic (uses key from Settings)
+  const key = DIRECT_API_KEY;
+  if (!key) throw new Error('NO_KEY');
+
+  const res = await fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: {
+      'x-api-key': key,
+      'anthropic-version': '2023-06-01',
+      'content-type': 'application/json',
+      'anthropic-dangerous-allow-browser': 'true'
+    },
+    body: JSON.stringify({
+      model: ACTIVE_MODEL,
+      max_tokens: 1024,
+      system,
+      messages: [{ role: 'user', content: user }]
+    })
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(err?.error?.message || `Anthropic API ${res.status}`);
+  }
+  return (await res.json()).content[0].text;
+}
+
+function parseJSON(raw) {
+  try { return JSON.parse(raw.replace(/```json\n?/g,'').replace(/```\n?/g,'').trim()); }
+  catch { return null; }
+}
+
+async function checkConnection(quiet=false) {
+  const dot  = document.getElementById('conn-dot');
+  const text = document.getElementById('conn-text');
+  dot.className = 'conn-dot checking';
+  text.innerHTML = 'Checking…';
+  try {
+    const res = await fetch(`${API_BASE}/health`, { signal: AbortSignal.timeout(4000) });
+    if (res.ok) {
+      dot.className = 'conn-dot connected';
+      text.innerHTML = 'API connected';
+      return true;
+    }
+    throw new Error('not ok');
+  } catch {
+    dot.className = 'conn-dot disconnected';
+    text.innerHTML = `Offline · <a onclick="showView('settings')">Setup</a>`;
+    return false;
+  }
+}
+
+async function testConnection() {
+  const pill = document.getElementById('settings-status');
+  pill.className = 'status-pill idle'; pill.textContent = 'Testing…';
+  try {
+    const res = await fetch(`${API_BASE}/health`, { signal: AbortSignal.timeout(4000) });
+    if (res.ok) {
+      const data = await res.json();
+      pill.className = 'status-pill ok';
+      pill.textContent = `✓ Connected · ${data.model || 'claude'}`;
+    } else throw new Error();
+  } catch {
+    pill.className = 'status-pill err';
+    pill.textContent = '✗ Cannot reach server';
+  }
+}
+
+/* ════════════════════════════════
+   SETTINGS ACTIONS
+════════════════════════════════ */
+function updateApiKey(v) {
+  DIRECT_API_KEY = v.trim();
+  localStorage.setItem('di_api_key', DIRECT_API_KEY);
+  document.getElementById('key-status').className = 'status-pill idle';
+  document.getElementById('key-status').textContent = 'Not tested';
+  checkConnection();
+}
+
+async function testDirectKey() {
+  const pill = document.getElementById('key-status');
+  pill.className = 'status-pill idle'; pill.textContent = 'Testing…';
+  if (!DIRECT_API_KEY) {
+    pill.className = 'status-pill err'; pill.textContent = '✗ No key entered';
+    return;
+  }
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'x-api-key': DIRECT_API_KEY,
+        'anthropic-version': '2023-06-01',
+        'content-type': 'application/json',
+        'anthropic-dangerous-allow-browser': 'true'
+      },
+      body: JSON.stringify({
+        model: ACTIVE_MODEL, max_tokens: 5,
+        messages: [{ role: 'user', content: 'hi' }]
+      })
+    });
+    if (res.ok || res.status === 400) { // 400 = valid key, bad request shape
+      pill.className = 'status-pill ok'; pill.textContent = '✓ Key valid — live';
+      // update sidebar indicator
+      document.getElementById('conn-dot').className = 'conn-dot connected';
+      document.getElementById('conn-text').innerHTML = 'API connected (direct)';
+    } else {
+      throw new Error(res.status);
+    }
+  } catch(e) {
+    pill.className = 'status-pill err';
+    pill.textContent = e.message?.includes('401') ? '✗ Invalid key' : '✗ Connection failed';
+  }
+}
+
+function updateApiBase(v) {
+  API_BASE = v.trim().replace(/\/+$/, '');
+  localStorage.setItem('di_api_base', API_BASE);
+  checkConnection();
+}
+
+function updateModel(v) {
+  ACTIVE_MODEL = v;
+  localStorage.setItem('di_model', v);
+}
+
+function updateProfile() {
+  userProfile.name  = document.getElementById('settings-name').value;
+  userProfile.email = document.getElementById('settings-email').value;
+  localStorage.setItem('di_profile', JSON.stringify(userProfile));
+  document.getElementById('profile-name').textContent  = userProfile.name || 'User';
+  document.getElementById('profile-email').textContent = userProfile.email || '';
+  document.getElementById('profile-badge').textContent = (userProfile.name || 'U').split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
+}
+
+function clearAllData() {
+  if (!confirm('Delete all sessions, projects, and settings? This cannot be undone.')) return;
+  ['di_recents','di_projects','di_profile','di_api_base','di_model'].forEach(k => localStorage.removeItem(k));
+  location.reload();
+}
+
+/* ════════════════════════════════
+   RECENTS
+════════════════════════════════ */
+function renderRecents() {
+  const list = loadRecents();
+  const el   = document.getElementById('recents-list');
+  if (!list.length) {
+    el.innerHTML = '<p class="recents-empty">Your perspectives appear here after each session.</p>';
+    return;
+  }
+  el.innerHTML = list.map((r,i) => `
+    <button class="recent-item" onclick="openRecent(${i})">
+      <div class="recent-avatar" style="background:${r.thinker.color}">${r.thinker.initials}</div>
+      <div class="recent-info">
+        <div class="recent-decision">${r.decision}</div>
+        <div class="recent-meta">
+          <span>${r.thinker.name.split(' ')[0]}</span>
+          <span class="recent-meta-dot"></span>
+          <span>${formatDate(r.date)}</span>
+        </div>
+      </div>
+    </button>
+  `).join('');
+}
+
+function openRecent(i) {
+  const r = loadRecents()[i];
+  if (!r) return;
+  document.querySelectorAll('.recent-item').forEach((el,j) => el.classList.toggle('active-recent', j===i));
+
+  document.getElementById('replay-header').innerHTML = `
+    <div class="screen-label">Saved · ${formatDate(r.date)}</div>
+    <h2 class="screen-title">${r.decision.length>80 ? r.decision.slice(0,80)+'…' : r.decision}</h2>
+    <div style="display:flex;align-items:center;gap:8px;margin-top:10px">
+      <div style="width:24px;height:24px;border-radius:50%;background:${r.thinker.color};display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:#fff">${r.thinker.initials}</div>
+      <span style="font-size:13px;color:var(--text-2)">${r.thinker.name} · ${r.thinker.title||''}</span>
+    </div>
+  `;
+
+  let html = '';
+  if (r.keyInsight) html += `
+    <div class="replay-key">
+      <div class="replay-key-label">Key insight</div>
+      <div class="replay-key-title">${r.keyInsight.title}</div>
+      <div class="replay-key-body">${r.keyInsight.body}</div>
+    </div>`;
+  if (r.frames?.length) html += `<div class="reframe-grid">${r.frames.map(f=>`
+    <div class="reframe-card">
+      <div class="reframe-card-icon">${f.icon}</div>
+      <div class="reframe-card-label">${f.label}</div>
+      <div class="reframe-card-title">${f.title}</div>
+      <div class="reframe-card-body">${f.body}</div>
+    </div>`).join('')}</div>`;
+
+  document.getElementById('replay-content').innerHTML = html;
+  show('screen-replay');
+  if (window.innerWidth <= 680 && sidebarOpen) toggleSidebar();
+}
+
+function formatDate(iso) {
+  const d = new Date(iso), now = new Date(), diff = now - d;
+  if (diff < 60000)    return 'Just now';
+  if (diff < 3600000)  return `${Math.floor(diff/60000)}m ago`;
+  if (diff < 86400000) return `${Math.floor(diff/3600000)}h ago`;
+  if (diff < 604800000)return `${Math.floor(diff/86400000)}d ago`;
+  return d.toLocaleDateString('en-US',{month:'short',day:'numeric'});
+}
+
+/* ════════════════════════════════
+   SEARCH
+════════════════════════════════ */
+function runSearch(q) {
+  q = q.trim().toLowerCase();
+  const el = document.getElementById('search-results');
+  if (!q) { el.innerHTML = '<div class="no-results"><span class="no-results-icon">🔍</span>Start typing to search your perspectives.</div>'; return; }
+  const matches = loadRecents().filter(r =>
+    r.decision.toLowerCase().includes(q) ||
+    (r.keyInsight?.title||'').toLowerCase().includes(q) ||
+    (r.keyInsight?.body||'').toLowerCase().includes(q)  ||
+    r.thinker.name.toLowerCase().includes(q)
+  );
+  if (!matches.length) { el.innerHTML = '<div class="no-results"><span class="no-results-icon">💭</span>No perspectives match that search.</div>'; return; }
+  el.innerHTML = matches.map(r => `
+    <div class="search-result-card" onclick="openRecentById('${r.id}')">
+      <div class="src-meta">
+        <div class="src-avatar" style="background:${r.thinker.color}">${r.thinker.initials}</div>
+        <span class="src-thinker">${r.thinker.name}</span>
+        <span class="src-date">${formatDate(r.date)}</span>
+      </div>
+      <div class="src-decision">${hl(r.decision,q)}</div>
+      ${r.keyInsight ? `<div class="src-insight">${hl(r.keyInsight.title,q)}</div>` : ''}
+    </div>
+  `).join('');
+}
+
+function hl(text, q) {
+  const re = new RegExp(`(${q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')})`, 'gi');
+  return text.replace(re, '<mark style="background:var(--accent-lt);color:var(--accent);border-radius:2px;padding:0 1px">$1</mark>');
+}
+
+function openRecentById(id) {
+  const idx = loadRecents().findIndex(r => r.id === id);
+  if (idx > -1) openRecent(idx);
+}
+
+/* ════════════════════════════════
+   PROJECTS
+════════════════════════════════ */
+function renderProjects() {
+  const projects = loadProjects(), recents = loadRecents();
+  const grid = document.getElementById('projects-grid');
+
+  document.getElementById('color-swatches').innerHTML = PROJECT_COLORS.map(c => `
+    <div class="swatch ${c===selectedColor?'selected':''}" style="background:${c}" onclick="selectColor('${c}')"></div>
+  `).join('');
+
+  const cards = projects.map(p => {
+    const n = recents.filter(r => r.projectId === p.id).length;
+    return `<div class="project-card"><div class="project-dot" style="background:${p.color}"></div><div class="project-name">${p.name}</div><div class="project-count">${n} perspective${n!==1?'s':''}</div></div>`;
+  }).join('');
+
+  grid.innerHTML = cards + `
+    <div class="new-project-card" onclick="showProjectForm()">
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="var(--text-3)" stroke-width="1.75"><path d="M10 4v12M4 10h12"/></svg>
+      <span>New project</span>
+    </div>`;
+}
+
+function showProjectForm() { document.getElementById('project-form').classList.add('visible'); document.getElementById('project-name-input').focus(); }
+function hideProjectForm() { document.getElementById('project-form').classList.remove('visible'); document.getElementById('project-name-input').value = ''; }
+function selectColor(c) { selectedColor = c; renderProjects(); }
+
+function saveProject() {
+  const name = document.getElementById('project-name-input').value.trim();
+  if (!name) return;
+  const p = loadProjects();
+  p.push({ id: String(Date.now()), name, color: selectedColor });
+  saveProjects(p);
+  hideProjectForm();
+  renderProjects();
+}
+
+/* ════════════════════════════════
+   DOWNLOADS
+════════════════════════════════ */
+function renderDownloads() {
+  const recents = loadRecents();
+  const el = document.getElementById('downloads-content');
+  if (!recents.length) {
+    el.innerHTML = '<div class="downloads-empty"><p style="font-size:32px;margin-bottom:12px">📥</p><p>Complete a session to export your perspectives.</p></div>';
+    return;
+  }
+  el.innerHTML = `<div class="downloads-list">${recents.map(r => `
+    <div class="download-item">
+      <div class="dl-icon">💭</div>
+      <div class="dl-info">
+        <div class="dl-name">${r.decision.length>60 ? r.decision.slice(0,60)+'…' : r.decision}</div>
+        <div class="dl-meta">${r.thinker.name} · ${formatDate(r.date)}</div>
+      </div>
+      <button class="dl-btn" onclick="downloadSession('${r.id}')">Export JSON</button>
+    </div>
+  `).join('')}</div>`;
+}
+
+function downloadSession(id) {
+  const r = loadRecents().find(s => s.id === id);
+  if (!r) return;
+  const blob = new Blob([JSON.stringify(r, null, 2)], { type:'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `divine-perspective-${r.id}.json`;
+  a.click();
+}
+
+/* ════════════════════════════════
+   HELP / FAQ
+════════════════════════════════ */
+function renderFAQ() {
+  document.getElementById('faq-list').innerHTML = FAQS.map((f,i) => `
+    <div class="faq-item" id="faq-${i}">
+      <div class="faq-q" onclick="toggleFAQ(${i})">
+        ${f.q}
+        <svg class="faq-chevron" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6l4 4 4-4"/></svg>
+      </div>
+      <div class="faq-a">${f.a}</div>
+    </div>
+  `).join('');
+}
+
+function toggleFAQ(i) {
+  document.getElementById(`faq-${i}`).classList.toggle('open');
+}
+
+/* ════════════════════════════════
+   THINKER PICKER
+════════════════════════════════ */
+function renderGrid(filter) {
+  const q = (filter||'').toLowerCase();
+  const list = q ? THINKERS.filter(t => t.name.toLowerCase().includes(q) || t.role.toLowerCase().includes(q)) : THINKERS;
+  document.getElementById('picker-count').textContent = `${list.length} thinker${list.length!==1?'s':''}`;
+  document.getElementById('picker-grid').innerHTML = list.map(t => `
+    <div class="picker-card ${t.id===activeThinker.id?'selected':''} ${!t.available?'unavailable':''}"
+         onclick="${t.available?`pickThinker('${t.id}')`:''}" >
+      <div class="picker-card-avatar" style="background:${t.color}">${t.initials}</div>
+      <div class="picker-card-name">${t.name}</div>
+      <div class="picker-card-role">${t.role}</div>
+      ${t.available&&t.id===activeThinker.id?'<div class="selected-check">✓</div>':''}
+      ${!t.available?'<div class="soon-badge">Coming soon</div>':''}
+    </div>`).join('');
+}
+
+function openPicker() { document.getElementById('picker-search').value=''; renderGrid(); document.getElementById('picker-modal').classList.add('open'); setTimeout(()=>document.getElementById('picker-search').focus(),200); }
+function closePicker() { document.getElementById('picker-modal').classList.remove('open'); }
+function closeBgClick(e) { if (e.target===document.getElementById('picker-modal')) closePicker(); }
+function filterThinkers(v) { renderGrid(v); }
+
+function pickThinker(id) {
+  activeThinker = THINKERS.find(t => t.id === id);
+  syncThinkerUI();
+  closePicker();
+}
+
+function syncThinkerUI() {
+  document.getElementById('lens-name').textContent       = activeThinker.name;
+  document.getElementById('lens-dot').style.background   = activeThinker.color;
+  document.getElementById('callout-avatar').textContent  = activeThinker.initials;
+  document.getElementById('callout-avatar').style.background = activeThinker.color;
+  document.getElementById('callout-name').textContent  = activeThinker.name;
+  document.getElementById('callout-title').textContent = activeThinker.title;
+  document.getElementById('callout-lens').textContent  = activeThinker.lens;
+  document.getElementById('context-sub').textContent   = `Help ${activeThinker.name.split(' ')[0]} see the full picture.`;
+}
+
+/* ════════════════════════════════
+   SESSION FLOW
+════════════════════════════════ */
+async function startSession() {
+  decisionText = document.getElementById('decision-input').value.trim();
+  if (!decisionText) return;
+
+  currentSession = {
+    id: String(Date.now()), date: new Date().toISOString(),
+    thinker: { name:activeThinker.name, initials:activeThinker.initials, color:activeThinker.color, title:activeThinker.title },
+    decision: decisionText, keyInsight:null, frames:[], projectId:null
+  };
+
+  show('screen-context');
+  document.getElementById('context-echo').textContent = decisionText;
+  document.getElementById('context-next').disabled = true;
+  document.getElementById('q-list').innerHTML = '<div class="dots"><span></span><span></span><span></span></div>';
+
+  try {
+    const raw = await callClaude(
+      `You are ${activeThinker.name}. Framework: ${activeThinker.aiFrame}. Return exactly this JSON array (no other text): [{"question":"..."},{"question":"..."},{"question":"..."}]`,
+      `Decision: ${decisionText}`
+    );
+    const qs = parseJSON(raw) || [
+      { question:'What signals prove real people experience this problem — not assumptions, but evidence?' },
+      { question:'What already exists that addresses this? What can you learn from their gaps?' },
+      { question:'If resources were unlimited, what would you actually build?' }
+    ];
+    sessionQs = qs;
+    document.getElementById('q-list').innerHTML = qs.map((q,i) => `
+      <div class="q-item">
+        <div class="q-num">Question ${i+1}</div>
+        <div class="q-text">${q.question}</div>
+        <textarea placeholder="Your answer…" rows="3" oninput="checkAnswers()"></textarea>
+      </div>`).join('');
+  } catch(e) {
+    document.getElementById('q-list').innerHTML =
+      `<p style="color:var(--text-2);font-size:14px;padding:20px 0">⚠️ Add your Anthropic API key in <a href="#" onclick="showView('settings');return false;" style="color:var(--accent)">Settings →</a></p>`;
+    document.getElementById('context-next').disabled = false;
+  }
+}
+
+function checkAnswers() {
+  const all = [...document.querySelectorAll('#q-list textarea')].every(t => t.value.trim().length > 5);
+  document.getElementById('context-next').disabled = !all;
+}
+
+async function goToMatch() {
+  sessionAnswers = [...document.querySelectorAll('#q-list textarea')]
+    .map((t,i) => ({ q:sessionQs[i]?.question||'', a:t.value.trim() }));
+
+  show('screen-match');
+  document.getElementById('match-footer').style.display = 'none';
+  document.getElementById('match-content').innerHTML = '<div class="dots"><span></span><span></span><span></span></div>';
+
+  const qa = sessionAnswers.map(x=>`Q: ${x.q}\nA: ${x.a}`).join('\n\n');
+
+  try {
+    const raw = await callClaude(
+      `You are ${activeThinker.name}. Framework: ${activeThinker.aiFrame}. Return only JSON: {"score":85,"headline":"Strong alignment","sub":"2-4 words","reasoning":"2-3 sentences."}`,
+      `Decision: ${decisionText}\n\n${qa}`
+    );
+    const d = parseJSON(raw) || { score:85, headline:'Strong alignment', sub:'Clear match', reasoning:'This decision aligns well with the framework.' };
+    document.getElementById('match-content').innerHTML = `
+      <div class="match-card">
+        <div class="match-avatar" style="background:${activeThinker.color}">${activeThinker.initials}</div>
+        <div class="match-score">${d.score}%</div>
+        <div class="match-headline">${d.headline}</div>
+        <div class="match-sub">${d.sub||''}</div>
+        <div class="match-reasoning">${d.reasoning}</div>
+      </div>`;
+    document.getElementById('match-footer').style.display = 'flex';
+  } catch {
+    document.getElementById('match-content').innerHTML =
+      `<p style="color:var(--text-2);font-size:14px">⚠️ Add your Anthropic API key in <a href="#" onclick="showView('settings');return false;" style="color:var(--accent)">Settings →</a></p>`;
+    document.getElementById('match-footer').style.display = 'flex';
+  }
+}
+
+async function goToReframe() {
+  show('screen-reframe');
+  document.getElementById('reframe-footer').style.display = 'none';
+  document.getElementById('reframe-content').innerHTML = '<div class="dots"><span></span><span></span><span></span></div>';
+
+  const qa = sessionAnswers.map(x=>`Q: ${x.q}\nA: ${x.a}`).join('\n\n');
+
+  try {
+    const raw = await callClaude(
+      `You are ${activeThinker.name}. Framework: ${activeThinker.aiFrame}. Return only JSON: {"keyInsight":{"title":"...","body":"..."},"frames":[{"icon":"🔍","label":"...","title":"...","body":"..."},{"icon":"⚡","label":"...","title":"...","body":"..."},{"icon":"🎯","label":"...","title":"...","body":"..."}]}`,
+      `Decision: ${decisionText}\n\n${qa}`
+    );
+    const d = parseJSON(raw);
+    if (d?.keyInsight && d?.frames) {
+      if (currentSession) { currentSession.keyInsight = d.keyInsight; currentSession.frames = d.frames; }
+      document.getElementById('reframe-content').innerHTML = `
+        <div class="reframe-key">
+          <div class="reframe-key-label">Key insight</div>
+          <div class="reframe-key-title">${d.keyInsight.title}</div>
+          <div class="reframe-key-body">${d.keyInsight.body}</div>
+        </div>
+        <div class="reframe-grid">${d.frames.map(f=>`
+          <div class="reframe-card">
+            <div class="reframe-card-icon">${f.icon}</div>
+            <div class="reframe-card-label">${f.label}</div>
+            <div class="reframe-card-title">${f.title}</div>
+            <div class="reframe-card-body">${f.body}</div>
+          </div>`).join('')}</div>`;
+    } else throw new Error('parse');
+    document.getElementById('reframe-footer').style.display = 'flex';
+  } catch {
+    document.getElementById('reframe-content').innerHTML =
+      `<p style="color:var(--text-2);font-size:14px">⚠️ Add your Anthropic API key in <a href="#" onclick="showView('settings');return false;" style="color:var(--accent)">Settings →</a></p>`;
+    document.getElementById('reframe-footer').style.display = 'flex';
+  }
+}
+
+function goToDone() {
+  if (currentSession) saveSession(currentSession);
+  show('screen-done');
+}
+
+/* ════════════════════════════════
+   INIT
+════════════════════════════════ */
+// Restore settings UI
+document.getElementById('settings-api-base').value = API_BASE;
+document.getElementById('settings-model').value     = ACTIVE_MODEL;
+document.getElementById('settings-name').value      = userProfile.name;
+document.getElementById('settings-email').value     = userProfile.email;
+if (DIRECT_API_KEY) {
+  document.getElementById('settings-api-key').value = DIRECT_API_KEY;
+  document.getElementById('key-status').className   = 'status-pill ok';
+  document.getElementById('key-status').textContent = '✓ Key saved';
+}
+
+// Restore profile display
+document.getElementById('profile-name').textContent  = userProfile.name;
+document.getElementById('profile-email').textContent = userProfile.email;
+document.getElementById('profile-badge').textContent = userProfile.name.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
+
+renderRecents();
+renderFAQ();
+checkConnection();
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') { closePicker(); closeProfileMenu(); }
+});
+</script>
+</body>
+</html>
