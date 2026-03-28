@@ -114,7 +114,7 @@
     .sidebar.collapsed .profile-text,
     .sidebar.collapsed .profile-dots { display:none; }
     .sidebar.collapsed .profile-btn { justify-content:center; padding:12px 0; }
-    .sidebar.collapsed .profile-menu-popup { left:56px; right:auto; bottom:8px; min-width:180px; }
+    .sidebar.collapsed .profile-menu-popup { left:56px; right:auto; bottom:calc(100% + 6px); min-width:190px; }
     .sidebar.collapsed .sidebar-nav { padding:12px 6px 8px; }
 
     /* Tooltip on hover for collapsed icons */
@@ -193,6 +193,71 @@
     .conn-text { font-size:11.5px; color:var(--text-3); }
     .conn-text a { color:var(--accent); text-decoration:none; cursor:pointer; }
     .conn-text a:hover { text-decoration:underline; }
+
+    /* Balance bar */
+    .balance-bar {
+      display:flex; align-items:center; justify-content:space-between;
+      padding:7px 14px; background:var(--surface-2);
+      border-top:1px solid var(--border); gap:10px;
+    }
+    .balance-amount { font-size:12px; font-weight:600; color:var(--text-1); }
+    .balance-label  { font-size:11px; color:var(--text-3); }
+    .balance-topup  {
+      font-size:11.5px; font-weight:600; color:#fff;
+      background:#E8613A; border:none; border-radius:20px;
+      padding:4px 11px; cursor:pointer; white-space:nowrap;
+      transition:background 0.13s;
+    }
+    .balance-topup:hover { background:#d14e29; }
+    .sidebar.collapsed .balance-bar { display:none; }
+
+    /* Top-up modal */
+    .modal-overlay {
+      display:none; position:fixed; inset:0; z-index:500;
+      background:rgba(15,14,12,0.55); backdrop-filter:blur(4px);
+      align-items:center; justify-content:center;
+    }
+    .modal-overlay.open { display:flex; }
+    .topup-modal {
+      background:var(--surface); border-radius:16px;
+      box-shadow:0 24px 60px rgba(0,0,0,0.18);
+      width:min(420px, calc(100vw - 32px)); padding:32px;
+      animation:modal-in 0.2s ease;
+    }
+    @keyframes modal-in { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
+    .topup-coral-icon {
+      width:52px; height:52px; border-radius:50%;
+      background:#FFF0EB; display:flex; align-items:center; justify-content:center;
+      font-size:24px; margin-bottom:18px;
+    }
+    .topup-title { font-size:20px; font-weight:700; color:var(--text-0); margin-bottom:6px; }
+    .topup-sub   { font-size:14px; color:var(--text-2); margin-bottom:24px; line-height:1.5; }
+    .topup-packages { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-bottom:24px; }
+    .topup-pkg {
+      border:2px solid var(--border-md); border-radius:12px; padding:14px 10px;
+      cursor:pointer; text-align:center; transition:border-color 0.15s,background 0.15s;
+      background:var(--surface);
+    }
+    .topup-pkg:hover, .topup-pkg.selected {
+      border-color:#E8613A; background:#FFF0EB;
+    }
+    .topup-pkg-credits { font-size:18px; font-weight:700; color:var(--text-0); }
+    .topup-pkg-label   { font-size:11px; color:var(--text-3); margin-top:2px; }
+    .topup-pkg-price   { font-size:13px; font-weight:600; color:#E8613A; margin-top:6px; }
+    .topup-cta {
+      width:100%; padding:14px; border:none; border-radius:12px;
+      background:#E8613A; color:#fff; font-size:15px; font-weight:700;
+      cursor:pointer; transition:background 0.15s;
+    }
+    .topup-cta:hover { background:#d14e29; }
+    .topup-cta:disabled { background:#ccc; cursor:not-allowed; }
+    .topup-close {
+      position:absolute; top:16px; right:16px;
+      background:none; border:none; font-size:20px; cursor:pointer;
+      color:var(--text-3); padding:4px 8px; border-radius:8px;
+    }
+    .topup-close:hover { background:var(--surface-2); }
+    .topup-modal-wrap { position:relative; }
 
     /* Profile popup */
     .profile-menu-popup {
@@ -527,6 +592,14 @@
       <div class="conn-bar" id="conn-bar">
         <div class="conn-dot checking" id="conn-dot"></div>
         <span class="conn-text" id="conn-text">Checking connection…</span>
+      </div>
+      <!-- Credit balance bar -->
+      <div class="balance-bar" id="balance-bar">
+        <div>
+          <div class="balance-amount" id="balance-amount">—</div>
+          <div class="balance-label">credits remaining</div>
+        </div>
+        <button class="balance-topup" onclick="openTopup()">Top up</button>
       </div>
       <div class="sidebar-divider" style="margin:0 10px"></div>
 
@@ -975,6 +1048,19 @@ let ACTIVE_MODEL   = localStorage.getItem('di_model')     || 'claude-opus-4-5';
 let userProfile    = JSON.parse(localStorage.getItem('di_profile') || '{"name":"Michael Akindele","email":"michael@surpluspods.com"}');
 let DIRECT_API_KEY = localStorage.getItem('di_api_key')   || '';
 
+// Persistent device user_id — wallet identifier
+function getOrCreateUserId() {
+  let id = localStorage.getItem('di_user_id');
+  if (!id) {
+    id = 'u_' + crypto.randomUUID().replace(/-/g, '');
+    localStorage.setItem('di_user_id', id);
+  }
+  return id;
+}
+const USER_ID = getOrCreateUserId();
+let currentBalance  = null;
+let selectedPkgEl   = null;
+
 /* ════════════════════════════════
    PERSISTENCE
 ════════════════════════════════ */
@@ -1088,42 +1174,146 @@ function startOver() {
 /* ════════════════════════════════
    API + CONNECTION
 ════════════════════════════════ */
+/**
+ * Primary: stream from /api/get-perspective (server handles auth + billing).
+ * Calls onChunk(text) for each streamed delta.
+ * Returns the full assembled text when done.
+ * Throws on 402 (insufficient funds) or other errors.
+ */
+async function callPerspective({ stage, decision, answers, onChunk }) {
+  const body = {
+    user_id:    USER_ID,
+    thinker_id: activeThinker.id,
+    stage,
+    decision:   decision || decisionText,
+    answers:    answers  || sessionAnswers,
+  };
+
+  const res = await fetch(`${API_BASE}/api/get-perspective`, {
+    method:  'POST',
+    headers: { 'content-type': 'application/json' },
+    body:    JSON.stringify(body),
+  });
+
+  // Non-streaming error (402, 400, 404 etc.)
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    if (res.status === 402) {
+      openTopup();
+      throw new Error('INSUFFICIENT_FUNDS');
+    }
+    throw new Error(err.error || `Server error ${res.status}`);
+  }
+
+  // Read SSE stream
+  const reader  = res.body.getReader();
+  const decoder = new TextDecoder();
+  let fullText  = '';
+  let buffer    = '';
+
+  while (true) {
+    const { done, value } = await reader.read();
+    if (done) break;
+    buffer += decoder.decode(value, { stream: true });
+    const lines = buffer.split('\n');
+    buffer = lines.pop(); // keep incomplete line
+
+    for (const line of lines) {
+      if (!line.startsWith('data: ')) continue;
+      const payload = line.slice(6).trim();
+      if (!payload) continue;
+      const msg = JSON.parse(payload);
+
+      if (msg.type === 'delta') {
+        fullText += msg.text;
+        if (onChunk) onChunk(msg.text);
+      } else if (msg.type === 'done') {
+        if (msg.balance !== null && msg.balance !== undefined) {
+          updateBalanceDisplay(msg.balance);
+        }
+      } else if (msg.type === 'error') {
+        throw new Error(msg.message);
+      }
+    }
+  }
+  return fullText;
+}
+
+/** Legacy wrapper so existing callClaude() call sites still work via proxy. */
 async function callClaude(system, user) {
-  // Mode 1: try proxy server (keeps key off the browser)
+  // Primary: proxy server
   try {
     const res = await fetch(`${API_BASE}/api/chat`, {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
       body: JSON.stringify({ system, user, model: ACTIVE_MODEL }),
-      signal: AbortSignal.timeout(5000)
+      signal: AbortSignal.timeout(8000)
     });
     if (res.ok) return (await res.json()).text;
-  } catch { /* server offline — fall through */ }
+  } catch { /* fall through */ }
 
-  // Mode 2: direct browser → Anthropic (uses key from Settings)
+  // Fallback: direct browser call
   const key = DIRECT_API_KEY;
   if (!key) throw new Error('NO_KEY');
-
   const res = await fetch('https://api.anthropic.com/v1/messages', {
     method: 'POST',
     headers: {
-      'x-api-key': key,
-      'anthropic-version': '2023-06-01',
-      'content-type': 'application/json',
-      'anthropic-dangerous-allow-browser': 'true'
+      'x-api-key': key, 'anthropic-version': '2023-06-01',
+      'content-type': 'application/json', 'anthropic-dangerous-allow-browser': 'true'
     },
-    body: JSON.stringify({
-      model: ACTIVE_MODEL,
-      max_tokens: 1024,
-      system,
-      messages: [{ role: 'user', content: user }]
-    })
+    body: JSON.stringify({ model: ACTIVE_MODEL, max_tokens: 1024, system,
+      messages: [{ role: 'user', content: user }] })
   });
-  if (!res.ok) {
-    const err = await res.json().catch(() => ({}));
-    throw new Error(err?.error?.message || `Anthropic API ${res.status}`);
-  }
+  if (!res.ok) { const e = await res.json().catch(()=>({})); throw new Error(e?.error?.message || `API ${res.status}`); }
   return (await res.json()).content[0].text;
+}
+
+/* ── Balance ── */
+function updateBalanceDisplay(balance) {
+  currentBalance = balance;
+  const el = document.getElementById('balance-amount');
+  if (el) el.textContent = `$${parseFloat(balance).toFixed(2)}`;
+  if (balance !== null && balance < 0.05) {
+    // Auto-open top-up when balance hits zero during a session
+    setTimeout(openTopup, 600);
+  }
+}
+
+async function fetchBalance() {
+  try {
+    const res = await fetch(`${API_BASE}/api/balance?user_id=${USER_ID}`);
+    if (res.ok) {
+      const data = await res.json();
+      updateBalanceDisplay(data.credit_balance);
+    }
+  } catch { /* non-fatal */ }
+}
+
+/* ── Top-up modal ── */
+function openTopup() {
+  document.getElementById('topup-overlay').classList.add('open');
+  // Pre-select $10 package
+  const pkgs = document.querySelectorAll('.topup-pkg');
+  pkgs.forEach(p => p.classList.remove('selected'));
+  selectedPkgEl = document.querySelector('.topup-pkg[data-credits="10"]');
+  if (selectedPkgEl) selectedPkgEl.classList.add('selected');
+}
+function closeTopup() {
+  document.getElementById('topup-overlay').classList.remove('open');
+}
+function selectPkg(el) {
+  document.querySelectorAll('.topup-pkg').forEach(p => p.classList.remove('selected'));
+  el.classList.add('selected');
+  selectedPkgEl = el;
+}
+function handleTopup() {
+  const pkg = selectedPkgEl || document.querySelector('.topup-pkg.selected');
+  if (!pkg) return;
+  const credits = pkg.dataset.credits;
+  const price   = pkg.dataset.price;
+  // TODO: open Stripe/Shift4 checkout with user_id + credits in metadata
+  // For now, redirect to a placeholder payment page or Stripe Payment Link
+  alert(`Payment integration coming soon.\nSelected: ${credits} credits for $${price}\nYour user_id: ${USER_ID}\n\nPass this user_id in your Stripe/Shift4 payment metadata so credits are applied automatically.`);
 }
 
 function parseJSON(raw) {
@@ -1491,10 +1681,7 @@ async function startSession() {
   document.getElementById('q-list').innerHTML = '<div class="dots"><span></span><span></span><span></span></div>';
 
   try {
-    const raw = await callClaude(
-      `You are ${activeThinker.name}. Framework: ${activeThinker.aiFrame}. Return exactly this JSON array (no other text): [{"question":"..."},{"question":"..."},{"question":"..."}]`,
-      `Decision: ${decisionText}`
-    );
+    const raw = await callPerspective({ stage: 'questions', decision: decisionText, onChunk: null });
     const qs = parseJSON(raw) || [
       { question:'What signals prove real people experience this problem — not assumptions, but evidence?' },
       { question:'What already exists that addresses this? What can you learn from their gaps?' },
@@ -1508,8 +1695,10 @@ async function startSession() {
         <textarea placeholder="Your answer…" rows="3" oninput="checkAnswers()"></textarea>
       </div>`).join('');
   } catch(e) {
-    document.getElementById('q-list').innerHTML =
-      `<p style="color:var(--text-2);font-size:14px;padding:20px 0">⚠️ Could not connect to AI — please try again shortly</p>`;
+    if (e.message !== 'INSUFFICIENT_FUNDS') {
+      document.getElementById('q-list').innerHTML =
+        `<p style="color:var(--text-2);font-size:14px;padding:20px 0">⚠️ Could not connect to AI — please try again shortly</p>`;
+    }
     document.getElementById('context-next').disabled = false;
   }
 }
@@ -1530,10 +1719,7 @@ async function goToMatch() {
   const qa = sessionAnswers.map(x=>`Q: ${x.q}\nA: ${x.a}`).join('\n\n');
 
   try {
-    const raw = await callClaude(
-      `You are ${activeThinker.name}. Framework: ${activeThinker.aiFrame}. Return only JSON: {"score":85,"headline":"Strong alignment","sub":"2-4 words","reasoning":"2-3 sentences."}`,
-      `Decision: ${decisionText}\n\n${qa}`
-    );
+    const raw = await callPerspective({ stage: 'match', decision: decisionText, answers: sessionAnswers, onChunk: null });
     const d = parseJSON(raw) || { score:85, headline:'Strong alignment', sub:'Clear match', reasoning:'This decision aligns well with the framework.' };
     document.getElementById('match-content').innerHTML = `
       <div class="match-card">
@@ -1559,10 +1745,7 @@ async function goToReframe() {
   const qa = sessionAnswers.map(x=>`Q: ${x.q}\nA: ${x.a}`).join('\n\n');
 
   try {
-    const raw = await callClaude(
-      `You are ${activeThinker.name}. Framework: ${activeThinker.aiFrame}. Return only JSON: {"keyInsight":{"title":"...","body":"..."},"frames":[{"icon":"🔍","label":"...","title":"...","body":"..."},{"icon":"⚡","label":"...","title":"...","body":"..."},{"icon":"🎯","label":"...","title":"...","body":"..."}]}`,
-      `Decision: ${decisionText}\n\n${qa}`
-    );
+    const raw = await callPerspective({ stage: 'reframe', decision: decisionText, answers: sessionAnswers, onChunk: null });
     const d = parseJSON(raw);
     if (d?.keyInsight && d?.frames) {
       if (currentSession) { currentSession.keyInsight = d.keyInsight; currentSession.frames = d.frames; }
@@ -1615,10 +1798,39 @@ document.getElementById('profile-badge').textContent = userProfile.name.split(' 
 renderRecents();
 renderFAQ();
 checkConnection();
+fetchBalance();
 
 document.addEventListener('keydown', e => {
-  if (e.key === 'Escape') { closePicker(); closeProfileMenu(); }
+  if (e.key === 'Escape') { closePicker(); closeProfileMenu(); closeTopup(); }
 });
 </script>
+
+<!-- Top-up Modal -->
+<div class="modal-overlay" id="topup-overlay" onclick="if(event.target===this)closeTopup()">
+  <div class="topup-modal topup-modal-wrap">
+    <button class="topup-close" onclick="closeTopup()">×</button>
+    <div class="topup-coral-icon">💳</div>
+    <div class="topup-title">Top up your credits</div>
+    <div class="topup-sub">Each perspective costs $0.05. Pick a package and keep the insights coming.</div>
+    <div class="topup-packages" id="topup-packages">
+      <div class="topup-pkg" data-credits="5" data-price="5.00" onclick="selectPkg(this)">
+        <div class="topup-pkg-credits">100</div>
+        <div class="topup-pkg-label">insights</div>
+        <div class="topup-pkg-price">$5</div>
+      </div>
+      <div class="topup-pkg selected" data-credits="10" data-price="10.00" onclick="selectPkg(this)">
+        <div class="topup-pkg-credits">200</div>
+        <div class="topup-pkg-label">insights</div>
+        <div class="topup-pkg-price">$10</div>
+      </div>
+      <div class="topup-pkg" data-credits="25" data-price="25.00" onclick="selectPkg(this)">
+        <div class="topup-pkg-credits">500</div>
+        <div class="topup-pkg-label">insights</div>
+        <div class="topup-pkg-price">$25</div>
+      </div>
+    </div>
+    <button class="topup-cta" id="topup-cta" onclick="handleTopup()">Continue to payment</button>
+  </div>
+</div>
 </body>
 </html>
