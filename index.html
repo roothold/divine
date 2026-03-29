@@ -635,21 +635,44 @@
     .dossier-empty { text-align:center; padding:72px 0; color:var(--text-3); }
     .dossier-empty-icon { width:52px; height:52px; margin:0 auto 16px; background:var(--surface-2); border-radius:50%; display:flex; align-items:center; justify-content:center; }
 
-    /* ═══ HELP ═══ */
-    .faq-item { background:var(--surface); border:1px solid var(--border); border-radius:var(--r); margin-bottom:8px; overflow:hidden; box-shadow:var(--sh-sm); }
-    .faq-q { display:flex; align-items:center; justify-content:space-between; padding:16px 20px; cursor:pointer; font-size:14px; font-weight:500; color:var(--text-0); transition:background 0.13s; }
-    .faq-q:hover { background:var(--surface-2); }
-    .faq-chevron { color:var(--text-3); transition:transform 0.2s; flex-shrink:0; }
-    .faq-item.open .faq-chevron { transform:rotate(180deg); }
-    .faq-a { display:none; padding:0 20px 16px; font-size:14px; color:var(--text-2); line-height:1.65; }
-    .faq-item.open .faq-a { display:block; }
-    .help-cards { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:28px; }
-    @media (max-width:480px) { .help-cards { grid-template-columns:1fr; } }
-    .help-card { background:var(--surface); border:1px solid var(--border); border-radius:var(--r); padding:20px; box-shadow:var(--sh-sm); cursor:pointer; transition:border-color 0.15s,box-shadow 0.15s; }
-    .help-card:hover { border-color:var(--border-hi); box-shadow:var(--sh-md); }
-    .help-card-icon { font-size:24px; margin-bottom:10px; }
-    .help-card-title { font-size:14px; font-weight:600; color:var(--text-0); margin-bottom:4px; }
-    .help-card-sub { font-size:13px; color:var(--text-2); }
+    /* ═══ KNOWLEDGE BASE ═══ */
+    .kb-search-wrap  { position:relative; margin-bottom:32px; }
+    .kb-search-input { width:100%; padding:13px 20px 13px 46px; font-size:14px; border:1.5px solid var(--border-md); border-radius:var(--r-pill); background:var(--surface); color:var(--text-0); outline:none; transition:border-color .2s,box-shadow .2s; font-family:inherit; }
+    .kb-search-input:focus  { border-color:var(--violet,#5b4fff); box-shadow:0 0 0 3px var(--violet-lt,#f0eeff); }
+    .kb-search-input::placeholder { color:var(--text-3); }
+    .kb-search-icon  { position:absolute; left:15px; top:50%; transform:translateY(-50%); color:var(--text-3); pointer-events:none; }
+    .kb-cards { display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-bottom:36px; }
+    @media (max-width:500px) { .kb-cards { grid-template-columns:1fr; } }
+    .kb-card { border-radius:12px; padding:22px 22px 18px; cursor:pointer; transition:transform .2s,box-shadow .2s; }
+    .kb-card:hover { transform:translateY(-2px); box-shadow:0 8px 28px rgba(0,0,0,.1); }
+    .kb-card-archives { background:var(--violet-lt,#f0eeff); border:1.5px solid var(--accent-bdr); }
+    .kb-card-emissary { background:var(--coral-lt,#fff1f3); border:1.5px solid rgba(255,79,107,.25); }
+    .kb-card-symbol   { margin-bottom:14px; display:block; }
+    .kb-card-title    { font-size:15px; font-weight:700; color:var(--text-0); margin-bottom:6px; line-height:1.2; }
+    .kb-card-sub      { font-size:13px; color:var(--text-2); line-height:1.6; margin-bottom:14px; }
+    .kb-card-cta      { font-size:12px; font-weight:600; display:inline-flex; align-items:center; gap:5px; }
+    .kb-card-archives .kb-card-cta { color:var(--violet,#5b4fff); }
+    .kb-card-emissary .kb-card-cta { color:var(--coral,#ff4f6b); }
+    .kb-section-head  { font-size:11px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:var(--text-3); margin-bottom:4px; display:flex; align-items:center; gap:7px; }
+    .kb-faq-item      { border-bottom:1px solid var(--border); }
+    .kb-faq-item:first-child { border-top:1px solid var(--border); }
+    .kb-faq-q         { display:flex; align-items:center; justify-content:space-between; padding:18px 2px; cursor:pointer; gap:16px; }
+    .kb-faq-q:hover .kb-faq-q-text { color:var(--violet,#5b4fff); }
+    .kb-faq-q-text    { font-size:14px; font-weight:500; color:var(--text-0); line-height:1.4; transition:color .15s; }
+    .kb-faq-item.open .kb-faq-q-text  { color:var(--violet,#5b4fff); }
+    .kb-faq-chevron   { color:var(--text-3); transition:transform .2s,color .15s; flex-shrink:0; }
+    .kb-faq-item.open .kb-faq-chevron { transform:rotate(180deg); color:var(--violet,#5b4fff); }
+    .kb-faq-a         { display:none; padding:0 2px 20px; font-size:13.5px; color:var(--text-2); line-height:1.75; }
+    .kb-faq-item.open .kb-faq-a { display:block; }
+    .kb-faq-empty     { padding:28px 2px; font-size:14px; color:var(--text-3); }
+    .kb-thinker-strip { margin-top:40px; background:linear-gradient(130deg,#1a1630 0%,#2d2065 100%); border-radius:12px; padding:22px 24px; display:flex; align-items:center; gap:16px; }
+    .kb-ts-icon       { width:44px; height:44px; flex-shrink:0; }
+    .kb-ts-body       { flex:1; }
+    .kb-ts-title      { font-size:14px; font-weight:700; color:#fff; margin-bottom:3px; }
+    .kb-ts-sub        { font-size:13px; color:rgba(255,255,255,.6); line-height:1.5; }
+    .kb-ts-btn        { font-size:12px; font-weight:600; color:#fff; background:var(--violet,#5b4fff); border:none; border-radius:var(--r-pill); padding:9px 18px; cursor:pointer; white-space:nowrap; flex-shrink:0; transition:opacity .15s; }
+    .kb-ts-btn:hover  { opacity:.82; }
+    @media (max-width:560px) { .kb-thinker-strip { flex-direction:column; align-items:flex-start; gap:10px; } .kb-ts-icon { display:none; } }
 
     /* ═══ UPGRADE ═══ */
     .plans-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:16px; }
@@ -1747,23 +1770,71 @@
     <div class="screen" id="screen-help">
       <div class="main-inner"><div class="screen-inner">
         <div class="screen-header">
-          <div class="screen-label">Help</div>
-          <h2 class="screen-title">How can we help?</h2>
+          <div class="screen-label">Knowledge Base</div>
+          <h2 class="screen-title" style="font-family:'Cormorant Garamond',serif;font-size:32px;font-weight:600">How may we illuminate?</h2>
+          <p class="screen-sub">The Divine Library holds answers to every question about the platform, the Thinkers, and the protocols that govern them.</p>
         </div>
-        <div class="help-cards">
-          <div class="help-card" onclick="window.open('mailto:michael@surpluspods.com')">
-            <div class="help-card-icon">✉️</div>
-            <div class="help-card-title">Email support</div>
-            <div class="help-card-sub">Get a response within 24 hours</div>
+
+        <!-- Search -->
+        <div class="kb-search-wrap">
+          <svg class="kb-search-icon" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="6.5" cy="6.5" r="4.5"/><path d="M11 11l3 3"/></svg>
+          <input class="kb-search-input" id="kb-search" type="text" placeholder="Search the Global Ledger of Wisdom…" oninput="helpSearch(this.value)" autocomplete="off" spellcheck="false">
+        </div>
+
+        <!-- Tiered assistance cards -->
+        <div class="kb-cards">
+          <div class="kb-card kb-card-archives" onclick="window.open('https://getdivine.ai/docs','_blank')">
+            <svg class="kb-card-symbol" width="32" height="32" viewBox="0 0 32 32" fill="none">
+              <rect x="3" y="2" width="18" height="24" rx="2.5" stroke="#5b4fff" stroke-width="1.7" fill="none"/>
+              <rect x="3" y="2" width="5.5" height="24" rx="2" fill="#5b4fff" opacity=".12"/>
+              <path d="M11 9h6M11 13.5h6M11 18h4" stroke="#5b4fff" stroke-width="1.5" stroke-linecap="round"/>
+              <path d="M25 5v20l-3.5-2.5-3.5 2.5V5" stroke="#5b4fff" stroke-width="1.6" stroke-linejoin="round" fill="none"/>
+            </svg>
+            <div class="kb-card-title">The Archives</div>
+            <div class="kb-card-sub">Access the structural blueprints of Divine Intelligence — integration guides, cognitive protocols, and platform architecture.</div>
+            <div class="kb-card-cta">
+              Open Documentation
+              <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2.5 6h7M6.5 3l3 3-3 3"/></svg>
+            </div>
           </div>
-          <div class="help-card" onclick="window.open('https://getdivine.ai/docs','_blank')">
-            <div class="help-card-icon">📖</div>
-            <div class="help-card-title">Documentation</div>
-            <div class="help-card-sub">Guides and API reference</div>
+          <div class="kb-card kb-card-emissary" onclick="window.open('mailto:michael@surpluspods.com')">
+            <svg class="kb-card-symbol" width="32" height="32" viewBox="0 0 32 32" fill="none">
+              <rect x="3" y="7" width="26" height="18" rx="3" stroke="#ff4f6b" stroke-width="1.7" fill="none"/>
+              <path d="M3 10l13 9 13-9" stroke="#ff4f6b" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+              <circle cx="25" cy="8" r="4" fill="#ff4f6b"/>
+              <path d="M23.5 8h3M25 6.5v3" stroke="#fff" stroke-width="1.4" stroke-linecap="round"/>
+            </svg>
+            <div class="kb-card-title">The Emissary</div>
+            <div class="kb-card-sub">Request a direct transmission from our architects. Human oversight ensures every inquiry receives considered counsel.</div>
+            <div class="kb-card-cta">
+              Send a Transmission
+              <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2.5 6h7M6.5 3l3 3-3 3"/></svg>
+            </div>
           </div>
         </div>
-        <h3 style="font-size:16px;font-weight:600;color:var(--text-0);margin-bottom:16px">Frequently asked questions</h3>
+
+        <!-- FAQ -->
+        <div class="kb-section-head">
+          <svg width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M5.5 1L7.8 4.2 11 5.5 7.8 6.8 5.5 10 3.2 6.8 0 5.5 3.2 4.2Z" stroke="currentColor" stroke-width="1.2" fill="none"/></svg>
+          Philosophical Inquiries
+        </div>
         <div id="faq-list"></div>
+
+        <!-- Thinker CTA strip -->
+        <div class="kb-thinker-strip">
+          <svg class="kb-ts-icon" width="44" height="44" viewBox="0 0 44 44" fill="none">
+            <circle cx="22" cy="22" r="20" fill="rgba(255,255,255,.06)" stroke="rgba(255,255,255,.18)" stroke-width="1"/>
+            <path d="M22 8L35 22L22 33L9 22Z" fill="none" stroke="rgba(255,255,255,.6)" stroke-width="1.4"/>
+            <path d="M22 8L35 22L22 19L9 22Z" fill="rgba(255,255,255,.1)" stroke="none"/>
+            <circle cx="22" cy="22" r="3.5" fill="rgba(255,255,255,.45)"/>
+          </svg>
+          <div class="kb-ts-body">
+            <div class="kb-ts-title">Are you an Architect of Wisdom?</div>
+            <div class="kb-ts-sub">Visit the Thinker Initiation guide to encode your cognitive framework and join the Divine network.</div>
+          </div>
+          <button class="kb-ts-btn" onclick="showView('thinker-hub')">Begin Initiation</button>
+        </div>
+
       </div></div>
     </div>
 
@@ -2429,11 +2500,30 @@ const THINKERS = [
 const PROJECT_COLORS = ['#3B31A4','#0F7A5E','#C0392B','#8E5A02','#7B2D8B','#005B9E','#1D4E89','#B5451B'];
 
 const FAQS = [
-  { q:'How does Divine Intelligence work?', a:'You describe a decision, answer a few context questions, and your selected thinker applies their specific cognitive framework to your situation. The AI has been trained on how that thinker sees the world — not what they would do, but how they would see it.' },
-  { q:'Who are the thinkers?', a:'Thinkers are real experts whose cognitive frameworks have been captured and licensed to the platform. Michael Akindele is the first available thinker — more are coming soon.' },
-  { q:'How do I connect the AI backend?', a:'Run server.js locally (node server.js), add your Anthropic API key to .env, and make sure the server URL in Settings points to http://localhost:3001. The connection indicator in the sidebar will turn green when you\'re live.' },
-  { q:'Are my sessions private?', a:'Yes. Sessions are stored locally in your browser using localStorage. Nothing is sent to our servers — only to the Anthropic API via your proxy server.' },
-  { q:'Can I export my sessions?', a:'Yes. Open the Dossier Collection from your profile menu to access all completed sessions as print-ready intelligence reports. Click "Download PDF Report" to open a formatted dossier in your browser, then save it as a PDF. You can also copy a shareable link to any perspective.' },
+  {
+    q: 'The Mechanics of Cognitive Replication',
+    a: 'You describe a decision, answer a few context questions, and your selected Architect applies their specific cognitive framework to your situation. The intelligence model has been trained on how that Thinker sees the world — not what they would do, but how they would see it. Each Perspective costs $0.05 and is preserved as a Dossier in your Collection.'
+  },
+  {
+    q: 'Who Are the Architects of Insight?',
+    a: 'Architects are verified human experts whose cognitive frameworks have been encoded into Divine Intelligence. Michael Akindele — Builder, Designer, Founder — is the first active Architect. Additional Thinkers are inducted through a rigorous Initiation process and appear in the Thinker Ledger as their frameworks pass encoding validation.'
+  },
+  {
+    q: 'The Encoding Protocol: How Is My Data Handled?',
+    a: 'Your perspectives are encoded, not stored. Session data lives in your browser\'s local memory — nothing from your deliberation process is persisted to our servers. Only transactional events (credit usage, dossier generation) are recorded in our secure infrastructure to maintain ledger integrity. Your private deliberations remain sovereign to you.'
+  },
+  {
+    q: 'How Do I Acquire a Perspective?',
+    a: 'Each insight costs $0.05. Top up your balance from the credit panel in the sidebar. Once credited, select an active Architect, describe your decision with precision, answer the context questions, and your Perspective will stream in real time. The session is automatically preserved in your Dossier Collection.'
+  },
+  {
+    q: 'What Form Do My Perspectives Take?',
+    a: 'Every completed session generates a Perspective Dossier — a structured intelligence report containing the Architect\'s Key Insight and a set of Cognitive Frames that reinterpret your decision through their lens. Access your Dossier Collection from the profile menu to download print-ready PDF reports or copy a shareable link.'
+  },
+  {
+    q: 'Can I Contribute My Own Cognitive Framework?',
+    a: 'Yes. If you possess a documented and demonstrably valuable way of thinking, you can apply to become an Architect of Wisdom. Visit the Thinker Hub and initiate the Onboarding Protocol. You\'ll encode your Framework, define your Lens, and map your Domain Constellation before your application enters review.'
+  },
 ];
 
 let activeThinker   = THINKERS[0];
@@ -3206,20 +3296,51 @@ function sharePerspective(id) {
 /* ════════════════════════════════
    HELP / FAQ
 ════════════════════════════════ */
-function renderFAQ() {
-  document.getElementById('faq-list').innerHTML = FAQS.map((f,i) => `
-    <div class="faq-item" id="faq-${i}">
-      <div class="faq-q" onclick="toggleFAQ(${i})">
-        ${f.q}
-        <svg class="faq-chevron" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6l4 4 4-4"/></svg>
+function renderFAQ(filter) {
+  const q = (filter || '').toLowerCase().trim();
+  const items = q
+    ? FAQS.filter(f => f.q.toLowerCase().includes(q) || f.a.toLowerCase().includes(q))
+    : FAQS;
+  const el = document.getElementById('faq-list');
+  if (!items.length) {
+    el.innerHTML = `<div class="kb-faq-empty">No entries found for "<em>${escHtml(filter)}</em>" — try a different query.</div>`;
+    return;
+  }
+  el.innerHTML = items.map((f, i) => `
+    <div class="kb-faq-item" id="kbfaq-${i}">
+      <div class="kb-faq-q" onclick="toggleKbFAQ(${i})">
+        <span class="kb-faq-q-text">${f.q}</span>
+        <svg class="kb-faq-chevron" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6l4 4 4-4"/></svg>
       </div>
-      <div class="faq-a">${f.a}</div>
-    </div>
-  `).join('');
+      <div class="kb-faq-a">${f.a}</div>
+    </div>`).join('');
 }
 
-function toggleFAQ(i) {
-  document.getElementById(`faq-${i}`).classList.toggle('open');
+function toggleKbFAQ(i) {
+  document.getElementById(`kbfaq-${i}`).classList.toggle('open');
+}
+
+function escHtml(s) {
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+let _helpSearchTimer = null;
+function helpSearch(val) {
+  renderFAQ(val);
+  clearTimeout(_helpSearchTimer);
+  if (val.trim().length >= 3) {
+    _helpSearchTimer = setTimeout(() => trackHelpSearch(val.trim()), 1400);
+  }
+}
+
+async function trackHelpSearch(query) {
+  try {
+    await fetch(`${API_BASE}/api/help/search`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ query, user_id: USER_ID, timestamp: new Date().toISOString() })
+    });
+  } catch(e) { /* silent — analytics are non-blocking */ }
 }
 
 /* ════════════════════════════════
