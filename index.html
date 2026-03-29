@@ -612,16 +612,28 @@
     .status-pill.err { background:#FEE2E2; color:#991B1B; }
     .status-pill.idle { background:var(--surface-2); color:var(--text-3); }
 
-    /* ═══ DOWNLOADS ═══ */
-    .downloads-list { display:flex; flex-direction:column; gap:12px; }
-    .download-item { background:var(--surface); border:1px solid var(--border); border-radius:var(--r); padding:18px 20px; display:flex; align-items:center; gap:14px; box-shadow:var(--sh-sm); }
-    .dl-icon { width:40px; height:40px; border-radius:var(--r-sm); background:var(--accent-lt); display:flex; align-items:center; justify-content:center; font-size:18px; flex-shrink:0; }
-    .dl-info { flex:1; min-width:0; }
-    .dl-name { font-size:14px; font-weight:600; color:var(--text-0); margin-bottom:3px; }
-    .dl-meta { font-size:12px; color:var(--text-3); }
-    .dl-btn { font-size:12px; font-weight:500; color:var(--accent); background:var(--accent-lt); border:1px solid var(--accent-bdr); border-radius:var(--r-pill); padding:6px 14px; cursor:pointer; white-space:nowrap; transition:opacity 0.15s; flex-shrink:0; }
-    .dl-btn:hover { opacity:0.75; }
-    .downloads-empty { text-align:center; padding:60px 0; color:var(--text-3); }
+    /* ═══ DOSSIER COLLECTION ═══ */
+    .dossier-count { font-size:11px; font-weight:600; letter-spacing:.08em; text-transform:uppercase; color:var(--text-3); margin-bottom:20px; display:flex; align-items:center; gap:6px; }
+    .dossier-grid  { display:grid; grid-template-columns:repeat(2,1fr); gap:16px; }
+    @media (max-width:680px) { .dossier-grid { grid-template-columns:1fr; } }
+    .dossier-card  { background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:22px 22px 18px; position:relative; overflow:hidden; box-shadow:var(--sh-sm); transition:box-shadow .2s,transform .2s; }
+    .dossier-card:hover { box-shadow:0 8px 30px rgba(0,0,0,.1); transform:translateY(-2px); }
+    .dossier-seal  { position:absolute; bottom:12px; right:12px; opacity:.07; pointer-events:none; user-select:none; }
+    .dossier-thinker-row { display:flex; align-items:center; gap:10px; margin-bottom:14px; }
+    .dossier-avatar { width:36px; height:36px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:700; color:#fff; flex-shrink:0; letter-spacing:.03em; }
+    .dossier-ti { flex:1; min-width:0; }
+    .dossier-ti-name  { font-size:13px; font-weight:600; color:var(--text-0); line-height:1.2; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .dossier-ti-title { font-size:11px; color:var(--text-3); margin-top:1px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .dossier-date  { font-size:11px; color:var(--text-3); flex-shrink:0; }
+    .dossier-decision { font-size:14px; font-weight:500; color:var(--text-0); line-height:1.55; display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden; margin-bottom:12px; }
+    .dossier-insight  { font-size:12px; color:var(--text-2); line-height:1.6; border-left:2px solid var(--accent-bdr); padding-left:10px; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; margin-bottom:16px; font-style:italic; }
+    .dossier-actions  { display:flex; gap:8px; flex-wrap:wrap; }
+    .dossier-btn-pdf  { font-size:12px; font-weight:600; color:#fff; background:var(--coral); border:none; border-radius:var(--r-pill); padding:7px 16px; cursor:pointer; transition:opacity .15s; white-space:nowrap; }
+    .dossier-btn-pdf:hover  { opacity:.85; }
+    .dossier-btn-share { font-size:12px; font-weight:500; color:var(--text-1); background:transparent; border:1px solid var(--border-md); border-radius:var(--r-pill); padding:7px 14px; cursor:pointer; transition:background .15s; white-space:nowrap; display:inline-flex; align-items:center; gap:5px; }
+    .dossier-btn-share:hover { background:var(--surface-2); }
+    .dossier-empty { text-align:center; padding:72px 0; color:var(--text-3); }
+    .dossier-empty-icon { width:52px; height:52px; margin:0 auto 16px; background:var(--surface-2); border-radius:50%; display:flex; align-items:center; justify-content:center; }
 
     /* ═══ HELP ═══ */
     .faq-item { background:var(--surface); border:1px solid var(--border); border-radius:var(--r); margin-bottom:8px; overflow:hidden; box-shadow:var(--sh-sm); }
@@ -1430,7 +1442,7 @@
         <!-- Settings entry point hidden pending redesign -->
         <button class="profile-menu-item" onclick="showView('downloads')">
           <svg width="15" height="15" viewBox="0 0 15 15" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M7.5 1v9M4 7l3.5 3.5L11 7"/><rect x="1" y="11" width="13" height="3" rx="1"/></svg>
-          Downloads
+          Dossier Collection
         </button>
         <div class="profile-menu-sep"></div>
         <button class="profile-menu-item" onclick="showView('help')">
@@ -1719,13 +1731,13 @@
       </div></div>
     </div>
 
-    <!-- SCREEN: Downloads -->
+    <!-- SCREEN: Downloads / Dossier Collection -->
     <div class="screen" id="screen-downloads">
       <div class="main-inner"><div class="screen-inner">
         <div class="screen-header">
-          <div class="screen-label">Downloads</div>
-          <h2 class="screen-title">Export your perspectives</h2>
-          <p class="screen-sub">Download saved sessions as JSON or share them as reports.</p>
+          <div class="screen-label">Dossier Collection</div>
+          <h2 class="screen-title">Your perspective dossiers</h2>
+          <p class="screen-sub">Each completed session is preserved as a print-ready intelligence report. Download as PDF or share a link.</p>
         </div>
         <div id="downloads-content"></div>
       </div></div>
@@ -2421,7 +2433,7 @@ const FAQS = [
   { q:'Who are the thinkers?', a:'Thinkers are real experts whose cognitive frameworks have been captured and licensed to the platform. Michael Akindele is the first available thinker — more are coming soon.' },
   { q:'How do I connect the AI backend?', a:'Run server.js locally (node server.js), add your Anthropic API key to .env, and make sure the server URL in Settings points to http://localhost:3001. The connection indicator in the sidebar will turn green when you\'re live.' },
   { q:'Are my sessions private?', a:'Yes. Sessions are stored locally in your browser using localStorage. Nothing is sent to our servers — only to the Anthropic API via your proxy server.' },
-  { q:'Can I export my sessions?', a:'Yes. Go to Downloads in the left navigation to export any saved session as a JSON file. PDF exports are coming in a future update.' },
+  { q:'Can I export my sessions?', a:'Yes. Open the Dossier Collection from your profile menu to access all completed sessions as print-ready intelligence reports. Click "Download PDF Report" to open a formatted dossier in your browser, then save it as a PDF. You can also copy a shareable link to any perspective.' },
 ];
 
 let activeThinker   = THINKERS[0];
@@ -2986,33 +2998,209 @@ function saveProject() {
 /* ════════════════════════════════
    DOWNLOADS
 ════════════════════════════════ */
+const DOSSIER_SEAL_SVG = `<svg width="82" height="82" viewBox="0 0 82 82" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <circle cx="41" cy="41" r="38" stroke="#5b4fff" stroke-width="1.5"/>
+  <circle cx="41" cy="41" r="31" stroke="#5b4fff" stroke-width="0.6"/>
+  <polygon points="41,14 61,41 41,60 21,41" stroke="#5b4fff" stroke-width="1.5" fill="none"/>
+  <polygon points="41,14 61,41 41,28 21,41" stroke="#5b4fff" stroke-width="0.75" fill="none" opacity="0.5"/>
+  <text x="41" y="75" text-anchor="middle" font-family="sans-serif" font-size="6" letter-spacing="3" fill="#5b4fff" font-weight="700">DIVINE</text>
+</svg>`;
+
 function renderDownloads() {
   const recents = loadRecents();
   const el = document.getElementById('downloads-content');
   if (!recents.length) {
-    el.innerHTML = '<div class="downloads-empty"><p style="font-size:32px;margin-bottom:12px">📥</p><p>Complete a session to export your perspectives.</p></div>';
+    el.innerHTML = `
+      <div class="dossier-empty">
+        <div class="dossier-empty-icon">
+          <svg width="22" height="22" viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.5" opacity=".4">
+            <rect x="3" y="1" width="12" height="16" rx="2"/><path d="M7 5h4M7 8h4M7 11h2"/><path d="M15 13v7l3-2 3 2v-7"/>
+          </svg>
+        </div>
+        <p style="font-size:14px;font-weight:500;color:var(--text-1);margin-bottom:6px">No dossiers yet.</p>
+        <p style="font-size:13px">Complete a session to generate your first perspective report.</p>
+      </div>`;
     return;
   }
-  el.innerHTML = `<div class="downloads-list">${recents.map(r => `
-    <div class="download-item">
-      <div class="dl-icon">💭</div>
-      <div class="dl-info">
-        <div class="dl-name">${r.decision.length>60 ? r.decision.slice(0,60)+'…' : r.decision}</div>
-        <div class="dl-meta">${r.thinker.name} · ${formatDate(r.date)}</div>
-      </div>
-      <button class="dl-btn" onclick="downloadSession('${r.id}')">Export JSON</button>
+
+  el.innerHTML = `
+    <div class="dossier-count">
+      <svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="1" y="1" width="8" height="10" rx="1.5"/><path d="M4 4h3M4 6.5h3M4 9h1.5"/><path d="M9 4l2 1.5L9 7"/></svg>
+      ${recents.length} ${recents.length === 1 ? 'dossier' : 'dossiers'} on record
     </div>
-  `).join('')}</div>`;
+    <div class="dossier-grid">
+      ${recents.map(r => {
+        const avatarBg = r.thinker.color || '#5b4fff';
+        const insightBlock = r.keyInsight
+          ? `<div class="dossier-insight">${r.keyInsight.title}</div>`
+          : '';
+        return `
+        <div class="dossier-card">
+          <div class="dossier-seal">${DOSSIER_SEAL_SVG}</div>
+          <div class="dossier-thinker-row">
+            <div class="dossier-avatar" style="background:${avatarBg}">${r.thinker.initials || r.thinker.name.slice(0,2).toUpperCase()}</div>
+            <div class="dossier-ti">
+              <div class="dossier-ti-name">${r.thinker.name}</div>
+              <div class="dossier-ti-title">${r.thinker.title || ''}</div>
+            </div>
+            <div class="dossier-date">${formatDate(r.date)}</div>
+          </div>
+          <div class="dossier-decision">${r.decision}</div>
+          ${insightBlock}
+          <div class="dossier-actions">
+            <button class="dossier-btn-pdf" onclick="downloadDossier('${r.id}')">
+              Download PDF Report
+            </button>
+            <button class="dossier-btn-share" onclick="sharePerspective('${r.id}')">
+              <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="9" cy="2" r="1.2"/><circle cx="2" cy="6" r="1.2"/><circle cx="9" cy="10" r="1.2"/><path d="M3.1 5.5l4.7-2.7M3.1 6.5l4.7 2.7"/></svg>
+              Share Link
+            </button>
+          </div>
+        </div>`;
+      }).join('')}
+    </div>`;
 }
 
-function downloadSession(id) {
+function generateDossierHTML(r) {
+  const thinkerColor = r.thinker.color || '#5b4fff';
+  const dateStr = new Date(r.date).toLocaleDateString('en-US', { year:'numeric', month:'long', day:'numeric' });
+  const framesHTML = (r.frames || []).map(f => `
+    <div style="break-inside:avoid;border:1px solid #e8e8e4;border-radius:8px;padding:18px 20px;margin-bottom:10px;">
+      <div style="font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#5b4fff;margin-bottom:5px;">${f.label || ''}</div>
+      <div style="font-family:'Georgia',serif;font-size:17px;font-weight:500;color:#111;line-height:1.3;margin-bottom:7px;">${f.title || ''}</div>
+      <div style="font-size:13px;color:#555;line-height:1.65;">${f.body || ''}</div>
+    </div>`).join('');
+
+  return `<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Divine Dossier — ${r.thinker.name}</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { font-family:'Inter',sans-serif; background:#fafaf8; color:#1a1a18; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+  .page { max-width:680px; margin:0 auto; padding:56px 48px; }
+  @media print {
+    body { background:#fff; }
+    .page { padding:40px 36px; max-width:100%; }
+    .no-print { display:none !important; }
+  }
+  /* Header */
+  .dossier-header { display:flex; align-items:flex-start; justify-content:space-between; margin-bottom:40px; padding-bottom:24px; border-bottom:2px solid #1a1a18; }
+  .dossier-wordmark { font-family:'Cormorant Garamond',serif; font-size:28px; font-weight:600; letter-spacing:.02em; color:#1a1a18; line-height:1; }
+  .dossier-wordmark span { color:#5b4fff; }
+  .dossier-label { font-size:10px; font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:#888; margin-top:4px; }
+  .dossier-meta-block { text-align:right; }
+  .dossier-meta-row { font-size:11px; color:#888; line-height:1.8; }
+  .dossier-meta-row strong { color:#444; font-weight:600; }
+  /* Thinker strip */
+  .thinker-strip { display:flex; align-items:center; gap:14px; background:#f4f3ff; border:1px solid #dddcff; border-radius:10px; padding:16px 20px; margin-bottom:32px; }
+  .thinker-avatar { width:44px; height:44px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:14px; font-weight:700; color:#fff; flex-shrink:0; }
+  .thinker-name { font-size:15px; font-weight:600; color:#1a1a18; line-height:1.2; }
+  .thinker-role { font-size:12px; color:#666; margin-top:2px; }
+  .thinker-lens { font-size:12px; color:#5b4fff; margin-top:6px; font-style:italic; border-top:1px solid #e0dfff; padding-top:8px; line-height:1.5; }
+  /* Section */
+  .section-label { font-size:10px; font-weight:700; letter-spacing:.12em; text-transform:uppercase; color:#999; margin-bottom:8px; }
+  .section-title { font-family:'Cormorant Garamond',serif; font-size:22px; font-weight:500; color:#1a1a18; line-height:1.3; margin-bottom:20px; }
+  /* Key insight */
+  .key-insight { background:#5b4fff; border-radius:10px; padding:24px; color:#fff; margin-bottom:24px; break-inside:avoid; }
+  .ki-label { font-size:10px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; opacity:.7; margin-bottom:8px; }
+  .ki-title { font-family:'Cormorant Garamond',serif; font-size:24px; font-weight:500; line-height:1.2; margin-bottom:10px; }
+  .ki-body  { font-size:13px; line-height:1.65; opacity:.9; }
+  /* Divider */
+  .divider { border:none; border-top:1px solid #e8e8e4; margin:28px 0; }
+  /* Footer */
+  .dossier-footer { margin-top:48px; padding-top:16px; border-top:1px solid #e8e8e4; display:flex; align-items:center; justify-content:space-between; }
+  .dossier-footer-brand { font-family:'Cormorant Garamond',serif; font-size:14px; color:#999; }
+  .dossier-footer-brand span { color:#5b4fff; }
+  .dossier-footer-id { font-size:10px; color:#bbb; font-family:monospace; letter-spacing:.04em; }
+  /* Print button */
+  .print-cta { position:fixed; bottom:24px; right:24px; background:#ff4f6b; color:#fff; border:none; border-radius:100px; padding:12px 24px; font-size:13px; font-weight:600; cursor:pointer; box-shadow:0 4px 16px rgba(255,79,107,.35); font-family:'Inter',sans-serif; }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- Header -->
+  <div class="dossier-header">
+    <div>
+      <div class="dossier-wordmark">D<span>I</span>VINE</div>
+      <div class="dossier-label">Perspective Dossier</div>
+    </div>
+    <div class="dossier-meta-block">
+      <div class="dossier-meta-row"><strong>Date</strong>&nbsp;&nbsp;${dateStr}</div>
+      <div class="dossier-meta-row"><strong>Thinker</strong>&nbsp;&nbsp;${r.thinker.name}</div>
+      <div class="dossier-meta-row"><strong>Session</strong>&nbsp;&nbsp;${r.id}</div>
+    </div>
+  </div>
+
+  <!-- Thinker strip -->
+  <div class="thinker-strip">
+    <div class="thinker-avatar" style="background:${thinkerColor}">${r.thinker.initials || r.thinker.name.slice(0,2).toUpperCase()}</div>
+    <div style="flex:1">
+      <div class="thinker-name">${r.thinker.name}</div>
+      <div class="thinker-role">${r.thinker.title || ''}</div>
+    </div>
+  </div>
+
+  <!-- Decision -->
+  <div class="section-label">The Decision</div>
+  <div class="section-title">${r.decision}</div>
+  <hr class="divider">
+
+  ${r.keyInsight ? `
+  <!-- Key Insight -->
+  <div class="key-insight">
+    <div class="ki-label">Key Insight</div>
+    <div class="ki-title">${r.keyInsight.title}</div>
+    <div class="ki-body">${r.keyInsight.body}</div>
+  </div>` : ''}
+
+  ${framesHTML ? `
+  <!-- Frames -->
+  <div class="section-label" style="margin-top:8px">Cognitive Frames</div>
+  <div style="margin-top:12px">${framesHTML}</div>` : ''}
+
+  <!-- Footer -->
+  <div class="dossier-footer">
+    <div class="dossier-footer-brand">D<span>I</span>VINE Intelligence &middot; getdivine.ai</div>
+    <div class="dossier-footer-id">DOSSIER-${r.id}</div>
+  </div>
+
+</div>
+
+<button class="print-cta no-print" onclick="window.print()">Save as PDF</button>
+
+</body>
+</html>`;
+}
+
+function downloadDossier(id) {
   const r = loadRecents().find(s => s.id === id);
   if (!r) return;
-  const blob = new Blob([JSON.stringify(r, null, 2)], { type:'application/json' });
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(blob);
-  a.download = `divine-perspective-${r.id}.json`;
-  a.click();
+  const html = generateDossierHTML(r);
+  const win = window.open('', '_blank');
+  if (!win) { showToast('Pop-up blocked — allow pop-ups to open dossier.'); return; }
+  win.document.write(html);
+  win.document.close();
+}
+
+function sharePerspective(id) {
+  const r = loadRecents().find(s => s.id === id);
+  if (!r) return;
+  try {
+    const encoded = btoa(unescape(encodeURIComponent(JSON.stringify(r))));
+    const shareURL = `${location.origin}${location.pathname}?dossier=${encoded}`;
+    navigator.clipboard.writeText(shareURL).then(() => {
+      showToast('Share link copied to clipboard.');
+    }).catch(() => {
+      prompt('Copy this link:', shareURL);
+    });
+  } catch(e) {
+    showToast('Could not generate share link.');
+  }
 }
 
 /* ════════════════════════════════
