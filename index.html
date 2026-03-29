@@ -176,13 +176,24 @@
     .thinker-hero-sub   { font-size:15px; color:var(--text-2); max-width:480px; margin:0 auto 28px; line-height:1.6; }
 
     /* Hub nav tabs */
-    .thinker-tabs { display:flex; gap:4px; background:var(--surface-2); border-radius:10px; padding:4px; margin-bottom:28px; }
-    .thinker-tab  {
-      flex:1; padding:9px 0; border:none; border-radius:8px; background:transparent;
-      font-family:'Inter',sans-serif; font-size:13px; font-weight:500; color:var(--text-2);
-      cursor:pointer; transition:background 0.13s,color 0.13s;
+    /* GitHub-style underline tabs */
+    .thinker-tabs {
+      display:flex; gap:0; padding:0; background:transparent; border-radius:0;
+      border-bottom:1px solid var(--border); margin-bottom:28px;
+      overflow-x:auto; scrollbar-width:none;
     }
-    .thinker-tab.active { background:var(--surface); color:var(--text-0); box-shadow:var(--sh-sm); font-weight:600; }
+    .thinker-tabs::-webkit-scrollbar { display:none; }
+    .thinker-tab  {
+      flex:0 0 auto; display:inline-flex; align-items:center; gap:7px;
+      padding:10px 16px 11px; border:none; border-bottom:2px solid transparent;
+      background:transparent; font-family:'Inter',sans-serif;
+      font-size:13px; font-weight:500; color:var(--text-2); cursor:pointer;
+      transition:color 0.13s, border-color 0.13s; white-space:nowrap;
+      margin-bottom:-1px;
+    }
+    .thinker-tab:hover { color:var(--text-0); }
+    .thinker-tab.active { color:var(--text-0); font-weight:600; border-bottom-color:var(--accent); }
+    .thinker-tab svg { flex-shrink:0; }
 
     /* Stats row */
     .thinker-stats { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin-bottom:28px; }
@@ -305,7 +316,6 @@
     .version-pill { display:inline-block; padding:3px 10px; border-radius:12px; background:#FFF0EB; color:#E8613A; font-size:11.5px; font-weight:600; }
     @media (max-width:680px) {
       .thinker-stats, .report-summary { grid-template-columns:repeat(2,1fr); }
-      .thinker-tabs { flex-wrap:wrap; }
     }
 
     .sidebar-divider { height:1px; background:var(--border); margin:8px 10px; flex-shrink:0; }
@@ -721,12 +731,10 @@
       .thinker-hero-sub    { font-size:13px; margin-bottom:14px; }
     }
 
-    /* ─── Thinker tabs: horizontal scroll, no wrapping ─── */
+    /* ─── Thinker tabs: compact on mobile (already scrollable via base style) ─── */
     @media (max-width:680px) {
-      .thinker-tabs { overflow-x:auto; flex-wrap:nowrap; -webkit-overflow-scrolling:touch;
-                      scrollbar-width:none; padding-bottom:2px; margin-bottom:18px; }
-      .thinker-tabs::-webkit-scrollbar { display:none; }
-      .thinker-tab  { flex:0 0 auto; padding:8px 14px; white-space:nowrap; font-size:12.5px; }
+      .thinker-tabs  { margin-bottom:18px; }
+      .thinker-tab   { padding:9px 12px 10px; font-size:12.5px; gap:5px; }
     }
 
     /* ─── Stats grids: 2-column on small mobile ─── */
@@ -1342,11 +1350,26 @@
 
     <!-- Tab nav -->
     <div class="thinker-tabs">
-      <button class="thinker-tab active" onclick="switchThinkerTab('overview',this)">Overview</button>
-      <button class="thinker-tab" onclick="switchThinkerTab('onboarding',this)">Onboarding</button>
-      <button class="thinker-tab" onclick="switchThinkerTab('train',this)">Train Model</button>
-      <button class="thinker-tab" onclick="switchThinkerTab('reports',this)">Reports</button>
-      <button class="thinker-tab" onclick="switchThinkerTab('payments',this)">Payments</button>
+      <button class="thinker-tab active" onclick="switchThinkerTab('overview',this)">
+        <svg width="15" height="15" viewBox="0 0 15 15" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="1" y="1" width="5.5" height="5.5" rx="1.2"/><rect x="8.5" y="1" width="5.5" height="5.5" rx="1.2"/><rect x="1" y="8.5" width="5.5" height="5.5" rx="1.2"/><rect x="8.5" y="8.5" width="5.5" height="5.5" rx="1.2"/></svg>
+        Overview
+      </button>
+      <button class="thinker-tab" onclick="switchThinkerTab('onboarding',this)">
+        <svg width="15" height="15" viewBox="0 0 15 15" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="7.5" cy="7.5" r="6"/><path d="M7.5 4.5v3l2 1.5"/></svg>
+        Onboarding
+      </button>
+      <button class="thinker-tab" onclick="switchThinkerTab('train',this)">
+        <svg width="15" height="15" viewBox="0 0 15 15" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M7.5 2a5.5 5.5 0 100 11"/><path d="M7.5 5a2.5 2.5 0 100 5 2.5 2.5 0 000-5z"/><path d="M13 7.5h-1M12.2 4l-.7.7M10 2.8l-.7.7"/></svg>
+        Train Model
+      </button>
+      <button class="thinker-tab" onclick="switchThinkerTab('reports',this)">
+        <svg width="15" height="15" viewBox="0 0 15 15" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="1" y="1" width="13" height="13" rx="2"/><path d="M4 10l2.5-3 2.5 2 2.5-4"/></svg>
+        Reports
+      </button>
+      <button class="thinker-tab" onclick="switchThinkerTab('payments',this)">
+        <svg width="15" height="15" viewBox="0 0 15 15" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="1" y="3.5" width="13" height="8" rx="1.5"/><path d="M1 6.5h13"/></svg>
+        Payments
+      </button>
     </div>
 
     <!-- ─── OVERVIEW ─── -->
