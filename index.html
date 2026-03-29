@@ -161,6 +161,152 @@
       margin-bottom:6px;
     }
     .nav-new-perspective:hover { background:#2e2683; color:#fff; }
+    .nav-thinker { color:var(--accent) !important; font-weight:600; }
+    .nav-thinker:hover { background:var(--accent-lt); }
+    .nav-thinker.active { background:var(--accent-lt); color:var(--accent); }
+
+    /* ═══ THINKER SCREENS ═══ */
+    .thinker-hero { text-align:center; padding:48px 0 32px; }
+    .thinker-badge {
+      width:72px; height:72px; border-radius:50%; background:var(--accent);
+      color:#fff; font-size:24px; font-weight:700; display:inline-flex;
+      align-items:center; justify-content:center; margin-bottom:16px;
+    }
+    .thinker-hero-title { font-size:26px; font-weight:700; color:var(--text-0); margin-bottom:8px; }
+    .thinker-hero-sub   { font-size:15px; color:var(--text-2); max-width:480px; margin:0 auto 28px; line-height:1.6; }
+
+    /* Hub nav tabs */
+    .thinker-tabs { display:flex; gap:4px; background:var(--surface-2); border-radius:10px; padding:4px; margin-bottom:28px; }
+    .thinker-tab  {
+      flex:1; padding:9px 0; border:none; border-radius:8px; background:transparent;
+      font-family:'Inter',sans-serif; font-size:13px; font-weight:500; color:var(--text-2);
+      cursor:pointer; transition:background 0.13s,color 0.13s;
+    }
+    .thinker-tab.active { background:var(--surface); color:var(--text-0); box-shadow:var(--sh-sm); font-weight:600; }
+
+    /* Stats row */
+    .thinker-stats { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin-bottom:28px; }
+    .thinker-stat  {
+      background:var(--surface); border:1px solid var(--border); border-radius:var(--r);
+      padding:18px 16px; text-align:center;
+    }
+    .thinker-stat-val   { font-size:26px; font-weight:700; color:var(--accent); }
+    .thinker-stat-label { font-size:12px; color:var(--text-3); margin-top:4px; }
+
+    /* Onboarding stepper */
+    .onboarding-steps { display:flex; gap:0; margin-bottom:36px; }
+    .onboarding-step  { flex:1; text-align:center; position:relative; }
+    .onboarding-step::after {
+      content:''; position:absolute; top:14px; left:50%; width:100%; height:2px;
+      background:var(--border-md);
+    }
+    .onboarding-step:last-child::after { display:none; }
+    .onboarding-step.done::after  { background:var(--accent); }
+    .step-dot {
+      width:28px; height:28px; border-radius:50%; border:2px solid var(--border-md);
+      background:var(--surface); display:inline-flex; align-items:center; justify-content:center;
+      font-size:12px; font-weight:600; color:var(--text-3); position:relative; z-index:1;
+      transition:all 0.2s;
+    }
+    .onboarding-step.active .step-dot { border-color:var(--accent); color:var(--accent); background:var(--accent-lt); }
+    .onboarding-step.done   .step-dot { border-color:var(--accent); background:var(--accent); color:#fff; }
+    .step-label { font-size:11px; color:var(--text-3); margin-top:6px; }
+    .onboarding-step.active .step-label { color:var(--accent); font-weight:600; }
+
+    /* Onboarding panels */
+    .onboard-panel { display:none; }
+    .onboard-panel.active { display:block; }
+    .onboard-field  { margin-bottom:20px; }
+    .onboard-label  { font-size:13px; font-weight:600; color:var(--text-1); margin-bottom:6px; display:block; }
+    .onboard-input, .onboard-textarea, .onboard-select {
+      width:100%; border:1.5px solid var(--border-md); border-radius:var(--r-sm);
+      padding:10px 14px; font-family:'Inter',sans-serif; font-size:14px; color:var(--text-0);
+      background:var(--surface-2); outline:none; box-sizing:border-box;
+      transition:border-color 0.15s;
+    }
+    .onboard-input:focus, .onboard-textarea:focus { border-color:var(--accent-bdr); background:var(--surface); }
+    .onboard-textarea { resize:vertical; min-height:100px; line-height:1.6; }
+    .onboard-hint  { font-size:12px; color:var(--text-3); margin-top:5px; line-height:1.5; }
+
+    /* Profile summary card */
+    .profile-summary-card {
+      background:var(--surface); border:1px solid var(--border); border-radius:var(--r);
+      padding:28px; margin-bottom:20px; box-shadow:var(--sh-sm);
+    }
+    .psc-header { display:flex; align-items:center; gap:16px; margin-bottom:20px; }
+    .psc-avatar { width:56px; height:56px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:20px; font-weight:700; color:#fff; flex-shrink:0; }
+    .psc-name   { font-size:18px; font-weight:700; color:var(--text-0); }
+    .psc-title  { font-size:13px; color:var(--text-2); margin-top:2px; }
+    .psc-lens   { font-size:14px; color:var(--text-1); font-style:italic; border-left:3px solid var(--accent); padding-left:14px; margin-bottom:16px; line-height:1.6; }
+    .psc-section-label { font-size:11px; font-weight:700; color:var(--text-3); letter-spacing:.06em; text-transform:uppercase; margin-bottom:8px; }
+    .psc-framework { font-size:13.5px; color:var(--text-1); line-height:1.7; }
+
+    /* Reports */
+    .report-period-tabs { display:flex; gap:6px; margin-bottom:24px; }
+    .rpt-tab {
+      padding:7px 18px; border-radius:20px; border:1.5px solid var(--border-md);
+      background:transparent; font-family:'Inter',sans-serif; font-size:13px;
+      font-weight:500; color:var(--text-2); cursor:pointer; transition:all 0.13s;
+    }
+    .rpt-tab.active { background:var(--accent); border-color:var(--accent); color:#fff; }
+    .report-summary { display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-bottom:24px; }
+    .rpt-stat { background:var(--surface); border:1px solid var(--border); border-radius:var(--r); padding:16px; }
+    .rpt-stat-val   { font-size:22px; font-weight:700; color:var(--text-0); }
+    .rpt-stat-label { font-size:11.5px; color:var(--text-3); margin-top:3px; }
+    .rpt-stat-delta { font-size:11.5px; color:#22C55E; margin-top:2px; }
+    .ledger-table   { width:100%; border-collapse:collapse; }
+    .ledger-table th {
+      text-align:left; font-size:11px; font-weight:700; color:var(--text-3);
+      letter-spacing:.06em; text-transform:uppercase; padding:10px 12px;
+      border-bottom:2px solid var(--border);
+    }
+    .ledger-table td { padding:12px; font-size:13.5px; color:var(--text-1); border-bottom:1px solid var(--border); }
+    .ledger-table tr:last-child td { border-bottom:none; }
+    .ledger-table tr:hover td { background:var(--surface-2); }
+    .ledger-amt { font-weight:600; color:#22C55E; }
+    .ledger-badge {
+      display:inline-block; padding:3px 9px; border-radius:12px; font-size:11px; font-weight:600;
+      background:var(--accent-lt); color:var(--accent);
+    }
+
+    /* Payments */
+    .payment-card {
+      background:var(--surface); border:1px solid var(--border); border-radius:var(--r);
+      padding:24px; margin-bottom:16px; box-shadow:var(--sh-sm);
+    }
+    .payment-card-title { font-size:15px; font-weight:600; color:var(--text-0); margin-bottom:4px; }
+    .payment-card-sub   { font-size:13px; color:var(--text-2); margin-bottom:20px; }
+    .bank-field  { margin-bottom:16px; }
+    .bank-label  { font-size:12.5px; font-weight:600; color:var(--text-2); margin-bottom:6px; display:block; }
+    .bank-input  {
+      width:100%; border:1.5px solid var(--border-md); border-radius:var(--r-sm);
+      padding:10px 14px; font-family:'Inter',sans-serif; font-size:14px; color:var(--text-0);
+      background:var(--surface-2); outline:none; box-sizing:border-box;
+    }
+    .bank-input:focus { border-color:var(--accent-bdr); }
+    .bank-secure-note { font-size:12px; color:var(--text-3); display:flex; align-items:center; gap:6px; margin-top:4px; }
+    .payout-schedule { display:flex; gap:10px; margin-top:16px; }
+    .payout-opt {
+      flex:1; border:2px solid var(--border-md); border-radius:var(--r); padding:14px;
+      cursor:pointer; transition:all 0.13s; text-align:center;
+    }
+    .payout-opt.selected { border-color:var(--accent); background:var(--accent-lt); }
+    .payout-opt-title { font-size:13px; font-weight:600; color:var(--text-0); }
+    .payout-opt-sub   { font-size:11.5px; color:var(--text-3); margin-top:3px; }
+
+    /* Train model */
+    .train-section { background:var(--surface); border:1px solid var(--border); border-radius:var(--r); padding:24px; margin-bottom:16px; }
+    .train-section-title { font-size:15px; font-weight:600; color:var(--text-0); margin-bottom:4px; }
+    .train-section-sub   { font-size:13px; color:var(--text-2); margin-bottom:16px; }
+    .train-tag { display:inline-flex; align-items:center; gap:6px; padding:5px 12px; border-radius:20px; background:var(--accent-lt); color:var(--accent); font-size:12.5px; font-weight:500; margin:4px; }
+    .train-tag button { background:none; border:none; cursor:pointer; color:var(--accent); font-size:14px; padding:0; line-height:1; }
+    .train-tags-wrap { margin-bottom:12px; }
+    .train-add-input { display:flex; gap:8px; }
+    .version-pill { display:inline-block; padding:3px 10px; border-radius:12px; background:#FFF0EB; color:#E8613A; font-size:11.5px; font-weight:600; }
+    @media (max-width:680px) {
+      .thinker-stats, .report-summary { grid-template-columns:repeat(2,1fr); }
+      .thinker-tabs { flex-wrap:wrap; }
+    }
 
     .sidebar-divider { height:1px; background:var(--border); margin:8px 10px; flex-shrink:0; }
 
@@ -316,6 +462,9 @@
     .btn-primary:hover { background:var(--accent-mid); transform:translateY(-1px); box-shadow:var(--sh-md); }
     .btn-primary:active { transform:translateY(0); }
     .btn-primary:disabled { opacity:0.4; cursor:not-allowed; transform:none; box-shadow:none; }
+    .btn-secondary { display:inline-flex; align-items:center; gap:8px; background:var(--surface); color:var(--text-1); border:1.5px solid var(--border-md); border-radius:var(--r-pill); padding:11px 22px; font-family:'Inter',sans-serif; font-size:14px; font-weight:500; cursor:pointer; transition:all 0.15s; white-space:nowrap; }
+    .btn-secondary:hover { border-color:var(--accent-bdr); color:var(--accent); background:var(--accent-lt); }
+    .btn-secondary:disabled { opacity:0.4; cursor:not-allowed; }
     .btn-back { display:inline-flex; align-items:center; gap:6px; font-size:13px; font-weight:500; color:var(--text-2); background:var(--surface); border:1px solid var(--border-md); border-radius:var(--r-pill); padding:7px 14px; cursor:pointer; transition:all 0.15s; }
     .btn-back:hover { border-color:var(--border-hi); color:var(--text-1); }
     .btn-ghost { display:inline-flex; align-items:center; gap:8px; font-size:14px; font-weight:500; color:var(--text-2); background:var(--surface); border:1px solid var(--border-md); border-radius:var(--r-pill); padding:10px 20px; cursor:pointer; transition:all 0.15s; box-shadow:var(--sh-sm); }
@@ -571,6 +720,10 @@
         </button>
         <button class="nav-item" id="nav-search" data-tip="Search" onclick="showView('search')">
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5l3 3"/></svg><span class="nav-item-label">Search</span>
+        </button>
+        <!-- Thinker nav — only visible to approved thinkers -->
+        <button class="nav-item nav-thinker" id="nav-thinker" data-tip="Thinker" onclick="showView('thinker-hub')">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75"><circle cx="8" cy="5" r="3"/><path d="M2 14c0-3.3 2.7-6 6-6s6 2.7 6 6"/><circle cx="8" cy="5" r="1" fill="currentColor" stroke="none"/></svg><span class="nav-item-label">Thinker</span>
         </button>
         <button class="nav-item" id="nav-projects" data-tip="Projects" onclick="showView('projects')">
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75"><rect x="2" y="2" width="5" height="5" rx="1.5"/><rect x="9" y="2" width="5" height="5" rx="1.5"/><rect x="2" y="9" width="5" height="5" rx="1.5"/><rect x="9" y="9" width="5" height="5" rx="1.5"/></svg><span class="nav-item-label">Projects</span>
@@ -989,6 +1142,332 @@
   </main>
 </div>
 
+<!-- ═══════════════════════════════════════════════
+     THINKER PORTAL SCREENS
+═══════════════════════════════════════════════ -->
+
+<!-- THINKER HUB -->
+<div class="screen" id="screen-thinker-hub">
+  <div class="main-inner"><div class="screen-inner">
+
+    <!-- Hub header -->
+    <div class="thinker-hero">
+      <div class="thinker-badge" id="th-badge">MA</div>
+      <div class="thinker-hero-title" id="th-name">Michael Akindele</div>
+      <div class="thinker-hero-sub" id="th-title">Builder · Designer · Founder</div>
+    </div>
+
+    <!-- Stats -->
+    <div class="thinker-stats">
+      <div class="thinker-stat">
+        <div class="thinker-stat-val" id="th-stat-sessions">—</div>
+        <div class="thinker-stat-label">Perspectives delivered</div>
+      </div>
+      <div class="thinker-stat">
+        <div class="thinker-stat-val" id="th-stat-earnings">—</div>
+        <div class="thinker-stat-label">Total earnings</div>
+      </div>
+      <div class="thinker-stat">
+        <div class="thinker-stat-val" id="th-stat-rating">—</div>
+        <div class="thinker-stat-label">Avg satisfaction</div>
+      </div>
+    </div>
+
+    <!-- Tab nav -->
+    <div class="thinker-tabs">
+      <button class="thinker-tab active" onclick="switchThinkerTab('overview',this)">Overview</button>
+      <button class="thinker-tab" onclick="switchThinkerTab('onboarding',this)">Onboarding</button>
+      <button class="thinker-tab" onclick="switchThinkerTab('train',this)">Train Model</button>
+      <button class="thinker-tab" onclick="switchThinkerTab('reports',this)">Reports</button>
+      <button class="thinker-tab" onclick="switchThinkerTab('payments',this)">Payments</button>
+    </div>
+
+    <!-- ─── OVERVIEW ─── -->
+    <div class="thinker-panel" id="tp-overview">
+      <div class="profile-summary-card">
+        <div class="psc-header">
+          <div class="psc-avatar" id="psc-avatar" style="background:#3B31A4">MA</div>
+          <div>
+            <div class="psc-name" id="psc-name">Michael Akindele</div>
+            <div class="psc-title" id="psc-title-text">Builder · Designer · Founder</div>
+          </div>
+        </div>
+        <div class="psc-section-label">Your lens</div>
+        <div class="psc-lens" id="psc-lens">Validates whether the problem is real, audits the market landscape, and tells you — directly — if you're not thinking big enough.</div>
+        <div class="psc-section-label" style="margin-top:18px">Cognitive framework</div>
+        <div class="psc-framework" id="psc-framework">Your framework is defined in your model training. Update it in the Train Model tab.</div>
+      </div>
+      <div style="display:flex;gap:12px">
+        <button class="btn-secondary" style="flex:1" onclick="switchThinkerTab('train', document.querySelectorAll('.thinker-tab')[2])">Update model →</button>
+        <button class="btn-primary" style="flex:1" onclick="switchThinkerTab('reports', document.querySelectorAll('.thinker-tab')[3])">View earnings →</button>
+      </div>
+    </div>
+
+    <!-- ─── ONBOARDING ─── -->
+    <div class="thinker-panel" id="tp-onboarding" style="display:none">
+      <!-- Stepper -->
+      <div class="onboarding-steps" id="ob-steps">
+        <div class="onboarding-step active" data-step="1"><div class="step-dot">1</div><div class="step-label">Welcome</div></div>
+        <div class="onboarding-step" data-step="2"><div class="step-dot">2</div><div class="step-label">Identity</div></div>
+        <div class="onboarding-step" data-step="3"><div class="step-dot">3</div><div class="step-label">Framework</div></div>
+        <div class="onboarding-step" data-step="4"><div class="step-dot">4</div><div class="step-label">Lens</div></div>
+        <div class="onboarding-step" data-step="5"><div class="step-dot">5</div><div class="step-label">Domains</div></div>
+        <div class="onboarding-step" data-step="6"><div class="step-dot">✓</div><div class="step-label">Complete</div></div>
+      </div>
+
+      <!-- Step 1: Welcome -->
+      <div class="onboard-panel active" id="ob-step-1">
+        <div style="text-align:center;padding:20px 0 32px">
+          <div style="font-size:48px;margin-bottom:16px">🧠</div>
+          <h3 style="font-size:22px;font-weight:700;color:var(--text-0);margin-bottom:12px">Welcome to Thinker Onboarding</h3>
+          <p style="font-size:15px;color:var(--text-2);max-width:440px;margin:0 auto 28px;line-height:1.7">You've been selected as a Divine Thinker. Your cognitive framework will be used to give world-class perspective to founders making their toughest decisions.</p>
+          <div style="background:var(--accent-lt);border-radius:var(--r);padding:20px;text-align:left;max-width:440px;margin:0 auto">
+            <div style="font-size:13px;font-weight:600;color:var(--accent);margin-bottom:10px">What you'll set up:</div>
+            <div style="font-size:13.5px;color:var(--text-1);line-height:2">
+              ✦ Your public identity & title<br>
+              ✦ Your cognitive framework (how you think)<br>
+              ✦ Your lens statement (your signature view)<br>
+              ✦ Your core decision-making domains
+            </div>
+          </div>
+        </div>
+        <div style="display:flex;justify-content:flex-end">
+          <button class="btn-primary" onclick="obNext(1)">Let's begin →</button>
+        </div>
+      </div>
+
+      <!-- Step 2: Identity -->
+      <div class="onboard-panel" id="ob-step-2">
+        <h3 style="font-size:18px;font-weight:700;color:var(--text-0);margin-bottom:6px">Your identity</h3>
+        <p style="font-size:14px;color:var(--text-2);margin-bottom:24px">This is how you appear to founders seeking perspective.</p>
+        <div class="onboard-field">
+          <label class="onboard-label">Full name</label>
+          <input class="onboard-input" id="ob-name" type="text" placeholder="e.g. Michael Akindele">
+        </div>
+        <div class="onboard-field">
+          <label class="onboard-label">Title / role descriptor</label>
+          <input class="onboard-input" id="ob-title" type="text" placeholder="e.g. Builder · Designer · Founder">
+          <div class="onboard-hint">Keep it short. This appears under your name in the thinker picker.</div>
+        </div>
+        <div class="onboard-field">
+          <label class="onboard-label">Professional background (2–3 sentences)</label>
+          <textarea class="onboard-textarea" id="ob-bio" rows="4" placeholder="What have you built, led, or created? What makes your perspective unique?"></textarea>
+        </div>
+        <div style="display:flex;justify-content:space-between">
+          <button class="btn-secondary" onclick="obBack(2)">← Back</button>
+          <button class="btn-primary" onclick="obNext(2)">Continue →</button>
+        </div>
+      </div>
+
+      <!-- Step 3: Framework -->
+      <div class="onboard-panel" id="ob-step-3">
+        <h3 style="font-size:18px;font-weight:700;color:var(--text-0);margin-bottom:6px">Your cognitive framework</h3>
+        <p style="font-size:14px;color:var(--text-2);margin-bottom:24px">This is the core of your Thinker model — how you process decisions, what you look for, what you challenge, and how you communicate truth.</p>
+        <div class="onboard-field">
+          <label class="onboard-label">How do you approach a decision?</label>
+          <textarea class="onboard-textarea" id="ob-framework" rows="8" placeholder="Describe your step-by-step thinking process. What do you look for first? What do you challenge? What signals matter most? How do you communicate hard truths?
+
+e.g. I always start by validating whether the problem is real before evaluating any solution..."></textarea>
+          <div class="onboard-hint">Be specific. The more precise your framework, the sharper your AI model's output.</div>
+        </div>
+        <div style="display:flex;justify-content:space-between">
+          <button class="btn-secondary" onclick="obBack(3)">← Back</button>
+          <button class="btn-primary" onclick="obNext(3)">Continue →</button>
+        </div>
+      </div>
+
+      <!-- Step 4: Lens -->
+      <div class="onboard-panel" id="ob-step-4">
+        <h3 style="font-size:18px;font-weight:700;color:var(--text-0);margin-bottom:6px">Your lens statement</h3>
+        <p style="font-size:14px;color:var(--text-2);margin-bottom:24px">One sentence that captures how you uniquely see the world. This appears on your public thinker card.</p>
+        <div class="onboard-field">
+          <label class="onboard-label">Your lens</label>
+          <textarea class="onboard-textarea" id="ob-lens" rows="3" placeholder="e.g. Validates whether the problem is real, audits the market landscape, and tells you — directly — if you're not thinking big enough."></textarea>
+          <div class="onboard-hint">Write in third person. It should describe what a founder gets from your perspective.</div>
+        </div>
+        <div class="onboard-field">
+          <label class="onboard-label">Your tone</label>
+          <select class="onboard-select" id="ob-tone">
+            <option value="direct">Direct and challenging</option>
+            <option value="structured">Structured and analytical</option>
+            <option value="empathetic">Empathetic and exploratory</option>
+            <option value="visionary">Visionary and expansive</option>
+          </select>
+        </div>
+        <div style="display:flex;justify-content:space-between">
+          <button class="btn-secondary" onclick="obBack(4)">← Back</button>
+          <button class="btn-primary" onclick="obNext(4)">Continue →</button>
+        </div>
+      </div>
+
+      <!-- Step 5: Domains -->
+      <div class="onboard-panel" id="ob-step-5">
+        <h3 style="font-size:18px;font-weight:700;color:var(--text-0);margin-bottom:6px">Your core domains</h3>
+        <p style="font-size:14px;color:var(--text-2);margin-bottom:24px">What kinds of decisions are you best equipped to advise on? Add the areas where your framework creates the most value.</p>
+        <div class="onboard-field">
+          <label class="onboard-label">Add a domain and press Enter</label>
+          <div class="train-tags-wrap" id="ob-domains-list" style="min-height:40px;border:1.5px solid var(--border-md);border-radius:var(--r-sm);padding:10px;background:var(--surface-2);margin-bottom:10px"></div>
+          <div class="train-add-input">
+            <input class="onboard-input" id="ob-domain-input" type="text" placeholder="e.g. Product-market fit, Fundraising, Hiring..." style="margin-bottom:0">
+            <button class="btn-secondary" onclick="addDomain()">Add</button>
+          </div>
+          <div class="onboard-hint">Add 3–8 domains. These help founders find the right thinker for their decision.</div>
+        </div>
+        <div style="display:flex;justify-content:space-between">
+          <button class="btn-secondary" onclick="obBack(5)">← Back</button>
+          <button class="btn-primary" onclick="obNext(5)">Complete setup →</button>
+        </div>
+      </div>
+
+      <!-- Step 6: Complete -->
+      <div class="onboard-panel" id="ob-step-6">
+        <div style="text-align:center;padding:20px 0">
+          <div style="font-size:48px;margin-bottom:16px">✦</div>
+          <h3 style="font-size:22px;font-weight:700;color:var(--text-0);margin-bottom:12px">You're live as a Thinker</h3>
+          <p style="font-size:15px;color:var(--text-2);max-width:420px;margin:0 auto 28px;line-height:1.7">Your profile and model are active. Founders can now request your perspective.</p>
+          <div class="profile-summary-card" id="ob-summary-card" style="text-align:left;max-width:480px;margin:0 auto 24px"></div>
+          <button class="btn-primary" onclick="switchThinkerTab('overview', document.querySelectorAll('.thinker-tab')[0])">Go to my profile →</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ─── TRAIN MODEL ─── -->
+    <div class="thinker-panel" id="tp-train" style="display:none">
+      <div class="train-section">
+        <div class="train-section-title">Cognitive framework</div>
+        <div class="train-section-sub">How your AI model processes decisions. The more specific, the more precise your output.</div>
+        <div class="onboard-field">
+          <label class="onboard-label" style="display:flex;align-items:center;justify-content:space-between">
+            Framework description
+            <span class="version-pill" id="framework-version">v1.0</span>
+          </label>
+          <textarea class="onboard-textarea" id="train-framework" rows="8" placeholder="Describe your full decision-making framework..."></textarea>
+        </div>
+        <button class="btn-primary" onclick="saveFramework()">Save & update model</button>
+      </div>
+
+      <div class="train-section">
+        <div class="train-section-title">Your lens statement</div>
+        <div class="train-section-sub">The one-liner that defines your perspective. Shown on your public thinker card.</div>
+        <div class="onboard-field" style="margin-bottom:12px">
+          <textarea class="onboard-textarea" id="train-lens" rows="2"></textarea>
+        </div>
+        <button class="btn-secondary" onclick="saveLens()">Update lens</button>
+      </div>
+
+      <div class="train-section">
+        <div class="train-section-title">Domain expertise</div>
+        <div class="train-section-sub">Add or remove the decision domains you cover.</div>
+        <div class="train-tags-wrap" id="train-domains-list" style="min-height:44px;border:1.5px solid var(--border-md);border-radius:var(--r-sm);padding:10px;background:var(--surface-2);margin-bottom:10px"></div>
+        <div class="train-add-input">
+          <input class="onboard-input" id="train-domain-input" type="text" placeholder="Add a domain…" style="margin-bottom:0">
+          <button class="btn-secondary" onclick="addTrainDomain()">Add</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ─── REPORTS ─── -->
+    <div class="thinker-panel" id="tp-reports" style="display:none">
+      <div class="report-period-tabs">
+        <button class="rpt-tab active" onclick="switchReportPeriod('last',this)">Last month</button>
+        <button class="rpt-tab" onclick="switchReportPeriod('this',this)">This month</button>
+        <button class="rpt-tab" onclick="switchReportPeriod('ytd',this)">YTD</button>
+      </div>
+
+      <div class="report-summary" id="rpt-summary">
+        <div class="rpt-stat"><div class="rpt-stat-val" id="rpt-sessions">0</div><div class="rpt-stat-label">Perspectives</div><div class="rpt-stat-delta">↑ 0%</div></div>
+        <div class="rpt-stat"><div class="rpt-stat-val" id="rpt-revenue">$0</div><div class="rpt-stat-label">Gross revenue</div><div class="rpt-stat-delta">↑ 0%</div></div>
+        <div class="rpt-stat"><div class="rpt-stat-val" id="rpt-payout">$0</div><div class="rpt-stat-label">Your payout (70%)</div><div class="rpt-stat-delta">↑ 0%</div></div>
+        <div class="rpt-stat"><div class="rpt-stat-val" id="rpt-unique">0</div><div class="rpt-stat-label">Unique founders</div><div class="rpt-stat-delta">—</div></div>
+      </div>
+
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--r);overflow:hidden">
+        <div style="padding:16px 16px 8px;border-bottom:1px solid var(--border)">
+          <div style="font-size:14px;font-weight:600;color:var(--text-0)">Transaction ledger</div>
+        </div>
+        <table class="ledger-table" id="ledger-table">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Stage</th>
+              <th>Decision (summary)</th>
+              <th>Gross</th>
+              <th>Your cut</th>
+            </tr>
+          </thead>
+          <tbody id="ledger-body">
+            <tr><td colspan="5" style="text-align:center;color:var(--text-3);padding:32px">No transactions yet for this period.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ─── PAYMENTS ─── -->
+    <div class="thinker-panel" id="tp-payments" style="display:none">
+      <div class="payment-card">
+        <div class="payment-card-title">Bank account</div>
+        <div class="payment-card-sub">Payouts are sent to this account on your chosen schedule.</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+          <div class="bank-field" style="grid-column:1/-1">
+            <label class="bank-label">Account holder name</label>
+            <input class="bank-input" id="bank-name" type="text" placeholder="Legal name on account">
+          </div>
+          <div class="bank-field">
+            <label class="bank-label">Routing number</label>
+            <input class="bank-input" id="bank-routing" type="text" placeholder="9 digits" maxlength="9" autocomplete="off">
+            <div class="bank-secure-note">🔒 Encrypted at rest</div>
+          </div>
+          <div class="bank-field">
+            <label class="bank-label">Account number</label>
+            <input class="bank-input" id="bank-account" type="password" placeholder="Account number" autocomplete="off">
+            <div class="bank-secure-note">🔒 Encrypted at rest</div>
+          </div>
+          <div class="bank-field">
+            <label class="bank-label">Bank name</label>
+            <input class="bank-input" id="bank-bankname" type="text" placeholder="e.g. Chase, Wells Fargo">
+          </div>
+          <div class="bank-field">
+            <label class="bank-label">Account type</label>
+            <select class="bank-input" id="bank-type">
+              <option value="checking">Checking</option>
+              <option value="savings">Savings</option>
+            </select>
+          </div>
+        </div>
+        <button class="btn-primary" style="margin-top:8px" onclick="saveBankInfo()">Save bank details</button>
+      </div>
+
+      <div class="payment-card">
+        <div class="payment-card-title">Payout schedule</div>
+        <div class="payment-card-sub">Choose how often earnings are transferred to your bank.</div>
+        <div class="payout-schedule" id="payout-schedule">
+          <div class="payout-opt selected" onclick="selectPayout(this,'weekly')">
+            <div class="payout-opt-title">Weekly</div>
+            <div class="payout-opt-sub">Every Monday</div>
+          </div>
+          <div class="payout-opt" onclick="selectPayout(this,'biweekly')">
+            <div class="payout-opt-title">Bi-weekly</div>
+            <div class="payout-opt-sub">1st & 15th</div>
+          </div>
+          <div class="payout-opt" onclick="selectPayout(this,'monthly')">
+            <div class="payout-opt-title">Monthly</div>
+            <div class="payout-opt-sub">1st of month</div>
+          </div>
+        </div>
+        <button class="btn-secondary" style="margin-top:16px" onclick="savePayoutSchedule()">Save schedule</button>
+      </div>
+
+      <div class="payment-card" style="border-color:#FEE2E2">
+        <div class="payment-card-title">Pending payout</div>
+        <div class="payment-card-sub">Your next scheduled transfer.</div>
+        <div style="font-size:32px;font-weight:700;color:var(--accent);margin-bottom:4px" id="pending-payout">$0.00</div>
+        <div style="font-size:13px;color:var(--text-3)">Transfers on next payout date based on your schedule.</div>
+      </div>
+    </div>
+
+  </div></div>
+</div>
+
 <!-- THINKER PICKER -->
 <div class="modal-bg" id="picker-modal" onclick="closeBgClick(event)">
   <div class="picker-sheet">
@@ -1126,13 +1605,18 @@ function showView(view) {
   document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
 
   const views = {
-    search:    () => { document.getElementById('nav-search').classList.add('active'); show('screen-search'); setTimeout(() => document.getElementById('search-input').focus(), 120); },
-    projects:  () => { document.getElementById('nav-projects').classList.add('active'); renderProjects(); show('screen-projects'); },
-    settings:  () => show('screen-settings'),
-    downloads: () => { renderDownloads(); show('screen-downloads'); },
-    help:      () => { renderFAQ(); show('screen-help'); },
-    upgrade:   () => show('screen-upgrade'),
-    recents:   () => show('screen-0'),
+    search:      () => { document.getElementById('nav-search').classList.add('active'); show('screen-search'); setTimeout(() => document.getElementById('search-input').focus(), 120); },
+    projects:    () => { document.getElementById('nav-projects').classList.add('active'); renderProjects(); show('screen-projects'); },
+    settings:    () => show('screen-settings'),
+    downloads:   () => { renderDownloads(); show('screen-downloads'); },
+    help:        () => { renderFAQ(); show('screen-help'); },
+    upgrade:     () => show('screen-upgrade'),
+    recents:     () => show('screen-0'),
+    'thinker-hub': () => {
+      document.getElementById('nav-thinker').classList.add('active');
+      show('screen-thinker-hub');
+      try { initThinkerHub(); } catch(e) { console.error('[thinker-hub init]', e); }
+    },
   };
   (views[view] || (() => {}))();
 
@@ -1799,10 +2283,258 @@ renderRecents();
 renderFAQ();
 checkConnection();
 fetchBalance();
+initThinkerAccess();
 
 document.addEventListener('keydown', e => {
   if (e.key === 'Escape') { closePicker(); closeProfileMenu(); closeTopup(); }
 });
+
+/* ════════════════════════════════
+   THINKER PORTAL
+════════════════════════════════ */
+
+// Approved thinker emails — gated properly once auth is in place
+const APPROVED_THINKER_EMAILS = ['michael@surpluspods.com'];
+
+function isThinker() {
+  // TODO: replace with server-side role check once auth is live
+  return true;
+}
+
+function initThinkerAccess() {
+  // Nav is visible by default — no-op until role-based auth is wired
+}
+
+// Thinker localStorage keys
+const TK = {
+  profile:  'di_tk_profile',
+  domains:  'di_tk_domains',
+  framework:'di_tk_framework',
+  lens:     'di_tk_lens',
+  bank:     'di_tk_bank',
+  payout:   'di_tk_payout',
+  version:  'di_tk_version',
+};
+
+function loadTkData(key, fallback) {
+  try { return JSON.parse(localStorage.getItem(key)) ?? fallback; } catch { return fallback; }
+}
+function saveTkData(key, val) { localStorage.setItem(key, JSON.stringify(val)); }
+
+function initThinkerHub() {
+  const prof = loadTkData(TK.profile, { name: userProfile.name, title: '', bio: '' });
+  const lens = loadTkData(TK.lens, activeThinker?.lens || '');
+  const fw   = loadTkData(TK.framework, activeThinker?.aiFrame || '');
+  const doms = loadTkData(TK.domains, []);
+  const ver  = loadTkData(TK.version, 1);
+
+  // Hero
+  const initials = prof.name.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
+  document.getElementById('th-badge').textContent   = initials;
+  document.getElementById('th-name').textContent    = prof.name;
+  document.getElementById('th-title').textContent   = prof.title || activeThinker?.title || '';
+
+  // Overview card
+  document.getElementById('psc-avatar').textContent = initials;
+  document.getElementById('psc-name').textContent   = prof.name;
+  document.getElementById('psc-title-text').textContent = prof.title || activeThinker?.title || '';
+  document.getElementById('psc-lens').textContent   = lens || 'Not set yet — complete your onboarding.';
+  document.getElementById('psc-framework').textContent  = fw  || 'Your framework is defined in your model training. Update it in the Train Model tab.';
+
+  // Stats (mock until DB wired)
+  document.getElementById('th-stat-sessions').textContent = '—';
+  document.getElementById('th-stat-earnings').textContent = '—';
+  document.getElementById('th-stat-rating').textContent   = '—';
+
+  // Train tab
+  const trainFw  = document.getElementById('train-framework');
+  const trainLens = document.getElementById('train-lens');
+  if (trainFw)  trainFw.value  = fw;
+  if (trainLens) trainLens.value = lens;
+  document.getElementById('framework-version').textContent = `v${ver}.0`;
+  renderTrainDomains(doms);
+
+  // Reports
+  renderReports('last');
+}
+
+/* ── Tab switching ── */
+function switchThinkerTab(tab, btn) {
+  document.querySelectorAll('.thinker-tab').forEach(t => t.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  document.querySelectorAll('.thinker-panel').forEach(p => p.style.display = 'none');
+  const panel = document.getElementById(`tp-${tab}`);
+  if (panel) panel.style.display = 'block';
+  if (tab === 'reports') renderReports(currentReportPeriod);
+}
+
+/* ── Onboarding flow ── */
+let currentObStep = 1;
+const OB_TOTAL    = 6;
+const obDomains   = [];
+
+function obGoTo(step) {
+  document.querySelectorAll('.onboard-panel').forEach(p => p.classList.remove('active'));
+  document.getElementById(`ob-step-${step}`).classList.add('active');
+  document.querySelectorAll('.onboarding-step').forEach((s, i) => {
+    s.classList.remove('active','done');
+    if (i + 1 < step) s.classList.add('done');
+    if (i + 1 === step) s.classList.add('active');
+  });
+  currentObStep = step;
+}
+function obNext(step) {
+  if (step === 5) { completeOnboarding(); }
+  obGoTo(step + 1);
+}
+function obBack(step) { obGoTo(step - 1); }
+
+function completeOnboarding() {
+  const prof = {
+    name:  document.getElementById('ob-name').value.trim()  || userProfile.name,
+    title: document.getElementById('ob-title').value.trim(),
+    bio:   document.getElementById('ob-bio').value.trim(),
+  };
+  const fw   = document.getElementById('ob-framework').value.trim();
+  const lens = document.getElementById('ob-lens').value.trim();
+  saveTkData(TK.profile,   prof);
+  saveTkData(TK.framework, fw);
+  saveTkData(TK.lens,      lens);
+  saveTkData(TK.domains,   [...obDomains]);
+  saveTkData(TK.version,   1);
+
+  // Populate summary card
+  const card = document.getElementById('ob-summary-card');
+  if (card) card.innerHTML = `
+    <div class="psc-header">
+      <div class="psc-avatar" style="background:${activeThinker?.color||'#3B31A4'}">${prof.name.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase()}</div>
+      <div><div class="psc-name">${prof.name}</div><div class="psc-title">${prof.title}</div></div>
+    </div>
+    <div class="psc-section-label">Lens</div>
+    <div class="psc-lens">${lens || '—'}</div>
+    <div class="psc-section-label" style="margin-top:14px">Domains</div>
+    <div>${obDomains.map(d=>`<span class="train-tag">${d}</span>`).join('') || '—'}</div>`;
+}
+
+function addDomain() {
+  const inp = document.getElementById('ob-domain-input');
+  const val = inp.value.trim();
+  if (!val || obDomains.includes(val)) return;
+  obDomains.push(val);
+  renderObDomains();
+  inp.value = '';
+}
+document.getElementById('ob-domain-input')?.addEventListener('keydown', e => { if (e.key==='Enter') { e.preventDefault(); addDomain(); }});
+
+function renderObDomains() {
+  const el = document.getElementById('ob-domains-list');
+  if (!el) return;
+  el.innerHTML = obDomains.map((d,i) =>
+    `<span class="train-tag">${d}<button onclick="obDomains.splice(${i},1);renderObDomains()">×</button></span>`
+  ).join('');
+}
+
+/* ── Train model ── */
+function saveFramework() {
+  const fw  = document.getElementById('train-framework').value.trim();
+  const ver = (loadTkData(TK.version, 1) || 1) + 1;
+  saveTkData(TK.framework, fw);
+  saveTkData(TK.version, ver);
+  document.getElementById('framework-version').textContent = `v${ver}.0`;
+  showToast('Framework updated ✓');
+}
+function saveLens() {
+  const lens = document.getElementById('train-lens').value.trim();
+  saveTkData(TK.lens, lens);
+  showToast('Lens updated ✓');
+}
+
+const trainDomains = [];
+function renderTrainDomains(list) {
+  trainDomains.length = 0;
+  list.forEach(d => trainDomains.push(d));
+  const el = document.getElementById('train-domains-list');
+  if (!el) return;
+  el.innerHTML = trainDomains.map((d,i) =>
+    `<span class="train-tag">${d}<button onclick="trainDomains.splice(${i},1);renderTrainDomains(trainDomains)">×</button></span>`
+  ).join('');
+}
+function addTrainDomain() {
+  const inp = document.getElementById('train-domain-input');
+  const val = inp.value.trim();
+  if (!val || trainDomains.includes(val)) return;
+  trainDomains.push(val);
+  renderTrainDomains(trainDomains);
+  saveTkData(TK.domains, [...trainDomains]);
+  inp.value = '';
+}
+document.getElementById('train-domain-input')?.addEventListener('keydown', e => { if (e.key==='Enter') { e.preventDefault(); addTrainDomain(); }});
+
+/* ── Reports ── */
+let currentReportPeriod = 'last';
+
+function switchReportPeriod(period, btn) {
+  currentReportPeriod = period;
+  document.querySelectorAll('.rpt-tab').forEach(t => t.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  renderReports(period);
+}
+
+function renderReports(period) {
+  // Mock data until DB endpoint is wired
+  const mock = {
+    last: { sessions:0, revenue:0, unique:0 },
+    this: { sessions:0, revenue:0, unique:0 },
+    ytd:  { sessions:0, revenue:0, unique:0 },
+  };
+  const d = mock[period] || mock.last;
+  const payout = (d.revenue * 0.7).toFixed(2);
+  document.getElementById('rpt-sessions').textContent = d.sessions;
+  document.getElementById('rpt-revenue').textContent  = `$${d.revenue.toFixed(2)}`;
+  document.getElementById('rpt-payout').textContent   = `$${payout}`;
+  document.getElementById('rpt-unique').textContent   = d.unique;
+  document.getElementById('ledger-body').innerHTML =
+    `<tr><td colspan="5" style="text-align:center;color:var(--text-3);padding:32px">No transactions yet for this period.</td></tr>`;
+}
+
+/* ── Payments ── */
+function saveBankInfo() {
+  const bank = {
+    name:     document.getElementById('bank-name').value.trim(),
+    routing:  document.getElementById('bank-routing').value.trim(),
+    account:  '****',    // never store raw account number in localStorage
+    bankname: document.getElementById('bank-bankname').value.trim(),
+    type:     document.getElementById('bank-type').value,
+  };
+  saveTkData(TK.bank, bank);
+  showToast('Bank details saved securely ✓');
+}
+
+let selectedPayoutSchedule = 'weekly';
+function selectPayout(el, schedule) {
+  document.querySelectorAll('.payout-opt').forEach(o => o.classList.remove('selected'));
+  el.classList.add('selected');
+  selectedPayoutSchedule = schedule;
+}
+function savePayoutSchedule() {
+  saveTkData(TK.payout, selectedPayoutSchedule);
+  showToast('Payout schedule updated ✓');
+}
+
+/* ── Toast ── */
+function showToast(msg) {
+  let t = document.getElementById('di-toast');
+  if (!t) {
+    t = document.createElement('div');
+    t.id = 'di-toast';
+    t.style.cssText = 'position:fixed;bottom:32px;left:50%;transform:translateX(-50%);background:#1a1a2e;color:#fff;padding:10px 22px;border-radius:24px;font-size:13.5px;font-weight:500;z-index:9999;transition:opacity 0.3s;pointer-events:none;white-space:nowrap';
+    document.body.appendChild(t);
+  }
+  t.textContent = msg;
+  t.style.opacity = '1';
+  clearTimeout(t._timer);
+  t._timer = setTimeout(() => { t.style.opacity = '0'; }, 2400);
+}
 </script>
 
 <!-- Top-up Modal -->
