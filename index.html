@@ -194,6 +194,10 @@
     .thinker-tab:hover { color:var(--text-0); }
     .thinker-tab.active { color:var(--text-0); font-weight:600; border-bottom-color:var(--accent); }
     .thinker-tab svg { flex-shrink:0; }
+    /* Onboarding is a launcher, not a panel — styled as a coral action */
+    .thinker-tab-launch { color:var(--coral) !important; border-bottom-color:transparent !important; }
+    .thinker-tab-launch:hover { color:#e8304a !important; background:var(--coral-lt); border-radius:6px 6px 0 0; }
+    .thinker-tab-launch svg { color:var(--coral); }
 
     /* Stats row */
     .thinker-stats { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin-bottom:28px; }
@@ -681,6 +685,493 @@
     .selected-check { position:absolute; top:8px; right:8px; width:18px; height:18px; background:var(--accent); border-radius:50%; display:flex; align-items:center; justify-content:center; color:#fff; font-size:10px; }
 
     /* ═══ RESPONSIVE ═══ */
+    /* ══════════════════════════════════════════════════════════
+       NEURAL SCULPTING — TRAIN MODEL
+    ══════════════════════════════════════════════════════════ */
+
+    /* Panel wrapper */
+    .ns-panel { display:flex; flex-direction:column; gap:20px; }
+
+    /* Base card */
+    .ns-card {
+      background:var(--surface); border:1px solid var(--border);
+      border-radius:16px; padding:28px; box-shadow:var(--sh-sm);
+      transition:box-shadow .2s, border-color .2s;
+    }
+    .ns-card:focus-within { box-shadow:var(--sh-md); }
+
+    /* Card header row */
+    .ns-card-head {
+      display:flex; align-items:center; justify-content:space-between;
+      margin-bottom:6px;
+    }
+    .ns-card-label {
+      font-size:10px; font-weight:700; letter-spacing:.13em;
+      text-transform:uppercase; color:var(--text-3); display:flex;
+      align-items:center; gap:8px;
+    }
+    .ns-card-title {
+      font-family:'Cormorant Garamond',serif; font-size:22px; font-weight:600;
+      color:var(--text-0); margin-bottom:6px; line-height:1.15; letter-spacing:-.2px;
+    }
+    .ns-card-sub { font-size:13px; color:var(--text-2); margin-bottom:18px; line-height:1.55; }
+
+    /* Coral activity dot — pulses on typing */
+    .ns-dot {
+      width:8px; height:8px; border-radius:50%; background:var(--coral);
+      flex-shrink:0; animation:ns-idle 3s ease-in-out infinite;
+    }
+    .ns-dot[data-intensity="1"] { animation:ns-pulse1 1.8s ease-in-out infinite; }
+    .ns-dot[data-intensity="2"] { animation:ns-pulse2 1.1s ease-in-out infinite; }
+    .ns-dot[data-intensity="3"] { animation:ns-pulse3 .6s ease-in-out infinite; }
+    @keyframes ns-idle   { 0%,100%{opacity:.3;transform:scale(1)} 50%{opacity:.6;transform:scale(1.1)} }
+    @keyframes ns-pulse1 { 0%,100%{opacity:.5;transform:scale(1)} 50%{opacity:1;transform:scale(1.25)} }
+    @keyframes ns-pulse2 { 0%,100%{opacity:.6;transform:scale(1)} 50%{opacity:1;transform:scale(1.4);box-shadow:0 0 0 4px rgba(255,79,107,.18)} }
+    @keyframes ns-pulse3 { 0%,100%{opacity:.8;transform:scale(1)} 50%{opacity:1;transform:scale(1.55);box-shadow:0 0 0 7px rgba(255,79,107,.22)} }
+
+    /* Forge textarea */
+    .ns-forge-textarea {
+      width:100%; min-height:160px; font-family:'Inter',sans-serif; font-size:14.5px;
+      color:var(--text-0); background:var(--surface-2); border:1.5px solid var(--border-md);
+      border-radius:10px; padding:14px 16px; outline:none; resize:vertical;
+      line-height:1.75; transition:border-color .2s, background .2s; margin-bottom:10px;
+    }
+    .ns-forge-textarea:focus { border-color:var(--coral); background:var(--surface); }
+    .ns-forge-textarea::placeholder { color:var(--text-3); }
+
+    /* Divine Audit bar */
+    .ns-audit {
+      display:flex; align-items:center; justify-content:space-between;
+      min-height:26px; padding:0 2px; margin-bottom:18px;
+    }
+    .ns-audit-msg {
+      font-size:11.5px; font-weight:500; color:var(--text-3);
+      font-style:italic; transition:color .3s;
+    }
+    .ns-audit-msg.active { color:var(--coral); }
+    .ns-audit-tier {
+      font-size:11px; font-weight:700; letter-spacing:.07em;
+      text-transform:uppercase; padding:3px 10px; border-radius:10px;
+      background:var(--accent-lt); color:var(--accent);
+      transition:background .3s, color .3s;
+    }
+    .ns-audit-tier.t2 { background:#FFF0EB; color:var(--coral); }
+    .ns-audit-tier.t3 { background:#fff0eb; color:var(--coral); border:1px solid rgba(255,79,107,.3); }
+    .ns-audit-tier.t4 { background:var(--coral); color:#fff; }
+
+    /* Lens card — centred focus */
+    .ns-lens-input-wrap { text-align:center; margin-bottom:20px; }
+    .ns-lens-input {
+      width:100%; font-family:'Cormorant Garamond',serif; font-size:20px;
+      font-weight:500; color:var(--text-0); background:transparent; border:none;
+      border-bottom:2px solid var(--border-md); padding:10px 0 14px;
+      text-align:center; outline:none; line-height:1.4; transition:border-color .2s;
+    }
+    .ns-lens-input:focus   { border-bottom-color:var(--coral); }
+    .ns-lens-input::placeholder { color:var(--text-3); font-style:italic; }
+
+    /* Lens live preview card */
+    .ns-lens-preview {
+      background:var(--bg); border:1px solid var(--border);
+      border-radius:12px; padding:20px 22px; transition:opacity .2s;
+    }
+    .ns-preview-label {
+      font-size:10px; font-weight:700; letter-spacing:.1em; text-transform:uppercase;
+      color:var(--text-3); margin-bottom:14px; display:flex; align-items:center; gap:6px;
+    }
+    .ns-preview-label::before { content:''; width:6px; height:6px; border-radius:50%;
+                                  background:var(--coral); display:block; }
+    .ns-preview-card {
+      background:var(--surface); border:1px solid var(--border); border-radius:10px;
+      padding:16px; display:flex; align-items:flex-start; gap:12px;
+      box-shadow:var(--sh-sm);
+    }
+    .ns-preview-avatar {
+      width:38px; height:38px; border-radius:50%; background:var(--accent);
+      color:#fff; font-size:12px; font-weight:700; display:flex;
+      align-items:center; justify-content:center; flex-shrink:0;
+    }
+    .ns-preview-name  { font-size:13px; font-weight:600; color:var(--text-0); margin-bottom:2px; }
+    .ns-preview-title { font-size:11px; color:var(--text-3); margin-bottom:8px; }
+    .ns-preview-lens  {
+      font-size:13px; color:var(--text-2); line-height:1.55; font-style:italic;
+      border-left:2.5px solid var(--coral); padding-left:10px;
+    }
+    .ns-preview-lens-empty { color:var(--border-hi); }
+
+    /* Domain Constellation */
+    .ns-constellation-wrap { display:flex; flex-direction:column; align-items:center; gap:16px; }
+    .ns-constellation-svg  { width:260px; height:260px; overflow:visible; flex-shrink:0; }
+    .ns-const-line { stroke:var(--violet); stroke-width:1.5; opacity:.5;
+                     stroke-dasharray:200; stroke-dashoffset:200;
+                     animation:const-draw .5s ease forwards; }
+    @keyframes const-draw { to { stroke-dashoffset:0; } }
+    .ns-const-node-circle { transition:r .2s; }
+    .ns-const-label { font-family:'Inter',sans-serif; font-size:10px; font-weight:600;
+                      fill:var(--text-1); text-anchor:middle; }
+    .ns-const-domain-add {
+      display:flex; gap:8px; width:100%; max-width:320px;
+    }
+    .ns-const-input {
+      flex:1; border:1.5px solid var(--border-md); border-radius:var(--r-pill);
+      padding:9px 16px; font-family:'Inter',sans-serif; font-size:13.5px;
+      color:var(--text-0); background:var(--surface-2); outline:none;
+      transition:border-color .2s;
+    }
+    .ns-const-input:focus { border-color:var(--violet); background:var(--surface); }
+    .ns-const-add-btn {
+      padding:9px 18px; border-radius:var(--r-pill); border:none;
+      background:var(--violet); color:#fff; font-family:'Inter',sans-serif;
+      font-size:13px; font-weight:600; cursor:pointer; transition:background .15s;
+      white-space:nowrap;
+    }
+    .ns-const-add-btn:hover { background:#4a3de0; }
+
+    /* Commit bar */
+    .ns-commit-bar {
+      display:flex; align-items:center; justify-content:space-between;
+      background:var(--surface); border:1px solid var(--border);
+      border-radius:16px; padding:20px 24px; box-shadow:var(--sh-sm); gap:16px;
+    }
+    .ns-commit-info { flex:1; min-width:0; }
+    .ns-commit-label { font-size:11px; font-weight:700; letter-spacing:.1em;
+                       text-transform:uppercase; color:var(--text-3); margin-bottom:3px; }
+    .ns-version-text { font-size:13px; color:var(--text-2); }
+    .ns-commit-btn {
+      display:inline-flex; align-items:center; gap:8px; padding:12px 24px;
+      background:var(--coral); color:#fff; border:none; border-radius:var(--r-pill);
+      font-family:'Inter',sans-serif; font-size:14px; font-weight:700;
+      cursor:pointer; transition:background .15s, transform .15s, box-shadow .15s;
+      white-space:nowrap; flex-shrink:0;
+    }
+    .ns-commit-btn:hover { background:#e8304a; transform:translateY(-1px); box-shadow:var(--sh-md); }
+    .ns-commit-btn:disabled { background:#ccc; cursor:not-allowed; transform:none; box-shadow:none; }
+
+    /* Commit encoding overlay */
+    .ns-encoding-overlay {
+      position:fixed; inset:0; z-index:850; background:rgba(250,250,248,.92);
+      backdrop-filter:blur(8px); display:none; flex-direction:column;
+      align-items:center; justify-content:center; gap:20px;
+    }
+    .ns-encoding-overlay.active { display:flex; }
+    .ns-enc-dot-large {
+      width:64px; height:64px; border-radius:50%; background:var(--coral);
+      animation:ns-enc-large 1s ease-in-out infinite;
+      box-shadow:0 0 0 0 rgba(255,79,107,.5);
+    }
+    @keyframes ns-enc-large {
+      0%,100% { transform:scale(1); box-shadow:0 0 0 0 rgba(255,79,107,.4); }
+      50%      { transform:scale(1.2); box-shadow:0 0 0 20px rgba(255,79,107,0); }
+    }
+    .ns-enc-text { font-family:'Inter',sans-serif; font-size:14px; font-weight:500;
+                   color:var(--text-2); letter-spacing:.02em; }
+    .ns-enc-sub  { font-family:'Cormorant Garamond',serif; font-size:13px;
+                   color:var(--text-3); letter-spacing:.06em; text-transform:uppercase; }
+
+    @media (max-width:480px) {
+      .ns-card { padding:20px; }
+      .ns-commit-bar { flex-direction:column; align-items:stretch; }
+      .ns-commit-btn { justify-content:center; }
+      .ns-constellation-svg { width:220px; height:220px; }
+    }
+
+    /* ══════════════════════════════════════════════════════════
+       THINKER ONBOARDING — CINEMATIC FULL-SCREEN FLOW
+    ══════════════════════════════════════════════════════════ */
+    :root {
+      --coral:   #ff4f6b;
+      --coral-lt:#fff1f3;
+      --violet:  #5b4fff;
+      --violet-lt:#f0eeff;
+      --paper:   #fafaf8;
+    }
+
+    /* Overlay */
+    .ob-flow {
+      position:fixed; inset:0; z-index:950;
+      background:var(--paper); display:none; flex-direction:column;
+      overflow:hidden;
+    }
+    .ob-flow.open { display:flex; }
+
+    /* Top bar */
+    .ob-topbar {
+      position:absolute; top:0; left:0; right:0; z-index:10;
+      display:flex; align-items:center; justify-content:space-between;
+      padding:18px 24px 0;
+    }
+    .ob-brand {
+      font-family:'Inter',sans-serif; font-size:11px; font-weight:700;
+      letter-spacing:.12em; text-transform:uppercase; color:var(--text-3);
+    }
+    .ob-close {
+      width:36px; height:36px; border-radius:50%; border:1.5px solid var(--border-md);
+      background:var(--surface); cursor:pointer; display:flex; align-items:center;
+      justify-content:center; font-size:18px; color:var(--text-2); transition:all .15s;
+    }
+    .ob-close:hover { background:var(--surface-2); border-color:var(--border-hi); }
+
+    /* Progress */
+    .ob-progress {
+      position:absolute; top:0; left:0; right:0; height:3px; z-index:10;
+    }
+    .ob-progress-fill {
+      height:100%; background:var(--coral); width:16.66%;
+      transition:width .5s cubic-bezier(.4,0,.2,1);
+    }
+
+    /* Step wrapper */
+    .ob-stage {
+      position:relative; flex:1; overflow:hidden;
+    }
+
+    /* Individual steps */
+    .ob-step {
+      position:absolute; inset:0;
+      display:flex; align-items:center; justify-content:center;
+      padding:80px 24px 40px;
+      opacity:0; transform:translateY(28px); pointer-events:none;
+      transition:opacity .45s ease, transform .45s ease;
+      overflow-y:auto;
+    }
+    .ob-step.ob-active {
+      opacity:1; transform:translateY(0); pointer-events:auto;
+    }
+    .ob-step.ob-exit-up {
+      opacity:0; transform:translateY(-28px);
+    }
+
+    /* Step inner content */
+    .ob-inner {
+      width:100%; max-width:520px; margin:0 auto;
+    }
+    .ob-eyebrow {
+      font-family:'Inter',sans-serif; font-size:10px; font-weight:700;
+      letter-spacing:.14em; text-transform:uppercase; color:var(--coral);
+      margin-bottom:20px;
+    }
+    .ob-step-num {
+      font-family:'Inter',sans-serif; font-size:10px; font-weight:700;
+      letter-spacing:.12em; text-transform:uppercase; color:var(--text-3);
+      margin-bottom:16px;
+    }
+    .ob-headline {
+      font-family:'Cormorant Garamond',serif; font-size:clamp(36px,8vw,60px);
+      font-weight:600; color:var(--text-0); line-height:1.08;
+      letter-spacing:-.5px; margin-bottom:20px;
+    }
+    .ob-headline em { color:var(--coral); font-style:normal; }
+    .ob-step-title {
+      font-family:'Cormorant Garamond',serif; font-size:clamp(28px,6vw,42px);
+      font-weight:600; color:var(--text-0); line-height:1.1;
+      letter-spacing:-.3px; margin-bottom:10px;
+    }
+    .ob-sub {
+      font-size:18px; font-weight:500; color:var(--text-2); margin-bottom:40px;
+      line-height:1.5; letter-spacing:-.1px;
+    }
+    .ob-hint {
+      font-size:14px; color:var(--text-3); margin-bottom:24px; line-height:1.55;
+    }
+
+    /* Inputs */
+    .ob-big-input {
+      width:100%; font-family:'Cormorant Garamond',serif; font-size:24px;
+      font-weight:500; color:var(--text-0); background:transparent;
+      border:none; border-bottom:2px solid var(--border-md);
+      padding:12px 0 16px; outline:none; transition:border-color .2s;
+      margin-bottom:32px;
+    }
+    .ob-big-input:focus { border-bottom-color:var(--coral); }
+    .ob-big-input::placeholder { color:var(--text-3); }
+    .ob-textarea {
+      width:100%; min-height:140px; font-family:'Inter',sans-serif; font-size:15px;
+      color:var(--text-0); background:var(--surface); border:1.5px solid var(--border-md);
+      border-radius:var(--r); padding:16px 18px; outline:none; resize:none;
+      line-height:1.7; transition:border-color .2s; margin-bottom:28px;
+    }
+    .ob-textarea:focus { border-color:var(--coral); }
+    .ob-textarea::placeholder { color:var(--text-3); }
+
+    /* CTAs */
+    .ob-cta {
+      display:inline-flex; align-items:center; gap:8px;
+      background:var(--violet); color:#fff; border:none;
+      border-radius:var(--r-pill); padding:14px 28px;
+      font-family:'Inter',sans-serif; font-size:15px; font-weight:600;
+      cursor:pointer; transition:background .15s, transform .15s, box-shadow .15s;
+      letter-spacing:-.1px; white-space:nowrap;
+    }
+    .ob-cta:hover { background:#4a3de0; transform:translateY(-1px); box-shadow:var(--sh-md); }
+    .ob-cta:active { transform:translateY(0); }
+    .ob-cta-coral { background:var(--coral); }
+    .ob-cta-coral:hover { background:#e8304a; }
+    .ob-cta-full { width:100%; justify-content:center; }
+    .ob-back-link {
+      display:inline-flex; align-items:center; gap:5px; font-size:13px;
+      color:var(--text-3); background:none; border:none; cursor:pointer;
+      transition:color .15s; margin-right:16px; padding:0;
+      font-family:'Inter',sans-serif;
+    }
+    .ob-back-link:hover { color:var(--text-1); }
+    .ob-nav-row { display:flex; align-items:center; margin-top:4px; }
+
+    /* Splash step special */
+    .ob-splash {
+      text-align:center; align-items:center; justify-content:center;
+    }
+    .ob-splash .ob-inner { text-align:center; }
+    .ob-splash .ob-headline { font-size:clamp(40px,9vw,68px); margin-bottom:16px; }
+    .ob-sub-small {
+      font-size:15px; color:var(--text-3); margin-bottom:48px; line-height:1.6;
+      max-width:360px; margin-left:auto; margin-right:auto;
+    }
+    .ob-splash-glyph {
+      font-family:'Cormorant Garamond',serif; font-size:72px; color:var(--coral);
+      line-height:1; margin-bottom:24px; display:block; opacity:.85;
+    }
+
+    /* Cognitive map */
+    .ob-map-label {
+      font-size:11px; font-weight:700; letter-spacing:.1em; text-transform:uppercase;
+      color:var(--text-3); margin-bottom:14px;
+    }
+    .ob-cog-map { display:flex; flex-wrap:wrap; gap:10px; margin-bottom:32px; }
+    .ob-cog-chip {
+      display:inline-flex; align-items:center; gap:7px;
+      padding:9px 14px; border-radius:var(--r-pill);
+      border:1.5px solid var(--border-md); background:var(--surface);
+      font-family:'Inter',sans-serif; font-size:13px; font-weight:500;
+      color:var(--text-2); cursor:pointer;
+      transition:all .15s; user-select:none; -webkit-tap-highlight-color:transparent;
+    }
+    .ob-cog-chip:hover { border-color:var(--violet); color:var(--violet); background:var(--violet-lt); }
+    .ob-cog-chip.selected {
+      border-color:var(--violet); background:var(--violet-lt);
+      color:var(--violet); font-weight:600;
+    }
+    .ob-cog-chip .chip-icon { font-size:16px; }
+
+    /* Insight tiers */
+    .ob-tiers { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-bottom:32px; }
+    .ob-tier {
+      border:2px solid var(--border-md); border-radius:var(--r);
+      padding:20px 14px; cursor:pointer; text-align:center;
+      background:var(--surface); transition:all .18s;
+    }
+    .ob-tier:hover { border-color:var(--coral); }
+    .ob-tier.selected { border-color:var(--coral); background:var(--coral-lt); }
+    .ob-tier-name { font-size:11px; font-weight:700; letter-spacing:.1em;
+                    text-transform:uppercase; color:var(--text-3); margin-bottom:8px; }
+    .ob-tier.selected .ob-tier-name { color:var(--coral); }
+    .ob-tier-price { font-family:'Cormorant Garamond',serif; font-size:30px;
+                     font-weight:600; color:var(--text-0); line-height:1; margin-bottom:6px; }
+    .ob-tier.selected .ob-tier-price { color:var(--coral); }
+    .ob-tier-sub { font-size:11.5px; color:var(--text-3); line-height:1.4; }
+    @media (max-width:400px) { .ob-tiers { grid-template-columns:1fr; } }
+
+    /* Signature pad */
+    .ob-sig-wrap {
+      position:relative; margin-bottom:28px;
+      border:2px solid var(--border-md); border-radius:var(--r);
+      background:var(--surface); overflow:hidden;
+      transition:border-color .2s;
+    }
+    .ob-sig-wrap:hover { border-color:var(--coral); }
+    .ob-sig-canvas {
+      display:block; width:100%; height:160px; touch-action:none; cursor:crosshair;
+    }
+    .ob-sig-placeholder {
+      position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+      font-family:'Cormorant Garamond',serif; font-size:18px; color:var(--text-3);
+      pointer-events:none; letter-spacing:.05em; transition:opacity .2s;
+    }
+    .ob-sig-clear {
+      position:absolute; bottom:10px; right:12px; font-size:11px; font-weight:600;
+      color:var(--text-3); background:var(--surface-2); border:1px solid var(--border-md);
+      border-radius:var(--r-pill); padding:4px 10px; cursor:pointer; transition:all .15s;
+    }
+    .ob-sig-clear:hover { color:var(--coral); border-color:var(--coral); }
+    .ob-legal {
+      font-size:12px; color:var(--text-3); text-align:center; margin-bottom:24px;
+      line-height:1.55;
+    }
+
+    /* ── ENCODING ANIMATION ── */
+    .ob-encoding {
+      position:absolute; inset:0; background:var(--paper);
+      display:none; flex-direction:column;
+      align-items:center; justify-content:center; z-index:20;
+    }
+    .ob-encoding.active { display:flex; }
+
+    .ob-enc-scene {
+      position:relative; width:200px; height:200px;
+      display:flex; align-items:center; justify-content:center; margin-bottom:40px;
+    }
+    .ob-enc-dot {
+      width:52px; height:52px; border-radius:50%; background:var(--coral);
+      position:relative; z-index:3; flex-shrink:0;
+      animation:enc-breathe 1.6s ease-in-out infinite;
+      box-shadow:0 0 0 0 rgba(255,79,107,.4);
+    }
+    @keyframes enc-breathe {
+      0%,100% { transform:scale(1); box-shadow:0 0 0 0 rgba(255,79,107,.4); }
+      50%      { transform:scale(1.18); box-shadow:0 0 0 18px rgba(255,79,107,0); }
+    }
+    .ob-enc-ring {
+      position:absolute; border-radius:50%; border:1.5px solid var(--coral);
+      animation:enc-ring-out 2.4s ease-out infinite;
+      opacity:0;
+    }
+    .ob-enc-ring-1 { width:80px; height:80px; animation-delay:0s; }
+    .ob-enc-ring-2 { width:130px; height:130px; animation-delay:.8s; }
+    .ob-enc-ring-3 { width:180px; height:180px; animation-delay:1.6s; }
+    @keyframes enc-ring-out {
+      0%   { transform:scale(.6); opacity:.7; }
+      100% { transform:scale(1);  opacity:0; }
+    }
+    .ob-enc-status {
+      font-family:'Inter',sans-serif; font-size:14px; font-weight:500;
+      color:var(--text-2); text-align:center; max-width:280px;
+      animation:enc-status-fade .5s ease;
+      letter-spacing:.01em;
+    }
+    @keyframes enc-status-fade { from{opacity:0;transform:translateY(6px)} to{opacity:1;transform:translateY(0)} }
+    .ob-enc-ledger {
+      font-family:'Cormorant Garamond',serif; font-size:13px; color:var(--text-3);
+      letter-spacing:.08em; text-transform:uppercase; margin-top:12px;
+    }
+    .ob-enc-fragment {
+      position:absolute; font-family:'Inter',sans-serif; font-size:11px;
+      font-weight:600; letter-spacing:.06em; text-transform:uppercase;
+      color:var(--coral); opacity:0; pointer-events:none;
+      animation:enc-fragment-drift 2.2s ease-in forwards;
+    }
+    @keyframes enc-fragment-drift {
+      0%   { opacity:.9; transform:translate(0,0) scale(1); }
+      80%  { opacity:.3; }
+      100% { opacity:0; transform:translate(var(--tx),var(--ty)) scale(.3); }
+    }
+
+    /* Step dots indicator */
+    .ob-step-dots {
+      position:absolute; bottom:24px; left:0; right:0;
+      display:flex; justify-content:center; gap:8px; z-index:10;
+    }
+    .ob-step-dot {
+      width:6px; height:6px; border-radius:50%;
+      background:var(--border-hi); transition:all .25s;
+    }
+    .ob-step-dot.active { background:var(--coral); width:18px; border-radius:3px; }
+    .ob-step-dot.done   { background:var(--violet); }
+
+    @media (max-width:480px) {
+      .ob-step  { padding:72px 20px 80px; }
+      .ob-tiers { grid-template-columns:1fr; gap:10px; }
+      .ob-cta   { width:100%; justify-content:center; }
+    }
+
     @media (max-width:480px) {
       .decision-box-footer { flex-direction:column; align-items:flex-start; gap:10px; }
       .decision-box-footer .btn-primary { width:100%; justify-content:center; }
@@ -1354,9 +1845,9 @@
         <svg width="15" height="15" viewBox="0 0 15 15" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="1" y="1" width="5.5" height="5.5" rx="1.2"/><rect x="8.5" y="1" width="5.5" height="5.5" rx="1.2"/><rect x="1" y="8.5" width="5.5" height="5.5" rx="1.2"/><rect x="8.5" y="8.5" width="5.5" height="5.5" rx="1.2"/></svg>
         Summary
       </button>
-      <button class="thinker-tab" onclick="switchThinkerTab('onboarding',this)">
-        <svg width="15" height="15" viewBox="0 0 15 15" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="7.5" cy="7.5" r="6"/><path d="M7.5 4.5v3l2 1.5"/></svg>
-        Onboarding
+      <button class="thinker-tab thinker-tab-launch" onclick="openObFlow()" title="Launch full-screen onboarding">
+        <svg width="15" height="15" viewBox="0 0 15 15" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M7.5 1.5L13 4v4c0 3.3-2.5 5.5-5.5 6C4.5 13.5 2 11.3 2 8V4l5.5-2.5z"/><path d="M5 7.5l2 2 3.5-3.5"/></svg>
+        Initiate
       </button>
       <button class="thinker-tab" onclick="switchThinkerTab('train',this)">
         <svg width="15" height="15" viewBox="0 0 15 15" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M7.5 2a5.5 5.5 0 100 11"/><path d="M7.5 5a2.5 2.5 0 100 5 2.5 2.5 0 000-5z"/><path d="M13 7.5h-1M12.2 4l-.7.7M10 2.8l-.7.7"/></svg>
@@ -1522,38 +2013,97 @@ e.g. I always start by validating whether the problem is real before evaluating 
     </div>
 
     <!-- ─── TRAIN MODEL ─── -->
-    <div class="thinker-panel" id="tp-train" style="display:none">
-      <div class="train-section">
-        <div class="train-section-title">Cognitive framework</div>
-        <div class="train-section-sub">How your AI model processes decisions. The more specific, the more precise your output.</div>
-        <div class="onboard-field">
-          <label class="onboard-label" style="display:flex;align-items:center;justify-content:space-between">
-            Framework description
-            <span class="version-pill" id="framework-version">v1.0</span>
-          </label>
-          <textarea class="onboard-textarea" id="train-framework" rows="8" placeholder="Describe your full decision-making framework..."></textarea>
+    <div class="thinker-panel ns-panel" id="tp-train" style="display:none">
+
+      <!-- ── 1. The Forge ── -->
+      <div class="ns-card" id="ns-forge">
+        <div class="ns-card-head">
+          <div class="ns-card-label">
+            <div class="ns-dot" id="ns-forge-dot" data-intensity="0"></div>
+            The Forge
+          </div>
+          <span class="version-pill" id="framework-version">v1.0</span>
         </div>
-        <button class="btn-primary" onclick="saveFramework()">Save & update model</button>
+        <div class="ns-card-title">Theory of Victory</div>
+        <div class="ns-card-sub">Your AI model's operating principle. The more precise the architecture, the sharper the insight.</div>
+        <textarea class="ns-forge-textarea" id="train-framework"
+          placeholder="The single truth that shapes every decision I make..."
+          oninput="nsForgeAudit(this.value)"></textarea>
+        <div class="ns-audit">
+          <span class="ns-audit-msg" id="ns-audit-msg">Begin your framework to activate the forge.</span>
+          <span class="ns-audit-tier" id="ns-audit-tier">Tier —</span>
+        </div>
       </div>
 
-      <div class="train-section">
-        <div class="train-section-title">Your lens statement</div>
-        <div class="train-section-sub">The one-liner that defines your perspective. Shown on your public thinker card.</div>
-        <div class="onboard-field" style="margin-bottom:12px">
-          <textarea class="onboard-textarea" id="train-lens" rows="2"></textarea>
+      <!-- ── 2. The Lens Aperture ── -->
+      <div class="ns-card" id="ns-lens-card">
+        <div class="ns-card-head">
+          <div class="ns-card-label">
+            <div class="ns-dot" id="ns-lens-dot" data-intensity="0"></div>
+            The Lens
+          </div>
+          <span style="font-size:11px;color:var(--text-3);font-style:italic">Live preview ↓</span>
         </div>
-        <button class="btn-secondary" onclick="saveLens()">Update lens</button>
+        <div class="ns-card-title">Aperture</div>
+        <div class="ns-card-sub">Your signature view — the insight only you can give. Shown on your public Thinker Card.</div>
+        <div class="ns-lens-input-wrap">
+          <input class="ns-lens-input" id="train-lens" type="text"
+            placeholder="How do you see what others miss?"
+            oninput="nsLensPreview(this.value)">
+        </div>
+        <div class="ns-lens-preview">
+          <div class="ns-preview-label">Public Thinker Card preview</div>
+          <div class="ns-preview-card">
+            <div class="ns-preview-avatar" id="ns-preview-avatar">MA</div>
+            <div>
+              <div class="ns-preview-name" id="ns-preview-name">Michael Akindele</div>
+              <div class="ns-preview-title" id="ns-preview-title-text">Builder · Designer · Founder</div>
+              <div class="ns-preview-lens ns-preview-lens-empty" id="ns-preview-lens-text">Your lens statement will appear here.</div>
+            </div>
+          </div>
+        </div>
       </div>
 
-      <div class="train-section">
-        <div class="train-section-title">Domain expertise</div>
-        <div class="train-section-sub">Add or remove the decision domains you cover.</div>
-        <div class="train-tags-wrap" id="train-domains-list" style="min-height:44px;border:1.5px solid var(--border-md);border-radius:var(--r-sm);padding:10px;background:var(--surface-2);margin-bottom:10px"></div>
-        <div class="train-add-input">
-          <input class="onboard-input" id="train-domain-input" type="text" placeholder="Add a domain…" style="margin-bottom:0">
-          <button class="btn-secondary" onclick="addTrainDomain()">Add</button>
+      <!-- ── 3. Domain Constellation ── -->
+      <div class="ns-card" id="ns-const-card">
+        <div class="ns-card-head">
+          <div class="ns-card-label">
+            <div class="ns-dot" style="background:var(--violet);animation:ns-idle 3s ease-in-out infinite"></div>
+            Domain Constellation
+          </div>
+        </div>
+        <div class="ns-card-title">Cognitive Map</div>
+        <div class="ns-card-sub">Each domain becomes a node in your constellation. Tap a node to remove it.</div>
+        <div class="ns-constellation-wrap">
+          <svg class="ns-constellation-svg" id="ns-const-svg" viewBox="0 0 260 260"></svg>
+          <div class="ns-const-domain-add">
+            <input class="ns-const-input" id="ns-const-input" type="text"
+              placeholder="Add a domain (e.g. Stoicism)…" maxlength="28"
+              onkeydown="if(event.key==='Enter')nsAddDomain()">
+            <button class="ns-const-add-btn" onclick="nsAddDomain()">Add</button>
+          </div>
         </div>
       </div>
+
+      <!-- ── Commit to Ledger ── -->
+      <div class="ns-commit-bar">
+        <div class="ns-commit-info">
+          <div class="ns-commit-label">Neural Model</div>
+          <div class="ns-version-text" id="ns-version-text">Current: <span id="ns-current-version">v1.0</span> · Save to increment</div>
+        </div>
+        <button class="ns-commit-btn" id="ns-commit-btn" onclick="nsCommitToLedger()">
+          <svg width="15" height="15" viewBox="0 0 15 15" fill="none" stroke="currentColor" stroke-width="2"><path d="M7.5 1L13.5 4v4c0 3.4-2.7 5.6-6 6-3.3-.4-6-2.6-6-6V4l6-3z"/></svg>
+          Commit to Ledger
+        </button>
+      </div>
+
+    </div>
+
+    <!-- Neural Sculpting encoding overlay -->
+    <div class="ns-encoding-overlay" id="ns-encoding-overlay">
+      <div class="ns-enc-dot-large"></div>
+      <div class="ns-enc-text" id="ns-enc-text">Committing to Ledger...</div>
+      <div class="ns-enc-sub" id="ns-enc-sub">Divine Global Ledger · Version recording</div>
     </div>
 
     <!-- ─── REPORTS ─── -->
@@ -1701,6 +2251,151 @@ e.g. I always start by validating whether the problem is real before evaluating 
     <div class="picker-scroll"><div class="picker-grid" id="picker-grid"></div></div>
   </div>
 </div>
+
+<!-- ══════════════════════════════════════════════════════════
+     THINKER ONBOARDING — CINEMATIC FULL-SCREEN FLOW
+══════════════════════════════════════════════════════════ -->
+<div id="ob-flow" class="ob-flow">
+
+  <!-- Progress bar -->
+  <div class="ob-progress"><div class="ob-progress-fill" id="ob-fill"></div></div>
+
+  <!-- Top bar -->
+  <div class="ob-topbar">
+    <span class="ob-brand">getdivine.ai · Thinker Protocol</span>
+    <button class="ob-close" onclick="closeObFlow()" aria-label="Close">×</button>
+  </div>
+
+  <!-- Step dots -->
+  <div class="ob-step-dots" id="ob-step-dots">
+    <div class="ob-step-dot active"></div>
+    <div class="ob-step-dot"></div>
+    <div class="ob-step-dot"></div>
+    <div class="ob-step-dot"></div>
+    <div class="ob-step-dot"></div>
+    <div class="ob-step-dot"></div>
+  </div>
+
+  <!-- Stage (all steps absolutely positioned inside) -->
+  <div class="ob-stage" id="ob-stage">
+
+    <!-- STEP 1 · The Invitation -->
+    <div class="ob-step ob-splash ob-active" id="obs-1">
+      <div class="ob-inner">
+        <span class="ob-splash-glyph">✦</span>
+        <h1 class="ob-headline">Your Intellect is Your Most <em>Valuable</em> Asset.</h1>
+        <p class="ob-sub-small">You have been selected as a Divine Thinker. What follows is the encoding of your cognitive framework into the Global Ledger.</p>
+        <button class="ob-cta" onclick="obTo(2)">Begin Encoding →</button>
+      </div>
+    </div>
+
+    <!-- STEP 2 · The Identity -->
+    <div class="ob-step" id="obs-2">
+      <div class="ob-inner">
+        <div class="ob-step-num">01 · Identity</div>
+        <h2 class="ob-step-title">What is your Title<br>in the Global Ledger?</h2>
+        <p class="ob-hint">This is how founders will seek your perspective. Make it precise.</p>
+        <input class="ob-big-input" id="ob-title" placeholder="e.g. The Architect, The Stoic Founder" maxlength="60" autocomplete="off">
+        <div class="ob-map-label">Domains of mastery — select all that apply</div>
+        <div class="ob-cog-map" id="ob-cog-map"></div>
+        <div class="ob-nav-row">
+          <button class="ob-back-link" onclick="obTo(1)">← Back</button>
+          <button class="ob-cta" onclick="obTo(3)">Continue →</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 3 · The Framework -->
+    <div class="ob-step" id="obs-3">
+      <div class="ob-inner">
+        <div class="ob-step-num">02 · Framework</div>
+        <h2 class="ob-step-title">What is your<br>'Theory of Victory'?</h2>
+        <p class="ob-hint">Describe the one lever you pull to win. This becomes your AI model's core operating principle.</p>
+        <textarea class="ob-textarea" id="ob-framework" placeholder="The single truth that shapes every decision I make is..." rows="5"></textarea>
+        <div class="ob-nav-row">
+          <button class="ob-back-link" onclick="obTo(2)">← Back</button>
+          <button class="ob-cta" onclick="obTo(4)">Continue →</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 4 · The Lens -->
+    <div class="ob-step" id="obs-4">
+      <div class="ob-inner">
+        <div class="ob-step-num">03 · Lens</div>
+        <h2 class="ob-step-title">How do you see<br>what others miss?</h2>
+        <p class="ob-hint">Your signature view — the insight only you can give a founder in the room.</p>
+        <textarea class="ob-textarea" id="ob-lens" placeholder="The pattern most people overlook is..." rows="5"></textarea>
+        <div class="ob-nav-row">
+          <button class="ob-back-link" onclick="obTo(3)">← Back</button>
+          <button class="ob-cta" onclick="obTo(5)">Continue →</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 5 · Economic Commitment -->
+    <div class="ob-step" id="obs-5">
+      <div class="ob-inner">
+        <div class="ob-step-num">04 · Insight Tier</div>
+        <h2 class="ob-step-title">Set your<br>Insight Tier.</h2>
+        <p class="ob-hint">You earn 70% of every session. Choose the access level that fits your positioning.</p>
+        <div class="ob-tiers" id="ob-tiers">
+          <div class="ob-tier selected" data-price="0.05" onclick="obSelectTier(this)">
+            <div class="ob-tier-name">Pulse</div>
+            <div class="ob-tier-price">$0.05</div>
+            <div class="ob-tier-sub">High-volume. Entry access.</div>
+          </div>
+          <div class="ob-tier" data-price="0.50" onclick="obSelectTier(this)">
+            <div class="ob-tier-name">Strategy</div>
+            <div class="ob-tier-price">$0.50</div>
+            <div class="ob-tier-sub">Qualified founders. Deep work.</div>
+          </div>
+          <div class="ob-tier" data-price="2.50" onclick="obSelectTier(this)">
+            <div class="ob-tier-name">Prophecy</div>
+            <div class="ob-tier-price">$2.50</div>
+            <div class="ob-tier-sub">Elite access. Critical decisions only.</div>
+          </div>
+        </div>
+        <div class="ob-nav-row">
+          <button class="ob-back-link" onclick="obTo(4)">← Back</button>
+          <button class="ob-cta" onclick="obTo(6)">Confirm Tier →</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 6 · The Immortalization -->
+    <div class="ob-step" id="obs-6">
+      <div class="ob-inner" style="text-align:center">
+        <div class="ob-step-num" style="text-align:center">05 · Authorize</div>
+        <h2 class="ob-step-title">Authorize the Replication<br>of Your Cognitive IP.</h2>
+        <p class="ob-hint" style="text-align:center">Sign below to encode your framework to the Divine Global Ledger. This is your digital commitment.</p>
+        <div class="ob-sig-wrap" id="ob-sig-wrap">
+          <canvas id="ob-sig-canvas" class="ob-sig-canvas"></canvas>
+          <div class="ob-sig-placeholder" id="ob-sig-placeholder">Sign here</div>
+          <button class="ob-sig-clear" onclick="obClearSig()">Clear</button>
+        </div>
+        <p class="ob-legal">By signing, you authorize Divine to replicate your cognitive framework as an AI-powered perspective engine available to founders on the platform.</p>
+        <div class="ob-nav-row" style="justify-content:center;gap:16px;flex-wrap:wrap">
+          <button class="ob-back-link" onclick="obTo(5)">← Back</button>
+          <button class="ob-cta ob-cta-coral" onclick="obBeginEncoding()">Authorize &amp; Encode →</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ENCODING ANIMATION -->
+    <div class="ob-encoding" id="ob-encoding">
+      <div class="ob-enc-scene" id="ob-enc-scene">
+        <div class="ob-enc-ring ob-enc-ring-1"></div>
+        <div class="ob-enc-ring ob-enc-ring-2"></div>
+        <div class="ob-enc-ring ob-enc-ring-3"></div>
+        <div class="ob-enc-dot" id="ob-enc-dot"></div>
+      </div>
+      <div class="ob-enc-status" id="ob-enc-status">Analyzing Theory of Victory...</div>
+      <div class="ob-enc-ledger">Divine Global Ledger · Encoding in progress</div>
+    </div>
+
+  </div><!-- /ob-stage -->
+</div><!-- /ob-flow -->
 
 <script>
 /* ════════════════════════════════
@@ -2596,32 +3291,247 @@ function initThinkerHub() {
 function switchThinkerTab(tab, btn) {
   document.querySelectorAll('.thinker-tab').forEach(t => t.classList.remove('active'));
   if (btn) btn.classList.add('active');
+  if (tab === 'onboarding') { openObFlow(); return; }
   document.querySelectorAll('.thinker-panel').forEach(p => p.style.display = 'none');
   const panel = document.getElementById(`tp-${tab}`);
   if (panel) panel.style.display = 'block';
   if (tab === 'reports') renderReports(currentReportPeriod);
+  if (tab === 'train')   initTrainModel();
 }
 
-/* ── Onboarding flow ── */
-let currentObStep = 1;
-const OB_TOTAL    = 6;
-const obDomains   = [];
+/* ════════════════════════════════════════
+   CINEMATIC ONBOARDING FLOW
+════════════════════════════════════════ */
+let obCurrentStep  = 1;
+let obSelectedTier = '0.05';
+let obSelectedDomains = [];
+let obSigDrawing   = false;
+let obSigHasStrokes = false;
+let obSigCtx       = null;
+let obEncodingTimer = null;
 
-function obGoTo(step) {
-  document.querySelectorAll('.onboard-panel').forEach(p => p.classList.remove('active'));
-  document.getElementById(`ob-step-${step}`).classList.add('active');
-  document.querySelectorAll('.onboarding-step').forEach((s, i) => {
-    s.classList.remove('active','done');
-    if (i + 1 < step) s.classList.add('done');
-    if (i + 1 === step) s.classList.add('active');
+const OB_DOMAINS = [
+  { icon:'🎯', label:'Strategy' },  { icon:'🧠', label:'Mindset' },
+  { icon:'🏗', label:'Systems' },   { icon:'💰', label:'Finance' },
+  { icon:'📣', label:'Marketing' }, { icon:'🔧', label:'Product' },
+  { icon:'👥', label:'Leadership'}, { icon:'⚙️', label:'Operations' },
+  { icon:'💡', label:'Innovation'}, { icon:'📈', label:'Growth' },
+  { icon:'🤝', label:'Sales' },     { icon:'🎨', label:'Design' },
+  { icon:'⚖️', label:'Negotiation'},{ icon:'🌍', label:'Global Markets' },
+];
+
+const OB_FRAGMENTS = [
+  'Logic','Strategy','Victory','Pattern Recognition',
+  'Systems Thinking','First Principles','Theory of Victory',
+  'Leverage','Signal vs Noise','Constraint Mapping',
+  'Cognitive Edge','Market Truth',
+];
+
+const OB_STATUSES = [
+  'Analyzing Theory of Victory...',
+  'Calibrating Decision-Making Lens...',
+  'Encoding Digital Twin to Ledger...',
+];
+
+function openObFlow() {
+  document.getElementById('ob-flow').classList.add('open');
+  document.body.style.overflow = 'hidden';
+  obCurrentStep = 1;
+  obRenderCogMap();
+  obInitSig();
+  obSetStep(1, false);
+}
+
+function closeObFlow() {
+  document.getElementById('ob-flow').classList.remove('open');
+  document.body.style.overflow = '';
+  if (obEncodingTimer) clearTimeout(obEncodingTimer);
+}
+
+function obTo(step) {
+  if (step < 1 || step > 6) return;
+  const current = document.getElementById(`obs-${obCurrentStep}`);
+  const next    = document.getElementById(`obs-${step}`);
+  if (!current || !next) return;
+  const forward = step > obCurrentStep;
+  current.classList.add(forward ? 'ob-exit-up' : 'ob-exit-down');
+  current.classList.remove('ob-active');
+  setTimeout(() => {
+    current.classList.remove('ob-exit-up','ob-exit-down');
+  }, 460);
+  next.classList.add('ob-active');
+  obCurrentStep = step;
+  obSetStep(step, true);
+}
+
+function obSetStep(step, animate) {
+  // Progress bar
+  document.getElementById('ob-fill').style.width = `${(step / 6) * 100}%`;
+  // Step dots
+  document.querySelectorAll('.ob-step-dot').forEach((d, i) => {
+    d.classList.remove('active','done');
+    if (i + 1 === step) d.classList.add('active');
+    else if (i + 1 < step) d.classList.add('done');
   });
-  currentObStep = step;
 }
-function obNext(step) {
-  if (step === 5) { completeOnboarding(); }
-  obGoTo(step + 1);
+
+function obRenderCogMap() {
+  const wrap = document.getElementById('ob-cog-map');
+  if (!wrap) return;
+  wrap.innerHTML = '';
+  OB_DOMAINS.forEach(d => {
+    const chip = document.createElement('button');
+    chip.className = 'ob-cog-chip' + (obSelectedDomains.includes(d.label) ? ' selected' : '');
+    chip.innerHTML = `<span class="chip-icon">${d.icon}</span>${d.label}`;
+    chip.onclick = () => {
+      chip.classList.toggle('selected');
+      if (chip.classList.contains('selected')) {
+        if (!obSelectedDomains.includes(d.label)) obSelectedDomains.push(d.label);
+      } else {
+        obSelectedDomains = obSelectedDomains.filter(x => x !== d.label);
+      }
+    };
+    wrap.appendChild(chip);
+  });
 }
-function obBack(step) { obGoTo(step - 1); }
+
+function obSelectTier(el) {
+  document.querySelectorAll('.ob-tier').forEach(t => t.classList.remove('selected'));
+  el.classList.add('selected');
+  obSelectedTier = el.dataset.price;
+}
+
+/* ── Signature pad ── */
+function obInitSig() {
+  const canvas = document.getElementById('ob-sig-canvas');
+  if (!canvas) return;
+  const dpr = window.devicePixelRatio || 1;
+  canvas.width  = canvas.offsetWidth  * dpr || 480 * dpr;
+  canvas.height = 160 * dpr;
+  obSigCtx = canvas.getContext('2d');
+  obSigCtx.scale(dpr, dpr);
+  obSigCtx.strokeStyle = '#1a1814';
+  obSigCtx.lineWidth   = 2;
+  obSigCtx.lineCap     = 'round';
+  obSigCtx.lineJoin    = 'round';
+  obSigHasStrokes = false;
+
+  function pos(e) {
+    const r = canvas.getBoundingClientRect();
+    const src = e.touches ? e.touches[0] : e;
+    return { x: (src.clientX - r.left), y: (src.clientY - r.top) };
+  }
+  canvas.onmousedown  = canvas.ontouchstart = e => {
+    e.preventDefault(); obSigDrawing = true;
+    const p = pos(e);
+    obSigCtx.beginPath(); obSigCtx.moveTo(p.x, p.y);
+    document.getElementById('ob-sig-placeholder').style.opacity = '0';
+  };
+  canvas.onmousemove  = canvas.ontouchmove  = e => {
+    e.preventDefault(); if (!obSigDrawing) return;
+    const p = pos(e);
+    obSigCtx.lineTo(p.x, p.y); obSigCtx.stroke();
+    obSigHasStrokes = true;
+  };
+  canvas.onmouseup    = canvas.ontouchend   = () => { obSigDrawing = false; };
+  canvas.onmouseleave = () => { obSigDrawing = false; };
+}
+
+function obClearSig() {
+  if (!obSigCtx) return;
+  const canvas = document.getElementById('ob-sig-canvas');
+  obSigCtx.clearRect(0, 0, canvas.width, canvas.height);
+  obSigHasStrokes = false;
+  document.getElementById('ob-sig-placeholder').style.opacity = '1';
+}
+
+/* ── Encoding sequence ── */
+function obBeginEncoding() {
+  const enc = document.getElementById('ob-encoding');
+  enc.classList.add('active');
+  obSpawnFragments();
+  let si = 0;
+  const statusEl = document.getElementById('ob-enc-status');
+  function cycleStatus() {
+    statusEl.style.animation = 'none';
+    statusEl.offsetHeight; // reflow
+    statusEl.style.animation = 'enc-status-fade .5s ease';
+    statusEl.textContent = OB_STATUSES[si % OB_STATUSES.length];
+    si++;
+  }
+  cycleStatus();
+  const statusInterval = setInterval(cycleStatus, 2200);
+  obEncodingTimer = setTimeout(() => {
+    clearInterval(statusInterval);
+    obSaveAndComplete();
+  }, 6600);
+}
+
+function obSpawnFragments() {
+  const scene = document.getElementById('ob-enc-scene');
+  if (!scene) return;
+  const cx = scene.offsetWidth  / 2;
+  const cy = scene.offsetHeight / 2;
+  let fi = 0;
+  const spawnInterval = setInterval(() => {
+    if (fi >= 14) { clearInterval(spawnInterval); return; }
+    const frag = document.createElement('span');
+    frag.className = 'ob-enc-fragment';
+    const angle = Math.random() * 2 * Math.PI;
+    const dist  = 80 + Math.random() * 60;
+    const sx = Math.cos(angle) * dist;
+    const sy = Math.sin(angle) * dist;
+    frag.style.left = `calc(50% + ${sx}px)`;
+    frag.style.top  = `calc(50% + ${sy}px)`;
+    frag.style.setProperty('--tx', `${-sx * .85}px`);
+    frag.style.setProperty('--ty', `${-sy * .85}px`);
+    frag.style.animationDelay = `${Math.random() * .4}s`;
+    frag.textContent = OB_FRAGMENTS[fi % OB_FRAGMENTS.length];
+    scene.appendChild(frag);
+    fi++;
+    setTimeout(() => frag.remove(), 3000);
+  }, 400);
+}
+
+async function obSaveAndComplete() {
+  // Collect all form data
+  const profile = {
+    onboarding_id: `ob_${USER_ID}_${Date.now()}`,
+    user_id:       USER_ID,
+    title:         document.getElementById('ob-title')?.value?.trim() || '',
+    framework:     document.getElementById('ob-framework')?.value?.trim() || '',
+    lens:          document.getElementById('ob-lens')?.value?.trim() || '',
+    domains:       obSelectedDomains,
+    insight_tier:  obSelectedTier,
+    completed_at:  new Date().toISOString(),
+  };
+  // Save to localStorage immediately
+  localStorage.setItem('di_tk_title',    profile.title);
+  localStorage.setItem('di_tk_framework',profile.framework);
+  localStorage.setItem('di_tk_lens',     profile.lens);
+  localStorage.setItem('di_tk_domains',  JSON.stringify(profile.domains));
+  localStorage.setItem('di_tk_tier',     profile.insight_tier);
+  localStorage.setItem('di_tk_onboarded','true');
+  // Attempt POST to backend
+  try {
+    await fetch(`${API_BASE}/api/thinker/profile`, {
+      method:'POST',
+      headers:{ 'Content-Type':'application/json' },
+      body: JSON.stringify(profile),
+    });
+  } catch(e) { /* non-blocking — data already in localStorage */ }
+  // Close flow and open thinker hub Summary tab
+  closeObFlow();
+  showToast('Cognitive framework encoded. Welcome to the Ledger.');
+  try { initThinkerHub(); } catch(e) {}
+  const summaryTab = document.querySelector('.thinker-tab');
+  if (summaryTab) switchThinkerTab('overview', summaryTab);
+}
+
+/* Legacy stubs (keep for backward compat with any inline calls) */
+function obGoTo(step) { obTo(step); }
+function obNext(step) { obTo(step + 1); }
+function obBack(step) { obTo(step - 1); }
 
 function completeOnboarding() {
   const prof = {
@@ -2669,40 +3579,251 @@ function renderObDomains() {
 }
 
 /* ── Train model ── */
-function saveFramework() {
-  const fw  = document.getElementById('train-framework').value.trim();
-  const ver = (loadTkData(TK.version, 1) || 1) + 1;
-  saveTkData(TK.framework, fw);
-  saveTkData(TK.version, ver);
-  document.getElementById('framework-version').textContent = `v${ver}.0`;
-  showToast('Framework updated ✓');
-}
-function saveLens() {
-  const lens = document.getElementById('train-lens').value.trim();
-  saveTkData(TK.lens, lens);
-  showToast('Lens updated ✓');
+/* ════════════════════════════════════════════════
+   NEURAL SCULPTING — TRAIN MODEL ENGINE
+════════════════════════════════════════════════ */
+
+/* ── Forge: Divine Audit feedback ── */
+const NS_AUDIT_LEVELS = [
+  { min:0,   msg:'Begin your framework to activate the forge.',   tier:'Tier —', cls:'' },
+  { min:1,   msg:'Establishing first principles...',              tier:'Tier 1', cls:'' },
+  { min:80,  msg:'Encoding structural logic...',                  tier:'Tier 2', cls:'t2' },
+  { min:200, msg:'Multi-variable architecture detected...',       tier:'Tier 3', cls:'t3' },
+  { min:400, msg:'Elite cognitive framework forming...',          tier:'Tier 4', cls:'t4' },
+  { min:650, msg:'Complexity depth maximal — Tier 4 confirmed.',  tier:'Tier 4✦', cls:'t4' },
+];
+let nsForgeDebounce = null;
+
+function nsForgeAudit(val) {
+  const len = val.trim().length;
+  const dot = document.getElementById('ns-forge-dot');
+  // Dot intensity: 0 = idle, 1-3 = typing intensity
+  const intensity = len === 0 ? 0 : len < 80 ? 1 : len < 300 ? 2 : 3;
+  if (dot) dot.dataset.intensity = intensity;
+  // Find audit level
+  let level = NS_AUDIT_LEVELS[0];
+  for (const l of NS_AUDIT_LEVELS) { if (len >= l.min) level = l; }
+  const msg  = document.getElementById('ns-audit-msg');
+  const tier = document.getElementById('ns-audit-tier');
+  if (msg)  { msg.textContent = level.msg; msg.className = 'ns-audit-msg' + (len > 0 ? ' active' : ''); }
+  if (tier) { tier.textContent = level.tier; tier.className = `ns-audit-tier ${level.cls}`; }
 }
 
-const trainDomains = [];
-function renderTrainDomains(list) {
-  trainDomains.length = 0;
-  list.forEach(d => trainDomains.push(d));
-  const el = document.getElementById('train-domains-list');
+/* ── Lens: Live preview ── */
+function nsLensPreview(val) {
+  const el = document.getElementById('ns-preview-lens-text');
+  const dot = document.getElementById('ns-lens-dot');
   if (!el) return;
-  el.innerHTML = trainDomains.map((d,i) =>
-    `<span class="train-tag">${d}<button onclick="trainDomains.splice(${i},1);renderTrainDomains(trainDomains)">×</button></span>`
-  ).join('');
+  if (dot) dot.dataset.intensity = val.trim().length > 0 ? 1 : 0;
+  if (val.trim()) {
+    el.textContent = val.trim();
+    el.classList.remove('ns-preview-lens-empty');
+  } else {
+    el.textContent = 'Your lens statement will appear here.';
+    el.classList.add('ns-preview-lens-empty');
+  }
 }
-function addTrainDomain() {
-  const inp = document.getElementById('train-domain-input');
+
+/* ── Domain Constellation ── */
+let nsDomains = [];
+const NS_SVG_CX = 130, NS_SVG_CY = 130, NS_RING_R = 88;
+const NS_VIOLET = '#5b4fff', NS_VIOLET_LT = '#ebe9ff';
+
+function nsRenderConstellation() {
+  const svg = document.getElementById('ns-const-svg');
+  if (!svg) return;
+  svg.innerHTML = '';
+
+  // Defs for filter
+  const defs = `<defs><filter id="ns-glow"><feGaussianBlur stdDeviation="3" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>`;
+  svg.innerHTML = defs;
+
+  // Outer ring guide (faint)
+  const guide = document.createElementNS('http://www.w3.org/2000/svg','circle');
+  guide.setAttribute('cx', NS_SVG_CX); guide.setAttribute('cy', NS_SVG_CY);
+  guide.setAttribute('r', NS_RING_R);
+  guide.setAttribute('fill','none'); guide.setAttribute('stroke','rgba(91,79,255,.08)');
+  guide.setAttribute('stroke-width','1'); guide.setAttribute('stroke-dasharray','4 6');
+  svg.appendChild(guide);
+
+  // Central "Core" node
+  const coreGroup = document.createElementNS('http://www.w3.org/2000/svg','g');
+  const coreCircle = document.createElementNS('http://www.w3.org/2000/svg','circle');
+  coreCircle.setAttribute('cx', NS_SVG_CX); coreCircle.setAttribute('cy', NS_SVG_CY);
+  coreCircle.setAttribute('r','22'); coreCircle.setAttribute('fill', NS_VIOLET);
+  coreCircle.setAttribute('filter','url(#ns-glow)');
+  const coreLabel = document.createElementNS('http://www.w3.org/2000/svg','text');
+  coreLabel.setAttribute('x', NS_SVG_CX); coreLabel.setAttribute('y', NS_SVG_CY + 4);
+  coreLabel.setAttribute('fill','#fff'); coreLabel.setAttribute('font-size','11');
+  coreLabel.setAttribute('font-weight','700'); coreLabel.setAttribute('text-anchor','middle');
+  coreLabel.setAttribute('font-family','Inter,sans-serif'); coreLabel.textContent = 'Core';
+  coreGroup.appendChild(coreCircle); coreGroup.appendChild(coreLabel);
+  svg.appendChild(coreGroup);
+
+  if (nsDomains.length === 0) {
+    const hint = document.createElementNS('http://www.w3.org/2000/svg','text');
+    hint.setAttribute('x', NS_SVG_CX); hint.setAttribute('y', NS_SVG_CY + 60);
+    hint.setAttribute('text-anchor','middle'); hint.setAttribute('fill','rgba(0,0,0,.22)');
+    hint.setAttribute('font-size','11'); hint.setAttribute('font-family','Inter,sans-serif');
+    hint.textContent = 'Add domains to build your constellation';
+    svg.appendChild(hint);
+    return;
+  }
+
+  const total = nsDomains.length;
+  nsDomains.forEach((domain, i) => {
+    const angle = (i / total) * 2 * Math.PI - Math.PI / 2;
+    const nx = NS_SVG_CX + NS_RING_R * Math.cos(angle);
+    const ny = NS_SVG_CY + NS_RING_R * Math.sin(angle);
+
+    // Connection line
+    const line = document.createElementNS('http://www.w3.org/2000/svg','line');
+    line.setAttribute('x1', NS_SVG_CX); line.setAttribute('y1', NS_SVG_CY);
+    line.setAttribute('x2', nx); line.setAttribute('y2', ny);
+    line.setAttribute('stroke', NS_VIOLET); line.setAttribute('stroke-width','1.5');
+    line.setAttribute('opacity','.4'); line.className.baseVal = 'ns-const-line';
+    const lineLen = Math.hypot(nx - NS_SVG_CX, ny - NS_SVG_CY);
+    line.setAttribute('stroke-dasharray', lineLen); line.setAttribute('stroke-dashoffset', lineLen);
+    svg.appendChild(line);
+
+    // Domain node
+    const g = document.createElementNS('http://www.w3.org/2000/svg','g');
+    g.style.cursor = 'pointer';
+    g.onclick = () => { nsDomains.splice(i,1); nsRenderConstellation(); saveTkData(TK.domains, [...nsDomains]); };
+
+    const circle = document.createElementNS('http://www.w3.org/2000/svg','circle');
+    circle.setAttribute('cx', nx); circle.setAttribute('cy', ny); circle.setAttribute('r','16');
+    circle.setAttribute('fill', NS_VIOLET_LT); circle.setAttribute('stroke', NS_VIOLET);
+    circle.setAttribute('stroke-width','1.5');
+    circle.className.baseVal = 'ns-const-node-circle';
+
+    // Label: shorten if long
+    const short = domain.length > 9 ? domain.slice(0,8)+'…' : domain;
+    const label = document.createElementNS('http://www.w3.org/2000/svg','text');
+    label.setAttribute('x', nx); label.setAttribute('y', ny + 4);
+    label.setAttribute('fill', NS_VIOLET); label.className.baseVal = 'ns-const-label';
+    label.setAttribute('font-size','9'); label.textContent = short;
+
+    g.appendChild(circle); g.appendChild(label);
+    svg.appendChild(g);
+
+    // Animate line in
+    requestAnimationFrame(() => {
+      line.style.transition = 'stroke-dashoffset .5s ease';
+      line.style.strokeDashoffset = '0';
+    });
+  });
+}
+
+function nsAddDomain() {
+  const inp = document.getElementById('ns-const-input');
+  if (!inp) return;
   const val = inp.value.trim();
-  if (!val || trainDomains.includes(val)) return;
-  trainDomains.push(val);
-  renderTrainDomains(trainDomains);
-  saveTkData(TK.domains, [...trainDomains]);
+  if (!val || nsDomains.includes(val) || nsDomains.length >= 12) return;
+  nsDomains.push(val);
+  nsRenderConstellation();
+  saveTkData(TK.domains, [...nsDomains]);
   inp.value = '';
 }
-document.getElementById('train-domain-input')?.addEventListener('keydown', e => { if (e.key==='Enter') { e.preventDefault(); addTrainDomain(); }});
+
+/* ── Commit to Ledger ── */
+const NS_COMMIT_MSGS = [
+  'Committing to Ledger...',
+  'Encoding model version...',
+  'Neural architecture sealed.',
+];
+let nsCurrentVersion = 1;
+
+async function nsCommitToLedger() {
+  const fw   = document.getElementById('train-framework')?.value?.trim() || '';
+  const lens = document.getElementById('train-lens')?.value?.trim() || '';
+  if (!fw) { showToast('Add your Theory of Victory before committing.'); return; }
+
+  // Version increment
+  nsCurrentVersion = (loadTkData(TK.version, 1) || 1) + 1;
+  const versionId = `${USER_ID}_v${nsCurrentVersion}_${Date.now()}`;
+
+  // Show encoding overlay
+  const overlay = document.getElementById('ns-encoding-overlay');
+  const textEl  = document.getElementById('ns-enc-text');
+  overlay.classList.add('active');
+  let mi = 0;
+  const msgInterval = setInterval(() => {
+    if (textEl) textEl.textContent = NS_COMMIT_MSGS[Math.min(mi, NS_COMMIT_MSGS.length-1)];
+    mi++;
+  }, 1100);
+
+  // Save locally
+  saveTkData(TK.framework, fw);
+  saveTkData(TK.lens, lens);
+  saveTkData(TK.domains, [...nsDomains]);
+  saveTkData(TK.version, nsCurrentVersion);
+
+  // POST to backend (non-blocking)
+  try {
+    await fetch(`${API_BASE}/api/thinker/update`, {
+      method:'POST',
+      headers:{ 'Content-Type':'application/json' },
+      body: JSON.stringify({
+        user_id: USER_ID, version_id: versionId,
+        framework: fw, lens, domains: nsDomains,
+        committed_at: new Date().toISOString(),
+      }),
+    });
+  } catch(e) { /* graceful — already saved locally */ }
+
+  setTimeout(() => {
+    clearInterval(msgInterval);
+    overlay.classList.remove('active');
+    // Update version pills
+    const pill = document.getElementById('framework-version');
+    const ver2 = document.getElementById('ns-current-version');
+    const vstr = `v${nsCurrentVersion}.0`;
+    if (pill) pill.textContent = vstr;
+    if (ver2) ver2.textContent = vstr;
+    showToast(`Model committed — ${vstr} sealed to Ledger ✦`);
+  }, 3200);
+}
+
+/* Init Train Model when tab opens */
+function initTrainModel() {
+  const fw   = loadTkData(TK.framework, '');
+  const lens = loadTkData(TK.lens, '');
+  const doms = loadTkData(TK.domains, []);
+  nsCurrentVersion = loadTkData(TK.version, 1) || 1;
+
+  const fwEl = document.getElementById('train-framework');
+  const lnEl = document.getElementById('train-lens');
+  if (fwEl) { fwEl.value = fw; nsForgeAudit(fw); }
+  if (lnEl) { lnEl.value = lens; nsLensPreview(lens); }
+
+  nsDomains = Array.isArray(doms) ? [...doms] : [];
+  nsRenderConstellation();
+
+  const vstr = `v${nsCurrentVersion}.0`;
+  const pill = document.getElementById('framework-version');
+  const ver2 = document.getElementById('ns-current-version');
+  if (pill) pill.textContent = vstr;
+  if (ver2) ver2.textContent = vstr;
+
+  // Pre-fill preview card with current thinker info
+  const name  = loadTkData(TK.name, userProfile.name || 'Michael Akindele');
+  const title = loadTkData(TK.title, 'Builder · Designer · Founder');
+  const init  = name.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
+  const av    = document.getElementById('ns-preview-avatar');
+  const pn    = document.getElementById('ns-preview-name');
+  const pt    = document.getElementById('ns-preview-title-text');
+  if (av) av.textContent = init;
+  if (pn) pn.textContent = name;
+  if (pt) pt.textContent = title;
+}
+
+/* Legacy stubs */
+function saveFramework() { nsCommitToLedger(); }
+function saveLens()      { nsCommitToLedger(); }
+const trainDomains = [];
+function addTrainDomain() { nsAddDomain(); }
+function renderTrainDomains() { nsRenderConstellation(); }
 
 /* ── Reports ── */
 let currentReportPeriod = 'last';
