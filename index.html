@@ -678,6 +678,176 @@
       .done-actions { flex-direction:column; }
       .done-actions button { width:100%; justify-content:center; }
     }
+
+    /* ═══════════════════════════════════════════════════════
+       MOBILE RESPONSIVENESS — reduce scroll, improve layout
+    ═══════════════════════════════════════════════════════ */
+
+    /* ─── Screen-level vertical breathing room ─── */
+    @media (max-width:640px) {
+      .screen-inner  { padding-top:24px; padding-bottom:90px; }
+      .replay-screen { padding-top:24px; padding-bottom:90px; }
+      .screen-header { margin-bottom:18px; }
+      .nav-row       { margin-bottom:16px; }
+      .main-inner    { padding:0 16px; }
+    }
+    @media (max-width:380px) {
+      .main-inner    { padding:0 12px; }
+    }
+
+    /* ─── Home screen ─── */
+    @media (max-width:480px) {
+      .thinker-callout  { gap:10px; padding:14px 14px 14px 16px; margin-bottom:20px; }
+      .callout-lens     { font-size:13px; -webkit-line-clamp:2; display:-webkit-box;
+                          -webkit-box-orient:vertical; overflow:hidden; }
+      .home-headline    { margin-bottom:10px; }
+      .home-sub         { margin-bottom:18px; font-size:14px; line-height:1.55; }
+      .decision-box textarea { min-height:96px; }
+    }
+
+    /* ─── Done screen ─── */
+    @media (max-width:480px) {
+      #screen-done .screen-inner { padding-top:40px; }
+      .done-glyph  { font-size:40px; margin-bottom:14px; }
+      .done-title  { font-size:28px; margin-bottom:8px; }
+      .done-sub    { font-size:14px; margin-bottom:28px; }
+    }
+
+    /* ─── Thinker hub hero ─── */
+    @media (max-width:640px) {
+      .thinker-hero        { padding:20px 0 12px; }
+      .thinker-badge       { width:54px; height:54px; font-size:18px; margin-bottom:10px; }
+      .thinker-hero-title  { font-size:19px; margin-bottom:3px; }
+      .thinker-hero-sub    { font-size:13px; margin-bottom:14px; }
+    }
+
+    /* ─── Thinker tabs: horizontal scroll, no wrapping ─── */
+    @media (max-width:680px) {
+      .thinker-tabs { overflow-x:auto; flex-wrap:nowrap; -webkit-overflow-scrolling:touch;
+                      scrollbar-width:none; padding-bottom:2px; margin-bottom:18px; }
+      .thinker-tabs::-webkit-scrollbar { display:none; }
+      .thinker-tab  { flex:0 0 auto; padding:8px 14px; white-space:nowrap; font-size:12.5px; }
+    }
+
+    /* ─── Stats grids: 2-column on small mobile ─── */
+    @media (max-width:480px) {
+      .thinker-stats   { grid-template-columns:repeat(2,1fr); gap:10px; margin-bottom:14px; }
+      .thinker-stat    { padding:14px 12px; }
+      .thinker-stat-val { font-size:20px; }
+      .report-summary  { grid-template-columns:repeat(2,1fr); gap:10px; margin-bottom:14px; }
+      .rpt-stat        { padding:12px 10px; }
+      .rpt-stat-val    { font-size:18px; }
+    }
+
+    /* ─── Onboarding stepper: hide labels, compact dots ─── */
+    @media (max-width:480px) {
+      .onboarding-steps { margin-bottom:18px; }
+      .step-label       { display:none; }
+      .step-dot         { width:24px; height:24px; font-size:10px; }
+    }
+
+    /* ─── Match card ─── */
+    @media (max-width:480px) {
+      .match-card   { padding:20px 16px; }
+      .match-score  { font-size:48px; }
+      .match-avatar { width:52px; height:52px; font-size:18px; margin-bottom:12px; }
+      .match-sub    { margin-bottom:16px; }
+    }
+
+    /* ─── Reframe key card ─── */
+    @media (max-width:480px) {
+      .reframe-key        { padding:20px 18px; }
+      .reframe-key-title  { font-size:22px; }
+    }
+
+    /* ─── Ledger table: horizontal scroll wrapper ─── */
+    .ledger-scroll-wrap { overflow-x:auto; -webkit-overflow-scrolling:touch; }
+    @media (max-width:640px) {
+      .ledger-table th,
+      .ledger-table td   { padding:8px 10px; font-size:12.5px; white-space:nowrap; }
+      .ledger-table th:nth-child(3),
+      .ledger-table td:nth-child(3) { max-width:130px; white-space:normal; }
+    }
+
+    /* ─── Report period tabs: horizontal scroll ─── */
+    @media (max-width:480px) {
+      .report-period-tabs { overflow-x:auto; flex-wrap:nowrap;
+                            scrollbar-width:none; padding-bottom:4px; }
+      .report-period-tabs::-webkit-scrollbar { display:none; }
+      .rpt-tab            { flex-shrink:0; white-space:nowrap; }
+    }
+
+    /* ─── Payout schedule: stack vertically ─── */
+    @media (max-width:480px) {
+      .payout-schedule   { flex-direction:column; gap:8px; }
+      .payout-opt        { padding:12px 14px; text-align:left;
+                           display:flex; align-items:center; justify-content:space-between; }
+      .payout-opt-title  { font-size:14px; }
+    }
+
+    /* ─── Bank form: single column on mobile ─── */
+    .bank-form-grid { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+    @media (max-width:520px) {
+      .bank-form-grid { grid-template-columns:1fr; }
+    }
+
+    /* ─── Settings rows: stack label + control on mobile ─── */
+    @media (max-width:560px) {
+      .settings-row          { flex-direction:column; align-items:flex-start; gap:8px; }
+      .settings-row > div:first-child { width:100%; }
+      .settings-input, .settings-select { max-width:100%; width:100%; }
+      .settings-row div[style*="flex:1"] { width:100%; max-width:100%; }
+    }
+
+    /* ─── Profile summary card ─── */
+    @media (max-width:480px) {
+      .profile-summary-card { padding:18px; }
+      .psc-header  { gap:10px; margin-bottom:12px; }
+      .psc-avatar  { width:44px; height:44px; font-size:15px; }
+      .psc-name    { font-size:16px; }
+    }
+
+    /* ─── Payment & train cards ─── */
+    @media (max-width:480px) {
+      .payment-card  { padding:18px; }
+      .train-section { padding:18px; }
+    }
+
+    /* ─── Full-width CTA buttons on small screens ─── */
+    @media (max-width:480px) {
+      .screen-footer .btn-secondary { width:100%; justify-content:center; }
+    }
+
+    /* ═══ MOBILE BOTTOM NAVIGATION ═══ */
+    .mobile-nav {
+      display:none;
+      position:fixed; bottom:0; left:0; right:0; z-index:200;
+      background:rgba(255,255,255,0.96);
+      backdrop-filter:blur(16px); -webkit-backdrop-filter:blur(16px);
+      border-top:1px solid var(--border);
+      padding:0 4px env(safe-area-inset-bottom,0px);
+      justify-content:space-around; align-items:center;
+      box-shadow:0 -2px 20px rgba(0,0,0,0.08);
+    }
+    .mob-nav-item {
+      display:flex; flex-direction:column; align-items:center; justify-content:center;
+      gap:3px; padding:8px 4px 10px; flex:1;
+      border:none; background:transparent; cursor:pointer;
+      color:var(--text-3); font-family:'Inter',sans-serif;
+      font-size:10px; font-weight:500; transition:color 0.13s;
+      -webkit-tap-highlight-color:transparent; min-width:0;
+    }
+    .mob-nav-item:hover { color:var(--text-1); }
+    .mob-nav-item.mob-active { color:var(--accent); }
+    .mob-nav-item svg { flex-shrink:0; }
+    .mob-nav-new {
+      background:var(--accent); color:#fff !important;
+      border-radius:14px; margin:5px 3px; padding:8px 12px 10px;
+    }
+    .mob-nav-new:hover { background:#2e2683; color:#fff !important; }
+    @media (max-width:640px) {
+      .mobile-nav { display:flex; }
+    }
   </style>
 </head>
 <body>
@@ -1382,6 +1552,7 @@ e.g. I always start by validating whether the problem is real before evaluating 
         <div style="padding:16px 16px 8px;border-bottom:1px solid var(--border)">
           <div style="font-size:14px;font-weight:600;color:var(--text-0)">Transaction ledger</div>
         </div>
+        <div class="ledger-scroll-wrap">
         <table class="ledger-table" id="ledger-table">
           <thead>
             <tr>
@@ -1396,6 +1567,7 @@ e.g. I always start by validating whether the problem is real before evaluating 
             <tr><td colspan="5" style="text-align:center;color:var(--text-3);padding:32px">No transactions yet for this period.</td></tr>
           </tbody>
         </table>
+        </div>
       </div>
     </div>
 
@@ -1404,7 +1576,7 @@ e.g. I always start by validating whether the problem is real before evaluating 
       <div class="payment-card">
         <div class="payment-card-title">Bank account</div>
         <div class="payment-card-sub">Payouts are sent to this account on your chosen schedule.</div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+        <div class="bank-form-grid">
           <div class="bank-field" style="grid-column:1/-1">
             <label class="bank-label">Account holder name</label>
             <input class="bank-input" id="bank-name" type="text" placeholder="Legal name on account">
@@ -1467,6 +1639,30 @@ e.g. I always start by validating whether the problem is real before evaluating 
 
   </main>
 </div>
+
+<!-- MOBILE BOTTOM NAV -->
+<nav class="mobile-nav" id="mobile-nav">
+  <button class="mob-nav-item mob-nav-new" onclick="newPerspective(); closeSidebarOnMobile()" aria-label="New perspective">
+    <svg width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="8" y1="2" x2="8" y2="14"/><line x1="2" y1="8" x2="14" y2="8"/></svg>
+    <span>New</span>
+  </button>
+  <button class="mob-nav-item" id="mob-nav-search" onclick="showView('search'); closeSidebarOnMobile()" aria-label="Search">
+    <svg width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5l3 3"/></svg>
+    <span>Search</span>
+  </button>
+  <button class="mob-nav-item" id="mob-nav-home" onclick="goHome(); closeSidebarOnMobile()" aria-label="Home">
+    <svg width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 7.5L8 2l6 5.5"/><rect x="5" y="9" width="6" height="6" rx="1"/></svg>
+    <span>Home</span>
+  </button>
+  <button class="mob-nav-item" id="mob-nav-thinker" onclick="showView('thinker-hub'); closeSidebarOnMobile()" aria-label="Thinker">
+    <svg width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="8" cy="5" r="3"/><path d="M2 14c0-3.3 2.7-6 6-6s6 2.7 6 6"/></svg>
+    <span>Thinker</span>
+  </button>
+  <button class="mob-nav-item" id="mob-nav-projects" onclick="showView('projects'); closeSidebarOnMobile()" aria-label="Projects">
+    <svg width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="2" width="5" height="5" rx="1.5"/><rect x="9" y="2" width="5" height="5" rx="1.5"/><rect x="2" y="9" width="5" height="5" rx="1.5"/><rect x="9" y="9" width="5" height="5" rx="1.5"/></svg>
+    <span>Projects</span>
+  </button>
+</nav>
 
 <!-- THINKER PICKER -->
 <div class="modal-bg" id="picker-modal" onclick="closeBgClick(event)">
@@ -1568,6 +1764,15 @@ function toggleSidebar() {
   document.getElementById('sidebar-backdrop').classList.toggle('visible', sidebarOpen && window.innerWidth <= 680);
 }
 
+function closeSidebarOnMobile() {
+  if (window.innerWidth <= 680 && sidebarOpen) toggleSidebar();
+}
+
+function setMobNavActive(id) {
+  document.querySelectorAll('.mob-nav-item').forEach(el => el.classList.remove('mob-active'));
+  if (id) { const el = document.getElementById(id); if (el) el.classList.add('mob-active'); }
+}
+
 window.addEventListener('resize', () => {
   if (window.innerWidth > 680) document.getElementById('sidebar-backdrop').classList.remove('visible');
 });
@@ -1605,15 +1810,16 @@ function showView(view) {
   document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
 
   const views = {
-    search:      () => { document.getElementById('nav-search').classList.add('active'); show('screen-search'); setTimeout(() => document.getElementById('search-input').focus(), 120); },
-    projects:    () => { document.getElementById('nav-projects').classList.add('active'); renderProjects(); show('screen-projects'); },
-    settings:    () => show('screen-settings'),
-    downloads:   () => { renderDownloads(); show('screen-downloads'); },
-    help:        () => { renderFAQ(); show('screen-help'); },
-    upgrade:     () => show('screen-upgrade'),
-    recents:     () => show('screen-0'),
+    search:      () => { document.getElementById('nav-search').classList.add('active'); setMobNavActive('mob-nav-search'); show('screen-search'); setTimeout(() => document.getElementById('search-input').focus(), 120); },
+    projects:    () => { document.getElementById('nav-projects').classList.add('active'); setMobNavActive('mob-nav-projects'); renderProjects(); show('screen-projects'); },
+    settings:    () => { setMobNavActive(null); show('screen-settings'); },
+    downloads:   () => { setMobNavActive(null); renderDownloads(); show('screen-downloads'); },
+    help:        () => { setMobNavActive(null); renderFAQ(); show('screen-help'); },
+    upgrade:     () => { setMobNavActive(null); show('screen-upgrade'); },
+    recents:     () => { setMobNavActive('mob-nav-home'); show('screen-0'); },
     'thinker-hub': () => {
       document.getElementById('nav-thinker').classList.add('active');
+      setMobNavActive('mob-nav-thinker');
       show('screen-thinker-hub');
       try { initThinkerHub(); } catch(e) { console.error('[thinker-hub init]', e); }
     },
@@ -1637,6 +1843,7 @@ function goBack(id) { show(id); }
 
 function goHome() {
   document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+  setMobNavActive('mob-nav-home');
   show('screen-0');
 }
 
@@ -1644,6 +1851,8 @@ function newPerspective() {
   decisionText = ''; sessionQs = []; sessionAnswers = []; currentSession = null;
   document.getElementById('decision-input').value = '';
   document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+  setMobNavActive('mob-nav-home');
+  closeSidebarOnMobile();
   show('screen-0');
   setTimeout(() => document.getElementById('decision-input').focus(), 120);
 }
@@ -1652,6 +1861,7 @@ function startOver() {
   decisionText = ''; sessionQs = []; sessionAnswers = []; currentSession = null;
   document.getElementById('decision-input').value = '';
   document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+  setMobNavActive('mob-nav-home');
   show('screen-0');
 }
 
@@ -2284,6 +2494,7 @@ renderFAQ();
 checkConnection();
 fetchBalance();
 initThinkerAccess();
+setMobNavActive('mob-nav-home'); // set home as active on initial load
 
 document.addEventListener('keydown', e => {
   if (e.key === 'Escape') { closePicker(); closeProfileMenu(); closeTopup(); }
