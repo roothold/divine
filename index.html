@@ -891,86 +891,95 @@
 
     /* ═══ INQUIRY STREAM ═══ */
     #screen-replay { display:none; flex-direction:column; }
-    #screen-replay.active { display:flex; height:100vh; overflow:hidden; }
-    #screen-replay .main-inner { display:none; } /* hide legacy wrapper */
+    /* Height = viewport minus the content-topbar above it */
+    #screen-replay.active { display:flex; height:calc(100vh - var(--header-h)); overflow:hidden; }
+    #screen-replay .main-inner { display:none; }
 
-    /* Scrollable content area */
-    .is-scroll-area { flex:1; overflow-y:auto; overflow-x:hidden; scrollbar-width:thin; scrollbar-color:var(--border-md) transparent; }
-    .is-inner { max-width:680px; margin:0 auto; padding:28px 24px 32px; }
-    @media (max-width:600px) { .is-inner { padding:20px 16px 24px; } }
+    /* Sticky top nav within the stream */
+    .is-header { flex-shrink:0; display:flex; align-items:center; justify-content:space-between; padding:12px 24px; background:var(--bg); }
+    @media (max-width:600px) { .is-header { padding:10px 16px; } }
 
-    /* Top nav */
-    .is-topnav { display:flex; align-items:center; justify-content:space-between; margin-bottom:32px; }
+    /* Scrollable content — no padding-bottom trick needed; bottom-bar is flex item */
+    .is-scroll-area { flex:1; overflow-y:auto; overflow-x:hidden; scrollbar-width:none; position:relative; }
+    .is-scroll-area::-webkit-scrollbar { display:none; }
+    /* Subtle gradient fade at the bottom of scroll area into the bottom bar */
+    .is-scroll-area::after { content:''; pointer-events:none; position:sticky; bottom:0; display:block; height:40px; background:linear-gradient(to bottom, transparent, var(--bg)); margin-top:-40px; }
+    .is-inner { max-width:660px; margin:0 auto; padding:20px 24px 20px; }
+    @media (max-width:600px) { .is-inner { padding:16px 16px 16px; } }
 
     /* Session header */
-    .is-session-eyebrow { font-size:10px; font-weight:700; letter-spacing:.12em; text-transform:uppercase; color:var(--accent); margin-bottom:10px; display:flex; align-items:center; gap:6px; }
-    .is-session-title { font-family:'Cormorant Garamond',serif; font-size:clamp(22px,3.5vw,34px); font-weight:600; color:var(--text-0); line-height:1.2; margin-bottom:14px; }
-    .is-thinker-row { display:flex; align-items:center; gap:9px; margin-bottom:36px; }
+    .is-session-eyebrow { font-size:10px; font-weight:700; letter-spacing:.12em; text-transform:uppercase; color:var(--accent); margin-bottom:8px; }
+    .is-session-title { font-family:'Cormorant Garamond',serif; font-size:clamp(22px,3.5vw,32px); font-weight:600; color:var(--text-0); line-height:1.2; margin-bottom:12px; }
+    .is-thinker-row { display:flex; align-items:center; gap:9px; margin-bottom:28px; }
     .is-thinker-badge { width:26px; height:26px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:9px; font-weight:700; color:#fff; flex-shrink:0; }
     .is-thinker-name { font-size:13px; color:var(--text-2); }
 
     /* Vertical stepper / Divine Ledger */
     .is-ledger { position:relative; }
-    .is-block { position:relative; padding:0 0 36px 26px; border-left:2px solid var(--border); margin-left:8px; }
-    .is-block:last-child { border-left-color:transparent; padding-bottom:0; }
-    .is-block::before { content:''; position:absolute; left:-5px; top:20px; width:8px; height:8px; border-radius:50%; background:var(--accent); border:2px solid var(--bg); flex-shrink:0; }
+    @keyframes is-block-in { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
+    .is-block { position:relative; padding:0 0 32px 26px; border-left:2px solid var(--border); margin-left:8px; animation:is-block-in .35s ease forwards; }
+    .is-block:last-child { border-left-color:transparent; padding-bottom:4px; }
+    .is-block::before { content:''; position:absolute; left:-5px; top:19px; width:8px; height:8px; border-radius:50%; background:var(--accent); border:2px solid var(--bg); }
     .is-block-initial::before { background:var(--accent); }
-    .is-block-followup::before { background:var(--coral,#ff4f6b); }
+    .is-block-followup::before { background:var(--coral,#ff4f6b); box-shadow:0 0 0 3px rgba(255,79,107,.12); }
 
-    /* Block meta row: label + timestamp */
-    .is-block-meta { display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; min-height:20px; }
-    .is-block-label { font-size:9.5px; font-weight:700; letter-spacing:.11em; text-transform:uppercase; color:var(--text-3); }
-    .is-block-ts { font-family:'Courier New',monospace; font-size:9.5px; color:var(--text-3); letter-spacing:.02em; }
+    /* Block meta */
+    .is-block-meta { display:flex; align-items:center; justify-content:space-between; margin-bottom:12px; }
+    .is-block-label { font-size:9px; font-weight:700; letter-spacing:.11em; text-transform:uppercase; color:var(--text-3); }
+    .is-block-ts { font-family:'Courier New',monospace; font-size:9px; color:var(--text-3); letter-spacing:.02em; }
 
-    /* User query pill inside follow-up blocks */
-    .is-query-pill { background:var(--accent-lt); border:1px solid var(--accent-bdr); border-radius:10px; padding:11px 15px; margin-bottom:16px; font-size:14px; color:var(--text-0); font-weight:500; line-height:1.55; }
+    /* Query pill */
+    .is-query-pill { background:var(--accent-lt); border:1px solid var(--accent-bdr); border-radius:10px; padding:11px 15px; margin-bottom:14px; font-size:14px; color:var(--text-0); font-weight:500; line-height:1.55; }
 
-    /* Key insight block (dark violet card) */
-    .is-insight-card { background:var(--accent); border-radius:12px; padding:24px; color:#fff; margin-bottom:14px; }
-    .is-insight-label { font-size:9.5px; font-weight:700; letter-spacing:.11em; text-transform:uppercase; opacity:.65; margin-bottom:8px; }
-    .is-insight-title { font-family:'Cormorant Garamond',serif; font-size:clamp(20px,3vw,26px); font-weight:500; line-height:1.22; margin-bottom:10px; }
-    .is-insight-body { font-size:13.5px; opacity:.88; line-height:1.68; }
+    /* Key insight card */
+    .is-insight-card { background:var(--accent); border-radius:12px; padding:22px 24px; color:#fff; margin-bottom:12px; }
+    .is-insight-label { font-size:9px; font-weight:700; letter-spacing:.12em; text-transform:uppercase; opacity:.6; margin-bottom:8px; }
+    .is-insight-title { font-family:'Cormorant Garamond',serif; font-size:clamp(19px,2.8vw,24px); font-weight:500; line-height:1.25; margin-bottom:9px; }
+    .is-insight-body { font-size:13.5px; opacity:.88; line-height:1.7; }
 
-    /* Reframe grid inside stream */
-    .is-reframe-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+    /* Reframe grid */
+    .is-reframe-grid { display:grid; grid-template-columns:1fr 1fr; gap:9px; }
     @media (max-width:500px) { .is-reframe-grid { grid-template-columns:1fr; } }
-    .is-reframe-card { background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:18px; }
-    .is-reframe-icon { font-size:18px; margin-bottom:9px; }
-    .is-reframe-label { font-size:9.5px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:var(--accent); margin-bottom:5px; }
-    .is-reframe-title { font-family:'Cormorant Garamond',serif; font-size:17px; font-weight:500; color:var(--text-0); line-height:1.25; margin-bottom:6px; }
-    .is-reframe-body { font-size:13px; color:var(--text-2); line-height:1.6; }
+    .is-reframe-card { background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:16px; }
+    .is-reframe-icon { font-size:17px; margin-bottom:8px; }
+    .is-reframe-label { font-size:9px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:var(--accent); margin-bottom:4px; }
+    .is-reframe-title { font-family:'Cormorant Garamond',serif; font-size:16px; font-weight:500; color:var(--text-0); line-height:1.25; margin-bottom:5px; }
+    .is-reframe-body { font-size:12.5px; color:var(--text-2); line-height:1.6; }
 
-    /* Plain follow-up response text */
-    .is-response-text { font-size:14.5px; color:var(--text-1); line-height:1.75; }
+    /* Response text */
+    .is-response-text { font-size:14.5px; color:var(--text-1); line-height:1.78; }
 
-    /* Fixed bottom input bar */
-    .is-bottom-bar { flex-shrink:0; background:rgba(247,245,241,0.94); backdrop-filter:blur(18px); -webkit-backdrop-filter:blur(18px); border-top:1px solid rgba(0,0,0,.06); padding:10px 0 18px; position:relative; }
-    .is-bottom-inner { max-width:680px; margin:0 auto; padding:0 24px; }
+    /* Bottom bar — NO border-top, seamless */
+    .is-bottom-bar { flex-shrink:0; background:rgba(247,245,241,0.96); backdrop-filter:blur(20px); -webkit-backdrop-filter:blur(20px); padding:8px 0 16px; position:relative; }
+    .is-bottom-inner { max-width:660px; margin:0 auto; padding:0 24px; }
     @media (max-width:600px) { .is-bottom-inner { padding:0 16px; } }
 
     /* Lens probes */
-    .is-probes { display:flex; gap:6px; flex-wrap:wrap; margin-bottom:10px; }
-    .is-probe { font-size:12px; font-weight:500; color:var(--text-2); background:var(--surface); border:1.5px solid var(--border-md); border-radius:var(--r-pill); padding:5px 12px; cursor:pointer; transition:all .15s; white-space:nowrap; max-width:280px; overflow:hidden; text-overflow:ellipsis; }
-    .is-probe:hover { border-color:var(--accent-bdr); color:var(--accent); background:var(--accent-lt); }
+    .is-probes { display:flex; gap:6px; flex-wrap:wrap; margin-bottom:9px; }
+    .is-probe { font-size:11.5px; font-weight:500; color:var(--text-2); background:rgba(255,255,255,.7); border:1.5px solid var(--border-md); border-radius:var(--r-pill); padding:5px 12px; cursor:pointer; transition:all .18s; white-space:nowrap; max-width:260px; overflow:hidden; text-overflow:ellipsis; }
+    .is-probe:hover { border-color:var(--accent-bdr); color:var(--accent); background:var(--accent-lt); transform:translateY(-1px); }
+    /* Thinker-specific probe — always the last one, subtly highlighted */
+    .is-probe-signature { background:var(--accent-lt); border-color:var(--accent-bdr); color:var(--accent); }
+    .is-probe-signature:hover { background:var(--accent); color:#fff; }
 
     /* Input row */
-    .is-input-row { display:flex; align-items:flex-end; gap:8px; background:#fff; border:1.5px solid var(--border); border-radius:14px; padding:10px 8px 10px 15px; transition:border-color .15s,box-shadow .15s; }
-    .is-input-row:focus-within { border-color:var(--accent-bdr); box-shadow:0 4px 16px rgba(91,79,255,.08); }
-    .is-input { flex:1; border:none; outline:none; resize:none; background:transparent; font-family:'Inter',sans-serif; font-size:14px; color:var(--text-0); line-height:1.55; max-height:110px; overflow-y:auto; }
-    .is-input::placeholder { color:#c0b8ae; }
-    .is-send-btn { width:34px; height:34px; border-radius:50%; border:none; background:var(--accent); color:#fff; cursor:pointer; display:flex; align-items:center; justify-content:center; flex-shrink:0; transition:background .15s,transform .1s; }
-    .is-send-btn:disabled { background:#c8c4ee; cursor:not-allowed; transform:none !important; }
-    .is-send-btn:not(:disabled):hover { background:#2e2683; transform:scale(1.06); }
+    .is-input-row { display:flex; align-items:flex-end; gap:8px; background:#fff; border:1.5px solid var(--border-md); border-radius:14px; padding:10px 8px 10px 15px; box-shadow:0 2px 12px rgba(0,0,0,.05); transition:border-color .15s,box-shadow .15s; }
+    .is-input-row:focus-within { border-color:var(--accent-bdr); box-shadow:0 4px 20px rgba(91,79,255,.1); }
+    .is-input { flex:1; border:none; outline:none; resize:none; background:transparent; font-family:'Inter',sans-serif; font-size:14px; color:var(--text-0); line-height:1.55; max-height:100px; overflow-y:auto; }
+    .is-input::placeholder { color:#c5bdb2; }
+    .is-send-btn { width:34px; height:34px; border-radius:50%; border:none; background:var(--accent); color:#fff; cursor:pointer; display:flex; align-items:center; justify-content:center; flex-shrink:0; transition:background .15s,transform .12s,box-shadow .15s; box-shadow:0 2px 8px rgba(59,49,164,.3); }
+    .is-send-btn:disabled { background:#d4d0f0; cursor:not-allowed; box-shadow:none; }
+    .is-send-btn:not(:disabled):hover { background:#2e2683; transform:scale(1.08); box-shadow:0 4px 14px rgba(59,49,164,.4); }
+    .is-send-btn:not(:disabled):active { transform:scale(.96); }
 
-    /* "Encoding Perspective" thinking state */
-    .is-thinking-pill { display:none; align-items:center; gap:9px; position:absolute; bottom:calc(100% + 8px); left:50%; transform:translateX(-50%); background:rgba(247,245,241,.96); border:1px solid var(--border-md); border-radius:var(--r-pill); padding:8px 16px; box-shadow:var(--sh-sm); backdrop-filter:blur(8px); white-space:nowrap; z-index:30; }
-    .is-thinking-pill.visible { display:flex; }
+    /* "Encoding Perspective" thinking pill */
+    .is-thinking-pill { display:none; align-items:center; gap:9px; position:absolute; bottom:calc(100% + 10px); left:50%; transform:translateX(-50%); background:rgba(247,245,241,.97); border:1px solid var(--accent-bdr); border-radius:var(--r-pill); padding:8px 16px 8px 12px; box-shadow:0 4px 20px rgba(91,79,255,.15); backdrop-filter:blur(10px); white-space:nowrap; z-index:30; }
+    .is-thinking-pill.visible { display:flex; animation:is-block-in .25s ease; }
     .is-monogram-spin { animation:is-mono-pulse 1.6s ease-in-out infinite; }
-    @keyframes is-mono-pulse { 0%,100%{opacity:.4;transform:scale(.9)} 50%{opacity:1;transform:scale(1.1)} }
-    .is-thinking-label { font-size:11.5px; font-weight:600; letter-spacing:.07em; text-transform:uppercase; color:var(--accent); }
-    .is-thinking-dots { font-size:11.5px; color:var(--accent); }
-    @keyframes is-dot-cycle { 0%{content:''} 33%{content:'.'} 66%{content:'..'} 100%{content:'...'} }
+    @keyframes is-mono-pulse { 0%,100%{opacity:.35;transform:scale(.88)} 50%{opacity:1;transform:scale(1.1)} }
+    .is-thinking-label { font-size:11px; font-weight:600; letter-spacing:.08em; text-transform:uppercase; color:var(--accent); }
     .is-thinking-dots::after { content:''; animation:is-dot-cycle 1.2s steps(4,end) infinite; }
+    @keyframes is-dot-cycle { 0%{content:''} 33%{content:'.'} 66%{content:'..'} 100%{content:'...'} }
 
     /* ═══ COGNITIVE RESONANCE ═══ */
     .dc-card { transition:opacity .4s ease, transform .4s ease, border-color .15s, box-shadow .15s; }
@@ -2245,14 +2254,15 @@
         <div id="replay-content"></div>
       </div>
 
+      <!-- Inquiry Stream header (fixed, outside scroll area) -->
+      <div class="is-header" id="is-header">
+        <button class="btn-back" onclick="goHome()">← Home</button>
+        <button class="btn-ghost" onclick="startOver()">New session</button>
+      </div>
+
       <!-- Inquiry Stream layout -->
       <div class="is-scroll-area" id="is-scroll-area">
         <div class="is-inner">
-          <!-- Top nav -->
-          <div class="is-topnav">
-            <button class="btn-back" onclick="goHome()">← Home</button>
-            <button class="btn-ghost" onclick="startOver()">New session</button>
-          </div>
           <!-- Session header (injected) -->
           <div id="is-session-header"></div>
           <!-- Divine Ledger (stepper blocks) -->
@@ -4345,24 +4355,25 @@ function isProbesHTML(thinker) {
   const topic = (_isActiveSession && _isActiveSession.decision) ? _isActiveSession.decision : '';
   const probes = [];
 
-  // Thinker-specific mandatory probe
+  // Thinker-specific mandatory probe (signature — always first)
+  let signatureProbe = '';
   if (name.toLowerCase().includes('akindele') || name.toLowerCase().includes('michael')) {
-    probes.push('Audit this landscape for a hidden signal Michael might see.');
+    signatureProbe = 'Audit this landscape for a hidden signal Michael might see.';
   } else {
-    probes.push(`What would ${name.split(' ')[0]} see that others miss here?`);
+    signatureProbe = `What would ${name.split(' ')[0]} see that others miss here?`;
   }
 
   // Contextual probes based on topic
-  if (topic.length > 10) {
-    probes.push(`What are the 3 biggest risks in: "${topic.slice(0,40)}${topic.length>40?'…':''}"`);
-  } else {
-    probes.push('What are the 3 biggest risks in this direction?');
-  }
-  probes.push('How would you stress-test this assumption right now?');
+  const probe2 = topic.length > 10
+    ? `What are the 3 biggest risks in: "${topic.slice(0,40)}${topic.length>40?'…':''}"`
+    : 'What are the 3 biggest risks in this direction?';
+  const probe3 = 'How would you stress-test this assumption right now?';
 
-  return probes.map(p =>
-    `<button class="is-probe" onclick="isUseProbe(${JSON.stringify(p)})">${escHtml(p)}</button>`
-  ).join('');
+  return [
+    `<button class="is-probe is-probe-signature" onclick="isUseProbe(${JSON.stringify(signatureProbe)})">${escHtml(signatureProbe)}</button>`,
+    `<button class="is-probe" onclick="isUseProbe(${JSON.stringify(probe2)})">${escHtml(probe2)}</button>`,
+    `<button class="is-probe" onclick="isUseProbe(${JSON.stringify(probe3)})">${escHtml(probe3)}</button>`
+  ].join('');
 }
 
 function isUseProbe(text) {
