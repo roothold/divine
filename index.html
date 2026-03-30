@@ -674,6 +674,50 @@
     .kb-ts-btn:hover  { opacity:.82; }
     @media (max-width:560px) { .kb-thinker-strip { flex-direction:column; align-items:flex-start; gap:10px; } .kb-ts-icon { display:none; } }
 
+    /* ═══ DIVINE ARCHIVE ═══ */
+    .da-toolbar        { display:flex; align-items:center; gap:10px; margin-bottom:18px; flex-wrap:wrap; }
+    .da-folder-pills   { display:flex; gap:6px; flex-wrap:wrap; flex:1; min-width:0; }
+    .da-pill           { font-size:12px; font-weight:500; padding:5px 13px; border-radius:var(--r-pill); border:1.5px solid var(--border-md); background:var(--surface); color:var(--text-2); cursor:pointer; transition:all .15s; white-space:nowrap; }
+    .da-pill.active    { background:var(--accent); border-color:var(--accent); color:#fff; }
+    .da-pill:hover:not(.active) { border-color:var(--accent); color:var(--accent); }
+    .da-sort           { font-size:12px; color:var(--text-3); background:transparent; border:1px solid var(--border); border-radius:6px; cursor:pointer; padding:5px 8px; outline:none; }
+    .da-sort:hover     { background:var(--surface-2); color:var(--text-1); }
+    .da-batch-bar      { display:none; align-items:center; gap:10px; background:var(--accent); border-radius:10px; padding:11px 14px; margin-bottom:14px; }
+    .da-batch-bar.visible { display:flex; }
+    .da-batch-count    { font-size:13px; font-weight:600; color:#fff; flex:1; }
+    .da-batch-compile  { font-size:12px; font-weight:700; color:var(--accent); background:#fff; border:none; border-radius:var(--r-pill); padding:6px 14px; cursor:pointer; white-space:nowrap; transition:opacity .15s; }
+    .da-batch-compile:hover { opacity:.88; }
+    .da-batch-selall   { font-size:12px; font-weight:500; color:rgba(255,255,255,.82); background:rgba(255,255,255,.14); border:1px solid rgba(255,255,255,.3); border-radius:var(--r-pill); padding:5px 11px; cursor:pointer; white-space:nowrap; transition:opacity .15s; }
+    .da-batch-selall:hover { opacity:.8; }
+    .da-batch-clear    { font-size:12px; color:rgba(255,255,255,.7); background:transparent; border:none; cursor:pointer; padding:4px; transition:color .15s; display:flex; align-items:center; }
+    .da-batch-clear:hover { color:#fff; }
+    .da-section-label  { font-size:11px; font-weight:700; letter-spacing:.09em; text-transform:uppercase; color:var(--text-3); margin:20px 0 10px; display:flex; align-items:center; gap:8px; }
+    .da-section-label::after { content:''; flex:1; height:1px; background:var(--border); }
+    .da-grid           { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; }
+    @media (max-width:860px) { .da-grid { grid-template-columns:repeat(2,1fr); } }
+    @media (max-width:520px)  { .da-grid { grid-template-columns:1fr; } }
+    .da-card           { background:var(--surface); border:1.5px solid var(--border); border-radius:10px; padding:14px 15px 12px; position:relative; cursor:pointer; transition:border-color .15s,box-shadow .15s,transform .15s; overflow:hidden; }
+    .da-card:hover     { border-color:var(--accent-bdr); box-shadow:0 4px 16px rgba(91,79,255,.08); transform:translateY(-1px); }
+    .da-card.selected  { border-color:var(--accent); background:var(--violet-lt,#f0eeff); }
+    .da-card-check     { position:absolute; top:10px; right:10px; width:20px; height:20px; border-radius:50%; border:1.5px solid var(--border-md); background:var(--surface); display:flex; align-items:center; justify-content:center; transition:all .15s; z-index:2; }
+    .da-card.selected .da-card-check { background:var(--accent); border-color:var(--accent); }
+    .da-card-check svg { display:none; }
+    .da-card.selected .da-card-check svg { display:block; }
+    .da-card-thinker   { display:flex; align-items:center; gap:8px; margin-bottom:9px; padding-right:26px; }
+    .da-card-avatar    { width:27px; height:27px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:10px; font-weight:700; color:#fff; flex-shrink:0; letter-spacing:.02em; }
+    .da-card-name      { font-size:12px; font-weight:600; color:var(--text-0); line-height:1.2; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; flex:1; min-width:0; }
+    .da-card-date      { font-size:11px; color:var(--text-3); flex-shrink:0; }
+    .da-card-decision  { font-size:12.5px; font-weight:500; color:var(--text-0); line-height:1.5; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; margin-bottom:8px; }
+    .da-card-summary   { font-size:11.5px; color:var(--text-2); line-height:1.6; display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden; font-style:italic; border-left:2px solid var(--accent-bdr); padding-left:8px; margin-bottom:10px; }
+    .da-card-footer    { display:flex; gap:6px; align-items:center; }
+    .da-btn-pdf        { font-size:11px; font-weight:600; color:#fff; background:var(--coral,#ff4f6b); border:none; border-radius:var(--r-pill); padding:5px 11px; cursor:pointer; transition:opacity .15s; white-space:nowrap; }
+    .da-btn-pdf:hover  { opacity:.85; }
+    .da-btn-share      { font-size:11px; font-weight:500; color:var(--text-2); background:transparent; border:1px solid var(--border-md); border-radius:var(--r-pill); padding:5px 10px; cursor:pointer; transition:background .15s; white-space:nowrap; }
+    .da-btn-share:hover { background:var(--surface-2); }
+    .da-empty          { text-align:center; padding:64px 0; color:var(--text-3); }
+    .da-empty-icon     { width:48px; height:48px; margin:0 auto 14px; background:var(--surface-2); border-radius:50%; display:flex; align-items:center; justify-content:center; }
+    .da-count          { font-size:11px; font-weight:600; letter-spacing:.08em; text-transform:uppercase; color:var(--text-3); margin-bottom:14px; display:flex; align-items:center; gap:6px; }
+
     /* ═══ UPGRADE ═══ */
     .plans-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:16px; }
     .plan-card { background:var(--surface); border:1.5px solid var(--border); border-radius:var(--r); padding:28px 22px; box-shadow:var(--sh-sm); position:relative; }
@@ -1847,9 +1891,9 @@
     <div class="screen" id="screen-downloads">
       <div class="main-inner"><div class="screen-inner">
         <div class="screen-header">
-          <div class="screen-label">Dossier Collection</div>
-          <h2 class="screen-title">Your perspective dossiers</h2>
-          <p class="screen-sub">Each completed session is preserved as a print-ready intelligence report. Download as PDF or share a link.</p>
+          <div class="screen-label">Divine Archive</div>
+          <h2 class="screen-title" style="font-family:'Cormorant Garamond',serif;font-size:32px;font-weight:600">Dossier Collection</h2>
+          <p class="screen-sub">Your collected perspectives, organised by project. Select multiple dossiers and compile a Master Dossier for print.</p>
         </div>
         <div id="downloads-content"></div>
       </div></div>
@@ -2672,6 +2716,10 @@ let sessionAnswers  = [];
 let currentSession  = null;
 let selectedColor   = PROJECT_COLORS[0];
 let profileMenuOpen = false;
+// Divine Archive state
+let _daSelected  = new Set();
+let _daProject   = 'all';
+let _daSort      = 'newest';
 
 // Settings (persisted)
 const _defaultBase = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
@@ -3234,59 +3282,232 @@ const DOSSIER_SEAL_SVG = `<svg width="82" height="82" viewBox="0 0 82 82" fill="
   <text x="41" y="75" text-anchor="middle" font-family="sans-serif" font-size="6" letter-spacing="3" fill="#5b4fff" font-weight="700">DIVINE</text>
 </svg>`;
 
-function renderDownloads() {
+// ─── DIVINE ARCHIVE ────────────────────────────────────────────────────────────
+
+function daSummary(r) {
+  if (r.keyInsight && r.keyInsight.body) {
+    const b = r.keyInsight.body.replace(/<[^>]*>/g, '').trim();
+    const sentences = b.match(/[^.!?]+[.!?]+/g) || [];
+    if (sentences.length >= 2) return sentences.slice(0, 2).join(' ').trim();
+    return b.slice(0, 180) + (b.length > 180 ? '…' : '');
+  }
+  if (r.frames && r.frames.length > 0) {
+    const body = (r.frames[0].body || '').replace(/<[^>]*>/g, '').trim();
+    return body.slice(0, 200) + (body.length > 200 ? '…' : '');
+  }
+  return '';
+}
+
+function daToggle(id, e) {
+  if (e) e.stopPropagation();
+  if (_daSelected.has(id)) _daSelected.delete(id); else _daSelected.add(id);
+  daUpdateBatchBar();
+  const card = document.querySelector('.da-card[data-id="' + id + '"]');
+  if (card) card.classList.toggle('selected', _daSelected.has(id));
+}
+
+function daSelectAll() {
+  const recents = loadRecents().filter(r =>
+    _daProject === 'all' ? true : (r.projectId || 'unfiled') === _daProject);
+  recents.forEach(r => _daSelected.add(r.id));
+  daUpdateBatchBar();
+  document.querySelectorAll('.da-card').forEach(c => c.classList.add('selected'));
+}
+
+function daClearSelection() {
+  _daSelected.clear();
+  daUpdateBatchBar();
+  document.querySelectorAll('.da-card').forEach(c => c.classList.remove('selected'));
+}
+
+function daUpdateBatchBar() {
+  const bar = document.getElementById('da-batch-bar');
+  const cnt = document.getElementById('da-batch-count');
+  if (!bar) return;
+  if (_daSelected.size > 0) {
+    bar.classList.add('visible');
+    cnt.textContent = _daSelected.size + ' dossier' + (_daSelected.size > 1 ? 's' : '') + ' selected';
+  } else {
+    bar.classList.remove('visible');
+  }
+}
+
+function daSetProject(proj) {
+  _daProject = proj;
+  _daSelected.clear();
+  renderDownloads();
+}
+
+function daSetSort(val) {
+  _daSort = val;
+  renderDownloads();
+}
+
+function daCompileMaster() {
   const recents = loadRecents();
+  const selected = recents.filter(r => _daSelected.has(r.id));
+  if (!selected.length) return;
+  const html = generateMasterDossierHTML(selected);
+  const w = window.open('', '_blank');
+  if (!w) return;
+  w.document.write(html);
+  w.document.close();
+  setTimeout(() => w.print(), 800);
+}
+
+function generateMasterDossierHTML(sessions) {
+  const dateStr = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+  const tocRows = sessions.map((r, i) =>
+    '<tr><td style="padding:6px 0;font-size:13px;color:#1a1a18;">' + (i + 1) + '. ' +
+    r.decision.slice(0, 60) + (r.decision.length > 60 ? '…' : '') +
+    '</td><td style="padding:6px 0;font-size:12px;color:#888;text-align:right;white-space:nowrap;">' +
+    r.thinker.name + '</td></tr>').join('');
+
+  const sessionBlocks = sessions.map((r, i) => {
+    const tc = r.thinker.color || '#5b4fff';
+    const dStr = new Date(r.date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+    const framesH = (r.frames || []).map(f =>
+      '<div style="break-inside:avoid;border:1px solid #e8e8e4;border-radius:8px;padding:16px 18px;margin-bottom:8px;">' +
+      '<div style="font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#5b4fff;margin-bottom:4px;">' + (f.label || '') + '</div>' +
+      '<div style="font-family:\'Georgia\',serif;font-size:15px;font-weight:500;color:#111;line-height:1.3;margin-bottom:6px;">' + (f.title || '') + '</div>' +
+      '<div style="font-size:12px;color:#555;line-height:1.65;">' + (f.body || '') + '</div>' +
+      '</div>').join('');
+
+    const kiBlock = r.keyInsight
+      ? '<div style="background:#5b4fff;border-radius:10px;padding:20px 22px;color:#fff;margin-bottom:18px;break-inside:avoid;">' +
+        '<div style="font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;opacity:.7;margin-bottom:6px;">Key Insight</div>' +
+        '<div style="font-family:\'Georgia\',serif;font-size:20px;font-weight:500;line-height:1.2;margin-bottom:8px;">' + r.keyInsight.title + '</div>' +
+        '<div style="font-size:12px;line-height:1.65;opacity:.9;">' + r.keyInsight.body + '</div></div>'
+      : '';
+
+    return '<div style="break-before:page;padding-top:40px;">' +
+      '<div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">' +
+      '<div style="width:8px;height:8px;border-radius:50%;background:' + tc + ';flex-shrink:0;"></div>' +
+      '<div style="font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#888;">Perspective ' + (i + 1) + ' of ' + sessions.length + '</div></div>' +
+      '<div style="font-family:\'Georgia\',serif;font-size:20px;font-weight:500;color:#1a1a18;line-height:1.3;margin-bottom:4px;">' + r.decision + '</div>' +
+      '<div style="font-size:11px;color:#999;margin-bottom:20px;">Architect: ' + r.thinker.name + ' · ' + dStr + '</div>' +
+      kiBlock + framesH +
+      '<hr style="border:none;border-top:1px solid #e8e8e4;margin:28px 0;"></div>';
+  }).join('');
+
+  return '<!DOCTYPE html>\n<html lang="en">\n<head>\n<meta charset="UTF-8"><title>Divine Master Dossier</title>\n' +
+    '<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">\n' +
+    '<style>*{box-sizing:border-box;margin:0;padding:0}body{font-family:\'Inter\',sans-serif;background:#fafaf8;color:#1a1a18;-webkit-print-color-adjust:exact;print-color-adjust:exact}.page{max-width:680px;margin:0 auto;padding:56px 48px}@media print{body{background:#fff}.page{padding:40px 36px;max-width:100%}.no-print{display:none!important}}.print-cta{position:fixed;bottom:24px;right:24px;background:#ff4f6b;color:#fff;border:none;border-radius:100px;padding:12px 24px;font-size:13px;font-weight:600;cursor:pointer;box-shadow:0 4px 16px rgba(255,79,107,.35);font-family:\'Inter\',sans-serif}</style>\n' +
+    '</head><body>\n' +
+    '<button class="print-cta no-print" onclick="window.print()">Print / Save PDF</button>\n' +
+    '<div class="page">\n' +
+    '<div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:40px;padding-bottom:24px;border-bottom:2px solid #1a1a18;">' +
+    '<div><div style="font-family:\'Cormorant Garamond\',serif;font-size:28px;font-weight:600;letter-spacing:.02em;color:#1a1a18;line-height:1;">Divine<span style="color:#5b4fff">.</span></div>' +
+    '<div style="font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#888;margin-top:4px;">Master Dossier</div></div>' +
+    '<div style="text-align:right;"><div style="font-size:11px;color:#888;line-height:2;">' + sessions.length + ' Perspectives Compiled</div>' +
+    '<div style="font-size:11px;color:#888;">' + dateStr + '</div></div></div>\n' +
+    '<div style="margin-bottom:36px;"><div style="font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#999;margin-bottom:14px;">Table of Contents</div>' +
+    '<table style="width:100%;border-collapse:collapse;">' + tocRows + '</table></div>\n' +
+    '<hr style="border:none;border-top:1px solid #e8e8e4;margin-bottom:0;">\n' +
+    sessionBlocks +
+    '<div style="margin-top:40px;padding-top:16px;border-top:1px solid #e8e8e4;display:flex;align-items:center;justify-content:space-between;">' +
+    '<div style="font-family:\'Cormorant Garamond\',serif;font-size:14px;color:#999;">Divine<span style="color:#5b4fff">.</span> Intelligence Platform</div>' +
+    '<div style="font-size:10px;color:#bbb;font-family:monospace;letter-spacing:.04em;">getdivine.ai</div></div>\n' +
+    '</div></body></html>';
+}
+
+function renderDownloads() {
+  let recents = loadRecents();
+  const projects = loadProjects();
   const el = document.getElementById('downloads-content');
+
   if (!recents.length) {
-    el.innerHTML = `
-      <div class="dossier-empty">
-        <div class="dossier-empty-icon">
-          <svg width="22" height="22" viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.5" opacity=".4">
-            <rect x="3" y="1" width="12" height="16" rx="2"/><path d="M7 5h4M7 8h4M7 11h2"/><path d="M15 13v7l3-2 3 2v-7"/>
-          </svg>
-        </div>
-        <p style="font-size:14px;font-weight:500;color:var(--text-1);margin-bottom:6px">No dossiers yet.</p>
-        <p style="font-size:13px">Complete a session to generate your first perspective report.</p>
-      </div>`;
+    _daSelected.clear();
+    el.innerHTML =
+      '<div class="da-empty">' +
+      '<div class="da-empty-icon"><svg width="22" height="22" viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.5" opacity=".4">' +
+      '<rect x="3" y="1" width="12" height="16" rx="2"/><path d="M7 5h4M7 8h4M7 11h2"/><path d="M15 13v7l3-2 3 2v-7"/></svg></div>' +
+      '<p style="font-size:14px;font-weight:500;color:var(--text-1);margin-bottom:6px">The Archive is empty.</p>' +
+      '<p style="font-size:13px">Complete a session to generate your first perspective dossier.</p></div>';
     return;
   }
 
-  el.innerHTML = `
-    <div class="dossier-count">
-      <svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="1" y="1" width="8" height="10" rx="1.5"/><path d="M4 4h3M4 6.5h3M4 9h1.5"/><path d="M9 4l2 1.5L9 7"/></svg>
-      ${recents.length} ${recents.length === 1 ? 'dossier' : 'dossiers'} on record
-    </div>
-    <div class="dossier-grid">
-      ${recents.map(r => {
-        const avatarBg = r.thinker.color || '#5b4fff';
-        const insightBlock = r.keyInsight
-          ? `<div class="dossier-insight">${r.keyInsight.title}</div>`
-          : '';
-        return `
-        <div class="dossier-card">
-          <div class="dossier-seal">${DOSSIER_SEAL_SVG}</div>
-          <div class="dossier-thinker-row">
-            <div class="dossier-avatar" style="background:${avatarBg}">${r.thinker.initials || r.thinker.name.slice(0,2).toUpperCase()}</div>
-            <div class="dossier-ti">
-              <div class="dossier-ti-name">${r.thinker.name}</div>
-              <div class="dossier-ti-title">${r.thinker.title || ''}</div>
-            </div>
-            <div class="dossier-date">${formatDate(r.date)}</div>
-          </div>
-          <div class="dossier-decision">${r.decision}</div>
-          ${insightBlock}
-          <div class="dossier-actions">
-            <button class="dossier-btn-pdf" onclick="downloadDossier('${r.id}')">
-              Download PDF Report
-            </button>
-            <button class="dossier-btn-share" onclick="sharePerspective('${r.id}')">
-              <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="9" cy="2" r="1.2"/><circle cx="2" cy="6" r="1.2"/><circle cx="9" cy="10" r="1.2"/><path d="M3.1 5.5l4.7-2.7M3.1 6.5l4.7 2.7"/></svg>
-              Share Link
-            </button>
-          </div>
-        </div>`;
-      }).join('')}
-    </div>`;
+  // Sort
+  if (_daSort === 'oldest') recents = recents.slice().reverse();
+
+  // Build project index
+  const projectMap = { unfiled: { id: 'unfiled', name: 'Unfiled', color: '#aaa' } };
+  projects.forEach(p => { projectMap[p.id] = p; });
+
+  // Group all recents by project
+  const groups = {};
+  recents.forEach(r => {
+    const pid = (r.projectId && projectMap[r.projectId]) ? r.projectId : 'unfiled';
+    if (!groups[pid]) groups[pid] = [];
+    groups[pid].push(r);
+  });
+  const usedPids = Object.keys(groups);
+
+  // Filtered view
+  const filteredRecents = _daProject === 'all' ? recents : (groups[_daProject] || []);
+
+  // Folder pills
+  const namedPids = usedPids.filter(p => p !== 'unfiled');
+  let pillsHTML =
+    '<button class="da-pill' + (_daProject === 'all' ? ' active' : '') + '" onclick="daSetProject(\'all\')">All (' + recents.length + ')</button>' +
+    namedPids.map(pid => {
+      const proj = projectMap[pid];
+      return '<button class="da-pill' + (_daProject === pid ? ' active' : '') + '" onclick="daSetProject(\'' + pid + '\')">' +
+        '<span style="display:inline-block;width:7px;height:7px;border-radius:50%;background:' + (proj.color || '#5b4fff') + ';margin-right:5px;vertical-align:middle;"></span>' +
+        proj.name + ' (' + groups[pid].length + ')</button>';
+    }).join('') +
+    (groups['unfiled'] ? '<button class="da-pill' + (_daProject === 'unfiled' ? ' active' : '') + '" onclick="daSetProject(\'unfiled\')">Unfiled (' + groups['unfiled'].length + ')</button>' : '');
+
+  // Single card HTML builder
+  function cardHTML(r) {
+    const avatarBg = r.thinker.color || '#5b4fff';
+    const initials = r.thinker.initials || r.thinker.name.slice(0, 2).toUpperCase();
+    const summary  = daSummary(r);
+    const isSel    = _daSelected.has(r.id);
+    return '<div class="da-card' + (isSel ? ' selected' : '') + '" data-id="' + r.id + '" onclick="daToggle(\'' + r.id + '\',event)">' +
+      '<div class="da-card-check"><svg width="11" height="9" viewBox="0 0 11 9" fill="none" stroke="#fff" stroke-width="2"><path d="M1 4l3 3 6-6"/></svg></div>' +
+      '<div class="da-card-thinker">' +
+      '<div class="da-card-avatar" style="background:' + avatarBg + '">' + initials + '</div>' +
+      '<div class="da-card-name">' + r.thinker.name + '</div>' +
+      '<div class="da-card-date">' + formatDate(r.date) + '</div></div>' +
+      '<div class="da-card-decision">' + r.decision + '</div>' +
+      (summary ? '<div class="da-card-summary">' + summary + '</div>' : '') +
+      '<div class="da-card-footer" onclick="event.stopPropagation()">' +
+      '<button class="da-btn-pdf" onclick="downloadDossier(\'' + r.id + '\')">PDF</button>' +
+      '<button class="da-btn-share" onclick="sharePerspective(\'' + r.id + '\')">Share</button>' +
+      '</div></div>';
+  }
+
+  // Grid: grouped if showing all + multiple projects, else flat
+  let gridHTML = '';
+  if (_daProject === 'all' && usedPids.length > 1) {
+    gridHTML = usedPids.map(pid => {
+      const proj = projectMap[pid];
+      const cards = groups[pid] || [];
+      return '<div class="da-section-label"><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:' +
+        (proj.color || '#aaa') + ';"></span>' + proj.name + '</div>' +
+        '<div class="da-grid">' + cards.map(cardHTML).join('') + '</div>';
+    }).join('');
+  } else {
+    gridHTML = '<div class="da-grid">' + filteredRecents.map(cardHTML).join('') + '</div>';
+  }
+
+  el.innerHTML =
+    '<div class="da-toolbar">' +
+    '<div class="da-folder-pills">' + pillsHTML + '</div>' +
+    '<select class="da-sort" onchange="daSetSort(this.value)">' +
+    '<option value="newest"' + (_daSort === 'newest' ? ' selected' : '') + '>Newest first</option>' +
+    '<option value="oldest"' + (_daSort === 'oldest' ? ' selected' : '') + '>Oldest first</option>' +
+    '</select></div>' +
+    '<div class="da-batch-bar' + (_daSelected.size > 0 ? ' visible' : '') + '" id="da-batch-bar">' +
+    '<div class="da-batch-count" id="da-batch-count">' + _daSelected.size + ' dossier' + (_daSelected.size > 1 ? 's' : '') + ' selected</div>' +
+    '<button class="da-batch-selall" onclick="daSelectAll()">Select All</button>' +
+    '<button class="da-batch-compile" onclick="daCompileMaster()">Compile Master Dossier</button>' +
+    '<button class="da-batch-clear" onclick="daClearSelection()" title="Clear selection">' +
+    '<svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 2l10 10M12 2L2 12"/></svg></button></div>' +
+    '<div class="da-count"><svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="1" y="1" width="8" height="10" rx="1.5"/><path d="M4 4h3M4 6.5h3M4 9h1.5"/><path d="M9 4l2 1.5L9 7"/></svg>' +
+    filteredRecents.length + ' ' + (filteredRecents.length === 1 ? 'dossier' : 'dossiers') + ' in archive</div>' +
+    gridHTML;
 }
 
 function generateDossierHTML(r) {
