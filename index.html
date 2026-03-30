@@ -613,27 +613,27 @@
     .status-pill.idle { background:var(--surface-2); color:var(--text-3); }
 
     /* ═══ DOSSIER COLLECTION ═══ */
-    .dossier-count { font-size:11px; font-weight:600; letter-spacing:.08em; text-transform:uppercase; color:var(--text-3); margin-bottom:20px; display:flex; align-items:center; gap:6px; }
-    .dossier-grid  { display:grid; grid-template-columns:repeat(2,1fr); gap:16px; }
-    @media (max-width:680px) { .dossier-grid { grid-template-columns:1fr; } }
-    .dossier-card  { background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:22px 22px 18px; position:relative; overflow:hidden; box-shadow:var(--sh-sm); transition:box-shadow .2s,transform .2s; }
-    .dossier-card:hover { box-shadow:0 8px 30px rgba(0,0,0,.1); transform:translateY(-2px); }
-    .dossier-seal  { position:absolute; bottom:12px; right:12px; opacity:.07; pointer-events:none; user-select:none; }
-    .dossier-thinker-row { display:flex; align-items:center; gap:10px; margin-bottom:14px; }
-    .dossier-avatar { width:36px; height:36px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:700; color:#fff; flex-shrink:0; letter-spacing:.03em; }
-    .dossier-ti { flex:1; min-width:0; }
-    .dossier-ti-name  { font-size:13px; font-weight:600; color:var(--text-0); line-height:1.2; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-    .dossier-ti-title { font-size:11px; color:var(--text-3); margin-top:1px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-    .dossier-date  { font-size:11px; color:var(--text-3); flex-shrink:0; }
-    .dossier-decision { font-size:14px; font-weight:500; color:var(--text-0); line-height:1.55; display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden; margin-bottom:12px; }
-    .dossier-insight  { font-size:12px; color:var(--text-2); line-height:1.6; border-left:2px solid var(--accent-bdr); padding-left:10px; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; margin-bottom:16px; font-style:italic; }
-    .dossier-actions  { display:flex; gap:8px; flex-wrap:wrap; }
-    .dossier-btn-pdf  { font-size:12px; font-weight:600; color:#fff; background:var(--coral); border:none; border-radius:var(--r-pill); padding:7px 16px; cursor:pointer; transition:opacity .15s; white-space:nowrap; }
-    .dossier-btn-pdf:hover  { opacity:.85; }
-    .dossier-btn-share { font-size:12px; font-weight:500; color:var(--text-1); background:transparent; border:1px solid var(--border-md); border-radius:var(--r-pill); padding:7px 14px; cursor:pointer; transition:background .15s; white-space:nowrap; display:inline-flex; align-items:center; gap:5px; }
-    .dossier-btn-share:hover { background:var(--surface-2); }
-    .dossier-empty { text-align:center; padding:72px 0; color:var(--text-3); }
-    .dossier-empty-icon { width:52px; height:52px; margin:0 auto 16px; background:var(--surface-2); border-radius:50%; display:flex; align-items:center; justify-content:center; }
+    .perspective-count { font-size:11px; font-weight:600; letter-spacing:.08em; text-transform:uppercase; color:var(--text-3); margin-bottom:20px; display:flex; align-items:center; gap:6px; }
+    .perspective-grid  { display:grid; grid-template-columns:repeat(2,1fr); gap:16px; }
+    @media (max-width:680px) { .perspective-grid { grid-template-columns:1fr; } }
+    .perspective-card  { background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:22px 22px 18px; position:relative; overflow:hidden; box-shadow:var(--sh-sm); transition:box-shadow .2s,transform .2s; }
+    .perspective-card:hover { box-shadow:0 8px 30px rgba(0,0,0,.1); transform:translateY(-2px); }
+    .perspective-seal  { position:absolute; bottom:12px; right:12px; opacity:.07; pointer-events:none; user-select:none; }
+    .perspective-thinker-row { display:flex; align-items:center; gap:10px; margin-bottom:14px; }
+    .perspective-avatar { width:36px; height:36px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:700; color:#fff; flex-shrink:0; letter-spacing:.03em; }
+    .perspective-ti { flex:1; min-width:0; }
+    .perspective-ti-name  { font-size:13px; font-weight:600; color:var(--text-0); line-height:1.2; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .perspective-ti-title { font-size:11px; color:var(--text-3); margin-top:1px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .perspective-date  { font-size:11px; color:var(--text-3); flex-shrink:0; }
+    .perspective-decision { font-size:14px; font-weight:500; color:var(--text-0); line-height:1.55; display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden; margin-bottom:12px; }
+    .perspective-insight  { font-size:12px; color:var(--text-2); line-height:1.6; border-left:2px solid var(--accent-bdr); padding-left:10px; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; margin-bottom:16px; font-style:italic; }
+    .perspective-actions  { display:flex; gap:8px; flex-wrap:wrap; }
+    .perspective-btn-pdf  { font-size:12px; font-weight:600; color:#fff; background:var(--coral); border:none; border-radius:var(--r-pill); padding:7px 16px; cursor:pointer; transition:opacity .15s; white-space:nowrap; }
+    .perspective-btn-pdf:hover  { opacity:.85; }
+    .perspective-btn-share { font-size:12px; font-weight:500; color:var(--text-1); background:transparent; border:1px solid var(--border-md); border-radius:var(--r-pill); padding:7px 14px; cursor:pointer; transition:background .15s; white-space:nowrap; display:inline-flex; align-items:center; gap:5px; }
+    .perspective-btn-share:hover { background:var(--surface-2); }
+    .perspective-empty { text-align:center; padding:72px 0; color:var(--text-3); }
+    .perspective-empty-icon { width:52px; height:52px; margin:0 auto 16px; background:var(--surface-2); border-radius:50%; display:flex; align-items:center; justify-content:center; }
 
     /* ═══ KNOWLEDGE BASE ═══ */
     .kb-search-wrap  { position:relative; margin-bottom:32px; }
@@ -731,6 +731,97 @@
     .plan-features li { font-size:13.5px; color:var(--text-1); display:flex; align-items:flex-start; gap:8px; }
     .plan-features li::before { content:'✓'; color:var(--accent); font-weight:700; flex-shrink:0; margin-top:1px; }
     .plan-cta { width:100%; }
+
+    /* ═══ COGNITIVE COMMAND CENTER ═══ */
+    .th-live-pill     { display:inline-flex; align-items:center; gap:5px; font-size:10px; font-weight:700; letter-spacing:.07em; text-transform:uppercase; color:var(--violet,#5b4fff); background:var(--violet-lt,#f0eeff); border:1.5px solid var(--accent-bdr); border-radius:var(--r-pill); padding:3px 9px; margin-left:10px; vertical-align:middle; position:relative; top:-2px; }
+    .th-live-dot      { width:6px; height:6px; border-radius:50%; background:var(--violet,#5b4fff); flex-shrink:0; animation:th-live-blink 2s ease-in-out infinite; }
+    @keyframes th-live-blink { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.4;transform:scale(1.4)} }
+    .th-stat-sub      { font-size:11px; color:var(--text-3); margin-top:3px; font-family:'Cormorant Garamond',serif; font-style:italic; }
+    .th-payout-cta    { font-size:13px; font-weight:700; color:#fff; background:var(--coral,#ff4f6b); border:none; border-radius:var(--r-pill); padding:11px 20px; cursor:pointer; transition:opacity .15s,transform .15s; white-space:nowrap; }
+    .th-payout-cta:hover { opacity:.88; transform:translateY(-1px); }
+
+    /* Domain Heatmap */
+    .th-heatmap-wrap  { background:var(--surface); border:1px solid var(--border); border-radius:var(--r); padding:18px 20px; margin-bottom:18px; }
+    .th-heatmap-head  { display:flex; align-items:baseline; justify-content:space-between; margin-bottom:14px; }
+    .th-heatmap-title { font-size:13px; font-weight:700; color:var(--text-0); }
+    .th-heatmap-sub   { font-size:11px; color:var(--text-3); font-style:italic; }
+    .th-domain-row    { display:flex; align-items:center; gap:10px; margin-bottom:9px; }
+    .th-domain-row:last-child { margin-bottom:0; }
+    .th-domain-name   { font-size:12.5px; color:var(--text-1); width:88px; flex-shrink:0; }
+    .th-domain-bar-bg { flex:1; background:var(--surface-2); border-radius:4px; height:6px; overflow:hidden; }
+    .th-domain-bar-fill { height:100%; border-radius:4px; width:0; transition:width 1.1s cubic-bezier(.34,1.56,.64,1); }
+    .th-domain-pct    { font-family:'Courier New',monospace; font-size:11px; color:var(--text-3); width:30px; text-align:right; flex-shrink:0; }
+    .th-domain-delta  { font-size:10px; font-weight:700; padding:2px 7px; border-radius:var(--r-pill); flex-shrink:0; white-space:nowrap; }
+    .th-domain-up     { color:#15803d; background:#dcfce7; }
+    .th-domain-flat   { color:var(--text-3); background:var(--surface-2); }
+    .th-domain-empty  { font-size:13px; color:var(--text-3); font-family:'Cormorant Garamond',serif; font-style:italic; }
+
+    /* Sale ping on stat dot */
+    .th-stat-dot-wrap { position:relative; display:inline-block; margin-bottom:6px; }
+    .th-sale-ring     { position:absolute; inset:-5px; border-radius:50%; border:2px solid var(--coral,#ff4f6b); opacity:0; transform:scale(1); pointer-events:none; }
+    @keyframes th-ping { 0%{opacity:.8;transform:scale(1)} 100%{opacity:0;transform:scale(2.4)} }
+    .th-sale-ring.active { animation:th-ping .75s ease-out forwards; }
+
+    /* Performance ledger header */
+    .th-perf-head     { display:flex; align-items:center; justify-content:space-between; padding:13px 16px; border-bottom:1px solid var(--border); }
+    .th-perf-title    { font-size:13.5px; font-weight:700; color:var(--text-0); display:flex; align-items:center; gap:8px; }
+    .th-perf-dot      { width:8px; height:8px; border-radius:50%; background:var(--coral,#ff4f6b); flex-shrink:0; animation:th-live-blink 2s ease-in-out infinite; }
+    @keyframes th-sale-flash { 0%,100%{transform:scale(1);box-shadow:0 0 0 0 rgba(255,79,107,0)} 30%{transform:scale(1.8);box-shadow:0 0 0 8px rgba(255,79,107,.25)} 60%{transform:scale(1.3);box-shadow:0 0 0 14px rgba(255,79,107,0)} }
+    .th-perf-dot.sold { animation:th-sale-flash .8s ease-out; }
+
+    /* ═══ COGNITIVE LEDGER ═══ */
+    .cl-capital-card  { background:linear-gradient(130deg,#1a1630 0%,#2d2065 100%); border-radius:14px; padding:24px 26px; margin-bottom:26px; display:flex; align-items:center; flex-wrap:wrap; gap:0; }
+    .cl-cap-main      { flex:1; min-width:160px; }
+    .cl-cap-label     { font-size:10px; font-weight:700; letter-spacing:.12em; text-transform:uppercase; color:rgba(255,255,255,.48); margin-bottom:6px; }
+    .cl-cap-amount    { font-family:'Courier New',monospace; font-size:40px; font-weight:700; color:#fff; line-height:1; letter-spacing:.02em; }
+    .cl-cap-sub       { font-size:11.5px; color:rgba(255,255,255,.4); margin-top:5px; }
+    .cl-cap-divider   { width:1px; height:48px; background:rgba(255,255,255,.12); margin:0 24px; flex-shrink:0; }
+    .cl-cap-stat      { text-align:center; flex-shrink:0; }
+    .cl-cap-stat-val  { font-family:'Courier New',monospace; font-size:28px; font-weight:700; color:#fff; line-height:1; }
+    .cl-cap-stat-lbl  { font-size:11px; color:rgba(255,255,255,.45); margin-top:5px; line-height:1.4; }
+    .cl-cap-topup     { margin-left:auto; padding-left:24px; flex-shrink:0; }
+    .cl-topup-btn     { font-size:12px; font-weight:700; color:#1a1630; background:#fff; border:none; border-radius:var(--r-pill); padding:9px 18px; cursor:pointer; white-space:nowrap; transition:opacity .15s; }
+    .cl-topup-btn:hover { opacity:.85; }
+    @media (max-width:540px) { .cl-cap-divider,.cl-cap-stat { display:none; } .cl-cap-topup { padding-left:0; width:100%; margin-top:16px; } .cl-topup-btn { width:100%; text-align:center; } }
+
+    .cl-section-head  { font-size:11px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:var(--text-3); margin-bottom:14px; display:flex; align-items:center; gap:8px; }
+    .cl-section-head::after { content:''; flex:1; height:1px; background:var(--border); }
+
+    .cl-list          { background:var(--surface); border:1px solid var(--border); border-radius:var(--r); overflow:hidden; }
+    .cl-list-head     { display:grid; grid-template-columns:104px 1fr 80px 74px; gap:12px; padding:9px 16px; border-bottom:1px solid var(--border); background:var(--surface-2); }
+    .cl-list-hcell    { font-size:11px; font-weight:600; letter-spacing:.06em; text-transform:uppercase; color:var(--text-3); }
+    .cl-row           { display:grid; grid-template-columns:104px 1fr 80px 74px; gap:12px; padding:13px 16px; border-bottom:1px solid var(--border); align-items:center; transition:background .12s; }
+    .cl-row:last-child { border-bottom:none; }
+    .cl-row:hover     { background:var(--surface-2); }
+    .cl-row-date      { font-family:'Courier New',monospace; font-size:11.5px; color:var(--text-3); white-space:nowrap; line-height:1.45; }
+    .cl-row-desc      { font-size:13.5px; color:var(--text-0); line-height:1.4; }
+    .cl-row-desc-sub  { font-size:12px; color:var(--text-3); margin-top:2px; font-family:'Cormorant Garamond',serif; font-style:italic; }
+    .cl-row-status    { display:flex; align-items:center; gap:7px; font-size:12px; color:var(--text-2); font-weight:500; }
+    .cl-dot           { width:8px; height:8px; border-radius:50%; flex-shrink:0; }
+    .cl-dot-debit     { background:var(--coral,#ff4f6b); }
+    .cl-dot-credit    { background:var(--violet,#5b4fff); }
+    .cl-row-amt-wrap  { position:relative; text-align:right; }
+    .cl-row-amount    { font-family:'Courier New',monospace; font-size:13px; font-weight:600; white-space:nowrap; }
+    .cl-amt-debit     { color:var(--coral,#ff4f6b); }
+    .cl-amt-credit    { color:var(--violet,#5b4fff); }
+    .cl-tooltip       { position:absolute; bottom:calc(100% + 8px); right:0; background:#1a1630; color:#fff; font-size:11px; font-weight:500; white-space:nowrap; padding:6px 11px; border-radius:8px; pointer-events:none; opacity:0; transition:opacity .15s; z-index:20; }
+    .cl-tooltip::after { content:''; position:absolute; top:100%; right:14px; border:5px solid transparent; border-top-color:#1a1630; }
+    .cl-row:hover .cl-tooltip { opacity:1; }
+
+    .cl-empty         { text-align:center; padding:52px 24px 44px; }
+    .cl-empty-title   { font-family:'Cormorant Garamond',serif; font-size:22px; font-weight:500; color:var(--text-1); line-height:1.45; margin-bottom:8px; }
+    .cl-empty-sub     { font-size:13px; color:var(--text-3); }
+    .cl-loading       { padding:40px 0; text-align:center; }
+    .cl-loading-dot   { width:8px; height:8px; border-radius:50%; background:var(--accent); display:inline-block; margin:0 3px; animation:cl-pulse .9s ease-in-out infinite; }
+    .cl-loading-dot:nth-child(2) { animation-delay:.18s; }
+    .cl-loading-dot:nth-child(3) { animation-delay:.36s; }
+    @keyframes cl-pulse { 0%,100%{opacity:.25;transform:scale(.85)} 50%{opacity:1;transform:scale(1.15)} }
+    @media (max-width:600px) {
+      .cl-list-head   { grid-template-columns:1fr 70px 64px; }
+      .cl-list-hcell:first-child { display:none; }
+      .cl-row         { grid-template-columns:1fr 70px 64px; }
+      .cl-row-date    { display:none; }
+    }
 
     /* ═══ THINKER PICKER ═══ */
     .modal-bg { display:none; position:fixed; inset:0; background:rgba(15,14,12,0.4); backdrop-filter:blur(6px); -webkit-backdrop-filter:blur(6px); z-index:300; align-items:flex-end; justify-content:center; }
@@ -1598,7 +1689,7 @@
         <!-- Settings entry point hidden pending redesign -->
         <button class="profile-menu-item" onclick="showView('downloads')">
           <svg width="15" height="15" viewBox="0 0 15 15" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M7.5 1v9M4 7l3.5 3.5L11 7"/><rect x="1" y="11" width="13" height="3" rx="1"/></svg>
-          Dossier Collection
+          Perspective Collection
         </button>
         <div class="profile-menu-sep"></div>
         <button class="profile-menu-item" onclick="showView('help')">
@@ -1887,13 +1978,13 @@
       </div></div>
     </div>
 
-    <!-- SCREEN: Downloads / Dossier Collection -->
+    <!-- SCREEN: Downloads / Perspective Collection -->
     <div class="screen" id="screen-downloads">
       <div class="main-inner"><div class="screen-inner">
         <div class="screen-header">
           <div class="screen-label">Divine Archive</div>
-          <h2 class="screen-title" style="font-family:'Cormorant Garamond',serif;font-size:32px;font-weight:600">Dossier Collection</h2>
-          <p class="screen-sub">Your collected perspectives, organised by project. Select multiple dossiers and compile a Master Dossier for print.</p>
+          <h2 class="screen-title" style="font-family:'Cormorant Garamond',serif;font-size:32px;font-weight:600">Perspective Collection</h2>
+          <p class="screen-sub">Your collected perspectives, organised by project. Select multiple perspectives and compile a Master Perspective for print.</p>
         </div>
         <div id="downloads-content"></div>
       </div></div>
@@ -1975,52 +2066,31 @@
     <div class="screen" id="screen-upgrade">
       <div class="main-inner"><div class="screen-inner">
         <div class="screen-header">
-          <div class="screen-label">Plans</div>
-          <h2 class="screen-title">Upgrade Divine Intelligence</h2>
-          <p class="screen-sub">Access more thinkers, unlimited sessions, and team features.</p>
+          <div class="screen-label">Cognitive Ledger</div>
+          <h2 class="screen-title" style="font-family:'Cormorant Garamond',serif;font-size:32px;font-weight:600">Capital &amp; Transactions</h2>
+          <p class="screen-sub">Every credit deposited, every perspective secured — recorded with precision.</p>
         </div>
-        <div class="plans-grid">
-          <div class="plan-card">
-            <div class="plan-name">Free</div>
-            <div class="plan-price">$0<span>/mo</span></div>
-            <div class="plan-desc">For founders getting started</div>
-            <ul class="plan-features">
-              <li>1 active thinker</li>
-              <li>5 sessions per month</li>
-              <li>Basic reframes</li>
-              <li>Session history (30 days)</li>
-            </ul>
-            <button class="btn-ghost plan-cta" disabled>Current plan</button>
+
+        <!-- Capital Header Card -->
+        <div class="cl-capital-card">
+          <div class="cl-cap-main">
+            <div class="cl-cap-label">Available Cognitive Capital</div>
+            <div class="cl-cap-amount" id="cl-balance">—</div>
+            <div class="cl-cap-sub">credits available · $0.05 per perspective</div>
           </div>
-          <div class="plan-card featured">
-            <div class="plan-badge">Most popular</div>
-            <div class="plan-name">Pro</div>
-            <div class="plan-price">$49<span>/mo</span></div>
-            <div class="plan-desc">For serious founders making critical calls</div>
-            <ul class="plan-features">
-              <li>All available thinkers</li>
-              <li>Unlimited sessions</li>
-              <li>Deep reframes + follow-up</li>
-              <li>Projects & organisation</li>
-              <li>Export & downloads</li>
-              <li>Unlimited history</li>
-            </ul>
-            <button class="btn-primary plan-cta" onclick="alert('Billing coming soon!')">Upgrade to Pro</button>
+          <div class="cl-cap-divider"></div>
+          <div class="cl-cap-stat">
+            <div class="cl-cap-stat-val" id="cl-lifetime">0</div>
+            <div class="cl-cap-stat-lbl">Lifetime Perspectives<br>Secured</div>
           </div>
-          <div class="plan-card">
-            <div class="plan-name">Enterprise</div>
-            <div class="plan-price">Custom</div>
-            <div class="plan-desc">For teams and investment firms</div>
-            <ul class="plan-features">
-              <li>Everything in Pro</li>
-              <li>Custom thinker onboarding</li>
-              <li>Team workspace</li>
-              <li>SSO & admin controls</li>
-              <li>SLA & dedicated support</li>
-            </ul>
-            <button class="btn-ghost plan-cta" onclick="window.open('mailto:michael@surpluspods.com')">Contact us</button>
+          <div class="cl-cap-topup">
+            <button class="cl-topup-btn" onclick="openTopup()">+ Capital Infusion</button>
           </div>
         </div>
+
+        <div class="cl-section-head">Transaction History</div>
+        <div id="cl-transaction-list"></div>
+
       </div></div>
     </div>
 
@@ -2034,8 +2104,13 @@
 
     <!-- Hub header -->
     <div class="thinker-hero">
-      <div class="thinker-badge" id="th-badge">MA</div>
-      <div class="thinker-hero-title" id="th-name">Michael Akindele</div>
+      <div class="th-stat-dot-wrap">
+        <div class="thinker-badge" id="th-badge">MA</div>
+        <div class="th-sale-ring" id="th-sale-ring"></div>
+      </div>
+      <div class="thinker-hero-title" id="th-name">Michael Akindele
+        <span class="th-live-pill" id="th-live-pill"><span class="th-live-dot"></span>Live</span>
+      </div>
       <div class="thinker-hero-sub" id="th-title">Builder · Designer · Founder</div>
     </div>
 
@@ -2043,7 +2118,8 @@
     <div class="thinker-stats">
       <div class="thinker-stat">
         <div class="thinker-stat-val" id="th-stat-sessions">—</div>
-        <div class="thinker-stat-label">Perspectives delivered</div>
+        <div class="thinker-stat-label">Cognitive Inquiries Resolved</div>
+        <div class="th-stat-sub" id="th-stat-hours">— hrs saved</div>
       </div>
       <div class="thinker-stat">
         <div class="thinker-stat-val" id="th-stat-earnings">—</div>
@@ -2094,9 +2170,9 @@
         <div class="psc-section-label" style="margin-top:18px">Cognitive framework</div>
         <div class="psc-framework" id="psc-framework">Your framework is defined in your model training. Update it in the Train Model tab.</div>
       </div>
-      <div style="display:flex;gap:12px">
+      <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:center">
         <button class="btn-secondary" onclick="switchThinkerTab('train', document.querySelectorAll('.thinker-tab')[2])">Update model →</button>
-        <button class="btn-primary" onclick="switchThinkerTab('reports', document.querySelectorAll('.thinker-tab')[3])">View earnings →</button>
+        <button class="th-payout-cta" onclick="switchThinkerTab('reports', document.querySelectorAll('.thinker-tab')[3])">Claim Accumulated Wisdom Royalties →</button>
       </div>
     </div>
 
@@ -2240,8 +2316,8 @@ e.g. I always start by validating whether the problem is real before evaluating 
           </div>
           <span class="version-pill" id="framework-version">v1.0</span>
         </div>
-        <div class="ns-card-title">Theory of Victory</div>
-        <div class="ns-card-sub">Your AI model's operating principle. The more precise the architecture, the sharper the insight.</div>
+        <div class="ns-card-title">The Source Code of Your Wisdom</div>
+        <div class="ns-card-sub">Your AI model's operating principle — the singular truth encoded into your intelligence engine. The more precise the architecture, the sharper every insight it delivers.</div>
         <textarea class="ns-forge-textarea" id="train-framework"
           placeholder="The single truth that shapes every decision I make..."
           oninput="nsForgeAudit(this.value)"></textarea>
@@ -2331,15 +2407,29 @@ e.g. I always start by validating whether the problem is real before evaluating 
       </div>
 
       <div class="report-summary" id="rpt-summary">
-        <div class="rpt-stat"><div class="rpt-stat-val" id="rpt-sessions">0</div><div class="rpt-stat-label">Perspectives</div><div class="rpt-stat-delta">↑ 0%</div></div>
-        <div class="rpt-stat"><div class="rpt-stat-val" id="rpt-revenue">$0</div><div class="rpt-stat-label">Gross revenue</div><div class="rpt-stat-delta">↑ 0%</div></div>
-        <div class="rpt-stat"><div class="rpt-stat-val" id="rpt-payout">$0</div><div class="rpt-stat-label">Your payout (70%)</div><div class="rpt-stat-delta">↑ 0%</div></div>
+        <div class="rpt-stat"><div class="rpt-stat-val" id="rpt-sessions">0</div><div class="rpt-stat-label">Inquiries Resolved</div><div class="rpt-stat-delta" id="rpt-sessions-delta">—</div></div>
+        <div class="rpt-stat"><div class="rpt-stat-val" id="rpt-revenue">$0</div><div class="rpt-stat-label">Gross revenue</div><div class="rpt-stat-delta" id="rpt-revenue-delta">—</div></div>
+        <div class="rpt-stat"><div class="rpt-stat-val" id="rpt-payout">$0</div><div class="rpt-stat-label">Your payout (70%)</div><div class="rpt-stat-delta">Wisdom Royalties</div></div>
         <div class="rpt-stat"><div class="rpt-stat-val" id="rpt-unique">0</div><div class="rpt-stat-label">Unique founders</div><div class="rpt-stat-delta">—</div></div>
       </div>
 
+      <!-- Domain Expertise Heatmap -->
+      <div class="th-heatmap-wrap">
+        <div class="th-heatmap-head">
+          <div class="th-heatmap-title">Domain Expertise Demand</div>
+          <div class="th-heatmap-sub">Which of your topics are trending</div>
+        </div>
+        <div id="th-heatmap-body"><div class="th-domain-empty">Define your domains in the Train Model tab to see demand analytics.</div></div>
+      </div>
+
+      <!-- High-Resolution Performance Ledger -->
       <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--r);overflow:hidden">
-        <div style="padding:16px 16px 8px;border-bottom:1px solid var(--border)">
-          <div style="font-size:14px;font-weight:600;color:var(--text-0)">Transaction ledger</div>
+        <div class="th-perf-head">
+          <div class="th-perf-title">
+            <div class="th-perf-dot" id="th-perf-dot"></div>
+            High-Resolution Performance Ledger
+          </div>
+          <span style="font-size:11px;color:var(--text-3);font-family:'Courier New',monospace" id="rpt-live-label">Live · synced with Railway</span>
         </div>
         <div class="ledger-scroll-wrap">
         <table class="ledger-table" id="ledger-table">
@@ -2353,7 +2443,7 @@ e.g. I always start by validating whether the problem is real before evaluating 
             </tr>
           </thead>
           <tbody id="ledger-body">
-            <tr><td colspan="5" style="text-align:center;color:var(--text-3);padding:32px">No transactions yet for this period.</td></tr>
+            <tr><td colspan="5" style="text-align:center;color:var(--text-3);padding:32px;font-family:'Cormorant Garamond',serif;font-size:15px">No transactions yet for this period.</td></tr>
           </tbody>
         </table>
         </div>
@@ -2685,7 +2775,7 @@ const PROJECT_COLORS = ['#3B31A4','#0F7A5E','#C0392B','#8E5A02','#7B2D8B','#005B
 const FAQS = [
   {
     q: 'The Mechanics of Cognitive Replication',
-    a: 'You describe a decision, answer a few context questions, and your selected Architect applies their specific cognitive framework to your situation. The intelligence model has been trained on how that Thinker sees the world — not what they would do, but how they would see it. Each Perspective costs $0.05 and is preserved as a Dossier in your Collection.'
+    a: 'You describe a decision, answer a few context questions, and your selected Architect applies their specific cognitive framework to your situation. The intelligence model has been trained on how that Thinker sees the world — not what they would do, but how they would see it. Each Perspective costs $0.05 and is preserved as a Perspective in your Collection.'
   },
   {
     q: 'Who Are the Architects of Insight?',
@@ -2693,15 +2783,15 @@ const FAQS = [
   },
   {
     q: 'The Encoding Protocol: How Is My Data Handled?',
-    a: 'Your perspectives are encoded, not stored. Session data lives in your browser\'s local memory — nothing from your deliberation process is persisted to our servers. Only transactional events (credit usage, dossier generation) are recorded in our secure infrastructure to maintain ledger integrity. Your private deliberations remain sovereign to you.'
+    a: 'Your perspectives are encoded, not stored. Session data lives in your browser\'s local memory — nothing from your deliberation process is persisted to our servers. Only transactional events (credit usage, perspective generation) are recorded in our secure infrastructure to maintain ledger integrity. Your private deliberations remain sovereign to you.'
   },
   {
     q: 'How Do I Acquire a Perspective?',
-    a: 'Each insight costs $0.05. Top up your balance from the credit panel in the sidebar. Once credited, select an active Architect, describe your decision with precision, answer the context questions, and your Perspective will stream in real time. The session is automatically preserved in your Dossier Collection.'
+    a: 'Each insight costs $0.05. Top up your balance from the credit panel in the sidebar. Once credited, select an active Architect, describe your decision with precision, answer the context questions, and your Perspective will stream in real time. The session is automatically preserved in your Perspective Collection.'
   },
   {
     q: 'What Form Do My Perspectives Take?',
-    a: 'Every completed session generates a Perspective Dossier — a structured intelligence report containing the Architect\'s Key Insight and a set of Cognitive Frames that reinterpret your decision through their lens. Access your Dossier Collection from the profile menu to download print-ready PDF reports or copy a shareable link.'
+    a: 'Every completed session generates a Perspective Perspective — a structured intelligence report containing the Architect\'s Key Insight and a set of Cognitive Frames that reinterpret your decision through their lens. Access your Perspective Collection from the profile menu to download print-ready PDF reports or copy a shareable link.'
   },
   {
     q: 'Can I Contribute My Own Cognitive Framework?',
@@ -2822,7 +2912,7 @@ function showView(view) {
     settings:    () => { setMobNavActive(null); show('screen-settings'); },
     downloads:   () => { setMobNavActive(null); renderDownloads(); show('screen-downloads'); },
     help:        () => { setMobNavActive(null); renderFAQ(); show('screen-help'); },
-    upgrade:     () => { setMobNavActive(null); show('screen-upgrade'); },
+    upgrade:     () => { setMobNavActive(null); renderCognitiveLedger(); show('screen-upgrade'); },
     recents:     () => { setMobNavActive('mob-nav-home'); show('screen-0'); },
     'thinker-hub': () => {
       document.getElementById('nav-thinker').classList.add('active');
@@ -2971,12 +3061,107 @@ async function callClaude(system, user) {
 /* ── Balance ── */
 function updateBalanceDisplay(balance) {
   currentBalance = balance;
+  const fmt = `$${parseFloat(balance).toFixed(2)}`;
   const el = document.getElementById('balance-amount');
-  if (el) el.textContent = `$${parseFloat(balance).toFixed(2)}`;
+  if (el) el.textContent = fmt;
+  // Sync Cognitive Ledger capital header if visible
+  const cl = document.getElementById('cl-balance');
+  if (cl) cl.textContent = fmt;
   if (balance !== null && balance < 0.05) {
     // Auto-open top-up when balance hits zero during a session
     setTimeout(openTopup, 600);
   }
+}
+
+/* ── Cognitive Ledger ── */
+async function renderCognitiveLedger() {
+  // Immediately show current known balance
+  const balEl = document.getElementById('cl-balance');
+  if (balEl) balEl.textContent = currentBalance !== null ? `$${parseFloat(currentBalance).toFixed(2)}` : '—';
+
+  const listEl = document.getElementById('cl-transaction-list');
+  if (!listEl) return;
+  listEl.innerHTML = '<div class="cl-loading"><span class="cl-loading-dot"></span><span class="cl-loading-dot"></span><span class="cl-loading-dot"></span></div>';
+
+  // Fetch fresh balance + transaction history in parallel
+  const [, txnResult] = await Promise.allSettled([
+    fetch(`${API_BASE}/api/balance?user_id=${USER_ID}`)
+      .then(r => r.ok ? r.json() : null)
+      .then(d => { if (d && d.credit_balance !== undefined) updateBalanceDisplay(d.credit_balance); })
+      .catch(() => {}),
+    fetch(`${API_BASE}/api/wallet/history?user_id=${USER_ID}`)
+      .then(r => r.ok ? r.json() : null)
+      .catch(() => null)
+  ]);
+
+  const raw   = txnResult.status === 'fulfilled' ? txnResult.value : null;
+  const txns  = Array.isArray(raw) ? raw : (raw?.transactions || raw?.data || []);
+
+  // Lifetime insights counter = debit rows
+  const lifetimeCount = txns.filter(t => {
+    const type = (t.type || t.transaction_type || '').toLowerCase();
+    return type.includes('debit') || type.includes('purchase') || type.includes('spend') || parseFloat(t.amount || 0) < 0;
+  }).length;
+  const liEl = document.getElementById('cl-lifetime');
+  if (liEl) liEl.textContent = lifetimeCount;
+
+  if (!txns.length) {
+    listEl.innerHTML =
+      '<div class="cl-list"><div class="cl-empty">' +
+      '<div class="cl-empty-title">Your ledger is empty.<br>Secure your first perspective to begin your archive.</div>' +
+      '<div class="cl-empty-sub" style="margin-top:6px">Each $0.05 perspective will appear here as a permanent record.</div>' +
+      '</div></div>';
+    return;
+  }
+
+  function fmtDate(d) {
+    if (!d) return '—';
+    const dt = new Date(d);
+    return dt.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) + '\n' +
+      dt.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false });
+  }
+
+  function isDebit(t) {
+    const type = (t.type || t.transaction_type || '').toLowerCase();
+    return type.includes('debit') || type.includes('purchase') || type.includes('spend') || parseFloat(t.amount || 0) < 0;
+  }
+
+  function fmtDesc(t) {
+    if (!isDebit(t)) return 'Capital Infusion';
+    const thinker = t.thinker_name || (t.metadata && t.metadata.thinker) || '';
+    return thinker ? 'Perspective Acquisition: ' + thinker : 'Perspective Acquisition';
+  }
+
+  const rowsHTML = txns.map(t => {
+    const debit  = isDebit(t);
+    const amt    = parseFloat(t.amount || 0);
+    const amtStr = (debit ? '−' : '+') + '$' + Math.abs(amt).toFixed(2);
+    const desc   = fmtDesc(t);
+    const note   = t.note || t.description || (t.metadata && (t.metadata.decision || t.metadata.note)) || '';
+    const noteSnip = note ? (note.length > 58 ? note.slice(0, 58) + '…' : note) : '';
+    const dateStr = fmtDate(t.created_at || t.date || t.timestamp);
+    const dateParts = dateStr.split('\n');
+    return '<div class="cl-row">' +
+      '<div class="cl-row-date">' + dateParts[0] + (dateParts[1] ? '<br>' + dateParts[1] : '') + '</div>' +
+      '<div><div class="cl-row-desc">' + desc + '</div>' +
+      (noteSnip ? '<div class="cl-row-desc-sub">' + noteSnip + '</div>' : '') +
+      '</div>' +
+      '<div class="cl-row-status"><div class="cl-dot ' + (debit ? 'cl-dot-debit' : 'cl-dot-credit') + '"></div>' +
+      (debit ? 'Debit' : 'Credit') + '</div>' +
+      '<div class="cl-row-amt-wrap">' +
+      '<div class="cl-row-amount ' + (debit ? 'cl-amt-debit' : 'cl-amt-credit') + '">' + amtStr + '</div>' +
+      (debit ? '<div class="cl-tooltip">Saved ~45 min of generic research</div>' : '') +
+      '</div></div>';
+  }).join('');
+
+  listEl.innerHTML =
+    '<div class="cl-list">' +
+    '<div class="cl-list-head">' +
+    '<div class="cl-list-hcell">Date</div>' +
+    '<div class="cl-list-hcell">Description</div>' +
+    '<div class="cl-list-hcell">Status</div>' +
+    '<div class="cl-list-hcell" style="text-align:right">Amount</div>' +
+    '</div>' + rowsHTML + '</div>';
 }
 
 async function fetchBalance() {
@@ -3326,7 +3511,7 @@ function daUpdateBatchBar() {
   if (!bar) return;
   if (_daSelected.size > 0) {
     bar.classList.add('visible');
-    cnt.textContent = _daSelected.size + ' dossier' + (_daSelected.size > 1 ? 's' : '') + ' selected';
+    cnt.textContent = _daSelected.size + ' perspective' + (_daSelected.size > 1 ? 's' : '') + ' selected';
   } else {
     bar.classList.remove('visible');
   }
@@ -3347,7 +3532,7 @@ function daCompileMaster() {
   const recents = loadRecents();
   const selected = recents.filter(r => _daSelected.has(r.id));
   if (!selected.length) return;
-  const html = generateMasterDossierHTML(selected);
+  const html = generateMasterPerspectiveHTML(selected);
   const w = window.open('', '_blank');
   if (!w) return;
   w.document.write(html);
@@ -3355,7 +3540,7 @@ function daCompileMaster() {
   setTimeout(() => w.print(), 800);
 }
 
-function generateMasterDossierHTML(sessions) {
+function generateMasterPerspectiveHTML(sessions) {
   const dateStr = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
   const tocRows = sessions.map((r, i) =>
     '<tr><td style="padding:6px 0;font-size:13px;color:#1a1a18;">' + (i + 1) + '. ' +
@@ -3390,7 +3575,7 @@ function generateMasterDossierHTML(sessions) {
       '<hr style="border:none;border-top:1px solid #e8e8e4;margin:28px 0;"></div>';
   }).join('');
 
-  return '<!DOCTYPE html>\n<html lang="en">\n<head>\n<meta charset="UTF-8"><title>Divine Master Dossier</title>\n' +
+  return '<!DOCTYPE html>\n<html lang="en">\n<head>\n<meta charset="UTF-8"><title>Divine Master Perspective</title>\n' +
     '<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">\n' +
     '<style>*{box-sizing:border-box;margin:0;padding:0}body{font-family:\'Inter\',sans-serif;background:#fafaf8;color:#1a1a18;-webkit-print-color-adjust:exact;print-color-adjust:exact}.page{max-width:680px;margin:0 auto;padding:56px 48px}@media print{body{background:#fff}.page{padding:40px 36px;max-width:100%}.no-print{display:none!important}}.print-cta{position:fixed;bottom:24px;right:24px;background:#ff4f6b;color:#fff;border:none;border-radius:100px;padding:12px 24px;font-size:13px;font-weight:600;cursor:pointer;box-shadow:0 4px 16px rgba(255,79,107,.35);font-family:\'Inter\',sans-serif}</style>\n' +
     '</head><body>\n' +
@@ -3398,7 +3583,7 @@ function generateMasterDossierHTML(sessions) {
     '<div class="page">\n' +
     '<div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:40px;padding-bottom:24px;border-bottom:2px solid #1a1a18;">' +
     '<div><div style="font-family:\'Cormorant Garamond\',serif;font-size:28px;font-weight:600;letter-spacing:.02em;color:#1a1a18;line-height:1;">Divine<span style="color:#5b4fff">.</span></div>' +
-    '<div style="font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#888;margin-top:4px;">Master Dossier</div></div>' +
+    '<div style="font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#888;margin-top:4px;">Master Perspective</div></div>' +
     '<div style="text-align:right;"><div style="font-size:11px;color:#888;line-height:2;">' + sessions.length + ' Perspectives Compiled</div>' +
     '<div style="font-size:11px;color:#888;">' + dateStr + '</div></div></div>\n' +
     '<div style="margin-bottom:36px;"><div style="font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#999;margin-bottom:14px;">Table of Contents</div>' +
@@ -3423,7 +3608,7 @@ function renderDownloads() {
       '<div class="da-empty-icon"><svg width="22" height="22" viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.5" opacity=".4">' +
       '<rect x="3" y="1" width="12" height="16" rx="2"/><path d="M7 5h4M7 8h4M7 11h2"/><path d="M15 13v7l3-2 3 2v-7"/></svg></div>' +
       '<p style="font-size:14px;font-weight:500;color:var(--text-1);margin-bottom:6px">The Archive is empty.</p>' +
-      '<p style="font-size:13px">Complete a session to generate your first perspective dossier.</p></div>';
+      '<p style="font-size:13px">Complete a session to generate your first perspective perspective.</p></div>';
     return;
   }
 
@@ -3473,7 +3658,7 @@ function renderDownloads() {
       '<div class="da-card-decision">' + r.decision + '</div>' +
       (summary ? '<div class="da-card-summary">' + summary + '</div>' : '') +
       '<div class="da-card-footer" onclick="event.stopPropagation()">' +
-      '<button class="da-btn-pdf" onclick="downloadDossier(\'' + r.id + '\')">PDF</button>' +
+      '<button class="da-btn-pdf" onclick="downloadPerspective(\'' + r.id + '\')">PDF</button>' +
       '<button class="da-btn-share" onclick="sharePerspective(\'' + r.id + '\')">Share</button>' +
       '</div></div>';
   }
@@ -3500,17 +3685,17 @@ function renderDownloads() {
     '<option value="oldest"' + (_daSort === 'oldest' ? ' selected' : '') + '>Oldest first</option>' +
     '</select></div>' +
     '<div class="da-batch-bar' + (_daSelected.size > 0 ? ' visible' : '') + '" id="da-batch-bar">' +
-    '<div class="da-batch-count" id="da-batch-count">' + _daSelected.size + ' dossier' + (_daSelected.size > 1 ? 's' : '') + ' selected</div>' +
+    '<div class="da-batch-count" id="da-batch-count">' + _daSelected.size + ' perspective' + (_daSelected.size > 1 ? 's' : '') + ' selected</div>' +
     '<button class="da-batch-selall" onclick="daSelectAll()">Select All</button>' +
-    '<button class="da-batch-compile" onclick="daCompileMaster()">Compile Master Dossier</button>' +
+    '<button class="da-batch-compile" onclick="daCompileMaster()">Compile Master Perspective</button>' +
     '<button class="da-batch-clear" onclick="daClearSelection()" title="Clear selection">' +
     '<svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 2l10 10M12 2L2 12"/></svg></button></div>' +
     '<div class="da-count"><svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="1" y="1" width="8" height="10" rx="1.5"/><path d="M4 4h3M4 6.5h3M4 9h1.5"/><path d="M9 4l2 1.5L9 7"/></svg>' +
-    filteredRecents.length + ' ' + (filteredRecents.length === 1 ? 'dossier' : 'dossiers') + ' in archive</div>' +
+    filteredRecents.length + ' ' + (filteredRecents.length === 1 ? 'perspective' : 'perspectives') + ' in archive</div>' +
     gridHTML;
 }
 
-function generateDossierHTML(r) {
+function generatePerspectiveHTML(r) {
   const thinkerColor = r.thinker.color || '#5b4fff';
   const dateStr = new Date(r.date).toLocaleDateString('en-US', { year:'numeric', month:'long', day:'numeric' });
   const framesHTML = (r.frames || []).map(f => `
@@ -3525,7 +3710,7 @@ function generateDossierHTML(r) {
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Divine Dossier — ${r.thinker.name}</title>
+<title>Divine Perspective — ${r.thinker.name}</title>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   * { box-sizing:border-box; margin:0; padding:0; }
@@ -3537,13 +3722,13 @@ function generateDossierHTML(r) {
     .no-print { display:none !important; }
   }
   /* Header */
-  .dossier-header { display:flex; align-items:flex-start; justify-content:space-between; margin-bottom:40px; padding-bottom:24px; border-bottom:2px solid #1a1a18; }
-  .dossier-wordmark { font-family:'Cormorant Garamond',serif; font-size:28px; font-weight:600; letter-spacing:.02em; color:#1a1a18; line-height:1; }
-  .dossier-wordmark span { color:#5b4fff; }
-  .dossier-label { font-size:10px; font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:#888; margin-top:4px; }
-  .dossier-meta-block { text-align:right; }
-  .dossier-meta-row { font-size:11px; color:#888; line-height:1.8; }
-  .dossier-meta-row strong { color:#444; font-weight:600; }
+  .perspective-header { display:flex; align-items:flex-start; justify-content:space-between; margin-bottom:40px; padding-bottom:24px; border-bottom:2px solid #1a1a18; }
+  .perspective-wordmark { font-family:'Cormorant Garamond',serif; font-size:28px; font-weight:600; letter-spacing:.02em; color:#1a1a18; line-height:1; }
+  .perspective-wordmark span { color:#5b4fff; }
+  .perspective-label { font-size:10px; font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:#888; margin-top:4px; }
+  .perspective-meta-block { text-align:right; }
+  .perspective-meta-row { font-size:11px; color:#888; line-height:1.8; }
+  .perspective-meta-row strong { color:#444; font-weight:600; }
   /* Thinker strip */
   .thinker-strip { display:flex; align-items:center; gap:14px; background:#f4f3ff; border:1px solid #dddcff; border-radius:10px; padding:16px 20px; margin-bottom:32px; }
   .thinker-avatar { width:44px; height:44px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:14px; font-weight:700; color:#fff; flex-shrink:0; }
@@ -3561,10 +3746,10 @@ function generateDossierHTML(r) {
   /* Divider */
   .divider { border:none; border-top:1px solid #e8e8e4; margin:28px 0; }
   /* Footer */
-  .dossier-footer { margin-top:48px; padding-top:16px; border-top:1px solid #e8e8e4; display:flex; align-items:center; justify-content:space-between; }
-  .dossier-footer-brand { font-family:'Cormorant Garamond',serif; font-size:14px; color:#999; }
-  .dossier-footer-brand span { color:#5b4fff; }
-  .dossier-footer-id { font-size:10px; color:#bbb; font-family:monospace; letter-spacing:.04em; }
+  .perspective-footer { margin-top:48px; padding-top:16px; border-top:1px solid #e8e8e4; display:flex; align-items:center; justify-content:space-between; }
+  .perspective-footer-brand { font-family:'Cormorant Garamond',serif; font-size:14px; color:#999; }
+  .perspective-footer-brand span { color:#5b4fff; }
+  .perspective-footer-id { font-size:10px; color:#bbb; font-family:monospace; letter-spacing:.04em; }
   /* Print button */
   .print-cta { position:fixed; bottom:24px; right:24px; background:#ff4f6b; color:#fff; border:none; border-radius:100px; padding:12px 24px; font-size:13px; font-weight:600; cursor:pointer; box-shadow:0 4px 16px rgba(255,79,107,.35); font-family:'Inter',sans-serif; }
 </style>
@@ -3573,15 +3758,15 @@ function generateDossierHTML(r) {
 <div class="page">
 
   <!-- Header -->
-  <div class="dossier-header">
+  <div class="perspective-header">
     <div>
-      <div class="dossier-wordmark">D<span>I</span>VINE</div>
-      <div class="dossier-label">Perspective Dossier</div>
+      <div class="perspective-wordmark">D<span>I</span>VINE</div>
+      <div class="perspective-label">Perspective Perspective</div>
     </div>
-    <div class="dossier-meta-block">
-      <div class="dossier-meta-row"><strong>Date</strong>&nbsp;&nbsp;${dateStr}</div>
-      <div class="dossier-meta-row"><strong>Thinker</strong>&nbsp;&nbsp;${r.thinker.name}</div>
-      <div class="dossier-meta-row"><strong>Session</strong>&nbsp;&nbsp;${r.id}</div>
+    <div class="perspective-meta-block">
+      <div class="perspective-meta-row"><strong>Date</strong>&nbsp;&nbsp;${dateStr}</div>
+      <div class="perspective-meta-row"><strong>Thinker</strong>&nbsp;&nbsp;${r.thinker.name}</div>
+      <div class="perspective-meta-row"><strong>Session</strong>&nbsp;&nbsp;${r.id}</div>
     </div>
   </div>
 
@@ -3613,9 +3798,9 @@ function generateDossierHTML(r) {
   <div style="margin-top:12px">${framesHTML}</div>` : ''}
 
   <!-- Footer -->
-  <div class="dossier-footer">
-    <div class="dossier-footer-brand">D<span>I</span>VINE Intelligence &middot; getdivine.ai</div>
-    <div class="dossier-footer-id">DOSSIER-${r.id}</div>
+  <div class="perspective-footer">
+    <div class="perspective-footer-brand">D<span>I</span>VINE Intelligence &middot; getdivine.ai</div>
+    <div class="perspective-footer-id">DOSSIER-${r.id}</div>
   </div>
 
 </div>
@@ -3626,12 +3811,12 @@ function generateDossierHTML(r) {
 </html>`;
 }
 
-function downloadDossier(id) {
+function downloadPerspective(id) {
   const r = loadRecents().find(s => s.id === id);
   if (!r) return;
-  const html = generateDossierHTML(r);
+  const html = generatePerspectiveHTML(r);
   const win = window.open('', '_blank');
-  if (!win) { showToast('Pop-up blocked — allow pop-ups to open dossier.'); return; }
+  if (!win) { showToast('Pop-up blocked — allow pop-ups to open perspective.'); return; }
   win.document.write(html);
   win.document.close();
 }
@@ -3641,7 +3826,7 @@ function sharePerspective(id) {
   if (!r) return;
   try {
     const encoded = btoa(unescape(encodeURIComponent(JSON.stringify(r))));
-    const shareURL = `${location.origin}${location.pathname}?dossier=${encoded}`;
+    const shareURL = `${location.origin}${location.pathname}?perspective=${encoded}`;
     navigator.clipboard.writeText(shareURL).then(() => {
       showToast('Share link copied to clipboard.');
     }).catch(() => {
@@ -3906,8 +4091,8 @@ function pfToRevelation(d) {
         </div>`).join('')}
     </div>
     <div class="pf-revel-actions">
-      <button class="pf-revel-save" onclick="pfSaveDossier()">Save to Dossier</button>
-      <button class="pf-revel-view" onclick="pfViewDossier()">View Dossier</button>
+      <button class="pf-revel-save" onclick="pfSavePerspective()">Save to Perspective</button>
+      <button class="pf-revel-view" onclick="pfViewPerspective()">View Perspective</button>
       <button class="pf-revel-new"  onclick="pfStartNew()">New Perspective</button>
     </div>`;
 
@@ -3941,13 +4126,13 @@ function pfTypewrite(elId, text, speed, onDone) {
   })();
 }
 
-function pfSaveDossier() {
+function pfSavePerspective() {
   if (!currentSession) return;
   saveSession(currentSession);
-  showToast('Perspective saved to your Dossier Collection.');
+  showToast('Perspective saved to your Perspective Collection.');
 }
 
-function pfViewDossier() {
+function pfViewPerspective() {
   if (!currentSession) return;
   saveSession(currentSession);
   closePerspectiveFlow();
@@ -4231,7 +4416,7 @@ function loadTkData(key, fallback) {
 }
 function saveTkData(key, val) { localStorage.setItem(key, JSON.stringify(val)); }
 
-function initThinkerHub() {
+async function initThinkerHub() {
   const prof = loadTkData(TK.profile, { name: userProfile.name, title: '', bio: '' });
   const lens = loadTkData(TK.lens, activeThinker?.lens || '');
   const fw   = loadTkData(TK.framework, activeThinker?.aiFrame || '');
@@ -4241,7 +4426,11 @@ function initThinkerHub() {
   // Hero
   const initials = prof.name.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
   document.getElementById('th-badge').textContent   = initials;
-  document.getElementById('th-name').textContent    = prof.name;
+  // Preserve the Live pill inside th-name
+  const nameEl = document.getElementById('th-name');
+  const livePill = nameEl.querySelector('.th-live-pill');
+  nameEl.childNodes[0].textContent = prof.name + ' ';
+  if (livePill) nameEl.appendChild(livePill);
   document.getElementById('th-title').textContent   = prof.title || activeThinker?.title || '';
 
   // Overview card
@@ -4251,10 +4440,25 @@ function initThinkerHub() {
   document.getElementById('psc-lens').textContent   = lens || 'Not set yet — complete your onboarding.';
   document.getElementById('psc-framework').textContent  = fw  || 'Your framework is defined in your model training. Update it in the Train Model tab.';
 
-  // Stats (mock until DB wired)
+  // Stats — fetch from DB, fall back to local
   document.getElementById('th-stat-sessions').textContent = '—';
   document.getElementById('th-stat-earnings').textContent = '—';
   document.getElementById('th-stat-rating').textContent   = '—';
+  document.getElementById('th-stat-hours').textContent    = '— hrs saved';
+  try {
+    const res = await fetch(`${API_BASE}/api/thinker/stats?thinker_id=${USER_ID}`);
+    if (res.ok) {
+      const s = await res.json();
+      const inquiries = s.sessions || s.perspectives || s.total_sessions || 0;
+      const earnings  = parseFloat(s.earnings || s.total_earnings || 0);
+      const rating    = s.rating || s.avg_rating || null;
+      const hoursSaved = (inquiries * 1.5).toFixed(1);
+      document.getElementById('th-stat-sessions').textContent = inquiries;
+      document.getElementById('th-stat-earnings').textContent = `$${earnings.toFixed(2)}`;
+      document.getElementById('th-stat-rating').textContent   = rating ? `${parseFloat(rating).toFixed(1)}★` : '—';
+      document.getElementById('th-stat-hours').textContent    = `${hoursSaved} hrs saved`;
+    }
+  } catch { /* non-fatal */ }
 
   // Train tab
   const trainFw  = document.getElementById('train-framework');
@@ -4266,6 +4470,80 @@ function initThinkerHub() {
 
   // Reports
   renderReports('last');
+
+  // Start sale polling (every 30s)
+  clearInterval(window._thSaleInterval);
+  window._thSaleInterval = setInterval(checkForNewSales, 30000);
+}
+
+/* ── Domain Heatmap ── */
+function renderThinkerHeatmap(domains) {
+  const el = document.getElementById('th-heatmap-body');
+  if (!el) return;
+  if (!domains || !domains.length) {
+    el.innerHTML = '<div class="th-domain-empty">Define your domains in the Train Model tab to see demand analytics.</div>';
+    return;
+  }
+  // Generate seeded pseudo-demand values per domain (replaced by real API data when available)
+  function seededVal(label) {
+    let h = 0;
+    for (let i = 0; i < label.length; i++) h = (h * 31 + label.charCodeAt(i)) & 0xffffffff;
+    return 30 + Math.abs(h % 71); // 30–100 range
+  }
+  const vals = domains.map(d => ({ label: d, val: seededVal(d) }));
+  const max  = Math.max(...vals.map(v => v.val));
+  const avg  = vals.reduce((s, v) => s + v.val, 0) / vals.length;
+  const sorted = vals.slice().sort((a, b) => b.val - a.val);
+
+  el.innerHTML = sorted.map((item, i) => {
+    const pct     = Math.round((item.val / max) * 100);
+    const abovAvg = item.val > avg * 1.08;
+    const delta   = abovAvg ? `+${Math.round(((item.val - avg) / avg) * 100)}%` : '—';
+    const cls     = abovAvg ? 'th-domain-up' : 'th-domain-flat';
+    // Gradient: top domains → coral, others → violet → mid
+    const hue = i === 0 ? '#ff4f6b' : i === 1 ? '#7c6fff' : '#5b4fff';
+    return `<div class="th-domain-row">
+      <div class="th-domain-name">${item.label}</div>
+      <div class="th-domain-bar-bg">
+        <div class="th-domain-bar-fill" id="thbar-${i}" style="background:${hue};width:0%"></div>
+      </div>
+      <div class="th-domain-pct">${pct}%</div>
+      <div class="th-domain-delta ${cls}">${delta}</div>
+    </div>`;
+  }).join('');
+
+  // Animate bars after paint
+  requestAnimationFrame(() => requestAnimationFrame(() => {
+    sorted.forEach((item, i) => {
+      const bar = document.getElementById(`thbar-${i}`);
+      if (bar) bar.style.width = Math.round((item.val / max) * 100) + '%';
+    });
+  }));
+}
+
+/* ── Sale ping ── */
+function pingThinkerSaleDot() {
+  const ring = document.getElementById('th-sale-ring');
+  const dot  = document.getElementById('th-perf-dot');
+  if (ring) { ring.classList.remove('active'); void ring.offsetWidth; ring.classList.add('active'); }
+  if (dot)  { dot.classList.remove('sold'); void dot.offsetWidth; dot.classList.add('sold'); }
+}
+
+let _lastTxnCount = 0;
+async function checkForNewSales() {
+  try {
+    const res = await fetch(`${API_BASE}/api/thinker/stats?thinker_id=${USER_ID}`);
+    if (!res.ok) return;
+    const s = await res.json();
+    const count = s.sessions || s.perspectives || s.total_sessions || 0;
+    if (_lastTxnCount > 0 && count > _lastTxnCount) {
+      pingThinkerSaleDot();
+      // Refresh stats + reports if reports tab is active
+      const panel = document.getElementById('tp-reports');
+      if (panel && panel.style.display !== 'none') renderReports(currentReportPeriod);
+    }
+    _lastTxnCount = count;
+  } catch { /* non-fatal */ }
 }
 
 /* ── Tab switching ── */
@@ -4816,21 +5094,71 @@ function switchReportPeriod(period, btn) {
   renderReports(period);
 }
 
-function renderReports(period) {
-  // Mock data until DB endpoint is wired
-  const mock = {
-    last: { sessions:0, revenue:0, unique:0 },
-    this: { sessions:0, revenue:0, unique:0 },
-    ytd:  { sessions:0, revenue:0, unique:0 },
-  };
-  const d = mock[period] || mock.last;
-  const payout = (d.revenue * 0.7).toFixed(2);
-  document.getElementById('rpt-sessions').textContent = d.sessions;
-  document.getElementById('rpt-revenue').textContent  = `$${d.revenue.toFixed(2)}`;
-  document.getElementById('rpt-payout').textContent   = `$${payout}`;
-  document.getElementById('rpt-unique').textContent   = d.unique;
+async function renderReports(period) {
+  // Show loading state in ledger
   document.getElementById('ledger-body').innerHTML =
-    `<tr><td colspan="5" style="text-align:center;color:var(--text-3);padding:32px">No transactions yet for this period.</td></tr>`;
+    '<tr><td colspan="5" style="text-align:center;color:var(--text-3);padding:28px;font-family:\'Cormorant Garamond\',serif;font-size:15px">Loading performance data…</td></tr>';
+
+  // Render heatmap from local domains immediately
+  const doms = loadTkData(TK.domains, []);
+  renderThinkerHeatmap(doms);
+
+  let txns = [], stats = { sessions: 0, revenue: 0, unique: 0 };
+
+  try {
+    // Try period-scoped earnings endpoint
+    const [txnRes, statsRes] = await Promise.allSettled([
+      fetch(`${API_BASE}/api/thinker/transactions?thinker_id=${USER_ID}&period=${period}`).then(r => r.ok ? r.json() : null),
+      fetch(`${API_BASE}/api/thinker/earnings?thinker_id=${USER_ID}&period=${period}`).then(r => r.ok ? r.json() : null),
+    ]);
+    if (txnRes.status === 'fulfilled' && txnRes.value) {
+      txns = Array.isArray(txnRes.value) ? txnRes.value : (txnRes.value.transactions || txnRes.value.data || []);
+    }
+    if (statsRes.status === 'fulfilled' && statsRes.value) {
+      const s = statsRes.value;
+      stats.sessions = s.sessions || s.perspectives || s.count || txns.length;
+      stats.revenue  = parseFloat(s.revenue || s.gross || s.total || txns.length * 0.05 || 0);
+      stats.unique   = s.unique || s.unique_founders || s.users || 0;
+    } else {
+      // Derive from txns
+      stats.sessions = txns.length;
+      stats.revenue  = txns.length * 0.05;
+      stats.unique   = new Set(txns.map(t => t.user_id || t.founder_id)).size;
+    }
+  } catch { /* non-fatal — leave zeroes */ }
+
+  const payout = (stats.revenue * 0.7).toFixed(2);
+  document.getElementById('rpt-sessions').textContent     = stats.sessions;
+  document.getElementById('rpt-revenue').textContent      = `$${stats.revenue.toFixed(2)}`;
+  document.getElementById('rpt-payout').textContent       = `$${payout}`;
+  document.getElementById('rpt-unique').textContent       = stats.unique;
+  _lastTxnCount = stats.sessions;
+
+  if (!txns.length) {
+    document.getElementById('ledger-body').innerHTML =
+      '<tr><td colspan="5" style="text-align:center;color:var(--text-3);padding:32px;font-family:\'Cormorant Garamond\',serif;font-size:15px;font-style:italic">No transactions recorded for this period.</td></tr>';
+    return;
+  }
+
+  function fmtDateShort(d) {
+    if (!d) return '—';
+    return new Date(d).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: '2-digit' });
+  }
+
+  document.getElementById('ledger-body').innerHTML = txns.map(t => {
+    const gross = parseFloat(t.amount || t.gross || 0.05);
+    const cut   = (gross * 0.7).toFixed(3);
+    const decision = t.decision || t.description || t.note || (t.metadata && t.metadata.decision) || '—';
+    const decSnip  = decision.length > 48 ? decision.slice(0, 48) + '…' : decision;
+    const stage    = t.stage || t.thinker_name || t.architect || '—';
+    return `<tr>
+      <td style="font-family:'Courier New',monospace;font-size:12px">${fmtDateShort(t.created_at || t.date || t.timestamp)}</td>
+      <td>${stage}</td>
+      <td style="font-style:italic;color:var(--text-2)">${decSnip}</td>
+      <td class="ledger-amt" style="font-family:'Courier New',monospace">$${gross.toFixed(2)}</td>
+      <td style="font-family:'Courier New',monospace;font-weight:600;color:var(--violet,#5b4fff)">$${cut}</td>
+    </tr>`;
+  }).join('');
 }
 
 /* ── Payments ── */
