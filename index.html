@@ -809,9 +809,19 @@
 
     /* Recent session cards */
     .dc-card-recent { flex-direction:column; min-height:0; }
-    .dc-recent-thinker { font-size:9.5px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:var(--accent); margin-bottom:6px; }
-    .dc-recent-decision { font-size:13px; font-weight:500; color:var(--text-0); line-height:1.5; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; flex:1; margin-bottom:6px; }
-    .dc-recent-sub { font-size:12px; color:var(--text-2); font-family:'Cormorant Garamond',serif; font-style:italic; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; margin-bottom:10px; }
+    /* New recents list layout */
+    .dc-recents-list { display:flex; flex-direction:column; gap:0; }
+    .dc-recent-row { display:flex; align-items:flex-start; gap:13px; padding:14px 16px; background:#fff; border:1px solid var(--border); border-radius:0; cursor:pointer; transition:background .13s; }
+    .dc-recent-row:first-child { border-radius:12px 12px 0 0; }
+    .dc-recent-row:last-child { border-radius:0 0 12px 12px; border-bottom:1px solid var(--border); }
+    .dc-recent-row:only-child { border-radius:12px; }
+    .dc-recent-row:not(:last-child) { border-bottom:1px solid var(--border); }
+    .dc-recent-row:hover { background:var(--surface-2); }
+    .dc-recent-icon { width:32px; height:32px; border-radius:8px; background:var(--surface-2); border:1px solid var(--border); display:flex; align-items:center; justify-content:center; color:var(--text-3); flex-shrink:0; margin-top:1px; }
+    .dc-recent-body { flex:1; min-width:0; }
+    .dc-recent-title { font-size:13.5px; font-weight:500; color:var(--text-0); line-height:1.4; margin-bottom:4px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .dc-recent-preview { font-size:12px; color:var(--text-3); line-height:1.5; display:-webkit-box; -webkit-line-clamp:1; -webkit-box-orient:vertical; overflow:hidden; }
+    .dc-recent-date { font-size:11.5px; color:var(--text-3); white-space:nowrap; flex-shrink:0; padding-top:2px; }
 
     /* Right panel */
     .dc-panel { background:var(--surface); border:1px solid var(--border); border-radius:14px; overflow:hidden; position:sticky; top:76px; }
@@ -1946,9 +1956,9 @@
               <!-- populated by renderDcThinkerGrid() -->
             </div>
 
-            <!-- Recently Acquired: last sessions -->
-            <div class="dc-section-head" id="dc-sect-recents">Recently Acquired</div>
-            <div class="dc-grid" id="dc-recents-grid">
+            <!-- Recents -->
+            <div class="dc-section-head" id="dc-sect-recents">Recents</div>
+            <div id="dc-recents-grid">
               <!-- populated by renderDcRecents() -->
             </div>
           </div>
@@ -3489,23 +3499,39 @@ function renderDcThinkerGrid() {
 function renderDcRecents() {
   const grid = document.getElementById('dc-recents-grid');
   if (!grid) return;
-  const recents = loadRecents().slice(0, 4);
+  const recents = loadRecents().slice(0, 6);
   if (!recents.length) {
-    grid.innerHTML = '<div style="grid-column:1/-1;padding:20px 0;font-family:\'Cormorant Garamond\',serif;font-style:italic;color:var(--text-3);font-size:15px">No perspectives acquired yet. Secure your first insight above.</div>';
+    grid.innerHTML = '<div style="padding:20px 0;font-family:\'Cormorant Garamond\',serif;font-style:italic;color:var(--text-3);font-size:15px">No perspectives acquired yet. Secure your first insight above.</div>';
     return;
   }
-  grid.innerHTML = recents.map(r => {
-    const tLabel = r.thinker ? (r.thinker.name.split(' ')[0].toUpperCase() + (r.thinker.title ? ': ' + r.thinker.title : '')) : '';
-    const summary = r.keyInsight ? r.keyInsight.title : (r.frames && r.frames[0] ? r.frames[0].title : '');
-    return '<div class="dc-card dc-card-recent">' +
-      (tLabel ? '<div class="dc-recent-thinker">' + tLabel + '</div>' : '') +
-      '<div class="dc-recent-decision">' + (r.decision || '') + '</div>' +
-      (summary ? '<div class="dc-recent-sub">' + summary + '</div>' : '') +
-      '<div style="display:flex;gap:6px;margin-top:auto;padding-top:8px">' +
-      '<button class="da-btn-pdf" onclick="event.stopPropagation();downloadPerspective(\'' + r.id + '\')">PDF</button>' +
-      '<button class="da-btn-share" onclick="event.stopPropagation();sharePerspective(\'' + r.id + '\')">Share</button>' +
-      '</div></div>';
-  }).join('');
+
+  // Icon SVG variants to visually differentiate session types
+  function rowIcon(r) {
+    // Use a search/doc icon, tinted by thinker color if available
+    const c = (r.thinker && r.thinker.color) ? r.thinker.color : 'var(--text-3)';
+    if (r.keyInsight) {
+      return '<svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="' + c + '" stroke-width="1.7"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5l3 3"/></svg>';
+    }
+    return '<svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="' + c + '" stroke-width="1.7"><rect x="2" y="1" width="12" height="14" rx="2"/><line x1="5" y1="5" x2="11" y2="5"/><line x1="5" y1="8" x2="11" y2="8"/><line x1="5" y1="11" x2="8" y2="11"/></svg>';
+  }
+
+  grid.innerHTML = '<div class="dc-recents-list">' +
+    recents.map(r => {
+      const title = r.decision || (r.keyInsight && r.keyInsight.title) || 'Untitled Perspective';
+      const preview = (r.keyInsight && r.keyInsight.body)
+        ? r.keyInsight.body
+        : (r.frames && r.frames[0] ? r.frames[0].body : '');
+      const dateStr = r.date ? formatDate(r.date) : '';
+      return '<div class="dc-recent-row" onclick="openReplay(\'' + r.id + '\')">' +
+        '<div class="dc-recent-icon">' + rowIcon(r) + '</div>' +
+        '<div class="dc-recent-body">' +
+        '<div class="dc-recent-title">' + title + '</div>' +
+        (preview ? '<div class="dc-recent-preview">' + preview + '</div>' : '') +
+        '</div>' +
+        (dateStr ? '<div class="dc-recent-date">' + dateStr + '</div>' : '') +
+        '</div>';
+    }).join('') +
+    '</div>';
 }
 
 function renderDcPortfolio() {
@@ -4067,6 +4093,12 @@ function renderRecents() {
       </div>
     </button>
   `).join('');
+}
+
+function openReplay(id) {
+  const recents = loadRecents();
+  const idx = recents.findIndex(r => r.id === id);
+  if (idx !== -1) openRecent(idx);
 }
 
 function openRecent(i) {
