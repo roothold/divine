@@ -889,6 +889,89 @@
     .tl-acquire-btn { width:100%; background:var(--coral,#ff4f6b); color:#fff; border:none; border-radius:var(--r-pill); padding:9px; font-size:12px; font-weight:700; cursor:pointer; transition:opacity .15s; display:flex; align-items:center; justify-content:center; gap:6px; }
     .tl-acquire-btn:hover { opacity:.87; }
 
+    /* ═══ INQUIRY STREAM ═══ */
+    #screen-replay { display:none; flex-direction:column; }
+    #screen-replay.active { display:flex; height:100vh; overflow:hidden; }
+    #screen-replay .main-inner { display:none; } /* hide legacy wrapper */
+
+    /* Scrollable content area */
+    .is-scroll-area { flex:1; overflow-y:auto; overflow-x:hidden; scrollbar-width:thin; scrollbar-color:var(--border-md) transparent; }
+    .is-inner { max-width:680px; margin:0 auto; padding:28px 24px 32px; }
+    @media (max-width:600px) { .is-inner { padding:20px 16px 24px; } }
+
+    /* Top nav */
+    .is-topnav { display:flex; align-items:center; justify-content:space-between; margin-bottom:32px; }
+
+    /* Session header */
+    .is-session-eyebrow { font-size:10px; font-weight:700; letter-spacing:.12em; text-transform:uppercase; color:var(--accent); margin-bottom:10px; display:flex; align-items:center; gap:6px; }
+    .is-session-title { font-family:'Cormorant Garamond',serif; font-size:clamp(22px,3.5vw,34px); font-weight:600; color:var(--text-0); line-height:1.2; margin-bottom:14px; }
+    .is-thinker-row { display:flex; align-items:center; gap:9px; margin-bottom:36px; }
+    .is-thinker-badge { width:26px; height:26px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:9px; font-weight:700; color:#fff; flex-shrink:0; }
+    .is-thinker-name { font-size:13px; color:var(--text-2); }
+
+    /* Vertical stepper / Divine Ledger */
+    .is-ledger { position:relative; }
+    .is-block { position:relative; padding:0 0 36px 26px; border-left:2px solid var(--border); margin-left:8px; }
+    .is-block:last-child { border-left-color:transparent; padding-bottom:0; }
+    .is-block::before { content:''; position:absolute; left:-5px; top:20px; width:8px; height:8px; border-radius:50%; background:var(--accent); border:2px solid var(--bg); flex-shrink:0; }
+    .is-block-initial::before { background:var(--accent); }
+    .is-block-followup::before { background:var(--coral,#ff4f6b); }
+
+    /* Block meta row: label + timestamp */
+    .is-block-meta { display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; min-height:20px; }
+    .is-block-label { font-size:9.5px; font-weight:700; letter-spacing:.11em; text-transform:uppercase; color:var(--text-3); }
+    .is-block-ts { font-family:'Courier New',monospace; font-size:9.5px; color:var(--text-3); letter-spacing:.02em; }
+
+    /* User query pill inside follow-up blocks */
+    .is-query-pill { background:var(--accent-lt); border:1px solid var(--accent-bdr); border-radius:10px; padding:11px 15px; margin-bottom:16px; font-size:14px; color:var(--text-0); font-weight:500; line-height:1.55; }
+
+    /* Key insight block (dark violet card) */
+    .is-insight-card { background:var(--accent); border-radius:12px; padding:24px; color:#fff; margin-bottom:14px; }
+    .is-insight-label { font-size:9.5px; font-weight:700; letter-spacing:.11em; text-transform:uppercase; opacity:.65; margin-bottom:8px; }
+    .is-insight-title { font-family:'Cormorant Garamond',serif; font-size:clamp(20px,3vw,26px); font-weight:500; line-height:1.22; margin-bottom:10px; }
+    .is-insight-body { font-size:13.5px; opacity:.88; line-height:1.68; }
+
+    /* Reframe grid inside stream */
+    .is-reframe-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+    @media (max-width:500px) { .is-reframe-grid { grid-template-columns:1fr; } }
+    .is-reframe-card { background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:18px; }
+    .is-reframe-icon { font-size:18px; margin-bottom:9px; }
+    .is-reframe-label { font-size:9.5px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:var(--accent); margin-bottom:5px; }
+    .is-reframe-title { font-family:'Cormorant Garamond',serif; font-size:17px; font-weight:500; color:var(--text-0); line-height:1.25; margin-bottom:6px; }
+    .is-reframe-body { font-size:13px; color:var(--text-2); line-height:1.6; }
+
+    /* Plain follow-up response text */
+    .is-response-text { font-size:14.5px; color:var(--text-1); line-height:1.75; }
+
+    /* Fixed bottom input bar */
+    .is-bottom-bar { flex-shrink:0; background:rgba(247,245,241,0.94); backdrop-filter:blur(18px); -webkit-backdrop-filter:blur(18px); border-top:1px solid rgba(0,0,0,.06); padding:10px 0 18px; position:relative; }
+    .is-bottom-inner { max-width:680px; margin:0 auto; padding:0 24px; }
+    @media (max-width:600px) { .is-bottom-inner { padding:0 16px; } }
+
+    /* Lens probes */
+    .is-probes { display:flex; gap:6px; flex-wrap:wrap; margin-bottom:10px; }
+    .is-probe { font-size:12px; font-weight:500; color:var(--text-2); background:var(--surface); border:1.5px solid var(--border-md); border-radius:var(--r-pill); padding:5px 12px; cursor:pointer; transition:all .15s; white-space:nowrap; max-width:280px; overflow:hidden; text-overflow:ellipsis; }
+    .is-probe:hover { border-color:var(--accent-bdr); color:var(--accent); background:var(--accent-lt); }
+
+    /* Input row */
+    .is-input-row { display:flex; align-items:flex-end; gap:8px; background:#fff; border:1.5px solid var(--border); border-radius:14px; padding:10px 8px 10px 15px; transition:border-color .15s,box-shadow .15s; }
+    .is-input-row:focus-within { border-color:var(--accent-bdr); box-shadow:0 4px 16px rgba(91,79,255,.08); }
+    .is-input { flex:1; border:none; outline:none; resize:none; background:transparent; font-family:'Inter',sans-serif; font-size:14px; color:var(--text-0); line-height:1.55; max-height:110px; overflow-y:auto; }
+    .is-input::placeholder { color:#c0b8ae; }
+    .is-send-btn { width:34px; height:34px; border-radius:50%; border:none; background:var(--accent); color:#fff; cursor:pointer; display:flex; align-items:center; justify-content:center; flex-shrink:0; transition:background .15s,transform .1s; }
+    .is-send-btn:disabled { background:#c8c4ee; cursor:not-allowed; transform:none !important; }
+    .is-send-btn:not(:disabled):hover { background:#2e2683; transform:scale(1.06); }
+
+    /* "Encoding Perspective" thinking state */
+    .is-thinking-pill { display:none; align-items:center; gap:9px; position:absolute; bottom:calc(100% + 8px); left:50%; transform:translateX(-50%); background:rgba(247,245,241,.96); border:1px solid var(--border-md); border-radius:var(--r-pill); padding:8px 16px; box-shadow:var(--sh-sm); backdrop-filter:blur(8px); white-space:nowrap; z-index:30; }
+    .is-thinking-pill.visible { display:flex; }
+    .is-monogram-spin { animation:is-mono-pulse 1.6s ease-in-out infinite; }
+    @keyframes is-mono-pulse { 0%,100%{opacity:.4;transform:scale(.9)} 50%{opacity:1;transform:scale(1.1)} }
+    .is-thinking-label { font-size:11.5px; font-weight:600; letter-spacing:.07em; text-transform:uppercase; color:var(--accent); }
+    .is-thinking-dots { font-size:11.5px; color:var(--accent); }
+    @keyframes is-dot-cycle { 0%{content:''} 33%{content:'.'} 66%{content:'..'} 100%{content:'...'} }
+    .is-thinking-dots::after { content:''; animation:is-dot-cycle 1.2s steps(4,end) infinite; }
+
     /* ═══ COGNITIVE RESONANCE ═══ */
     .dc-card { transition:opacity .4s ease, transform .4s ease, border-color .15s, box-shadow .15s; }
     .dc-card.cr-dimmed { opacity:.3 !important; transform:scale(0.98) !important; }
@@ -2156,14 +2239,54 @@
 
     <!-- SCREEN: Replay -->
     <div class="screen" id="screen-replay">
-      <div class="main-inner">
-        <div class="replay-screen">
-          <div class="nav-row">
+      <!-- Legacy wrapper preserved for old code references, hidden via CSS -->
+      <div class="main-inner" style="display:none">
+        <div id="replay-header"></div>
+        <div id="replay-content"></div>
+      </div>
+
+      <!-- Inquiry Stream layout -->
+      <div class="is-scroll-area" id="is-scroll-area">
+        <div class="is-inner">
+          <!-- Top nav -->
+          <div class="is-topnav">
             <button class="btn-back" onclick="goHome()">← Home</button>
             <button class="btn-ghost" onclick="startOver()">New session</button>
           </div>
-          <div class="screen-header" id="replay-header"></div>
-          <div id="replay-content"></div>
+          <!-- Session header (injected) -->
+          <div id="is-session-header"></div>
+          <!-- Divine Ledger (stepper blocks) -->
+          <div class="is-ledger" id="is-ledger"></div>
+        </div>
+      </div>
+
+      <!-- Fixed bottom bar: probes + input -->
+      <div class="is-bottom-bar" id="is-bottom-bar">
+        <!-- "Encoding Perspective…" thinking pill -->
+        <div class="is-thinking-pill" id="is-thinking-pill">
+          <svg class="is-monogram-spin" width="18" height="18" viewBox="0 0 100 100" fill="none">
+            <g stroke="#3B31A4" stroke-width="10" stroke-linecap="round" fill="none">
+              <rect x="18" y="12" width="8" height="76" rx="2"/>
+              <rect x="26" y="12" width="8" height="8" rx="1"/>
+              <rect x="26" y="80" width="8" height="8" rx="1"/>
+              <path d="M34 18 Q78 18 78 50 Q78 82 34 82"/>
+              <path d="M34 30 Q66 30 66 50 Q66 70 34 70"/>
+            </g>
+          </svg>
+          <span class="is-thinking-label">Encoding Perspective</span>
+          <span class="is-thinking-dots"></span>
+        </div>
+        <div class="is-bottom-inner">
+          <div class="is-probes" id="is-probes"></div>
+          <div class="is-input-row">
+            <textarea class="is-input" id="is-input" rows="1"
+              placeholder="Deepen the perspective… (+ $0.05)"
+              oninput="isInputUpdate(this)"
+              onkeydown="isInputKeydown(event)"></textarea>
+            <button class="is-send-btn" id="is-send-btn" onclick="isSendFollowup()" disabled>
+              <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="14" x2="8" y2="2"/><path d="M3 7l5-5 5 5"/></svg>
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -4168,36 +4291,184 @@ function openReplay(id) {
   if (idx !== -1) openRecent(idx);
 }
 
+/* ════════════════════════════════
+   INQUIRY STREAM
+════════════════════════════════ */
+let _isActiveSession = null;
+let _isFollowups = []; // [{query, response, ts}]
+
+function isTimestamp(d) {
+  const dt = d ? new Date(d) : new Date();
+  return dt.toLocaleTimeString('en-US', { hour:'2-digit', minute:'2-digit', second:'2-digit', hour12:true }).replace(' ','');
+}
+
+function isBlockHTML(blockLabel, ts, dotClass, innerHTML) {
+  return `<div class="is-block ${dotClass || 'is-block-initial'}">
+    <div class="is-block-meta">
+      <span class="is-block-label">${blockLabel}</span>
+      <span class="is-block-ts">${ts}</span>
+    </div>
+    ${innerHTML}
+  </div>`;
+}
+
+function isRenderInitialBlock(r) {
+  let inner = '';
+  if (r.keyInsight) {
+    inner += `<div class="is-insight-card">
+      <div class="is-insight-label">Key Insight</div>
+      <div class="is-insight-title">${r.keyInsight.title}</div>
+      <div class="is-insight-body">${r.keyInsight.body}</div>
+    </div>`;
+  }
+  if (r.frames?.length) {
+    inner += `<div class="is-reframe-grid">${r.frames.map(f => `
+      <div class="is-reframe-card">
+        <div class="is-reframe-icon">${f.icon || ''}</div>
+        <div class="is-reframe-label">${f.label || ''}</div>
+        <div class="is-reframe-title">${f.title || ''}</div>
+        <div class="is-reframe-body">${f.body || ''}</div>
+      </div>`).join('')}</div>`;
+  }
+  if (!inner) inner = `<div class="is-response-text">${r.decision || ''}</div>`;
+  return isBlockHTML('Initial Perspective', isTimestamp(r.date), 'is-block-initial', inner);
+}
+
+function isRenderFollowupBlock(query, response, ts) {
+  const inner = `<div class="is-query-pill">${escHtml(query)}</div>
+    <div class="is-response-text">${response.replace(/\n/g,'<br>')}</div>`;
+  return isBlockHTML('Follow-up Exchange', ts, 'is-block-followup', inner);
+}
+
+function isProbesHTML(thinker) {
+  const name = thinker ? thinker.name : '';
+  const topic = (_isActiveSession && _isActiveSession.decision) ? _isActiveSession.decision : '';
+  const probes = [];
+
+  // Thinker-specific mandatory probe
+  if (name.toLowerCase().includes('akindele') || name.toLowerCase().includes('michael')) {
+    probes.push('Audit this landscape for a hidden signal Michael might see.');
+  } else {
+    probes.push(`What would ${name.split(' ')[0]} see that others miss here?`);
+  }
+
+  // Contextual probes based on topic
+  if (topic.length > 10) {
+    probes.push(`What are the 3 biggest risks in: "${topic.slice(0,40)}${topic.length>40?'…':''}"`);
+  } else {
+    probes.push('What are the 3 biggest risks in this direction?');
+  }
+  probes.push('How would you stress-test this assumption right now?');
+
+  return probes.map(p =>
+    `<button class="is-probe" onclick="isUseProbe(${JSON.stringify(p)})">${escHtml(p)}</button>`
+  ).join('');
+}
+
+function isUseProbe(text) {
+  const ta = document.getElementById('is-input');
+  if (ta) { ta.value = text; isInputUpdate(ta); ta.focus(); }
+}
+
+function isInputUpdate(ta) {
+  if (!ta) return;
+  ta.style.height = 'auto';
+  ta.style.height = Math.min(ta.scrollHeight, 110) + 'px';
+  const btn = document.getElementById('is-send-btn');
+  if (btn) { btn.disabled = !ta.value.trim(); }
+}
+
+function isInputKeydown(e) {
+  if ((e.metaKey || e.ctrlKey) && e.key === 'Enter') { e.preventDefault(); isSendFollowup(); }
+}
+
+function isShowThinking() {
+  document.getElementById('is-thinking-pill')?.classList.add('visible');
+}
+function isHideThinking() {
+  document.getElementById('is-thinking-pill')?.classList.remove('visible');
+}
+
+async function isSendFollowup() {
+  const ta = document.getElementById('is-input');
+  if (!ta) return;
+  const query = ta.value.trim();
+  if (!query || !_isActiveSession) return;
+
+  ta.value = '';
+  isInputUpdate(ta);
+  document.getElementById('is-send-btn').disabled = true;
+  isShowThinking();
+
+  const ts = isTimestamp();
+  const r = _isActiveSession;
+  const thinkerName = r.thinker?.name || 'the Thinker';
+  const systemPrompt = `You are ${thinkerName}, a verified human mind with the following expertise: ${r.thinker?.title || 'strategic thinking'}. Your lens: ${r.thinker?.lens || 'direct, signal-focused insight'}. The user's original decision context was: "${r.decision}". Respond to their follow-up question directly and concisely — 2-4 paragraphs, no generic filler. Lead with the most counter-intuitive signal first.`;
+
+  let response = '';
+  try {
+    response = await callClaude(systemPrompt, query);
+  } catch (e) {
+    response = `${thinkerName.split(' ')[0]} is offline right now. Your follow-up has been noted — reconnect to continue the thread.`;
+  }
+
+  isHideThinking();
+  _isFollowups.push({ query, response, ts });
+
+  // Append new block to ledger
+  const ledger = document.getElementById('is-ledger');
+  if (ledger) {
+    const div = document.createElement('div');
+    div.innerHTML = isRenderFollowupBlock(query, response, ts);
+    ledger.appendChild(div.firstElementChild);
+    // Scroll to new block
+    setTimeout(() => div.firstElementChild?.scrollIntoView({ behavior:'smooth', block:'end' }), 80);
+  }
+
+  // Re-enable input
+  document.getElementById('is-send-btn').disabled = false;
+}
+
 function openRecent(i) {
   const r = loadRecents()[i];
   if (!r) return;
+  _isActiveSession = r;
+  _isFollowups = [];
+
   document.querySelectorAll('.recent-item').forEach((el,j) => el.classList.toggle('active-recent', j===i));
 
-  document.getElementById('replay-header').innerHTML = `
-    <div class="screen-label">Saved · ${formatDate(r.date)}</div>
-    <h2 class="screen-title">${r.decision.length>80 ? r.decision.slice(0,80)+'…' : r.decision}</h2>
-    <div style="display:flex;align-items:center;gap:8px;margin-top:10px">
-      <div style="width:24px;height:24px;border-radius:50%;background:${r.thinker.color};display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:#fff">${r.thinker.initials}</div>
-      <span style="font-size:13px;color:var(--text-2)">${r.thinker.name} · ${r.thinker.title||''}</span>
-    </div>
-  `;
+  // Render session header
+  const headerEl = document.getElementById('is-session-header');
+  if (headerEl) {
+    headerEl.innerHTML = `
+      <div class="is-session-eyebrow">
+        <span>Saved · ${formatDate(r.date)}</span>
+      </div>
+      <div class="is-session-title">${r.decision?.length > 90 ? r.decision.slice(0,90)+'…' : (r.decision||'Perspective')}</div>
+      <div class="is-thinker-row">
+        <div class="is-thinker-badge" style="background:${r.thinker?.color||'#3B31A4'}">${r.thinker?.initials||'?'}</div>
+        <span class="is-thinker-name">${r.thinker?.name||''} · ${r.thinker?.title||''}</span>
+      </div>`;
+  }
 
-  let html = '';
-  if (r.keyInsight) html += `
-    <div class="replay-key">
-      <div class="replay-key-label">Key insight</div>
-      <div class="replay-key-title">${r.keyInsight.title}</div>
-      <div class="replay-key-body">${r.keyInsight.body}</div>
-    </div>`;
-  if (r.frames?.length) html += `<div class="reframe-grid">${r.frames.map(f=>`
-    <div class="reframe-card">
-      <div class="reframe-card-icon">${f.icon}</div>
-      <div class="reframe-card-label">${f.label}</div>
-      <div class="reframe-card-title">${f.title}</div>
-      <div class="reframe-card-body">${f.body}</div>
-    </div>`).join('')}</div>`;
+  // Render initial perspective as first stepper block
+  const ledger = document.getElementById('is-ledger');
+  if (ledger) ledger.innerHTML = isRenderInitialBlock(r);
 
-  document.getElementById('replay-content').innerHTML = html;
+  // Render lens probes
+  const probesEl = document.getElementById('is-probes');
+  if (probesEl) probesEl.innerHTML = isProbesHTML(r.thinker);
+
+  // Reset input
+  const ta = document.getElementById('is-input');
+  if (ta) { ta.value = ''; ta.style.height = 'auto'; }
+  document.getElementById('is-send-btn').disabled = true;
+  isHideThinking();
+
+  // Scroll stream to top
+  const scrollArea = document.getElementById('is-scroll-area');
+  if (scrollArea) scrollArea.scrollTop = 0;
+
   show('screen-replay');
   if (window.innerWidth <= 680 && sidebarOpen) toggleSidebar();
 }
