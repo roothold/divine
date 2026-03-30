@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Divine</title>
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='white'/%3E%3Cdefs%3E%3CradialGradient id='g' cx='50%25' cy='50%25' r='70%25'%3E%3Cstop offset='0%25' stop-color='%238B8BF5'/%3E%3Cstop offset='100%25' stop-color='%23C4B5FD'/%3E%3C/radialGradient%3E%3C/defs%3E%3Crect width='100' height='100' rx='20' fill='url(%23g)' opacity='0.18'/%3E%3Ctext x='12' y='82' font-family='Georgia,serif' font-size='78' font-weight='700' fill='%235B5BD6'%3ED%3C/text%3E%3Ccircle cx='82' cy='76' r='11' fill='%23F06070'/%3E%3C/svg%3E">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%231a2326'/%3E%3Cg stroke='%232d3f44' stroke-width='5' fill='none' stroke-linecap='round'%3E%3Crect x='22' y='20' width='8' height='60' rx='2'/%3E%3Crect x='30' y='20' width='5' height='5' rx='1'/%3E%3Crect x='30' y='75' width='5' height='5' rx='1'/%3E%3Cpath d='M35 25 Q72 25 72 50 Q72 75 35 75'/%3E%3Cpath d='M35 35 Q62 35 62 50 Q62 65 35 65'/%3E%3C/g%3E%3C/svg%3E">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
@@ -34,14 +34,24 @@
     html { scroll-behavior: smooth; }
     body { font-family:'Inter',system-ui,sans-serif; background:var(--bg); color:var(--text-1); font-size:15px; line-height:1.6; min-height:100vh; }
 
-    /* ═══ HEADER ═══ */
-    .header {
-      position: sticky; top: 0; z-index: 100;
+    /* ═══ CONTENT TOPBAR (replaces full-width header) ═══ */
+    .content-topbar {
+      position: sticky; top: 0; z-index: 50;
       height: var(--header-h);
       background: rgba(247,245,241,0.92);
       backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
-      border-bottom: 1px solid var(--border);
-      display: flex; align-items: center; padding: 0 16px; gap: 8px;
+      /* NO border-bottom */
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 24px 0 20px; flex-shrink: 0;
+    }
+    .content-wordmark {
+      font-family:'Cormorant Garamond',serif; font-size:20px; font-weight:600;
+      color:var(--text-0); text-decoration:none; letter-spacing:-0.2px;
+    }
+    /* Sidebar hamburger row */
+    .sb-hamburger-row {
+      display:flex; align-items:center; justify-content:space-between;
+      padding:0 10px; height:var(--header-h); flex-shrink:0;
     }
     .hamburger {
       width: 36px; height: 36px; border-radius: 8px;
@@ -51,10 +61,10 @@
     }
     .hamburger:hover { background: var(--surface-2); }
     .hamburger span { display:block; width:18px; height:1.5px; background:var(--text-2); border-radius:2px; }
+    /* Keep .logo / .logo-mark / .logo-text for backward compat (used in onboarding etc.) */
     .logo { display:flex; align-items:center; gap:8px; text-decoration:none; flex:1; }
     .logo-mark { width:30px; height:30px; background:var(--accent); border-radius:7px; display:flex; align-items:center; justify-content:center; color:#fff; font-family:'Cormorant Garamond',serif; font-size:17px; font-weight:600; flex-shrink:0; }
     .logo-text { font-family:'Cormorant Garamond',serif; font-size:18px; font-weight:600; color:var(--text-0); letter-spacing:-0.2px; }
-    @media (max-width:380px) { .logo-text { display:none; } }
     /* Lens switcher — clearly about perspective, not profile */
     .lens-switcher {
       display: flex; align-items: center; gap: 10px;
@@ -87,19 +97,25 @@
     @media (max-width: 380px) { .lens-switcher { padding: 7px 10px; } }
 
     /* ═══ APP BODY ═══ */
-    .app-body { display:flex; min-height:calc(100vh - var(--header-h)); }
+    .app-body { display:flex; min-height:100vh; }
 
     /* ═══ SIDEBAR ═══ */
     .sidebar {
       width: var(--sidebar-w); flex-shrink: 0;
       background: var(--surface); border-right: 1px solid var(--border);
       display: flex; flex-direction: column;
-      position: sticky; top: var(--header-h);
-      height: calc(100vh - var(--header-h));
+      position: sticky; top: 0;
+      height: 100vh;
       overflow: hidden;
       transition: width 0.22s cubic-bezier(0.4,0,0.2,1), opacity 0.18s ease;
     }
     .sidebar.collapsed { width:56px; opacity:1; pointer-events:auto; }
+    /* Sidebar search button */
+    .sb-search-btn { width:36px; height:36px; border-radius:8px; border:none; background:transparent; cursor:pointer; display:flex; align-items:center; justify-content:center; color:var(--text-2); transition:background .15s; flex-shrink:0; }
+    .sb-search-btn:hover { background:var(--surface-2); color:var(--text-1); }
+    /* Hamburger always visible in collapsed state; search hidden */
+    .sidebar.collapsed .sb-hamburger-row { padding:0 10px; justify-content:center; }
+    .sidebar.collapsed .sb-search-btn { display:none; }
 
     /* Icon-only collapsed state — desktop */
     .sidebar.collapsed .nav-item { justify-content:center; padding:10px 0; position:relative; }
@@ -130,16 +146,17 @@
 
     @media (max-width:680px) {
       .sidebar {
-        position:fixed; top:var(--header-h); left:0; bottom:0; z-index:90;
-        width:var(--sidebar-w); height:auto;
+        position:fixed; top:0; left:0; bottom:0; z-index:90;
+        width:var(--sidebar-w); height:100vh;
         transform:translateX(0); opacity:1;
         transition:transform 0.22s cubic-bezier(0.4,0,0.2,1);
         box-shadow:var(--sh-lg);
       }
       .sidebar.collapsed { transform:translateX(-100%); width:var(--sidebar-w); opacity:1; pointer-events:none; }
+      .content-topbar { padding:0 16px 0 16px; }
     }
 
-    .sidebar-backdrop { display:none; position:fixed; inset:0; top:var(--header-h); background:rgba(15,14,12,0.28); z-index:89; backdrop-filter:blur(2px); }
+    .sidebar-backdrop { display:none; position:fixed; inset:0; top:0; background:rgba(15,14,12,0.28); z-index:89; backdrop-filter:blur(2px); }
     .sidebar-backdrop.visible { display:block; }
 
     /* Sidebar internal layout */
@@ -733,6 +750,27 @@
     .plan-cta { width:100%; }
 
     /* ═══ DASHBOARD COMMAND CENTER ═══ */
+
+    /* Dashboard greeting row */
+    .dc-greeting-row { display:flex; align-items:center; gap:10px; margin-bottom:6px; }
+    .dc-greeting-icon { width:28px; height:28px; flex-shrink:0; opacity:.85; }
+    .dc-greeting-text { font-size:15px; font-weight:500; color:var(--text-2); }
+
+    /* Dashboard quick-input card */
+    .dc-input-card { background:#fff; border:1.5px solid var(--border); border-radius:14px; padding:18px 20px 14px; margin-bottom:28px; box-shadow:var(--sh-sm); transition:border-color .15s,box-shadow .15s; }
+    .dc-input-card:focus-within { border-color:var(--accent-bdr); box-shadow:0 4px 20px rgba(91,79,255,.1); }
+    .dc-input-textarea { width:100%; min-height:52px; background:transparent; border:none; outline:none; resize:none; font-family:'Inter',sans-serif; font-size:15px; color:var(--text-0); line-height:1.55; }
+    .dc-input-textarea::placeholder { color:#c0b8ae; }
+    .dc-input-footer { display:flex; align-items:center; justify-content:space-between; gap:10px; margin-top:10px; }
+    .dc-input-proj { display:flex; align-items:center; gap:6px; }
+    .dc-proj-select { display:flex; align-items:center; gap:5px; font-size:13px; color:var(--text-2); background:var(--surface); border:1px solid var(--border); border-radius:var(--r-pill); padding:5px 11px; cursor:pointer; transition:border-color .12s; font-family:'Inter',sans-serif; }
+    .dc-proj-select:hover { border-color:var(--accent-bdr); color:var(--accent); }
+    .dc-proj-add { width:28px; height:28px; border-radius:50%; border:1.5px solid var(--border); background:transparent; cursor:pointer; display:flex; align-items:center; justify-content:center; color:var(--text-3); transition:border-color .12s,color .12s; }
+    .dc-proj-add:hover { border-color:var(--accent-bdr); color:var(--accent); }
+    .dc-input-submit { background:#c8c4ee; color:#fff; border:none; border-radius:var(--r-pill); padding:8px 18px; font-size:13px; font-weight:600; cursor:not-allowed; transition:background .2s; font-family:'Inter',sans-serif; white-space:nowrap; flex-shrink:0; }
+    .dc-input-submit.ready { background:var(--accent); cursor:pointer; }
+    .dc-input-submit.ready:hover { background:#2e2683; }
+
     /* Sidebar section labels + sub-items */
     .nav-section-label { font-size:10px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:var(--text-3); padding:14px 14px 4px; flex-shrink:0; }
     .sidebar.collapsed .nav-section-label { display:none; }
@@ -753,7 +791,7 @@
     .dc-eyebrow { font-size:11px; font-weight:700; letter-spacing:.13em; text-transform:uppercase; color:var(--text-3); margin-bottom:8px; }
     .dc-headline { font-family:'Cormorant Garamond',serif; font-size:clamp(28px,3.8vw,44px); font-weight:600; color:var(--text-0); margin-bottom:28px; line-height:1.15; }
     .dc-section-head { font-size:11px; font-weight:700; letter-spacing:.09em; text-transform:uppercase; color:var(--text-3); margin:0 0 12px; display:flex; align-items:center; gap:8px; }
-    .dc-section-head::after { content:''; flex:1; height:1px; background:var(--border); }
+    /* No extending divider line on section heads */
 
     /* Thinker card grid */
     .dc-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:12px; margin-bottom:28px; }
@@ -812,6 +850,33 @@
     .dc-market-bar-bg { width:60px; height:5px; background:var(--surface-2); border-radius:3px; overflow:hidden; }
     .dc-market-bar-fill { height:100%; border-radius:3px; background:var(--violet,#5b4fff); }
     .dc-market-pct { font-family:'Courier New',monospace; font-size:11px; color:var(--text-3); width:28px; text-align:right; flex-shrink:0; }
+
+    /* ═══ THOUGHT LEADERS SCREEN ═══ */
+    .tl-filter-row { display:flex; gap:6px; margin-bottom:22px; }
+    .tl-filter-btn { font-size:12px; font-weight:600; padding:7px 16px; border-radius:var(--r-pill); border:1.5px solid var(--border-md); background:var(--surface); color:var(--text-2); cursor:pointer; transition:all .15s; }
+    .tl-filter-btn:hover { border-color:var(--accent-bdr); color:var(--accent); }
+    .tl-filter-btn.active { background:var(--accent); border-color:var(--accent); color:#fff; }
+    .tl-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:14px; }
+    @media (max-width:560px) { .tl-grid { grid-template-columns:1fr; } }
+    .tl-card { background:var(--surface); border:1.5px solid var(--border); border-radius:14px; padding:20px; cursor:pointer; transition:border-color .15s,box-shadow .15s,transform .15s,opacity .4s; }
+    .tl-card:hover { border-color:var(--accent-bdr); box-shadow:0 4px 18px rgba(91,79,255,.09); transform:translateY(-1px); }
+    .tl-card-top { display:flex; align-items:center; gap:13px; margin-bottom:14px; }
+    .tl-avatar { width:46px; height:46px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:14px; font-weight:700; color:#fff; flex-shrink:0; transition:box-shadow .4s; }
+    .tl-name { font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:var(--text-0); line-height:1.35; }
+    .tl-title { font-size:9.5px; font-weight:700; letter-spacing:.07em; text-transform:uppercase; color:var(--text-3); margin-top:3px; }
+    .tl-lens-label { font-size:9px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:var(--text-3); margin-bottom:5px; }
+    .tl-lens-text { font-family:'Cormorant Garamond',serif; font-size:15px; font-style:italic; color:var(--text-1); line-height:1.5; margin-bottom:14px; }
+    .tl-demand-row { display:flex; align-items:center; gap:8px; margin-bottom:14px; }
+    .tl-demand-bar-bg { flex:1; height:4px; background:var(--border-md); border-radius:2px; overflow:hidden; }
+    .tl-demand-fill { height:100%; background:var(--accent); border-radius:2px; transition:width .6s ease; }
+    .tl-demand-label { font-size:10px; font-weight:700; color:var(--text-3); white-space:nowrap; }
+    .tl-acquire-btn { width:100%; background:var(--coral,#ff4f6b); color:#fff; border:none; border-radius:var(--r-pill); padding:9px; font-size:12px; font-weight:700; cursor:pointer; transition:opacity .15s; display:flex; align-items:center; justify-content:center; gap:6px; }
+    .tl-acquire-btn:hover { opacity:.87; }
+
+    /* ═══ COGNITIVE RESONANCE ═══ */
+    .dc-card { transition:opacity .4s ease, transform .4s ease, border-color .15s, box-shadow .15s; }
+    .dc-card.cr-dimmed { opacity:.3 !important; transform:scale(0.98) !important; }
+    .dc-card.cr-resonating .dc-card-avatar { box-shadow:0 0 0 3px rgba(91,79,255,.35), 0 0 14px rgba(91,79,255,.2); }
 
     /* ═══ COGNITIVE COMMAND CENTER ═══ */
     .th-live-pill     { display:inline-flex; align-items:center; gap:5px; font-size:10px; font-weight:700; letter-spacing:.07em; text-transform:uppercase; color:var(--violet,#5b4fff); background:var(--violet-lt,#f0eeff); border:1.5px solid var(--accent-bdr); border-radius:var(--r-pill); padding:3px 9px; margin-left:10px; vertical-align:middle; position:relative; top:-2px; }
@@ -1691,37 +1756,23 @@
 </head>
 <body>
 
-<!-- HEADER -->
-<header class="header">
-  <button class="hamburger" id="hamburger" onclick="toggleSidebar()" aria-label="Toggle menu">
-    <span></span><span></span><span></span>
-  </button>
-  <a class="logo" href="#" onclick="goHome(); return false;">
-    <div class="logo-mark">D</div>
-    <span class="logo-text">Divine</span>
-  </a>
-  <button class="lens-switcher" onclick="openPicker()" aria-label="Switch perspective">
-    <!-- Switch arrows — signals this is about changing the cognitive lens -->
-    <span class="lens-swap-icon">
-      <svg width="15" height="15" viewBox="0 0 15 15" fill="none" stroke="currentColor" stroke-width="2">
-        <path d="M2 5h9M8 2l3 3-3 3"/>
-        <path d="M13 10H4M7 7l-3 3 3 3"/>
-      </svg>
-    </span>
-    <div class="lens-info">
-      <span class="lens-eyebrow">Perspective</span>
-      <span class="lens-name" id="lens-name">Michael Akindele</span>
-    </div>
-    <div class="lens-color-dot" id="lens-dot" style="background:#3B31A4"></div>
-  </button>
-</header>
-
 <div class="sidebar-backdrop" id="sidebar-backdrop" onclick="toggleSidebar()"></div>
 
 <div class="app-body">
 
-  <!-- SIDEBAR -->
+  <!-- SIDEBAR: full height, hamburger at top -->
   <nav class="sidebar" id="sidebar">
+
+    <!-- Hamburger toggle row -->
+    <div class="sb-hamburger-row">
+      <button class="hamburger" id="hamburger" onclick="toggleSidebar()" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </button>
+      <button class="sb-search-btn" onclick="showView('search')" aria-label="Search" title="Search">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5l3 3"/></svg>
+      </button>
+    </div>
+
     <div class="sidebar-top">
       <div class="sidebar-nav">
 
@@ -1732,20 +1783,29 @@
           <span class="nav-item-label">Overview</span>
         </button>
 
-        <!-- Initiate -->
-        <button class="nav-item nav-new-perspective" data-tip="Initiate" onclick="newPerspective()">
+        <!-- Get Perspective -->
+        <button class="nav-item nav-new-perspective" data-tip="Get Perspective" onclick="newPerspective()">
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="2" x2="8" y2="14"/><line x1="2" y1="8" x2="14" y2="8"/></svg>
-          <span class="nav-item-label">Initiate</span>
+          <span class="nav-item-label">Get Perspective</span>
         </button>
 
         <!-- Explore -->
         <div class="nav-section-label">Explore</div>
-        <button class="nav-item" id="nav-search" data-tip="Search" onclick="showView('search')">
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5l3 3"/></svg>
-          <span class="nav-item-label">Search</span>
+        <button class="nav-item" id="nav-search" data-tip="Thought Leaders" onclick="showView('thought-leaders')">
+          <!-- [D] bracket logo mark -->
+          <svg width="16" height="16" viewBox="0 0 100 100" fill="none">
+            <g stroke="currentColor" stroke-width="9" stroke-linecap="round" fill="none">
+              <rect x="18" y="12" width="8" height="76" rx="2"/>
+              <rect x="26" y="12" width="8" height="8" rx="1"/>
+              <rect x="26" y="80" width="8" height="8" rx="1"/>
+              <path d="M34 18 Q78 18 78 50 Q78 82 34 82"/>
+              <path d="M34 30 Q66 30 66 50 Q66 70 34 70"/>
+            </g>
+          </svg>
+          <span class="nav-item-label">Thought Leaders</span>
         </button>
-        <button class="nav-sub-item" id="nav-sub-top" onclick="showView('recents');scrollToDcSection('dc-sect-thinkers')">Top Sought</button>
-        <button class="nav-sub-item" id="nav-sub-recent" onclick="showView('recents');scrollToDcSection('dc-sect-recents')">Recently Added</button>
+        <button class="nav-sub-item" id="nav-sub-top" onclick="showView('thought-leaders');setTlFilter('top')">Top Sought</button>
+        <button class="nav-sub-item" id="nav-sub-recent" onclick="showView('thought-leaders');setTlFilter('recent')">Recently Added</button>
 
         <!-- Projects -->
         <button class="nav-item" id="nav-projects" data-tip="Projects" onclick="showView('projects')">
@@ -1766,7 +1826,6 @@
         </button>
 
       </div>
-      <div class="sidebar-divider"></div>
       <div class="recents-header">
         <span class="recents-label">Recents</span>
       </div>
@@ -1777,21 +1836,11 @@
       </div>
     </div>
 
-    <!-- BOTTOM: status + profile -->
+    <!-- BOTTOM: profile -->
     <div class="sidebar-bottom">
-      <div class="conn-bar" id="conn-bar">
-        <div class="conn-dot checking" id="conn-dot"></div>
-        <span class="conn-text" id="conn-text">Checking connection…</span>
-      </div>
-      <!-- Credit balance bar -->
-      <div class="balance-bar" id="balance-bar">
-        <div>
-          <div class="balance-amount" id="balance-amount">—</div>
-          <div class="balance-label">credits remaining</div>
-        </div>
-        <button class="balance-topup" onclick="openTopup()">Top up</button>
-      </div>
-      <div class="sidebar-divider" style="margin:0 10px"></div>
+      <!-- Hidden balance elements preserved for JS references -->
+      <div id="balance-bar" style="display:none"><div id="balance-amount"></div></div>
+      <div id="conn-bar" style="display:none"><span id="conn-dot"></span><span id="conn-text"></span></div>
 
       <!-- Profile popup -->
       <div class="profile-menu-popup" id="profile-menu">
@@ -1830,6 +1879,24 @@
   <!-- MAIN -->
   <main class="main" id="main-content">
 
+    <!-- Content-level topbar: wordmark + perspective switcher -->
+    <div class="content-topbar">
+      <a class="content-wordmark" href="#" onclick="goHome(); return false;">Divine</a>
+      <button class="lens-switcher" onclick="openPicker()" aria-label="Switch perspective">
+        <span class="lens-swap-icon">
+          <svg width="15" height="15" viewBox="0 0 15 15" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M2 5h9M8 2l3 3-3 3"/>
+            <path d="M13 10H4M7 7l-3 3 3 3"/>
+          </svg>
+        </span>
+        <div class="lens-info">
+          <span class="lens-eyebrow">Perspective</span>
+          <span class="lens-name" id="lens-name">Michael Akindele</span>
+        </div>
+        <div class="lens-color-dot" id="lens-dot" style="background:#3B31A4"></div>
+      </button>
+    </div>
+
     <!-- SCREEN 0: Home — Divine Command Center -->
     <div class="screen active" id="screen-0">
       <div class="dc-wide-inner">
@@ -1837,8 +1904,41 @@
 
           <!-- LEFT: Main content -->
           <div>
-            <div class="dc-eyebrow">Divine Command</div>
+            <!-- Greeting row with [D] mark -->
+            <div class="dc-greeting-row">
+              <svg class="dc-greeting-icon" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <g stroke="#3B31A4" stroke-width="9" stroke-linecap="round" fill="none">
+                  <rect x="18" y="12" width="8" height="76" rx="2"/>
+                  <rect x="26" y="12" width="8" height="8" rx="1"/>
+                  <rect x="26" y="80" width="8" height="8" rx="1"/>
+                  <path d="M34 18 Q78 18 78 50 Q78 82 34 82"/>
+                  <path d="M34 30 Q66 30 66 50 Q66 70 34 70"/>
+                </g>
+              </svg>
+              <span class="dc-greeting-text" id="dc-greeting-name">Hi Michael</span>
+            </div>
             <h1 class="dc-headline">What perspective do you need today?</h1>
+
+            <!-- Quick-input card -->
+            <div class="dc-input-card">
+              <textarea class="dc-input-textarea" id="dc-quick-input" rows="2"
+                placeholder="What would you like to work on?"
+                oninput="dcInputUpdate(this)"></textarea>
+              <div class="dc-input-footer">
+                <div class="dc-input-proj">
+                  <button class="dc-proj-select" id="dc-proj-btn" onclick="dcToggleProjDropdown()">
+                    <svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M2 5h12M2 8h8M2 11h5"/><rect x="1" y="2" width="14" height="12" rx="2"/></svg>
+                    <span id="dc-proj-label">Project</span>
+                    <svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M2 4l3 3 3-3"/></svg>
+                  </button>
+                  <div class="dc-proj-dropdown" id="dc-proj-dropdown" style="display:none;position:absolute;background:#fff;border:1.5px solid var(--border);border-radius:10px;padding:6px;min-width:160px;box-shadow:var(--sh-md);z-index:200;margin-top:36px"></div>
+                  <button class="dc-proj-add" onclick="showView('projects')" title="New project">
+                    <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><line x1="6" y1="1" x2="6" y2="11"/><line x1="1" y1="6" x2="11" y2="6"/></svg>
+                  </button>
+                </div>
+                <button class="dc-input-submit" id="dc-input-submit" onclick="dcSubmitInput()" disabled>Get Perspective</button>
+              </div>
+            </div>
 
             <!-- Top Sought: available thinker cards -->
             <div class="dc-section-head" id="dc-sect-thinkers">Curation of verified Human Minds</div>
@@ -2698,6 +2798,22 @@ e.g. I always start by validating whether the problem is real before evaluating 
   </div></div>
 </div>
 
+    <!-- SCREEN: Thought Leaders -->
+    <div class="screen" id="screen-thought-leaders">
+      <div class="main-inner"><div class="screen-inner">
+        <div class="screen-header">
+          <div class="screen-label">Explore</div>
+          <h2 class="screen-title">Thought Leaders</h2>
+          <p class="screen-sub">Curated human minds with verified cognitive frameworks.</p>
+        </div>
+        <div class="tl-filter-row">
+          <button class="tl-filter-btn active" id="tl-btn-top" onclick="setTlFilter('top')">Top Sought</button>
+          <button class="tl-filter-btn" id="tl-btn-recent" onclick="setTlFilter('recent')">Recently Added</button>
+        </div>
+        <div class="tl-grid" id="tl-grid"></div>
+      </div></div>
+    </div>
+
   </main>
 </div>
 
@@ -3089,7 +3205,8 @@ function showView(view) {
   document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
 
   const views = {
-    search:      () => { document.getElementById('nav-search').classList.add('active'); setMobNavActive('mob-nav-search'); show('screen-search'); setTimeout(() => document.getElementById('search-input').focus(), 120); },
+    search:      () => { show('screen-search'); setTimeout(() => document.getElementById('search-input').focus(), 120); },
+    'thought-leaders': () => { document.getElementById('nav-search')?.classList.add('active'); setMobNavActive('mob-nav-search'); renderThoughtLeaders(); show('screen-thought-leaders'); },
     projects:    () => { document.getElementById('nav-projects').classList.add('active'); setMobNavActive('mob-nav-projects'); renderProjects(); show('screen-projects'); },
     settings:    () => { setMobNavActive(null); show('screen-settings'); },
     downloads:   () => { setMobNavActive(null); renderDownloads(); show('screen-downloads'); },
@@ -3264,6 +3381,79 @@ function renderDashboardHome() {
   renderDcRecents();
   renderDcPortfolio();
   renderDcMarket();
+  dcRenderProjDropdown();
+}
+
+/* ── Dashboard quick-input ── */
+let _dcSelectedProj = null;
+
+function dcInputUpdate(ta) {
+  const btn = document.getElementById('dc-input-submit');
+  if (!btn) return;
+  const hasText = ta.value.trim().length > 0;
+  btn.classList.toggle('ready', hasText);
+  btn.disabled = !hasText;
+  // Auto-grow
+  ta.style.height = 'auto';
+  ta.style.height = Math.min(ta.scrollHeight, 200) + 'px';
+}
+
+function dcSubmitInput() {
+  const ta = document.getElementById('dc-quick-input');
+  if (!ta) return;
+  const val = ta.value.trim();
+  if (!val) return;
+  // Pre-fill and launch perspective flow
+  const di = document.getElementById('decision-input');
+  if (di) di.value = val;
+  openPerspectiveFlow(val);
+}
+
+function dcToggleProjDropdown() {
+  const dd = document.getElementById('dc-proj-dropdown');
+  if (!dd) return;
+  const isOpen = dd.style.display !== 'none';
+  if (isOpen) { dd.style.display = 'none'; return; }
+  dcRenderProjDropdown();
+  dd.style.display = 'block';
+  // Close on outside click
+  setTimeout(() => {
+    const close = (e) => {
+      if (!dd.contains(e.target) && e.target.id !== 'dc-proj-btn') {
+        dd.style.display = 'none'; document.removeEventListener('click', close);
+      }
+    };
+    document.addEventListener('click', close);
+  }, 10);
+}
+
+function dcRenderProjDropdown() {
+  const dd = document.getElementById('dc-proj-dropdown');
+  if (!dd) return;
+  const projects = loadProjects();
+  const label = document.getElementById('dc-proj-label');
+  if (!projects.length) {
+    dd.innerHTML = '<div style="padding:8px 10px;font-size:12px;color:var(--text-3)">No projects yet.</div>';
+    return;
+  }
+  dd.innerHTML = '<div style="padding:4px 6px 2px;font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--text-3)">Projects</div>' +
+    projects.map(p =>
+      '<button style="display:flex;align-items:center;gap:8px;width:100%;padding:7px 8px;border:none;background:transparent;cursor:pointer;border-radius:7px;font-size:13px;color:var(--text-1);font-family:Inter,sans-serif;text-align:left" ' +
+      'onmouseenter="this.style.background=\'var(--surface-2)\'" onmouseleave="this.style.background=\'transparent\'" ' +
+      'onclick="dcSelectProj(\'' + p.id + '\',\'' + p.name.replace(/'/g,"\\'") + '\',\'' + (p.color||'#5b4fff') + '\')">' +
+      '<span style="width:8px;height:8px;border-radius:50%;background:' + (p.color || '#5b4fff') + ';flex-shrink:0"></span>' +
+      p.name + '</button>'
+    ).join('');
+}
+
+function dcSelectProj(id, name, color) {
+  _dcSelectedProj = id;
+  const label = document.getElementById('dc-proj-label');
+  if (label) label.textContent = name;
+  const dd = document.getElementById('dc-proj-dropdown');
+  if (dd) dd.style.display = 'none';
+  // Also set in the main perspective flow
+  window._dcPrefillProject = id;
 }
 
 function renderDcThinkerGrid() {
@@ -3280,7 +3470,8 @@ function renderDcThinkerGrid() {
     const parts = t.name.split(' ');
     const lastName = parts[parts.length - 1].toUpperCase() + ',';
     const firstName = parts.slice(0, -1).join(' ').toUpperCase();
-    return '<div class="dc-card">' +
+    const domain = t.title ? t.title.split('·')[0].trim() : 'Other';
+    return '<div class="dc-card" data-domain="' + domain + '">' +
       '<div class="dc-card-top">' +
       '<div class="dc-card-avatar" style="background:' + (t.color || '#5b4fff') + '">' + initials + '</div>' +
       '<div><div class="dc-card-name">' + (firstName ? firstName + ' ' : '') + lastName + '</div>' +
@@ -3358,13 +3549,46 @@ function renderDcPortfolio() {
       { label:'Other',             count:10, color:'#aaa' },
     ];
   }
-  requestAnimationFrame(() => requestAnimationFrame(() => drawDivPie('dc-pie-canvas', segs)));
+  requestAnimationFrame(() => requestAnimationFrame(() => {
+    drawDivPie('dc-pie-canvas', segs);
+    // Wire up Cognitive Resonance hover on pie canvas
+    const pieCanvas = document.getElementById('dc-pie-canvas');
+    if (pieCanvas && !pieCanvas._crBound) {
+      pieCanvas._crBound = true;
+      pieCanvas._segs = segs;
+      pieCanvas.addEventListener('mousemove', function(e) {
+        const rect = this.getBoundingClientRect();
+        const x = e.clientX - rect.left, y = e.clientY - rect.top;
+        const cx = this.width / 2, cy = this.height / 2;
+        const r = Math.min(this.width, this.height) / 2 - 2;
+        const dx = x - cx, dy = y - cy;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist < r * 0.5 || dist > r) { setDomainHighlight(null); return; }
+        let angle = Math.atan2(dy, dx) + Math.PI / 2;
+        if (angle < 0) angle += Math.PI * 2;
+        const total = this._segs.reduce((s, x) => s + x.count, 0);
+        let cumAngle = 0;
+        for (const seg of this._segs) {
+          const slice = (seg.count / total) * Math.PI * 2;
+          if (angle >= cumAngle && angle < cumAngle + slice) {
+            setDomainHighlight(seg.label); return;
+          }
+          cumAngle += slice;
+        }
+        setDomainHighlight(null);
+      });
+      pieCanvas.addEventListener('mouseleave', function() { setDomainHighlight(null); });
+    } else if (pieCanvas) {
+      pieCanvas._segs = segs; // update segments
+    }
+  }));
 
   const legendEl = document.getElementById('dc-pie-legend');
   if (legendEl) {
     const tot = segs.reduce((s, x) => s + x.count, 0);
     legendEl.innerHTML = segs.slice(0, 5).map(s =>
-      '<div class="dc-div-legend-row">' +
+      '<div class="dc-div-legend-row" style="cursor:pointer;border-radius:5px;padding:2px 4px;transition:background .15s" ' +
+      'onmouseenter="setDomainHighlight(\'' + s.label.replace(/'/g,"\\'") + '\')" onmouseleave="setDomainHighlight(null)">' +
       '<div class="dc-div-dot" style="background:' + s.color + '"></div>' +
       '<span>' + s.label + ' ' + Math.round(s.count / tot * 100) + '%</span></div>'
     ).join('');
@@ -3414,6 +3638,113 @@ function scrollToDcSection(id) {
     const el = document.getElementById(id);
     if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }, 120);
+}
+
+/* ── Thought Leaders ── */
+let _tlFilter = 'top';
+
+function setTlFilter(filter) {
+  _tlFilter = filter;
+  ['top','recent'].forEach(f => {
+    const btn = document.getElementById('tl-btn-' + f);
+    if (btn) btn.classList.toggle('active', f === filter);
+  });
+  renderThoughtLeaders();
+}
+
+function renderThoughtLeaders() {
+  const grid = document.getElementById('tl-grid');
+  if (!grid) return;
+  function seededDemand(name) {
+    let h = 0;
+    for (let i = 0; i < name.length; i++) h = (h * 31 + name.charCodeAt(i)) & 0xffffffff;
+    return 40 + Math.abs(h % 61);
+  }
+  let thinkers = THINKERS.filter(t => t.available !== false);
+  if (_tlFilter === 'top') {
+    thinkers = [...thinkers].sort((a, b) => seededDemand(b.name) - seededDemand(a.name));
+  } else {
+    thinkers = [...thinkers].reverse();
+  }
+  const maxDemand = Math.max(...thinkers.map(t => seededDemand(t.name)));
+  if (!thinkers.length) {
+    grid.innerHTML = '<div style="grid-column:1/-1;padding:24px;text-align:center;font-family:\'Cormorant Garamond\',serif;font-style:italic;color:var(--text-3)">No thinkers available yet.</div>';
+    return;
+  }
+  grid.innerHTML = thinkers.map((t, i) => {
+    const idx = THINKERS.indexOf(t);
+    const initials = t.initials || t.name.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase();
+    const parts = t.name.split(' ');
+    const lastName = parts[parts.length - 1].toUpperCase() + ',';
+    const firstName = parts.slice(0, -1).join(' ').toUpperCase();
+    const demand = seededDemand(t.name);
+    const demandPct = Math.round(demand / maxDemand * 100);
+    const domain = t.title ? t.title.split('·')[0].trim() : 'Other';
+    return '<div class="tl-card" data-domain="' + domain + '" onclick="acquireFromThinker(' + idx + ')">' +
+      '<div class="tl-card-top">' +
+      '<div class="tl-avatar" style="background:' + (t.color || '#5b4fff') + '">' + initials + '</div>' +
+      '<div><div class="tl-name">' + (firstName ? firstName + ' ' : '') + lastName + '</div>' +
+      '<div class="tl-title">' + (t.title || '') + '</div></div>' +
+      '</div>' +
+      '<div class="tl-lens-label">Signature Lens</div>' +
+      '<div class="tl-lens-text">' + (t.lens || 'Cognitive framework defined.') + '</div>' +
+      '<div class="tl-demand-row">' +
+      '<div class="tl-demand-bar-bg"><div class="tl-demand-fill" style="width:0%" data-pct="' + demandPct + '"></div></div>' +
+      '<span class="tl-demand-label">' + demand + ' req/wk</span></div>' +
+      '<button class="tl-acquire-btn" onclick="event.stopPropagation();acquireFromThinker(' + idx + ')">' +
+      '<svg width="12" height="12" viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6.5 1L8.4 4.7 12.5 5.3 9.5 8.3l.7 4.1L6.5 10.4 2.3 12.4l.7-4.1L0 5.3l4.1-.6z"/></svg>' +
+      'Acquire Insight · $0.05</button>' +
+      '</div>';
+  }).join('');
+  // Animate demand bars
+  requestAnimationFrame(() => requestAnimationFrame(() => {
+    grid.querySelectorAll('.tl-demand-fill').forEach(el => {
+      el.style.width = el.dataset.pct + '%';
+    });
+  }));
+}
+
+/* ── Cognitive Resonance ── */
+let _hoveredDomain = null;
+
+function setDomainHighlight(domain) {
+  _hoveredDomain = domain;
+  const cards = document.querySelectorAll('#dc-thinker-grid .dc-card');
+  const input = document.querySelector('.dc-headline');
+
+  cards.forEach(card => {
+    const cardDomain = card.dataset.domain || '';
+    if (domain === null) {
+      card.classList.remove('cr-dimmed', 'cr-resonating');
+    } else if (cardDomain === domain) {
+      card.classList.remove('cr-dimmed');
+      card.classList.add('cr-resonating');
+    } else {
+      card.classList.add('cr-dimmed');
+      card.classList.remove('cr-resonating');
+    }
+  });
+
+  // Gap insight: if domain is a placeholder segment (no real sessions), update headline hint
+  const inputEl = document.getElementById('pf-incub-textarea') || document.querySelector('.pf-incub-textarea');
+  const recents = loadRecents();
+  const realDomains = new Set(recents.map(r => r.thinker && r.thinker.title ? r.thinker.title.split('·')[0].trim() : 'Other'));
+  if (domain && !realDomains.has(domain)) {
+    // Show gap hint under dc-headline
+    let hint = document.getElementById('dc-resonance-hint');
+    if (!hint) {
+      hint = document.createElement('div');
+      hint.id = 'dc-resonance-hint';
+      hint.style.cssText = 'font-size:13px;color:var(--accent);font-style:italic;margin-top:-16px;margin-bottom:18px;opacity:0;transition:opacity .3s';
+      const headline = document.querySelector('.dc-headline');
+      if (headline && headline.parentNode) headline.parentNode.insertBefore(hint, headline.nextSibling);
+    }
+    hint.textContent = 'Explore top Thinkers in ' + domain + ' to diversify your Moat.';
+    requestAnimationFrame(() => { hint.style.opacity = '1'; });
+  } else {
+    const hint = document.getElementById('dc-resonance-hint');
+    if (hint) hint.style.opacity = '0';
+  }
 }
 
 function drawMoatGauge(canvasId, signalPct) {
