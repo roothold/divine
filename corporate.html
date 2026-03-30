@@ -1,0 +1,1024 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Divine — Monetize Your Intellectual Asset</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700;1,900&family=EB+Garamond:ital,wght@0,400;1,400&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+/* ─── TOKENS ──────────────────────────────────────────── */
+:root{
+  --paper:#fafaf8; --paper-2:#f2f2ee; --paper-3:#eeecea;
+  --ink:#0d0d0b; --ink-2:#1c1c1a;
+  --violet:#5b4fff; --violet-2:#3d35cc; --violet-pale:rgba(91,79,255,.09);
+  --coral:#ff4f6b; --coral-2:#cc3352;
+  --rule:rgba(13,13,11,.16); --rule-light:rgba(13,13,11,.08);
+  --serif:'Playfair Display',Georgia,serif;
+  --body:'EB Garamond',Georgia,serif;
+  --ui:'DM Sans',system-ui,sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;font-size:17px}
+body{background:var(--paper);color:var(--ink);font-family:var(--body);line-height:1.7;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+img{display:block;max-width:100%}
+body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;opacity:.02;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+
+/* ─── LAYOUT ──────────────────────────────────────────── */
+.w{max-width:1100px;margin:0 auto;padding:0 1.8rem}
+.sec{padding:5rem 0}
+.sec-sm{padding:3.5rem 0}
+
+/* ─── FADE ────────────────────────────────────────────── */
+.f{opacity:0;transform:translateY(18px);transition:opacity .65s ease,transform .65s ease}
+.f.on{opacity:1;transform:none}
+.f1{transition-delay:.1s}.f2{transition-delay:.2s}.f3{transition-delay:.32s}
+
+/* ─── LABELS ──────────────────────────────────────────── */
+.lbl{font-family:var(--ui);font-size:.62rem;font-weight:700;letter-spacing:.22em;text-transform:uppercase;opacity:.50;display:flex;align-items:center;gap:.7rem;margin-bottom:1.2rem}
+.lbl::before{content:'';width:18px;height:1px;background:currentColor;display:block;flex-shrink:0}
+
+/* ─── NAV ─────────────────────────────────────────────── */
+nav{position:fixed;top:0;left:0;right:0;z-index:300;height:58px;display:flex;align-items:center;background:rgba(250,250,248,.92);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid var(--rule)}
+.nav-inner{display:flex;align-items:center;justify-content:space-between;width:100%;max-width:1100px;margin:0 auto;padding:0 1.8rem}
+.logo{font-family:var(--serif);font-weight:900;font-size:1.2rem;letter-spacing:.08em;text-transform:uppercase}
+.logo span{color:var(--violet)}
+.nav-links{display:flex;align-items:center;gap:2rem;list-style:none}
+.nav-links a{font-family:var(--ui);font-size:.68rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;opacity:.59;transition:opacity .2s}
+.nav-links a:hover{opacity:1}
+.nav-cta{font-family:var(--ui);font-size:.68rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;padding:.5rem 1.3rem;background:var(--violet);color:#fff;border-radius:2px;transition:background .2s,transform .15s}
+.nav-cta:hover{background:var(--violet-2);transform:translateY(-1px)}
+/* Hamburger */
+.ham{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:.4rem;background:none;border:none}
+.ham span{display:block;width:22px;height:1.5px;background:var(--ink);transition:transform .25s,opacity .25s}
+.ham.open span:nth-child(1){transform:translateY(6.5px) rotate(45deg)}
+.ham.open span:nth-child(2){opacity:0}
+.ham.open span:nth-child(3){transform:translateY(-6.5px) rotate(-45deg)}
+/* Mobile drawer */
+.nav-drawer{display:none;position:fixed;top:58px;left:0;right:0;background:var(--paper);border-bottom:1px solid var(--rule);padding:1.5rem 1.8rem 2rem;z-index:299}
+.nav-drawer.open{display:block}
+.nav-drawer ul{list-style:none;display:flex;flex-direction:column;gap:1.2rem;margin-bottom:1.5rem}
+.nav-drawer a{font-family:var(--ui);font-size:.8rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;opacity:.78}
+.nav-drawer .nav-cta{display:inline-flex;width:100%;justify-content:center}
+
+/* ─── HERO ────────────────────────────────────────────── */
+#hero{min-height:100svh;display:grid;place-items:center;padding:7rem 1.8rem 4rem;text-align:center;position:relative;overflow:hidden}
+.hero-bg{position:absolute;font-family:var(--serif);font-weight:900;font-size:clamp(8rem,22vw,22rem);line-height:1;letter-spacing:-.04em;color:transparent;-webkit-text-stroke:1px rgba(91,79,255,.055);pointer-events:none;user-select:none;top:50%;left:50%;transform:translate(-50%,-50%)}
+.hero-content{position:relative;z-index:2;max-width:880px}
+.hero-eyebrow{font-family:var(--ui);font-size:.65rem;font-weight:700;letter-spacing:.26em;text-transform:uppercase;color:var(--violet);margin-bottom:1.6rem;display:flex;align-items:center;justify-content:center;gap:.7rem}
+.hero-eyebrow::before,.hero-eyebrow::after{content:'';display:block;width:20px;height:1px;background:var(--violet)}
+h1{font-family:var(--serif);font-weight:900;font-size:clamp(2.8rem,7vw,6.8rem);line-height:1.02;letter-spacing:-.025em;margin-bottom:1.4rem}
+h1 em{font-style:italic;color:var(--violet)}
+.hero-deck{font-family:var(--body);font-style:italic;font-size:clamp(1rem,1.6vw,1.2rem);max-width:48ch;margin:0 auto 2.4rem;opacity:.81;line-height:1.65}
+.cta-row{display:flex;flex-wrap:wrap;gap:.9rem;justify-content:center}
+.btn-dark{display:inline-flex;align-items:center;gap:.65rem;padding:.85rem 2rem;background:var(--ink);color:var(--paper);font-family:var(--ui);font-size:.74rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;border-radius:2px;border:1.5px solid var(--ink);transition:background .2s,transform .15s}
+.btn-dark:hover{background:#2a2a28;transform:translateY(-2px)}
+.btn-ghost{display:inline-flex;align-items:center;gap:.65rem;padding:.85rem 2rem;background:transparent;color:var(--ink);font-family:var(--ui);font-size:.74rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;border-radius:2px;border:1.5px solid rgba(13,13,11,.42);transition:background .2s,border-color .2s,transform .15s}
+.btn-ghost:hover{border-color:var(--ink);background:var(--paper-2);transform:translateY(-2px)}
+.btn-violet{display:inline-flex;align-items:center;gap:.65rem;padding:.85rem 2rem;background:var(--violet);color:#fff;font-family:var(--ui);font-size:.74rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;border-radius:2px;border:1.5px solid var(--violet);transition:background .2s,transform .15s,box-shadow .2s}
+.btn-violet:hover{background:var(--violet-2);transform:translateY(-2px);box-shadow:0 8px 28px rgba(91,79,255,.3)}
+.btn-outline-ink{display:inline-flex;align-items:center;gap:.65rem;padding:.85rem 2rem;background:transparent;color:var(--ink);font-family:var(--ui);font-size:.74rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;border-radius:2px;border:1.5px solid var(--ink);transition:background .2s,color .2s}
+.btn-outline-ink:hover{background:var(--ink);color:var(--paper)}
+.hero-scroll{position:absolute;bottom:2rem;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:.4rem;font-family:var(--ui);font-size:.58rem;letter-spacing:.2em;text-transform:uppercase;opacity:.38}
+.scroll-line{width:1px;height:32px;background:var(--ink);animation:spulse 2.4s ease-in-out infinite}
+@keyframes spulse{0%,100%{opacity:.38;transform:scaleY(1)}50%{opacity:.8;transform:scaleY(1.25)}}
+
+/* ─── MARQUEE ─────────────────────────────────────────── */
+.mq{height:40px;background:var(--ink);overflow:hidden;display:flex;align-items:center}
+.mq-track{display:flex;white-space:nowrap;animation:mq 22s linear infinite}
+.mq-item{font-family:var(--ui);font-size:.62rem;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--paper);opacity:.65;padding:0 2.4rem}
+.mq-dot{color:var(--violet);opacity:1!important;margin:0 .3rem}
+@keyframes mq{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+/* ─── INVERSION CHART ─────────────────────────────────── */
+#inversion{background:var(--paper);padding:5rem 0 4rem;border-bottom:1px solid var(--rule);position:relative;overflow:hidden}
+#inversion::before{content:'';position:absolute;inset:0;background-image:radial-gradient(circle,rgba(13,13,11,.055) 1px,transparent 1px);background-size:26px 26px;pointer-events:none}
+.inv-head{max-width:620px;margin:0 auto 3rem;text-align:center;position:relative;z-index:2}
+.inv-eyebrow{font-family:var(--ui);font-size:.65rem;font-weight:700;letter-spacing:.24em;text-transform:uppercase;color:var(--violet);margin-bottom:1.2rem;display:flex;align-items:center;justify-content:center;gap:.7rem}
+.inv-eyebrow::before,.inv-eyebrow::after{content:'';display:block;width:20px;height:1px;background:var(--violet)}
+.inv-h2{font-family:var(--serif);font-weight:900;font-size:clamp(2rem,3.8vw,3.4rem);line-height:1.07;letter-spacing:-.022em;margin-bottom:1rem}
+.inv-h2 em{font-style:italic;color:var(--violet)}
+.inv-sub{font-family:var(--body);font-style:italic;font-size:1rem;line-height:1.7;opacity:.78}
+/* Chart layout */
+.inv-chart-wrap{position:relative;z-index:2;max-width:1000px;margin:0 auto;display:grid;grid-template-columns:56px 1fr 56px;align-items:center}
+.inv-yax{writing-mode:vertical-rl;display:flex;flex-direction:column;align-items:center;gap:.3rem;padding:.5rem 0}
+.inv-yax-l{transform:rotate(180deg)}
+.inv-yax span{font-family:var(--ui);font-size:.56rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;opacity:.52;white-space:nowrap}
+.inv-yax .accent{opacity:.84}
+.inv-yax-l .accent{color:var(--violet)}
+.inv-yax-r .accent{color:var(--coral)}
+.inv-svg-wrap{border:1px solid var(--rule);background:var(--paper);box-shadow:0 2px 20px rgba(13,13,11,.06);position:relative}
+.inv-svg-wrap svg{display:block;width:100%;height:auto}
+.inv-tip{position:absolute;top:32%;left:50%;transform:translateX(-50%) translateY(-110%);background:var(--ink);color:var(--paper);padding:.85rem 1.3rem;border-radius:2px;pointer-events:none;opacity:0;transition:opacity .22s;white-space:nowrap;z-index:10;box-shadow:0 8px 28px rgba(0,0,0,.35)}
+.inv-tip::after{content:'';position:absolute;bottom:-5px;left:50%;transform:translateX(-50%);border:5px solid transparent;border-top-color:var(--ink);border-bottom:none}
+.inv-tip.on{opacity:1}
+.inv-tip-yr{font-family:var(--ui);font-size:.6rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--coral);margin-bottom:.35rem}
+.inv-tip-txt{font-family:var(--serif);font-weight:700;font-size:.95rem;margin-bottom:.2rem}
+.inv-tip-sub{font-family:var(--body);font-style:italic;font-size:.82rem;opacity:.78}
+/* Pulse */
+.pulse-r{transform-origin:445px 284px;animation:iring 2.5s ease-out infinite}
+.pulse-r2{animation-delay:.85s}
+@keyframes iring{0%{r:8;opacity:.84}100%{r:26;opacity:0}}
+/* Narrative grid */
+.inv-nar{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--rule);border:1px solid var(--rule);margin:2.4rem auto 0;max-width:1000px;position:relative;z-index:2}
+.inv-ch{background:var(--paper);padding:1.6rem 1.4rem;position:relative;overflow:hidden;transition:background .2s}
+.inv-ch:hover{background:var(--paper-2)}
+.inv-ch-yr{font-family:var(--ui);font-size:.6rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--violet);margin-bottom:.5rem}
+.inv-ch-yr.c{color:var(--coral)}
+.inv-ch-t{font-family:var(--serif);font-weight:700;font-size:1rem;line-height:1.2;margin-bottom:.5rem}
+.inv-ch-b{font-family:var(--body);font-style:italic;font-size:.88rem;line-height:1.6;opacity:.78}
+.inv-ch-bar{position:absolute;bottom:0;left:0;right:0;height:2px;background:var(--bar,var(--violet));opacity:0;transition:opacity .25s}
+.inv-ch:hover .inv-ch-bar{opacity:1}
+.inv-cta-row{text-align:center;margin-top:2.8rem;position:relative;z-index:2}
+.inv-cta-row p{font-family:var(--ui);font-size:.6rem;font-weight:500;letter-spacing:.12em;text-transform:uppercase;opacity:.42;margin-top:.9rem}
+.btn-serif{display:inline-flex;align-items:center;gap:.8rem;padding:1rem 2.6rem;font-family:var(--serif);font-weight:700;font-style:italic;font-size:1.1rem;background:var(--ink);color:var(--paper);border-radius:2px;transition:background .2s,transform .2s,box-shadow .2s}
+.btn-serif:hover{background:var(--violet);transform:translateY(-2px);box-shadow:0 10px 32px rgba(91,79,255,.3)}
+
+/* ─── THE AGE (Shift + Problem merged) ────────────────── */
+#the-age{background:var(--paper-2);border-top:1px solid var(--rule);border-bottom:1px solid var(--rule)}
+.age-grid{display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:start}
+.age-left{}
+.age-title{font-family:var(--serif);font-weight:900;font-size:clamp(2rem,3.5vw,3.2rem);line-height:1.07;letter-spacing:-.022em;margin-bottom:1.2rem}
+.age-title em{font-style:italic;color:var(--violet)}
+.age-pull{padding:1.2rem 1.4rem;border-left:2.5px solid var(--violet);margin-bottom:1.8rem}
+.age-pull p{font-family:var(--serif);font-style:italic;font-size:1.1rem;line-height:1.5}
+/* Era timeline */
+.era-list{border-top:1px solid var(--rule)}
+.era-row{display:flex;align-items:baseline;gap:1rem;padding:.85rem 0;border-bottom:1px solid var(--rule-light)}
+.era-date{font-family:var(--ui);font-size:.6rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;opacity:.46;min-width:56px;flex-shrink:0}
+.era-name{font-family:var(--serif);font-weight:700;font-size:.98rem;flex:1}
+.era-asset{font-family:var(--body);font-style:italic;font-size:.88rem;opacity:.65;text-align:right}
+.era-row.now .era-name{color:var(--violet)}
+.era-row.now .era-asset{color:var(--violet);opacity:1;font-style:normal;font-weight:600}
+/* Tension cards — right column */
+.tension-stack{display:flex;flex-direction:column;gap:1px;background:var(--rule);border:1px solid var(--rule)}
+.t-card{background:var(--paper-2);padding:1.8rem 1.6rem;transition:background .2s}
+.t-card:hover{background:var(--paper)}
+.t-icon{font-family:var(--serif);font-style:italic;font-size:1.6rem;color:var(--coral);line-height:1;margin-bottom:.7rem}
+.t-title{font-family:var(--serif);font-weight:700;font-size:1rem;margin-bottom:.4rem}
+.t-body{font-family:var(--body);font-size:.92rem;line-height:1.65;opacity:.81}
+/* Stat bar */
+.stat-bar{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--rule);border:1px solid var(--rule);margin-top:1px}
+.stat-cell{background:var(--paper-2);padding:1.2rem 1rem;text-align:center}
+.stat-num{font-family:var(--serif);font-weight:900;font-size:2rem;color:var(--violet);line-height:1;letter-spacing:-.03em;margin-bottom:.2rem}
+.stat-lbl{font-family:var(--ui);font-size:.56rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;opacity:.59;line-height:1.4}
+
+/* ─── THE MODEL (Solution + Economics merged) ──────────── */
+#the-model{background:var(--ink);color:var(--paper)}
+#the-model .lbl{color:var(--paper);opacity:.46}
+.model-head{margin-bottom:3rem}
+.model-title{font-family:var(--serif);font-weight:900;font-size:clamp(2rem,3.5vw,3.2rem);line-height:1.07;letter-spacing:-.022em;margin-bottom:.8rem;color:var(--paper)}
+.model-title em{font-style:italic;color:var(--coral)}
+.model-grid{display:grid;grid-template-columns:1fr 1fr;gap:3.5rem;align-items:start}
+/* Phases */
+.phases{display:flex;flex-direction:column;gap:0}
+.phase{display:grid;grid-template-columns:32px 1fr;gap:.9rem;padding:1.2rem 0;border-bottom:1px solid rgba(250,250,248,.08);align-items:start}
+.phase:first-child{border-top:1px solid rgba(250,250,248,.08)}
+.ph-n{font-family:var(--serif);font-weight:700;font-size:1.4rem;color:var(--coral);line-height:1;padding-top:.1rem}
+.ph-t{font-family:var(--serif);font-weight:700;font-size:.97rem;color:var(--paper);margin-bottom:.25rem}
+.ph-d{font-family:var(--body);font-size:.88rem;line-height:1.6;opacity:.72}
+/* Royalty + table */
+.royalty-wrap{}
+.royalty-bar{display:flex;height:62px;overflow:hidden;border:1px solid rgba(250,250,248,.1)}
+.r-you{width:60%;background:var(--coral);display:flex;align-items:center;justify-content:center;font-family:var(--ui);font-size:.68rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#fff;gap:.5rem}
+.r-us{width:40%;background:rgba(91,79,255,.5);display:flex;align-items:center;justify-content:center;font-family:var(--ui);font-size:.68rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.6);gap:.5rem}
+.royalty-sub{display:flex;font-family:var(--ui);font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;opacity:.42;margin:-.1rem 0 1.6rem}
+.royalty-sub span:first-child{width:60%}
+.royalty-sub span:last-child{width:40%;text-align:right}
+.cmp-table{width:100%;border-collapse:collapse;border:1px solid rgba(250,250,248,.08)}
+.cmp-table th{font-family:var(--ui);font-size:.56rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;opacity:.42;padding:.8rem 1rem;text-align:left;border-bottom:1px solid rgba(250,250,248,.07)}
+.cmp-table td{font-family:var(--body);font-size:.88rem;padding:.85rem 1rem;border-bottom:1px solid rgba(250,250,248,.04);opacity:.76;vertical-align:middle;line-height:1.4}
+.cmp-table tr:last-child td{border-bottom:none}
+.cmp-table td:first-child{font-family:var(--serif);font-weight:700;color:var(--paper);opacity:1;font-size:.9rem}
+.badge-g{font-family:var(--ui);font-size:.56rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:.2rem .55rem;border-radius:2px;background:rgba(91,79,255,.3);color:#b0aaff}
+.badge-b{font-family:var(--ui);font-size:.56rem;font-weight:500;letter-spacing:.08em;text-transform:uppercase;padding:.2rem .55rem;border-radius:2px;background:rgba(255,255,255,.06);color:rgba(255,255,255,.32)}
+/* Compounding note */
+.compound-note{margin-top:1.2rem;padding:1.4rem;background:rgba(91,79,255,.1);border:1px solid rgba(91,79,255,.15)}
+.compound-note p{font-family:var(--body);font-style:italic;font-size:.9rem;line-height:1.65;color:var(--paper);opacity:.81}
+
+/* ─── THE THINKER (FoW + Belonging + Profiles) ─────────── */
+#the-thinker{border-bottom:1px solid var(--rule)}
+.thinker-top{display:grid;grid-template-columns:1fr 1fr;gap:3.5rem;align-items:start;margin-bottom:3rem;padding-bottom:3rem;border-bottom:1px solid var(--rule)}
+.tk-title{font-family:var(--serif);font-weight:900;font-size:clamp(2rem,3.5vw,3.2rem);line-height:1.07;letter-spacing:-.022em;margin-bottom:1rem}
+.tk-title em{font-style:italic;color:var(--violet)}
+.tk-prose{font-family:var(--body);font-size:.98rem;line-height:1.78;opacity:.88}
+/* Pillars compact */
+.pillar-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--rule);border:1px solid var(--rule)}
+.pillar-c{background:var(--paper);padding:1.5rem 1.3rem;transition:background .2s}
+.pillar-c:hover{background:var(--paper-2)}
+.pillar-n{font-family:var(--serif);font-style:italic;font-weight:700;font-size:2rem;color:var(--violet);opacity:.18;line-height:1;margin-bottom:.6rem}
+.pillar-t{font-family:var(--serif);font-weight:700;font-size:.97rem;line-height:1.2;margin-bottom:.4rem}
+.pillar-b{font-family:var(--body);font-size:.88rem;line-height:1.6;opacity:.78}
+/* Criteria list */
+.criteria{margin-top:2rem}
+.cr-item{display:grid;grid-template-columns:20px 1fr;gap:.9rem;padding:1rem 0;border-bottom:1px solid var(--rule);align-items:start}
+.cr-item:first-child{border-top:1px solid var(--rule)}
+.cr-check{width:18px;height:18px;border:1.5px solid var(--violet);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:.18rem}
+.cr-t{font-family:var(--serif);font-weight:700;font-size:.95rem;margin-bottom:.2rem}
+.cr-d{font-family:var(--body);font-size:.85rem;line-height:1.6;opacity:.76}
+/* Thinker bottom: profiles */
+.thinker-bot{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1px;background:var(--rule);border:1px solid var(--rule)}
+/* Profile cards */
+.prof{background:var(--paper);overflow:hidden;transition:border-color .22s,transform .18s;border:1px solid transparent;position:relative}
+.prof:hover{transform:translateY(-2px);border-color:var(--violet)}
+.prof-head{display:flex;align-items:center;gap:.9rem;padding:1.4rem 1.4rem 1rem;border-bottom:1px solid var(--rule-light)}
+.prof-sig{width:40px;height:40px;border-radius:2px;display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-style:italic;font-weight:700;font-size:1.2rem;flex-shrink:0}
+.sv{background:var(--violet-pale);color:var(--violet);border:1px solid rgba(91,79,255,.18)}
+.sc{background:rgba(255,79,107,.07);color:var(--coral);border:1px solid rgba(255,79,107,.18)}
+.si{background:rgba(13,13,11,.05);color:var(--ink);border:1px solid var(--rule)}
+.prof-id{font-family:var(--ui);font-size:.56rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;opacity:.42;margin-bottom:.25rem}
+.prof-name{font-family:var(--serif);font-weight:700;font-size:.97rem;line-height:1.2}
+.prof-domain{font-family:var(--ui);font-size:.58rem;font-weight:500;letter-spacing:.08em;text-transform:uppercase;opacity:.50;margin-top:.2rem}
+.prof-body{padding:1rem 1.4rem 1.4rem}
+.prof-quote{font-family:var(--body);font-style:italic;font-size:.88rem;line-height:1.62;opacity:.88;margin-bottom:.9rem}
+.prof-tags{display:flex;flex-wrap:wrap;gap:.35rem;margin-bottom:.9rem}
+.prof-tag{font-family:var(--ui);font-size:.55rem;font-weight:600;letter-spacing:.09em;text-transform:uppercase;padding:.2rem .6rem;border:1px solid var(--rule);border-radius:2px;opacity:.76}
+.prof-foot{display:flex;align-items:center;justify-content:space-between;padding-top:.7rem;border-top:1px solid var(--rule-light)}
+.prof-q{font-family:var(--ui);font-size:.56rem;font-weight:500;letter-spacing:.09em;text-transform:uppercase;opacity:.42}
+.prof-price{font-family:var(--serif);font-weight:700;font-size:.88rem;color:var(--violet)}
+
+/* ─── INSIGHT ─────────────────────────────────────────── */
+#insight{background:var(--ink);color:var(--paper)}
+#insight .lbl{color:var(--paper);opacity:.46}
+.insight-grid{display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:center}
+.ins-title{font-family:var(--serif);font-weight:900;font-size:clamp(1.9rem,3.2vw,3rem);line-height:1.08;letter-spacing:-.022em;margin-bottom:1.2rem;color:var(--paper)}
+.ins-title em{font-style:italic;color:var(--coral)}
+.ins-prose{font-family:var(--body);font-size:.97rem;line-height:1.78;opacity:.78;color:var(--paper)}
+.ins-prose p+p{margin-top:.9em}
+/* Phone */
+.phone{width:272px;margin:0 auto;border-radius:34px;overflow:hidden;background:#111110;border:1px solid rgba(255,255,255,.09);box-shadow:0 36px 72px rgba(0,0,0,.55),0 0 0 1px rgba(255,255,255,.04) inset}
+.ph-notch{height:28px;background:#0a0a09;display:flex;align-items:center;justify-content:center}
+.ph-pill{width:64px;height:9px;border-radius:5px;background:#1a1a18}
+.ph-screen{background:#0f0f0e;display:flex;flex-direction:column;min-height:490px}
+.ph-status{display:flex;align-items:center;justify-content:space-between;padding:.45rem 1.1rem .25rem;font-family:var(--ui);font-size:.58rem;color:rgba(250,250,248,.72)}
+.ph-status strong{font-weight:600;color:rgba(250,250,248,.84)}
+.ph-hdr{display:flex;align-items:center;justify-content:space-between;padding:.5rem 1.1rem .85rem;border-bottom:1px solid rgba(255,255,255,.05)}
+.ph-hdr-l .ph-app{font-family:var(--ui);font-size:.55rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--violet);margin-bottom:.2rem}
+.ph-hdr-l .ph-who{font-family:var(--serif);font-weight:700;font-size:.88rem;color:rgba(250,250,248,.9)}
+.ph-lock{width:18px;height:18px;border:1.5px solid rgba(91,79,255,.45);border-radius:3px;display:flex;align-items:center;justify-content:center}
+.ph-lock::after{content:'';width:5px;height:6px;border:1.5px solid rgba(91,79,255,.65);border-radius:1px}
+.ph-body{flex:1;padding:.9rem 1.1rem 1.2rem;display:flex;flex-direction:column;gap:.75rem}
+.ph-q{align-self:flex-end;background:rgba(91,79,255,.22);border:1px solid rgba(91,79,255,.32);border-radius:14px 14px 3px 14px;padding:.6rem .85rem;max-width:82%}
+.ph-q-txt{font-family:var(--body);font-style:italic;font-size:.78rem;line-height:1.45;color:rgba(250,250,248,.92)}
+.ph-q-meta{font-family:var(--ui);font-size:.5rem;font-weight:600;letter-spacing:.09em;text-transform:uppercase;color:rgba(91,79,255,.7);margin-top:.25rem;text-align:right}
+.ph-typing{display:flex;align-items:center;gap:.4rem;padding:.1rem 0}
+.ph-dot{width:5px;height:5px;border-radius:50%;background:var(--coral);animation:spulse 1.4s ease-in-out infinite}
+.ph-dot:nth-child(2){animation-delay:.18s}
+.ph-dot:nth-child(3){animation-delay:.36s}
+.ph-hint{font-family:var(--ui);font-size:.5rem;letter-spacing:.1em;text-transform:uppercase;opacity:.38;color:var(--paper);margin-left:.3rem}
+.ph-r{align-self:flex-start;background:#1a1a18;border:1px solid rgba(255,255,255,.07);border-radius:3px 14px 14px 14px;padding:.8rem 1rem;max-width:92%}
+.ph-r-from{font-family:var(--ui);font-size:.5rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--coral);margin-bottom:.4rem;display:flex;align-items:center;gap:.35rem}
+.ph-r-from::before{content:'';width:4px;height:4px;border-radius:50%;background:var(--coral)}
+.ph-r-txt{font-family:var(--body);font-size:.8rem;line-height:1.55;color:rgba(250,250,248,.90)}
+.ph-r-txt em{font-style:italic;color:rgba(250,250,248,.94)}
+.ph-r-foot{display:flex;align-items:center;justify-content:space-between;margin-top:.6rem;padding-top:.5rem;border-top:1px solid rgba(255,255,255,.05)}
+.ph-price{font-family:var(--serif);font-weight:700;font-size:.72rem;color:var(--violet)}
+.ph-verify{font-family:var(--ui);font-size:.48rem;font-weight:600;letter-spacing:.09em;text-transform:uppercase;color:rgba(91,79,255,.55)}
+.ph-input{margin:.35rem .7rem .75rem;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);border-radius:20px;padding:.5rem .9rem;display:flex;align-items:center;justify-content:space-between}
+.ph-input span{font-family:var(--body);font-style:italic;font-size:.7rem;color:rgba(250,250,248,.36)}
+.ph-send{width:24px;height:24px;border-radius:50%;background:var(--violet);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.ph-home{height:20px;background:#0a0a09;display:flex;align-items:center;justify-content:center}
+.ph-home-bar{width:90px;height:3px;border-radius:2px;background:rgba(255,255,255,.16)}
+
+/* ─── LEDGER ──────────────────────────────────────────── */
+#ledger{background:var(--ink);color:var(--paper);text-align:center;padding:5rem 1.8rem;border-top:1px solid rgba(250,250,248,.06)}
+.ledger-inner{max-width:640px;margin:0 auto}
+.ledger-eye{font-family:var(--ui);font-size:.65rem;font-weight:700;letter-spacing:.24em;text-transform:uppercase;color:var(--violet);margin-bottom:1.4rem;display:flex;align-items:center;justify-content:center;gap:.7rem}
+.ledger-eye::before,.ledger-eye::after{content:'';display:block;width:20px;height:1px;background:var(--violet)}
+.ledger-title{font-family:var(--serif);font-weight:900;font-size:clamp(1.9rem,3.8vw,3.4rem);line-height:1.1;letter-spacing:-.022em;margin-bottom:1.2rem;color:var(--paper)}
+.ledger-title em{font-style:italic;color:var(--coral)}
+.ledger-body{font-family:var(--body);font-style:italic;font-size:1rem;line-height:1.78;opacity:.76;color:var(--paper);margin-bottom:2.2rem}
+.btn-ghost-paper{display:inline-flex;align-items:center;gap:.65rem;padding:.85rem 2rem;background:transparent;color:var(--paper);font-family:var(--ui);font-size:.72rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;border-radius:2px;border:1.5px solid rgba(250,250,248,.28);transition:border-color .2s,background .2s}
+.btn-ghost-paper:hover{border-color:var(--paper);background:rgba(250,250,248,.07)}
+
+/* ─── APPLY / DUAL CTA ────────────────────────────────── */
+#apply{background:var(--paper-3);padding:5rem 1.8rem 6rem}
+.apply-head{text-align:center;margin-bottom:2.8rem}
+.apply-label{font-family:var(--ui);font-size:.65rem;font-weight:700;letter-spacing:.22em;text-transform:uppercase;opacity:.50;margin-bottom:1.2rem;display:flex;align-items:center;justify-content:center;gap:.9rem}
+.apply-label::before,.apply-label::after{content:'';display:block;width:32px;height:1px;background:var(--ink);opacity:.38}
+.apply-title{font-family:var(--serif);font-weight:900;font-size:clamp(2.2rem,4.5vw,3.8rem);line-height:1.06;letter-spacing:-.024em;margin-bottom:1rem}
+.apply-title em{font-style:italic;color:var(--violet)}
+.apply-sub{font-family:var(--body);font-style:italic;font-size:1.05rem;line-height:1.7;opacity:.76;max-width:48ch;margin:0 auto}
+.two-cards{display:grid;grid-template-columns:1fr 1fr;gap:1.4rem;max-width:860px;margin:0 auto}
+.path-card{display:flex;flex-direction:column;align-items:center;text-align:center;padding:2.6rem 2.2rem 2.2rem;border:1px solid rgba(13,13,11,.1);transition:transform .2s,box-shadow .2s}
+.path-card:hover{transform:translateY(-3px);box-shadow:0 16px 48px rgba(13,13,11,.09)}
+.path-card.tk{background:#edeaf8;border-color:rgba(91,79,255,.22)}
+.path-card.sk{background:#f4f2ef}
+.pc-icon{width:52px;height:52px;border-radius:50%;display:flex;align-items:center;justify-content:center;margin-bottom:1.4rem}
+.pc-icon.vi{background:rgba(91,79,255,.14)}
+.pc-icon.co{background:rgba(255,79,107,.1)}
+.pc-tag{font-family:var(--ui);font-size:.58rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;opacity:.55;margin-bottom:.65rem}
+.pc-title{font-family:var(--serif);font-weight:700;font-size:1.5rem;margin-bottom:.75rem;line-height:1.2}
+.pc-body{font-family:var(--body);font-size:.95rem;line-height:1.7;opacity:.81;margin-bottom:1.8rem;flex:1}
+.pc-fn{font-family:var(--ui);font-size:.58rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;opacity:.42;margin-top:.8rem}
+.btn-pc-v{display:inline-flex;align-items:center;gap:.65rem;width:100%;justify-content:center;padding:.85rem;background:var(--violet);color:#fff;font-family:var(--ui);font-size:.7rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;border-radius:2px;transition:background .2s,transform .15s}
+.btn-pc-v:hover{background:var(--violet-2);transform:translateY(-1px)}
+.btn-pc-o{display:inline-flex;align-items:center;gap:.65rem;width:100%;justify-content:center;padding:.85rem;background:transparent;color:var(--ink);font-family:var(--ui);font-size:.7rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;border-radius:2px;border:1.5px solid var(--ink);transition:background .2s,color .2s}
+.btn-pc-o:hover{background:var(--ink);color:var(--paper)}
+
+/* ─── FOOTER ──────────────────────────────────────────── */
+footer{background:var(--ink);color:var(--paper);padding:2.2rem 0;border-top:1px solid rgba(250,250,248,.06)}
+.foot-row{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem}
+.foot-logo{font-family:var(--serif);font-weight:900;font-size:1.05rem;letter-spacing:.08em;text-transform:uppercase}
+.foot-logo span{color:var(--violet)}
+.foot-tag{font-family:var(--body);font-style:italic;font-size:.82rem;opacity:.38}
+.foot-links{display:flex;gap:1.6rem;list-style:none}
+.foot-links a{font-family:var(--ui);font-size:.6rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;opacity:.38;transition:opacity .2s}
+.foot-links a:hover{opacity:.84}
+
+/* ─── RESPONSIVE ──────────────────────────────────────── */
+@media(max-width:900px){
+  .nav-links{display:none}
+  .ham{display:flex}
+  .age-grid,.model-grid,.insight-grid,.thinker-top{grid-template-columns:1fr;gap:2.4rem}
+  .thinker-bot{grid-template-columns:1fr 1fr}
+  .inv-chart-wrap{grid-template-columns:1fr}
+  .inv-yax{display:none}
+  .inv-nar{grid-template-columns:1fr 1fr}
+  .two-cards{grid-template-columns:1fr 1fr}
+  .pillar-grid{grid-template-columns:1fr 1fr}
+}
+@media(max-width:600px){
+  html{font-size:15px}
+  .cta-row{flex-direction:column;align-items:center}
+  .thinker-bot,.inv-nar,.two-cards,.pillar-grid{grid-template-columns:1fr}
+  .stat-bar{grid-template-columns:1fr 1fr}
+  .phone{width:248px}
+  .foot-row{flex-direction:column;align-items:flex-start;gap:1.2rem}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV ─────────────────────────────────────────────────── -->
+<nav>
+  <div class="nav-inner">
+    <a href="#" class="logo">Div<span>ine</span></a>
+    <ul class="nav-links">
+      <li><a href="#inversion">The Inversion</a></li>
+      <li><a href="#the-model">The Model</a></li>
+      <li><a href="#the-thinker">Thinkers</a></li>
+      <li><a href="#insight">Insight</a></li>
+    </ul>
+    <a href="#apply" class="nav-cta">Encode My Mind</a>
+    <button class="ham" id="ham" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+<div class="nav-drawer" id="drawer">
+  <ul>
+    <li><a href="#inversion">The Inversion</a></li>
+    <li><a href="#the-model">The Model</a></li>
+    <li><a href="#the-thinker">Thinkers</a></li>
+    <li><a href="#insight">Insight</a></li>
+  </ul>
+  <a href="#apply" class="nav-cta">Encode My Mind</a>
+</div>
+
+<!-- HERO ────────────────────────────────────────────────── -->
+<section id="hero">
+  <div class="hero-bg">DIVINE</div>
+  <div class="hero-content">
+    <p class="hero-eyebrow">The Future of Work Has Arrived</p>
+    <h1>Your Intellect<br/>Is Your Most<br/><em>Valuable Asset.</em></h1>
+    <p class="hero-deck">The world's greatest minds have always traded time for access. Divine ends that bargain — permanently. Encode your cognitive framework once. Earn royalties forever.</p>
+    <div class="cta-row">
+      <a href="#apply" class="btn-dark">Encode My Mind <svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+      <a href="#board-access" class="btn-ghost">Access the Board <svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+    </div>
+  </div>
+  <div class="hero-scroll"><div class="scroll-line"></div>Scroll</div>
+</section>
+
+<!-- MARQUEE ──────────────────────────────────────────────── -->
+<div class="mq">
+  <div class="mq-track">
+    <span class="mq-item">Cognitive IP <span class="mq-dot">✦</span></span>
+    <span class="mq-item">60% Royalty on Every Query <span class="mq-dot">✦</span></span>
+    <span class="mq-item">Your Digital Twin <span class="mq-dot">✦</span></span>
+    <span class="mq-item">Earn While You Sleep <span class="mq-dot">✦</span></span>
+    <span class="mq-item">The Future of Work <span class="mq-dot">✦</span></span>
+    <span class="mq-item">Immortalize Your Mind <span class="mq-dot">✦</span></span>
+    <span class="mq-item">The Digital Ledger of Human Wisdom <span class="mq-dot">✦</span></span>
+    <span class="mq-item">Intellectual Capital as an Asset Class <span class="mq-dot">✦</span></span>
+    <span class="mq-item">Cognitive IP <span class="mq-dot">✦</span></span>
+    <span class="mq-item">60% Royalty on Every Query <span class="mq-dot">✦</span></span>
+    <span class="mq-item">Your Digital Twin <span class="mq-dot">✦</span></span>
+    <span class="mq-item">Earn While You Sleep <span class="mq-dot">✦</span></span>
+    <span class="mq-item">The Future of Work <span class="mq-dot">✦</span></span>
+    <span class="mq-item">Immortalize Your Mind <span class="mq-dot">✦</span></span>
+    <span class="mq-item">The Digital Ledger of Human Wisdom <span class="mq-dot">✦</span></span>
+    <span class="mq-item">Intellectual Capital as an Asset Class <span class="mq-dot">✦</span></span>
+  </div>
+</div>
+
+<!-- VALUE INVERSION CHART ───────────────────────────────── -->
+<section id="inversion">
+  <div class="w">
+    <div class="inv-head f">
+      <p class="inv-eyebrow">The Great Inversion · 2020 — 2030</p>
+      <h2 class="inv-h2">As AI Costs Soar, Human Wisdom<br/>Becomes the Last <em>Hard Asset.</em></h2>
+      <p class="inv-sub">The world is printing intelligence at the speed of electricity — and paying in energy, water, and signal collapse. The Thinker who encodes their mind now is issuing a sovereign bond against the coming Noise Floor.</p>
+    </div>
+    <div class="inv-chart-wrap f">
+      <!-- Left Y-axis -->
+      <div class="inv-yax inv-yax-l">
+        <span class="accent" style="font-size:.54rem;letter-spacing:.12em;line-height:1.35;text-align:center;">Global Energy Consumption<br/>for Synthetic Data</span>
+      </div>
+
+      <div class="inv-svg-wrap" style="position:relative;">
+        <svg id="inv-svg" viewBox="0 0 860 410" preserveAspectRatio="xMidYMid meet">
+          <defs>
+            <filter id="haze" x="-5%" y="-10%" width="110%" height="120%">
+              <feTurbulence type="turbulence" baseFrequency="0.015 0.06" numOctaves="3" seed="2" result="noise">
+                <animate attributeName="baseFrequency" values="0.015 0.06;0.03 0.10;0.015 0.06" dur="2.8s" repeatCount="indefinite"/>
+              </feTurbulence>
+              <feDisplacementMap in="SourceGraphic" in2="noise" scale="4" xChannelSelector="R" yChannelSelector="G"/>
+            </filter>
+            <filter id="cglow" x="-10%" y="-10%" width="120%" height="120%">
+              <feGaussianBlur stdDeviation="2.5" result="b"/>
+              <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+            </filter>
+            <linearGradient id="gv" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#5b4fff" stop-opacity=".13"/>
+              <stop offset="100%" stop-color="#5b4fff" stop-opacity="0"/>
+            </linearGradient>
+            <linearGradient id="gc" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#ff4f6b" stop-opacity=".1"/>
+              <stop offset="100%" stop-color="#ff4f6b" stop-opacity="0"/>
+            </linearGradient>
+            <!-- Divine Alpha gradient — fills between the lines after 2025 -->
+            <linearGradient id="alpha-grad" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0%"   stop-color="#ff4f6b" stop-opacity=".22"/>
+              <stop offset="100%" stop-color="#ff4f6b" stop-opacity=".06"/>
+            </linearGradient>
+            <clipPath id="rc"><rect id="rr" x="0" y="0" width="0" height="410"/></clipPath>
+            <!-- Clip for alpha region only (after 2025) -->
+            <clipPath id="rc-alpha"><rect x="445" y="0" width="415" height="410"/></clipPath>
+          </defs>
+
+          <!-- Ultra-faint grid lines -->
+          <g stroke="rgba(13,13,11,.055)" stroke-width="1">
+            <line x1="70" y1="30"  x2="820" y2="30"/>
+            <line x1="70" y1="100" x2="820" y2="100"/>
+            <line x1="70" y1="170" x2="820" y2="170"/>
+            <line x1="70" y1="240" x2="820" y2="240"/>
+            <line x1="70" y1="310" x2="820" y2="310"/>
+            <line x1="70" y1="370" x2="820" y2="370"/>
+          </g>
+
+          <!-- LEFT Y-axis tick labels (Energy) -->
+          <g font-family="'DM Sans',sans-serif" font-size="9" fill="#5b4fff" text-anchor="end" letter-spacing="0.04em" font-weight="600" opacity=".65">
+            <text x="66" y="33">500 TWh</text>
+            <text x="66" y="103">300 TWh</text>
+            <text x="66" y="173">150 TWh</text>
+            <text x="66" y="243">50 TWh</text>
+          </g>
+          <!-- Left axis tick marks -->
+          <g stroke="#5b4fff" stroke-width="1" opacity=".3">
+            <line x1="68" y1="30"  x2="70" y2="30"/>
+            <line x1="68" y1="100" x2="70" y2="100"/>
+            <line x1="68" y1="170" x2="70" y2="170"/>
+            <line x1="68" y1="240" x2="70" y2="240"/>
+          </g>
+
+          <!-- RIGHT Y-axis tick labels (Market Value) -->
+          <g font-family="'DM Sans',sans-serif" font-size="9" fill="#ff4f6b" text-anchor="start" letter-spacing="0.04em" font-weight="600" opacity=".65">
+            <text x="824" y="33">$12T</text>
+            <text x="824" y="103">$6T</text>
+            <text x="824" y="173">$2T</text>
+            <text x="824" y="243">$500B</text>
+          </g>
+          <!-- Right axis tick marks -->
+          <g stroke="#ff4f6b" stroke-width="1" opacity=".3">
+            <line x1="820" y1="30"  x2="822" y2="30"/>
+            <line x1="820" y1="100" x2="822" y2="100"/>
+            <line x1="820" y1="170" x2="822" y2="170"/>
+            <line x1="820" y1="240" x2="822" y2="240"/>
+          </g>
+
+          <!-- Year labels -->
+          <g font-family="'DM Sans',sans-serif" font-size="10" fill="rgba(13,13,11,.42)" letter-spacing="0.04em">
+            <text x="70"  y="394" text-anchor="middle">2020</text>
+            <text x="145" y="394" text-anchor="middle">2021</text>
+            <text x="220" y="394" text-anchor="middle">2022</text>
+            <text x="295" y="394" text-anchor="middle">2023</text>
+            <text x="370" y="394" text-anchor="middle">2024</text>
+            <text x="445" y="394" text-anchor="middle" font-weight="700" fill="#ff4f6b">2025</text>
+            <text x="520" y="394" text-anchor="middle">2026</text>
+            <text x="595" y="394" text-anchor="middle">2027</text>
+            <text x="670" y="394" text-anchor="middle">2028</text>
+            <text x="745" y="394" text-anchor="middle">2029</text>
+            <text x="820" y="394" text-anchor="middle">2030</text>
+          </g>
+
+          <!-- Inversion vertical dashed line -->
+          <line x1="445" y1="30" x2="445" y2="370" stroke="#ff4f6b" stroke-width="1" stroke-dasharray="4 4" opacity=".35"/>
+
+          <!-- Area fills under each line -->
+          <g clip-path="url(#rc)">
+            <path d="M 70,360 C 95,359 128,358 145,357 C 170,356 207,354 220,352 C 250,349 280,345 295,342 C 330,336 355,326 370,317 C 404,305 430,292 445,284 C 475,272 500,256 520,244 C 550,228 572,210 595,194 C 622,175 645,158 670,143 C 698,126 722,108 745,93 C 775,72 800,56 820,43 L 820,370 L 70,370 Z" fill="url(#gv)"/>
+            <path d="M 70,366 C 95,365 128,365 145,364 C 170,363 207,362 220,360 C 250,358 280,356 295,352 C 330,348 355,344 370,340 C 404,334 430,308 445,284 C 475,262 500,246 520,231 C 550,212 572,194 595,179 C 622,163 645,146 670,131 C 698,114 722,97 745,83 C 775,65 800,53 820,43 L 820,370 L 70,370 Z" fill="url(#gc)"/>
+          </g>
+
+          <!-- ★ THE DIVINE ALPHA — shaded gap between lines after 2025 -->
+          <g clip-path="url(#rc)">
+            <path id="alpha-area"
+              d="M 445,284
+                 C 475,262 500,246 520,231
+                 C 550,212 572,194 595,179
+                 C 622,163 645,146 670,131
+                 C 698,114 722,97  745,83
+                 C 775,65  800,53  820,43
+                 C 800,56  775,72  745,93
+                 C 722,108 698,126 670,143
+                 C 645,158 622,175 595,194
+                 C 572,210 550,228 520,244
+                 C 500,256 475,272 445,284 Z"
+              fill="url(#alpha-grad)"/>
+          </g>
+
+          <!-- "THE DIVINE ALPHA" label inside shaded region -->
+          <g clip-path="url(#rc)" opacity="0" id="alpha-label">
+            <text x="630" y="208" font-family="'DM Sans',sans-serif" font-size="8.5" font-weight="700" letter-spacing="0.2em" text-transform="uppercase" fill="#ff4f6b" text-anchor="middle" opacity=".7">THE DIVINE ALPHA</text>
+            <line x1="565" y1="208" x2="590" y2="208" stroke="#ff4f6b" stroke-width="1" opacity=".4"/>
+            <line x1="670" y1="208" x2="695" y2="208" stroke="#ff4f6b" stroke-width="1" opacity=".4"/>
+          </g>
+
+          <!-- Violet line (AI Resource Cost) -->
+          <g clip-path="url(#rc)">
+            <path d="M 70,360 C 95,359 128,358 145,357 C 170,356 207,354 220,352 C 250,349 280,345 295,342 C 330,336 355,326 370,317 C 404,305 430,292 445,284 C 475,272 500,256 520,244 C 550,228 572,210 595,194 C 622,175 645,158 670,143 C 698,126 722,108 745,93 C 775,72 800,56 820,43" fill="none" stroke="#5b4fff" stroke-width="4.5" stroke-linecap="round" opacity=".2" filter="url(#haze)"/>
+            <path d="M 70,360 C 95,359 128,358 145,357 C 170,356 207,354 220,352 C 250,349 280,345 295,342 C 330,336 355,326 370,317 C 404,305 430,292 445,284 C 475,272 500,256 520,244 C 550,228 572,210 595,194 C 622,175 645,158 670,143 C 698,126 722,108 745,93 C 775,72 800,56 820,43" fill="none" stroke="#5b4fff" stroke-width="2.5" stroke-linecap="round"/>
+          </g>
+
+          <!-- Coral line (Cognitive IP Value) -->
+          <g clip-path="url(#rc)">
+            <path d="M 70,366 C 95,365 128,365 145,364 C 170,363 207,362 220,360 C 250,358 280,356 295,352 C 330,348 355,344 370,340 C 404,334 430,308 445,284 C 475,262 500,246 520,231 C 550,212 572,194 595,179 C 622,163 645,146 670,131 C 698,114 722,97 745,83 C 775,65 800,53 820,43" fill="none" stroke="#ff4f6b" stroke-width="2.5" stroke-linecap="round" filter="url(#cglow)"/>
+          </g>
+
+          <!-- Year dots -->
+          <g clip-path="url(#rc)">
+            <circle cx="295" cy="342" r="3" fill="#5b4fff" opacity=".6"/>
+            <circle cx="595" cy="194" r="3" fill="#5b4fff" opacity=".6"/>
+          </g>
+
+          <!-- Inversion point — pulsing coral dot -->
+          <g clip-path="url(#rc)">
+            <circle class="pulse-r"  cx="445" cy="284" r="10" fill="none" stroke="#ff4f6b" stroke-width="1.5" opacity="0"/>
+            <circle class="pulse-r pulse-r2" cx="445" cy="284" r="10" fill="none" stroke="#ff4f6b" stroke-width="1" opacity="0"/>
+            <circle id="inv-dot" cx="445" cy="284" r="6" fill="#ff4f6b" stroke="#fafaf8" stroke-width="2" style="cursor:pointer"/>
+          </g>
+
+          <!-- Legend -->
+          <g font-family="'DM Sans',sans-serif" font-size="10" letter-spacing="0.07em">
+            <circle cx="84"  cy="18" r="4.5" fill="#5b4fff"/>
+            <text x="93"  y="22" fill="rgba(13,13,11,.65)" text-anchor="start">AI RESOURCE COST</text>
+            <circle cx="232" cy="18" r="4.5" fill="#ff4f6b"/>
+            <text x="241" y="22" fill="rgba(13,13,11,.65)" text-anchor="start">COGNITIVE IP VALUE</text>
+            <!-- Alpha legend swatch -->
+            <rect x="380" y="11" width="14" height="9" rx="1" fill="url(#alpha-grad)" opacity=".8"/>
+            <text x="398" y="22" fill="rgba(13,13,11,.65)" text-anchor="start">THE DIVINE ALPHA</text>
+          </g>
+        </svg>
+
+        <!-- THE SIGNAL COLLAPSE — 2025 callout card -->
+        <div class="callout-2025" id="callout-2025">
+          <div class="callout-yr">2025 — The Signal Collapse</div>
+          <div class="callout-stat">
+            <div class="callout-row">
+              <span class="callout-metric">Cost of Generic Intelligence</span>
+              <span class="callout-val zero">$0.00</span>
+            </div>
+            <div class="callout-divider"></div>
+            <div class="callout-row">
+              <span class="callout-metric">Cost of Verified Perspective</span>
+              <span class="callout-val rising">↑ Exponential</span>
+            </div>
+          </div>
+          <div class="callout-footer">Divine is the only infrastructure that captures this premium.</div>
+        </div>
+
+        <!-- Hover tooltip -->
+        <div class="inv-tip" id="inv-tip">
+          <div class="inv-tip-yr">2025 — The Great Inversion</div>
+          <div class="inv-tip-txt">Wisdom becomes the new Gold Standard.</div>
+          <div class="inv-tip-sub">Human Cognitive IP surpasses AI in verified value.</div>
+        </div>
+      </div>
+
+      <!-- Right Y-axis -->
+      <div class="inv-yax inv-yax-r">
+        <span class="accent" style="font-size:.54rem;letter-spacing:.12em;line-height:1.35;text-align:center;">Market Value of<br/>Verified Cognitive IP</span>
+      </div>
+    </div>
+
+    <style>
+      /* Callout card */
+      .callout-2025 {
+        position: absolute;
+        top: 10%;
+        left: 51%;
+        transform: translateX(-50%);
+        background: #0d0d0b;
+        color: #fafaf8;
+        padding: 1.1rem 1.4rem;
+        border-radius: 2px;
+        width: 260px;
+        box-shadow: 0 12px 40px rgba(0,0,0,.35), 0 0 0 1px rgba(255,79,107,.25);
+        border-top: 2px solid #ff4f6b;
+        pointer-events: none;
+        z-index: 20;
+        opacity: 0;
+        transition: opacity .4s ease .8s;
+      }
+      .callout-2025.on { opacity: 1; }
+      /* Connector line (pseudo) */
+      .callout-2025::after {
+        content: '';
+        position: absolute;
+        bottom: -18px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 1px;
+        height: 18px;
+        background: linear-gradient(to bottom, rgba(255,79,107,.5), transparent);
+      }
+      .callout-yr {
+        font-family: 'DM Sans', sans-serif;
+        font-size: .58rem; font-weight: 700;
+        letter-spacing: .18em; text-transform: uppercase;
+        color: #ff4f6b; margin-bottom: .75rem;
+      }
+      .callout-stat { margin-bottom: .75rem; }
+      .callout-row {
+        display: flex; justify-content: space-between;
+        align-items: center; gap: .8rem;
+        padding: .45rem 0;
+      }
+      .callout-metric {
+        font-family: 'EB Garamond', serif; font-style: italic;
+        font-size: .82rem; opacity: .65; line-height: 1.3;
+      }
+      .callout-val {
+        font-family: 'DM Sans', sans-serif; font-size: .72rem;
+        font-weight: 700; letter-spacing: .04em; white-space: nowrap;
+      }
+      .callout-val.zero { color: rgba(250,250,248,.48); }
+      .callout-val.rising { color: #ff4f6b; }
+      .callout-divider {
+        height: 1px; background: rgba(250,250,248,.08); margin: .1rem 0;
+      }
+      .callout-footer {
+        font-family: 'EB Garamond', serif; font-style: italic;
+        font-size: .78rem; opacity: .42; line-height: 1.45;
+        border-top: 1px solid rgba(250,250,248,.07);
+        padding-top: .65rem;
+      }
+      /* Responsive: hide callout on small screens */
+      @media (max-width: 700px) {
+        .callout-2025 { display: none; }
+        #inv-svg text[x="66"], #inv-svg text[x="824"] { font-size: 7px; }
+      }
+      /* Alpha label fade in */
+      #alpha-label { transition: opacity .5s ease 1.6s; }
+      #alpha-label.on { opacity: 1 !important; }
+    </style>
+    <div class="inv-nar">
+      <div class="inv-ch f">
+        <div class="inv-ch-yr">2023</div>
+        <div class="inv-ch-t">The Age of Abundance</div>
+        <div class="inv-ch-b">"Generic AI commoditizes data. The cost of 'Knowing' drops to zero."</div>
+        <div class="inv-ch-bar" style="--bar:var(--violet)"></div>
+      </div>
+      <div class="inv-ch f f1">
+        <div class="inv-ch-yr c">2025 ✦</div>
+        <div class="inv-ch-t">The Noise Threshold</div>
+        <div class="inv-ch-b">"AI content exceeds human consumption. Verification becomes the primary filter for value."</div>
+        <div class="inv-ch-bar" style="--bar:var(--coral)"></div>
+      </div>
+      <div class="inv-ch f f2">
+        <div class="inv-ch-yr">2027</div>
+        <div class="inv-ch-t">The Resource Wall</div>
+        <div class="inv-ch-b">"Energy and compute costs hit critical levels. Human thought becomes the most efficient intelligence."</div>
+        <div class="inv-ch-bar" style="--bar:var(--violet)"></div>
+      </div>
+      <div class="inv-ch f f3">
+        <div class="inv-ch-yr">2030</div>
+        <div class="inv-ch-t">The Era of Sovereignty</div>
+        <div class="inv-ch-b">"Cognitive IP is recognized as a Global Hard Asset — managed on the Divine Ledger."</div>
+        <div class="inv-ch-bar" style="--bar:var(--violet)"></div>
+      </div>
+    </div>
+    <div class="inv-cta-row f">
+      <a href="#apply" class="btn-serif">Secure Your Cognitive Legacy <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+      <p>$0.05 per query · 60% royalty to you · Zero compute cost</p>
+    </div>
+  </div>
+</section>
+
+<!-- THE AGE — Shift + Problem merged ────────────────────── -->
+<section id="the-age" class="sec">
+  <div class="w">
+    <div class="age-grid">
+      <div class="f">
+        <p class="lbl">The Cognitive Age</p>
+        <h2 class="age-title">Every Era Has Its<br/>Defining Asset.<br/><em>This Is Yours.</em></h2>
+        <div class="age-pull"><p>"Data is cheap. Perspective is the rarest commodity on earth."</p></div>
+        <div class="era-list">
+          <div class="era-row"><span class="era-date">1700s</span><span class="era-name">The Agricultural Age</span><span class="era-asset">Land</span></div>
+          <div class="era-row"><span class="era-date">1800s</span><span class="era-name">The Industrial Age</span><span class="era-asset">Machinery</span></div>
+          <div class="era-row"><span class="era-date">1900s</span><span class="era-name">The Information Age</span><span class="era-asset">Data</span></div>
+          <div class="era-row now"><span class="era-date">Now</span><span class="era-name">The Cognitive Age</span><span class="era-asset">Your Mind →</span></div>
+        </div>
+      </div>
+      <div class="f f1">
+        <div class="tension-stack">
+          <div class="t-card">
+            <div class="t-icon">I.</div>
+            <div class="t-title">Trading Hours for Access</div>
+            <div class="t-body">Every advisory call converts your rarest asset — your cognitive framework — into a perishable commodity that expires the moment the call ends. You build nothing permanent. You scale nothing.</div>
+          </div>
+          <div class="t-card">
+            <div class="t-icon">II.</div>
+            <div class="t-title">The Availability Ceiling</div>
+            <div class="t-body">Your calendar is finite. The demand for what you know is not. Every timezone you can't serve, every founder who can't afford your rate — these are systematic losses in a model designed to keep your leverage small.</div>
+          </div>
+          <div class="t-card">
+            <div class="t-icon">III.</div>
+            <div class="t-title">The Impermanence Problem</div>
+            <div class="t-body">Books and courses capture what you said, not how you think. They are static snapshots of a living system — unqueryable, earning no royalty, and compounding nothing.</div>
+          </div>
+        </div>
+        <div class="stat-bar">
+          <div class="stat-cell"><div class="stat-num">60%</div><div class="stat-lbl">Royalty to You — Every Query</div></div>
+          <div class="stat-cell"><div class="stat-num">∞</div><div class="stat-lbl">Simultaneous Queries Your Twin Serves</div></div>
+          <div class="stat-cell"><div class="stat-num">$0.05</div><div class="stat-lbl">Starting Price per Insight Delivered</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- THE MODEL — Solution + Economics merged ─────────────── -->
+<section id="the-model" class="sec">
+  <div class="w">
+    <div class="model-head f">
+      <p class="lbl">The Divine Model</p>
+      <h2 class="model-title">Encode Once.<br/>Earn <em>Forever.</em></h2>
+    </div>
+    <div class="model-grid">
+      <div class="f">
+        <div class="phases">
+          <div class="phase"><div class="ph-n">01</div><div><div class="ph-t">Cognitive Mapping Session</div><div class="ph-d">Our Architects conduct deep-structure interviews to map the decision frameworks and first principles that define your highest-leverage thinking. An excavation, not a questionnaire.</div></div></div>
+          <div class="phase"><div class="ph-n">02</div><div><div class="ph-t">Twin Construction &amp; Calibration</div><div class="ph-d">A sovereign, queryable Digital Twin trained exclusively on your framework — not generic AI. You review and refine until it meets your standard.</div></div></div>
+          <div class="phase"><div class="ph-n">03</div><div><div class="ph-t">Your Profile on the Ledger</div><div class="ph-d">Your Thinker profile goes live — curated alongside the most distinguished cognitive contributors on the platform. Admission is an endorsement of intellectual standing.</div></div></div>
+          <div class="phase"><div class="ph-n">04</div><div><div class="ph-t">Perpetual Royalty Stream</div><div class="ph-d">Every query your Twin answers generates a 60% royalty automatically — at any volume, any geography, any hour. Earning no longer bounded by your waking hours.</div></div></div>
+        </div>
+      </div>
+      <div class="f f1">
+        <div class="royalty-wrap">
+          <div class="royalty-bar"><div class="r-you">You — 60%</div><div class="r-us">Divine — 40%</div></div>
+          <div class="royalty-sub"><span>Your perpetual royalty</span><span>Platform &amp; infrastructure</span></div>
+        </div>
+        <table class="cmp-table">
+          <thead><tr><th>Model</th><th>Your Effort</th><th>Scale</th><th>Permanence</th></tr></thead>
+          <tbody>
+            <tr><td>Advisory Call</td><td>High / per session</td><td><span class="badge-b">1 client</span></td><td><span class="badge-b">Expires</span></td></tr>
+            <tr><td>Board Seat</td><td>High / ongoing</td><td><span class="badge-b">1 company</span></td><td><span class="badge-b">Term-limited</span></td></tr>
+            <tr><td>Book / Course</td><td>Very high upfront</td><td><span class="badge-b">Static</span></td><td><span class="badge-b">Depreciates</span></td></tr>
+            <tr><td>Speaking</td><td>High / per event</td><td><span class="badge-b">One audience</span></td><td><span class="badge-b">No residual</span></td></tr>
+            <tr><td>Divine Twin</td><td>Once to build</td><td><span class="badge-g">Unlimited</span></td><td><span class="badge-g">Compounds</span></td></tr>
+          </tbody>
+        </table>
+        <div class="compound-note"><p>"Unlike a Zoom call — which delivers value once — your Twin improves with every query. Each insight delivered builds the evidentiary record of your framework's value. Your Cognitive IP compounds."</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- THE THINKER — FoW + Belonging + Profiles merged ─────── -->
+<section id="the-thinker" class="sec">
+  <div class="w">
+    <div class="thinker-top">
+      <div class="f">
+        <p class="lbl">The Future of Work</p>
+        <h2 class="tk-title">The World's Best<br/>Minds Will Not<br/>Retire. They Will <em>Replicate.</em></h2>
+        <p class="tk-prose">The next decade belongs to those who build intelligent systems around assets they already possess. For the world's sharpest thinkers, that asset is the irreducible architecture of how they see the world.</p>
+        <div class="criteria">
+          <div class="cr-item"><div class="cr-check"><svg width="9" height="7" viewBox="0 0 10 8" fill="none"><path d="M1 4l3 3 5-6" stroke="#5b4fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div><div class="cr-t">Verifiable Domain Mastery</div><div class="cr-d">You have operated at the frontier — building, competing, or creating at a level that produced outcomes most practitioners never achieve.</div></div></div>
+          <div class="cr-item"><div class="cr-check"><svg width="9" height="7" viewBox="0 0 10 8" fill="none"><path d="M1 4l3 3 5-6" stroke="#5b4fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div><div class="cr-t">A Distinctive Cognitive Framework</div><div class="cr-d">Your value is not your resume. It is the specific, articulable way you think — a framework others cannot simply reverse-engineer from your outputs.</div></div></div>
+          <div class="cr-item"><div class="cr-check"><svg width="9" height="7" viewBox="0 0 10 8" fill="none"><path d="M1 4l3 3 5-6" stroke="#5b4fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div><div class="cr-t">Long-Term Orientation</div><div class="cr-d">This is the structure for a permanent intellectual legacy, not this quarter's revenue. We look for Thinkers who understand the difference.</div></div></div>
+        </div>
+      </div>
+      <div class="f f1">
+        <p class="lbl">Future of Work — Four Pillars</p>
+        <div class="pillar-grid">
+          <div class="pillar-c"><div class="pillar-n">I</div><div class="pillar-t">Cognitive IP as an Asset Class</div><div class="pillar-b">The first permanent ledger for the recording, verification, and monetization of intellectual capital.</div></div>
+          <div class="pillar-c"><div class="pillar-n">II</div><div class="pillar-t">Expertise Unbounded by Geography</div><div class="pillar-b">A founder in Lagos deserves the same caliber of thinking as a founder in San Francisco. Divine makes this structurally possible.</div></div>
+          <div class="pillar-c"><div class="pillar-n">III</div><div class="pillar-t">Built for Experts, Not Platforms</div><div class="pillar-b">Unlike LinkedIn or Substack, Divine converts your framework into a permanent, sovereign, income-generating asset requiring nothing further from you.</div></div>
+          <div class="pillar-c"><div class="pillar-n">IV</div><div class="pillar-t">Your Legacy, Encoded Before It Fades</div><div class="pillar-b">A living, thinking, earning record of the way you saw the world at the height of your powers.</div></div>
+        </div>
+      </div>
+    </div>
+    <!-- Cognitive Profiles -->
+    <p class="lbl f" style="margin-bottom:1.4rem">Sample Cognitive Profiles</p>
+    <div class="thinker-bot">
+      <div class="prof f">
+        <div class="prof-head"><div class="prof-sig sv">S</div><div><div class="prof-id">Profile · #0041</div><div class="prof-name">The Stoic Founder</div><div class="prof-domain">Venture Building · Crisis Decisions</div></div></div>
+        <div class="prof-body">
+          <div class="prof-quote">"I do not ask whether a decision is reversible. I ask whether it is directionally correct. Most founders confuse the need for certainty with the need for clarity — they are not the same thing."</div>
+          <div class="prof-tags"><span class="prof-tag">Zero-to-one</span><span class="prof-tag">Stoic rationalism</span><span class="prof-tag">Founder psychology</span></div>
+          <div class="prof-foot"><span class="prof-q">4,200+ queries</span><span class="prof-price">$0.25–$1.50</span></div>
+        </div>
+      </div>
+      <div class="prof f f1">
+        <div class="prof-head"><div class="prof-sig sc">H</div><div><div class="prof-id">Profile · #0087</div><div class="prof-name">The High-Performance Coach</div><div class="prof-domain">Elite Performance · Identity Architecture</div></div></div>
+        <div class="prof-body">
+          <div class="prof-quote">"Every performer I've worked with broke down at the identity level before they broke down at the performance level. Fix the model of the self first. Everything else is downstream of that."</div>
+          <div class="prof-tags"><span class="prof-tag">Pre-performance rituals</span><span class="prof-tag">Identity reconditioning</span><span class="prof-tag">Adversity reframe</span></div>
+          <div class="prof-foot"><span class="prof-q">2,880+ queries</span><span class="prof-price">$0.15–$0.90</span></div>
+        </div>
+      </div>
+      <div class="prof f f2">
+        <div class="prof-head"><div class="prof-sig si">C</div><div><div class="prof-id">Profile · #0112</div><div class="prof-name">The Contrarian Allocator</div><div class="prof-domain">Risk Architecture · Asymmetric Bets</div></div></div>
+        <div class="prof-body">
+          <div class="prof-quote">"The consensus is never wrong about the direction. It is almost always wrong about timing and magnitude. That gap — between direction and timing — is where every asymmetric return I have generated lived."</div>
+          <div class="prof-tags"><span class="prof-tag">Contrarian thesis</span><span class="prof-tag">Position sizing</span><span class="prof-tag">Second-order thinking</span></div>
+          <div class="prof-foot"><span class="prof-q">6,100+ queries</span><span class="prof-price">$0.50–$2.50</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- INSIGHT ──────────────────────────────────────────────── -->
+<section id="insight" class="sec">
+  <div class="w">
+    <div class="insight-grid">
+      <div class="f">
+        <p class="lbl">The Insight Experience</p>
+        <h2 class="ins-title">A $0.05 Thought<br/>That Changes a<br/><em>$10M Decision.</em></h2>
+        <div class="ins-prose">
+          <p>Every query delivered through Divine is not a text message. It is a cryptographically verified transmission from a sovereign cognitive framework — attributed, timestamped, and recorded permanently on the Ledger.</p>
+          <p>Your insight arrives like a dispatch from a trusted advisor. Because that is precisely what it is.</p>
+        </div>
+      </div>
+      <div class="f f1" style="display:flex;justify-content:center">
+        <div class="phone">
+          <div class="ph-notch"><div class="ph-pill"></div></div>
+          <div class="ph-screen">
+            <div class="ph-status"><strong>9:41</strong><span>▲▲▲ WiFi ⬛</span></div>
+            <div class="ph-hdr">
+              <div class="ph-hdr-l"><div class="ph-app">Divine · Insight</div><div class="ph-who">The Stoic Founder</div></div>
+              <div class="ph-lock"></div>
+            </div>
+            <div class="ph-body">
+              <div class="ph-q">
+                <div class="ph-q-txt">"I have a term sheet. Lower valuation, exceptional investor. Do I hold out?"</div>
+                <div class="ph-q-meta">Query · $0.25</div>
+              </div>
+              <div style="display:flex;align-items:center;gap:.45rem;padding:.15rem 0">
+                <div class="ph-dot"></div><div class="ph-dot"></div><div class="ph-dot"></div>
+                <span class="ph-hint">Encoding response…</span>
+              </div>
+              <div class="ph-r">
+                <div class="ph-r-from">The Stoic Founder · #0041</div>
+                <div class="ph-r-txt">"Valuation is a number. The investor is a relationship. I have never regretted taking a lower valuation from someone I trusted completely. I have regretted the opposite <em>every single time.</em>"</div>
+                <div class="ph-r-foot">
+                  <span class="ph-price">$0.25 · Delivered</span>
+                  <span class="ph-verify">✓ Verified on Ledger</span>
+                </div>
+              </div>
+            </div>
+            <div class="ph-input">
+              <span>Ask a follow-up…</span>
+              <div class="ph-send"><svg width="10" height="10" viewBox="0 0 14 14" fill="none"><path d="M2 7h10M8 3l4 4-4 4" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+            </div>
+          </div>
+          <div class="ph-home"><div class="ph-home-bar"></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- LEDGER ───────────────────────────────────────────────── -->
+<section id="ledger">
+  <div class="ledger-inner f">
+    <p class="ledger-eye">The Divine Thesis</p>
+    <h2 class="ledger-title">We Are Building the<br/><em>Digital Ledger</em><br/>of Human Wisdom.</h2>
+    <p class="ledger-body">Every Thinker who joins Divine makes an entry in a permanent record — an immutable testament to how the world's finest minds understood their domains at the height of their powers. This ledger does not depreciate. It compounds with every query.</p>
+    <a href="#apply" class="btn-ghost-paper">Claim Your Place on the Ledger <svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+  </div>
+</section>
+
+<!-- APPLY / DUAL CTA ─────────────────────────────────────── -->
+<section id="apply">
+  <div class="apply-head f">
+    <p class="apply-label">VII — Your Next Step</p>
+    <h2 class="apply-title">Two Paths to <em>Divine.</em></h2>
+    <p class="apply-sub">Whether you are a world-class thinker ready to encode your cognitive framework, or a brand seeking prophetic insight — there is a seat for you.</p>
+  </div>
+  <div class="two-cards f">
+    <div class="path-card tk">
+      <div class="pc-icon vi"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#5b4fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9.5 2A2.5 2.5 0 0 1 12 4.5v15a2.5 2.5 0 0 1-4.96-.46 2.5 2.5 0 0 1-1.98-3 2.5 2.5 0 0 1-1.32-4.24 3 3 0 0 1 .34-5.58 2.5 2.5 0 0 1 1.96-3.45 2.5 2.5 0 0 1 3.46-1.23Z"/><path d="M14.5 2A2.5 2.5 0 0 0 12 4.5v15a2.5 2.5 0 0 0 4.96-.46 2.5 2.5 0 0 0 1.98-3 2.5 2.5 0 0 0 1.32-4.24 3 3 0 0 0-.34-5.58 2.5 2.5 0 0 0-1.96-3.45 2.5 2.5 0 0 0-3.46-1.23Z"/></svg></div>
+      <p class="pc-tag">For Thinkers</p>
+      <h3 class="pc-title">Encode My Mind</h3>
+      <p class="pc-body">Your cognitive framework becomes a permanent, royalty-generating Digital Twin — working for you at infinite scale, without your presence.</p>
+      <a href="mailto:thinkers@joindivine.com" class="btn-pc-v">Apply as Thinker <svg width="12" height="12" viewBox="0 0 14 14" fill="none"><path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+      <p class="pc-fn">60% Perpetual Royalty</p>
+    </div>
+    <div id="board-access" class="path-card sk">
+      <div class="pc-icon co"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#ff4f6b" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/><path d="M7 8h.01M11 8h6M7 12h.01M11 12h3"/></svg></div>
+      <p class="pc-tag">For Brands &amp; Seekers</p>
+      <h3 class="pc-title">Access the Board</h3>
+      <p class="pc-body">Tap into the world's most elite cognitive perspectives — starting at $0.05 per insight. No retainer. No gatekeepers. No timezone.</p>
+      <a href="mailto:seekers@joindivine.com" class="btn-pc-o">Request Access <svg width="12" height="12" viewBox="0 0 14 14" fill="none"><path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+      <p class="pc-fn">From $0.05 Per Thought</p>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER ───────────────────────────────────────────────── -->
+<footer>
+  <div class="w foot-row">
+    <div>
+      <div class="foot-logo">Div<span>ine</span></div>
+      <div class="foot-tag">The Digital Ledger of Human Wisdom</div>
+    </div>
+    <ul class="foot-links">
+      <li><a href="#inversion">The Inversion</a></li>
+      <li><a href="#the-model">The Model</a></li>
+      <li><a href="#the-thinker">Thinkers</a></li>
+      <li><a href="#apply">Apply</a></li>
+      <li><a href="#">Privacy</a></li>
+    </ul>
+  </div>
+</footer>
+
+<script>
+// Fade on scroll
+const io = new IntersectionObserver(
+  es => es.forEach(e => { if(e.isIntersecting){e.target.classList.add('on');io.unobserve(e.target)} }),
+  {threshold:.1}
+);
+document.querySelectorAll('.f').forEach(el => io.observe(el));
+
+// Chart line draw
+(function(){
+  const rr = document.getElementById('rr');
+  const sec = document.getElementById('inversion');
+  let done = false;
+  const draw = new IntersectionObserver(es => {
+    if(es[0].isIntersecting && !done){
+      done = true;
+      let start = null;
+      const dur = 1800;
+      (function step(ts){
+        if(!start) start = ts;
+        const p = Math.min((ts-start)/dur,1);
+        const e = p<.5 ? 4*p*p*p : 1-Math.pow(-2*p+2,3)/2;
+        rr.setAttribute('width', String(e*860));
+        if(p<1) requestAnimationFrame(step);
+      })(performance.now());
+      draw.disconnect();
+    }
+  },{threshold:.2});
+  if(sec) draw.observe(sec);
+
+  // Show callout card + alpha label after line draw completes
+  setTimeout(() => {
+    const c = document.getElementById('callout-2025');
+    const a = document.getElementById('alpha-label');
+    if(c) c.classList.add('on');
+    if(a) a.classList.add('on');
+  }, 2200);
+
+  // Tooltip on hover of inversion dot
+  const dot = document.getElementById('inv-dot');
+  const tip = document.getElementById('inv-tip');
+  if(dot && tip){
+    dot.addEventListener('mouseenter', () => tip.classList.add('on'));
+    dot.addEventListener('mouseleave', () => tip.classList.remove('on'));
+  }
+})();
+
+// Mobile nav
+const ham = document.getElementById('ham');
+const drawer = document.getElementById('drawer');
+ham.addEventListener('click', () => {
+  ham.classList.toggle('open');
+  drawer.classList.toggle('open');
+});
+drawer.querySelectorAll('a').forEach(a => {
+  a.addEventListener('click', () => {
+    ham.classList.remove('open');
+    drawer.classList.remove('open');
+  });
+});
+</script>
+</body>
+</html>
