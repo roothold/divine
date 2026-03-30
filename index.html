@@ -765,8 +765,14 @@
     .dc-input-proj { display:flex; align-items:center; gap:6px; }
     .dc-proj-select { display:flex; align-items:center; gap:5px; font-size:13px; color:var(--text-2); background:var(--surface); border:1px solid var(--border); border-radius:var(--r-pill); padding:5px 11px; cursor:pointer; transition:border-color .12s; font-family:'Inter',sans-serif; }
     .dc-proj-select:hover { border-color:var(--accent-bdr); color:var(--accent); }
-    .dc-proj-add { width:28px; height:28px; border-radius:50%; border:1.5px solid var(--border); background:transparent; cursor:pointer; display:flex; align-items:center; justify-content:center; color:var(--text-3); transition:border-color .12s,color .12s; }
-    .dc-proj-add:hover { border-color:var(--accent-bdr); color:var(--accent); }
+    .dc-proj-add { width:28px; height:28px; border-radius:50%; border:1.5px solid var(--border); background:transparent; cursor:pointer; display:flex; align-items:center; justify-content:center; color:var(--text-3); transition:border-color .12s,color .12s,background .12s; }
+    .dc-proj-add:hover { border-color:var(--accent-bdr); color:var(--accent); background:var(--accent-lt); }
+    /* Attachment chip */
+    .dc-attach-chip { display:none; align-items:center; gap:6px; background:var(--accent-lt); border:1px solid var(--accent-bdr); border-radius:var(--r-pill); padding:4px 10px 4px 8px; font-size:12px; font-weight:500; color:var(--accent); max-width:220px; margin-top:6px; }
+    .dc-attach-chip.visible { display:flex; }
+    .dc-attach-chip-name { white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:130px; }
+    .dc-attach-remove { background:none; border:none; cursor:pointer; color:var(--accent); display:flex; align-items:center; padding:0; opacity:.7; transition:opacity .12s; flex-shrink:0; }
+    .dc-attach-remove:hover { opacity:1; }
     .dc-input-submit { background:#c8c4ee; color:#fff; border:none; border-radius:var(--r-pill); padding:8px 18px; font-size:13px; font-weight:600; cursor:not-allowed; transition:background .2s; font-family:'Inter',sans-serif; white-space:nowrap; flex-shrink:0; }
     .dc-input-submit.ready { background:var(--accent); cursor:pointer; }
     .dc-input-submit.ready:hover { background:#2e2683; }
@@ -1934,6 +1940,14 @@
               <textarea class="dc-input-textarea" id="dc-quick-input" rows="2"
                 placeholder="What would you like to work on?"
                 oninput="dcInputUpdate(this)"></textarea>
+              <!-- Attachment chip — shown once a file is selected -->
+              <div class="dc-attach-chip" id="dc-attach-chip">
+                <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M13.5 8.5l-5.5 5.5a4 4 0 01-5.66-5.66l6-6a2.5 2.5 0 013.54 3.54l-6.01 6a1 1 0 01-1.41-1.41l5.5-5.5"/></svg>
+                <span class="dc-attach-chip-name" id="dc-attach-name">document.pdf</span>
+                <button class="dc-attach-remove" onclick="dcRemoveAttachment()" title="Remove">
+                  <svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><line x1="2" y1="2" x2="10" y2="10"/><line x1="10" y1="2" x2="2" y2="10"/></svg>
+                </button>
+              </div>
               <div class="dc-input-footer">
                 <div class="dc-input-proj">
                   <button class="dc-proj-select" id="dc-proj-btn" onclick="dcToggleProjDropdown()">
@@ -1942,7 +1956,9 @@
                     <svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M2 4l3 3 3-3"/></svg>
                   </button>
                   <div class="dc-proj-dropdown" id="dc-proj-dropdown" style="display:none;position:absolute;background:#fff;border:1.5px solid var(--border);border-radius:10px;padding:6px;min-width:160px;box-shadow:var(--sh-md);z-index:200;margin-top:36px"></div>
-                  <button class="dc-proj-add" onclick="showView('projects')" title="New project">
+                  <!-- Upload button -->
+                  <input type="file" id="dc-file-input" accept=".pdf,.doc,.docx,.txt,.md,.csv,.pptx,.xlsx" style="display:none" onchange="dcHandleFileUpload(this)">
+                  <button class="dc-proj-add" onclick="document.getElementById('dc-file-input').click()" title="Attach document">
                     <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><line x1="6" y1="1" x2="6" y2="11"/><line x1="1" y1="6" x2="11" y2="6"/></svg>
                   </button>
                 </div>
@@ -3408,15 +3424,66 @@ function dcInputUpdate(ta) {
   ta.style.height = Math.min(ta.scrollHeight, 200) + 'px';
 }
 
+let _dcAttachedFile = null;
+let _dcAttachedText = null;
+
+function dcHandleFileUpload(input) {
+  const file = input.files[0];
+  if (!file) return;
+  _dcAttachedFile = file;
+
+  // Show chip
+  const chip = document.getElementById('dc-attach-chip');
+  const nameEl = document.getElementById('dc-attach-name');
+  if (chip) chip.classList.add('visible');
+  if (nameEl) nameEl.textContent = file.name;
+
+  // Read file text for context injection (text-based files)
+  const reader = new FileReader();
+  const isText = /\.(txt|md|csv)$/i.test(file.name);
+  if (isText) {
+    reader.onload = e => { _dcAttachedText = e.target.result; };
+    reader.readAsText(file);
+  } else {
+    // For binary files (PDF, DOCX etc.) store filename as context hint
+    _dcAttachedText = '[Attached document: ' + file.name + ']';
+  }
+
+  // Reset file input so same file can be re-selected
+  input.value = '';
+
+  // Enable submit if not already enabled
+  const btn = document.getElementById('dc-input-submit');
+  if (btn) { btn.classList.add('ready'); btn.disabled = false; }
+}
+
+function dcRemoveAttachment() {
+  _dcAttachedFile = null;
+  _dcAttachedText = null;
+  const chip = document.getElementById('dc-attach-chip');
+  if (chip) chip.classList.remove('visible');
+  // Re-evaluate submit button state
+  const ta = document.getElementById('dc-quick-input');
+  dcInputUpdate(ta);
+}
+
 function dcSubmitInput() {
   const ta = document.getElementById('dc-quick-input');
   if (!ta) return;
   const val = ta.value.trim();
-  if (!val) return;
-  // Pre-fill and launch perspective flow
+  if (!val && !_dcAttachedFile) return;
+
+  // Build prefill: combine typed text + document context
+  let prefill = val;
+  if (_dcAttachedText) {
+    prefill = val
+      ? val + '\n\n---\nContext from ' + (_dcAttachedFile ? _dcAttachedFile.name : 'document') + ':\n' + _dcAttachedText.slice(0, 4000)
+      : 'Please analyse the following document:\n\n' + _dcAttachedText.slice(0, 4000);
+  }
+
   const di = document.getElementById('decision-input');
-  if (di) di.value = val;
-  openPerspectiveFlow(val);
+  if (di) di.value = prefill;
+  openPerspectiveFlow(prefill);
 }
 
 function dcToggleProjDropdown() {
