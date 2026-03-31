@@ -1964,13 +1964,30 @@
 
     /* Stage 3 – Encoding */
     #pf-stage-3 { padding:0; }
-    .pf-enc-bg { position:absolute; inset:0; background:#0d0b14; z-index:0; }
-    .pf-enc-dot { position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); width:18px; height:18px; border-radius:50%; background:#ff4f6b; z-index:2; transition:width 1.3s cubic-bezier(.4,0,.2,1), height 1.3s cubic-bezier(.4,0,.2,1), box-shadow 1.3s ease; }
-    .pf-enc-dot.pf-expanding { width:min(52vmin,320px); height:min(52vmin,320px); box-shadow:0 0 80px 18px rgba(255,79,107,.38), 0 0 160px 64px rgba(255,79,107,.16); }
-    @keyframes pf-enc-breathe { 0%,100%{box-shadow:0 0 60px 14px rgba(255,79,107,.3),0 0 130px 52px rgba(255,79,107,.12)} 50%{box-shadow:0 0 96px 32px rgba(255,79,107,.46),0 0 200px 90px rgba(255,79,107,.2)} }
-    .pf-enc-dot.pf-breathing { animation:pf-enc-breathe 2.4s ease-in-out infinite; }
-    .pf-enc-status { position:absolute; bottom:26%; left:50%; transform:translateX(-50%); text-align:center; z-index:3; min-width:280px; }
-    .pf-enc-status-line { display:block; color:rgba(255,255,255,.5); font-size:13px; letter-spacing:.05em; animation:pf-enc-status-in .5s ease forwards; white-space:nowrap; }
+    .pf-enc-bg { position:absolute; inset:0; background:#f5f3ef; z-index:0; }
+    .pf-enc-dot {
+      position:absolute; left:50%; top:45%; transform:translate(-50%,-50%);
+      width:18px; height:18px; border-radius:50%;
+      background:var(--accent,#3B31A4); z-index:2;
+      transition:width 1.3s cubic-bezier(.4,0,.2,1), height 1.3s cubic-bezier(.4,0,.2,1), box-shadow 1.3s ease;
+    }
+    .pf-enc-dot.pf-expanding {
+      width:min(48vmin,300px); height:min(48vmin,300px);
+      box-shadow:0 0 60px 20px rgba(59,49,164,.12), 0 0 140px 60px rgba(59,49,164,.07);
+    }
+    @keyframes pf-enc-breathe {
+      0%,100% { box-shadow:0 0 50px 16px rgba(59,49,164,.10),0 0 110px 50px rgba(59,49,164,.06); }
+      50%      { box-shadow:0 0 80px 28px rgba(59,49,164,.16),0 0 170px 80px rgba(59,49,164,.09); }
+    }
+    .pf-enc-dot.pf-breathing { animation:pf-enc-breathe 2.6s ease-in-out infinite; }
+    .pf-enc-status {
+      position:absolute; bottom:24%; left:50%; transform:translateX(-50%);
+      text-align:center; z-index:3; min-width:300px; max-width:420px; padding:0 24px;
+    }
+    .pf-enc-status-line {
+      display:block; color:var(--text-2,#6b6357); font-size:13.5px;
+      letter-spacing:.03em; animation:pf-enc-status-in .5s ease forwards; line-height:1.6;
+    }
     @keyframes pf-enc-status-in { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
 
     /* Stage 4 – Revelation */
@@ -5458,29 +5475,27 @@ async function pfToEncoding() {
     encDot.style.cssText = 'width:14px;height:14px;background:#ff4f6b;opacity:.7';
 
     const isNoKey = e.message === 'NO_KEY';
-    const btnStyle = `position:relative;z-index:4;border-radius:100px;padding:10px 24px;font-size:13px;cursor:pointer;font-family:inherit;letter-spacing:.02em;font-weight:600;`;
+    const btnPrimary = `position:relative;z-index:4;border-radius:100px;padding:10px 24px;font-size:13px;cursor:pointer;font-family:inherit;letter-spacing:.02em;font-weight:600;background:#3B31A4;border:none;color:#fff;`;
+    const btnSecondary = `position:relative;z-index:4;border-radius:100px;padding:10px 24px;font-size:13px;cursor:pointer;font-family:inherit;letter-spacing:.02em;font-weight:500;background:transparent;border:1.5px solid rgba(0,0,0,.15);color:#6b6357;`;
 
     encStatus.innerHTML = `
-      <span class="pf-enc-status-line" style="color:rgba(255,255,255,.5);font-size:14px;margin-bottom:6px;display:block">
+      <span class="pf-enc-status-line" style="font-size:15px;font-weight:700;color:#1a1814;margin-bottom:8px;display:block">
         ${isNoKey ? 'No API key configured' : 'Could not reach the server'}
       </span>
-      <span style="display:block;font-size:12px;color:rgba(255,255,255,.32);margin-bottom:28px;line-height:1.6">
+      <span style="display:block;font-size:13px;color:#9a9186;margin-bottom:28px;line-height:1.65">
         ${isNoKey
-          ? 'Add your Anthropic API key in Settings to use Divine without an active server connection.'
+          ? 'Add your Anthropic API key in Settings to run perspectives without a server connection.'
           : 'The server is unreachable and no API key is saved. Add a key to continue offline.'}
       </span>
       <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;position:relative;z-index:4">
         ${isNoKey ? `
-          <button onclick="closePerspectiveFlow();showView('settings')"
-            style="${btnStyle}background:#3B31A4;border:none;color:#fff;">
+          <button onclick="closePerspectiveFlow();showView('settings')" style="${btnPrimary}">
             Add API Key →
           </button>` : `
-          <button onclick="pfToEncoding()"
-            style="${btnStyle}background:#3B31A4;border:none;color:#fff;">
+          <button onclick="pfToEncoding()" style="${btnPrimary}">
             Try Again
           </button>`}
-        <button onclick="closePerspectiveFlow()"
-          style="${btnStyle}background:transparent;border:1px solid rgba(255,255,255,.18);color:rgba(255,255,255,.5);">
+        <button onclick="closePerspectiveFlow()" style="${btnSecondary}">
           Close
         </button>
       </div>`;
