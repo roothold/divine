@@ -906,6 +906,12 @@
     .dc-gauge-lbl-s { color:var(--violet,#5b4fff); font-weight:600; }
     .dc-gauge-lbl-n { color:var(--coral,#ff4f6b); font-weight:600; }
 
+    /* Portfolio pie */
+    .dc-div-wrap { display:flex; align-items:center; gap:14px; }
+    .dc-div-legend { display:flex; flex-direction:column; gap:6px; flex:1; }
+    .dc-div-legend-row { display:flex; align-items:center; gap:7px; font-size:11px; color:var(--text-1); }
+    .dc-div-dot { width:8px; height:8px; border-radius:50%; flex-shrink:0; }
+
     /* Market health placeholder */
     .dc-market-item { display:flex; align-items:center; gap:10px; padding:10px 0; border-bottom:1px solid var(--border); }
     .dc-market-item:last-child { border-bottom:none; }
@@ -2310,6 +2316,14 @@
                   </div>
                 </div>
 
+                <!-- Portfolio Diversification -->
+                <div class="dc-panel-section">
+                  <div class="dc-psec-title">Portfolio Diversification</div>
+                  <div class="dc-div-wrap">
+                    <canvas id="dc-pie-canvas" width="90" height="90" style="flex-shrink:0"></canvas>
+                    <div class="dc-div-legend" id="dc-pie-legend"></div>
+                  </div>
+                </div>
 
               </div>
             </div>
@@ -4040,6 +4054,36 @@ function renderDcPortfolio() {
   if (nEl) nEl.textContent = noisePct + '%';
   requestAnimationFrame(() => requestAnimationFrame(() => drawMoatGauge('dc-gauge-canvas', signalPct)));
 
+  // Portfolio diversification — group by thinker title domain
+  const PALETTE = ['#5b4fff','#ff4f6b','#E8613A','#f59e0b','#22C55E','#aaa'];
+  let domainMap = {};
+  recents.forEach(r => {
+    const key = (r.thinker && r.thinker.title) ? r.thinker.title.split('·')[0].trim() : 'Other';
+    domainMap[key] = (domainMap[key] || 0) + 1;
+  });
+  let segs = Object.entries(domainMap)
+    .sort((a, b) => b[1] - a[1])
+    .map(([label, count], i) => ({ label, count, color: PALETTE[i % PALETTE.length] }));
+
+  if (!segs.length) {
+    segs = [
+      { label:'Stoic Philosophy', count:40, color:'#5b4fff' },
+      { label:'Startup Strategy',  count:30, color:'#ff4f6b' },
+      { label:'Cognitive Design',  count:20, color:'#E8613A' },
+      { label:'Other',             count:10, color:'#aaa' },
+    ];
+  }
+  requestAnimationFrame(() => requestAnimationFrame(() => drawDivPie('dc-pie-canvas', segs)));
+
+  const legendEl = document.getElementById('dc-pie-legend');
+  if (legendEl) {
+    const tot = segs.reduce((s, x) => s + x.count, 0);
+    legendEl.innerHTML = segs.slice(0, 5).map(s =>
+      '<div class="dc-div-legend-row">' +
+      '<div class="dc-div-dot" style="background:' + s.color + '"></div>' +
+      '<span>' + s.label + ' ' + Math.round(s.count / tot * 100) + '%</span></div>'
+    ).join('');
+  }
 }
 
 function renderDcMarket() {
@@ -4178,6 +4222,33 @@ function drawMoatGauge(canvasId, signalPct) {
   ctx.lineWidth   = lw;
   ctx.lineCap     = 'round';
   ctx.stroke();
+}
+
+function drawDivPie(canvasId, segments) {
+  const canvas = document.getElementById(canvasId);
+  if (!canvas || !canvas.getContext) return;
+  const ctx = canvas.getContext('2d');
+  const w = canvas.width, h = canvas.height;
+  ctx.clearRect(0, 0, w, h);
+  const cx = w / 2, cy = h / 2, r = Math.min(w, h) / 2 - 2;
+  const total = segments.reduce((s, x) => s + x.count, 0);
+  let angle = -Math.PI / 2;
+  segments.forEach(seg => {
+    const slice = (seg.count / total) * Math.PI * 2;
+    ctx.beginPath();
+    ctx.moveTo(cx, cy);
+    ctx.arc(cx, cy, r, angle, angle + slice);
+    ctx.closePath();
+    ctx.fillStyle = seg.color;
+    ctx.fill();
+    angle += slice;
+  });
+  // Donut hole
+  ctx.beginPath();
+  ctx.arc(cx, cy, r * 0.5, 0, Math.PI * 2);
+  const bg = getComputedStyle(document.documentElement).getPropertyValue('--surface').trim() || '#fafaf8';
+  ctx.fillStyle = bg;
+  ctx.fill();
 }
 
 /* ── Cognitive Ledger ── */
