@@ -1134,24 +1134,37 @@
     .cc-dash { display:flex; flex-direction:column; gap:28px; }
 
     /* Hero strip */
-    .cc-hero { display:flex; align-items:center; gap:18px; padding:24px 28px;
-      background:var(--accent); border-radius:16px; color:#fff; }
-    .cc-hero-avatar { width:56px; height:56px; border-radius:14px;
-      background:rgba(255,255,255,.18); display:flex; align-items:center;
-      justify-content:center; font-size:18px; font-weight:700; flex-shrink:0;
+    .cc-hero { display:flex; align-items:center; gap:18px; padding:20px 24px;
+      background:#F9F8F6; border:1px solid var(--border); border-radius:16px; }
+    .cc-hero-avatar { width:48px; height:48px; border-radius:12px;
+      background:var(--accent); color:#fff; display:flex; align-items:center;
+      justify-content:center; font-size:16px; font-weight:700; flex-shrink:0;
       letter-spacing:.02em; }
     .cc-hero-body { flex:1; min-width:0; }
-    .cc-hero-name { font-size:20px; font-weight:700; line-height:1.2; margin-bottom:4px; }
-    .cc-hero-title { font-size:13px; opacity:.72; white-space:nowrap;
+    .cc-hero-name { font-family:'Cormorant Garamond',serif; font-size:22px;
+      font-weight:600; line-height:1.2; margin-bottom:3px; color:var(--text-0); }
+    .cc-hero-title { font-size:12.5px; color:var(--text-3); white-space:nowrap;
       overflow:hidden; text-overflow:ellipsis; }
-    .cc-hero-badges { display:flex; align-items:center; gap:10px; flex-shrink:0; }
-    .cc-hero-live { display:inline-flex; align-items:center; gap:6px;
-      background:rgba(255,255,255,.15); border:1px solid rgba(255,255,255,.25);
-      border-radius:100px; padding:5px 14px; font-size:11.5px; font-weight:700;
-      letter-spacing:.06em; }
+    /* Neural Network Health metric */
+    .cc-hero-nnh { text-align:right; flex-shrink:0; padding-right:4px; }
+    .cc-hero-nnh-label { font-size:9.5px; font-weight:700; letter-spacing:.08em;
+      text-transform:uppercase; color:var(--text-3); margin-bottom:3px; }
+    .cc-hero-nnh-val { font-size:24px; font-weight:800; color:var(--accent);
+      line-height:1; font-variant-numeric:tabular-nums; }
+    .cc-hero-nnh-val span { font-size:13px; font-weight:600; }
+    .cc-hero-nnh-bar { width:72px; height:3px; background:var(--border);
+      border-radius:2px; margin-top:5px; margin-left:auto; overflow:hidden; }
+    .cc-hero-nnh-fill { height:100%; border-radius:2px;
+      background:linear-gradient(90deg, var(--accent,#3B31A4), var(--violet,#5b4fff)); }
+    .cc-hero-badges { display:flex; flex-direction:column; align-items:flex-end;
+      gap:6px; flex-shrink:0; }
+    .cc-hero-live { display:inline-flex; align-items:center; gap:5px;
+      background:rgba(22,163,74,.08); border:1px solid rgba(22,163,74,.2);
+      border-radius:100px; padding:4px 10px; font-size:11px; font-weight:700;
+      letter-spacing:.06em; color:#16a34a; }
     .cc-hero-live-dot { width:6px; height:6px; border-radius:50%;
       background:#4ade80; animation:cc-live-pulse 2s infinite; }
-    .cc-hero-version { font-size:11.5px; opacity:.55; font-weight:500; }
+    .cc-hero-version { font-size:11px; color:var(--text-3); font-weight:500; }
 
     /* Stats row */
     .cc-stats { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; }
@@ -1170,7 +1183,8 @@
 
     /* Action grid */
     .cc-actions-label { font-size:10.5px; font-weight:700; letter-spacing:.1em;
-      text-transform:uppercase; color:var(--text-3); margin-bottom:12px; }
+      text-transform:uppercase; color:var(--text-3); margin-bottom:12px;
+      font-family:'Cormorant Garamond',serif; font-size:13px; letter-spacing:.06em; }
     .cc-action-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:12px; }
     @media (max-width:500px) { .cc-action-grid { grid-template-columns:1fr; } }
     .cc-action-tile { background:var(--surface); border:1.5px solid var(--border);
@@ -1194,6 +1208,20 @@
     .cc-tile-cta { font-size:12.5px; font-weight:600; color:var(--accent);
       display:flex; align-items:center; gap:4px; padding-top:2px; }
     .cc-tile-coral .cc-tile-cta { color:var(--coral,#ff4f6b); }
+    /* Version badge */
+    .cc-tile-tag { display:inline-flex; align-items:center; gap:4px;
+      font-size:10px; font-weight:700; padding:3px 8px; border-radius:100px;
+      white-space:nowrap; letter-spacing:.04em; }
+    .cc-tile-tag-green { color:#16a34a; background:rgba(22,163,74,.09);
+      border:1px solid rgba(22,163,74,.18); }
+    /* Tile relative positioning for decorations */
+    .cc-action-tile { position:relative; overflow:hidden; }
+    /* Mesh background hint on Train Model */
+    .cc-tile-mesh { position:absolute; inset:0; pointer-events:none;
+      border-radius:inherit; overflow:hidden; }
+    .cc-tile-mesh svg { position:absolute; bottom:-6px; right:-6px; opacity:.055; }
+    /* Sparkline top-right */
+    .cc-tile-sparkline { position:absolute; top:16px; right:16px; opacity:.45; }
 
     /* Recent activity */
     .cc-recent-label { font-size:10.5px; font-weight:700; letter-spacing:.1em;
@@ -2088,37 +2116,48 @@
 
         <button class="nav-item cc-flat" id="cc-onboarding" data-tip="Onboarding"
           onclick="ccActivate('onboarding',this); showView('thinker-hub'); switchThinkerTab('onboarding',null)">
+          <!-- Compass -->
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75">
-            <path d="M8 1l1.5 3 3.5.5-2.5 2.5.6 3.5L8 9l-3.1 1.5.6-3.5L3 4.5 6.5 4z"/>
+            <circle cx="8" cy="8" r="6.5"/>
+            <path d="M9.8 6.2l-2.4 1-1 2.4 2.4-1z" fill="currentColor" stroke="none" opacity=".8"/>
+            <path d="M6.2 9.8l1-2.4 2.4-1-1 2.4z" fill="currentColor" stroke="none" opacity=".3"/>
           </svg>
           <span class="nav-item-label">Onboarding</span>
         </button>
 
         <button class="nav-item cc-flat" id="cc-train" data-tip="Train Model"
           onclick="ccActivate('train',this); showView('thinker-hub'); switchThinkerTab('train', document.querySelector('.thinker-tab:nth-child(3)'))">
+          <!-- CPU chip -->
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75">
-            <circle cx="8" cy="8" r="3"/>
-            <path d="M8 1v2M8 13v2M1 8h2M13 8h2M3.2 3.2l1.4 1.4M11.4 11.4l1.4 1.4M3.2 12.8l1.4-1.4M11.4 4.6l1.4-1.4"/>
+            <rect x="4" y="4" width="8" height="8" rx="1.5"/>
+            <path d="M6 2.5v1.5M8 2.5v1.5M10 2.5v1.5M6 12v1.5M8 12v1.5M10 12v1.5M2.5 6h1.5M2.5 8h1.5M2.5 10h1.5M12 6h1.5M12 8h1.5M12 10h1.5"/>
           </svg>
           <span class="nav-item-label">Train Model</span>
         </button>
 
         <button class="nav-item cc-flat" id="cc-reports" data-tip="Reports"
           onclick="ccActivate('reports',this); showView('thinker-hub'); switchThinkerTab('reports', document.querySelector('.thinker-tab:nth-child(4)'))">
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75">
-            <rect x="2" y="10" width="3" height="4" rx="1"/>
-            <rect x="6.5" y="6" width="3" height="8" rx="1"/>
-            <rect x="11" y="2" width="3" height="12" rx="1"/>
+          <!-- Fingerprint (verified signal) -->
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round">
+            <path d="M8 1.5C5 1.5 2.5 4 2.5 7"/>
+            <path d="M8 3.5C6 3.5 4.5 5.1 4.5 7"/>
+            <path d="M8 5.5C7 5.5 6.5 6.2 6.5 7"/>
+            <path d="M8 1.5c3 0 5.5 2.5 5.5 5.5"/>
+            <path d="M8 3.5C10 3.5 11.5 5.1 11.5 7"/>
+            <path d="M8 5.5c1 0 1.5.7 1.5 1.5v1.5"/>
+            <path d="M4.5 9c.1 2 1.5 5 3.5 5.5"/>
+            <path d="M2.5 8.5c0 3 2 6 5.5 6"/>
+            <path d="M6.5 7v1c0 2 .5 4.5 1.5 6"/>
           </svg>
           <span class="nav-item-label">Reports</span>
         </button>
 
         <button class="nav-item cc-flat" id="cc-payments" data-tip="Payments"
           onclick="ccActivate('payments',this); showView('thinker-hub'); switchThinkerTab('payments', document.querySelector('.thinker-tab:nth-child(5)'))">
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75">
-            <rect x="1" y="4" width="14" height="10" rx="2"/>
-            <path d="M11 9a1 1 0 110 2 1 1 0 010-2z" fill="currentColor" stroke="none"/>
-            <path d="M1 7h14"/>
+          <!-- Key -->
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="5.5" cy="7" r="3"/>
+            <path d="M8.2 9.3l5.3 4.2M11 11.5l1.5 1.2"/>
           </svg>
           <span class="nav-item-label">Payments</span>
         </button>
@@ -2776,6 +2815,11 @@
           <div class="cc-hero-name" id="cc-hero-name">Michael Akindele</div>
           <div class="cc-hero-title" id="cc-hero-title">Builder · Designer · Founder</div>
         </div>
+        <div class="cc-hero-nnh">
+          <div class="cc-hero-nnh-label">Neural Network Health</div>
+          <div class="cc-hero-nnh-val">94<span>%</span></div>
+          <div class="cc-hero-nnh-bar"><div class="cc-hero-nnh-fill" style="width:94%"></div></div>
+        </div>
         <div class="cc-hero-badges">
           <div class="cc-hero-live"><span class="cc-hero-live-dot"></span>Live</div>
           <div class="cc-hero-version" id="cc-hero-ver">v1.0</div>
@@ -2796,9 +2840,9 @@
           <div class="cc-stat-sub">Wisdom royalties (YTD)</div>
         </div>
         <div class="cc-stat">
-          <div class="cc-stat-label">Satisfaction Score</div>
+          <div class="cc-stat-label">Cognitive Moat Score</div>
           <div class="cc-stat-val" id="cc-stat-rating">—</div>
-          <div class="cc-stat-sub">Avg across all sessions</div>
+          <div class="cc-stat-sub">Verified signal strength</div>
         </div>
       </div>
 
@@ -2819,17 +2863,37 @@
           </button>
 
           <button class="cc-action-tile" onclick="switchThinkerTab('train', document.querySelectorAll('.thinker-tab')[2])">
+            <!-- Subtle mesh pattern hint -->
+            <div class="cc-tile-mesh" aria-hidden="true">
+              <svg viewBox="0 0 100 70" fill="none" stroke="currentColor" stroke-width="1">
+                <circle cx="10" cy="35" r="4"/><circle cx="35" cy="15" r="4"/><circle cx="35" cy="55" r="4"/>
+                <circle cx="65" cy="20" r="4"/><circle cx="65" cy="50" r="4"/><circle cx="90" cy="35" r="4"/>
+                <line x1="14" y1="35" x2="31" y2="18"/><line x1="14" y1="35" x2="31" y2="52"/>
+                <line x1="39" y1="15" x2="61" y2="21"/><line x1="39" y1="55" x2="61" y2="49"/>
+                <line x1="39" y1="18" x2="61" y2="48"/><line x1="39" y1="52" x2="61" y2="22"/>
+                <line x1="69" y1="22" x2="86" y2="33"/><line x1="69" y1="48" x2="86" y2="37"/>
+              </svg>
+            </div>
             <div class="cc-tile-icon cc-tile-icon-coral">
-              <svg width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75"><circle cx="8" cy="8" r="3"/><path d="M8 1v2M8 13v2M1 8h2M13 8h2M3.2 3.2l1.4 1.4M11.4 11.4l1.4 1.4M3.2 12.8l1.4-1.4M11.4 4.6l1.4-1.4"/></svg>
+              <svg width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75"><rect x="4" y="4" width="8" height="8" rx="1.5"/><path d="M6 2.5v1.5M8 2.5v1.5M10 2.5v1.5M6 12v1.5M8 12v1.5M10 12v1.5M2.5 6h1.5M2.5 8h1.5M2.5 10h1.5M12 6h1.5M12 8h1.5M12 10h1.5"/><circle cx="8" cy="8" r="1.5" fill="currentColor" stroke="none"/></svg>
             </div>
             <div class="cc-tile-body">
-              <div class="cc-tile-title">Train Model</div>
+              <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">
+                <div class="cc-tile-title" style="margin-bottom:0">Train Model</div>
+                <div class="cc-tile-tag cc-tile-tag-green">v1.4 · Active</div>
+              </div>
               <div class="cc-tile-desc">Encode how you think. Define your domains and decision logic.</div>
             </div>
             <div class="cc-tile-cta cc-tile-coral" style="color:var(--coral,#ff4f6b)">Update →</div>
           </button>
 
           <button class="cc-action-tile" onclick="switchThinkerTab('reports', document.querySelectorAll('.thinker-tab')[3])">
+            <!-- Sparkline decoration -->
+            <div class="cc-tile-sparkline" aria-hidden="true">
+              <svg width="48" height="22" viewBox="0 0 48 22" fill="none" stroke="#16a34a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="2,18 8,14 14,16 20,10 26,12 32,6 38,8 46,3"/>
+              </svg>
+            </div>
             <div class="cc-tile-icon cc-tile-icon-green">
               <svg width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75"><rect x="2" y="10" width="3" height="4" rx="1"/><rect x="6.5" y="6" width="3" height="8" rx="1"/><rect x="11" y="2" width="3" height="12" rx="1"/></svg>
             </div>
