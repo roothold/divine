@@ -1131,141 +1131,87 @@
     }
 
     /* ══════════════════════════════════════
-       NEURAL FORGE COMMAND CENTER
+       COMMAND CENTER — CLEAN DASHBOARD
     ══════════════════════════════════════ */
-    .nf-wrap { display:flex; flex-direction:column; gap:0; }
+    .cc-dash { display:flex; flex-direction:column; gap:28px; }
 
-    /* ── Header ── */
-    .nf-header { margin-bottom:20px; }
-    .nf-header-meta { display:flex; flex-wrap:wrap; align-items:center; gap:6px;
-      font-size:13px; color:var(--text-1); font-weight:500; margin-bottom:7px; line-height:1.5; }
-    .nf-sep { color:var(--text-3); }
-    .nf-live-pill { display:inline-flex; align-items:center; gap:4px;
-      background:rgba(255,79,107,.08); border:1px solid rgba(255,79,107,.2);
-      border-radius:100px; padding:2px 9px; font-size:10.5px; font-weight:700;
-      letter-spacing:.07em; color:var(--coral,#ff4f6b); }
-    .nf-live-dot { width:5px; height:5px; border-radius:50%;
-      background:var(--coral,#ff4f6b); animation:cc-live-pulse 2s infinite; }
-    .nf-tier { color:var(--text-2); }
-    .nf-tier strong { color:var(--accent); }
-    .nf-source-row { display:flex; align-items:center; gap:6px;
-      font-size:11px; font-weight:600; letter-spacing:.08em; text-transform:uppercase;
-      color:var(--text-3); margin-bottom:6px; }
-    .nf-source-row svg { color:var(--coral,#ff4f6b); }
-    .nf-forge-title { font-family:'Cormorant Garamond',serif; font-size:clamp(18px,2.2vw,24px);
-      font-weight:600; color:var(--text-0); font-style:italic; }
+    /* Hero strip */
+    .cc-hero { display:flex; align-items:center; gap:18px; padding:24px 28px;
+      background:var(--accent); border-radius:16px; color:#fff; }
+    .cc-hero-avatar { width:56px; height:56px; border-radius:14px;
+      background:rgba(255,255,255,.18); display:flex; align-items:center;
+      justify-content:center; font-size:18px; font-weight:700; flex-shrink:0;
+      letter-spacing:.02em; }
+    .cc-hero-body { flex:1; min-width:0; }
+    .cc-hero-name { font-size:20px; font-weight:700; line-height:1.2; margin-bottom:4px; }
+    .cc-hero-title { font-size:13px; opacity:.72; white-space:nowrap;
+      overflow:hidden; text-overflow:ellipsis; }
+    .cc-hero-badges { display:flex; align-items:center; gap:10px; flex-shrink:0; }
+    .cc-hero-live { display:inline-flex; align-items:center; gap:6px;
+      background:rgba(255,255,255,.15); border:1px solid rgba(255,255,255,.25);
+      border-radius:100px; padding:5px 14px; font-size:11.5px; font-weight:700;
+      letter-spacing:.06em; }
+    .cc-hero-live-dot { width:6px; height:6px; border-radius:50%;
+      background:#4ade80; animation:cc-live-pulse 2s infinite; }
+    .cc-hero-version { font-size:11.5px; opacity:.55; font-weight:500; }
 
-    /* ── Three-column grid ── */
-    .nf-grid { display:grid; grid-template-columns:1fr 1.8fr 1fr; gap:12px; margin-bottom:16px; }
-    @media (max-width:900px) { .nf-grid { grid-template-columns:1fr 1fr; } }
-    @media (max-width:600px) { .nf-grid { grid-template-columns:1fr; } }
+    /* Stats row */
+    .cc-stats { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; }
+    @media (max-width:600px) { .cc-stats { grid-template-columns:1fr 1fr; } }
+    .cc-stat { background:var(--surface); border:1px solid var(--border);
+      border-radius:14px; padding:22px 24px; display:flex; flex-direction:column; gap:2px; }
+    .cc-stat-label { font-size:10.5px; font-weight:700; color:var(--text-3);
+      letter-spacing:.06em; text-transform:uppercase; margin-bottom:8px; }
+    .cc-stat-val { font-size:32px; font-weight:800; color:var(--text-0);
+      line-height:1; font-variant-numeric:tabular-nums; }
+    .cc-stat-sub { font-size:12px; color:var(--text-3); margin-top:6px; }
+    .cc-stat-badge { display:inline-flex; align-items:center; gap:3px;
+      font-size:11px; font-weight:700; color:#16a34a;
+      background:rgba(22,163,74,.08); border-radius:100px;
+      padding:3px 10px; margin-top:8px; width:fit-content; }
 
-    .nf-layer { border:1px solid var(--border); border-radius:12px; padding:16px;
-      background:var(--surface); display:flex; flex-direction:column; gap:0; }
-    .nf-layer-label { font-size:9.5px; font-weight:800; letter-spacing:.13em;
-      text-transform:uppercase; color:var(--text-0); margin-bottom:2px; }
-    .nf-layer-sub { font-size:10.5px; color:var(--text-3); margin-bottom:12px; }
+    /* Action grid */
+    .cc-actions-label { font-size:10.5px; font-weight:700; letter-spacing:.1em;
+      text-transform:uppercase; color:var(--text-3); margin-bottom:12px; }
+    .cc-action-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:12px; }
+    @media (max-width:500px) { .cc-action-grid { grid-template-columns:1fr; } }
+    .cc-action-tile { background:var(--surface); border:1.5px solid var(--border);
+      border-radius:14px; padding:22px 24px; cursor:pointer; text-align:left;
+      transition:border-color .15s, box-shadow .15s, transform .15s;
+      display:flex; flex-direction:column; gap:12px; }
+    .cc-action-tile:hover { border-color:var(--accent-bdr);
+      box-shadow:0 6px 20px rgba(59,49,164,.08); transform:translateY(-2px); }
+    .cc-action-tile.cc-tile-coral { border-color:rgba(255,79,107,.2); }
+    .cc-action-tile.cc-tile-coral:hover { border-color:rgba(255,79,107,.5);
+      box-shadow:0 6px 20px rgba(255,79,107,.08); }
+    .cc-tile-icon { width:40px; height:40px; border-radius:10px; display:flex;
+      align-items:center; justify-content:center; flex-shrink:0; }
+    .cc-tile-icon-violet { background:var(--accent-lt); color:var(--accent); }
+    .cc-tile-icon-coral  { background:rgba(255,79,107,.1); color:var(--coral,#ff4f6b); }
+    .cc-tile-icon-green  { background:rgba(22,163,74,.09); color:#16a34a; }
+    .cc-tile-icon-amber  { background:rgba(217,119,6,.09); color:#b45309; }
+    .cc-tile-body { flex:1; display:flex; flex-direction:column; gap:5px; }
+    .cc-tile-title { font-size:15px; font-weight:700; color:var(--text-0); line-height:1.25; }
+    .cc-tile-desc { font-size:13px; color:var(--text-3); line-height:1.6; }
+    .cc-tile-cta { font-size:12.5px; font-weight:600; color:var(--accent);
+      display:flex; align-items:center; gap:4px; padding-top:2px; }
+    .cc-tile-coral .cc-tile-cta { color:var(--coral,#ff4f6b); }
 
-    /* INPUT LAYER — glowing orb */
-    .nf-orb-wrap { display:flex; justify-content:center; align-items:center;
-      flex:1; min-height:120px; position:relative; margin-bottom:14px; }
-    .nf-orb { width:80px; height:80px; border-radius:50%;
-      background: radial-gradient(circle at 38% 38%, #6ec6ff 0%, #2563eb 35%, #1e3a8a 65%, #0f1729 100%);
-      box-shadow: 0 0 0 12px rgba(37,99,235,.1), 0 0 0 28px rgba(37,99,235,.06),
-                  0 0 40px rgba(37,99,235,.35), 0 0 80px rgba(37,99,235,.18);
-      animation: nf-orb-breathe 3.5s ease-in-out infinite; }
-    @keyframes nf-orb-breathe {
-      0%,100% { box-shadow:0 0 0 10px rgba(37,99,235,.1),0 0 0 26px rgba(37,99,235,.05),0 0 36px rgba(37,99,235,.3),0 0 70px rgba(37,99,235,.14); }
-      50%     { box-shadow:0 0 0 16px rgba(37,99,235,.15),0 0 0 38px rgba(37,99,235,.08),0 0 52px rgba(37,99,235,.42),0 0 100px rgba(37,99,235,.22); }
-    }
-    /* Beam lines emitting from orb */
-    .nf-orb-beams { position:absolute; width:100%; height:100%; pointer-events:none; }
-    .nf-orb-beam { position:absolute; top:50%; left:50%; height:1px;
-      background:linear-gradient(to right, rgba(37,99,235,.6), transparent);
-      transform-origin:left center; opacity:.5; }
-    .nf-feed-label { font-size:10px; font-weight:700; letter-spacing:.08em;
-      text-transform:uppercase; color:var(--text-3); margin-bottom:6px; }
-    .nf-feed-list { display:flex; flex-direction:column; gap:3px; }
-    .nf-feed-item { display:flex; align-items:flex-start; gap:6px;
-      font-size:11.5px; color:var(--text-2); line-height:1.4; }
-    .nf-feed-item::before { content:''; width:2px; min-width:2px; height:14px;
-      border-radius:1px; background:var(--accent); margin-top:1px; flex-shrink:0; }
-
-    /* HIDDEN LAYER */
-    .nf-hidden-grid { display:grid; grid-template-columns:1fr auto 1fr; gap:10px; align-items:start; }
-    .nf-nodes-col { display:flex; flex-direction:column; gap:6px; }
-
-    .nf-node { background:var(--bg); border:1px solid var(--border); border-radius:8px;
-      padding:8px 10px; }
-    .nf-node-meta { font-size:9px; color:var(--text-3); font-family:'Courier New',monospace;
-      letter-spacing:.04em; margin-bottom:3px; }
-    .nf-node-meta span { color:var(--coral,#ff4f6b); font-weight:700; }
-    .nf-node-name { font-size:11.5px; font-weight:700; color:var(--text-0); line-height:1.3; }
-    .nf-node-contrib { font-size:9.5px; color:var(--text-3); margin-top:3px; }
-    .nf-node-contrib em { color:#22c55e; font-style:normal; font-weight:700; }
-
-    /* Center column in hidden layer */
-    .nf-center-col { display:flex; flex-direction:column; align-items:center; gap:4px;
-      padding:0 4px; }
-    .nf-monogram { font-family:'Cormorant Garamond',serif; font-size:28px; font-weight:700;
-      color:var(--coral,#ff4f6b); letter-spacing:.03em; line-height:1; }
-    .nf-moat-label { font-size:9px; font-weight:600; letter-spacing:.07em;
-      text-transform:uppercase; color:var(--text-3); text-align:center; }
-    .nf-moat-canvas { max-width:100px; }
-    .nf-moat-val { font-family:'Courier New',monospace; font-size:22px; font-weight:700;
-      color:var(--text-0); margin-top:-6px; line-height:1; }
-    .nf-moat-sub { font-size:9px; color:var(--text-3); }
-    /* Demand heatmap mini bars */
-    .nf-heatmap { margin-top:12px; width:100%; }
-    .nf-hm-title { font-size:9px; font-weight:700; letter-spacing:.06em;
-      text-transform:uppercase; color:var(--text-3); margin-bottom:5px; text-align:center; }
-    .nf-hm-row { display:flex; align-items:center; gap:5px; margin-bottom:3px; }
-    .nf-hm-label { font-size:9.5px; color:var(--text-2); width:52px; text-align:right;
-      flex-shrink:0; font-weight:500; }
-    .nf-hm-bar-wrap { flex:1; height:7px; background:var(--border); border-radius:4px; overflow:hidden; }
-    .nf-hm-bar { height:100%; border-radius:4px;
-      background:linear-gradient(to right, var(--accent), #6b63ff); transition:width .6s ease; }
-
-    /* OUTPUT LAYER */
-    .nf-output-cards { display:flex; flex-direction:column; gap:8px; }
-    .nf-out-card { border-radius:10px; padding:14px 16px; }
-    .nf-out-dark { background:#1a1a2e; color:#fff; }
-    .nf-out-surface { background:var(--surface-2); border:1px solid var(--border); }
-    .nf-out-label { font-size:10px; font-weight:600; letter-spacing:.06em;
-      text-transform:uppercase; opacity:.6; margin-bottom:4px; }
-    .nf-out-dark .nf-out-label { color:#fff; }
-    .nf-out-val { font-size:26px; font-weight:800; line-height:1.1; margin-bottom:2px; }
-    .nf-out-dark .nf-out-val { color:#fff; }
-    .nf-out-xl { font-size:22px; }
-    .nf-out-sub { font-size:10.5px; opacity:.55; }
-    .nf-out-dark .nf-out-sub { color:#fff; }
-    .nf-out-growth { font-size:11px; font-weight:700; color:#4ade80; margin-top:4px; }
-    .nf-out-yield  { font-size:11px; font-weight:600; color:#4ade80; margin-top:4px; }
-    .nf-out-utd { opacity:.5; font-size:9.5px; }
-    .nf-val-gauge-canvas { display:block; margin:0 auto; }
-    .nf-val-scale { display:flex; justify-content:space-between; align-items:center;
-      font-size:9px; color:var(--text-3); margin-top:2px; padding:0 4px; }
-    .nf-val-mid { font-weight:700; color:var(--accent); }
-    .nf-live-mini { display:inline-flex; align-items:center; gap:3px;
-      font-size:9px; font-weight:700; color:#22c55e; margin-left:6px; }
-    .nf-live-dot-sm { width:4px; height:4px; border-radius:50%; background:#22c55e;
-      animation:cc-live-pulse 2s infinite; }
-    .nf-out-agreement { font-size:12px; color:var(--text-2); text-align:center;
-      padding:8px 0 2px; }
-    .nf-out-agreement strong { color:var(--text-0); }
-
-    /* ── Action bar ── */
-    .nf-action-bar { display:flex; gap:10px; flex-wrap:wrap; padding-top:4px; }
-    .nf-btn-audit { display:flex; align-items:center; gap:7px;
-      background:var(--surface); border:1px solid var(--border); border-radius:100px;
-      padding:10px 20px; font-size:12.5px; font-weight:600; color:var(--text-1);
-      cursor:pointer; transition:border-color .15s,color .15s; }
-    .nf-btn-audit:hover { border-color:var(--accent-bdr); color:var(--accent); }
-    .nf-btn-royalty { display:flex; align-items:center; gap:7px;
-      background:var(--coral,#ff4f6b); border:none; border-radius:100px;
-      padding:10px 22px; font-size:12.5px; font-weight:700; color:#fff;
-      cursor:pointer; transition:opacity .15s; }
-    .nf-btn-royalty:hover { opacity:.88; }
+    /* Recent activity */
+    .cc-recent-label { font-size:10.5px; font-weight:700; letter-spacing:.1em;
+      text-transform:uppercase; color:var(--text-3); margin-bottom:12px; }
+    .cc-recent-rows { display:flex; flex-direction:column;
+      background:var(--surface); border:1px solid var(--border); border-radius:14px;
+      overflow:hidden; }
+    .cc-recent-row { display:flex; align-items:center; gap:14px; padding:14px 20px;
+      border-bottom:1px solid var(--border); transition:background .12s; }
+    .cc-recent-row:last-child { border-bottom:none; }
+    .cc-recent-row:hover { background:var(--surface-2); }
+    .cc-recent-dot { width:8px; height:8px; border-radius:50%; flex-shrink:0; }
+    .cc-recent-text { flex:1; font-size:13.5px; color:var(--text-1);
+      white-space:nowrap; overflow:hidden; text-overflow:ellipsis; font-weight:500; }
+    .cc-recent-when { font-size:11.5px; color:var(--text-3); flex-shrink:0; }
+    .cc-empty-state { font-size:13px; color:var(--text-3); padding:20px 24px; }
 
     /* ═══ THINKER PICKER ═══ */
     .modal-bg { display:none; position:fixed; inset:0; background:rgba(15,14,12,0.4); backdrop-filter:blur(6px); -webkit-backdrop-filter:blur(6px); z-index:300; align-items:flex-end; justify-content:center; }
@@ -2773,33 +2719,12 @@
 <div class="screen" id="screen-thinker-hub">
   <div class="main-inner"><div class="screen-inner">
 
-    <!-- Hub header -->
-    <div class="thinker-hero">
-      <div class="th-stat-dot-wrap">
-        <div class="thinker-badge" id="th-badge">MA</div>
-        <div class="th-sale-ring" id="th-sale-ring"></div>
-      </div>
-      <div class="thinker-hero-title" id="th-name">Michael Akindele
-        <span class="th-live-pill" id="th-live-pill"><span class="th-live-dot"></span>Live</span>
-      </div>
-      <div class="thinker-hero-sub" id="th-title">Builder · Designer · Founder</div>
-    </div>
-
-    <!-- Stats -->
-    <div class="thinker-stats">
-      <div class="thinker-stat">
-        <div class="thinker-stat-val" id="th-stat-sessions">—</div>
-        <div class="thinker-stat-label">Cognitive Inquiries Resolved</div>
-        <div class="th-stat-sub" id="th-stat-hours">— hrs saved</div>
-      </div>
-      <div class="thinker-stat">
-        <div class="thinker-stat-val" id="th-stat-earnings">—</div>
-        <div class="thinker-stat-label">Total earnings</div>
-      </div>
-      <div class="thinker-stat">
-        <div class="thinker-stat-val" id="th-stat-rating">—</div>
-        <div class="thinker-stat-label">Avg satisfaction</div>
-      </div>
+    <!-- Hidden stat anchors preserved for JS references -->
+    <div style="display:none">
+      <span id="th-badge"></span><span id="th-sale-ring"></span>
+      <span id="th-name"></span><span id="th-live-pill"></span><span id="th-title"></span>
+      <span id="th-stat-sessions"></span><span id="th-stat-hours"></span>
+      <span id="th-stat-earnings"></span><span id="th-stat-rating"></span>
     </div>
 
     <!-- Tab nav -->
@@ -2826,125 +2751,100 @@
       </button>
     </div>
 
-    <!-- ─── NEURAL FORGE OVERVIEW ─── -->
-    <div class="thinker-panel nf-wrap" id="tp-overview">
+    <!-- ─── COMMAND CENTER OVERVIEW ─── -->
+    <div class="thinker-panel cc-dash" id="tp-overview">
 
-      <!-- Header: name · roles · health -->
-      <div class="nf-header">
-        <div class="nf-header-meta">
-          <strong id="forge-name">Michael Akindele</strong>
-          <span class="nf-sep">·</span>
-          <span class="nf-live-pill"><span class="nf-live-dot"></span>LIVE</span>
-          <span class="nf-sep">·</span>
-          <span id="forge-roles">Builder · Designer · Founder</span>
-          <span class="nf-sep">·</span>
-          <span class="nf-tier">Sovereign Asset: <strong>Tier 1</strong></span>
-          <span class="nf-sep">·</span>
-          <span>Neural Network Health: <strong id="forge-health">94%</strong></span>
+      <!-- Hero -->
+      <div class="cc-hero">
+        <div class="cc-hero-avatar" id="cc-hero-avatar">MA</div>
+        <div class="cc-hero-body">
+          <div class="cc-hero-name" id="cc-hero-name">Michael Akindele</div>
+          <div class="cc-hero-title" id="cc-hero-title">Builder · Designer · Founder</div>
         </div>
-        <div class="nf-source-row">
-          <svg width="13" height="13" viewBox="0 0 20 14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
-            <path d="M1 7h2M4 4v6M7 2v10M10 5v4M13 3v8M16 4v6M19 7h-2"/>
-          </svg>
-          <span id="forge-source">Neural Source v1.6</span>
+        <div class="cc-hero-badges">
+          <div class="cc-hero-live"><span class="cc-hero-live-dot"></span>Live</div>
+          <div class="cc-hero-version" id="cc-hero-ver">v1.0</div>
         </div>
-        <div class="nf-forge-title">'The Forge v<span id="forge-ver">1.6</span> (Active Neural Architecture)'</div>
       </div>
 
-      <!-- Three-column neural network layout -->
-      <div class="nf-grid">
-
-        <!-- ── INPUT LAYER ── -->
-        <div class="nf-layer nf-layer-input">
-          <div class="nf-layer-label">Input Layer</div>
-          <div class="nf-layer-sub">(Problem Aperture)</div>
-          <div class="nf-orb-wrap">
-            <div class="nf-orb"></div>
-          </div>
-          <div class="nf-feed-label">Live feed for up inquiry:</div>
-          <div class="nf-feed-list" id="forge-feed">
-            <div class="nf-feed-item">Awaiting first perspective…</div>
-          </div>
+      <!-- Stats -->
+      <div class="cc-stats">
+        <div class="cc-stat">
+          <div class="cc-stat-label">Perspectives Served</div>
+          <div class="cc-stat-val" id="cc-stat-sessions">—</div>
+          <div class="cc-stat-sub" id="cc-stat-hours">— hrs of clarity delivered</div>
+          <div class="cc-stat-badge" id="cc-stat-growth">↗ Growing</div>
         </div>
-
-        <!-- ── HIDDEN LAYER ── -->
-        <div class="nf-layer nf-layer-hidden">
-          <div class="nf-layer-label">Hidden Layer</div>
-          <div class="nf-layer-sub">(The Forge — Node Activation)</div>
-          <div class="nf-hidden-grid">
-            <!-- Left nodes column -->
-            <div class="nf-nodes-col" id="forge-nodes-left"></div>
-
-            <!-- Center: monogram + moat gauge + heatmap -->
-            <div class="nf-center-col">
-              <div class="nf-monogram">DI</div>
-              <div class="nf-moat-label">Moat Score (<span id="forge-moat-pct">88%</span>)</div>
-              <canvas class="nf-moat-canvas" id="forge-moat-canvas" width="100" height="58"></canvas>
-              <div class="nf-moat-val" id="forge-moat-val">88</div>
-              <div class="nf-moat-sub">Signal vs Noise</div>
-              <div class="nf-heatmap">
-                <div class="nf-hm-title">Live Market<br>Demand Heatmap</div>
-                <div id="forge-heatmap"></div>
-              </div>
-            </div>
-
-            <!-- Right nodes column -->
-            <div class="nf-nodes-col" id="forge-nodes-right"></div>
-          </div>
+        <div class="cc-stat">
+          <div class="cc-stat-label">Total Earned</div>
+          <div class="cc-stat-val" id="cc-stat-earnings">$—</div>
+          <div class="cc-stat-sub">Wisdom royalties (YTD)</div>
         </div>
-
-        <!-- ── OUTPUT LAYER ── -->
-        <div class="nf-layer nf-layer-output">
-          <div class="nf-layer-label">Output Layer</div>
-          <div class="nf-layer-sub">(Wisdom Yield)</div>
-          <div class="nf-output-cards">
-
-            <div class="nf-out-card nf-out-dark">
-              <div class="nf-out-label">Cognitive Inquiries Resolved</div>
-              <div class="nf-out-val" id="forge-inquiries">—</div>
-              <div class="nf-out-sub">Insights (30 Day)</div>
-              <div class="nf-out-growth" id="forge-growth">↗ +18% Growth</div>
-            </div>
-
-            <div class="nf-out-card nf-out-dark">
-              <div class="nf-out-label">Global Ledger Alpha DI-UTD</div>
-              <div class="nf-out-val nf-out-xl" id="forge-earnings-ytd">$—</div>
-              <div class="nf-out-sub">Gross (YTD)</div>
-              <div class="nf-out-yield" id="forge-yield-today">+$0.00 DI-UTD Yield (Today)</div>
-            </div>
-
-            <div class="nf-out-card nf-out-surface">
-              <div class="nf-out-label">
-                Estimated Valuation
-                <span class="nf-live-mini"><span class="nf-live-dot-sm"></span>Live</span>
-              </div>
-              <canvas class="nf-val-gauge-canvas" id="forge-val-gauge" width="150" height="84"></canvas>
-              <div style="text-align:center">
-                <div class="nf-out-val" id="forge-valuation" style="font-size:20px">$0.62</div>
-                <div class="nf-out-utd">UTD (2030 Proj.)</div>
-              </div>
-              <div class="nf-val-scale"><span>0</span><span class="nf-val-mid">UTD</span><span>1000</span></div>
-            </div>
-
-            <div class="nf-out-agreement">
-              Avg. Neural Agreement: <strong id="forge-agreement">88%</strong>
-            </div>
-
-          </div>
+        <div class="cc-stat">
+          <div class="cc-stat-label">Satisfaction Score</div>
+          <div class="cc-stat-val" id="cc-stat-rating">—</div>
+          <div class="cc-stat-sub">Avg across all sessions</div>
         </div>
+      </div>
 
-      </div><!-- /nf-grid -->
+      <!-- Action tiles -->
+      <div>
+        <div class="cc-actions-label">Quick Actions</div>
+        <div class="cc-action-grid">
 
-      <!-- Bottom action bar -->
-      <div class="nf-action-bar">
-        <button class="nf-btn-audit" onclick="switchThinkerTab('train', document.querySelectorAll('.thinker-tab')[2])">
-          <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="8" cy="8" r="3"/><path d="M8 1v2M8 13v2M1 8h2M13 8h2M3.2 3.2l1.4 1.4M11.4 11.4l1.4 1.4M3.2 12.8l1.4-1.4M11.4 4.6l1.4-1.4"/></svg>
-          Audit Cognitive Source Code v<span id="forge-ver-btn">1.6</span>
-        </button>
-        <button class="nf-btn-royalty" onclick="switchThinkerTab('payments', document.querySelectorAll('.thinker-tab')[4])">
-          <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="1" y="3" width="14" height="10" rx="2"/><path d="M1 6h14M5 10h2"/></svg>
-          Issue Royalties (DI-UTD) · $0.05 per verified insight
-        </button>
+          <button class="cc-action-tile" onclick="switchThinkerTab('onboarding', null)">
+            <div class="cc-tile-icon cc-tile-icon-violet">
+              <svg width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M8 1l1.5 3 3.5.5-2.5 2.5.6 3.5L8 9l-3.1 1.5.6-3.5L3 4.5 6.5 4z"/></svg>
+            </div>
+            <div class="cc-tile-body">
+              <div class="cc-tile-title">Onboarding</div>
+              <div class="cc-tile-desc">Set up your identity, cognitive lens, and thinking framework.</div>
+            </div>
+            <div class="cc-tile-cta">Open →</div>
+          </button>
+
+          <button class="cc-action-tile" onclick="switchThinkerTab('train', document.querySelectorAll('.thinker-tab')[2])">
+            <div class="cc-tile-icon cc-tile-icon-coral">
+              <svg width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75"><circle cx="8" cy="8" r="3"/><path d="M8 1v2M8 13v2M1 8h2M13 8h2M3.2 3.2l1.4 1.4M11.4 11.4l1.4 1.4M3.2 12.8l1.4-1.4M11.4 4.6l1.4-1.4"/></svg>
+            </div>
+            <div class="cc-tile-body">
+              <div class="cc-tile-title">Train Model</div>
+              <div class="cc-tile-desc">Encode how you think. Define your domains and decision logic.</div>
+            </div>
+            <div class="cc-tile-cta cc-tile-coral" style="color:var(--coral,#ff4f6b)">Update →</div>
+          </button>
+
+          <button class="cc-action-tile" onclick="switchThinkerTab('reports', document.querySelectorAll('.thinker-tab')[3])">
+            <div class="cc-tile-icon cc-tile-icon-green">
+              <svg width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75"><rect x="2" y="10" width="3" height="4" rx="1"/><rect x="6.5" y="6" width="3" height="8" rx="1"/><rect x="11" y="2" width="3" height="12" rx="1"/></svg>
+            </div>
+            <div class="cc-tile-body">
+              <div class="cc-tile-title">Reports</div>
+              <div class="cc-tile-desc">View your performance, demand analytics, and earnings history.</div>
+            </div>
+            <div class="cc-tile-cta" style="color:#16a34a">View →</div>
+          </button>
+
+          <button class="cc-action-tile cc-tile-coral" onclick="switchThinkerTab('payments', document.querySelectorAll('.thinker-tab')[4])">
+            <div class="cc-tile-icon cc-tile-icon-amber">
+              <svg width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75"><rect x="1" y="4" width="14" height="10" rx="2"/><path d="M11 9a1 1 0 110 2 1 1 0 010-2z" fill="currentColor" stroke="none"/><path d="M1 7h14"/></svg>
+            </div>
+            <div class="cc-tile-body">
+              <div class="cc-tile-title">Payments</div>
+              <div class="cc-tile-desc">Manage royalty payouts. $0.05 issued per verified insight.</div>
+            </div>
+            <div class="cc-tile-cta" style="color:#b45309">Claim →</div>
+          </button>
+
+        </div>
+      </div>
+
+      <!-- Recent activity -->
+      <div>
+        <div class="cc-recent-label">Recent Perspectives Served</div>
+        <div class="cc-recent-rows" id="cc-recent-rows">
+          <div class="cc-empty-state">Your served perspectives will appear here.</div>
+        </div>
       </div>
 
     </div><!-- /tp-overview -->
@@ -5928,139 +5828,71 @@ async function initThinkerHub() {
   if (livePill) nameEl.appendChild(livePill);
   document.getElementById('th-title').textContent   = prof.title || activeThinker?.title || '';
 
-  // ── Neural Forge Overview ──────────────────────────────────
+  // ── Command Center Overview ────────────────────────────────
   const title  = prof.title || activeThinker?.title || 'Builder · Designer · Founder';
-  const verStr = `${ver}.${Math.min(ver * 2, 9)}`;
+  const verStr = `v${ver}.0`;
+  const set = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
 
-  // Header
-  const forgeNameEl = document.getElementById('forge-name');
-  if (forgeNameEl) forgeNameEl.textContent = prof.name;
-  const forgeRolesEl = document.getElementById('forge-roles');
-  if (forgeRolesEl) forgeRolesEl.textContent = title;
-  ['forge-ver','forge-ver-btn'].forEach(id => {
-    const el = document.getElementById(id);
-    if (el) el.textContent = verStr;
-  });
-  const srcEl = document.getElementById('forge-source');
-  if (srcEl) srcEl.textContent = `Neural Source v${verStr}`;
-  const forgeTitleEl = document.querySelector('.nf-forge-title');
-  if (forgeTitleEl) forgeTitleEl.innerHTML =
-    `'The Forge v<span id="forge-ver">${verStr}</span> (Active Neural Architecture)'`;
+  set('cc-hero-name',  prof.name);
+  set('cc-hero-title', title);
+  set('cc-hero-ver',   verStr);
+  const avatarEl = document.getElementById('cc-hero-avatar');
+  if (avatarEl) avatarEl.textContent = initials;
 
-  // ── Build nodes from domains (or defaults) ─────────────────
-  const DEFAULT_NODES = [
-    { id:1, weight:0.88, name:'Validates Problem' },
-    { id:2, weight:0.74, name:'Challenges 10× Thinking' },
-    { id:3, weight:0.74, name:'Audits Landscape' },
-    { id:4, weight:0.88, name:'1× Signal Audit' },
-    { id:5, weight:0.74, name:'Market Signal Filter' },
-    { id:6, weight:0.73, name:'Pattern Interpreter' },
-    { id:7, weight:0.74, name:'Brand Signal Audit' },
-  ];
-  // Derive nodes from domains if available
-  function seededWeight(str) {
-    let h = 0;
-    for (let i = 0; i < str.length; i++) h = (h * 31 + str.charCodeAt(i)) & 0xffffffff;
-    return (0.60 + (Math.abs(h) % 30) / 100).toFixed(2);
-  }
-  const nodeSource = doms.length >= 4
-    ? doms.slice(0,7).map((d,i) => ({ id:i+1, weight:parseFloat(seededWeight(d)), name:d }))
-    : DEFAULT_NODES;
-
-  const leftNodes  = nodeSource.slice(0, 4);
-  const rightNodes = nodeSource.slice(4, 7);
-
-  function nodeHTML(n) {
-    return `<div class="nf-node">
-      <div class="nf-node-meta">Node ${n.id}: &nbsp;<span>Weight: ${n.weight.toFixed ? n.weight.toFixed(2) : n.weight}</span></div>
-      <div class="nf-node-name">${n.name}</div>
-      <div class="nf-node-contrib">Moat Contribution <em>+22%</em></div>
-    </div>`;
-  }
-  const leftEl  = document.getElementById('forge-nodes-left');
-  const rightEl = document.getElementById('forge-nodes-right');
-  if (leftEl)  leftEl.innerHTML  = leftNodes.map(nodeHTML).join('');
-  if (rightEl) rightEl.innerHTML = rightNodes.map(nodeHTML).join('');
-
-  // ── Live feed from recents ──────────────────────────────────
-  const feedEl = document.getElementById('forge-feed');
-  if (feedEl) {
-    const recents = loadRecents().slice(0,3);
+  // Recent perspectives
+  const recentRowsEl = document.getElementById('cc-recent-rows');
+  if (recentRowsEl) {
+    const recents = loadRecents().slice(0, 5);
     if (recents.length) {
-      feedEl.innerHTML = recents.map(r =>
-        `<div class="nf-feed-item">${r.decision ? r.decision.slice(0,45) + (r.decision.length>45?'…':'') : 'Untitled inquiry'}</div>`
-      ).join('');
+      recentRowsEl.innerHTML = recents.map(r => {
+        const color = r.thinker?.color || 'var(--accent)';
+        const when  = r.date ? formatDate(r.date) : '';
+        const text  = r.decision ? r.decision.slice(0, 60) + (r.decision.length > 60 ? '…' : '') : 'Untitled';
+        return `<div class="cc-recent-row">
+          <div class="cc-recent-dot" style="background:${color}"></div>
+          <div class="cc-recent-text">${text}</div>
+          <div class="cc-recent-when">${when}</div>
+        </div>`;
+      }).join('');
     } else {
-      feedEl.innerHTML = '<div class="nf-feed-item" style="color:var(--text-3)">Awaiting first perspective…</div>';
+      recentRowsEl.innerHTML = '<div class="cc-empty-state">Serve your first perspective to see activity here.</div>';
     }
   }
 
-  // ── Heatmap bars ────────────────────────────────────────────
-  const hmEl = document.getElementById('forge-heatmap');
-  if (hmEl) {
-    const hmDoms = doms.length ? doms.slice(0,3) : ['Strategy','Design','Positioning'];
-    function seededPct(s) {
-      let h = 0; for (let i=0;i<s.length;i++) h=(h*31+s.charCodeAt(i))&0xffffffff;
-      return 40 + Math.abs(h)%56;
-    }
-    hmEl.innerHTML = hmDoms.map(d => {
-      const pct = seededPct(d);
-      return `<div class="nf-hm-row">
-        <div class="nf-hm-label">${d.slice(0,9)}</div>
-        <div class="nf-hm-bar-wrap"><div class="nf-hm-bar" style="width:${pct}%"></div></div>
-      </div>`;
-    }).join('');
-  }
+  // Stats — seeded while API loads
+  const seedSessions = loadRecents().length || 0;
+  const seedEarnings = (seedSessions * 0.05).toFixed(2);
+  set('cc-stat-sessions', seedSessions || '—');
+  set('cc-stat-earnings', seedSessions ? `$${seedEarnings}` : '$—');
+  set('cc-stat-rating',   '—');
+  set('cc-stat-hours',    seedSessions ? `${(seedSessions * 1.5).toFixed(0)} hrs of clarity delivered` : '— hrs of clarity delivered');
 
-  // ── Moat gauge canvas ───────────────────────────────────────
-  requestAnimationFrame(() => requestAnimationFrame(() => {
-    drawMoatGauge('forge-moat-canvas', 88);
-    drawForgeValGauge('forge-val-gauge', 0.062); // 0.62 / 1000 scale = 6.2%
-  }));
+  document.getElementById('th-stat-sessions').textContent = seedSessions || '—';
+  document.getElementById('th-stat-earnings').textContent = seedSessions ? `$${seedEarnings}` : '$—';
+  document.getElementById('th-stat-rating').textContent   = '—';
+  document.getElementById('th-stat-hours').textContent    = seedSessions ? `${(seedSessions*1.5).toFixed(0)} hrs saved` : '— hrs saved';
 
-  // ── Stats — try live API, fall back to seeded defaults ──────
-  const seedInquiries = 200 + (prof.name.length * 3 % 50);
-  const seedEarnings  = (seedInquiries * 0.05 * 4.2).toFixed(2);
-  const seedRating    = 87 + (prof.name.length % 8);
-
-  document.getElementById('th-stat-sessions').textContent = seedInquiries;
-  document.getElementById('th-stat-earnings').textContent = `$${seedEarnings}`;
-  document.getElementById('th-stat-rating').textContent   = `${(seedRating/20).toFixed(1)}★`;
-  document.getElementById('th-stat-hours').textContent    = `${(seedInquiries*1.5).toFixed(0)} hrs saved`;
-
-  // Forge stat elements
-  const setForge = (id, val) => { const el=document.getElementById(id); if(el) el.textContent=val; };
-  setForge('forge-inquiries', seedInquiries);
-  setForge('forge-earnings-ytd', `$${(seedInquiries*0.05*4.2).toFixed(2)}`);
-  setForge('forge-yield-today', `+$${(Math.floor(seedInquiries/200)*0.05).toFixed(2)} DI-UTD Yield (Today)`);
-  setForge('forge-moat-val', seedRating);
-  setForge('forge-moat-pct', `${seedRating}%`);
-  setForge('forge-agreement', `${seedRating}%`);
-  setForge('forge-health', `${seedRating}%`);
-  setForge('forge-valuation', `$0.${Math.max(10, seedRating - 50)}`);
-
-  // Try live stats from API
+  // Try live stats
   try {
     const res = await fetch(`${API_BASE}/api/thinker/stats?thinker_id=${USER_ID}`,
       { signal: AbortSignal.timeout(5000) });
     if (res.ok) {
       const s = await res.json();
-      const inquiries = s.sessions || s.perspectives || s.total_sessions || seedInquiries;
-      const earnings  = parseFloat(s.earnings || s.total_earnings || seedEarnings);
-      const rating    = parseFloat(s.rating || s.avg_rating || 0) || seedRating;
-      const hoursSaved = (inquiries * 1.5).toFixed(1);
+      const inquiries  = s.sessions || s.perspectives || s.total_sessions || seedSessions;
+      const earnings   = parseFloat(s.earnings || s.total_earnings || seedEarnings);
+      const ratingRaw  = parseFloat(s.rating || s.avg_rating || 0);
+      const ratingDisp = ratingRaw ? `${ratingRaw.toFixed(1)}★` : '—';
+      const hoursSaved = `${(inquiries * 1.5).toFixed(0)} hrs of clarity delivered`;
+      set('cc-stat-sessions', inquiries);
+      set('cc-stat-earnings', `$${earnings.toFixed(2)}`);
+      set('cc-stat-rating',   ratingDisp);
+      set('cc-stat-hours',    hoursSaved);
       document.getElementById('th-stat-sessions').textContent = inquiries;
       document.getElementById('th-stat-earnings').textContent = `$${earnings.toFixed(2)}`;
-      document.getElementById('th-stat-rating').textContent   = `${(rating/20).toFixed(1)}★`;
-      document.getElementById('th-stat-hours').textContent    = `${hoursSaved} hrs saved`;
-      setForge('forge-inquiries', inquiries);
-      setForge('forge-earnings-ytd', `$${earnings.toFixed(2)}`);
-      const rPct = Math.round(rating * 10);
-      setForge('forge-moat-val', rPct); setForge('forge-moat-pct', `${rPct}%`);
-      setForge('forge-agreement', `${rPct}%`); setForge('forge-health', `${rPct}%`);
-      requestAnimationFrame(() => requestAnimationFrame(() => drawMoatGauge('forge-moat-canvas', rPct)));
+      document.getElementById('th-stat-rating').textContent   = ratingDisp;
+      document.getElementById('th-stat-hours').textContent    = `${(inquiries*1.5).toFixed(0)} hrs saved`;
     }
-  } catch { /* non-fatal — seeded values already shown */ }
+  } catch { /* non-fatal */ }
 
   // Train tab
   const trainFw  = document.getElementById('train-framework');
