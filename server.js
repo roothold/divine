@@ -1,14 +1,24 @@
 /**
- * Divine Intelligence — Production Server v3
+ * Divine Intelligence — Production Server v4
  *
  * Routes:
- *   GET  /                     → Serve app
- *   GET  /health               → Status + DB check
- *   GET  /api/balance          → Fetch wallet balance (create if new user)
- *   POST /api/get-perspective  → Stream AI insight, deduct $0.05
- *   POST /api/top-up           → Payment webhook (Stripe / Shift4)
+ *   GET  /                           → Serve app
+ *   GET  /health                     → Status + DB check
  *
- * Brand voice: Direct, not cold. Precise, not clever.
+ *   Auth:
+ *   GET  /auth/google                → Start Google OAuth flow
+ *   GET  /auth/google/callback       → Complete Google OAuth, issue JWT
+ *   GET  /auth/linkedin              → Start LinkedIn OAuth flow
+ *   GET  /auth/linkedin/callback     → Complete LinkedIn OAuth, issue JWT
+ *   POST /auth/email/register        → Email + password sign-up
+ *   POST /auth/email/login           → Email + password sign-in
+ *   GET  /api/me                     → Return current user (JWT required)
+ *
+ *   App:
+ *   GET  /api/balance                → Fetch wallet balance
+ *   POST /api/get-perspective        → Stream AI insight, deduct $0.05
+ *   POST /api/top-up                 → Payment webhook (Stripe / Shift4)
+ *   GET  /api/wallet/history         → Transaction history
  */
 
 import 'dotenv/config';
@@ -17,22 +27,38 @@ import { readFileSync }   from 'fs';
 import { join, dirname }  from 'path';
 import { fileURLToPath }  from 'url';
 import Anthropic          from '@anthropic-ai/sdk';
-import pool, { getOrCreateWallet, deductCredit, creditWallet } from './db.js';
-import { getThinker }     from './thinkers.js';
+import jwt                from 'jsonwebtoken';
+import bcrypt             from 'bcryptjs';
+import pool, {
+  getOrCreateWallet, deductCredit, creditWallet,
+  getUserById, getUserByEmail,
+  upsertGoogleUser, upsertLinkedInUser, createEmailUser,
+} from './db.js';
+import { getThinker } from './thinkers.js';
 
 const __dirname  = dirname(fileURLToPath(import.meta.url));
 const app        = express();
 const anthropic  = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
 
-// ── Constants ────────────────────────────────────────────────────────────────
-const INSIGHT_COST    = parseFloat(process.env.INSIGHT_COST   || '0.05');
-const MAIN_MODEL      = process.env.ANTHROPIC_MODEL            || 'claude-sonnet-4-5';
-const SUMMARY_MODEL   = 'claude-haiku-4-5';   // cheap model for context compression
-const MAX_CTX_CHARS   = 12_000;               // ~3 000 tokens — summarise above this
+// ── Constants ─────────────────────────────────────────────────────────────────
+const INSIGHT_COST    = parseFloat(process.env.INSIGHT_COST    || '0.05');
+const MAIN_MODEL      = process.env.ANTHROPIC_MODEL             || 'claude-sonnet-4-5';
+const SUMMARY_MODEL   = 'claude-haiku-4-5';
+const MAX_CTX_CHARS   = 12_000;
 const PORT            = parseInt(process.env.PORT              || '3001');
 const ALLOWED_ORIGINS = (process.env.ALLOWED_ORIGINS || '').split(',').map(s => s.trim()).filter(Boolean);
+const JWT_SECRET      = process.env.JWT_SECRET                  || 'divine-dev-secret-change-in-production';
+const APP_URL         = process.env.APP_URL                     || 'https://divine.uncharted.ventures';
 
-// ── Middleware ───────────────────────────────────────────────────────────────
+const GOOGLE_CLIENT_ID     = process.env.GOOGLE_CLIENT_ID     || '';
+const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET || '';
+const GOOGLE_REDIRECT_URI  = `${APP_URL}/auth/google/callback`;
+
+const LINKEDIN_CLIENT_ID     = process.env.LINKEDIN_CLIENT_ID     || '';
+const LINKEDIN_CLIENT_SECRET = process.env.LINKEDIN_CLIENT_SECRET || '';
+const LINKEDIN_REDIRECT_URI  = `${APP_URL}/auth/linkedin/callback`;
+
+// ── Middleware ────────────────────────────────────────────────────────────────
 app.use((req, res, next) => {
   const origin = req.headers.origin || '';
   if (!ALLOWED_ORIGINS.length || ALLOWED_ORIGINS.includes(origin)) {
@@ -44,11 +70,37 @@ app.use((req, res, next) => {
   next();
 });
 
-// Raw body for webhook — must come before express.json()
 app.use('/api/top-up', express.raw({ type: '*/*' }));
 app.use(express.json());
 
-// ── Serve app ────────────────────────────────────────────────────────────────
+// ── JWT helper ────────────────────────────────────────────────────────────────
+function signToken(user) {
+  return jwt.sign(
+    { sub: user.id, email: user.email, role: user.role, thinker_access: user.thinker_access },
+    JWT_SECRET,
+    { expiresIn: '30d' }
+  );
+}
+
+/** Middleware: attach req.user if a valid Bearer token is present. Never blocks. */
+function optionalAuth(req, _res, next) {
+  const header = req.headers.authorization || '';
+  const token  = header.startsWith('Bearer ') ? header.slice(7) : null;
+  if (token) {
+    try { req.user = jwt.verify(token, JWT_SECRET); } catch {}
+  }
+  next();
+}
+
+/** Middleware: require valid JWT. */
+function requireAuth(req, res, next) {
+  optionalAuth(req, res, () => {
+    if (!req.user) return res.status(401).json({ error: 'Authentication required.' });
+    next();
+  });
+}
+
+// ── Serve app ─────────────────────────────────────────────────────────────────
 const HTML_FILE = join(__dirname, 'index.html');
 app.get('/', (_req, res) => {
   try {
@@ -59,7 +111,7 @@ app.get('/', (_req, res) => {
   }
 });
 
-// ── Health ───────────────────────────────────────────────────────────────────
+// ── Health ────────────────────────────────────────────────────────────────────
 app.get('/health', async (_req, res) => {
   try {
     await pool.query('SELECT 1');
@@ -69,7 +121,171 @@ app.get('/health', async (_req, res) => {
   }
 });
 
-// ── GET /api/balance ─────────────────────────────────────────────────────────
+// ════════════════════════════════════════════════════════════════════════════
+//  AUTH ROUTES
+// ════════════════════════════════════════════════════════════════════════════
+
+// ── Google OAuth ──────────────────────────────────────────────────────────────
+app.get('/auth/google', (_req, res) => {
+  if (!GOOGLE_CLIENT_ID) return res.status(503).send('Google OAuth not configured.');
+  const params = new URLSearchParams({
+    client_id:     GOOGLE_CLIENT_ID,
+    redirect_uri:  GOOGLE_REDIRECT_URI,
+    response_type: 'code',
+    scope:         'openid email profile',
+    access_type:   'online',
+  });
+  res.redirect(`https://accounts.google.com/o/oauth2/v2/auth?${params}`);
+});
+
+app.get('/auth/google/callback', async (req, res) => {
+  const { code } = req.query;
+  if (!code) return res.redirect('/?auth_error=no_code');
+
+  try {
+    // Exchange code for tokens
+    const tokenRes = await fetch('https://oauth2.googleapis.com/token', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: new URLSearchParams({
+        code,
+        client_id:     GOOGLE_CLIENT_ID,
+        client_secret: GOOGLE_CLIENT_SECRET,
+        redirect_uri:  GOOGLE_REDIRECT_URI,
+        grant_type:    'authorization_code',
+      }),
+    });
+    const tokens = await tokenRes.json();
+    if (!tokenRes.ok) throw new Error(tokens.error_description || 'Token exchange failed');
+
+    // Get user info
+    const infoRes = await fetch('https://www.googleapis.com/oauth2/v2/userinfo', {
+      headers: { Authorization: `Bearer ${tokens.access_token}` },
+    });
+    const info = await infoRes.json();
+    if (!infoRes.ok) throw new Error('Could not fetch Google user info');
+
+    const user = await upsertGoogleUser({
+      googleId:  info.id,
+      email:     info.email,
+      name:      info.name,
+      avatarUrl: info.picture,
+    });
+
+    const appToken = signToken(user);
+    res.redirect(`/?token=${encodeURIComponent(appToken)}`);
+  } catch (err) {
+    console.error('[Google OAuth]', err.message);
+    res.redirect('/?auth_error=google_failed');
+  }
+});
+
+// ── LinkedIn OAuth ────────────────────────────────────────────────────────────
+app.get('/auth/linkedin', (_req, res) => {
+  if (!LINKEDIN_CLIENT_ID) return res.status(503).send('LinkedIn OAuth not configured.');
+  const params = new URLSearchParams({
+    client_id:     LINKEDIN_CLIENT_ID,
+    redirect_uri:  LINKEDIN_REDIRECT_URI,
+    response_type: 'code',
+    scope:         'openid profile email',
+  });
+  res.redirect(`https://www.linkedin.com/oauth/v2/authorization?${params}`);
+});
+
+app.get('/auth/linkedin/callback', async (req, res) => {
+  const { code } = req.query;
+  if (!code) return res.redirect('/?auth_error=no_code');
+
+  try {
+    const tokenRes = await fetch('https://www.linkedin.com/oauth/v2/accessToken', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: new URLSearchParams({
+        code,
+        client_id:     LINKEDIN_CLIENT_ID,
+        client_secret: LINKEDIN_CLIENT_SECRET,
+        redirect_uri:  LINKEDIN_REDIRECT_URI,
+        grant_type:    'authorization_code',
+      }),
+    });
+    const tokens = await tokenRes.json();
+    if (!tokenRes.ok) throw new Error(tokens.error_description || 'Token exchange failed');
+
+    const infoRes = await fetch('https://api.linkedin.com/v2/userinfo', {
+      headers: { Authorization: `Bearer ${tokens.access_token}` },
+    });
+    const info = await infoRes.json();
+    if (!infoRes.ok) throw new Error('Could not fetch LinkedIn user info');
+
+    const user = await upsertLinkedInUser({
+      linkedinId: info.sub,
+      email:      info.email,
+      name:       info.name,
+      avatarUrl:  info.picture,
+    });
+
+    const appToken = signToken(user);
+    res.redirect(`/?token=${encodeURIComponent(appToken)}`);
+  } catch (err) {
+    console.error('[LinkedIn OAuth]', err.message);
+    res.redirect('/?auth_error=linkedin_failed');
+  }
+});
+
+// ── Email auth ────────────────────────────────────────────────────────────────
+app.post('/auth/email/register', async (req, res) => {
+  const { name, email, password } = req.body || {};
+  if (!email || !password) return res.status(400).json({ error: 'Email and password are required.' });
+  if (password.length < 8)  return res.status(400).json({ error: 'Password must be at least 8 characters.' });
+
+  try {
+    const existing = await getUserByEmail(email);
+    if (existing) return res.status(409).json({ error: 'An account with this email already exists.' });
+
+    const passwordHash = await bcrypt.hash(password, 12);
+    const user = await createEmailUser({ email, name: name || email.split('@')[0], passwordHash });
+    res.json({ token: signToken(user), user });
+  } catch (err) {
+    console.error('[email register]', err.message);
+    res.status(500).json({ error: 'Registration failed. Try again.' });
+  }
+});
+
+app.post('/auth/email/login', async (req, res) => {
+  const { email, password } = req.body || {};
+  if (!email || !password) return res.status(400).json({ error: 'Email and password are required.' });
+
+  try {
+    const user = await getUserByEmail(email);
+    if (!user || !user.password_hash) return res.status(401).json({ error: 'Invalid email or password.' });
+
+    const match = await bcrypt.compare(password, user.password_hash);
+    if (!match) return res.status(401).json({ error: 'Invalid email or password.' });
+
+    const { password_hash, ...safe } = user;
+    res.json({ token: signToken(safe), user: safe });
+  } catch (err) {
+    console.error('[email login]', err.message);
+    res.status(500).json({ error: 'Login failed. Try again.' });
+  }
+});
+
+// ── GET /api/me ───────────────────────────────────────────────────────────────
+app.get('/api/me', requireAuth, async (req, res) => {
+  try {
+    const user = await getUserById(req.user.sub);
+    if (!user) return res.status(404).json({ error: 'User not found.' });
+    res.json(user);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// ════════════════════════════════════════════════════════════════════════════
+//  APP ROUTES
+// ════════════════════════════════════════════════════════════════════════════
+
+// ── GET /api/balance ──────────────────────────────────────────────────────────
 app.get('/api/balance', async (req, res) => {
   const userId = req.query.user_id;
   if (!userId) return res.status(400).json({ error: 'user_id is required.' });
@@ -88,6 +304,30 @@ app.get('/api/balance', async (req, res) => {
   }
 });
 
+// ── GET /api/wallet/history ───────────────────────────────────────────────────
+app.get('/api/wallet/history', async (req, res) => {
+  const userId = req.query.user_id;
+  if (!userId) return res.status(400).json({ error: 'user_id is required.' });
+
+  try {
+    const { rows: walletRows } = await pool.query(
+      'SELECT id FROM wallets WHERE user_id = $1', [userId]
+    );
+    if (!walletRows.length) return res.json([]);
+
+    const { rows } = await pool.query(
+      `SELECT type, amount, description, metadata, created_at
+       FROM transactions WHERE wallet_id = $1
+       ORDER BY created_at DESC LIMIT 50`,
+      [walletRows[0].id]
+    );
+    res.json(rows);
+  } catch (err) {
+    console.error('[wallet history]', err.message);
+    res.status(500).json({ error: 'Could not load history.' });
+  }
+});
+
 // ── POST /api/get-perspective ─────────────────────────────────────────────────
 app.post('/api/get-perspective', async (req, res) => {
   const { user_id, thinker_id, stage, decision, answers } = req.body;
@@ -96,12 +336,10 @@ app.post('/api/get-perspective', async (req, res) => {
   if (!thinker_id) return res.status(400).json({ error: 'thinker_id is required.' });
   if (!stage)      return res.status(400).json({ error: 'stage is required.'      });
 
-  // 1. Wallet check
   let wallet;
   try {
     wallet = await getOrCreateWallet(user_id);
   } catch (err) {
-    console.error('[wallet check]', err.message);
     return res.status(500).json({ error: 'Could not verify balance. Try again.' });
   }
 
@@ -113,11 +351,9 @@ app.post('/api/get-perspective', async (req, res) => {
     });
   }
 
-  // 2. Load thinker profile
   const thinker = getThinker(thinker_id);
   if (!thinker) return res.status(404).json({ error: 'Thinker not found.' });
 
-  // 3. Context management
   let conversationHistory = [];
   let summaryPrefix       = '';
 
@@ -127,20 +363,14 @@ app.post('/api/get-perspective', async (req, res) => {
        WHERE user_id = $1 AND thinker_id = $2`,
       [user_id, thinker_id]
     );
-
     if (rows.length) {
       conversationHistory = rows[0].messages || [];
       summaryPrefix       = rows[0].summary  || '';
-
       const historyStr = JSON.stringify(conversationHistory);
       if (historyStr.length > MAX_CTX_CHARS) {
-        console.log(`[context] Compressing ${historyStr.length} chars for ${user_id}`);
         const summaryRes = await anthropic.messages.create({
           model: SUMMARY_MODEL, max_tokens: 600,
-          messages: [{
-            role: 'user',
-            content: `Summarise this conversation in 3-5 bullet points, keeping only the key decisions, insights, and context that affect future advice:\n\n${historyStr}`,
-          }],
+          messages: [{ role: 'user', content: `Summarise this conversation in 3-5 bullet points:\n\n${historyStr}` }],
         });
         summaryPrefix       = summaryRes.content[0].text;
         conversationHistory = [];
@@ -150,7 +380,6 @@ app.post('/api/get-perspective', async (req, res) => {
     console.error('[context load]', err.message);
   }
 
-  // 4. Build user message for this stage
   let userMessage = '';
   if (stage === 'questions') {
     userMessage = `Decision I'm working through: ${decision}\n\nGenerate 3 clarifying questions. Return exactly this JSON (no other text):\n[{"question":"..."},{"question":"..."},{"question":"..."}]`;
@@ -164,17 +393,15 @@ app.post('/api/get-perspective', async (req, res) => {
     return res.status(400).json({ error: `Unknown stage: ${stage}` });
   }
 
-  // 5. Build messages array
   const messages = [
     ...(summaryPrefix
-      ? [{ role: 'user',      content: `[Prior session summary]\n${summaryPrefix}` },
+      ? [{ role: 'user', content: `[Prior session summary]\n${summaryPrefix}` },
          { role: 'assistant', content: 'Understood. I have the context.' }]
       : []),
     ...conversationHistory,
     { role: 'user', content: userMessage },
   ];
 
-  // 6. Stream with prompt caching
   res.setHeader('Content-Type',      'text/event-stream');
   res.setHeader('Cache-Control',     'no-cache');
   res.setHeader('Connection',        'keep-alive');
@@ -186,11 +413,7 @@ app.post('/api/get-perspective', async (req, res) => {
     const stream = anthropic.messages.stream({
       model:      MAIN_MODEL,
       max_tokens: 1024,
-      system: [{
-        type:          'text',
-        text:          thinker.systemPrompt,
-        cache_control: { type: 'ephemeral' },
-      }],
+      system: [{ type: 'text', text: thinker.systemPrompt, cache_control: { type: 'ephemeral' } }],
       messages,
     });
 
@@ -201,7 +424,6 @@ app.post('/api/get-perspective', async (req, res) => {
 
     const finalMsg = await stream.finalMessage();
 
-    // 7. Deduct credit
     try {
       await deductCredit(user_id, INSIGHT_COST, `${thinker.name} · ${stage}`, {
         thinker_id, stage,
@@ -214,7 +436,6 @@ app.post('/api/get-perspective', async (req, res) => {
       console.error('[deduct]', deductErr.message);
     }
 
-    // 8. Save context
     const newHistory = [
       ...conversationHistory,
       { role: 'user',      content: userMessage },
@@ -229,12 +450,8 @@ app.post('/api/get-perspective', async (req, res) => {
        Math.ceil(JSON.stringify(newHistory).length / 4)]
     ).catch(err => console.error('[context save]', err.message));
 
-    // 9. Send final balance
     const updated = await getOrCreateWallet(user_id).catch(() => null);
-    res.write(`data: ${JSON.stringify({
-      type:    'done',
-      balance: updated ? parseFloat(updated.credit_balance) : null,
-    })}\n\n`);
+    res.write(`data: ${JSON.stringify({ type: 'done', balance: updated ? parseFloat(updated.credit_balance) : null })}\n\n`);
     res.end();
 
   } catch (err) {
@@ -244,7 +461,7 @@ app.post('/api/get-perspective', async (req, res) => {
   }
 });
 
-// ── POST /api/top-up ─────────────────────────────────────────────────────────
+// ── POST /api/top-up ──────────────────────────────────────────────────────────
 app.post('/api/top-up', async (req, res) => {
   let event;
   try {
@@ -254,54 +471,35 @@ app.post('/api/top-up', async (req, res) => {
   }
 
   const handle = async (userId, credits, amountUsd, metadata) => {
-    if (!userId || credits <= 0) {
-      console.error('[top-up] Missing user_id or credits', metadata);
-      return res.status(400).json({ error: 'Missing user_id or credits in payment metadata.' });
-    }
+    if (!userId || credits <= 0) return res.status(400).json({ error: 'Missing user_id or credits.' });
     const wallet = await creditWallet(userId, credits, `Top-up · $${amountUsd.toFixed(2)}`, metadata);
-    console.log(`[top-up] ${userId} +$${credits} → balance $${wallet.credit_balance}`);
     res.json({ received: true, balance: parseFloat(wallet.credit_balance) });
   };
 
   try {
-    // Stripe: payment_intent.succeeded
     if (event.type === 'payment_intent.succeeded') {
       const intent = event.data?.object;
-      await handle(
-        intent?.metadata?.user_id,
-        parseFloat(intent?.metadata?.credits || '0'),
-        (intent?.amount_received || 0) / 100,
-        { payment_intent_id: intent?.id }
-      );
+      await handle(intent?.metadata?.user_id, parseFloat(intent?.metadata?.credits || '0'), (intent?.amount_received || 0) / 100, { payment_intent_id: intent?.id });
       return;
     }
-
-    // Shift4: PAYMENT_UPDATED / SUCCESSFUL
     if (event.type === 'PAYMENT_UPDATED' && event.data?.status === 'SUCCESSFUL') {
       const p = event.data;
-      await handle(
-        p.metadata?.user_id,
-        parseFloat(p.metadata?.credits || '0'),
-        (p.amount || 0) / 100,
-        { shift4_payment_id: p.id }
-      );
+      await handle(p.metadata?.user_id, parseFloat(p.metadata?.credits || '0'), (p.amount || 0) / 100, { shift4_payment_id: p.id });
       return;
     }
-
-    // Unknown event — acknowledge
     res.json({ received: true, ignored: true });
-
   } catch (err) {
     console.error('[top-up error]', err.message);
     res.status(500).json({ error: 'Could not credit wallet.' });
   }
 });
 
-// ── Start ────────────────────────────────────────────────────────────────────
+// ── Start ─────────────────────────────────────────────────────────────────────
 app.listen(PORT, () => {
   console.log(`[Divine Intelligence] Running on :${PORT}`);
   console.log(`  Model:         ${MAIN_MODEL}`);
-  console.log(`  Summary model: ${SUMMARY_MODEL}`);
   console.log(`  Insight cost:  $${INSIGHT_COST}`);
-  console.log(`  DB:            ${process.env.DATABASE_URL ? 'configured' : 'NOT SET ⚠'}`);
+  console.log(`  Google OAuth:  ${GOOGLE_CLIENT_ID ? 'configured ✓' : 'NOT SET ⚠'}`);
+  console.log(`  LinkedIn OAuth:${LINKEDIN_CLIENT_ID ? 'configured ✓' : ' NOT SET ⚠'}`);
+  console.log(`  DB:            ${process.env.DATABASE_URL ? 'configured ✓' : 'NOT SET ⚠'}`);
 });

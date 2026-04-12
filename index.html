@@ -2045,6 +2045,48 @@
     .pf-revel-new:hover { background:rgba(0,0,0,.04); }
     .pf-revel-view { background:transparent; color:#BF452A; border:1px solid rgba(191,69,42,.25); border-radius:100px; padding:11px 20px; font-size:13px; font-weight:500; cursor:pointer; font-family:'Inter',sans-serif; transition:background .15s; }
     .pf-revel-view:hover { background:rgba(191,69,42,.05); }
+
+    /* ═══ AUTH / LOGIN SCREEN ═══ */
+    .auth-screen { position:fixed; inset:0; z-index:1000; background:var(--bg);
+      display:flex; align-items:center; justify-content:center; padding:20px;
+      animation:auth-fade-in .25s ease; }
+    @keyframes auth-fade-in { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
+    .auth-box { width:100%; max-width:400px; background:var(--surface);
+      border:1px solid var(--border-md); border-radius:20px; padding:40px 44px;
+      box-shadow:var(--sh-lg); }
+    .auth-wordmark { font-family:'Cormorant Garamond',serif; font-size:20px; font-weight:600;
+      color:var(--accent); display:block; margin-bottom:24px; }
+    .auth-title { font-family:'Cormorant Garamond',serif; font-size:28px; font-weight:600;
+      color:var(--text-0); line-height:1.2; margin-bottom:6px; }
+    .auth-sub { font-size:13px; color:var(--text-3); margin-bottom:28px; line-height:1.6; }
+    .auth-error { background:#FEF0EE; border:1px solid rgba(191,69,42,.3); color:#BF452A;
+      border-radius:8px; padding:10px 14px; font-size:13px; margin-bottom:16px; display:none; }
+    .auth-error.visible { display:block; }
+    .auth-social-btn { display:flex; align-items:center; gap:12px; width:100%;
+      padding:11px 18px; background:var(--surface); border:1.5px solid var(--border-md);
+      border-radius:var(--r-pill); cursor:pointer; font-family:'Inter',sans-serif;
+      font-size:13.5px; font-weight:500; color:var(--text-1); text-decoration:none;
+      transition:border-color .15s, box-shadow .15s, background .15s; margin-bottom:10px; }
+    .auth-social-btn:hover { border-color:var(--accent); background:var(--accent-lt);
+      box-shadow:0 2px 12px rgba(191,69,42,.1); }
+    .auth-divider { display:flex; align-items:center; gap:12px; color:var(--text-3);
+      font-size:12px; margin:18px 0; }
+    .auth-divider::before,.auth-divider::after { content:''; flex:1; height:1px; background:var(--border); }
+    .auth-input { width:100%; padding:11px 14px; border:1.5px solid var(--border-md);
+      border-radius:var(--r); font-size:13.5px; font-family:'Inter',sans-serif;
+      background:var(--surface); color:var(--text-0); outline:none;
+      transition:border-color .15s; margin-bottom:10px; display:block; }
+    .auth-input:focus { border-color:var(--accent); }
+    .auth-submit-btn { width:100%; padding:12px; background:var(--accent); color:#fff;
+      border:none; border-radius:var(--r-pill); font-size:13.5px; font-weight:600;
+      cursor:pointer; font-family:'Inter',sans-serif; transition:background .15s; margin-top:4px; }
+    .auth-submit-btn:hover { background:var(--accent-mid); }
+    .auth-toggle { text-align:center; margin-top:18px; font-size:13px; color:var(--text-3); }
+    .auth-toggle a { color:var(--accent); cursor:pointer; font-weight:500; }
+    .auth-close { position:absolute; top:16px; right:16px; background:transparent;
+      border:none; cursor:pointer; color:var(--text-3); font-size:20px; line-height:1;
+      padding:4px 8px; border-radius:6px; }
+    .auth-close:hover { background:var(--surface-2); }
   </style>
 </head>
 <body>
@@ -2108,7 +2150,8 @@
           <span class="nav-item-label">Wallet</span>
         </button>
 
-        <!-- Thinker nav — Command Center suite (approved thinkers) -->
+        <!-- Thinker nav — gated: only visible when currentUser.thinker_access === true -->
+        <div id="thinker-nav-section" style="display:none">
         <div class="nav-section-label nav-thinker">Thinker</div>
 
         <button class="nav-item nav-thinker cc-parent" id="nav-thinker" data-tip="Command Center"
@@ -2168,6 +2211,8 @@
           <span class="nav-item-label">Payments</span>
         </button>
 
+        </div><!-- /thinker-nav-section -->
+
       </div>
       <div class="recents-header">
         <span class="recents-label">Recents</span>
@@ -2209,14 +2254,25 @@
         </button>
       </div>
 
-      <button class="profile-btn" id="profile-btn" onclick="toggleProfileMenu()">
-        <div class="profile-avatar-badge" id="profile-badge">MA</div>
-        <div class="profile-text">
-          <div class="profile-name" id="profile-name">Michael Akindele</div>
-          <div class="profile-email" id="profile-email">michael@surpluspods.com</div>
-        </div>
-        <svg class="profile-dots" width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><circle cx="8" cy="3" r="1.5"/><circle cx="8" cy="8" r="1.5"/><circle cx="8" cy="13" r="1.5"/></svg>
-      </button>
+      <!-- Authenticated: show user profile -->
+      <div id="sidebar-profile-area" style="display:none">
+        <button class="profile-btn" id="profile-btn" onclick="toggleProfileMenu()">
+          <div class="profile-avatar-badge" id="profile-badge">?</div>
+          <div class="profile-text">
+            <div class="profile-name" id="profile-name">Loading…</div>
+            <div class="profile-email" id="profile-email"></div>
+          </div>
+          <svg class="profile-dots" width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><circle cx="8" cy="3" r="1.5"/><circle cx="8" cy="8" r="1.5"/><circle cx="8" cy="13" r="1.5"/></svg>
+        </button>
+      </div>
+
+      <!-- Anonymous: Sign in prompt -->
+      <div id="sidebar-signin-area" style="padding:12px 14px">
+        <button onclick="showView('login')" style="width:100%;background:var(--accent);color:#fff;border:none;border-radius:var(--r-pill);padding:10px 16px;font-size:13px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;transition:background .15s;text-align:center" onmouseover="this.style.background='var(--accent-mid)'" onmouseout="this.style.background='var(--accent)'">
+          Sign in to Divine
+        </button>
+        <div style="font-size:11px;color:var(--text-3);text-align:center;margin-top:8px">Personalization &amp; Thinker features</div>
+      </div>
     </div>
   </nav>
 
@@ -3605,9 +3661,13 @@ function getOrCreateUserId() {
   }
   return id;
 }
-const USER_ID = getOrCreateUserId();
+let USER_ID = getOrCreateUserId();
 let currentBalance  = null;
 let selectedPkgEl   = null;
+
+// ── Auth state ────────────────────────────────────────────────────────────────
+const AUTH_TOKEN_KEY = 'di_auth_token';
+let currentUser      = null;
 
 /* ════════════════════════════════
    PERSISTENCE
@@ -3672,7 +3732,8 @@ document.addEventListener('click', e => {
 
 function signOut() {
   closeProfileMenu();
-  alert('Sign out — auth coming in a future release.');
+  clearAuth();
+  location.reload();
 }
 
 /* ════════════════════════════════
@@ -3686,6 +3747,7 @@ function showView(view) {
     search:      () => { show('screen-search'); setTimeout(() => document.getElementById('search-input').focus(), 120); },
     'thought-leaders': () => { document.getElementById('nav-search')?.classList.add('active'); setMobNavActive('mob-nav-search'); renderThoughtLeaders(); show('screen-thought-leaders'); },
     projects:    () => { document.getElementById('nav-projects').classList.add('active'); setMobNavActive('mob-nav-projects'); renderProjects(); show('screen-projects'); },
+    login:       () => { setMobNavActive(null); showLoginScreen(); },
     settings:    () => { setMobNavActive(null); show('screen-settings'); },
     downloads:   () => { setMobNavActive(null); renderDownloads(); show('screen-downloads'); },
     help:        () => { setMobNavActive(null); renderFAQ(); show('screen-help'); },
@@ -5780,6 +5842,165 @@ function goToDone() {
 }
 
 /* ════════════════════════════════
+   AUTH
+════════════════════════════════ */
+function getAuthToken()    { return localStorage.getItem(AUTH_TOKEN_KEY); }
+function setAuthToken(tok) { localStorage.setItem(AUTH_TOKEN_KEY, tok); }
+function clearAuth() {
+  localStorage.removeItem(AUTH_TOKEN_KEY);
+  currentUser = null;
+}
+
+function applyAuthState(user) {
+  currentUser = user;
+  if (user) {
+    USER_ID = user.id;
+    document.getElementById('sidebar-profile-area').style.display = '';
+    document.getElementById('sidebar-signin-area').style.display  = 'none';
+    document.getElementById('profile-name').textContent  = user.name  || 'User';
+    document.getElementById('profile-email').textContent = user.email || '';
+    document.getElementById('profile-badge').textContent =
+      (user.name || 'U').split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase();
+    if (user.thinker_access) {
+      document.getElementById('thinker-nav-section').style.display = '';
+    }
+  } else {
+    document.getElementById('sidebar-profile-area').style.display = 'none';
+    document.getElementById('sidebar-signin-area').style.display  = '';
+    document.getElementById('thinker-nav-section').style.display  = 'none';
+  }
+}
+
+async function initAuth() {
+  const params     = new URLSearchParams(window.location.search);
+  const tokenParam = params.get('token');
+  const authError  = params.get('auth_error');
+
+  // Clean up URL query params we consume
+  if (tokenParam || authError) {
+    const clean = new URL(window.location.href);
+    clean.searchParams.delete('token');
+    clean.searchParams.delete('auth_error');
+    const qs = clean.search === '?' ? '' : clean.search;
+    history.replaceState({}, '', clean.pathname + qs);
+  }
+
+  if (authError) {
+    showLoginScreen(authError);
+    return;
+  }
+
+  const tok = tokenParam || getAuthToken();
+  if (!tok) { applyAuthState(null); return; }
+  if (tokenParam) setAuthToken(tokenParam);
+
+  try {
+    const res = await fetch(`${API_BASE}/api/me`, {
+      headers: { Authorization: `Bearer ${tok}` }
+    });
+    if (!res.ok) throw new Error('invalid');
+    const user = await res.json();
+    applyAuthState(user);
+  } catch {
+    clearAuth();
+    applyAuthState(null);
+  }
+}
+
+function showLoginScreen(errorCode) {
+  document.getElementById('screen-login').style.display = '';
+  if (errorCode) {
+    const msgs = {
+      oauth_failed:         'OAuth sign-in failed. Please try again.',
+      email_exists:         'An account with that email already exists. Try logging in instead.',
+      invalid_credentials:  'Incorrect email or password.',
+      user_not_found:       'No account found. Please sign up first.',
+      weak_password:        'Password must be at least 8 characters.',
+      server_error:         'Server error. Please try again later.',
+    };
+    const errEl = document.getElementById('auth-error');
+    errEl.textContent = msgs[errorCode] || 'Something went wrong. Please try again.';
+    errEl.classList.add('visible');
+  }
+}
+
+function closeLoginScreen() {
+  document.getElementById('screen-login').style.display = 'none';
+  const errEl = document.getElementById('auth-error');
+  errEl.classList.remove('visible');
+  errEl.textContent = '';
+}
+
+let _authMode = 'login'; // 'login' | 'register'
+function toggleAuthMode() {
+  _authMode = _authMode === 'login' ? 'register' : 'login';
+  const isReg = _authMode === 'register';
+  document.getElementById('auth-title').textContent     = isReg ? 'Create your account'    : 'Log in to Divine';
+  document.getElementById('auth-sub').textContent       = isReg
+    ? 'Join Divine to unlock personalization and Thinker features.'
+    : 'Access your personalized AI perspective engine.';
+  document.getElementById('auth-name').style.display    = isReg ? 'block' : 'none';
+  document.getElementById('auth-email-btn').textContent = isReg ? 'Create account'         : 'Continue with Email';
+  document.getElementById('auth-mode-text').textContent = isReg ? 'Already have an account?' : "Don't have an account?";
+  document.getElementById('auth-mode-link').textContent = isReg ? 'Log in'                 : 'Sign up';
+  const errEl = document.getElementById('auth-error');
+  errEl.classList.remove('visible');
+  errEl.textContent = '';
+}
+
+async function submitEmailAuth() {
+  const isReg    = _authMode === 'register';
+  const email    = document.getElementById('auth-email').value.trim();
+  const password = document.getElementById('auth-password').value;
+  const name     = document.getElementById('auth-name').value.trim();
+  const errEl    = document.getElementById('auth-error');
+  const btn      = document.getElementById('auth-email-btn');
+
+  errEl.classList.remove('visible');
+
+  if (!email || !password) {
+    errEl.textContent = 'Please enter your email and password.';
+    errEl.classList.add('visible');
+    return;
+  }
+  if (isReg && password.length < 8) {
+    errEl.textContent = 'Password must be at least 8 characters.';
+    errEl.classList.add('visible');
+    return;
+  }
+
+  btn.disabled    = true;
+  btn.textContent = isReg ? 'Creating account…' : 'Signing in…';
+
+  try {
+    const endpoint = isReg ? '/auth/email/register' : '/auth/email/login';
+    const body     = isReg ? { email, password, name } : { email, password };
+    const res = await fetch(`${API_BASE}${endpoint}`, {
+      method:  'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body:    JSON.stringify(body),
+    });
+    const data = await res.json();
+    if (!res.ok) {
+      errEl.textContent = data.error || 'Authentication failed. Please try again.';
+      errEl.classList.add('visible');
+      return;
+    }
+    setAuthToken(data.token);
+    applyAuthState(data.user);
+    closeLoginScreen();
+    const firstName = (data.user.name || '').split(' ')[0];
+    showToast(`Welcome${isReg ? '' : ' back'}${firstName ? ', ' + firstName : ''}! ✓`);
+  } catch {
+    errEl.textContent = 'Network error. Please check your connection.';
+    errEl.classList.add('visible');
+  } finally {
+    btn.disabled    = false;
+    btn.textContent = isReg ? 'Create account' : 'Continue with Email';
+  }
+}
+
+/* ════════════════════════════════
    INIT
 ════════════════════════════════ */
 // Restore settings UI
@@ -5833,6 +6054,9 @@ renderDashboardHome();           // populate Divine Command dashboard on load
   // Small delay so the dashboard paint finishes before the overlay appears
   setTimeout(() => openPerspectiveFlow(q.trim()), 420);
 })();
+
+// Kick off auth check — verifies stored JWT and applies auth state
+initAuth();
 
 document.addEventListener('keydown', e => {
   if (e.key === 'Escape') { closePicker(); closeProfileMenu(); closeTopup(); }
@@ -6759,5 +6983,48 @@ function showToast(msg) {
     <button class="topup-cta" id="topup-cta" onclick="handleTopup()">Continue to payment</button>
   </div>
 </div>
+
+<!-- ═══ LOGIN / REGISTER SCREEN ═══ -->
+<div id="screen-login" style="display:none">
+  <div class="auth-screen" onclick="if(event.target===this)closeLoginScreen()">
+    <div class="auth-box" style="position:relative">
+      <button class="auth-close" onclick="closeLoginScreen()" aria-label="Close">×</button>
+
+      <span class="auth-wordmark">Divine</span>
+      <h1 class="auth-title" id="auth-title">Log in to Divine</h1>
+      <p class="auth-sub" id="auth-sub">Access your personalized AI perspective engine.</p>
+
+      <div class="auth-error" id="auth-error"></div>
+
+      <!-- Google -->
+      <a class="auth-social-btn" href="/auth/google">
+        <svg width="18" height="18" viewBox="0 0 18 18"><path d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.875 2.684-6.615z" fill="#4285F4"/><path d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.909-2.259c-.806.54-1.837.86-3.047.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332C2.438 15.983 5.482 18 9 18z" fill="#34A853"/><path d="M3.964 10.71c-.18-.54-.282-1.117-.282-1.71s.102-1.17.282-1.71V4.958H.957C.347 6.173 0 7.548 0 9s.348 2.827.957 4.042l3.007-2.332z" fill="#FBBC05"/><path d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0 5.482 0 2.438 2.017.957 4.958L3.964 7.29C4.672 5.163 6.656 3.58 9 3.58z" fill="#EA4335"/></svg>
+        Continue with Google
+      </a>
+
+      <!-- LinkedIn -->
+      <a class="auth-social-btn" href="/auth/linkedin">
+        <svg width="18" height="18" viewBox="0 0 18 18" fill="#0A66C2"><rect width="18" height="18" rx="3"/><path d="M4.5 7h2v7h-2zM5.5 4a1.25 1.25 0 110 2.5A1.25 1.25 0 015.5 4zM8 7h1.9v1h.03C10.24 7.4 11.1 7 12.1 7c2.1 0 2.4 1.4 2.4 3.2V14h-2v-3.4c0-.8 0-1.9-1.15-1.9s-1.35.9-1.35 1.85V14H8V7z" fill="#fff"/></svg>
+        Continue with LinkedIn
+      </a>
+
+      <div class="auth-divider">or</div>
+
+      <!-- Email form -->
+      <div id="auth-email-section">
+        <input class="auth-input" type="text"     id="auth-name"     placeholder="Your name" style="display:none" autocomplete="name">
+        <input class="auth-input" type="email"    id="auth-email"    placeholder="Email address" autocomplete="email" required>
+        <input class="auth-input" type="password" id="auth-password" placeholder="Password (8+ characters)" autocomplete="current-password" required>
+        <button class="auth-submit-btn" id="auth-email-btn" onclick="submitEmailAuth()">Continue with Email</button>
+      </div>
+
+      <div class="auth-toggle">
+        <span id="auth-mode-text">Don't have an account?</span>
+        <a onclick="toggleAuthMode()"> <span id="auth-mode-link">Sign up</span></a>
+      </div>
+    </div>
+  </div>
+</div>
+
 </body>
 </html>
