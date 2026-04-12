@@ -5806,6 +5806,34 @@ initThinkerAccess();
 setMobNavActive('mob-nav-home'); // set home as active on initial load
 renderDashboardHome();           // populate Divine Command dashboard on load
 
+/* ════════════════════════════════
+   INBOUND PARAM INTAKE
+   Accepts ?thinker=&q= from uncharted.ventures widget.
+   The Uncharted form sets these on submit then redirects here.
+════════════════════════════════ */
+(function handleInboundParams() {
+  const params = new URLSearchParams(window.location.search);
+  const q   = params.get('q');
+  const tid = params.get('thinker'); // e.g. 'michael', 'composite'
+
+  if (!q) return;
+
+  // Strip params from URL immediately — keep the address bar clean
+  history.replaceState({}, '', window.location.pathname);
+
+  // Match thinker by id or partial name; fall back to default (THINKERS[0])
+  if (tid) {
+    const match = THINKERS.find(t =>
+      t.id === tid.toLowerCase() ||
+      t.name.toLowerCase().includes(tid.toLowerCase())
+    );
+    if (match) activeThinker = match;
+  }
+
+  // Small delay so the dashboard paint finishes before the overlay appears
+  setTimeout(() => openPerspectiveFlow(q.trim()), 420);
+})();
+
 document.addEventListener('keydown', e => {
   if (e.key === 'Escape') { closePicker(); closeProfileMenu(); closeTopup(); }
 });
