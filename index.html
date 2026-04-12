@@ -2304,8 +2304,8 @@
 
           <!-- LEFT: Main content -->
           <div>
-            <!-- Greeting row with [D] mark -->
-            <div class="dc-greeting-row">
+            <!-- Greeting row with [D] mark — hidden until logged in -->
+            <div class="dc-greeting-row" id="dc-greeting-row" style="display:none">
               <svg class="dc-greeting-icon" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <g stroke="#BF452A" stroke-width="9" stroke-linecap="round" fill="none">
                   <rect x="18" y="12" width="8" height="76" rx="2"/>
@@ -5861,6 +5861,10 @@ function applyAuthState(user) {
     document.getElementById('profile-email').textContent = user.email || '';
     document.getElementById('profile-badge').textContent =
       (user.name || 'U').split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase();
+    // Show dashboard greeting with first name
+    const firstName = (user.name || 'there').split(' ')[0];
+    document.getElementById('dc-greeting-name').textContent = `Hi ${firstName}`;
+    document.getElementById('dc-greeting-row').style.display = '';
     if (user.thinker_access) {
       document.getElementById('thinker-nav-section').style.display = '';
     }
@@ -5868,6 +5872,7 @@ function applyAuthState(user) {
     document.getElementById('sidebar-profile-area').style.display = 'none';
     document.getElementById('sidebar-signin-area').style.display  = '';
     document.getElementById('thinker-nav-section').style.display  = 'none';
+    document.getElementById('dc-greeting-row').style.display      = 'none';
   }
 }
 
