@@ -2046,6 +2046,130 @@
     .pf-revel-view { background:transparent; color:#BF452A; border:1px solid rgba(191,69,42,.25); border-radius:100px; padding:11px 20px; font-size:13px; font-weight:500; cursor:pointer; font-family:'Inter',sans-serif; transition:background .15s; }
     .pf-revel-view:hover { background:rgba(191,69,42,.05); }
 
+    /* ═══ CHAT SCREEN ═══ */
+    #screen-chat { display:flex; flex-direction:column; height:100%; padding:0; overflow:hidden; }
+
+    .chat-topbar {
+      display:flex; align-items:center; gap:10px; padding:14px 20px 12px;
+      border-bottom:1px solid var(--border-lt); background:var(--bg);
+      flex-shrink:0; min-height:52px;
+    }
+    .chat-title-wrap { flex:1; min-width:0; }
+    .chat-title-input {
+      background:transparent; border:none; outline:none;
+      font-family:'Cormorant Garamond',serif; font-size:17px; font-weight:600;
+      color:var(--text-0); width:100%; cursor:text;
+      white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+    }
+    .chat-title-input::placeholder { color:var(--text-3); }
+    .chat-thinker-pill {
+      display:flex; align-items:center; gap:7px;
+      padding:5px 11px 5px 8px; border-radius:var(--r-pill);
+      border:1px solid var(--border-md); background:var(--surface);
+      cursor:pointer; font-size:12px; color:var(--text-1); flex-shrink:0;
+      transition:border-color .15s, background .15s;
+    }
+    .chat-thinker-pill:hover { border-color:var(--accent); background:var(--accent-lt); }
+    .chat-thinker-dot { width:9px; height:9px; border-radius:50%; flex-shrink:0; }
+    .chat-model-label {
+      font-size:11px; color:var(--text-3); white-space:nowrap;
+      padding:4px 8px; border:1px solid var(--border-lt); border-radius:var(--r-pill);
+      background:var(--surface); flex-shrink:0;
+    }
+    .chat-new-btn {
+      padding:5px 12px; border-radius:var(--r-pill); border:1.5px solid var(--border-md);
+      background:var(--surface); font-size:12px; font-weight:500; color:var(--text-1);
+      cursor:pointer; flex-shrink:0; transition:border-color .15s, background .15s;
+    }
+    .chat-new-btn:hover { border-color:var(--accent); background:var(--accent-lt); color:var(--accent); }
+
+    .chat-messages {
+      flex:1; overflow-y:auto; padding:28px 20px 16px;
+      display:flex; flex-direction:column; gap:20px;
+      scroll-behavior:smooth;
+    }
+    .chat-empty {
+      flex:1; display:flex; flex-direction:column; align-items:center;
+      justify-content:center; gap:10px; padding:40px 20px; text-align:center;
+    }
+    .chat-empty-icon {
+      width:48px; height:48px; border-radius:50%; background:var(--accent-lt);
+      border:1.5px solid var(--accent-bdr); display:flex; align-items:center; justify-content:center;
+    }
+    .chat-empty-headline {
+      font-family:'Cormorant Garamond',serif; font-size:22px; font-weight:600; color:var(--text-1);
+    }
+    .chat-empty-sub { font-size:13px; color:var(--text-3); max-width:320px; line-height:1.6; }
+
+    .chat-msg { display:flex; flex-direction:column; max-width:82%; gap:4px; }
+    .chat-msg.user { align-self:flex-end; align-items:flex-end; }
+    .chat-msg.assistant { align-self:flex-start; align-items:flex-start; }
+
+    .chat-msg-header {
+      display:flex; align-items:center; gap:7px; font-size:11.5px; color:var(--text-3);
+    }
+    .chat-msg-avatar {
+      width:22px; height:22px; border-radius:50%; display:flex; align-items:center;
+      justify-content:center; font-size:9px; font-weight:700; color:#fff; flex-shrink:0;
+    }
+    .chat-msg-bubble {
+      padding:12px 16px; border-radius:16px; font-size:14px; line-height:1.65;
+      color:var(--text-0); white-space:pre-wrap; word-break:break-word;
+    }
+    .chat-msg.user .chat-msg-bubble {
+      background:var(--accent); color:#fff; border-bottom-right-radius:4px;
+    }
+    .chat-msg.assistant .chat-msg-bubble {
+      background:var(--surface); border:1px solid var(--border-lt);
+      border-bottom-left-radius:4px;
+    }
+    .chat-msg-ts { font-size:10.5px; color:var(--text-3); padding:0 4px; }
+
+    /* streaming cursor */
+    .chat-cursor::after { content:'▋'; animation:chat-blink .7s steps(1) infinite; }
+    @keyframes chat-blink { 0%,100%{opacity:1} 50%{opacity:0} }
+
+    .chat-input-bar {
+      flex-shrink:0; padding:12px 16px 16px;
+      border-top:1px solid var(--border-lt); background:var(--bg);
+    }
+    .chat-input-wrap {
+      display:flex; align-items:flex-end; gap:10px;
+      background:var(--surface); border:1.5px solid var(--border-md);
+      border-radius:16px; padding:10px 10px 10px 14px;
+      transition:border-color .15s;
+    }
+    .chat-input-wrap:focus-within { border-color:var(--accent); }
+    .chat-textarea {
+      flex:1; background:transparent; border:none; outline:none; resize:none;
+      font-family:'Inter',sans-serif; font-size:14px; color:var(--text-0);
+      line-height:1.5; max-height:160px; min-height:22px; overflow-y:auto;
+    }
+    .chat-textarea::placeholder { color:var(--text-3); }
+    .chat-send-btn {
+      width:36px; height:36px; border-radius:50%; background:var(--accent);
+      border:none; cursor:pointer; display:flex; align-items:center; justify-content:center;
+      flex-shrink:0; transition:background .15s, opacity .15s;
+    }
+    .chat-send-btn:hover { background:var(--accent-mid); }
+    .chat-send-btn:disabled { opacity:.35; cursor:not-allowed; }
+    .chat-input-meta {
+      display:flex; align-items:center; gap:8px; padding:6px 2px 0;
+      font-size:11px; color:var(--text-3);
+    }
+    .chat-input-meta-sep { width:1px; height:10px; background:var(--border-md); }
+
+    /* Recent item rename */
+    .recent-item { position:relative; }
+    .recent-rename-btn {
+      position:absolute; right:8px; top:50%; transform:translateY(-50%);
+      width:24px; height:24px; border-radius:6px; border:none; background:transparent;
+      cursor:pointer; display:none; align-items:center; justify-content:center;
+      color:var(--text-3); transition:background .12s, color .12s;
+    }
+    .recent-item:hover .recent-rename-btn { display:flex; }
+    .recent-rename-btn:hover { background:var(--border-lt); color:var(--text-1); }
+
     /* ═══ AUTH / LOGIN SCREEN ═══ */
     .auth-screen { position:fixed; inset:0; z-index:1000; background:var(--bg);
       display:flex; align-items:center; justify-content:center; padding:20px;
@@ -2498,6 +2622,70 @@
           <button class="btn-ghost" onclick="showView('recents')">View recents</button>
         </div>
       </div></div>
+    </div>
+
+    <!-- SCREEN: Chat -->
+    <div class="screen" id="screen-chat">
+      <!-- Top bar: title + thinker pill + model label + new chat -->
+      <div class="chat-topbar">
+        <div class="chat-title-wrap">
+          <input class="chat-title-input" id="chat-title-input"
+            placeholder="New conversation"
+            maxlength="80"
+            onblur="saveChatTitle()"
+            onkeydown="if(event.key==='Enter'){this.blur()}"
+          >
+        </div>
+        <button class="chat-thinker-pill" id="chat-thinker-pill" onclick="openChatThinkerPicker()" title="Change thinker">
+          <div class="chat-thinker-dot" id="chat-thinker-dot" style="background:#BF452A"></div>
+          <span id="chat-thinker-name">Michael Akindele</span>
+        </button>
+        <span class="chat-model-label" id="chat-model-label">claude-opus-4-5</span>
+        <button class="chat-new-btn" onclick="openChat()">+ New</button>
+      </div>
+
+      <!-- Messages -->
+      <div class="chat-messages" id="chat-messages">
+        <div class="chat-empty" id="chat-empty">
+          <div class="chat-empty-icon">
+            <svg width="22" height="22" viewBox="0 0 100 100" fill="none">
+              <g stroke="#BF452A" stroke-width="9" stroke-linecap="round">
+                <rect x="18" y="12" width="8" height="76" rx="2"/>
+                <rect x="26" y="12" width="8" height="8" rx="1"/>
+                <rect x="26" y="80" width="8" height="8" rx="1"/>
+                <path d="M34 18 Q78 18 78 50 Q78 82 34 82"/>
+                <path d="M34 30 Q66 30 66 50 Q66 70 34 70"/>
+              </g>
+            </svg>
+          </div>
+          <div class="chat-empty-headline">Ask your Architect</div>
+          <p class="chat-empty-sub">What decision are you weighing? The more precise your framing, the sharper the perspective.</p>
+        </div>
+      </div>
+
+      <!-- Input bar -->
+      <div class="chat-input-bar">
+        <div class="chat-input-wrap">
+          <textarea class="chat-textarea" id="chat-textarea"
+            placeholder="What high-stakes decision are you weighing?"
+            rows="1"
+            onkeydown="chatTextareaKeydown(event)"
+            oninput="chatTextareaResize(this)"
+          ></textarea>
+          <button class="chat-send-btn" id="chat-send-btn" onclick="sendChatMsg()" title="Send (⌘↵)">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+              <path d="M8 13V3M3.5 7.5L8 3l4.5 4.5" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+        </div>
+        <div class="chat-input-meta">
+          <span id="chat-meta-thinker">Michael Akindele</span>
+          <div class="chat-input-meta-sep"></div>
+          <span id="chat-meta-model">claude-opus-4-5</span>
+          <div class="chat-input-meta-sep"></div>
+          <span>⌘↵ to send</span>
+        </div>
+      </div>
     </div>
 
     <!-- SCREEN: Search -->
@@ -3747,6 +3935,7 @@ function showView(view) {
     search:      () => { show('screen-search'); setTimeout(() => document.getElementById('search-input').focus(), 120); },
     'thought-leaders': () => { document.getElementById('nav-search')?.classList.add('active'); setMobNavActive('mob-nav-search'); renderThoughtLeaders(); show('screen-thought-leaders'); },
     projects:    () => { document.getElementById('nav-projects').classList.add('active'); setMobNavActive('mob-nav-projects'); renderProjects(); show('screen-projects'); },
+    chat:        () => { openChat(); },
     login:       () => { setMobNavActive(null); showLoginScreen(); },
     settings:    () => { setMobNavActive(null); show('screen-settings'); },
     downloads:   () => { setMobNavActive(null); renderDownloads(); show('screen-downloads'); },
@@ -3784,12 +3973,9 @@ function goHome() {
 }
 
 function newPerspective() {
-  decisionText = ''; sessionQs = []; sessionAnswers = []; currentSession = null;
-  document.getElementById('decision-input').value = '';
   document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
-  setMobNavActive('mob-nav-home');
   closeSidebarOnMobile();
-  openPerspectiveFlow();
+  openChat();
 }
 
 function startOver() {
@@ -4625,26 +4811,34 @@ function clearAllData() {
    RECENTS
 ════════════════════════════════ */
 function renderRecents() {
-  const list = loadRecents();
-  const el   = document.getElementById('recents-list');
-  if (!list.length) {
-    el.innerHTML = '<p class="recents-empty">Your perspectives appear here after each session.</p>';
+  const chatList = loadChatSessions();
+  const el       = document.getElementById('recents-list');
+  if (!chatList.length) {
+    el.innerHTML = '<p class="recents-empty">Your conversations appear here.</p>';
     return;
   }
-  el.innerHTML = list.map((r,i) => {
-    const dt = r.date ? new Date(r.date) : new Date();
-    const ts = dt.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',hour12:true}).replace(' ','');
+  el.innerHTML = chatList.slice(0, 30).map(s => {
+    const t      = s.thinker || THINKERS[0];
+    const dt     = s.updatedAt ? new Date(s.updatedAt) : new Date();
+    const title  = s.title || 'Untitled conversation';
+    const lastMsg = s.messages && s.messages.filter(m => m.role === 'user').pop();
+    const preview = lastMsg ? lastMsg.content.slice(0, 48) + (lastMsg.content.length > 48 ? '…' : '') : '';
     return `
-    <button class="recent-item" onclick="openRecent(${i})" data-ts="${ts}">
-      <div class="recent-avatar" style="background:${r.thinker.color}">${r.thinker.initials}</div>
+    <button class="recent-item" onclick="openChatSession('${s.id}')">
+      <div class="recent-avatar" style="background:${t.color || '#BF452A'}">${t.initials || 'AI'}</div>
       <div class="recent-info">
-        <div class="recent-decision">${r.decision}</div>
+        <div class="recent-decision">${_escapeHtml(title)}</div>
         <div class="recent-meta">
-          <span>${r.thinker.name.split(' ')[0]}</span>
+          <span>${(t.name || '').split(' ')[0]}</span>
           <span class="recent-meta-dot"></span>
-          <span>${formatDate(r.date)}</span>
+          <span>${formatDate(s.updatedAt)}</span>
         </div>
       </div>
+      <button class="recent-rename-btn" onclick="renameChatSession('${s.id}', event)" title="Rename">
+        <svg width="12" height="12" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6">
+          <path d="M9.5 2.5l2 2L4 12H2v-2L9.5 2.5z"/>
+        </svg>
+      </button>
     </button>`;
   }).join('');
 }
@@ -5310,6 +5504,10 @@ let _pfEncTimer      = null;
 let _pfEncStatusIdx  = 0;
 
 function openPerspectiveFlow(prefill) {
+  // Redirect to the new chat screen
+  openChat(prefill);
+}
+function _openPerspectiveFlowLegacy(prefill) {
   _pfActiveThinker = null;
   _pfEncTimer = null;
   clearTimeout(_pfEncTimer);
@@ -5707,6 +5905,11 @@ function filterThinkers(v) { renderGrid(v); }
 function pickThinker(id) {
   activeThinker = THINKERS.find(t => t.id === id);
   syncThinkerUI();
+  // If a chat session is open, update its thinker too
+  if (_chatSession) {
+    _chatSession.thinker = activeThinker;
+    _chatSyncTopbar();
+  }
   closePicker();
 }
 
@@ -5839,6 +6042,376 @@ async function goToReframe() {
 function goToDone() {
   if (currentSession) saveSession(currentSession);
   show('screen-done');
+}
+
+/* ════════════════════════════════
+   CHAT ENGINE
+════════════════════════════════ */
+let _chatSession   = null;   // { id, title, thinker, messages: [], createdAt, updatedAt }
+let _chatStreaming  = false;
+
+function loadChatSessions() {
+  try { return JSON.parse(localStorage.getItem('di_chats') || '[]'); } catch { return []; }
+}
+function saveChatSessions(list) {
+  localStorage.setItem('di_chats', JSON.stringify(list));
+}
+
+function openChat(prefill) {
+  // Create a fresh session
+  const thinker = activeThinker || THINKERS[0];
+  _chatSession = {
+    id:        'c_' + Date.now(),
+    title:     '',
+    thinker,
+    messages:  [],
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+  };
+  _chatStreaming = false;
+
+  // Update top bar
+  _chatSyncTopbar();
+
+  // Clear messages area
+  const msgs = document.getElementById('chat-messages');
+  msgs.innerHTML = '';
+  msgs.appendChild(_chatEmptyState());
+
+  // Reset textarea
+  const ta = document.getElementById('chat-textarea');
+  ta.value = '';
+  chatTextareaResize(ta);
+
+  // Navigate to screen
+  show('screen-chat');
+  setMobNavActive(null);
+
+  // Pre-fill if coming from dashboard input or URL param
+  if (prefill && prefill.trim()) {
+    ta.value = prefill.trim();
+    chatTextareaResize(ta);
+    // Auto-send if question is substantial
+    if (prefill.trim().length >= 20) {
+      setTimeout(sendChatMsg, 200);
+    } else {
+      ta.focus();
+    }
+  } else {
+    setTimeout(() => ta.focus(), 120);
+  }
+}
+
+function openChatSession(sessionId) {
+  const sessions = loadChatSessions();
+  const s = sessions.find(x => x.id === sessionId);
+  if (!s) { openChat(); return; }
+
+  _chatSession  = s;
+  _chatStreaming = false;
+
+  // Restore active thinker from session
+  if (s.thinker) {
+    const match = THINKERS.find(t => t.id === s.thinker.id);
+    if (match) activeThinker = match;
+  }
+  _chatSyncTopbar();
+
+  // Re-render messages
+  const msgs = document.getElementById('chat-messages');
+  msgs.innerHTML = '';
+  if (!s.messages || !s.messages.length) {
+    msgs.appendChild(_chatEmptyState());
+  } else {
+    s.messages.forEach(m => _appendChatMsg(m.role, m.content, { ts: m.ts, thinker: s.thinker, skipSave: true }));
+  }
+  // Reset textarea
+  const ta = document.getElementById('chat-textarea');
+  ta.value = '';
+  chatTextareaResize(ta);
+
+  show('screen-chat');
+  setMobNavActive(null);
+  setTimeout(() => { msgs.scrollTop = msgs.scrollHeight; ta.focus(); }, 80);
+}
+
+function _chatEmptyState() {
+  const el = document.createElement('div');
+  el.className = 'chat-empty';
+  el.id = 'chat-empty';
+  el.innerHTML = `
+    <div class="chat-empty-icon">
+      <svg width="22" height="22" viewBox="0 0 100 100" fill="none">
+        <g stroke="#BF452A" stroke-width="9" stroke-linecap="round">
+          <rect x="18" y="12" width="8" height="76" rx="2"/>
+          <rect x="26" y="12" width="8" height="8" rx="1"/>
+          <rect x="26" y="80" width="8" height="8" rx="1"/>
+          <path d="M34 18 Q78 18 78 50 Q78 82 34 82"/>
+          <path d="M34 30 Q66 30 66 50 Q66 70 34 70"/>
+        </g>
+      </svg>
+    </div>
+    <div class="chat-empty-headline">Ask your Architect</div>
+    <p class="chat-empty-sub">What decision are you weighing? The more precise your framing, the sharper the perspective.</p>`;
+  return el;
+}
+
+function _chatSyncTopbar() {
+  if (!_chatSession) return;
+  const t = _chatSession.thinker || activeThinker || THINKERS[0];
+  document.getElementById('chat-title-input').value = _chatSession.title || '';
+  document.getElementById('chat-thinker-dot').style.background = t.color || '#BF452A';
+  document.getElementById('chat-thinker-name').textContent = t.name || 'Select Architect';
+  document.getElementById('chat-model-label').textContent = ACTIVE_MODEL.replace('claude-','').replace('-latest','');
+  document.getElementById('chat-meta-thinker').textContent = t.name || 'Select Architect';
+  document.getElementById('chat-meta-model').textContent = ACTIVE_MODEL;
+}
+
+function openChatThinkerPicker() {
+  openPicker(); // reuse the existing thinker picker modal
+  // After selection, _chatSession.thinker will be updated by pfSelectThinker hook
+}
+
+function chatTextareaKeydown(e) {
+  if ((e.metaKey || e.ctrlKey) && e.key === 'Enter') {
+    e.preventDefault();
+    sendChatMsg();
+  }
+}
+
+function chatTextareaResize(ta) {
+  ta.style.height = 'auto';
+  ta.style.height = Math.min(ta.scrollHeight, 160) + 'px';
+}
+
+async function sendChatMsg() {
+  if (_chatStreaming) return;
+  const ta   = document.getElementById('chat-textarea');
+  const text = ta.value.trim();
+  if (!text) return;
+
+  ta.value = '';
+  chatTextareaResize(ta);
+  document.getElementById('chat-send-btn').disabled = true;
+  _chatStreaming = true;
+
+  // Remove empty state
+  const empty = document.getElementById('chat-empty');
+  if (empty) empty.remove();
+
+  // Auto-title from first message
+  if (!_chatSession.title && _chatSession.messages.length === 0) {
+    const short = text.length > 52 ? text.slice(0, 50) + '…' : text;
+    _chatSession.title = short;
+    document.getElementById('chat-title-input').value = short;
+  }
+
+  // Append user message
+  _appendChatMsg('user', text, { ts: new Date().toISOString() });
+
+  // Append thinking placeholder for AI
+  const aiId    = 'cm_' + Date.now();
+  const aiEl    = _appendChatMsg('assistant', '', { id: aiId, streaming: true });
+  const bubble  = aiEl.querySelector('.chat-msg-bubble');
+  bubble.classList.add('chat-cursor');
+  bubble.textContent = '';
+
+  // Scroll to bottom
+  const msgs = document.getElementById('chat-messages');
+  msgs.scrollTop = msgs.scrollHeight;
+
+  // Build messages history for API
+  const history = _chatSession.messages
+    .slice(0, -1) // exclude the blank assistant msg we just pushed
+    .map(m => ({ role: m.role, content: m.content }));
+
+  let fullText = '';
+  try {
+    fullText = await _callChatAPI(history, text, chunk => {
+      fullText += chunk;
+      bubble.textContent = fullText;
+      msgs.scrollTop = msgs.scrollHeight;
+    });
+  } catch (err) {
+    bubble.textContent = err.message === 'NO_KEY'
+      ? '⚠ No API key configured. Add one in Settings.'
+      : '⚠ Could not connect — please try again.';
+    bubble.classList.remove('chat-cursor');
+    _chatStreaming = false;
+    document.getElementById('chat-send-btn').disabled = false;
+    return;
+  }
+
+  bubble.classList.remove('chat-cursor');
+  bubble.textContent = fullText;
+
+  // Update the session messages (replace blank placeholder with real content)
+  const lastMsg = _chatSession.messages[_chatSession.messages.length - 1];
+  if (lastMsg && lastMsg.role === 'assistant') lastMsg.content = fullText;
+
+  // Persist session
+  _persistChatSession();
+  renderRecents();
+
+  _chatStreaming = false;
+  document.getElementById('chat-send-btn').disabled = false;
+  msgs.scrollTop = msgs.scrollHeight;
+}
+
+function _appendChatMsg(role, content, opts = {}) {
+  const msgs  = document.getElementById('chat-messages');
+  const t     = _chatSession?.thinker || activeThinker || THINKERS[0];
+  const ts    = opts.ts ? new Date(opts.ts) : new Date();
+  const tsStr = ts.toLocaleTimeString('en-US', { hour:'2-digit', minute:'2-digit', hour12:true });
+
+  const wrap = document.createElement('div');
+  wrap.className = `chat-msg ${role}`;
+  if (opts.id) wrap.id = opts.id;
+
+  if (role === 'user') {
+    wrap.innerHTML = `
+      <div class="chat-msg-ts">${tsStr}</div>
+      <div class="chat-msg-bubble">${_escapeHtml(content)}</div>`;
+  } else {
+    wrap.innerHTML = `
+      <div class="chat-msg-header">
+        <div class="chat-msg-avatar" style="background:${t.color || '#BF452A'}">${t.initials || 'AI'}</div>
+        <span>${t.name || 'Architect'}</span>
+        <span class="chat-msg-ts">${tsStr}</span>
+      </div>
+      <div class="chat-msg-bubble">${_escapeHtml(content)}</div>`;
+  }
+  msgs.appendChild(wrap);
+
+  // Track in session (unless restoring from storage)
+  if (!opts.skipSave) {
+    if (!_chatSession.messages) _chatSession.messages = [];
+    _chatSession.messages.push({
+      role,
+      content,
+      ts: ts.toISOString(),
+      thinker_id: role === 'assistant' ? (t.id || null) : undefined,
+    });
+  }
+  return wrap;
+}
+
+function _escapeHtml(str) {
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+
+async function _callChatAPI(history, newMsg, onChunk) {
+  const thinker = _chatSession?.thinker || activeThinker || THINKERS[0];
+  const system  = `You are ${thinker.name}, ${thinker.title || 'a world-class strategic thinker'}. You think in unconventional frameworks and surface non-obvious insights. Respond conversationally but with depth — challenge assumptions, reframe problems, and illuminate blind spots. Be direct and substantive.`;
+
+  const messages = [...history, { role: 'user', content: newMsg }];
+
+  // ── Try proxy server (SSE) ───────────────────────────────────────────────
+  try {
+    const res = await fetch(`${API_BASE}/api/get-perspective`, {
+      method:  'POST',
+      headers: { 'content-type': 'application/json' },
+      body:    JSON.stringify({
+        user_id:    USER_ID,
+        thinker_id: thinker.id || 'default',
+        stage:      'chat',
+        decision:   newMsg,
+        messages,
+        system,
+      }),
+      signal: AbortSignal.timeout(10000),
+    });
+
+    if (res.status === 402) { openTopup(); throw new Error('INSUFFICIENT_FUNDS'); }
+
+    if (res.ok) {
+      const reader  = res.body.getReader();
+      const decoder = new TextDecoder();
+      let fullText  = '';
+      let buffer    = '';
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        buffer += decoder.decode(value, { stream: true });
+        const lines = buffer.split('\n');
+        buffer = lines.pop();
+        for (const line of lines) {
+          if (!line.startsWith('data: ')) continue;
+          const payload = line.slice(6).trim();
+          if (!payload) continue;
+          const msg = JSON.parse(payload);
+          if (msg.type === 'delta')     { fullText += msg.text; if (onChunk) onChunk(msg.text); }
+          else if (msg.type === 'done') { if (msg.balance != null) updateBalanceDisplay(msg.balance); }
+          else if (msg.type === 'error') throw new Error(msg.message);
+        }
+      }
+      return fullText;
+    }
+  } catch (e) {
+    if (e.message === 'INSUFFICIENT_FUNDS') throw e;
+    // fall through to direct API
+  }
+
+  // ── Fallback: direct Anthropic API ──────────────────────────────────────
+  const key = DIRECT_API_KEY;
+  if (!key) throw new Error('NO_KEY');
+
+  const apiRes = await fetch('https://api.anthropic.com/v1/messages', {
+    method:  'POST',
+    headers: {
+      'x-api-key':                          key,
+      'anthropic-version':                  '2023-06-01',
+      'content-type':                       'application/json',
+      'anthropic-dangerous-allow-browser':  'true',
+    },
+    body: JSON.stringify({
+      model:      ACTIVE_MODEL,
+      max_tokens: 1400,
+      system,
+      messages,
+    }),
+  });
+  if (!apiRes.ok) throw new Error('API error');
+  const data = await apiRes.json();
+  const text = data.content?.[0]?.text || '';
+  if (onChunk) onChunk(text);
+  return text;
+}
+
+function _persistChatSession() {
+  if (!_chatSession) return;
+  _chatSession.updatedAt = new Date().toISOString();
+  const sessions = loadChatSessions().filter(s => s.id !== _chatSession.id);
+  sessions.unshift(_chatSession);
+  saveChatSessions(sessions.slice(0, 80)); // cap at 80
+}
+
+function saveChatTitle() {
+  if (!_chatSession) return;
+  const val = document.getElementById('chat-title-input').value.trim();
+  if (val) _chatSession.title = val;
+  _persistChatSession();
+  renderRecents();
+}
+
+function renameChatSession(id, e) {
+  e && e.stopPropagation();
+  const sessions = loadChatSessions();
+  const s = sessions.find(x => x.id === id);
+  if (!s) return;
+  const newTitle = prompt('Rename chat:', s.title || '');
+  if (newTitle === null) return;
+  s.title = newTitle.trim() || s.title;
+  saveChatSessions(sessions);
+  if (_chatSession && _chatSession.id === id) {
+    _chatSession.title = s.title;
+    document.getElementById('chat-title-input').value = s.title;
+  }
+  renderRecents();
 }
 
 /* ════════════════════════════════
