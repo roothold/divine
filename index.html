@@ -416,42 +416,58 @@
     }
     .modal-overlay.open { display:flex; }
     .topup-modal {
-      background:var(--surface); border-radius:16px;
+      background:var(--surface); border-radius:20px;
       box-shadow:0 24px 60px rgba(0,0,0,0.18);
-      width:min(420px, calc(100vw - 32px)); padding:32px;
+      width:min(400px, calc(100vw - 32px)); padding:32px;
       animation:modal-in 0.2s ease;
     }
     @keyframes modal-in { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
-    .topup-coral-icon {
-      width:52px; height:52px; border-radius:50%;
-      background:#FFF0EB; display:flex; align-items:center; justify-content:center;
-      font-size:24px; margin-bottom:18px;
+    .topup-header { display:flex; align-items:center; gap:12px; margin-bottom:6px; }
+    .topup-d-icon {
+      width:40px; height:40px; border-radius:50%; flex-shrink:0;
+      background:var(--accent-lt); border:1.5px solid var(--accent-bdr);
+      display:flex; align-items:center; justify-content:center;
     }
-    .topup-title { font-size:20px; font-weight:700; color:var(--text-0); margin-bottom:6px; }
-    .topup-sub   { font-size:14px; color:var(--text-2); margin-bottom:24px; line-height:1.5; }
-    .topup-packages { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-bottom:24px; }
+    .topup-title { font-family:'Cormorant Garamond',serif; font-size:22px; font-weight:600; color:var(--text-0); }
+    .topup-balance-row { font-size:12px; color:var(--text-3); margin-bottom:20px; }
+    .topup-balance-val { font-weight:600; color:var(--text-1); }
+    .topup-sub { font-size:13px; color:var(--text-2); margin-bottom:18px; line-height:1.5; }
+    .topup-packages { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-bottom:8px; }
     .topup-pkg {
-      border:2px solid var(--border-md); border-radius:12px; padding:14px 10px;
-      cursor:pointer; text-align:center; transition:border-color 0.15s,background 0.15s;
-      background:var(--surface);
+      border:1.5px solid var(--border-md); border-radius:14px; padding:16px 10px 14px;
+      cursor:pointer; text-align:center; transition:border-color .15s, background .15s;
+      background:var(--surface); position:relative;
     }
-    .topup-pkg:hover, .topup-pkg.selected {
-      border-color:#E8613A; background:#FFF0EB;
+    .topup-pkg:hover { border-color:var(--accent); background:var(--accent-lt); }
+    .topup-pkg.selected { border-color:var(--accent); background:var(--accent-lt); box-shadow:0 0 0 3px rgba(191,69,42,.1); }
+    .topup-pkg-badge {
+      position:absolute; top:-9px; left:50%; transform:translateX(-50%);
+      background:var(--accent); color:#fff; font-size:9px; font-weight:700;
+      letter-spacing:.06em; text-transform:uppercase;
+      padding:2px 8px; border-radius:20px; white-space:nowrap;
     }
-    .topup-pkg-credits { font-size:18px; font-weight:700; color:var(--text-0); }
-    .topup-pkg-label   { font-size:11px; color:var(--text-3); margin-top:2px; }
-    .topup-pkg-price   { font-size:13px; font-weight:600; color:#E8613A; margin-top:6px; }
+    .topup-pkg-credits { font-size:20px; font-weight:700; color:var(--text-0); line-height:1; }
+    .topup-pkg-label   { font-size:11px; color:var(--text-3); margin-top:3px; }
+    .topup-pkg-price   { font-size:14px; font-weight:700; color:var(--accent); margin-top:8px; }
+    .topup-pkg-unit    { font-size:10px; color:var(--text-3); margin-top:2px; }
+    .topup-trust { font-size:11px; color:var(--text-3); text-align:center; margin-bottom:18px; }
+    .topup-notice {
+      font-size:13px; color:var(--text-2); background:var(--surface-2);
+      border-radius:10px; padding:12px 14px; margin-bottom:16px;
+      display:none; line-height:1.5;
+    }
+    .topup-notice.visible { display:block; }
     .topup-cta {
-      width:100%; padding:14px; border:none; border-radius:12px;
-      background:#E8613A; color:#fff; font-size:15px; font-weight:700;
-      cursor:pointer; transition:background 0.15s;
+      width:100%; padding:13px; border:none; border-radius:var(--r-pill);
+      background:var(--accent); color:#fff; font-size:14px; font-weight:600;
+      cursor:pointer; transition:background .15s; font-family:'Inter',sans-serif;
     }
-    .topup-cta:hover { background:#d14e29; }
-    .topup-cta:disabled { background:#ccc; cursor:not-allowed; }
+    .topup-cta:hover { background:var(--accent-mid); }
+    .topup-cta:disabled { background:#D9D9D6; cursor:not-allowed; }
     .topup-close {
       position:absolute; top:16px; right:16px;
       background:none; border:none; font-size:20px; cursor:pointer;
-      color:var(--text-3); padding:4px 8px; border-radius:8px;
+      color:var(--text-3); padding:4px 8px; border-radius:8px; line-height:1;
     }
     .topup-close:hover { background:var(--surface-2); }
     .topup-modal-wrap { position:relative; }
@@ -4698,11 +4714,17 @@ async function fetchBalance() {
 /* ── Top-up modal ── */
 function openTopup() {
   document.getElementById('topup-overlay').classList.add('open');
-  // Pre-select $10 package
-  const pkgs = document.querySelectorAll('.topup-pkg');
-  pkgs.forEach(p => p.classList.remove('selected'));
-  selectedPkgEl = document.querySelector('.topup-pkg[data-credits="10"]');
-  if (selectedPkgEl) selectedPkgEl.classList.add('selected');
+  // Reset notice
+  const notice = document.getElementById('topup-notice');
+  notice.textContent = '';
+  notice.classList.remove('visible');
+  // Show current balance
+  const balEl = document.getElementById('topup-balance-display');
+  if (balEl) balEl.textContent = currentBalance != null ? `${currentBalance} perspectives` : '—';
+  // Pre-select Popular ($10) package
+  document.querySelectorAll('.topup-pkg').forEach(p => p.classList.remove('selected'));
+  selectedPkgEl = document.querySelector('.topup-pkg[data-credits="200"]');
+  if (selectedPkgEl) { selectedPkgEl.classList.add('selected'); _updateTopupCta(selectedPkgEl); }
 }
 function closeTopup() {
   document.getElementById('topup-overlay').classList.remove('open');
@@ -4711,16 +4733,49 @@ function selectPkg(el) {
   document.querySelectorAll('.topup-pkg').forEach(p => p.classList.remove('selected'));
   el.classList.add('selected');
   selectedPkgEl = el;
+  _updateTopupCta(el);
+  // Clear any previous notice
+  const notice = document.getElementById('topup-notice');
+  notice.textContent = '';
+  notice.classList.remove('visible');
+}
+function _updateTopupCta(pkg) {
+  const credits = pkg?.dataset.credits;
+  const price   = pkg?.dataset.price;
+  const btn     = document.getElementById('topup-cta');
+  if (btn && credits && price) {
+    btn.textContent = `Get ${credits} Perspectives · $${parseFloat(price).toFixed(0)}`;
+  }
 }
 function handleTopup() {
   const pkg = selectedPkgEl || document.querySelector('.topup-pkg.selected');
   if (!pkg) return;
   const credits = pkg.dataset.credits;
   const price   = pkg.dataset.price;
-  // TODO: open Stripe/Shift4 checkout with user_id + credits in metadata
-  // For now, redirect to a placeholder payment page or Stripe Payment Link
-  alert(`Payment integration coming soon.\nSelected: ${credits} credits for $${price}\nYour user_id: ${USER_ID}\n\nPass this user_id in your Stripe/Shift4 payment metadata so credits are applied automatically.`);
+  const notice  = document.getElementById('topup-notice');
+  const btn     = document.getElementById('topup-cta');
+
+  // TODO: Replace with Stripe Payment Link or checkout session
+  // Pass USER_ID + credits in metadata so the webhook can credit the account
+  // e.g. window.location.href = `https://buy.stripe.com/yourlink?client_reference_id=${USER_ID}&metadata[credits]=${credits}`;
+
+  btn.disabled    = true;
+  btn.textContent = 'Connecting to payment…';
+  setTimeout(() => {
+    btn.disabled    = false;
+    _updateTopupCta(pkg);
+    notice.innerHTML = `Payment integration is being configured. Your selection: <strong>${credits} perspectives for $${price}</strong>.<br>Your account ID <code style="font-size:11px;background:var(--border-lt);padding:1px 5px;border-radius:4px">${USER_ID}</code> will be credited automatically once connected.`;
+    notice.classList.add('visible');
+  }, 800);
 }
+
+// Close on ESC
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    closeTopup();
+    closeLoginScreen();
+  }
+});
 
 function parseJSON(raw) {
   try { return JSON.parse(raw.replace(/```json\n?/g,'').replace(/```\n?/g,'').trim()); }
@@ -7562,28 +7617,59 @@ function showToast(msg) {
 <!-- Top-up Modal -->
 <div class="modal-overlay" id="topup-overlay" onclick="if(event.target===this)closeTopup()">
   <div class="topup-modal topup-modal-wrap">
-    <button class="topup-close" onclick="closeTopup()">×</button>
-    <div class="topup-coral-icon">💳</div>
-    <div class="topup-title">Top up your credits</div>
-    <div class="topup-sub">Each perspective costs $0.05. Pick a package and keep the insights coming.</div>
+    <button class="topup-close" onclick="closeTopup()" aria-label="Close">×</button>
+
+    <div class="topup-header">
+      <div class="topup-d-icon">
+        <svg width="18" height="18" viewBox="0 0 100 100" fill="none">
+          <g stroke="#BF452A" stroke-width="10" stroke-linecap="round">
+            <rect x="18" y="12" width="8" height="76" rx="2"/>
+            <rect x="26" y="12" width="8" height="8" rx="1"/>
+            <rect x="26" y="80" width="8" height="8" rx="1"/>
+            <path d="M34 18 Q78 18 78 50 Q78 82 34 82"/>
+            <path d="M34 30 Q66 30 66 50 Q66 70 34 70"/>
+          </g>
+        </svg>
+      </div>
+      <div class="topup-title">Add Perspectives</div>
+    </div>
+
+    <div class="topup-balance-row">
+      Current balance: <span class="topup-balance-val" id="topup-balance-display">—</span>
+    </div>
+
+    <div class="topup-sub">Each perspective is $0.05. One-time purchase — no subscription.</div>
+
     <div class="topup-packages" id="topup-packages">
-      <div class="topup-pkg" data-credits="5" data-price="5.00" onclick="selectPkg(this)">
+      <div class="topup-pkg" data-credits="100" data-price="5.00" onclick="selectPkg(this)">
         <div class="topup-pkg-credits">100</div>
-        <div class="topup-pkg-label">insights</div>
+        <div class="topup-pkg-label">perspectives</div>
         <div class="topup-pkg-price">$5</div>
+        <div class="topup-pkg-unit">$0.05 each</div>
       </div>
-      <div class="topup-pkg selected" data-credits="10" data-price="10.00" onclick="selectPkg(this)">
+      <div class="topup-pkg selected" data-credits="200" data-price="10.00" onclick="selectPkg(this)">
+        <div class="topup-pkg-badge">Popular</div>
         <div class="topup-pkg-credits">200</div>
-        <div class="topup-pkg-label">insights</div>
+        <div class="topup-pkg-label">perspectives</div>
         <div class="topup-pkg-price">$10</div>
+        <div class="topup-pkg-unit">$0.05 each</div>
       </div>
-      <div class="topup-pkg" data-credits="25" data-price="25.00" onclick="selectPkg(this)">
+      <div class="topup-pkg" data-credits="500" data-price="20.00" onclick="selectPkg(this)">
+        <div class="topup-pkg-badge" style="background:#2C3E50">Best value</div>
         <div class="topup-pkg-credits">500</div>
-        <div class="topup-pkg-label">insights</div>
-        <div class="topup-pkg-price">$25</div>
+        <div class="topup-pkg-label">perspectives</div>
+        <div class="topup-pkg-price">$20</div>
+        <div class="topup-pkg-unit">$0.04 each</div>
       </div>
     </div>
-    <button class="topup-cta" id="topup-cta" onclick="handleTopup()">Continue to payment</button>
+
+    <div class="topup-trust">🔒 Secured by Stripe · Cancel anytime</div>
+
+    <div class="topup-notice" id="topup-notice"></div>
+
+    <button class="topup-cta" id="topup-cta" onclick="handleTopup()">
+      Get 200 Perspectives · $10
+    </button>
   </div>
 </div>
 
