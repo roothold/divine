@@ -3595,7 +3595,7 @@ e.g. I always start by validating whether the problem is real before evaluating 
     <svg width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 7.5L8 2l6 5.5"/><rect x="5" y="9" width="6" height="6" rx="1"/></svg>
     <span>Home</span>
   </button>
-  <button class="mob-nav-item" id="mob-nav-thinker" onclick="showView('thinker-hub'); closeSidebarOnMobile()" aria-label="Thinker">
+  <button class="mob-nav-item" id="mob-nav-thinker" onclick="showView('thinker-hub'); closeSidebarOnMobile()" aria-label="Thinker" style="display:none">
     <svg width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="8" cy="5" r="3"/><path d="M2 14c0-3.3 2.7-6 6-6s6 2.7 6 6"/></svg>
     <span>Thinker</span>
   </button>
@@ -6520,11 +6520,15 @@ function applyAuthState(user) {
     document.getElementById('dc-greeting-row').style.display = '';
     if (user.thinker_access) {
       document.getElementById('thinker-nav-section').style.display = '';
+      document.getElementById('mob-nav-thinker').style.display = '';
+    } else {
+      document.getElementById('mob-nav-thinker').style.display = 'none';
     }
   } else {
     document.getElementById('sidebar-profile-area').style.display = 'none';
     document.getElementById('sidebar-signin-area').style.display  = '';
     document.getElementById('thinker-nav-section').style.display  = 'none';
+    document.getElementById('mob-nav-thinker').style.display      = 'none';
     document.getElementById('dc-greeting-row').style.display      = 'none';
   }
 }
