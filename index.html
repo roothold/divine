@@ -136,6 +136,17 @@
     .sidebar.collapsed .profile-text,
     .sidebar.collapsed .profile-dots { display:none; }
     .sidebar.collapsed .profile-btn { justify-content:center; padding:12px 0; }
+    /* Collapsed sign-in: hide full button, show icon-only */
+    .sidebar.collapsed .signin-full { display:none; }
+    .sidebar-signin-icon { display:none; }
+    .sidebar.collapsed .sidebar-signin-icon {
+      display:flex; align-items:center; justify-content:center;
+      width:36px; height:36px; border-radius:50%;
+      background:#1a1a1a; color:#fff; cursor:pointer; border:none;
+      margin:8px auto; transition:background .15s;
+    }
+    .sidebar.collapsed .sidebar-signin-icon:hover { background:#000; }
+    .sidebar.collapsed #sidebar-signin-area { padding:8px 0; }
     .sidebar.collapsed .profile-menu-popup { left:56px; right:auto; bottom:calc(100% + 6px); min-width:190px; }
     .sidebar.collapsed .sidebar-nav { padding:12px 6px 8px; }
 
@@ -2393,10 +2404,18 @@
 
       <!-- Anonymous: Sign in prompt -->
       <div id="sidebar-signin-area" style="padding:12px 14px">
-        <button onclick="showView('login')" style="width:100%;background:#1a1a1a;color:#fff;border:none;border-radius:var(--r-pill);padding:10px 16px;font-size:13px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;transition:background .15s;text-align:center" onmouseover="this.style.background='#000'" onmouseout="this.style.background='#1a1a1a'">
+        <!-- Full button (expanded state) -->
+        <button class="signin-full" onclick="showView('login')" style="width:100%;background:#1a1a1a;color:#fff;border:none;border-radius:var(--r-pill);padding:10px 16px;font-size:13px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;transition:background .15s;text-align:center" onmouseover="this.style.background='#000'" onmouseout="this.style.background='#1a1a1a'">
           Sign in to Divine
         </button>
-        <div style="font-size:11px;color:var(--text-3);text-align:center;margin-top:8px">Personalization &amp; Thinker features</div>
+        <div class="signin-full" style="font-size:11px;color:var(--text-3);text-align:center;margin-top:8px">Personalization &amp; Thinker features</div>
+        <!-- Icon-only button (collapsed state) -->
+        <button class="sidebar-signin-icon" onclick="showView('login')" title="Sign in to Divine">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8">
+            <circle cx="8" cy="5.5" r="2.5"/>
+            <path d="M2 14c0-3.3 2.7-5.5 6-5.5s6 2.2 6 5.5"/>
+          </svg>
+        </button>
       </div>
     </div>
   </nav>
