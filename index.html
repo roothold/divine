@@ -3249,7 +3249,7 @@
         </div>
         <div class="onboard-field">
           <label class="onboard-label">Title / role descriptor</label>
-          <input class="onboard-input" id="ob-title" type="text" placeholder="e.g. Builder · Designer · Founder">
+          <input class="onboard-input" id="tkp-title" type="text" placeholder="e.g. Builder · Designer · Founder">
           <div class="onboard-hint">Keep it short. This appears under your name in the thinker picker.</div>
         </div>
         <div class="onboard-field">
@@ -3268,7 +3268,7 @@
         <p style="font-size:14px;color:var(--text-2);margin-bottom:24px">This is the core of your Thinker model — how you process decisions, what you look for, what you challenge, and how you communicate truth.</p>
         <div class="onboard-field">
           <label class="onboard-label">How do you approach a decision?</label>
-          <textarea class="onboard-textarea" id="ob-framework" rows="8" placeholder="Describe your step-by-step thinking process. What do you look for first? What do you challenge? What signals matter most? How do you communicate hard truths?
+          <textarea class="onboard-textarea" id="tkp-framework" rows="8" placeholder="Describe your step-by-step thinking process. What do you look for first? What do you challenge? What signals matter most? How do you communicate hard truths?
 
 e.g. I always start by validating whether the problem is real before evaluating any solution..."></textarea>
           <div class="onboard-hint">Be specific. The more precise your framework, the sharper your AI model's output.</div>
@@ -3285,7 +3285,7 @@ e.g. I always start by validating whether the problem is real before evaluating 
         <p style="font-size:14px;color:var(--text-2);margin-bottom:24px">One sentence that captures how you uniquely see the world. This appears on your public thinker card.</p>
         <div class="onboard-field">
           <label class="onboard-label">Your lens</label>
-          <textarea class="onboard-textarea" id="ob-lens" rows="3" placeholder="e.g. Validates whether the problem is real, audits the market landscape, and tells you — directly — if you're not thinking big enough."></textarea>
+          <textarea class="onboard-textarea" id="tkp-lens" rows="3" placeholder="e.g. Validates whether the problem is real, audits the market landscape, and tells you — directly — if you're not thinking big enough."></textarea>
           <div class="onboard-hint">Write in third person. It should describe what a founder gets from your perspective.</div>
         </div>
         <div class="onboard-field">
@@ -6188,9 +6188,6 @@ function _chatSyncTopbar() {
   if (!_chatSession) return;
   const t = _chatSession.thinker || activeThinker || THINKERS[0];
   document.getElementById('chat-title-input').value = _chatSession.title || '';
-  document.getElementById('chat-thinker-dot').style.background = t.color || '#BF452A';
-  document.getElementById('chat-thinker-name').textContent = t.name || 'Select Architect';
-  document.getElementById('chat-model-label').textContent = ACTIVE_MODEL.replace('claude-','').replace('-latest','');
   document.getElementById('chat-meta-thinker').textContent = t.name || 'Select Architect';
   document.getElementById('chat-meta-model').textContent = ACTIVE_MODEL;
 }
@@ -7156,11 +7153,11 @@ function obBack(step) { obTo(step - 1); }
 function completeOnboarding() {
   const prof = {
     name:  document.getElementById('ob-name').value.trim()  || userProfile.name,
-    title: document.getElementById('ob-title').value.trim(),
+    title: document.getElementById('tkp-title').value.trim(),
     bio:   document.getElementById('ob-bio').value.trim(),
   };
-  const fw   = document.getElementById('ob-framework').value.trim();
-  const lens = document.getElementById('ob-lens').value.trim();
+  const fw   = document.getElementById('tkp-framework').value.trim();
+  const lens = document.getElementById('tkp-lens').value.trim();
   saveTkData(TK.profile,   prof);
   saveTkData(TK.framework, fw);
   saveTkData(TK.lens,      lens);
