@@ -908,10 +908,10 @@
 
     /* Moat gauge */
     .dc-gauge-wrap { display:flex; flex-direction:column; align-items:center; }
-    .dc-gauge-pct { font-family:'Courier New',monospace; font-size:26px; font-weight:700; color:var(--text-0); margin:2px 0 4px; }
+    .dc-gauge-pct { font-family:'Courier New',monospace; font-size:26px; font-weight:700; color:#2C3E50; margin:2px 0 4px; }
     .dc-gauge-labels { display:flex; justify-content:space-between; font-size:10px; width:160px; margin-top:2px; }
-    .dc-gauge-lbl-s { color:var(--violet,#BF452A); font-weight:600; }
-    .dc-gauge-lbl-n { color:var(--coral,#BF452A); font-weight:600; }
+    .dc-gauge-lbl-s { color:#2C3E50; font-weight:600; }
+    .dc-gauge-lbl-n { color:#9E9E9E; font-weight:600; }
 
     /* Portfolio pie */
     .dc-div-wrap { display:flex; align-items:center; gap:14px; }
@@ -2393,7 +2393,7 @@
 
       <!-- Anonymous: Sign in prompt -->
       <div id="sidebar-signin-area" style="padding:12px 14px">
-        <button onclick="showView('login')" style="width:100%;background:var(--accent);color:#fff;border:none;border-radius:var(--r-pill);padding:10px 16px;font-size:13px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;transition:background .15s;text-align:center" onmouseover="this.style.background='var(--accent-mid)'" onmouseout="this.style.background='var(--accent)'">
+        <button onclick="showView('login')" style="width:100%;background:#1a1a1a;color:#fff;border:none;border-radius:var(--r-pill);padding:10px 16px;font-size:13px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;transition:background .15s;text-align:center" onmouseover="this.style.background='#000'" onmouseout="this.style.background='#1a1a1a'">
           Sign in to Divine
         </button>
         <div style="font-size:11px;color:var(--text-3);text-align:center;margin-top:8px">Personalization &amp; Thinker features</div>
@@ -3092,7 +3092,7 @@
         </div>
         <div class="cc-stat">
           <div class="cc-stat-label">Cognitive Moat Score</div>
-          <div class="cc-stat-val" id="cc-stat-rating">—</div>
+          <div class="cc-stat-val" id="cc-stat-rating" style="color:#2C3E50">—</div>
           <div class="cc-stat-sub">Verified signal strength</div>
         </div>
       </div>
@@ -4386,10 +4386,10 @@ function renderDcPortfolio() {
 
   if (!segs.length) {
     segs = [
-      { label:'Stoic Philosophy', count:40, color:'#BF452A' },
-      { label:'Startup Strategy',  count:30, color:'#BF452A' },
-      { label:'Cognitive Design',  count:20, color:'#E8613A' },
-      { label:'Other',             count:10, color:'#aaa' },
+      { label:'Stoic Philosophy', count:40, color:'#4A7C6F' },
+      { label:'Startup Strategy',  count:30, color:'#4A7FB5' },
+      { label:'Cognitive Design',  count:20, color:'#C9A84C' },
+      { label:'Other',             count:10, color:'#9E9E9E' },
     ];
   }
   requestAnimationFrame(() => requestAnimationFrame(() => drawDivPie('dc-pie-canvas', segs)));
@@ -4530,11 +4530,11 @@ function drawMoatGauge(canvasId, signalPct) {
   ctx.lineWidth   = lw;
   ctx.lineCap     = 'butt';
   ctx.stroke();
-  // Signal arc (terracotta, flat)
+  // Signal arc (deep slate, flat)
   const signalAngle = Math.PI * (signalPct / 100);
   ctx.beginPath();
   ctx.arc(cx, cy, r, Math.PI, Math.PI + signalAngle);
-  ctx.strokeStyle = '#BF452A';
+  ctx.strokeStyle = '#2C3E50';
   ctx.lineWidth   = lw;
   ctx.lineCap     = 'round';
   ctx.stroke();
