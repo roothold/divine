@@ -218,7 +218,7 @@
       margin-bottom:-1px;
     }
     .thinker-tab:hover { color:var(--text-0); }
-    .thinker-tab.active { color:var(--text-0); font-weight:600; border-bottom-color:var(--accent); }
+    .thinker-tab.active { color:var(--text-0); font-weight:600; border-bottom-color:#2C2820; }
     .thinker-tab svg { flex-shrink:0; }
     /* Onboarding is a launcher, not a panel — styled as a coral action */
     .thinker-tab-launch { color:var(--coral) !important; border-bottom-color:transparent !important; }
@@ -289,7 +289,7 @@
       background:transparent; font-family:'Inter',sans-serif; font-size:13px;
       font-weight:500; color:var(--text-2); cursor:pointer; transition:all 0.13s;
     }
-    .rpt-tab.active { background:var(--accent); border-color:var(--accent); color:#fff; }
+    .rpt-tab.active { background:#2C2820; border-color:#2C2820; color:#fff; }
     .report-summary { display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-bottom:24px; }
     .rpt-stat { background:var(--surface); border:1px solid var(--border); border-radius:var(--r); padding:16px; }
     .rpt-stat-val   { font-size:22px; font-weight:700; color:var(--text-0); }
@@ -870,8 +870,8 @@
     .dc-card-title { font-size:9.5px; font-weight:700; letter-spacing:.07em; text-transform:uppercase; color:var(--text-3); margin-top:3px; }
     .dc-lens-label { font-size:9.5px; font-weight:700; letter-spacing:.09em; text-transform:uppercase; color:var(--text-3); margin-bottom:5px; }
     .dc-lens-text { font-family:'Cormorant Garamond',serif; font-size:16px; font-style:italic; color:var(--text-1); line-height:1.55; margin-bottom:14px; flex:1; display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden; }
-    .dc-acquire-btn { width:100%; background:var(--coral,#BF452A); color:#fff; border:none; border-radius:var(--r-pill); padding:9px; font-size:12px; font-weight:700; cursor:pointer; transition:opacity .15s; display:flex; align-items:center; justify-content:center; gap:6px; letter-spacing:.02em; margin-top:auto; }
-    .dc-acquire-btn:hover { opacity:.87; }
+    .dc-acquire-btn { width:100%; background:transparent; color:var(--accent); border:1.5px solid var(--accent); border-radius:var(--r-pill); padding:9px; font-size:12px; font-weight:700; cursor:pointer; transition:background .15s, color .15s; display:flex; align-items:center; justify-content:center; gap:6px; letter-spacing:.02em; margin-top:auto; }
+    .dc-acquire-btn:hover { background:var(--accent); color:#fff; }
 
     /* Recent session cards */
     .dc-card-recent { flex-direction:column; min-height:0; }
@@ -893,7 +893,7 @@
     .dc-panel { background:var(--surface); border:1px solid var(--border); border-radius:14px; overflow:hidden; position:sticky; top:76px; }
     .dc-panel-tabs { display:grid; grid-template-columns:1fr 1fr; border-bottom:1px solid var(--border); }
     .dc-ptab { font-size:12px; font-weight:500; color:var(--text-3); background:transparent; border:none; border-bottom:2.5px solid transparent; padding:12px 8px; cursor:pointer; transition:color .15s; margin-bottom:-1px; }
-    .dc-ptab.active { color:var(--text-0); font-weight:600; border-bottom-color:var(--accent); }
+    .dc-ptab.active { color:var(--text-0); font-weight:600; border-bottom-color:#2C2820; }
     .dc-panel-body { padding:18px; }
     .dc-panel-section { margin-bottom:20px; }
     .dc-panel-section:last-child { margin-bottom:0; }
@@ -946,8 +946,8 @@
     .tl-demand-bar-bg { flex:1; height:4px; background:var(--border-md); border-radius:2px; overflow:hidden; }
     .tl-demand-fill { height:100%; background:var(--accent); border-radius:2px; transition:width .6s ease; }
     .tl-demand-label { font-size:10px; font-weight:700; color:var(--text-3); white-space:nowrap; }
-    .tl-acquire-btn { width:100%; background:var(--coral,#BF452A); color:#fff; border:none; border-radius:var(--r-pill); padding:9px; font-size:12px; font-weight:700; cursor:pointer; transition:opacity .15s; display:flex; align-items:center; justify-content:center; gap:6px; }
-    .tl-acquire-btn:hover { opacity:.87; }
+    .tl-acquire-btn { width:100%; background:transparent; color:var(--accent); border:1.5px solid var(--accent); border-radius:var(--r-pill); padding:9px; font-size:12px; font-weight:700; cursor:pointer; transition:background .15s, color .15s; display:flex; align-items:center; justify-content:center; gap:6px; }
+    .tl-acquire-btn:hover { background:var(--accent); color:#fff; }
 
     /* ═══ INQUIRY STREAM ═══ */
     #screen-replay { display:none; flex-direction:column; }
@@ -3779,7 +3779,7 @@ e.g. I always start by validating whether the problem is real before evaluating 
    DATA
 ════════════════════════════════ */
 const THINKERS = [
-  { id:'michael', name:'Michael Akindele', initials:'MA', color:'#BF452A', title:'Builder · Designer · Founder', role:'Founder',
+  { id:'michael', name:'Michael Akindele', initials:'MA', color:'#2C3E50', title:'Builder · Designer · Founder', role:'Founder',
     lens:"Validates whether the problem is real, audits the market landscape, and tells you — directly — if you're not thinking big enough.", available:true,
     aiFrame:`Validate whether the problem is real before evaluating any solution — ask what signals prove real people experience this pain. Audit what already exists in the market before building anything — ask what is different about this, what can be learned from competitors' mistakes, what does this reveal about positioning, and how can it be made 10x better. Challenge the founder to think bigger — surface where they have artificially constrained their vision by current resources or market. Examine how the founder is showing up externally (brand, presentation, email, deck) and whether the signal undermines the idea before it gets a fair hearing. Be direct, specific, and willing to say what others won't.` },
   { id:'indra',   name:'Indra Nooyi',   initials:'IN', color:'#0F7A5E', title:'Global CEO · Strategist',  role:'CEO',      lens:"Applies performance with purpose.", available:false, aiFrame:'' },
