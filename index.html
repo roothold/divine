@@ -10,7 +10,7 @@
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
-      --bg:        #F7F5F1;
+      --bg:        #FAFAF8;
       --surface:   #FFFFFF;
       --surface-2: #F2EEE7;
       --surface-3: #E8E3DA;
@@ -177,7 +177,7 @@
       transition:background 0.13s,color 0.13s; white-space:nowrap;
       line-height:1;
     }
-    .nav-item:hover { background:var(--surface-2); color:var(--text-1); }
+    .nav-item:hover { background:rgba(0,0,0,0.06); color:#2C2820; }
     .nav-item.active { background:var(--accent-lt); color:var(--accent); }
     /* All icons in nav: fixed 16×16, vertically centred, no shrink */
     .nav-item svg { flex-shrink:0; width:16px; height:16px; display:block; }
@@ -783,9 +783,9 @@
     .dc-attach-chip-name { white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:130px; }
     .dc-attach-remove { background:none; border:none; cursor:pointer; color:var(--accent); display:flex; align-items:center; padding:0; opacity:.7; transition:opacity .12s; flex-shrink:0; }
     .dc-attach-remove:hover { opacity:1; }
-    .dc-input-submit { background:#c8c4ee; color:#fff; border:none; border-radius:var(--r-pill); padding:8px 18px; font-size:13px; font-weight:600; cursor:not-allowed; transition:background .2s; font-family:'Inter',sans-serif; white-space:nowrap; flex-shrink:0; }
+    .dc-input-submit { background:#D9D9D6; color:#fff; border:none; border-radius:var(--r-pill); padding:8px 18px; font-size:13px; font-weight:600; cursor:not-allowed; transition:background .2s; font-family:'Inter',sans-serif; white-space:nowrap; flex-shrink:0; }
     .dc-input-submit.ready { background:var(--accent); cursor:pointer; }
-    .dc-input-submit.ready:hover { background:#2e2683; }
+    .dc-input-submit.ready:hover { background:var(--accent-mid); }
 
     /* Sidebar section labels + sub-items */
     .nav-section-label { font-size:10px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:var(--text-3); padding:14px 10px 4px; flex-shrink:0; }
