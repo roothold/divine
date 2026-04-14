@@ -6,7 +6,7 @@
   <title>Divine</title>
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='50' fill='%23BF452A'/%3E%3Cg stroke='%23ffffff' stroke-width='5.5' fill='none' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='24' y='18' width='7' height='64' rx='2'/%3E%3Crect x='31' y='18' width='6' height='6' rx='1'/%3E%3Crect x='31' y='76' width='6' height='6' rx='1'/%3E%3Cpath d='M37 23 Q76 23 76 50 Q76 77 37 77'/%3E%3Cpath d='M37 33 Q66 33 66 50 Q66 67 37 67'/%3E%3C/g%3E%3C/svg%3E">
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
@@ -39,6 +39,42 @@
     }
     html { scroll-behavior: smooth; }
     body { font-family:'Inter',system-ui,sans-serif; background:var(--bg); color:var(--text-1); font-size:15px; line-height:1.6; min-height:100vh; }
+
+    /* ══ NUMERIC FONT SYSTEM ══════════════════════════════════════════════
+       JetBrains Mono for all data values: prices, percentages, counts.
+       Makes numbers feel machine-audited, not designer-typed.
+    ═══════════════════════════════════════════════════════════════════════ */
+    :root { --font-mono: 'JetBrains Mono', 'Courier New', monospace; }
+
+    /* Utility class — add class="num" to any inline numeric span */
+    .num { font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
+
+    /* ── Data values: stats, gauges, ratings ─────────────────────────── */
+    .dc-gauge-pct,
+    .thinker-stat-val,
+    .rpt-stat-val,
+    .cc-stat-val,
+    .cc-stat-rating,
+    .th-stat-val { font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
+
+    /* ── Prices & credit amounts ─────────────────────────────────────── */
+    .plan-price,
+    .topup-pkg-credits,
+    .topup-pkg-price,
+    .topup-pkg-unit,
+    .topup-balance-val,
+    .cl-row-amount { font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
+
+    /* ── Ledger table: amounts column ────────────────────────────────── */
+    .ledger-table td:nth-child(3),
+    .ledger-table th:nth-child(3) { font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
+
+    /* ── Match score (perspective result) ────────────────────────────── */
+    .match-score { font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
+
+    /* ── Timestamps & monospace context ─────────────────────────────── */
+    .is-block-ts,
+    .recent-item::before { font-family: var(--font-mono); }
 
     /* ═══ CONTENT TOPBAR (replaces full-width header) ═══ */
     .content-topbar {
@@ -197,7 +233,7 @@
       background:var(--accent); color:#fff !important; font-weight:600;
       margin-bottom:6px;
     }
-    .nav-new-perspective:hover { background:#2e2683; color:#fff; }
+    .nav-new-perspective:hover { background:var(--accent-mid); color:#fff; }
     .nav-thinker { color:var(--accent) !important; font-weight:600; }
     .nav-thinker:hover { background:var(--accent-lt); }
     .nav-thinker.active { background:var(--accent-lt); color:var(--accent); }
@@ -856,7 +892,7 @@
     /* Monospace timestamp stripe */
     .recent-item::before {
       content:attr(data-ts); position:absolute; top:8px; right:8px;
-      font-family:'Courier New',monospace; font-size:8.5px; color:var(--text-3); opacity:.6;
+      font-family:var(--font-mono); font-size:8.5px; color:var(--text-3); opacity:.6;
       letter-spacing:.03em;
     }
     .recent-avatar { width:26px; height:26px; border-radius:6px; display:flex; align-items:center;
@@ -930,12 +966,12 @@
     .dc-equity-grid { display:grid; grid-template-columns:1fr 1fr; gap:9px; }
     .dc-eq-card { background:var(--surface-2); border-radius:8px; padding:12px; }
     .dc-eq-label { font-size:9px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:var(--text-3); margin-bottom:4px; }
-    .dc-eq-val { font-family:'Courier New',monospace; font-size:22px; font-weight:700; color:var(--text-0); line-height:1; }
+    .dc-eq-val { font-family:var(--font-mono); font-size:22px; font-weight:700; color:var(--text-0); line-height:1; }
     .dc-eq-sub { font-size:9.5px; color:var(--text-3); margin-top:3px; }
 
     /* Moat gauge */
     .dc-gauge-wrap { display:flex; flex-direction:column; align-items:center; }
-    .dc-gauge-pct { font-family:'Courier New',monospace; font-size:26px; font-weight:700; color:#2C3E50; margin:2px 0 4px; }
+    .dc-gauge-pct { font-family:var(--font-mono); font-size:26px; font-weight:700; color:#2C3E50; margin:2px 0 4px; }
     .dc-gauge-labels { display:flex; justify-content:space-between; font-size:10px; width:160px; margin-top:2px; }
     .dc-gauge-lbl-s { color:#2C3E50; font-weight:600; }
     .dc-gauge-lbl-n { color:#9E9E9E; font-weight:600; }
@@ -952,7 +988,7 @@
     .dc-market-name { font-size:13px; font-weight:500; color:var(--text-0); flex:1; }
     .dc-market-bar-bg { width:60px; height:5px; background:var(--surface-2); border-radius:3px; overflow:hidden; }
     .dc-market-bar-fill { height:100%; border-radius:3px; background:var(--violet,#BF452A); }
-    .dc-market-pct { font-family:'Courier New',monospace; font-size:11px; color:var(--text-3); width:28px; text-align:right; flex-shrink:0; }
+    .dc-market-pct { font-family:var(--font-mono); font-size:11px; color:var(--text-3); width:28px; text-align:right; flex-shrink:0; }
 
     /* ═══ THOUGHT LEADERS SCREEN ═══ */
     .tl-filter-row { display:flex; gap:6px; margin-bottom:22px; }
@@ -1013,7 +1049,7 @@
     /* Block meta */
     .is-block-meta { display:flex; align-items:center; justify-content:space-between; margin-bottom:12px; }
     .is-block-label { font-size:9px; font-weight:700; letter-spacing:.11em; text-transform:uppercase; color:var(--text-3); }
-    .is-block-ts { font-family:'Courier New',monospace; font-size:9px; color:var(--text-3); letter-spacing:.02em; }
+    .is-block-ts { font-family:var(--font-mono); font-size:9px; color:var(--text-3); letter-spacing:.02em; }
 
     /* Query pill */
     .is-query-pill { background:var(--accent-lt); border:1px solid var(--accent-bdr); border-radius:10px; padding:11px 15px; margin-bottom:14px; font-size:14px; color:var(--text-0); font-weight:500; line-height:1.55; }
@@ -1056,7 +1092,7 @@
     .is-input::placeholder { color:#c5bdb2; }
     .is-send-btn { width:34px; height:34px; border-radius:50%; border:none; background:var(--accent); color:#fff; cursor:pointer; display:flex; align-items:center; justify-content:center; flex-shrink:0; transition:background .15s,transform .12s,box-shadow .15s; box-shadow:0 2px 8px rgba(191,69,42,.3); }
     .is-send-btn:disabled { background:#d4d0f0; cursor:not-allowed; box-shadow:none; }
-    .is-send-btn:not(:disabled):hover { background:#2e2683; transform:scale(1.08); box-shadow:0 4px 14px rgba(191,69,42,.4); }
+    .is-send-btn:not(:disabled):hover { background:var(--accent-mid); transform:scale(1.08); box-shadow:0 4px 14px rgba(191,69,42,.4); }
     .is-send-btn:not(:disabled):active { transform:scale(.96); }
 
     /* "Encoding Perspective" thinking pill */
@@ -1089,7 +1125,7 @@
     .th-domain-name   { font-size:12.5px; color:var(--text-1); width:88px; flex-shrink:0; }
     .th-domain-bar-bg { flex:1; background:var(--surface-2); border-radius:4px; height:6px; overflow:hidden; }
     .th-domain-bar-fill { height:100%; border-radius:4px; width:0; transition:width 1.1s cubic-bezier(.34,1.56,.64,1); }
-    .th-domain-pct    { font-family:'Courier New',monospace; font-size:11px; color:var(--text-3); width:30px; text-align:right; flex-shrink:0; }
+    .th-domain-pct    { font-family:var(--font-mono); font-size:11px; color:var(--text-3); width:30px; text-align:right; flex-shrink:0; }
     .th-domain-delta  { font-size:10px; font-weight:700; padding:2px 7px; border-radius:var(--r-pill); flex-shrink:0; white-space:nowrap; }
     .th-domain-up     { color:#15803d; background:#dcfce7; }
     .th-domain-flat   { color:var(--text-3); background:var(--surface-2); }
@@ -1112,11 +1148,11 @@
     .cl-capital-card  { background:#1A1714; border-radius:14px; padding:24px 26px; margin-bottom:26px; display:flex; align-items:center; flex-wrap:wrap; gap:0; }
     .cl-cap-main      { flex:1; min-width:160px; }
     .cl-cap-label     { font-size:10px; font-weight:700; letter-spacing:.12em; text-transform:uppercase; color:rgba(255,255,255,.48); margin-bottom:6px; }
-    .cl-cap-amount    { font-family:'Courier New',monospace; font-size:40px; font-weight:700; color:#fff; line-height:1; letter-spacing:.02em; }
+    .cl-cap-amount    { font-family:var(--font-mono); font-size:40px; font-weight:700; color:#fff; line-height:1; letter-spacing:.02em; }
     .cl-cap-sub       { font-size:11.5px; color:rgba(255,255,255,.4); margin-top:5px; }
     .cl-cap-divider   { width:1px; height:48px; background:rgba(255,255,255,.12); margin:0 24px; flex-shrink:0; }
     .cl-cap-stat      { text-align:center; flex-shrink:0; }
-    .cl-cap-stat-val  { font-family:'Courier New',monospace; font-size:28px; font-weight:700; color:#fff; line-height:1; }
+    .cl-cap-stat-val  { font-family:var(--font-mono); font-size:28px; font-weight:700; color:#fff; line-height:1; }
     .cl-cap-stat-lbl  { font-size:11px; color:rgba(255,255,255,.45); margin-top:5px; line-height:1.4; }
     .cl-cap-topup     { margin-left:auto; padding-left:24px; flex-shrink:0; }
     .cl-topup-btn     { font-size:12px; font-weight:700; color:#1A1714; background:#fff; border:none; border-radius:var(--r-pill); padding:9px 18px; cursor:pointer; white-space:nowrap; transition:opacity .15s; }
@@ -1132,7 +1168,7 @@
     .cl-row           { display:grid; grid-template-columns:104px 1fr 80px 74px; gap:12px; padding:13px 16px; border-bottom:1px solid var(--border); align-items:center; transition:background .12s; }
     .cl-row:last-child { border-bottom:none; }
     .cl-row:hover     { background:var(--surface-2); }
-    .cl-row-date      { font-family:'Courier New',monospace; font-size:11.5px; color:var(--text-3); white-space:nowrap; line-height:1.45; }
+    .cl-row-date      { font-family:var(--font-mono); font-size:11.5px; color:var(--text-3); white-space:nowrap; line-height:1.45; }
     .cl-row-desc      { font-size:13.5px; color:var(--text-0); line-height:1.4; }
     .cl-row-desc-sub  { font-size:12px; color:var(--text-3); margin-top:2px; font-family:'Cormorant Garamond',serif; font-style:italic; }
     .cl-row-status    { display:flex; align-items:center; gap:7px; font-size:12px; color:var(--text-2); font-weight:500; }
@@ -1140,7 +1176,7 @@
     .cl-dot-debit     { background:var(--coral,#BF452A); }
     .cl-dot-credit    { background:#16a34a; }
     .cl-row-amt-wrap  { position:relative; text-align:right; }
-    .cl-row-amount    { font-family:'Courier New',monospace; font-size:13px; font-weight:600; white-space:nowrap; }
+    .cl-row-amount    { font-family:var(--font-mono); font-size:13px; font-weight:600; white-space:nowrap; font-variant-numeric:tabular-nums; }
     .cl-amt-debit     { color:var(--coral,#BF452A); }
     .cl-amt-credit    { color:#16a34a; }
     .cl-tooltip       { position:absolute; bottom:calc(100% + 8px); right:0; background:#1A1714; color:#fff; font-size:11px; font-weight:500; white-space:nowrap; padding:6px 11px; border-radius:8px; pointer-events:none; opacity:0; transition:opacity .15s; z-index:20; }
@@ -1963,9 +1999,83 @@
       background:var(--accent); color:#fff !important;
       border-radius:14px; margin:5px 3px; padding:8px 12px 10px;
     }
-    .mob-nav-new:hover { background:#2e2683; color:#fff !important; }
+    .mob-nav-new:hover { background:var(--accent-mid); color:#fff !important; }
     @media (max-width:640px) {
       .mobile-nav { display:flex; }
+    }
+
+    /* ══════════════════════════════════════════════════════════
+       COMPREHENSIVE MOBILE IMPROVEMENTS
+    ══════════════════════════════════════════════════════════ */
+
+    /* ─── Chat screen: account for fixed mobile nav ─── */
+    @media (max-width:640px) {
+      /* Push chat input above the mobile nav bar */
+      .chat-input-bar {
+        padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 72px);
+      }
+      /* Compact topbar */
+      .chat-topbar { padding:10px 14px 10px; min-height:46px; }
+      .chat-title-input { font-size:15px; }
+      .chat-new-btn { padding:4px 10px; font-size:11px; }
+      /* Tighter message padding */
+      .chat-messages { padding:16px 12px 12px; gap:14px; }
+      /* Empty state: tighter vertical */
+      .chat-empty { padding:24px 16px; gap:8px; }
+      .chat-empty-headline { font-size:18px; }
+      .chat-empty-sub { font-size:12.5px; }
+    }
+
+    /* ─── Dashboard: hide thinker grid on mobile ─── */
+    @media (max-width:640px) {
+      #dc-sect-thinkers, #dc-thinker-grid { display:none; }
+      /* Compact headline */
+      .dc-headline { font-size:clamp(22px,6vw,32px); margin-bottom:18px; }
+      /* Make input card more prominent */
+      .dc-input-textarea { font-size:15px; min-height:80px; }
+      /* Full-width submit button on mobile */
+      .dc-input-footer { flex-direction:column; gap:8px; align-items:stretch; }
+      .dc-input-proj { justify-content:flex-start; }
+      .dc-input-submit { width:100%; text-align:center; padding:12px 18px; font-size:14px; }
+    }
+
+    /* ─── Knowledge base: hide thinker strip on mobile ─── */
+    @media (max-width:640px) {
+      .kb-thinker-strip { display:none; }
+    }
+
+    /* ─── General screens: safe bottom padding for mobile nav ─── */
+    @media (max-width:640px) {
+      /* Recents & small cards: better touch targets */
+      .dc-recent-row { padding:16px 14px; }
+      .dc-recent-title { font-size:14px; }
+      /* Dashboard right panel (portfolio) hidden on mobile — only show main col */
+      .dc-panel { display:none; }
+      /* Thinker hub: ensure tabs are scrollable */
+      .thinker-tabs { -webkit-overflow-scrolling:touch; }
+      /* Projects, search: ensure bottom clearance */
+      #screen-projects .screen-inner,
+      #screen-search .screen-inner,
+      #screen-knowledge .screen-inner,
+      #screen-upgrade .screen-inner,
+      #screen-settings .screen-inner { padding-bottom:100px; }
+      /* Content topbar: slightly more compact on mobile */
+      .content-topbar { height:52px; }
+      /* Topbar: hide lens info label text on very small screens */
+      .lens-name { max-width:90px; font-size:12px; }
+    }
+
+    /* ─── Mobile-specific touch interaction improvements ─── */
+    @media (max-width:640px) {
+      /* Larger tap targets for nav items */
+      .mob-nav-item { min-height:54px; flex:1; }
+      /* Remove hover-persisting color on mobile for nav items */
+      .mob-nav-item:hover { color:var(--text-3); }
+      .mob-nav-item.mob-active:hover { color:var(--accent); }
+      /* Increase tap zone for chat send button */
+      .chat-send-btn { width:40px; height:40px; }
+      /* Input text larger for mobile readability */
+      .chat-textarea { font-size:16px; } /* 16px prevents iOS zoom-on-focus */
     }
 
     /* ══════════════════════════════════════════════════════════
@@ -2318,7 +2428,7 @@
         <div class="nav-section-label nav-thinker">Thinker</div>
 
         <button class="nav-item nav-thinker cc-parent" id="nav-thinker" data-tip="Command Center"
-          onclick="ccActivate('overview',this); showView('thinker-hub')">
+          onclick="ccActivate('overview',this); navigateThinkerTab('overview')">
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75">
             <circle cx="8" cy="5" r="3"/>
             <path d="M2 14c0-3.3 2.7-6 6-6s6 2.7 6 6"/>
@@ -2327,7 +2437,7 @@
         </button>
 
         <button class="nav-item cc-flat" id="cc-onboarding" data-tip="Onboarding"
-          onclick="ccActivate('onboarding',this); showView('thinker-hub'); switchThinkerTab('onboarding',null)">
+          onclick="ccActivate('onboarding',this); navigateThinkerTab('onboarding')">
           <!-- Compass -->
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75">
             <circle cx="8" cy="8" r="6.5"/>
@@ -2338,7 +2448,7 @@
         </button>
 
         <button class="nav-item cc-flat" id="cc-train" data-tip="Train Model"
-          onclick="ccActivate('train',this); showView('thinker-hub'); switchThinkerTab('train', document.querySelector('.thinker-tab:nth-child(3)'))">
+          onclick="ccActivate('train',this); navigateThinkerTab('train')">
           <!-- CPU chip -->
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75">
             <rect x="4" y="4" width="8" height="8" rx="1.5"/>
@@ -2348,7 +2458,7 @@
         </button>
 
         <button class="nav-item cc-flat" id="cc-reports" data-tip="Reports"
-          onclick="ccActivate('reports',this); showView('thinker-hub'); switchThinkerTab('reports', document.querySelector('.thinker-tab:nth-child(4)'))">
+          onclick="ccActivate('reports',this); navigateThinkerTab('reports')">
           <!-- Fingerprint (verified signal) -->
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round">
             <path d="M8 1.5C5 1.5 2.5 4 2.5 7"/>
@@ -2365,7 +2475,7 @@
         </button>
 
         <button class="nav-item cc-flat" id="cc-payments" data-tip="Payments"
-          onclick="ccActivate('payments',this); showView('thinker-hub'); switchThinkerTab('payments', document.querySelector('.thinker-tab:nth-child(5)'))">
+          onclick="ccActivate('payments',this); navigateThinkerTab('payments')">
           <!-- Key -->
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
             <circle cx="5.5" cy="7" r="3"/>
@@ -3475,7 +3585,7 @@ e.g. I always start by validating whether the problem is real before evaluating 
             <div class="th-perf-dot" id="th-perf-dot"></div>
             High-Resolution Performance Ledger
           </div>
-          <span style="font-size:11px;color:var(--text-3);font-family:'Courier New',monospace" id="rpt-live-label">Live · synced with Railway</span>
+          <span style="font-size:11px;color:var(--text-3);font-family:var(--font-mono)" id="rpt-live-label">Live · synced with Railway</span>
         </div>
         <div class="ledger-scroll-wrap">
         <table class="ledger-table" id="ledger-table">
@@ -3971,8 +4081,121 @@ function signOut() {
 /* ════════════════════════════════
    VIEW ROUTING
 ════════════════════════════════ */
-function showView(view) {
+/* ════════════════════════════════════════════════════════════════════════
+   URL ROUTER — History API client-side routing (no full-page reloads)
+   Every showView() call pushes a clean URL. Refresh lands on the right view.
+   URL schema:
+     /dashboard                  → Main dashboard
+     /dashboard/wallet           → Wallet / Cognitive Ledger
+     /dashboard/wallet/topup     → Wallet + top-up modal open
+     /dashboard/chat             → New chat
+     /dashboard/chat/:id         → Specific chat session
+     /dashboard/audit/:id        → Perspective replay
+     /search                     → Search
+     /thought-leaders            → Thought leaders
+     /projects                   → Projects
+     /settings                   → Settings
+     /help                       → Help & FAQ
+     /downloads                  → Downloads
+     /thinker                    → Thinker hub (overview)
+     /thinker/onboarding         → Thinker hub — onboarding tab
+     /thinker/train              → Thinker hub — train tab
+     /thinker/reports            → Thinker hub — reports tab
+     /thinker/payments           → Thinker hub — payments tab
+     /uncharted/logic-intake     → New perspective (chat)
+════════════════════════════════════════════════════════════════════════ */
+const router = (() => {
+  // View name → canonical URL path
+  const VIEW_TO_PATH = {
+    'recents':         '/dashboard',
+    'upgrade':         '/dashboard/wallet',
+    'chat':            '/dashboard/chat',
+    'search':          '/search',
+    'thought-leaders': '/thought-leaders',
+    'projects':        '/projects',
+    'settings':        '/settings',
+    'help':            '/help',
+    'downloads':       '/downloads',
+    'thinker-hub':     '/thinker',
+    'login':           '/login',
+  };
+
+  // Ordered route table — first match wins
+  // Each fn receives the regex match array; _act(view) activates without re-pushing.
+  function buildRoutes() { return [
+    { re: /^\/$|^\/dashboard$/,             fn: ()      => _act('recents') },
+    { re: /^\/dashboard\/wallet\/topup$/,   fn: ()      => { _act('upgrade'); setTimeout(openTopup, 200); } },
+    { re: /^\/dashboard\/wallet$/,          fn: ()      => _act('upgrade') },
+    { re: /^\/dashboard\/chat\/(.+)$/,      fn: (m)     => openChatSession(m[1]) },
+    { re: /^\/dashboard\/chat$/,            fn: ()      => openChat() },
+    { re: /^\/dashboard\/audit\/(.+)$/,     fn: (m)     => openAuditById(m[1]) },
+    { re: /^\/search$/,                     fn: ()      => _act('search') },
+    { re: /^\/thought-leaders$/,            fn: ()      => _act('thought-leaders') },
+    { re: /^\/projects$/,                   fn: ()      => _act('projects') },
+    { re: /^\/settings$/,                   fn: ()      => _act('settings') },
+    { re: /^\/help$/,                       fn: ()      => _act('help') },
+    { re: /^\/downloads$/,                  fn: ()      => _act('downloads') },
+    { re: /^\/thinker\/onboarding$/,        fn: ()      => _actThinkerTab('onboarding') },
+    { re: /^\/thinker\/train$/,             fn: ()      => _actThinkerTab('train') },
+    { re: /^\/thinker\/reports$/,           fn: ()      => _actThinkerTab('reports') },
+    { re: /^\/thinker\/payments$/,          fn: ()      => _actThinkerTab('payments') },
+    { re: /^\/thinker/,                     fn: ()      => _act('thinker-hub') },
+    { re: /^\/uncharted\/logic-intake$/,    fn: ()      => openChat() },
+    { re: /^\/login$/,                      fn: ()      => showLoginScreen() },
+  ]; }
+
+  // Activate a named view without emitting another pushState (avoids loops)
+  function _act(view) { showView(view, { _noHistory: true }); }
+
+  function _actThinkerTab(tab) {
+    _act('thinker-hub');
+    // Small defer so the hub screen renders before the tab switches
+    setTimeout(() => switchThinkerTab(tab, null), 80);
+  }
+
+  function resolve(path) {
+    const pathname = (path || '/').split('?')[0].replace(/\/+$/, '') || '/';
+    const routes = buildRoutes();
+    const route  = routes.find(r => r.re.test(pathname));
+    if (route) route.fn(pathname.match(route.re));
+    else _act('recents');  // unknown path → dashboard
+  }
+
+  function push(path) {
+    if (window.location.pathname !== path) {
+      history.pushState({ path }, '', path);
+    }
+  }
+
+  function replace(path) {
+    history.replaceState({ path }, '', path);
+  }
+
+  function pathForView(view) {
+    return VIEW_TO_PATH[view] || '/dashboard';
+  }
+
+  // Back / forward button support
+  window.addEventListener('popstate', () => resolve(window.location.pathname));
+
+  return { resolve, push, replace, pathForView };
+})();
+
+// Open a chat session by its local-storage ID (called from /dashboard/audit/:id)
+function openAuditById(id) {
+  // Attempt to load and replay the session
+  const sessions = loadChatSessions();
+  const s = sessions.find(x => x.id === id);
+  if (s) openChatSession(id);
+  else openChat(); // session not found → new chat
+}
+
+function showView(view, opts = {}) {
   closeProfileMenu();
+  // Push URL unless caller explicitly suppresses (avoids router loop)
+  if (!opts._noHistory && view !== 'login') {
+    router.push(router.pathForView(view));
+  }
   document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
 
   const views = {
@@ -6166,9 +6389,10 @@ function openChat(prefill) {
   ta.value = '';
   chatTextareaResize(ta);
 
-  // Navigate to screen
+  // Navigate to screen + push URL with session id
   show('screen-chat');
   setMobNavActive(null);
+  router.push('/dashboard/chat/' + _chatSession.id);
 
   // Pre-fill if coming from dashboard input or URL param
   if (prefill && prefill.trim()) {
@@ -6215,6 +6439,7 @@ function openChatSession(sessionId) {
 
   show('screen-chat');
   setMobNavActive(null);
+  router.push('/dashboard/chat/' + sessionId);
   setTimeout(() => { msgs.scrollTop = msgs.scrollHeight; ta.focus(); }, 80);
 }
 
@@ -6686,8 +6911,19 @@ renderFAQ();
 checkConnection();
 fetchBalance();
 initThinkerAccess();
-setMobNavActive('mob-nav-home'); // set home as active on initial load
-renderDashboardHome();           // populate Divine Command dashboard on load
+
+// ── URL-based initial routing ────────────────────────────────────────────
+// Resolve the current pathname so that a refresh on /dashboard/wallet
+// loads the wallet view directly, not the dashboard.
+// renderDashboardHome() is called by router.resolve → showView('recents')
+// for the default case, so we only call it explicitly for non-dashboard paths.
+(function initRouter() {
+  const path = window.location.pathname;
+  // Always pre-render dashboard data in case we need it for back-navigation
+  renderDashboardHome();
+  // Now activate the view matching the current URL
+  router.resolve(path);
+})();
 
 /* ════════════════════════════════
    INBOUND PARAM INTAKE
@@ -6951,6 +7187,17 @@ async function checkForNewSales() {
 }
 
 /* ── Tab switching ── */
+// Navigate to a thinker hub sub-tab and push the right URL
+function navigateThinkerTab(tab) {
+  const path = (!tab || tab === 'overview') ? '/thinker' : '/thinker/' + tab;
+  router.push(path);
+  show('screen-thinker-hub');
+  try { initThinkerHub(); } catch(e) {}
+  if (tab && tab !== 'overview') {
+    setTimeout(() => switchThinkerTab(tab, null), 80);
+  }
+}
+
 function switchThinkerTab(tab, btn) {
   document.querySelectorAll('.thinker-tab').forEach(t => t.classList.remove('active'));
   if (btn) btn.classList.add('active');
@@ -7569,11 +7816,11 @@ async function renderReports(period) {
     const decSnip  = decision.length > 48 ? decision.slice(0, 48) + '…' : decision;
     const stage    = t.stage || t.thinker_name || t.architect || '—';
     return `<tr>
-      <td style="font-family:'Courier New',monospace;font-size:12px">${fmtDateShort(t.created_at || t.date || t.timestamp)}</td>
+      <td style="font-family:var(--font-mono);font-size:12px">${fmtDateShort(t.created_at || t.date || t.timestamp)}</td>
       <td>${stage}</td>
       <td style="font-style:italic;color:var(--text-2)">${decSnip}</td>
-      <td class="ledger-amt" style="font-family:'Courier New',monospace">$${gross.toFixed(2)}</td>
-      <td style="font-family:'Courier New',monospace;font-weight:600;color:var(--violet,#BF452A)">$${cut}</td>
+      <td class="ledger-amt" style="font-family:var(--font-mono)">$${gross.toFixed(2)}</td>
+      <td style="font-family:var(--font-mono);font-weight:600;color:var(--violet,#BF452A)">$${cut}</td>
     </tr>`;
   }).join('');
 }

@@ -330,7 +330,8 @@ app.get('/api/wallet/history', async (req, res) => {
 
 // ── POST /api/get-perspective ─────────────────────────────────────────────────
 app.post('/api/get-perspective', async (req, res) => {
-  const { user_id, thinker_id, stage, decision, answers } = req.body;
+  const { user_id, thinker_id, stage, decision, answers,
+          messages: clientMessages, system: clientSystem } = req.body;
 
   if (!user_id)    return res.status(400).json({ error: 'user_id is required.'    });
   if (!thinker_id) return res.status(400).json({ error: 'thinker_id is required.' });
@@ -380,27 +381,43 @@ app.post('/api/get-perspective', async (req, res) => {
     console.error('[context load]', err.message);
   }
 
-  let userMessage = '';
-  if (stage === 'questions') {
-    userMessage = `Decision I'm working through: ${decision}\n\nGenerate 3 clarifying questions. Return exactly this JSON (no other text):\n[{"question":"..."},{"question":"..."},{"question":"..."}]`;
-  } else if (stage === 'match') {
-    const answersText = (answers || []).map((a, i) => `Q${i+1}: ${a.q}\nA: ${a.a}`).join('\n\n');
-    userMessage = `Decision: ${decision}\n\nContext:\n${answersText}\n\nRate this founder's thinking. Return only JSON:\n{"score":85,"headline":"Strong alignment","sub":"2-4 words","reasoning":"2-3 sentences."}`;
-  } else if (stage === 'reframe') {
-    const answersText = (answers || []).map((a, i) => `Q${i+1}: ${a.q}\nA: ${a.a}`).join('\n\n');
-    userMessage = `Decision: ${decision}\n\nContext:\n${answersText}\n\nApply your full framework. Return only JSON:\n{"keyInsight":{"title":"...","body":"..."},"frames":[{"icon":"🔍","label":"...","title":"...","body":"..."},{"icon":"⚡","label":"...","title":"...","body":"..."},{"icon":"🎯","label":"...","title":"...","body":"..."}]}`;
-  } else {
-    return res.status(400).json({ error: `Unknown stage: ${stage}` });
-  }
+  // ── Build the messages array and system prompt for this stage ────────────
+  let messages;
+  let systemPrompt = thinker.systemPrompt;
 
-  const messages = [
-    ...(summaryPrefix
-      ? [{ role: 'user', content: `[Prior session summary]\n${summaryPrefix}` },
-         { role: 'assistant', content: 'Understood. I have the context.' }]
-      : []),
-    ...conversationHistory,
-    { role: 'user', content: userMessage },
-  ];
+  if (stage === 'chat') {
+    // Conversational chat: client sends full message history + optional system override.
+    // Use client messages directly; no JSON-output constraint.
+    if (clientSystem) systemPrompt = clientSystem;
+    if (!clientMessages?.length) {
+      return res.status(400).json({ error: 'messages array is required for stage: chat' });
+    }
+    messages = clientMessages;
+
+  } else {
+    // Legacy structured stages (perspective flow)
+    let userMessage = '';
+    if (stage === 'questions') {
+      userMessage = `Decision I'm working through: ${decision}\n\nGenerate 3 clarifying questions. Return exactly this JSON (no other text):\n[{"question":"..."},{"question":"..."},{"question":"..."}]`;
+    } else if (stage === 'match') {
+      const answersText = (answers || []).map((a, i) => `Q${i+1}: ${a.q}\nA: ${a.a}`).join('\n\n');
+      userMessage = `Decision: ${decision}\n\nContext:\n${answersText}\n\nRate this founder's thinking. Return only JSON:\n{"score":85,"headline":"Strong alignment","sub":"2-4 words","reasoning":"2-3 sentences."}`;
+    } else if (stage === 'reframe') {
+      const answersText = (answers || []).map((a, i) => `Q${i+1}: ${a.q}\nA: ${a.a}`).join('\n\n');
+      userMessage = `Decision: ${decision}\n\nContext:\n${answersText}\n\nApply your full framework. Return only JSON:\n{"keyInsight":{"title":"...","body":"..."},"frames":[{"icon":"🔍","label":"...","title":"...","body":"..."},{"icon":"⚡","label":"...","title":"...","body":"..."},{"icon":"🎯","label":"...","title":"...","body":"..."}]}`;
+    } else {
+      return res.status(400).json({ error: `Unknown stage: ${stage}` });
+    }
+
+    messages = [
+      ...(summaryPrefix
+        ? [{ role: 'user', content: `[Prior session summary]\n${summaryPrefix}` },
+           { role: 'assistant', content: 'Understood. I have the context.' }]
+        : []),
+      ...conversationHistory,
+      { role: 'user', content: userMessage },
+    ];
+  }
 
   res.setHeader('Content-Type',      'text/event-stream');
   res.setHeader('Cache-Control',     'no-cache');
@@ -412,8 +429,8 @@ app.post('/api/get-perspective', async (req, res) => {
   try {
     const stream = anthropic.messages.stream({
       model:      MAIN_MODEL,
-      max_tokens: 1024,
-      system: [{ type: 'text', text: thinker.systemPrompt, cache_control: { type: 'ephemeral' } }],
+      max_tokens: stage === 'chat' ? 2048 : 1024,
+      system: [{ type: 'text', text: systemPrompt, cache_control: { type: 'ephemeral' } }],
       messages,
     });
 
@@ -436,19 +453,24 @@ app.post('/api/get-perspective', async (req, res) => {
       console.error('[deduct]', deductErr.message);
     }
 
-    const newHistory = [
-      ...conversationHistory,
-      { role: 'user',      content: userMessage },
-      { role: 'assistant', content: fullText    },
-    ];
-    await pool.query(
-      `INSERT INTO conversation_contexts (user_id, thinker_id, messages, summary, token_est)
-       VALUES ($1,$2,$3,$4,$5)
-       ON CONFLICT (user_id, thinker_id) DO UPDATE
-         SET messages=$3, summary=$4, token_est=$5`,
-      [user_id, thinker_id, JSON.stringify(newHistory), summaryPrefix,
-       Math.ceil(JSON.stringify(newHistory).length / 4)]
-    ).catch(err => console.error('[context save]', err.message));
+    // Save conversation context for legacy stages only.
+    // For 'chat', history is owned by the client (localStorage).
+    if (stage !== 'chat') {
+      const lastUserMsg = messages[messages.length - 1]?.content || '';
+      const newHistory = [
+        ...conversationHistory,
+        { role: 'user',      content: lastUserMsg },
+        { role: 'assistant', content: fullText    },
+      ];
+      await pool.query(
+        `INSERT INTO conversation_contexts (user_id, thinker_id, messages, summary, token_est)
+         VALUES ($1,$2,$3,$4,$5)
+         ON CONFLICT (user_id, thinker_id) DO UPDATE
+           SET messages=$3, summary=$4, token_est=$5`,
+        [user_id, thinker_id, JSON.stringify(newHistory), summaryPrefix,
+         Math.ceil(JSON.stringify(newHistory).length / 4)]
+      ).catch(err => console.error('[context save]', err.message));
+    }
 
     const updated = await getOrCreateWallet(user_id).catch(() => null);
     res.write(`data: ${JSON.stringify({ type: 'done', balance: updated ? parseFloat(updated.credit_balance) : null })}\n\n`);
@@ -491,6 +513,20 @@ app.post('/api/top-up', async (req, res) => {
   } catch (err) {
     console.error('[top-up error]', err.message);
     res.status(500).json({ error: 'Could not credit wallet.' });
+  }
+});
+
+// ── SPA catch-all ────────────────────────────────────────────────────────────
+// Serve index.html for every non-API, non-auth route.
+// This is what makes /dashboard/wallet work on browser refresh — the server
+// returns the SPA shell and the client router takes over from there.
+app.get('*', (req, res, next) => {
+  if (req.path.startsWith('/api/') || req.path.startsWith('/auth/')) return next();
+  try {
+    res.setHeader('Content-Type', 'text/html; charset=utf-8');
+    res.send(readFileSync(HTML_FILE, 'utf8'));
+  } catch {
+    res.status(404).send('App not found.');
   }
 });
 
