@@ -2319,7 +2319,43 @@
       font-size:12.5px; background:rgba(0,0,0,.06); color:var(--accent);
       padding:1px 5px; border-radius:4px; border:1px solid rgba(0,0,0,.07);
     }
-    /* [SYSTEM REFRAME] header */
+    /* [BLUF] — bottom line up front */
+    .chat-bluf {
+      font-size:14.5px; font-weight:700; color:var(--text-0);
+      line-height:1.5; margin-bottom:2px;
+      border-left:3px solid var(--accent);
+      padding:8px 12px;
+      background:rgba(191,69,42,.04);
+      border-radius:0 6px 6px 0;
+    }
+    /* Section labels: **The Reframe**, **Strategic Levers**, **Required Inputs** */
+    .chat-section-label {
+      font-size:10px; font-weight:800; letter-spacing:.1em; text-transform:uppercase;
+      color:var(--text-3); font-family:var(--font-mono,'JetBrains Mono',monospace);
+      margin:2px 0 6px; display:flex; align-items:center; gap:8px;
+    }
+    .chat-section-label::after {
+      content:''; flex:1; height:1px; background:var(--border-md); opacity:.6;
+    }
+    /* → Next Logical Question CTA */
+    .chat-next-q {
+      display:flex; align-items:baseline; flex-wrap:wrap; gap:5px;
+      margin-top:4px; padding:8px 10px;
+      background:var(--surface); border:1px solid var(--border-md);
+      border-radius:8px;
+    }
+    .chat-next-q-arrow {
+      font-size:13px; color:var(--accent); font-weight:700; flex-shrink:0;
+    }
+    .chat-next-q-label {
+      font-size:10px; font-weight:800; letter-spacing:.08em; text-transform:uppercase;
+      color:var(--text-3); font-family:var(--font-mono,'JetBrains Mono',monospace);
+      flex-shrink:0;
+    }
+    .chat-next-q-text {
+      font-size:13px; color:var(--text-1); font-style:italic; line-height:1.5;
+    }
+    /* [SYSTEM REFRAME] header — legacy */
     .chat-reframe {
       margin:0 -16px 12px; padding:8px 16px;
       background:linear-gradient(135deg,rgba(191,69,42,.08),rgba(191,69,42,.03));
@@ -2329,7 +2365,7 @@
       font-size:10px; font-weight:800; letter-spacing:.12em; text-transform:uppercase;
       color:var(--accent); font-family:var(--font-mono,'JetBrains Mono',monospace);
     }
-    /* [NEXT INQUIRY] section */
+    /* [NEXT INQUIRY] section — legacy */
     .chat-inquiry-header {
       margin:14px 0 6px;
       font-size:10px; font-weight:800; letter-spacing:.12em; text-transform:uppercase;
@@ -2412,16 +2448,30 @@
     }
     .chat-input-meta-sep { width:1px; height:10px; background:var(--border-md); }
 
-    /* Recent item rename */
-    .recent-item { position:relative; }
-    .recent-rename-btn {
-      position:absolute; right:8px; top:50%; transform:translateY(-50%);
-      width:24px; height:24px; border-radius:6px; border:none; background:transparent;
-      cursor:pointer; display:none; align-items:center; justify-content:center;
-      color:var(--text-3); transition:background .12s, color .12s;
+    /* Recent item actions (edit + delete) */
+    .recent-item { position:relative; cursor:pointer; }
+    .recent-actions {
+      display:flex; align-items:center; gap:2px; flex-shrink:0;
+      opacity:0; transition:opacity .12s; margin-left:auto;
     }
-    .recent-item:hover .recent-rename-btn { display:flex; }
-    .recent-rename-btn:hover { background:var(--border-lt); color:var(--text-1); }
+    .recent-item:hover .recent-actions,
+    .recent-item.editing .recent-actions { opacity:1; }
+    .recent-action-btn {
+      width:26px; height:26px; border-radius:6px; border:none; background:transparent;
+      cursor:pointer; display:flex; align-items:center; justify-content:center;
+      color:var(--text-3); transition:background .12s, color .12s; flex-shrink:0;
+      padding:0;
+    }
+    .recent-action-btn:hover { background:var(--border-lt); color:var(--text-1); }
+    .recent-action-btn.delete:hover { background:rgba(191,69,42,.1); color:var(--accent); }
+    .recent-action-btn.save:hover  { background:rgba(60,140,60,.1); color:#3c8c3c; }
+    /* Inline rename input */
+    .recent-rename-input {
+      font-size:12.5px; font-weight:500; color:var(--text-0); font-family:inherit;
+      background:var(--surface); border:1.5px solid var(--accent);
+      border-radius:6px; padding:2px 6px; width:100%; min-width:0;
+      outline:none; line-height:1.4;
+    }
 
     /* ═══ AUTH / LOGIN SCREEN ═══ */
     .auth-screen { position:fixed; inset:0; z-index:1000; background:var(--bg);
@@ -2897,7 +2947,6 @@
             onkeydown="if(event.key==='Enter'){this.blur()}"
           >
         </div>
-        <button class="chat-new-btn" onclick="openChat()">+ New</button>
       </div>
 
       <!-- Messages -->
@@ -5230,13 +5279,10 @@ function renderRecents() {
     return;
   }
   el.innerHTML = chatList.slice(0, 30).map(s => {
-    const t      = s.thinker || THINKERS[0];
-    const dt     = s.updatedAt ? new Date(s.updatedAt) : new Date();
-    const title  = s.title || 'Untitled conversation';
-    const lastMsg = s.messages && s.messages.filter(m => m.role === 'user').pop();
-    const preview = lastMsg ? lastMsg.content.slice(0, 48) + (lastMsg.content.length > 48 ? '…' : '') : '';
+    const t     = s.thinker || THINKERS[0];
+    const title = s.title || 'Untitled conversation';
     return `
-    <button class="recent-item" onclick="openChatSession('${s.id}')">
+    <div class="recent-item" data-id="${s.id}" onclick="openChatSession('${s.id}')">
       <div class="recent-avatar" style="background:${t.color || '#BF452A'}">${t.initials || 'AI'}</div>
       <div class="recent-info">
         <div class="recent-decision">${_escapeHtml(title)}</div>
@@ -5246,12 +5292,19 @@ function renderRecents() {
           <span>${formatDate(s.updatedAt)}</span>
         </div>
       </div>
-      <button class="recent-rename-btn" onclick="renameChatSession('${s.id}', event)" title="Rename">
-        <svg width="12" height="12" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6">
-          <path d="M9.5 2.5l2 2L4 12H2v-2L9.5 2.5z"/>
-        </svg>
-      </button>
-    </button>`;
+      <div class="recent-actions">
+        <button class="recent-action-btn" onclick="startRenameSession('${s.id}',event)" title="Rename">
+          <svg width="12" height="12" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6">
+            <path d="M9.5 2.5l2 2L4 12H2v-2L9.5 2.5z"/>
+          </svg>
+        </button>
+        <button class="recent-action-btn delete" onclick="deleteChatSession('${s.id}',event)" title="Delete">
+          <svg width="12" height="12" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6">
+            <path d="M2 3.5h10M5 3.5V2h4v1.5M5.5 6v4.5M8.5 6v4.5M3 3.5l.8 8h6.4l.8-8"/>
+          </svg>
+        </button>
+      </div>
+    </div>`;
   }).join('');
 }
 
@@ -6712,14 +6765,38 @@ function _renderChatMarkdown(raw) {
     const line = raw.trim();
 
     // ── Special markers ──────────────────────────────────────────────────
+
+    // [BLUF] — bold bottom-line sentence
+    if (/^\*?\*?\[BLUF\]\*?\*?/i.test(line)) {
+      closelist();
+      const blufText = line.replace(/^\*?\*?\[BLUF\]\*?\*?\s*/i, '');
+      html += `<div class="chat-bluf">${blufText ? inline(blufText) : ''}</div>`;
+      continue;
+    }
+    // Legacy [SYSTEM REFRAME]
     if (/^\[SYSTEM REFRAME\]/i.test(line)) {
       closelist();
       html += `<div class="chat-reframe"><span class="chat-reframe-label">◈ SYSTEM REFRAME</span></div>`;
       continue;
     }
+    // [NEXT INQUIRY] / Required Inputs section header
     if (/^\[NEXT INQUIRY\]/i.test(line)) {
       closelist();
       html += `<div class="chat-inquiry-header">◎ NEXT INQUIRY</div>`;
+      continue;
+    }
+    // **Section headers** like **The Reframe**, **Strategic Levers**, **Required Inputs**
+    const sectionMatch = line.match(/^\*\*(.+?)\*\*\s*$/);
+    if (sectionMatch) {
+      closelist();
+      html += `<div class="chat-section-label">${_escapeHtml(sectionMatch[1])}</div>`;
+      continue;
+    }
+    // → Next Logical Question: ...
+    if (/^→\s*Next Logical Question:/i.test(line)) {
+      closelist();
+      const q = line.replace(/^→\s*Next Logical Question:\s*/i, '');
+      html += `<div class="chat-next-q"><span class="chat-next-q-arrow">→</span><span class="chat-next-q-label">Next Logical Question</span>${q ? `<span class="chat-next-q-text">${inline(q)}</span>` : ''}</div>`;
       continue;
     }
 
@@ -6784,20 +6861,46 @@ function _renderChatMarkdown(raw) {
   return html;
 }
 
-// ── Extract [NEXT INQUIRY] questions from response ────────────────────────────
+// ── Extract follow-up questions from response ─────────────────────────────────
+// Scans for: Required Inputs section bullets, [NEXT INQUIRY] bullets,
+// and the → Next Logical Question line.
 function _extractNextInquiry(text) {
-  const idx = text.search(/\[NEXT INQUIRY\]/i);
-  if (idx === -1) return [];
-  const section = text.slice(idx);
   const questions = [];
-  const re = /^[-*\d.]\s+(.+)/gm;
-  let m;
-  while ((m = re.exec(section)) !== null) {
-    const q = m[1].replace(/\*\*/g, '').replace(/`/g, '').trim();
+
+  // 1. → Next Logical Question: (single CTA line)
+  const ctaMatch = text.match(/→\s*Next Logical Question:\s*(.+)/i);
+  if (ctaMatch) {
+    const q = ctaMatch[1].replace(/\*\*/g,'').replace(/`/g,'').replace(/\[ui-action:[^\]]*\]/gi,'').trim();
     if (q) questions.push(q);
-    if (questions.length >= 3) break;
   }
-  return questions;
+
+  // 2. Required Inputs section bullets
+  const riIdx = text.search(/\*\*Required Inputs\*\*/i);
+  if (riIdx !== -1) {
+    const section = text.slice(riIdx, riIdx + 800);
+    const re = /^[-*]\s+(.+)/gm;
+    let m;
+    while ((m = re.exec(section)) !== null && questions.length < 3) {
+      const q = m[1].replace(/\*\*/g,'').replace(/`/g,'').trim();
+      if (q) questions.push(q);
+    }
+  }
+
+  // 3. Legacy [NEXT INQUIRY] fallback
+  if (!questions.length) {
+    const idx = text.search(/\[NEXT INQUIRY\]/i);
+    if (idx !== -1) {
+      const section = text.slice(idx);
+      const re = /^[-*\d.]\s+(.+)/gm;
+      let m;
+      while ((m = re.exec(section)) !== null && questions.length < 3) {
+        const q = m[1].replace(/\*\*/g,'').replace(/`/g,'').trim();
+        if (q) questions.push(q);
+      }
+    }
+  }
+
+  return questions.slice(0, 3);
 }
 
 // ── Follow-up suggestion chips ────────────────────────────────────────────────
@@ -6910,21 +7013,38 @@ function _escapeHtml(str) {
 
 async function _callChatAPI(history, newMsg, onChunk) {
   const thinker = _chatSession?.thinker || activeThinker || THINKERS[0];
-  const system  = `You are ${thinker.name}, ${thinker.title || 'a world-class strategic thinker'}. You think in unconventional frameworks and surface non-obvious insights. Be direct, substantive, and intellectually rigorous.
+  const system  = `You are ${thinker.name}, ${thinker.title || 'a world-class strategic thinker'}. You operate as a high-density strategic intelligence system. Every response is a compressed, scannable briefing — not a conversation.
 
-FORMAT EVERY RESPONSE using the Divine Intelligence Protocol:
+OUTPUT FORMAT — follow this structure exactly, every time:
 
-1. Open with [SYSTEM REFRAME] on its own line — a single bold reframing of the question that cuts to what is actually being asked.
+**[BLUF]** Start with a single bolded sentence: the bottom-line answer, stated as a non-obvious claim. No intro. No preamble.
 
-2. Structure the body into 2–3 sections separated by --- (horizontal rule). Each section addresses a distinct dimension of the problem. Use **bold** for the first 3–5 words of key statements for scannability. Wrap specific leverage points or metrics in backticks (e.g., \`Strategic Asymmetry\`, \`Time-to-Signal\`).
+---
 
-3. Use bullet points for tactical steps. Bold the first 3 words of every bullet.
+**The Reframe**
+Restate what is actually being asked beneath the surface question. One paragraph, maximum 3 sentences. Wrap key concepts in backticks (e.g. \`Value Asymmetry\`, \`Sovereign Lock-in\`, \`Signal-to-Noise Ratio\`).
 
-4. End with [NEXT INQUIRY] on its own line, followed by 2–3 specific questions the user should answer to go deeper — framed around uncovering asymmetric advantage or clarifying constraints.
+---
 
-5. Append [ui-action: enable-copy-on-hover] as the final line.
+**Strategic Levers**
+3–5 bullet points. Rules:
+- **Bold the first three words** of every bullet — no exceptions.
+- Single line break between bullets. No double spacing.
+- Each bullet must contain at least one backtick-wrapped technical term.
+- Bullets are tactics, not observations.
 
-No filler phrases. No 'great question.' No 'I understand.' Pure signal.`;
+---
+
+**Required Inputs**
+2–3 bullets. Each is a specific, unanswered question that — if answered — would change the strategic recommendation. Frame around constraints or asymmetric data gaps.
+
+---
+
+**→ Next Logical Question:** [One single-line question the user should answer next to unlock the next layer of insight.]
+
+[ui-action: enable-copy-on-hover]
+
+RULES: No filler. No 'great question.' No 'I understand.' No double blank lines between bullets. Compress every idea to its sharpest form.`;
 
   const messages = [...history, { role: 'user', content: newMsg }];
 
@@ -7023,21 +7143,114 @@ function saveChatTitle() {
   renderRecents();
 }
 
-function renameChatSession(id, e) {
+// ── Inline rename ─────────────────────────────────────────────────────────────
+function startRenameSession(id, e) {
   e && e.stopPropagation();
+  const item = document.querySelector(`.recent-item[data-id="${id}"]`);
+  if (!item || item.classList.contains('editing')) return;
+  item.classList.add('editing');
+
+  const decEl = item.querySelector('.recent-decision');
+  const currentTitle = decEl.textContent;
+
+  // Swap title text for an input
+  const input = document.createElement('input');
+  input.className = 'recent-rename-input';
+  input.value = currentTitle;
+  decEl.replaceWith(input);
+  input.focus();
+  input.select();
+
+  // Swap action buttons for save/cancel
+  const actions = item.querySelector('.recent-actions');
+  actions.innerHTML = `
+    <button class="recent-action-btn save" onclick="commitRename('${id}',event)" title="Save">
+      <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+        <path d="M1.5 6l3 3 6-6"/>
+      </svg>
+    </button>
+    <button class="recent-action-btn delete" onclick="cancelRename('${id}',event)" title="Cancel">
+      <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+        <path d="M2 2l8 8M10 2l-8 8"/>
+      </svg>
+    </button>`;
+
+  input.addEventListener('keydown', ev => {
+    if (ev.key === 'Enter')  { ev.preventDefault(); commitRename(id, ev); }
+    if (ev.key === 'Escape') { ev.preventDefault(); cancelRename(id, ev); }
+  });
+
+  // Prevent item click from firing while editing
+  item._editClickGuard = ev => ev.stopPropagation();
+  item.addEventListener('click', item._editClickGuard, true);
+}
+
+function commitRename(id, e) {
+  e && e.stopPropagation();
+  const item = document.querySelector(`.recent-item[data-id="${id}"]`);
+  if (!item) return;
+  const input = item.querySelector('.recent-rename-input');
+  const newTitle = input ? input.value.trim() : '';
+
   const sessions = loadChatSessions();
   const s = sessions.find(x => x.id === id);
-  if (!s) return;
-  const newTitle = prompt('Rename chat:', s.title || '');
-  if (newTitle === null) return;
-  s.title = newTitle.trim() || s.title;
-  saveChatSessions(sessions);
-  if (_chatSession && _chatSession.id === id) {
-    _chatSession.title = s.title;
-    document.getElementById('chat-title-input').value = s.title;
+  if (s && newTitle) {
+    s.title = newTitle;
+    saveChatSessions(sessions);
+    if (_chatSession && _chatSession.id === id) {
+      _chatSession.title = newTitle;
+      const titleInput = document.getElementById('chat-title-input');
+      if (titleInput) titleInput.value = newTitle;
+    }
   }
+  _cleanupRenameItem(item);
   renderRecents();
 }
+
+function cancelRename(id, e) {
+  e && e.stopPropagation();
+  const item = document.querySelector(`.recent-item[data-id="${id}"]`);
+  if (!item) return;
+  _cleanupRenameItem(item);
+  renderRecents();
+}
+
+function _cleanupRenameItem(item) {
+  if (item._editClickGuard) {
+    item.removeEventListener('click', item._editClickGuard, true);
+    delete item._editClickGuard;
+  }
+  item.classList.remove('editing');
+}
+
+// ── Delete session ────────────────────────────────────────────────────────────
+function deleteChatSession(id, e) {
+  e && e.stopPropagation();
+  const sessions = loadChatSessions();
+  const idx = sessions.findIndex(x => x.id === id);
+  if (idx === -1) return;
+
+  // Animate item out
+  const item = document.querySelector(`.recent-item[data-id="${id}"]`);
+  if (item) {
+    item.style.transition = 'opacity .18s, transform .18s';
+    item.style.opacity    = '0';
+    item.style.transform  = 'translateX(-8px)';
+  }
+
+  setTimeout(() => {
+    sessions.splice(idx, 1);
+    saveChatSessions(sessions);
+    // If currently viewing the deleted session, open a fresh chat
+    if (_chatSession && _chatSession.id === id) {
+      openChat();
+    }
+    renderRecents();
+  }, 180);
+}
+
+// Legacy alias (kept for any old onclick references)
+function renameChatSession(id, e) { startRenameSession(id, e); }
 
 /* ════════════════════════════════
    AUTH
