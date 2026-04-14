@@ -337,14 +337,25 @@ app.post('/api/get-perspective', async (req, res) => {
   if (!thinker_id) return res.status(400).json({ error: 'thinker_id is required.' });
   if (!stage)      return res.status(400).json({ error: 'stage is required.'      });
 
+  // Guest users have a localStorage-generated id like "u_<hex>" which is not a
+  // valid Postgres UUID and has no row in the users table. We detect them here
+  // and skip all wallet DB operations — they get free streaming access until
+  // they sign in and a real wallet is provisioned.
+  const UUID_RE   = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+  const isGuest   = !UUID_RE.test(user_id);
+
   let wallet;
-  try {
-    wallet = await getOrCreateWallet(user_id);
-  } catch (err) {
-    return res.status(500).json({ error: 'Could not verify balance. Try again.' });
+  if (isGuest) {
+    wallet = { credit_balance: 99.00 }; // guest — no DB wallet, free access
+  } else {
+    try {
+      wallet = await getOrCreateWallet(user_id);
+    } catch (err) {
+      return res.status(500).json({ error: 'Could not verify balance. Try again.' });
+    }
   }
 
-  if (parseFloat(wallet.credit_balance) < INSIGHT_COST) {
+  if (!isGuest && parseFloat(wallet.credit_balance) < INSIGHT_COST) {
     return res.status(402).json({
       error:   'Your balance is empty. Top up to continue.',
       code:    'INSUFFICIENT_FUNDS',
@@ -441,21 +452,23 @@ app.post('/api/get-perspective', async (req, res) => {
 
     const finalMsg = await stream.finalMessage();
 
-    try {
-      await deductCredit(user_id, INSIGHT_COST, `${thinker.name} · ${stage}`, {
-        thinker_id, stage,
-        input_tokens:  finalMsg.usage?.input_tokens,
-        output_tokens: finalMsg.usage?.output_tokens,
-        cache_read:    finalMsg.usage?.cache_read_input_tokens,
-        cache_write:   finalMsg.usage?.cache_creation_input_tokens,
-      });
-    } catch (deductErr) {
-      console.error('[deduct]', deductErr.message);
+    if (!isGuest) {
+      try {
+        await deductCredit(user_id, INSIGHT_COST, `${thinker.name} · ${stage}`, {
+          thinker_id, stage,
+          input_tokens:  finalMsg.usage?.input_tokens,
+          output_tokens: finalMsg.usage?.output_tokens,
+          cache_read:    finalMsg.usage?.cache_read_input_tokens,
+          cache_write:   finalMsg.usage?.cache_creation_input_tokens,
+        });
+      } catch (deductErr) {
+        console.error('[deduct]', deductErr.message);
+      }
     }
 
     // Save conversation context for legacy stages only.
     // For 'chat', history is owned by the client (localStorage).
-    if (stage !== 'chat') {
+    if (!isGuest && stage !== 'chat') {
       const lastUserMsg = messages[messages.length - 1]?.content || '';
       const newHistory = [
         ...conversationHistory,
@@ -472,7 +485,7 @@ app.post('/api/get-perspective', async (req, res) => {
       ).catch(err => console.error('[context save]', err.message));
     }
 
-    const updated = await getOrCreateWallet(user_id).catch(() => null);
+    const updated = isGuest ? null : await getOrCreateWallet(user_id).catch(() => null);
     res.write(`data: ${JSON.stringify({ type: 'done', balance: updated ? parseFloat(updated.credit_balance) : null })}\n\n`);
     res.end();
 

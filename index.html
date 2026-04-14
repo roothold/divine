@@ -6633,32 +6633,39 @@ async function _callChatAPI(history, newMsg, onChunk) {
 
     if (res.status === 402) { openTopup(); throw new Error('INSUFFICIENT_FUNDS'); }
 
-    if (res.ok) {
-      const reader  = res.body.getReader();
-      const decoder = new TextDecoder();
-      let fullText  = '';
-      let buffer    = '';
-      while (true) {
-        const { done, value } = await reader.read();
-        if (done) break;
-        buffer += decoder.decode(value, { stream: true });
-        const lines = buffer.split('\n');
-        buffer = lines.pop();
-        for (const line of lines) {
-          if (!line.startsWith('data: ')) continue;
-          const payload = line.slice(6).trim();
-          if (!payload) continue;
-          const msg = JSON.parse(payload);
-          if (msg.type === 'delta')     { fullText += msg.text; if (onChunk) onChunk(msg.text); }
-          else if (msg.type === 'done') { if (msg.balance != null) updateBalanceDisplay(msg.balance); }
-          else if (msg.type === 'error') throw new Error(msg.message);
-        }
-      }
-      return fullText;
+    if (!res.ok) {
+      // Surface real server errors instead of falling through to the no-key path.
+      let errMsg = `Server error (${res.status})`;
+      try { const d = await res.json(); errMsg = d.error || errMsg; } catch {}
+      throw new Error(errMsg);
     }
+
+    const reader  = res.body.getReader();
+    const decoder = new TextDecoder();
+    let fullText  = '';
+    let buffer    = '';
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      buffer += decoder.decode(value, { stream: true });
+      const lines = buffer.split('\n');
+      buffer = lines.pop();
+      for (const line of lines) {
+        if (!line.startsWith('data: ')) continue;
+        const payload = line.slice(6).trim();
+        if (!payload) continue;
+        const msg = JSON.parse(payload);
+        if (msg.type === 'delta')      { fullText += msg.text; if (onChunk) onChunk(msg.text); }
+        else if (msg.type === 'done')  { if (msg.balance != null) updateBalanceDisplay(msg.balance); }
+        else if (msg.type === 'error') throw new Error(msg.message);
+      }
+    }
+    return fullText;
   } catch (e) {
     if (e.message === 'INSUFFICIENT_FUNDS') throw e;
-    // fall through to direct API
+    // Only fall through to direct API for network-level failures (timeout, offline).
+    // Re-throw server errors so the user sees the real problem.
+    if (e.name !== 'TypeError' && e.name !== 'AbortError' && !e.message.startsWith('Failed to fetch')) throw e;
   }
 
   // ── Fallback: direct Anthropic API ──────────────────────────────────────
