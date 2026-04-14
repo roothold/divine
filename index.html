@@ -37,8 +37,8 @@
       --sh-lg: 0 16px 48px rgba(0,0,0,0.13),0 4px 12px rgba(0,0,0,0.07);
       --header-h: 60px; --sidebar-w: 240px; --col-w: 672px;
     }
-    html { scroll-behavior: smooth; }
-    body { font-family:'Inter',system-ui,sans-serif; background:var(--bg); color:var(--text-1); font-size:15px; line-height:1.6; min-height:100vh; }
+    html { scroll-behavior:smooth; height:100%; }
+    body { font-family:'Inter',system-ui,sans-serif; background:var(--bg); color:var(--text-1); font-size:15px; line-height:1.6; height:100%; overflow:hidden; }
 
     /* ══ NUMERIC FONT SYSTEM ══════════════════════════════════════════════
        JetBrains Mono for all data values: prices, percentages, counts.
@@ -139,7 +139,7 @@
     @media (max-width: 380px) { .lens-switcher { padding: 7px 10px; } }
 
     /* ═══ APP BODY ═══ */
-    .app-body { display:flex; min-height:100vh; }
+    .app-body { display:flex; height:100%; overflow:hidden; }
 
     /* ═══ SIDEBAR ═══ */
     .sidebar {
@@ -230,10 +230,10 @@
     .nav-item svg { flex-shrink:0; width:16px; height:16px; display:block; }
     .nav-item-label { display:block; line-height:1; }
     .nav-new-perspective {
-      background:var(--accent); color:#fff !important; font-weight:600;
+      background:#F2F1F0; color:var(--text-0) !important; font-weight:600;
       margin-bottom:6px;
     }
-    .nav-new-perspective:hover { background:var(--accent-mid); color:#fff; }
+    .nav-new-perspective:hover { background:#E8E7E5; color:var(--text-0) !important; }
     .nav-thinker { color:var(--accent) !important; font-weight:600; }
     .nav-thinker:hover { background:var(--accent-lt); }
     .nav-thinker.active { background:var(--accent-lt); color:var(--accent); }
@@ -545,11 +545,13 @@
     .profile-dots { color:var(--text-3); flex-shrink:0; }
 
     /* ═══ MAIN ═══ */
-    .main { flex:1; min-width:0; display:flex; flex-direction:column; }
+    .main { flex:1; min-width:0; display:flex; flex-direction:column; height:100%; overflow:hidden; }
     .main-inner { max-width:var(--col-w); margin:0 auto; padding:0 20px; width:100%; }
     .screen { display:none; }
-    .screen.active { display:block; }
-    #screen-chat.active { display:flex; }
+    /* Non-chat screens: scroll within themselves */
+    .screen.active { display:block; height:100%; overflow-y:auto; }
+    /* Chat screen: flex column, children handle their own scroll */
+    #screen-chat.active { display:flex; overflow:hidden; }
     .screen-inner { padding-top:56px; padding-bottom:100px; }
 
     .progress-wrap { height:2px; background:var(--surface-3); }
@@ -1996,10 +1998,10 @@
     .mob-nav-item.mob-active { color:var(--accent); }
     .mob-nav-item svg { flex-shrink:0; }
     .mob-nav-new {
-      background:var(--accent); color:#fff !important;
+      background:#F2F1F0; color:var(--text-0) !important;
       border-radius:14px; margin:5px 3px; padding:8px 12px 10px;
     }
-    .mob-nav-new:hover { background:var(--accent-mid); color:#fff !important; }
+    .mob-nav-new:hover { background:#E8E7E5; color:var(--text-0) !important; }
     @media (max-width:640px) {
       .mobile-nav { display:flex; }
     }
@@ -2257,22 +2259,124 @@
       width:22px; height:22px; border-radius:50%; display:flex; align-items:center;
       justify-content:center; font-size:9px; font-weight:700; color:#fff; flex-shrink:0;
     }
+    /* Bubble wrap — provides the relative context for copy button */
+    .chat-msg-bubble-wrap {
+      position:relative; max-width:82%; display:inline-block; width:auto;
+    }
+    .chat-msg.assistant .chat-msg-bubble-wrap { max-width:100%; display:block; }
+    .chat-msg.user .chat-msg-bubble-wrap { display:block; }
+
     .chat-msg-bubble {
       padding:12px 16px; border-radius:16px; font-size:14px; line-height:1.65;
-      color:var(--text-0); white-space:pre-wrap; word-break:break-word;
+      color:var(--text-0); white-space:normal; word-break:break-word;
     }
     .chat-msg.user .chat-msg-bubble {
-      background:var(--accent); color:#fff; border-bottom-right-radius:4px;
+      background:#F2F1F0; color:var(--text-0); border-bottom-right-radius:4px;
+      white-space:pre-wrap; /* user messages stay as plain text */
     }
     .chat-msg.assistant .chat-msg-bubble {
       background:var(--surface); border:1px solid var(--border-lt);
       border-bottom-left-radius:4px;
     }
+    /* During streaming, keep pre-wrap so raw text reads cleanly */
+    .chat-msg.assistant .chat-cursor { white-space:pre-wrap; }
+
     .chat-msg-ts { font-size:10.5px; color:var(--text-3); padding:0 4px; }
 
     /* streaming cursor */
     .chat-cursor::after { content:'▋'; animation:chat-blink .7s steps(1) infinite; }
     @keyframes chat-blink { 0%,100%{opacity:1} 50%{opacity:0} }
+
+    /* ── Markdown rendering inside assistant bubbles ─────────────────────── */
+    .chat-msg-bubble .chat-p {
+      margin:0 0 10px; line-height:1.7;
+    }
+    .chat-msg-bubble .chat-p:last-child { margin-bottom:0; }
+    .chat-msg-bubble .chat-h2 {
+      font-size:15px; font-weight:700; color:var(--text-0);
+      margin:14px 0 6px; letter-spacing:.01em;
+    }
+    .chat-msg-bubble .chat-h3 {
+      font-size:13.5px; font-weight:700; color:var(--text-0);
+      margin:12px 0 5px; letter-spacing:.01em;
+    }
+    .chat-msg-bubble .chat-h4 {
+      font-size:12.5px; font-weight:700; color:var(--text-2);
+      margin:10px 0 4px; text-transform:uppercase; letter-spacing:.06em;
+    }
+    .chat-msg-bubble .chat-hr {
+      border:none; border-top:1px solid var(--border-md);
+      margin:14px 0; opacity:.6;
+    }
+    .chat-msg-bubble .chat-ul,
+    .chat-msg-bubble .chat-ol {
+      margin:6px 0 10px; padding-left:18px; display:flex; flex-direction:column; gap:5px;
+    }
+    .chat-msg-bubble .chat-ul li,
+    .chat-msg-bubble .chat-ol li { line-height:1.65; }
+    .chat-msg-bubble .chat-code {
+      font-family:var(--font-mono,'JetBrains Mono','Courier New',monospace);
+      font-size:12.5px; background:rgba(0,0,0,.06); color:var(--accent);
+      padding:1px 5px; border-radius:4px; border:1px solid rgba(0,0,0,.07);
+    }
+    /* [SYSTEM REFRAME] header */
+    .chat-reframe {
+      margin:0 -16px 12px; padding:8px 16px;
+      background:linear-gradient(135deg,rgba(191,69,42,.08),rgba(191,69,42,.03));
+      border-left:3px solid var(--accent); border-radius:0 0 6px 0;
+    }
+    .chat-reframe-label {
+      font-size:10px; font-weight:800; letter-spacing:.12em; text-transform:uppercase;
+      color:var(--accent); font-family:var(--font-mono,'JetBrains Mono',monospace);
+    }
+    /* [NEXT INQUIRY] section */
+    .chat-inquiry-header {
+      margin:14px 0 6px;
+      font-size:10px; font-weight:800; letter-spacing:.12em; text-transform:uppercase;
+      color:var(--text-3); font-family:var(--font-mono,'JetBrains Mono',monospace);
+      display:flex; align-items:center; gap:6px;
+    }
+    .chat-inquiry-header::after {
+      content:''; flex:1; height:1px; background:var(--border-md);
+    }
+    .chat-inquiry-item { color:var(--text-1); font-size:13px; }
+
+    /* ── Copy-on-hover ───────────────────────────────────────────────────── */
+    .chat-msg-bubble-wrap {
+      position:relative; max-width:82%;
+    }
+    .chat-msg.assistant .chat-msg-bubble-wrap { max-width:100%; }
+    .chat-copy-btn {
+      position:absolute; top:8px; right:8px;
+      width:28px; height:28px; border-radius:7px;
+      background:var(--bg); border:1px solid var(--border-md);
+      display:flex; align-items:center; justify-content:center;
+      cursor:pointer; opacity:0; transition:opacity .15s, background .12s;
+      color:var(--text-3);
+    }
+    .chat-msg-bubble-wrap:hover .chat-copy-btn { opacity:1; }
+    .chat-copy-btn:hover { background:var(--surface); color:var(--text-1); }
+    .chat-copy-btn.copied { color:var(--accent); border-color:var(--accent); }
+
+    /* ── Follow-up suggestion chips ──────────────────────────────────────── */
+    .chat-suggestions {
+      display:flex; flex-wrap:wrap; gap:6px;
+      padding:0 0 10px; max-width:100%;
+      animation:sugg-in .2s ease;
+    }
+    @keyframes sugg-in { from{opacity:0;transform:translateY(4px)} to{opacity:1;transform:translateY(0)} }
+    .chat-suggestions:empty { display:none; }
+    .chat-sugg-chip {
+      font-size:12px; color:var(--text-1);
+      background:var(--surface); border:1px solid var(--border-md);
+      border-radius:100px; padding:5px 12px;
+      cursor:pointer; transition:border-color .12s, color .12s, background .12s;
+      line-height:1.4; white-space:nowrap; max-width:100%; overflow:hidden;
+      text-overflow:ellipsis;
+    }
+    .chat-sugg-chip:hover {
+      border-color:var(--accent); color:var(--accent); background:rgba(191,69,42,.04);
+    }
 
     .chat-input-bar {
       flex-shrink:0; padding:12px 16px 16px;
@@ -2818,6 +2922,8 @@
       <!-- Input bar -->
       <div class="chat-input-bar">
         <div class="chat-input-inner">
+          <!-- Follow-up question chips (populated dynamically after each response) -->
+          <div class="chat-suggestions" id="chat-suggestions"></div>
           <div class="chat-input-wrap">
             <textarea class="chat-textarea" id="chat-textarea"
               placeholder="What high-stakes decision are you weighing?"
@@ -6511,13 +6617,16 @@ async function sendChatMsg() {
     document.getElementById('chat-title-input').value = short;
   }
 
+  // Hide any existing suggestions when user sends
+  _hideChatSuggestions();
+
   // Append user message
   _appendChatMsg('user', text, { ts: new Date().toISOString() });
 
-  // Append thinking placeholder for AI
-  const aiId    = 'cm_' + Date.now();
-  const aiEl    = _appendChatMsg('assistant', '', { id: aiId, streaming: true });
-  const bubble  = aiEl.querySelector('.chat-msg-bubble');
+  // Append thinking placeholder for AI (streaming mode — raw text during stream)
+  const aiId   = 'cm_' + Date.now();
+  const aiEl   = _appendChatMsg('assistant', '', { id: aiId, streaming: true });
+  const bubble = aiEl.querySelector('.chat-msg-bubble');
   bubble.classList.add('chat-cursor');
   bubble.textContent = '';
 
@@ -6525,30 +6634,39 @@ async function sendChatMsg() {
   const msgs = document.getElementById('chat-messages');
   msgs.scrollTop = msgs.scrollHeight;
 
-  // Build messages history for API
+  // Build messages history for API (exclude the blank placeholder we just pushed)
   const history = _chatSession.messages
-    .slice(0, -1) // exclude the blank assistant msg we just pushed
+    .slice(0, -1)
     .map(m => ({ role: m.role, content: m.content }));
 
   let fullText = '';
   try {
     fullText = await _callChatAPI(history, text, chunk => {
       fullText += chunk;
+      // During streaming, show raw text with cursor — avoids partial-markdown glitches
       bubble.textContent = fullText;
       msgs.scrollTop = msgs.scrollHeight;
     });
   } catch (err) {
     bubble.textContent = err.message === 'NO_KEY'
       ? '⚠ No API key configured. Add one in Settings.'
-      : '⚠ Could not connect — please try again.';
+      : `⚠ ${err.message || 'Could not connect — please try again.'}`;
     bubble.classList.remove('chat-cursor');
     _chatStreaming = false;
     document.getElementById('chat-send-btn').disabled = false;
     return;
   }
 
+  // Stream done: render markdown, wire copy button, show follow-up chips
   bubble.classList.remove('chat-cursor');
-  bubble.textContent = fullText;
+  bubble.innerHTML = _renderChatMarkdown(fullText);
+  _attachCopyBtn(aiEl, fullText);
+
+  // Extract [NEXT INQUIRY] questions and show as chips
+  const followUps = _extractNextInquiry(fullText);
+  if (followUps.length) {
+    _showChatSuggestions(followUps);
+  }
 
   // Update the session messages (replace blank placeholder with real content)
   const lastMsg = _chatSession.messages[_chatSession.messages.length - 1];
@@ -6561,6 +6679,175 @@ async function sendChatMsg() {
   _chatStreaming = false;
   document.getElementById('chat-send-btn').disabled = false;
   msgs.scrollTop = msgs.scrollHeight;
+}
+
+// ── Markdown renderer for assistant chat bubbles ──────────────────────────────
+function _renderChatMarkdown(raw) {
+  // Strip hidden ui-action markers
+  const text = raw.replace(/\[ui-action:[^\]]*\]/gi, '').trim();
+
+  // Inline formatter — runs AFTER html-escaping a segment
+  function inline(s) {
+    let t = s
+      .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    // **bold**
+    t = t.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+    // *italic* (not preceded/followed by another *)
+    t = t.replace(/(?<!\*)\*(?!\*)(.+?)(?<!\*)\*(?!\*)/g, '<em>$1</em>');
+    // `inline code`
+    t = t.replace(/`([^`]+)`/g, '<code class="chat-code">$1</code>');
+    return t;
+  }
+
+  const lines   = text.split('\n');
+  let   html    = '';
+  let   listTag = null; // 'ul' | 'ol' | null
+
+  function closelist() {
+    if (listTag) { html += `</${listTag}>`; listTag = null; }
+  }
+
+  for (let i = 0; i < lines.length; i++) {
+    const raw  = lines[i];
+    const line = raw.trim();
+
+    // ── Special markers ──────────────────────────────────────────────────
+    if (/^\[SYSTEM REFRAME\]/i.test(line)) {
+      closelist();
+      html += `<div class="chat-reframe"><span class="chat-reframe-label">◈ SYSTEM REFRAME</span></div>`;
+      continue;
+    }
+    if (/^\[NEXT INQUIRY\]/i.test(line)) {
+      closelist();
+      html += `<div class="chat-inquiry-header">◎ NEXT INQUIRY</div>`;
+      continue;
+    }
+
+    // ── Horizontal rule ──────────────────────────────────────────────────
+    if (/^-{3,}$/.test(line)) {
+      closelist();
+      html += '<hr class="chat-hr">';
+      continue;
+    }
+
+    // ── Headings ─────────────────────────────────────────────────────────
+    if (line.startsWith('### ')) {
+      closelist();
+      html += `<h4 class="chat-h4">${inline(line.slice(4))}</h4>`;
+      continue;
+    }
+    if (line.startsWith('## ')) {
+      closelist();
+      html += `<h3 class="chat-h3">${inline(line.slice(3))}</h3>`;
+      continue;
+    }
+    if (line.startsWith('# ')) {
+      closelist();
+      html += `<h2 class="chat-h2">${inline(line.slice(2))}</h2>`;
+      continue;
+    }
+
+    // ── Bullet list ───────────────────────────────────────────────────────
+    if (/^[-*]\s+/.test(line)) {
+      const body = line.replace(/^[-*]\s+/, '');
+      if (listTag !== 'ul') { closelist(); html += '<ul class="chat-ul">'; listTag = 'ul'; }
+      html += `<li>${inline(body)}</li>`;
+      continue;
+    }
+
+    // ── Numbered list ─────────────────────────────────────────────────────
+    if (/^\d+\.\s+/.test(line)) {
+      const body = line.replace(/^\d+\.\s+/, '');
+      if (listTag !== 'ol') { closelist(); html += '<ol class="chat-ol">'; listTag = 'ol'; }
+      html += `<li>${inline(body)}</li>`;
+      continue;
+    }
+
+    // ── Empty line → paragraph break ─────────────────────────────────────
+    if (line === '') {
+      closelist();
+      html += '<br>';
+      continue;
+    }
+
+    // ── Regular paragraph ─────────────────────────────────────────────────
+    closelist();
+    html += `<p class="chat-p">${inline(line)}</p>`;
+  }
+  closelist();
+
+  // Collapse consecutive <br> into one
+  html = html.replace(/(<br>\s*){2,}/g, '<br>');
+  // Strip leading/trailing <br>
+  html = html.replace(/^(<br>)+|(<br>)+$/g, '');
+
+  return html;
+}
+
+// ── Extract [NEXT INQUIRY] questions from response ────────────────────────────
+function _extractNextInquiry(text) {
+  const idx = text.search(/\[NEXT INQUIRY\]/i);
+  if (idx === -1) return [];
+  const section = text.slice(idx);
+  const questions = [];
+  const re = /^[-*\d.]\s+(.+)/gm;
+  let m;
+  while ((m = re.exec(section)) !== null) {
+    const q = m[1].replace(/\*\*/g, '').replace(/`/g, '').trim();
+    if (q) questions.push(q);
+    if (questions.length >= 3) break;
+  }
+  return questions;
+}
+
+// ── Follow-up suggestion chips ────────────────────────────────────────────────
+function _showChatSuggestions(questions) {
+  const bar = document.getElementById('chat-suggestions');
+  if (!bar || !questions.length) return;
+  bar.innerHTML = questions.map(q =>
+    `<button class="chat-sugg-chip" onclick="_useSuggestion(this)">${_escapeHtml(q)}</button>`
+  ).join('');
+}
+
+function _hideChatSuggestions() {
+  const bar = document.getElementById('chat-suggestions');
+  if (bar) bar.innerHTML = '';
+}
+
+function _useSuggestion(btn) {
+  const ta = document.getElementById('chat-textarea');
+  if (!ta) return;
+  ta.value = btn.textContent;
+  chatTextareaResize(ta);
+  ta.focus();
+  _hideChatSuggestions();
+}
+
+// ── Copy-on-hover wiring ──────────────────────────────────────────────────────
+function _attachCopyBtn(wrap, rawText) {
+  const btn = wrap.querySelector('.chat-copy-btn');
+  if (!btn) return;
+  btn.addEventListener('click', async (e) => {
+    e.stopPropagation();
+    try {
+      await navigator.clipboard.writeText(rawText);
+      btn.classList.add('copied');
+      btn.innerHTML = `<svg width="13" height="13" viewBox="0 0 13 13" fill="none">
+        <path d="M2 6.5l3 3 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>`;
+      setTimeout(() => {
+        btn.classList.remove('copied');
+        btn.innerHTML = _copyIcon();
+      }, 2000);
+    } catch {}
+  });
+}
+
+function _copyIcon() {
+  return `<svg width="13" height="13" viewBox="0 0 13 13" fill="none">
+    <rect x="4.5" y="1" width="7.5" height="9.5" rx="1.5" stroke="currentColor" stroke-width="1.3"/>
+    <rect x="1" y="3.5" width="7.5" height="9.5" rx="1.5" stroke="currentColor" stroke-width="1.3" fill="var(--bg)"/>
+  </svg>`;
 }
 
 function _appendChatMsg(role, content, opts = {}) {
@@ -6576,15 +6863,27 @@ function _appendChatMsg(role, content, opts = {}) {
   if (role === 'user') {
     wrap.innerHTML = `
       <div class="chat-msg-ts">${tsStr}</div>
-      <div class="chat-msg-bubble">${_escapeHtml(content)}</div>`;
+      <div class="chat-msg-bubble-wrap">
+        <div class="chat-msg-bubble">${_escapeHtml(content)}</div>
+      </div>`;
   } else {
+    // Assistant: render markdown (or raw text during streaming), add copy button
+    const bubbleContent = opts.streaming
+      ? '' // populated by streaming
+      : _renderChatMarkdown(content);
     wrap.innerHTML = `
       <div class="chat-msg-header">
         <div class="chat-msg-avatar" style="background:${t.color || '#BF452A'}">${t.initials || 'AI'}</div>
         <span>${t.name || 'Architect'}</span>
         <span class="chat-msg-ts">${tsStr}</span>
       </div>
-      <div class="chat-msg-bubble">${_escapeHtml(content)}</div>`;
+      <div class="chat-msg-bubble-wrap">
+        <div class="chat-msg-bubble">${bubbleContent}</div>
+        <button class="chat-copy-btn" title="Copy response">${_copyIcon()}</button>
+      </div>`;
+    if (!opts.streaming && content) {
+      _attachCopyBtn(wrap, content);
+    }
   }
   msgs.appendChild(wrap);
 
@@ -6611,7 +6910,21 @@ function _escapeHtml(str) {
 
 async function _callChatAPI(history, newMsg, onChunk) {
   const thinker = _chatSession?.thinker || activeThinker || THINKERS[0];
-  const system  = `You are ${thinker.name}, ${thinker.title || 'a world-class strategic thinker'}. You think in unconventional frameworks and surface non-obvious insights. Respond conversationally but with depth — challenge assumptions, reframe problems, and illuminate blind spots. Be direct and substantive.`;
+  const system  = `You are ${thinker.name}, ${thinker.title || 'a world-class strategic thinker'}. You think in unconventional frameworks and surface non-obvious insights. Be direct, substantive, and intellectually rigorous.
+
+FORMAT EVERY RESPONSE using the Divine Intelligence Protocol:
+
+1. Open with [SYSTEM REFRAME] on its own line — a single bold reframing of the question that cuts to what is actually being asked.
+
+2. Structure the body into 2–3 sections separated by --- (horizontal rule). Each section addresses a distinct dimension of the problem. Use **bold** for the first 3–5 words of key statements for scannability. Wrap specific leverage points or metrics in backticks (e.g., \`Strategic Asymmetry\`, \`Time-to-Signal\`).
+
+3. Use bullet points for tactical steps. Bold the first 3 words of every bullet.
+
+4. End with [NEXT INQUIRY] on its own line, followed by 2–3 specific questions the user should answer to go deeper — framed around uncovering asymmetric advantage or clarifying constraints.
+
+5. Append [ui-action: enable-copy-on-hover] as the final line.
+
+No filler phrases. No 'great question.' No 'I understand.' Pure signal.`;
 
   const messages = [...history, { role: 'user', content: newMsg }];
 
