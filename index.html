@@ -10,7 +10,7 @@
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
-      --bg:        #FAFAF8;
+      --bg:        #FAF8F3;
       --surface:   #FFFFFF;
       --surface-2: #F2EEE7;
       --surface-3: #E8E3DA;
@@ -83,7 +83,7 @@
       background: transparent;
       backdrop-filter: none; -webkit-backdrop-filter: none;
       /* NO border-bottom */
-      display: flex; align-items: center; justify-content: space-between;
+      display: flex; align-items: center; justify-content: flex-end;
       padding: 0 24px 0 20px; flex-shrink: 0;
     }
     .content-wordmark { display:none; } /* site link hidden */
@@ -107,16 +107,16 @@
     /* Lens switcher — clearly about perspective, not profile */
     .lens-switcher {
       display: flex; align-items: center; gap: 10px;
-      background: var(--surface);
+      background: var(--bg);
       border: 1px solid var(--border-md);
       border-radius: var(--r-pill);
       padding: 6px 14px 6px 10px;
       cursor: pointer;
       transition: box-shadow 0.15s, border-color 0.15s, background 0.15s;
-      box-shadow: var(--sh-sm);
+      box-shadow: none;
       flex-shrink: 0;
     }
-    .lens-switcher:hover { border-color: var(--accent-bdr); box-shadow: var(--sh-md); background: var(--accent-lt); }
+    .lens-switcher:hover { border-color: var(--accent-bdr); box-shadow: var(--sh-sm); background: var(--accent-lt); }
 
     .lens-swap-icon {
       display: flex; align-items: center; justify-content: center;
@@ -2157,7 +2157,7 @@
     .pf-revel-view:hover { background:rgba(191,69,42,.05); }
 
     /* ═══ CHAT SCREEN ═══ */
-    #screen-chat { flex-direction:column; height:100%; padding:0; overflow:hidden; background:#FAF8F3; }
+    #screen-chat { flex-direction:column; height:100%; padding:0; overflow:hidden; background:var(--bg); }
 
     .chat-topbar {
       display:flex; align-items:center; gap:10px; padding:14px 20px 12px;
@@ -2379,7 +2379,7 @@
 
     .chat-input-bar {
       flex-shrink:0; padding:12px 16px 16px;
-      border-top:1px solid var(--border-lt); background:#FAF8F3;
+      border-top:1px solid var(--border-lt); background:var(--bg);
       display:flex; flex-direction:column; align-items:center;
     }
     .chat-input-inner {
