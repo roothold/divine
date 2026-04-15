@@ -2512,46 +2512,48 @@
     .recent-action-btn.delete:hover { background:rgba(191,69,42,.1); color:var(--accent); }
 
     /* ═══ AUTH / LOGIN SCREEN ═══ */
-    .auth-screen { position:fixed; inset:0; z-index:1000; background:var(--bg);
+    .auth-screen { position:fixed; inset:0; z-index:1000;
+      background:rgba(0,0,0,0.38); backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px);
       display:flex; align-items:center; justify-content:center; padding:20px;
-      animation:auth-fade-in .25s ease; }
-    @keyframes auth-fade-in { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
-    .auth-box { width:100%; max-width:400px; background:var(--surface);
-      border:1px solid var(--border-md); border-radius:20px; padding:40px 44px;
-      box-shadow:var(--sh-lg); }
-    .auth-wordmark { font-family:'Cormorant Garamond',serif; font-size:20px; font-weight:600;
-      color:var(--accent); display:block; margin-bottom:24px; }
-    .auth-title { font-family:'Cormorant Garamond',serif; font-size:28px; font-weight:600;
-      color:var(--text-0); line-height:1.2; margin-bottom:6px; }
-    .auth-sub { font-size:13px; color:var(--text-3); margin-bottom:28px; line-height:1.6; }
+      animation:auth-fade-in .2s ease; }
+    @keyframes auth-fade-in { from{opacity:0;transform:scale(.97)} to{opacity:1;transform:scale(1)} }
+    .auth-box { width:100%; max-width:400px; background:#fff;
+      border-radius:20px; padding:36px 40px 30px; position:relative;
+      box-shadow:0 24px 60px rgba(0,0,0,0.18),0 4px 16px rgba(0,0,0,0.08); }
+    .auth-wordmark { font-family:'Cormorant Garamond',serif; font-size:16px; font-weight:600;
+      color:var(--accent); display:block; margin-bottom:16px; text-align:center; letter-spacing:.02em; }
+    .auth-title { font-family:'Inter',sans-serif; font-size:22px; font-weight:700;
+      color:var(--text-0); line-height:1.25; margin-bottom:8px; text-align:center; }
+    .auth-sub { font-size:13.5px; color:var(--text-3); margin-bottom:26px; line-height:1.6; text-align:center; }
     .auth-error { background:#FEF0EE; border:1px solid rgba(191,69,42,.3); color:#BF452A;
-      border-radius:8px; padding:10px 14px; font-size:13px; margin-bottom:16px; display:none; }
+      border-radius:10px; padding:10px 14px; font-size:13px; margin-bottom:14px; display:none; }
     .auth-error.visible { display:block; }
-    .auth-social-btn { display:flex; align-items:center; gap:12px; width:100%;
-      padding:11px 18px; background:var(--surface); border:1.5px solid var(--border-md);
+    .auth-social-btn { display:flex; align-items:center; justify-content:center; gap:10px; width:100%;
+      padding:12px 18px; background:#fff; border:1.5px solid var(--border-md);
       border-radius:var(--r-pill); cursor:pointer; font-family:'Inter',sans-serif;
-      font-size:13.5px; font-weight:500; color:var(--text-1); text-decoration:none;
-      transition:border-color .15s, box-shadow .15s, background .15s; margin-bottom:10px; }
-    .auth-social-btn:hover { border-color:var(--accent); background:var(--accent-lt);
-      box-shadow:0 2px 12px rgba(191,69,42,.1); }
-    .auth-divider { display:flex; align-items:center; gap:12px; color:var(--text-3);
-      font-size:12px; margin:18px 0; }
+      font-size:14px; font-weight:500; color:var(--text-0); text-decoration:none;
+      transition:border-color .15s, background .15s; margin-bottom:10px; }
+    .auth-social-btn:hover { border-color:var(--text-2); background:var(--surface-2); }
+    .auth-divider { display:flex; align-items:center; gap:10px; color:var(--text-3);
+      font-size:11px; font-weight:600; letter-spacing:.08em; text-transform:uppercase; margin:16px 0; }
     .auth-divider::before,.auth-divider::after { content:''; flex:1; height:1px; background:var(--border); }
-    .auth-input { width:100%; padding:11px 14px; border:1.5px solid var(--border-md);
-      border-radius:var(--r); font-size:13.5px; font-family:'Inter',sans-serif;
-      background:var(--surface); color:var(--text-0); outline:none;
+    .auth-input { width:100%; padding:12px 16px; border:1.5px solid var(--border-md);
+      border-radius:var(--r-pill); font-size:14px; font-family:'Inter',sans-serif;
+      background:#fff; color:var(--text-0); outline:none;
       transition:border-color .15s; margin-bottom:10px; display:block; }
-    .auth-input:focus { border-color:var(--accent); }
-    .auth-submit-btn { width:100%; padding:12px; background:var(--accent); color:#fff;
-      border:none; border-radius:var(--r-pill); font-size:13.5px; font-weight:600;
-      cursor:pointer; font-family:'Inter',sans-serif; transition:background .15s; margin-top:4px; }
-    .auth-submit-btn:hover { background:var(--accent-mid); }
-    .auth-toggle { text-align:center; margin-top:18px; font-size:13px; color:var(--text-3); }
-    .auth-toggle a { color:var(--accent); cursor:pointer; font-weight:500; }
-    .auth-close { position:absolute; top:16px; right:16px; background:transparent;
-      border:none; cursor:pointer; color:var(--text-3); font-size:20px; line-height:1;
-      padding:4px 8px; border-radius:6px; }
-    .auth-close:hover { background:var(--surface-2); }
+    .auth-input:focus { border-color:var(--text-1); }
+    .auth-submit-btn { width:100%; padding:13px; background:#1a1a1a; color:#fff;
+      border:none; border-radius:var(--r-pill); font-size:14px; font-weight:600;
+      cursor:pointer; font-family:'Inter',sans-serif; transition:background .15s; margin-top:2px; }
+    .auth-submit-btn:hover { background:#000; }
+    .auth-toggle { text-align:center; margin-top:20px; font-size:13px; color:var(--text-3); }
+    .auth-toggle a { color:var(--text-0); cursor:pointer; font-weight:600; text-decoration:underline;
+      text-underline-offset:2px; }
+    .auth-close { position:absolute; top:14px; right:14px; background:transparent;
+      border:none; cursor:pointer; color:var(--text-3);
+      width:32px; height:32px; border-radius:8px;
+      display:flex; align-items:center; justify-content:center; transition:background .12s,color .12s; }
+    .auth-close:hover { background:var(--surface-2); color:var(--text-1); }
   </style>
 </head>
 <body>
@@ -7574,12 +7576,12 @@ let _authMode = 'login'; // 'login' | 'register'
 function toggleAuthMode() {
   _authMode = _authMode === 'login' ? 'register' : 'login';
   const isReg = _authMode === 'register';
-  document.getElementById('auth-title').textContent     = isReg ? 'Create your account'    : 'Log in to Divine';
+  document.getElementById('auth-title').textContent     = isReg ? 'Create your account' : 'Log in or sign up';
   document.getElementById('auth-sub').textContent       = isReg
     ? 'Join Divine to unlock personalization and Thinker features.'
-    : 'Access your personalized AI perspective engine.';
+    : 'Unlock personalized perspectives and Thinker features.';
   document.getElementById('auth-name').style.display    = isReg ? 'block' : 'none';
-  document.getElementById('auth-email-btn').textContent = isReg ? 'Create account'         : 'Continue with Email';
+  document.getElementById('auth-email-btn').textContent = isReg ? 'Create account' : 'Continue';
   document.getElementById('auth-mode-text').textContent = isReg ? 'Already have an account?' : "Don't have an account?";
   document.getElementById('auth-mode-link').textContent = isReg ? 'Log in'                 : 'Sign up';
   const errEl = document.getElementById('auth-error');
@@ -8679,12 +8681,14 @@ function showToast(msg) {
 <!-- ═══ LOGIN / REGISTER SCREEN ═══ -->
 <div id="screen-login" style="display:none">
   <div class="auth-screen" onclick="if(event.target===this)closeLoginScreen()">
-    <div class="auth-box" style="position:relative">
-      <button class="auth-close" onclick="closeLoginScreen()" aria-label="Close">×</button>
+    <div class="auth-box">
+      <button class="auth-close" onclick="closeLoginScreen()" aria-label="Close">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="2" y1="2" x2="12" y2="12"/><line x1="12" y1="2" x2="2" y2="12"/></svg>
+      </button>
 
       <span class="auth-wordmark">Divine</span>
-      <h1 class="auth-title" id="auth-title">Log in to Divine</h1>
-      <p class="auth-sub" id="auth-sub">Access your personalized AI perspective engine.</p>
+      <h1 class="auth-title" id="auth-title">Log in or sign up</h1>
+      <p class="auth-sub" id="auth-sub">Unlock personalized perspectives and Thinker features.</p>
 
       <div class="auth-error" id="auth-error"></div>
 
@@ -8707,12 +8711,12 @@ function showToast(msg) {
         <input class="auth-input" type="text"     id="auth-name"     placeholder="Your name" style="display:none" autocomplete="name">
         <input class="auth-input" type="email"    id="auth-email"    placeholder="Email address" autocomplete="email" required>
         <input class="auth-input" type="password" id="auth-password" placeholder="Password (8+ characters)" autocomplete="current-password" required>
-        <button class="auth-submit-btn" id="auth-email-btn" onclick="submitEmailAuth()">Continue with Email</button>
+        <button class="auth-submit-btn" id="auth-email-btn" onclick="submitEmailAuth()">Continue</button>
       </div>
 
       <div class="auth-toggle">
         <span id="auth-mode-text">Don't have an account?</span>
-        <a onclick="toggleAuthMode()"> <span id="auth-mode-link">Sign up</span></a>
+        <a onclick="toggleAuthMode()"><span id="auth-mode-link">Sign up</span></a>
       </div>
     </div>
   </div>
