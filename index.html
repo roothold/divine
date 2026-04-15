@@ -10,7 +10,7 @@
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
-      --bg:        #FAF8F3;
+      --bg:        #FFFFFF;
       --surface:   #FFFFFF;
       --surface-2: #F2EEE7;
       --surface-3: #E8E3DA;
@@ -141,7 +141,7 @@
     /* ═══ SIDEBAR ═══ */
     .sidebar {
       width: var(--sidebar-w); flex-shrink: 0;
-      background: var(--surface); border-right: 1px solid var(--border);
+      background: #FAF8F3; border-right: 1px solid var(--border);
       display: flex; flex-direction: column;
       position: sticky; top: 0;
       height: 100vh;
@@ -1949,7 +1949,7 @@
     .mobile-nav {
       display:none;
       position:fixed; bottom:0; left:0; right:0; z-index:200;
-      background:rgba(255,255,255,0.96);
+      background:rgba(250,248,243,0.97);
       backdrop-filter:blur(16px); -webkit-backdrop-filter:blur(16px);
       border-top:1px solid var(--border);
       padding:0 4px env(safe-area-inset-bottom,0px);
@@ -2195,7 +2195,7 @@
 
     .chat-messages {
       flex:1; overflow-y:auto; padding:28px 20px 16px;
-      display:flex; flex-direction:column; gap:20px;
+      display:flex; flex-direction:column; gap:14px;
       scroll-behavior:smooth; align-items:center;
     }
     /* All children constrained to centered 600px column */
@@ -2297,11 +2297,13 @@
     }
     /* Section labels: **The Reframe**, **Strategic Levers**, **Required Inputs** */
     .chat-section-label {
-      font-size:10px; font-weight:800; letter-spacing:.1em; text-transform:uppercase;
-      color:var(--text-3); font-family:inherit; /* sans-serif, no mono */
-      margin:10px 0 4px; display:flex; align-items:center; gap:8px;
+      font-size:11px; font-weight:700; letter-spacing:.02em;
+      color:var(--text-3); font-family:inherit;
+      margin:8px 0 3px; display:flex; align-items:center; gap:8px;
     }
     .chat-section-label::after { content:none; } /* no divider line */
+    /* Blank-line spacer — replaces <br> for controlled vertical rhythm */
+    .chat-br { height:5px; }
     /* → Next Logical Question CTA */
     .chat-next-q {
       display:flex; align-items:baseline; flex-wrap:wrap; gap:5px;
@@ -2387,7 +2389,7 @@
     }
     .chat-input-wrap {
       display:flex; align-items:center; gap:10px;
-      background:var(--surface); border:1.5px solid var(--border-md);
+      background:#FFFFFF; border:1.5px solid var(--border-md);
       border-radius:16px; padding:10px 10px 10px 14px;
       transition:border-color .15s;
     }
@@ -3879,6 +3881,26 @@ e.g. I always start by validating whether the problem is real before evaluating 
     </div>
 
   </main>
+</div>
+
+<!-- ── Rename Chat Modal ────────────────────────────────────────────────── -->
+<div id="rename-modal-overlay" style="display:none;position:fixed;inset:0;z-index:900;background:rgba(0,0,0,0.35);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);align-items:center;justify-content:center;" onclick="if(event.target===this)closeRenameModal()">
+  <div id="rename-modal" style="background:#fff;border-radius:16px;padding:28px 28px 24px;width:min(420px,90vw);box-shadow:0 20px 60px rgba(0,0,0,0.18);display:flex;flex-direction:column;gap:16px;">
+    <div style="display:flex;align-items:center;justify-content:space-between;">
+      <h3 style="font-size:16px;font-weight:700;color:var(--text-0);margin:0;">Rename conversation</h3>
+      <button onclick="closeRenameModal()" style="width:30px;height:30px;border:none;background:transparent;cursor:pointer;border-radius:8px;display:flex;align-items:center;justify-content:center;color:var(--text-3);" onmouseover="this.style.background='var(--surface-2)'" onmouseout="this.style.background='transparent'">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2"><line x1="2" y1="2" x2="12" y2="12"/><line x1="12" y1="2" x2="2" y2="12"/></svg>
+      </button>
+    </div>
+    <input id="rename-modal-input" type="text" placeholder="Conversation name"
+      style="width:100%;padding:10px 14px;font-size:14px;font-family:'Inter',sans-serif;border:1.5px solid var(--border-md);border-radius:10px;outline:none;color:var(--text-0);background:#fff;"
+      onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border-md)'"
+      onkeydown="if(event.key==='Enter')commitRenameModal();if(event.key==='Escape')closeRenameModal()">
+    <div style="display:flex;gap:8px;justify-content:flex-end;">
+      <button onclick="closeRenameModal()" style="padding:9px 18px;font-size:13.5px;font-weight:500;border:1px solid var(--border-md);border-radius:var(--r-pill);background:transparent;cursor:pointer;color:var(--text-1);">Cancel</button>
+      <button onclick="commitRenameModal()" style="padding:9px 18px;font-size:13.5px;font-weight:600;border:none;border-radius:var(--r-pill);background:var(--accent);color:#fff;cursor:pointer;">Save</button>
+    </div>
+  </div>
 </div>
 
 <!-- MOBILE BOTTOM NAV -->
@@ -6864,6 +6886,13 @@ async function sendChatMsg() {
   msgs.scrollTop = msgs.scrollHeight;
 }
 
+// Convert ALL CAPS (or any case) text to Sentence case
+function _sentenceCase(s) {
+  if (!s) return s;
+  const t = s.trim();
+  return t.charAt(0).toUpperCase() + t.slice(1).toLowerCase();
+}
+
 // ── Markdown renderer for assistant chat bubbles ──────────────────────────────
 function _renderChatMarkdown(raw) {
   // Strip hidden ui-action markers
@@ -6899,7 +6928,8 @@ function _renderChatMarkdown(raw) {
     // [BLUF] — bold bottom-line sentence
     if (/^\*?\*?\[BLUF\]\*?\*?/i.test(line)) {
       closelist();
-      const blufText = line.replace(/^\*?\*?\[BLUF\]\*?\*?\s*/i, '');
+      const blufRaw = line.replace(/^\*?\*?\[BLUF\]\*?\*?\s*/i, '');
+      const blufText = _sentenceCase(blufRaw);
       html += `<div class="chat-bluf">${blufText ? inline(blufText) : ''}</div>`;
       continue;
     }
@@ -6919,7 +6949,7 @@ function _renderChatMarkdown(raw) {
     const sectionMatch = line.match(/^\*\*(.+?)\*\*\s*$/);
     if (sectionMatch) {
       closelist();
-      html += `<div class="chat-section-label">${_escapeHtml(sectionMatch[1])}</div>`;
+      html += `<div class="chat-section-label">${_escapeHtml(_sentenceCase(sectionMatch[1]))}</div>`;
       continue;
     }
     // → Next Logical Question: ...
@@ -6970,10 +7000,10 @@ function _renderChatMarkdown(raw) {
       continue;
     }
 
-    // ── Empty line → paragraph break ─────────────────────────────────────
+    // ── Empty line → controlled spacer ───────────────────────────────────
     if (line === '') {
       closelist();
-      html += '<br>';
+      html += '<div class="chat-br"></div>';
       continue;
     }
 
@@ -6983,10 +7013,10 @@ function _renderChatMarkdown(raw) {
   }
   closelist();
 
-  // Collapse consecutive <br> into one
-  html = html.replace(/(<br>\s*){2,}/g, '<br>');
-  // Strip leading/trailing <br>
-  html = html.replace(/^(<br>)+|(<br>)+$/g, '');
+  // Collapse consecutive spacers into one
+  html = html.replace(/(<div class="chat-br"><\/div>\s*){2,}/g, '<div class="chat-br"></div>');
+  // Strip leading/trailing spacers
+  html = html.replace(/^(<div class="chat-br"><\/div>)+|(<div class="chat-br"><\/div>)+$/g, '');
 
   return html;
 }
@@ -7363,58 +7393,30 @@ function pinChatSession(id) {
   renderRecents();
 }
 
-// ── Inline rename ─────────────────────────────────────────────────────────────
+// ── Rename modal ──────────────────────────────────────────────────────────────
+let _renameTargetId = null;
+
 function startRenameSession(id, e) {
   e && e.stopPropagation();
   closeRecentMenu();
-  const item = document.querySelector(`.recent-item[data-id="${id}"]`);
-  if (!item || item.classList.contains('editing')) return;
-  item.classList.add('editing');
+  const sessions = loadChatSessions();
+  const s = sessions.find(x => x.id === id);
+  if (!s) return;
 
-  const titleEl      = item.querySelector('.recent-item-title');
-  const currentTitle = titleEl.textContent;
-
-  // Replace title span with input + save/cancel inline
-  titleEl.replaceWith(...(() => {
-    const input = document.createElement('input');
-    input.className = 'recent-rename-input';
-    input.value     = currentTitle;
-    input.addEventListener('keydown', ev => {
-      if (ev.key === 'Enter')  { ev.preventDefault(); commitRename(id); }
-      if (ev.key === 'Escape') { ev.preventDefault(); cancelRename(id); }
-    });
-
-    const saveBtn = document.createElement('button');
-    saveBtn.className = 'recent-action-btn save';
-    saveBtn.title     = 'Save';
-    saveBtn.onclick   = ev => { ev.stopPropagation(); commitRename(id); };
-    saveBtn.innerHTML = `<svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M1.5 6l3 3 6-6"/></svg>`;
-
-    const cancelBtn = document.createElement('button');
-    cancelBtn.className = 'recent-action-btn delete';
-    cancelBtn.title     = 'Cancel';
-    cancelBtn.onclick   = ev => { ev.stopPropagation(); cancelRename(id); };
-    cancelBtn.innerHTML = `<svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M2 2l8 8M10 2l-8 8"/></svg>`;
-
-    return [input, saveBtn, cancelBtn];
-  })());
-
-  // Focus input after DOM update
-  const inp = item.querySelector('.recent-rename-input');
-  if (inp) { inp.focus(); inp.select(); }
-
-  // Block item click while editing
-  item._editClickGuard = ev => ev.stopPropagation();
-  item.addEventListener('click', item._editClickGuard, true);
+  _renameTargetId = id;
+  const overlay = document.getElementById('rename-modal-overlay');
+  const input   = document.getElementById('rename-modal-input');
+  input.value   = s.title || '';
+  overlay.style.display = 'flex';
+  // Slight delay so the flex renders before focus
+  setTimeout(() => { input.focus(); input.select(); }, 60);
 }
 
-function commitRename(id) {
-  const item  = document.querySelector(`.recent-item[data-id="${id}"]`);
-  if (!item)  return;
-  const input = item.querySelector('.recent-rename-input');
+function commitRenameModal() {
+  const input    = document.getElementById('rename-modal-input');
   const newTitle = input?.value.trim();
-
-  if (newTitle) {
+  const id       = _renameTargetId;
+  if (id && newTitle) {
     const sessions = loadChatSessions();
     const s = sessions.find(x => x.id === id);
     if (s) {
@@ -7426,23 +7428,15 @@ function commitRename(id) {
         if (ti) ti.value = newTitle;
       }
     }
+    renderRecents();
   }
-  _cleanupRenameItem(item);
-  renderRecents();
+  closeRenameModal();
 }
 
-function cancelRename(id) {
-  const item = document.querySelector(`.recent-item[data-id="${id}"]`);
-  if (item) _cleanupRenameItem(item);
-  renderRecents();
-}
-
-function _cleanupRenameItem(item) {
-  if (item._editClickGuard) {
-    item.removeEventListener('click', item._editClickGuard, true);
-    delete item._editClickGuard;
-  }
-  item.classList.remove('editing');
+function closeRenameModal() {
+  const overlay = document.getElementById('rename-modal-overlay');
+  if (overlay) overlay.style.display = 'none';
+  _renameTargetId = null;
 }
 
 // ── Delete session ────────────────────────────────────────────────────────────
