@@ -27,6 +27,7 @@ import { readFileSync }   from 'fs';
 import { join, dirname }  from 'path';
 import { fileURLToPath }  from 'url';
 import Anthropic          from '@anthropic-ai/sdk';
+import Stripe             from 'stripe';
 import jwt                from 'jsonwebtoken';
 import bcrypt             from 'bcryptjs';
 import pool, {
@@ -57,6 +58,15 @@ const GOOGLE_REDIRECT_URI  = `${APP_URL}/auth/google/callback`;
 const LINKEDIN_CLIENT_ID     = process.env.LINKEDIN_CLIENT_ID     || '';
 const LINKEDIN_CLIENT_SECRET = process.env.LINKEDIN_CLIENT_SECRET || '';
 const LINKEDIN_REDIRECT_URI  = `${APP_URL}/auth/linkedin/callback`;
+
+// ── Stripe ────────────────────────────────────────────────────────────────────
+const STRIPE_SECRET_KEY      = process.env.STRIPE_SECRET_KEY      || '';
+const STRIPE_WEBHOOK_SECRET  = process.env.STRIPE_WEBHOOK_SECRET  || '';
+const stripe = STRIPE_SECRET_KEY ? new Stripe(STRIPE_SECRET_KEY, { apiVersion: '2024-06-20' }) : null;
+
+// ── Guest rate-limit constants ────────────────────────────────────────────────
+const GUEST_LIMIT  = parseInt(process.env.GUEST_RATE_LIMIT || '3');
+const GUEST_WINDOW = (parseInt(process.env.GUEST_RATE_WINDOW_HOURS || '72')) * 60 * 60 * 1000;
 
 // ── Middleware ────────────────────────────────────────────────────────────────
 app.use((req, res, next) => {
@@ -98,6 +108,84 @@ function requireAuth(req, res, next) {
     if (!req.user) return res.status(401).json({ error: 'Authentication required.' });
     next();
   });
+}
+
+// ── Guest rate-limit helpers ──────────────────────────────────────────────────
+import { createHash } from 'node:crypto';
+
+/**
+ * Hash the client IP into a short token for secondary rate limiting.
+ * We never store the raw IP.
+ */
+function hashIp(req) {
+  const raw = req.headers['x-forwarded-for']?.split(',')[0].trim()
+           || req.socket?.remoteAddress
+           || '';
+  return createHash('sha256').update(raw).digest('hex').slice(0, 16);
+}
+
+/**
+ * Returns { limited, count, resetsAt } for a guest user.
+ * If the DB is unavailable we return { limited: false } to avoid blocking
+ * legitimate users due to an infrastructure issue.
+ */
+async function checkGuestRateLimit(guestId, ipHash) {
+  try {
+    const windowStart = new Date(Date.now() - GUEST_WINDOW).toISOString();
+
+    // Primary check: by guest_id
+    const { rows } = await pool.query(
+      `SELECT COUNT(*) AS cnt, MIN(created_at) AS oldest
+       FROM guest_rate_limits
+       WHERE guest_id = $1 AND created_at > $2`,
+      [guestId, windowStart]
+    );
+    const countById = parseInt(rows[0].cnt, 10);
+
+    if (countById >= GUEST_LIMIT) {
+      const resetsAt = rows[0].oldest
+        ? new Date(new Date(rows[0].oldest).getTime() + GUEST_WINDOW).toISOString()
+        : null;
+      return { limited: true, count: countById, resetsAt };
+    }
+
+    // Secondary check: by IP hash — catch users who cleared localStorage
+    if (ipHash) {
+      const { rows: ipRows } = await pool.query(
+        `SELECT COUNT(*) AS cnt, MIN(created_at) AS oldest
+         FROM guest_rate_limits
+         WHERE ip_hash = $1 AND created_at > $2`,
+        [ipHash, windowStart]
+      );
+      const countByIp = parseInt(ipRows[0].cnt, 10);
+
+      if (countByIp >= GUEST_LIMIT) {
+        const resetsAt = ipRows[0].oldest
+          ? new Date(new Date(ipRows[0].oldest).getTime() + GUEST_WINDOW).toISOString()
+          : null;
+        return { limited: true, count: countByIp, resetsAt };
+      }
+    }
+
+    return { limited: false, count: countById };
+  } catch (err) {
+    console.error('[guest rate-limit check]', err.message);
+    return { limited: false, count: 0 }; // fail open
+  }
+}
+
+/**
+ * Record one guest usage event. Called after a successful stream completes.
+ */
+async function recordGuestUsage(guestId, ipHash) {
+  try {
+    await pool.query(
+      `INSERT INTO guest_rate_limits (guest_id, ip_hash) VALUES ($1, $2)`,
+      [guestId, ipHash]
+    );
+  } catch (err) {
+    console.error('[guest rate-limit record]', err.message);
+  }
 }
 
 // ── Serve app ─────────────────────────────────────────────────────────────────
@@ -339,14 +427,25 @@ app.post('/api/get-perspective', async (req, res) => {
 
   // Guest users have a localStorage-generated id like "u_<hex>" which is not a
   // valid Postgres UUID and has no row in the users table. We detect them here
-  // and skip all wallet DB operations — they get free streaming access until
-  // they sign in and a real wallet is provisioned.
-  const UUID_RE   = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
-  const isGuest   = !UUID_RE.test(user_id);
+  // and apply server-side rate limiting (3 perspectives / 72h), then skip all
+  // wallet DB operations for the session.
+  const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+  const isGuest = !UUID_RE.test(user_id);
+  const ipHash  = hashIp(req);
 
   let wallet;
   if (isGuest) {
-    wallet = { credit_balance: 99.00 }; // guest — no DB wallet, free access
+    // ── Server-side rate limit for guests ──────────────────────────────────
+    const rl = await checkGuestRateLimit(user_id, ipHash);
+    if (rl.limited) {
+      return res.status(429).json({
+        error:     'Free perspective limit reached. Sign up to continue.',
+        code:      'RATE_LIMITED',
+        remaining: 0,
+        resets_at: rl.resetsAt,
+      });
+    }
+    wallet = { credit_balance: 99.00 }; // guest — no DB wallet
   } else {
     try {
       wallet = await getOrCreateWallet(user_id);
@@ -452,7 +551,10 @@ app.post('/api/get-perspective', async (req, res) => {
 
     const finalMsg = await stream.finalMessage();
 
-    if (!isGuest) {
+    if (isGuest) {
+      // Record server-side usage so the next request is counted correctly
+      await recordGuestUsage(user_id, ipHash);
+    } else {
       try {
         await deductCredit(user_id, INSIGHT_COST, `${thinker.name} · ${stage}`, {
           thinker_id, stage,
@@ -496,36 +598,112 @@ app.post('/api/get-perspective', async (req, res) => {
   }
 });
 
-// ── POST /api/top-up ──────────────────────────────────────────────────────────
+// ── POST /api/top-up  (Stripe webhook receiver) ───────────────────────────────
+// express.raw() is mounted on this route above so req.body is a Buffer.
 app.post('/api/top-up', async (req, res) => {
-  let event;
-  try {
-    event = JSON.parse(req.body.toString('utf8'));
-  } catch {
-    return res.status(400).json({ error: 'Invalid webhook payload.' });
+  if (!stripe || !STRIPE_WEBHOOK_SECRET) {
+    console.warn('[top-up] Stripe not configured — STRIPE_SECRET_KEY / STRIPE_WEBHOOK_SECRET missing');
+    return res.status(503).json({ error: 'Payment processing not configured.' });
   }
 
-  const handle = async (userId, credits, amountUsd, metadata) => {
-    if (!userId || credits <= 0) return res.status(400).json({ error: 'Missing user_id or credits.' });
-    const wallet = await creditWallet(userId, credits, `Top-up · $${amountUsd.toFixed(2)}`, metadata);
-    res.json({ received: true, balance: parseFloat(wallet.credit_balance) });
-  };
+  const sig = req.headers['stripe-signature'];
+  if (!sig) return res.status(400).json({ error: 'Missing stripe-signature header.' });
+
+  let event;
+  try {
+    event = stripe.webhooks.constructEvent(req.body, sig, STRIPE_WEBHOOK_SECRET);
+  } catch (err) {
+    console.error('[top-up] Webhook signature verification failed:', err.message);
+    return res.status(400).json({ error: `Webhook Error: ${err.message}` });
+  }
+
+  // Idempotency guard — log the event id to avoid double-crediting
+  const eventId = event.id;
+  try {
+    const { rowCount } = await pool.query(
+      `INSERT INTO stripe_events (event_id) VALUES ($1) ON CONFLICT DO NOTHING`, [eventId]
+    );
+    if (rowCount === 0) {
+      // Already processed
+      console.log(`[top-up] Duplicate event ${eventId} — ignored`);
+      return res.json({ received: true, duplicate: true });
+    }
+  } catch (err) {
+    // stripe_events table may not exist yet — log warning but continue
+    console.warn('[top-up] Could not record event id (stripe_events missing?):', err.message);
+  }
 
   try {
-    if (event.type === 'payment_intent.succeeded') {
-      const intent = event.data?.object;
-      await handle(intent?.metadata?.user_id, parseFloat(intent?.metadata?.credits || '0'), (intent?.amount_received || 0) / 100, { payment_intent_id: intent?.id });
-      return;
+    if (event.type === 'checkout.session.completed') {
+      const session = event.data.object;
+      const userId  = session.metadata?.user_id;
+      const credits = parseFloat(session.metadata?.credits || '0');
+      const amountUsd = (session.amount_total || 0) / 100;
+
+      if (!userId || credits <= 0) {
+        console.error('[top-up] checkout.session.completed — missing user_id or credits in metadata');
+        return res.status(400).json({ error: 'Missing user_id or credits in session metadata.' });
+      }
+
+      const wallet = await creditWallet(
+        userId, credits,
+        `Top-up · $${amountUsd.toFixed(2)} (${credits} perspectives)`,
+        { stripe_session_id: session.id, stripe_event_id: eventId }
+      );
+      console.log(`[top-up] Credited ${credits} perspectives to user ${userId}. New balance: ${wallet.credit_balance}`);
+      return res.json({ received: true, balance: parseFloat(wallet.credit_balance) });
     }
-    if (event.type === 'PAYMENT_UPDATED' && event.data?.status === 'SUCCESSFUL') {
-      const p = event.data;
-      await handle(p.metadata?.user_id, parseFloat(p.metadata?.credits || '0'), (p.amount || 0) / 100, { shift4_payment_id: p.id });
-      return;
-    }
+
+    // Fallback: log and acknowledge unhandled event types
+    console.log(`[top-up] Unhandled event type: ${event.type}`);
     res.json({ received: true, ignored: true });
   } catch (err) {
     console.error('[top-up error]', err.message);
     res.status(500).json({ error: 'Could not credit wallet.' });
+  }
+});
+
+// ── POST /api/create-checkout-session ────────────────────────────────────────
+app.post('/api/create-checkout-session', requireAuth, async (req, res) => {
+  if (!stripe) {
+    return res.status(503).json({ error: 'Payment processing not configured.' });
+  }
+
+  const { credits, price_usd } = req.body;
+  if (!credits || !price_usd || credits <= 0 || price_usd <= 0) {
+    return res.status(400).json({ error: 'Invalid credits or price.' });
+  }
+
+  const userId = req.user.id;
+  const amountCents = Math.round(parseFloat(price_usd) * 100);
+
+  try {
+    const session = await stripe.checkout.sessions.create({
+      payment_method_types: ['card'],
+      mode: 'payment',
+      line_items: [{
+        price_data: {
+          currency: 'usd',
+          unit_amount: amountCents,
+          product_data: {
+            name: `${credits} Divine Perspectives`,
+            description: `${credits} AI-powered perspective sessions on Divine Intelligence`,
+          },
+        },
+        quantity: 1,
+      }],
+      metadata: {
+        user_id: userId,
+        credits: String(credits),
+      },
+      success_url: `${APP_URL}/dashboard/wallet?topup=success`,
+      cancel_url:  `${APP_URL}/dashboard/wallet/topup`,
+    });
+
+    res.json({ url: session.url, session_id: session.id });
+  } catch (err) {
+    console.error('[create-checkout-session]', err.message);
+    res.status(500).json({ error: 'Could not create checkout session.' });
   }
 });
 
@@ -550,5 +728,6 @@ app.listen(PORT, () => {
   console.log(`  Insight cost:  $${INSIGHT_COST}`);
   console.log(`  Google OAuth:  ${GOOGLE_CLIENT_ID ? 'configured ✓' : 'NOT SET ⚠'}`);
   console.log(`  LinkedIn OAuth:${LINKEDIN_CLIENT_ID ? 'configured ✓' : ' NOT SET ⚠'}`);
+  console.log(`  Stripe:        ${STRIPE_SECRET_KEY ? 'configured ✓' : 'NOT SET ⚠'}`);
   console.log(`  DB:            ${process.env.DATABASE_URL ? 'configured ✓' : 'NOT SET ⚠'}`);
 });

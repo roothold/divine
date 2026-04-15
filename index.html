@@ -2239,6 +2239,12 @@
     .chat-msg-bubble {
       padding:12px 16px; border-radius:16px; font-size:14px; line-height:1.65;
       color:var(--text-0); white-space:normal; word-break:break-word;
+      font-family:'Inter',system-ui,sans-serif;
+    }
+    .chat-msg-bubble strong, .chat-msg-bubble em,
+    .chat-msg-bubble p, .chat-msg-bubble li,
+    .chat-msg-bubble h2, .chat-msg-bubble h3, .chat-msg-bubble h4 {
+      font-family:'Inter',system-ui,sans-serif;
     }
     .chat-msg.user .chat-msg-bubble {
       background:#F2F1F0; color:var(--text-0); border-bottom-right-radius:4px;
@@ -2425,16 +2431,35 @@
     .chat-usage-pill.empty { color:var(--accent); font-weight:600; }
     /* Rate limit blocked banner */
     .chat-rate-banner {
-      display:none; align-items:flex-start; gap:10px;
-      background:rgba(191,69,42,.06); border:1px solid rgba(191,69,42,.18);
-      border-radius:10px; padding:12px 14px; margin-bottom:10px;
-      font-size:12.5px; line-height:1.55;
+      display:none; flex-direction:column; gap:12px;
+      background:#fff; border:1.5px solid var(--border-md);
+      border-radius:14px; padding:18px 20px; margin-bottom:10px;
+      box-shadow:0 2px 12px rgba(0,0,0,.06);
     }
     .chat-rate-banner.visible { display:flex; }
-    .chat-rate-banner-icon { font-size:16px; flex-shrink:0; margin-top:1px; }
+    .chat-rate-banner-top { display:flex; align-items:flex-start; gap:12px; }
+    .chat-rate-banner-icon {
+      width:36px; height:36px; border-radius:10px;
+      background:rgba(191,69,42,.08); display:flex; align-items:center; justify-content:center;
+      flex-shrink:0; font-size:17px;
+    }
     .chat-rate-banner-body { flex:1; min-width:0; }
-    .chat-rate-banner-title { font-weight:700; color:var(--text-0); margin-bottom:2px; }
-    .chat-rate-banner-sub   { color:var(--text-2); }
+    .chat-rate-banner-title { font-weight:700; font-size:14px; color:var(--text-0); margin-bottom:3px; }
+    .chat-rate-banner-sub   { font-size:12.5px; color:var(--text-3); line-height:1.55; }
+    .chat-rate-banner-actions { display:flex; gap:8px; }
+    .chat-rate-cta-primary {
+      flex:1; padding:10px 16px; background:#1a1a1a; color:#fff;
+      border:none; border-radius:var(--r-pill); font-size:13px; font-weight:600;
+      cursor:pointer; font-family:'Inter',sans-serif; transition:background .15s;
+    }
+    .chat-rate-cta-primary:hover { background:#000; }
+    .chat-rate-cta-secondary {
+      padding:10px 16px; background:transparent; color:var(--text-2);
+      border:1.5px solid var(--border-md); border-radius:var(--r-pill);
+      font-size:13px; font-weight:500; cursor:pointer;
+      font-family:'Inter',sans-serif; transition:border-color .15s, color .15s;
+    }
+    .chat-rate-cta-secondary:hover { border-color:var(--text-1); color:var(--text-0); }
 
     /* ── Recent items — clean list style ──────────────────────────────── */
     .recent-item {
@@ -3015,10 +3040,16 @@
           </div>
           <!-- Rate limit blocked state -->
           <div class="chat-rate-banner" id="chat-rate-banner">
-            <span class="chat-rate-banner-icon">⏳</span>
-            <div class="chat-rate-banner-body">
-              <div class="chat-rate-banner-title">Perspective limit reached</div>
-              <div class="chat-rate-banner-sub" id="chat-rate-banner-sub">You've used 3 of 3 perspectives this window. Resets in —</div>
+            <div class="chat-rate-banner-top">
+              <div class="chat-rate-banner-icon">✦</div>
+              <div class="chat-rate-banner-body">
+                <div class="chat-rate-banner-title" id="chat-rate-banner-title">You've used all 3 free perspectives</div>
+                <div class="chat-rate-banner-sub" id="chat-rate-banner-sub">Create a free account to unlock more, or purchase tokens to continue now.</div>
+              </div>
+            </div>
+            <div class="chat-rate-banner-actions" id="chat-rate-banner-actions">
+              <button class="chat-rate-cta-primary" id="chat-rate-cta-primary" onclick="showView('login')">Create free account</button>
+              <button class="chat-rate-cta-secondary" id="chat-rate-cta-secondary" onclick="showView('upgrade')">Buy tokens</button>
             </div>
           </div>
           <div class="chat-input-meta">
@@ -4410,7 +4441,12 @@ function showView(view, opts = {}) {
   document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
 
   const views = {
-    search:      () => { show('screen-search'); setTimeout(() => document.getElementById('search-input').focus(), 120); },
+    search:      () => {
+      show('screen-search');
+      const si = document.getElementById('search-input');
+      if (si) { si.value = ''; runSearch(''); }
+      setTimeout(() => si && si.focus(), 120);
+    },
     'thought-leaders': () => { document.getElementById('nav-search')?.classList.add('active'); setMobNavActive('mob-nav-search'); renderThoughtLeaders(); show('screen-thought-leaders'); },
     projects:    () => { document.getElementById('nav-projects').classList.add('active'); setMobNavActive('mob-nav-projects'); renderProjects(); show('screen-projects'); },
     chat:        () => { openChat(); },
@@ -4496,6 +4532,15 @@ async function callPerspective({ stage, decision, answers, onChunk }) {
     });
 
     if (res.status === 402) { openTopup(); throw new Error('INSUFFICIENT_FUNDS'); }
+
+    if (res.status === 429) {
+      let data = {};
+      try { data = await res.json(); } catch {}
+      const log = new Array(RATE_LIMIT_MAX).fill(Date.now());
+      _usageLogSave(log);
+      _usageRefreshUI();
+      throw new Error(data.error || 'Rate limit reached.');
+    }
 
     if (res.ok) {
       const reader  = res.body.getReader();
@@ -5184,26 +5229,40 @@ function _updateTopupCta(pkg) {
     btn.textContent = `Get ${credits} Perspectives · $${parseFloat(price).toFixed(0)}`;
   }
 }
-function handleTopup() {
+async function handleTopup() {
   const pkg = selectedPkgEl || document.querySelector('.topup-pkg.selected');
   if (!pkg) return;
-  const credits = pkg.dataset.credits;
-  const price   = pkg.dataset.price;
-  const notice  = document.getElementById('topup-notice');
-  const btn     = document.getElementById('topup-cta');
-
-  // TODO: Replace with Stripe Payment Link or checkout session
-  // Pass USER_ID + credits in metadata so the webhook can credit the account
-  // e.g. window.location.href = `https://buy.stripe.com/yourlink?client_reference_id=${USER_ID}&metadata[credits]=${credits}`;
+  const credits   = parseInt(pkg.dataset.credits, 10);
+  const price_usd = parseFloat(pkg.dataset.price);
+  const notice    = document.getElementById('topup-notice');
+  const btn       = document.getElementById('topup-cta');
 
   btn.disabled    = true;
   btn.textContent = 'Connecting to payment…';
-  setTimeout(() => {
+  notice.textContent = '';
+  notice.classList.remove('visible');
+
+  try {
+    const res = await fetch('/api/create-checkout-session', {
+      method:  'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${TOKEN}` },
+      body:    JSON.stringify({ credits, price_usd }),
+      signal:  AbortSignal.timeout(15000),
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || 'Could not start checkout.');
+    if (data.url) {
+      // Redirect to Stripe-hosted checkout page
+      window.location.href = data.url;
+    } else {
+      throw new Error('No checkout URL returned.');
+    }
+  } catch (err) {
     btn.disabled    = false;
     _updateTopupCta(pkg);
-    notice.innerHTML = `Payment integration is being configured. Your selection: <strong>${credits} perspectives for $${price}</strong>.<br>Your account ID <code style="font-size:11px;background:var(--border-lt);padding:1px 5px;border-radius:4px">${USER_ID}</code> will be credited automatically once connected.`;
+    notice.textContent = err.message || 'Something went wrong. Please try again.';
     notice.classList.add('visible');
-  }, 800);
+  }
 }
 
 // Close on ESC
@@ -5555,33 +5614,135 @@ function formatDate(iso) {
    SEARCH
 ════════════════════════════════ */
 function runSearch(q) {
-  q = q.trim().toLowerCase();
+  q = q.trim();
   const el = document.getElementById('search-results');
-  if (!q) { el.innerHTML = '<div class="no-results"><span class="no-results-icon">🔍</span>Start typing to search your perspectives.</div>'; return; }
-  const matches = loadRecents().filter(r =>
-    r.decision.toLowerCase().includes(q) ||
-    (r.keyInsight?.title||'').toLowerCase().includes(q) ||
-    (r.keyInsight?.body||'').toLowerCase().includes(q)  ||
-    r.thinker.name.toLowerCase().includes(q)
-  );
-  if (!matches.length) { el.innerHTML = '<div class="no-results"><span class="no-results-icon">💭</span>No perspectives match that search.</div>'; return; }
-  el.innerHTML = matches.map(r => `
-    <div class="search-result-card" onclick="openRecentById('${r.id}')">
-      <div class="src-meta">
-        <div class="src-avatar" style="background:${r.thinker.color}">${r.thinker.initials}</div>
-        <span class="src-thinker">${r.thinker.name}</span>
-        <span class="src-date">${formatDate(r.date)}</span>
-      </div>
-      <div class="src-decision">${hl(r.decision,q)}</div>
-      ${r.keyInsight ? `<div class="src-insight">${hl(r.keyInsight.title,q)}</div>` : ''}
-    </div>
-  `).join('');
+  if (!q) {
+    el.innerHTML = '<div class="no-results"><span class="no-results-icon">🔍</span>Start typing to search your perspectives.</div>';
+    return;
+  }
+
+  // Split into individual keywords — all must be present somewhere in the doc
+  const keywords = q.toLowerCase().split(/\s+/).filter(Boolean);
+
+  function allMatch(fields) {
+    const combined = fields.join(' ').toLowerCase();
+    return keywords.every(k => combined.includes(k));
+  }
+  function relevanceScore(fields) {
+    const combined = fields.join(' ').toLowerCase();
+    return keywords.filter(k => combined.includes(k)).length;
+  }
+  function extractSnippet(text, keywords) {
+    if (!text) return '';
+    const lc = text.toLowerCase();
+    const idx = lc.indexOf(keywords[0]);
+    if (idx === -1) return '';
+    const start = Math.max(0, idx - 40);
+    let snip = text.slice(start, start + 140).replace(/\n/g, ' ').trim();
+    if (start > 0) snip = '…' + snip;
+    if (start + 140 < text.length) snip += '…';
+    return snip;
+  }
+
+  const results = [];
+
+  // ── 1. Chat sessions (di_chats) ────────────────────────────────────
+  for (const s of loadChatSessions()) {
+    const titleText   = s.title || '';
+    const thinkerName = s.thinker?.name || '';
+    const msgs        = s.messages || [];
+    const msgBody     = msgs.map(m => m.content || '').join(' ');
+    const fields      = [titleText, thinkerName, msgBody];
+    if (!allMatch(fields)) continue;
+
+    // Find best assistant snippet
+    let snippet = '';
+    for (const m of msgs) {
+      if (m.role === 'assistant') {
+        snippet = extractSnippet(m.content || '', keywords);
+        if (snippet) break;
+      }
+    }
+    results.push({
+      type:    'chat',
+      id:      s.id,
+      title:   titleText || 'Untitled conversation',
+      thinker: s.thinker,
+      date:    s.updatedAt || s.createdAt,
+      snippet,
+      score:   relevanceScore(fields),
+    });
+  }
+
+  // ── 2. Legacy recents (di_recents) ─────────────────────────────────
+  for (const r of loadRecents()) {
+    const fields = [
+      r.decision || '',
+      r.keyInsight?.title || '',
+      r.keyInsight?.body  || '',
+      r.thinker?.name     || '',
+    ];
+    if (!allMatch(fields)) continue;
+    const snippet = r.keyInsight?.body
+      ? extractSnippet(r.keyInsight.body, keywords)
+      : '';
+    results.push({
+      type:    'recent',
+      id:      r.id,
+      title:   r.decision || '',
+      thinker: r.thinker,
+      date:    r.date,
+      snippet,
+      score:   relevanceScore(fields),
+    });
+  }
+
+  // Sort: relevance first, then most recent
+  results.sort((a, b) => b.score !== a.score
+    ? b.score - a.score
+    : new Date(b.date) - new Date(a.date));
+
+  if (!results.length) {
+    el.innerHTML = `<div class="no-results"><span class="no-results-icon">💭</span>No results for "<strong>${escHtml(q)}</strong>".</div>`;
+    return;
+  }
+
+  el.innerHTML = results.map(r => {
+    const onClick = r.type === 'chat'
+      ? `openChatSession('${r.id}')`
+      : `openRecentById('${r.id}')`;
+    const thinkerHtml = r.thinker
+      ? `<div class="src-avatar" style="background:${r.thinker.color || 'var(--accent)'}">${r.thinker.initials || '?'}</div>
+         <span class="src-thinker">${escHtml(r.thinker.name || '')}</span>`
+      : '';
+    const snippetHtml = r.snippet
+      ? `<div class="src-insight">${hlMulti(r.snippet, keywords)}</div>`
+      : '';
+    return `
+      <div class="search-result-card" onclick="${onClick}">
+        <div class="src-meta">
+          ${thinkerHtml}
+          <span class="src-date">${formatDate(r.date)}</span>
+        </div>
+        <div class="src-decision">${hlMulti(r.title, keywords)}</div>
+        ${snippetHtml}
+      </div>`;
+  }).join('');
 }
 
-function hl(text, q) {
-  const re = new RegExp(`(${q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')})`, 'gi');
-  return text.replace(re, '<mark style="background:var(--accent-lt);color:var(--accent);border-radius:2px;padding:0 1px">$1</mark>');
+// Highlight multiple keywords in text (HTML-safe)
+function hlMulti(text, keywords) {
+  if (!text) return '';
+  let out = escHtml(text);
+  keywords.forEach(k => {
+    const re = new RegExp(`(${k.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')})`, 'gi');
+    out = out.replace(re, '<mark style="background:var(--accent-lt);color:var(--accent);border-radius:2px;padding:0 1px">$1</mark>');
+  });
+  return out;
 }
+
+// Keep legacy single-query hl() for backward compat
+function hl(text, q) { return hlMulti(text, [q]); }
 
 function openRecentById(id) {
   const idx = loadRecents().findIndex(r => r.id === id);
@@ -6769,25 +6930,43 @@ function _usageRefreshUI() {
 
   // Banner + send button lock
   if (remaining === 0) {
-    const reset = _usageNextReset();
+    const reset      = _usageNextReset();
+    const isLoggedIn = !!USER_ID;
+
     if (banner) {
       banner.classList.add('visible');
-      if (bannerSub && reset) {
-        bannerSub.textContent = `You've used all 3 perspectives this window. Resets in ${_usageCountdown(reset)}.`;
+
+      const titleEl   = document.getElementById('chat-rate-banner-title');
+      const actionsEl = document.getElementById('chat-rate-banner-actions');
+      const primaryBtn  = document.getElementById('chat-rate-cta-primary');
+      const secondaryBtn = document.getElementById('chat-rate-cta-secondary');
+
+      if (isLoggedIn) {
+        // Authenticated: prompt to buy more tokens
+        if (titleEl) titleEl.textContent = 'You\'ve used all your perspectives';
+        if (bannerSub) {
+          const resetStr = reset ? ` Free perspectives reset in ${_usageCountdown(reset)}.` : '';
+          bannerSub.textContent = 'Purchase tokens to keep the conversation going.' + resetStr;
+        }
+        if (primaryBtn) { primaryBtn.textContent = 'Purchase tokens'; primaryBtn.onclick = () => showView('upgrade'); }
+        if (secondaryBtn) secondaryBtn.style.display = 'none'; // hide sign-up option for logged-in users
+      } else {
+        // Guest: push toward account creation, wallet as secondary
+        if (titleEl) titleEl.textContent = 'You\'ve used all 3 free perspectives';
+        if (bannerSub) bannerSub.textContent = 'Create a free account to unlock more, or purchase tokens to continue now.';
+        if (primaryBtn) { primaryBtn.textContent = 'Create free account'; primaryBtn.onclick = () => showView('login'); }
+        if (secondaryBtn) { secondaryBtn.style.display = ''; secondaryBtn.textContent = 'Buy tokens'; secondaryBtn.onclick = () => showView('upgrade'); }
       }
     }
     if (sendBtn) sendBtn.disabled = true;
     if (textarea) textarea.disabled = true;
 
-    // Auto-refresh countdown every minute
+    // Auto-refresh countdown every 30s — auto-unlock if window rolls
     clearInterval(window._rateCountdownInterval);
     window._rateCountdownInterval = setInterval(() => {
       if (_usageRemaining() > 0) {
-        // Window has rolled — unlock
         clearInterval(window._rateCountdownInterval);
         _usageRefreshUI();
-      } else if (bannerSub && reset) {
-        bannerSub.textContent = `You've used all 3 perspectives this window. Resets in ${_usageCountdown(reset)}.`;
       }
     }, 30_000);
   } else {
@@ -6871,6 +7050,7 @@ async function sendChatMsg() {
   _usageRefreshUI();
 
   bubble.classList.remove('chat-cursor');
+  bubble.style.whiteSpace = ''; // ensure pre-wrap from streaming is cleared
   bubble.innerHTML = _renderChatMarkdown(fullText);
   _attachCopyBtn(aiEl, fullText);
 
@@ -6904,18 +7084,30 @@ function _sentenceCase(s) {
 // ── Markdown renderer for assistant chat bubbles ──────────────────────────────
 function _renderChatMarkdown(raw) {
   // Strip hidden ui-action markers
-  const text = raw.replace(/\[ui-action:[^\]]*\]/gi, '').trim();
+  let text = raw.replace(/\[ui-action:[^\]]*\]/gi, '').trim();
+
+  // ── Pre-pass: collapse multi-line bold/italic spans ──────────────────────
+  // The line-by-line parser can't handle **bold text\nthat wraps** so we
+  // join those continuation lines first before splitting.
+  text = text.replace(/\*\*([^*\n]*)\n([^*\n]*)\*\*/g, '**$1 $2**');
+  text = text.replace(/\*([^*\n]*)\n([^*\n]*)\*/g,    '*$1 $2*');
 
   // Inline formatter — runs AFTER html-escaping a segment
   function inline(s) {
+    // 1. Escape HTML special chars first
     let t = s
       .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-    // **bold**
+    // 2. Bold+italic (***text***)
+    t = t.replace(/\*{3}(.+?)\*{3}/g, '<strong><em>$1</em></strong>');
+    // 3. Bold (**text**)
     t = t.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
-    // *italic* (not preceded/followed by another *)
-    t = t.replace(/(?<!\*)\*(?!\*)(.+?)(?<!\*)\*(?!\*)/g, '<em>$1</em>');
-    // `inline code`
+    // 4. Italic (*text*) — only when not part of bold markers
+    t = t.replace(/(^|[^*])\*([^*\n]+?)\*([^*]|$)/g,
+      (_, pre, content, post) => `${pre}<em>${content}</em>${post}`);
+    // 5. Inline code
     t = t.replace(/`([^`]+)`/g, '<code class="chat-code">$1</code>');
+    // 6. Strip any remaining lone asterisks that slipped through
+    t = t.replace(/\*\*/g, '').replace(/(^|[\s])\*(\s|$)/g, '$1$2');
     return t;
   }
 
@@ -7236,10 +7428,21 @@ RULES: No filler. No 'great question.' No 'I understand.' No double blank lines 
         messages,
         system,
       }),
-      signal: AbortSignal.timeout(10000),
+      signal: AbortSignal.timeout(90000),
     });
 
     if (res.status === 402) { openTopup(); throw new Error('INSUFFICIENT_FUNDS'); }
+
+    if (res.status === 429) {
+      // Server-side rate limit hit — sync client state and show paywall
+      let data = {};
+      try { data = await res.json(); } catch {}
+      // Force the client counter to the limit so the banner renders correctly
+      const log = new Array(RATE_LIMIT_MAX).fill(Date.now());
+      _usageLogSave(log);
+      _usageRefreshUI();
+      throw new Error(data.error || 'Rate limit reached.');
+    }
 
     if (!res.ok) {
       // Surface real server errors instead of falling through to the no-key path.
@@ -7522,12 +7725,14 @@ async function initAuth() {
   const params     = new URLSearchParams(window.location.search);
   const tokenParam = params.get('token');
   const authError  = params.get('auth_error');
+  const topupOk    = params.get('topup') === 'success';
 
   // Clean up URL query params we consume
-  if (tokenParam || authError) {
+  if (tokenParam || authError || topupOk) {
     const clean = new URL(window.location.href);
     clean.searchParams.delete('token');
     clean.searchParams.delete('auth_error');
+    clean.searchParams.delete('topup');
     const qs = clean.search === '?' ? '' : clean.search;
     history.replaceState({}, '', clean.pathname + qs);
   }
@@ -7548,6 +7753,13 @@ async function initAuth() {
     if (!res.ok) throw new Error('invalid');
     const user = await res.json();
     applyAuthState(user);
+    if (topupOk) {
+      // Stripe redirected back after successful payment — refresh balance and show toast
+      setTimeout(() => {
+        fetchBalance();
+        showToast('✓ Payment successful! Your perspectives have been credited.');
+      }, 800);
+    }
   } catch {
     clearAuth();
     applyAuthState(null);
@@ -8692,7 +8904,6 @@ function showToast(msg) {
         <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="2" y1="2" x2="12" y2="12"/><line x1="12" y1="2" x2="2" y2="12"/></svg>
       </button>
 
-      <span class="auth-wordmark">Divine</span>
       <h1 class="auth-title" id="auth-title">Log in or sign up</h1>
       <p class="auth-sub" id="auth-sub">Unlock personalized perspectives and Thinker features.</p>
 

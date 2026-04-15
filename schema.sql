@@ -380,7 +380,29 @@ CREATE INDEX IF NOT EXISTS idx_earnings_status  ON thinker_earnings(status);
 
 
 -- ═══════════════════════════════════════════════════════════════════════════
--- 14. LEGACY — conversation_contexts (v2 compat; migrate to chat_sessions)
+-- 14. GUEST RATE LIMITS
+--     Tracks API usage for unauthenticated (guest) users by their ephemeral
+--     localStorage ID.  Allows a rolling 72-hour window check server-side
+--     so guests cannot bypass the limit by clearing localStorage.
+--     IP hash is stored as a secondary signal (SHA-256, first 16 hex chars).
+-- ═══════════════════════════════════════════════════════════════════════════
+
+CREATE TABLE IF NOT EXISTS guest_rate_limits (
+  id         UUID        PRIMARY KEY DEFAULT gen_random_uuid(),
+  guest_id   TEXT        NOT NULL,   -- the u_<hex> id from localStorage
+  ip_hash    TEXT,                   -- truncated SHA-256 of client IP
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+CREATE INDEX IF NOT EXISTS idx_grl_guest ON guest_rate_limits(guest_id, created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_grl_ip    ON guest_rate_limits(ip_hash,  created_at DESC);
+
+-- Auto-purge rows older than 72 hours to keep the table small.
+-- Run nightly via pg_cron or a cron job:
+--   DELETE FROM guest_rate_limits WHERE created_at < NOW() - INTERVAL '72 hours';
+
+
+-- ═══════════════════════════════════════════════════════════════════════════
+-- 15. LEGACY — conversation_contexts (v2 compat; migrate to chat_sessions)
 -- ═══════════════════════════════════════════════════════════════════════════
 
 CREATE TABLE IF NOT EXISTS conversation_contexts (
@@ -655,3 +677,15 @@ CREATE OR REPLACE VIEW v_domain_thinker_coverage AS
   WHERE cd.is_active = TRUE
   GROUP BY cd.id, cd.slug, cd.name, cd.color
   ORDER BY total_thinkers DESC, cd.name;
+
+
+-- ═══════════════════════════════════════════════════════════════════════════
+-- 16. STRIPE EVENT LOG — idempotency guard for webhook replays
+-- ═══════════════════════════════════════════════════════════════════════════
+
+CREATE TABLE IF NOT EXISTS stripe_events (
+  event_id    TEXT        PRIMARY KEY,   -- Stripe evt_xxx id — globally unique
+  created_at  TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+-- Auto-purge rows older than 90 days:
+--   DELETE FROM stripe_events WHERE created_at < NOW() - INTERVAL '90 days';
