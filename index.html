@@ -2276,10 +2276,12 @@
     .chat-msg-bubble .chat-hr { display:none; } /* dividers removed */
     .chat-msg-bubble .chat-ul,
     .chat-msg-bubble .chat-ol {
-      margin:6px 0 10px; padding-left:18px; display:flex; flex-direction:column; gap:5px;
+      margin:6px 0 10px; padding-left:18px; display:flex; flex-direction:column; gap:0;
     }
     .chat-msg-bubble .chat-ul li,
-    .chat-msg-bubble .chat-ol li { line-height:1.65; }
+    .chat-msg-bubble .chat-ol li { line-height:1.65; margin-bottom:10px; }
+    .chat-msg-bubble .chat-ul li:last-child,
+    .chat-msg-bubble .chat-ol li:last-child { margin-bottom:0; }
     .chat-msg-bubble .chat-code {
       font-family:var(--font-mono,'JetBrains Mono','Courier New',monospace);
       font-size:12.5px; background:rgba(0,0,0,.06); color:var(--accent);
@@ -7007,6 +7009,11 @@ function _renderChatMarkdown(raw) {
     html += `<p class="chat-p">${inline(line)}</p>`;
   }
   closelist();
+
+  // Merge split lists — blank lines between list items close & reopen the list,
+  // resetting the counter. Rejoin them so numbering is continuous.
+  html = html.replace(/<\/ol>(<div class="chat-br"><\/div>)*<ol class="chat-ol">/g, '');
+  html = html.replace(/<\/ul>(<div class="chat-br"><\/div>)*<ul class="chat-ul">/g, '');
 
   // Collapse consecutive spacers into one
   html = html.replace(/(<div class="chat-br"><\/div>\s*){2,}/g, '<div class="chat-br"></div>');
