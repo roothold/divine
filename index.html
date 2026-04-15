@@ -35,7 +35,7 @@
       --sh-sm: 0 1px 3px rgba(0,0,0,0.07),0 1px 2px rgba(0,0,0,0.04);
       --sh-md: 0 4px 16px rgba(0,0,0,0.09),0 2px 6px rgba(0,0,0,0.05);
       --sh-lg: 0 16px 48px rgba(0,0,0,0.13),0 4px 12px rgba(0,0,0,0.07);
-      --header-h: 60px; --sidebar-w: 240px; --col-w: 672px;
+      --header-h: 48px; --sidebar-w: 240px; --col-w: 672px;
     }
     html { scroll-behavior:smooth; height:100%; }
     body { font-family:'Inter',system-ui,sans-serif; background:var(--bg); color:var(--text-1); font-size:15px; line-height:1.6; height:100%; overflow:hidden; }
@@ -87,6 +87,18 @@
       padding: 0 24px 0 20px; flex-shrink: 0;
     }
     .content-wordmark { display:none; } /* site link hidden */
+    /* Chat title in the topbar — hidden on non-chat screens */
+    .content-chat-title {
+      display:none; flex:1; min-width:0;
+      background:transparent; border:none; outline:none;
+      font-family:'Cormorant Garamond',serif; font-size:17px; font-weight:600;
+      color:var(--text-0); cursor:text; padding:0;
+      white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+    }
+    .content-chat-title::placeholder { color:var(--text-3); }
+    /* When chat is active, show title and spread left↔right */
+    .content-topbar.chat-mode { justify-content:space-between; }
+    .content-topbar.chat-mode .content-chat-title { display:block; }
     /* Sidebar hamburger row */
     .sb-hamburger-row {
       display:flex; align-items:center; justify-content:space-between;
@@ -1986,9 +1998,8 @@
       .chat-input-bar {
         padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 72px);
       }
-      /* Compact topbar */
-      .chat-topbar { padding:10px 14px 10px; min-height:46px; }
-      .chat-title-input { font-size:15px; }
+      /* Compact topbar title on mobile */
+      .content-chat-title { font-size:15px; }
       .chat-new-btn { padding:4px 10px; font-size:11px; }
       /* Tighter message padding */
       .chat-messages { padding:16px 12px 12px; gap:14px; }
@@ -2159,19 +2170,7 @@
     /* ═══ CHAT SCREEN ═══ */
     #screen-chat { flex-direction:column; height:100%; padding:0; overflow:hidden; background:var(--bg); }
 
-    .chat-topbar {
-      display:flex; align-items:center; gap:10px; padding:14px 20px 12px;
-      border-bottom:1px solid var(--border-lt); background:transparent;
-      flex-shrink:0; min-height:52px;
-    }
-    .chat-title-wrap { flex:1; min-width:0; }
-    .chat-title-input {
-      background:transparent; border:none; outline:none;
-      font-family:'Cormorant Garamond',serif; font-size:17px; font-weight:600;
-      color:var(--text-0); width:100%; cursor:text;
-      white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
-    }
-    .chat-title-input::placeholder { color:var(--text-3); }
+    /* .chat-topbar removed — title now lives in content-topbar */
     .chat-thinker-pill {
       display:flex; align-items:center; gap:7px;
       padding:5px 11px 5px 8px; border-radius:var(--r-pill);
@@ -2194,7 +2193,7 @@
     .chat-new-btn:hover { border-color:var(--accent); background:var(--accent-lt); color:var(--accent); }
 
     .chat-messages {
-      flex:1; overflow-y:auto; padding:28px 20px 16px;
+      flex:1; overflow-y:auto; padding:18px 20px 16px;
       display:flex; flex-direction:column; gap:14px;
       scroll-behavior:smooth; align-items:center;
     }
@@ -2297,7 +2296,7 @@
     }
     /* Section labels: **The Reframe**, **Strategic Levers**, **Required Inputs** */
     .chat-section-label {
-      font-size:11px; font-weight:700; letter-spacing:.02em;
+      font-size:13px; font-weight:700; letter-spacing:.02em;
       color:var(--text-3); font-family:inherit;
       margin:8px 0 3px; display:flex; align-items:center; gap:8px;
     }
@@ -2747,9 +2746,13 @@
   <!-- MAIN -->
   <main class="main" id="main-content">
 
-    <!-- Content-level topbar: wordmark + perspective switcher -->
-    <div class="content-topbar">
+    <!-- Content-level topbar: chat title (chat mode) + perspective switcher -->
+    <div class="content-topbar" id="content-topbar">
       <a class="content-wordmark" href="#" onclick="goHome(); return false;">Divine</a>
+      <input class="content-chat-title" id="chat-title-input"
+        placeholder="New conversation" maxlength="80"
+        onblur="saveChatTitle()"
+        onkeydown="if(event.key==='Enter'){this.blur()}">
       <button class="lens-switcher" onclick="openPicker()" aria-label="Switch perspective">
         <span class="lens-swap-icon">
           <svg width="15" height="15" viewBox="0 0 15 15" fill="none" stroke="currentColor" stroke-width="2">
@@ -2965,17 +2968,6 @@
 
     <!-- SCREEN: Chat -->
     <div class="screen" id="screen-chat">
-      <!-- Top bar: title + thinker pill + model label + new chat -->
-      <div class="chat-topbar">
-        <div class="chat-title-wrap">
-          <input class="chat-title-input" id="chat-title-input"
-            placeholder="New conversation"
-            maxlength="80"
-            onblur="saveChatTitle()"
-            onkeydown="if(event.key==='Enter'){this.blur()}"
-          >
-        </div>
-      </div>
 
       <!-- Messages -->
       <div class="chat-messages" id="chat-messages">
@@ -4440,6 +4432,9 @@ function showView(view, opts = {}) {
 function show(id) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   document.getElementById(id).classList.add('active');
+  // Toggle chat-mode on topbar: title visible only on chat screen
+  const topbar = document.getElementById('content-topbar');
+  if (topbar) topbar.classList.toggle('chat-mode', id === 'screen-chat');
   window.scrollTo({ top:0, behavior:'smooth' });
 }
 
