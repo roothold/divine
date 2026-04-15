@@ -5411,9 +5411,11 @@ function updateProfile() {
   userProfile.name  = document.getElementById('settings-name').value;
   userProfile.email = document.getElementById('settings-email').value;
   localStorage.setItem('di_profile', JSON.stringify(userProfile));
-  document.getElementById('profile-name').textContent  = userProfile.name || 'User';
-  document.getElementById('profile-email').textContent = userProfile.email || '';
-  document.getElementById('profile-badge').textContent = (userProfile.name || 'U').split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
+  const firstName = (userProfile.name || 'there').split(' ')[0];
+  const initials  = (userProfile.name || 'U').split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
+  document.getElementById('profile-greeting').textContent = currentUser ? `Hi ${(currentUser.name||'').split(' ')[0]}` : `Hi ${firstName}`;
+  document.getElementById('profile-email').textContent    = userProfile.email || '';
+  document.getElementById('profile-badge').textContent    = initials;
 }
 
 function clearAllData() {
@@ -7943,10 +7945,13 @@ if (DIRECT_API_KEY) {
   document.getElementById('key-status').textContent = '✓ Key saved';
 }
 
-// Restore profile display
-document.getElementById('profile-name').textContent  = userProfile.name;
-document.getElementById('profile-email').textContent = userProfile.email;
-document.getElementById('profile-badge').textContent = userProfile.name.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
+// Restore profile display (handled by applyAuthState on load; these are pre-auth fallbacks)
+if (document.getElementById('profile-email')) {
+  document.getElementById('profile-email').textContent = userProfile.email || '';
+}
+if (document.getElementById('profile-badge') && userProfile.name) {
+  document.getElementById('profile-badge').textContent = userProfile.name.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
+}
 
 renderRecents();
 renderFAQ();
