@@ -187,10 +187,11 @@
     .sidebar.collapsed .sidebar-signin-icon {
       display:flex; align-items:center; justify-content:center;
       width:36px; height:36px; border-radius:50%;
-      background:#1a1a1a; color:#fff; cursor:pointer; border:none;
-      margin:8px auto; transition:background .15s;
+      background:transparent; color:var(--text-1); cursor:pointer;
+      border:1.5px solid var(--border-hi);
+      margin:8px auto; transition:border-color .15s,color .15s;
     }
-    .sidebar.collapsed .sidebar-signin-icon:hover { background:#000; }
+    .sidebar.collapsed .sidebar-signin-icon:hover { border-color:var(--text-1); color:var(--text-0); }
     .sidebar.collapsed #sidebar-signin-area { padding:8px 0; }
     .sidebar.collapsed .profile-menu-popup { left:56px; right:auto; bottom:calc(100% + 6px); min-width:190px; }
     .sidebar.collapsed .sidebar-nav { padding:12px 6px 8px; }
@@ -2730,8 +2731,8 @@
       <!-- Anonymous: Sign in prompt -->
       <div id="sidebar-signin-area" style="padding:12px 14px">
         <!-- Full button (expanded state) -->
-        <button class="signin-full" onclick="showView('login')" style="width:100%;background:#1a1a1a;color:#fff;border:none;border-radius:var(--r-pill);padding:10px 16px;font-size:13px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;transition:background .15s;text-align:center" onmouseover="this.style.background='#000'" onmouseout="this.style.background='#1a1a1a'">
-          Sign in to Divine
+        <button class="signin-full" onclick="showView('login')" style="width:100%;background:transparent;color:var(--text-1);border:1.5px solid var(--border-hi);border-radius:var(--r-pill);padding:9px 16px;font-size:13px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;transition:border-color .15s,color .15s;text-align:center" onmouseover="this.style.borderColor='var(--text-1)';this.style.color='var(--text-0)'" onmouseout="this.style.borderColor='var(--border-hi)';this.style.color='var(--text-1)'">
+          Log in
         </button>
         <div class="signin-full" style="font-size:11px;color:var(--text-3);text-align:center;margin-top:8px">Personalization &amp; Thinker features</div>
         <!-- Icon-only button (collapsed state) -->
