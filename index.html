@@ -880,28 +880,8 @@
     .recents-live-dot { width:5px; height:5px; border-radius:50%; background:var(--coral,#BF452A); margin-left:5px; display:inline-block; vertical-align:middle; animation:cc-live-pulse 2.4s ease-in-out infinite; }
     .recents-list { padding:2px 8px 8px; display:flex; flex-direction:column; gap:1px; }
     .recents-empty { padding:10px 14px; font-size:12px; color:var(--text-3); line-height:1.5; }
-    .recent-item { display:flex; align-items:flex-start; gap:9px; padding:8px 8px; border-radius:8px;
-      background:transparent; border:none; width:100%; text-align:left; cursor:pointer;
-      transition:background .13s; position:relative; }
-    .recent-item:hover { background:var(--surface-2); }
-    /* Monospace timestamp stripe */
-    .recent-item::before {
-      content:attr(data-ts); position:absolute; top:8px; right:8px;
-      font-family:var(--font-mono); font-size:8.5px; color:var(--text-3); opacity:.6;
-      letter-spacing:.03em;
-    }
-    .recent-avatar { width:26px; height:26px; border-radius:6px; display:flex; align-items:center;
-      justify-content:center; font-size:9px; font-weight:700; color:#fff; flex-shrink:0; margin-top:1px; }
-    .recent-info { flex:1; min-width:0; padding-right:42px; }
-    .recent-decision { font-size:12.5px; font-weight:500; color:var(--text-0); line-height:1.35;
-      white-space:nowrap; overflow:hidden; text-overflow:ellipsis; margin-bottom:3px; }
-    .recent-meta { display:flex; align-items:center; gap:4px; font-size:10.5px; color:var(--text-3); }
-    .recent-meta-dot { width:2px; height:2px; border-radius:50%; background:var(--text-3); }
-    /* Ledger commit line between items */
-    .recent-item + .recent-item::before-line { content:''; }
-    .recents-list > .recent-item:not(:last-child) { border-bottom:1px solid rgba(0,0,0,.04); border-radius:0; }
-    .recents-list > .recent-item:first-child { border-radius:8px 8px 0 0; }
-    .recents-list > .recent-item:last-child  { border-radius:0 0 8px 8px; }
+    /* recent-item base — overridden by the full block lower in the stylesheet */
+    .recent-item { position:relative; }
 
     /* Wide inner for dashboard (overrides main-inner max-width) */
     .dc-wide-inner { max-width:1080px; margin:0 auto; padding:32px 24px 48px; width:100%; }
@@ -2467,6 +2447,7 @@
       background:transparent; border:none; width:100%; text-align:left;
       transition:background .12s;
     }
+    .recent-item::before { content:none; } /* kill any legacy ::before timestamp */
     .recent-item:hover { background:var(--surface-2); }
     .recent-item.active-recent { background:rgba(0,0,0,.06); }
     .recent-item-title {
@@ -2593,17 +2574,16 @@
     <div class="sidebar-top">
       <div class="sidebar-nav">
 
-        <!-- Dashboard -->
-        <div class="nav-section-label">Dashboard</div>
-        <button class="nav-item" id="nav-home" data-tip="Home" onclick="showView('recents')">
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75"><rect x="1" y="1" width="5.5" height="5.5" rx="1.2"/><rect x="9.5" y="1" width="5.5" height="5.5" rx="1.2"/><rect x="1" y="9.5" width="5.5" height="5.5" rx="1.2"/><rect x="9.5" y="9.5" width="5.5" height="5.5" rx="1.2"/></svg>
-          <span class="nav-item-label">Overview</span>
-        </button>
-
-        <!-- New Perspective -->
-        <button class="nav-item nav-new-perspective" data-tip="New Perspective" onclick="newPerspective()">
+        <!-- New Perspective — first CTA, same style as all nav items -->
+        <button class="nav-item" id="nav-new" data-tip="New Perspective" onclick="newPerspective()">
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="2" x2="8" y2="14"/><line x1="2" y1="8" x2="14" y2="8"/></svg>
           <span class="nav-item-label">New Perspective</span>
+        </button>
+
+        <!-- Launchpad -->
+        <button class="nav-item" id="nav-home" data-tip="Launchpad" onclick="showView('recents')">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75"><rect x="1" y="1" width="5.5" height="5.5" rx="1.2"/><rect x="9.5" y="1" width="5.5" height="5.5" rx="1.2"/><rect x="1" y="9.5" width="5.5" height="5.5" rx="1.2"/><rect x="9.5" y="9.5" width="5.5" height="5.5" rx="1.2"/></svg>
+          <span class="nav-item-label">Launchpad</span>
         </button>
 
         <!-- Explore -->
