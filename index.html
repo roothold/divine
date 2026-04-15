@@ -4523,7 +4523,12 @@ function showView(view, opts = {}) {
     downloads:   () => { setMobNavActive(null); renderDownloads(); show('screen-downloads'); },
     help:        () => { setMobNavActive(null); renderFAQ(); show('screen-help'); },
     upgrade:     () => { setMobNavActive(null); renderCognitiveLedger(); show('screen-upgrade'); },
-    recents:     () => { setMobNavActive('mob-nav-home'); document.getElementById('nav-home')?.classList.add('active'); renderDashboardHome(); show('screen-0'); },
+    recents:     () => {
+      setMobNavActive('mob-nav-home');
+      document.getElementById('nav-home')?.classList.add('active');
+      try { renderDashboardHome(); } catch(e) { console.error('[renderDashboardHome]', e); }
+      show('screen-0');
+    },
     'thinker-hub': () => {
       document.getElementById('nav-thinker').classList.add('active');
       setMobNavActive('mob-nav-thinker');
@@ -7877,12 +7882,12 @@ async function initAuth() {
     });
     if (!res.ok) throw new Error('invalid');
     const user = await res.json();
-    applyAuthState(user);
+    try { applyAuthState(user); } catch(e) { console.error('[initAuth] applyAuthState:', e); }
     if (tokenParam) {
       // Fresh OAuth login — navigate to home and greet the user
-      const firstName = (user.name || '').split(' ')[0];
-      showView('recents');
-      setTimeout(() => showToast(`Welcome${firstName ? ', ' + firstName : ''}! ✓`), 300);
+      const firstName = (user.name || user.email || '').split(/[\s@]/)[0];
+      try { showView('recents'); } catch(e) { console.error('[initAuth] showView:', e); }
+      setTimeout(() => { try { showToast(`Welcome${firstName ? ', ' + firstName : ''}! ✓`); } catch(e) {} }, 300);
     }
     if (topupOk) {
       // Stripe redirected back after successful payment — refresh balance and show toast
@@ -7991,16 +7996,16 @@ async function submitEmailAuth() {
       errEl.classList.add('visible');
       return;
     }
+    // ── Success path ──────────────────────────────────────────────────────
     setAuthToken(data.token);
-    applyAuthState(data.user);
-    closeLoginScreen();
-    const firstName = (data.user.name || '').split(' ')[0];
-    showToast(`Welcome${isReg ? '' : ' back'}${firstName ? ', ' + firstName : ''}! ✓`);
-    // Navigate to home so the user sees the personalised dashboard
-    showView('recents');
+    try { applyAuthState(data.user); } catch(e) { console.error('[Auth] applyAuthState error:', e); }
+    try { closeLoginScreen(); }       catch(e) { console.error('[Auth] closeLoginScreen error:', e); }
+    const firstName = (data.user.name || data.user.email || 'there').split(/[\s@]/)[0];
+    try { showToast(`Welcome${isReg ? '' : ' back'}, ${firstName}! ✓`); } catch(e) {}
+    try { showView('recents'); }      catch(e) { console.error('[Auth] showView error:', e); }
   } catch (err) {
     console.error('[Auth] Login error:', err);
-    errEl.textContent = 'Cannot reach server. Check your connection and try again.';
+    errEl.textContent = `Cannot reach server (${API_BASE}). Check connection and try again.`;
     errEl.classList.add('visible');
   } finally {
     btn.disabled    = false;
@@ -8056,13 +8061,26 @@ initThinkerAccess();
 ════════════════════════════════ */
 (function handleInboundParams() {
   const params = new URLSearchParams(window.location.search);
-  const q   = params.get('q');
-  const tid = params.get('thinker'); // e.g. 'michael', 'composite'
+  const q      = params.get('q');
+  const tid    = params.get('thinker'); // e.g. 'michael', 'composite'
+  const doLogin = params.get('login');  // ?login=1 → auto-open login modal
+
+  // Strip all known params immediately — keep the address bar clean
+  if (q || tid || doLogin) {
+    const clean = new URL(window.location.href);
+    clean.searchParams.delete('q');
+    clean.searchParams.delete('thinker');
+    clean.searchParams.delete('login');
+    history.replaceState({}, '', clean.pathname + (clean.search === '?' ? '' : clean.search));
+  }
+
+  // ?login=1 — open login modal after a short paint delay
+  if (doLogin === '1') {
+    setTimeout(() => showLoginScreen(), 300);
+    return; // skip q/thinker processing if just asking for login
+  }
 
   if (!q) return;
-
-  // Strip params from URL immediately — keep the address bar clean
-  history.replaceState({}, '', window.location.pathname);
 
   // Match thinker by id or partial name; fall back to default (THINKERS[0])
   if (tid) {
@@ -8075,6 +8093,18 @@ initThinkerAccess();
 
   // Small delay so the dashboard paint finishes before the overlay appears
   setTimeout(() => openPerspectiveFlow(q.trim()), 420);
+})();
+
+// ── ?mock_login=1 — client-side auth test (no server needed) ─────────────────
+// Visit https://divine.uncharted.ventures/?mock_login=1 to instantly simulate a
+// logged-in user. If the UI changes (Hi Michael in headline + nav) the display
+// code is confirmed working; the real issue is server connectivity / credentials.
+(function checkMockLogin() {
+  const p = new URLSearchParams(window.location.search);
+  if (p.get('mock_login') !== '1') return;
+  history.replaceState({}, '', window.location.pathname);
+  applyAuthState({ id: 'mock-user', name: 'Michael', email: 'michael@surpluspods.com', thinker_access: true });
+  setTimeout(() => showToast('✓ Mock login active — display is working'), 200);
 })();
 
 // Kick off auth check — verifies stored JWT and applies auth state
