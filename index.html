@@ -2852,7 +2852,7 @@
               </svg>
               <span class="dc-greeting-text" id="dc-greeting-name"></span>
             </div>
-            <h1 class="dc-headline">What perspective do you need today?</h1>
+            <h1 class="dc-headline" id="dc-headline">What perspective do you need today?</h1>
 
             <!-- Quick-input card -->
             <div class="dc-input-card">
@@ -4285,6 +4285,7 @@ function getOrCreateUserId() {
 }
 let USER_ID = getOrCreateUserId();
 let currentBalance  = null;
+let _prevBalance    = null;   // tracks last known balance to detect real run-out
 let selectedPkgEl   = null;
 
 // ── Auth state ────────────────────────────────────────────────────────────────
@@ -4705,6 +4706,7 @@ async function callClaude(system, user) {
 
 /* ── Balance ── */
 function updateBalanceDisplay(balance) {
+  const prev = currentBalance;
   currentBalance = balance;
   const fmt = balance !== null && balance !== undefined ? `$${parseFloat(balance).toFixed(2)}` : '—';
   const el = document.getElementById('balance-amount');
@@ -4715,8 +4717,13 @@ function updateBalanceDisplay(balance) {
   // Sync profile menu wallet badge
   const mb = document.getElementById('profile-menu-balance');
   if (mb) mb.textContent = balance !== null && balance !== undefined ? fmt : '';
-  if (balance !== null && balance !== undefined && balance < 0.05) {
-    // Auto-open top-up when balance hits zero during a session
+  // Only auto-open top-up when balance RUNS OUT during active use —
+  // not on initial login load (prev === null) and not when logging out (balance === null)
+  const ranOut = balance !== null && balance !== undefined
+    && balance < 0.05
+    && prev !== null           // was already loaded (not fresh login)
+    && prev >= 0.05;           // was positive before, now it's gone
+  if (ranOut) {
     setTimeout(openTopup, 600);
   }
 }
@@ -7756,6 +7763,7 @@ function clearAuth() {
 
 function applyAuthState(user) {
   currentUser = user;
+  console.log('[Auth]', user ? `Logged in as ${user.name || user.email} (id:${user.id})` : 'Logged out');
   if (user) {
     USER_ID = user.id;
     const firstName = (user.name || 'there').split(' ')[0];
@@ -7775,6 +7783,8 @@ function applyAuthState(user) {
     // Dashboard greeting
     document.getElementById('dc-greeting-name').textContent = `Hi ${firstName}`;
     document.getElementById('dc-greeting-row').style.display = '';
+    const hl = document.getElementById('dc-headline');
+    if (hl) hl.textContent = `${firstName}, what perspective do you need today?`;
 
     // Thinker nav
     if (user.thinker_access) {
@@ -7792,6 +7802,8 @@ function applyAuthState(user) {
     document.getElementById('thinker-nav-section').style.display  = 'none';
     document.getElementById('mob-nav-thinker').style.display      = 'none';
     document.getElementById('dc-greeting-row').style.display      = 'none';
+    const hl = document.getElementById('dc-headline');
+    if (hl) hl.textContent = 'What perspective do you need today?';
     // Clear balance display when logged out
     updateBalanceDisplay(null);
   }
@@ -7919,12 +7931,14 @@ async function submitEmailAuth() {
   try {
     const endpoint = isReg ? '/auth/email/register' : '/auth/email/login';
     const body     = isReg ? { email, password, name } : { email, password };
+    console.log('[Auth] Submitting to', API_BASE + endpoint);
     const res = await fetch(`${API_BASE}${endpoint}`, {
       method:  'POST',
       headers: { 'Content-Type': 'application/json' },
       body:    JSON.stringify(body),
     });
     const data = await res.json();
+    console.log('[Auth] Response status:', res.status, '| user:', data.user?.email || data.error);
     if (!res.ok) {
       errEl.textContent = data.error || 'Authentication failed. Please try again.';
       errEl.classList.add('visible');
@@ -7937,8 +7951,9 @@ async function submitEmailAuth() {
     showToast(`Welcome${isReg ? '' : ' back'}${firstName ? ', ' + firstName : ''}! ✓`);
     // Navigate to home so the user sees the personalised dashboard
     showView('recents');
-  } catch {
-    errEl.textContent = 'Network error. Please check your connection.';
+  } catch (err) {
+    console.error('[Auth] Login error:', err);
+    errEl.textContent = 'Cannot reach server. Check your connection and try again.';
     errEl.classList.add('visible');
   } finally {
     btn.disabled    = false;
