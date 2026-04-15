@@ -536,16 +536,38 @@
 
     /* Profile button */
     .profile-btn {
-      display:flex; align-items:center; gap:10px; padding:12px 14px;
+      display:flex; align-items:center; gap:10px; padding:10px 14px;
       border:none; background:transparent; cursor:pointer; width:100%;
-      text-align:left; transition:background 0.13s;
+      text-align:left; transition:background 0.13s; border-radius:10px;
+      margin:4px 8px; width:calc(100% - 16px);
     }
     .profile-btn:hover { background:var(--surface-2); }
-    .profile-avatar-badge { width:32px; height:32px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:700; color:#fff; flex-shrink:0; background:var(--accent); }
+    .profile-avatar-badge {
+      width:34px; height:34px; border-radius:50%;
+      display:flex; align-items:center; justify-content:center;
+      font-size:13px; font-weight:700; color:#fff; flex-shrink:0;
+      background:var(--accent);
+      box-shadow:0 0 0 2px var(--accent-lt);
+    }
     .profile-text { flex:1; min-width:0; }
-    .profile-name { font-size:13px; font-weight:600; color:var(--text-0); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .profile-greeting {
+      font-size:13.5px; font-weight:700; color:var(--text-0);
+      white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+      line-height:1.3;
+    }
+    .profile-name  { font-size:13px; font-weight:600; color:var(--text-0); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
     .profile-email { font-size:11px; color:var(--text-3); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .profile-chevron { color:var(--text-3); flex-shrink:0; transition:transform 0.15s; }
+    .profile-menu-popup.open ~ * .profile-chevron,
+    #profile-btn.menu-open .profile-chevron { transform:rotate(180deg); }
     .profile-dots { color:var(--text-3); flex-shrink:0; }
+
+    /* Profile menu header */
+    .profile-menu-header {
+      padding:12px 16px 10px; border-bottom:1px solid var(--border);
+    }
+    .profile-menu-hname { font-size:13.5px; font-weight:700; color:var(--text-0); }
+    .profile-menu-hemail { font-size:11.5px; color:var(--text-3); margin-top:1px; }
 
     /* ═══ MAIN ═══ */
     .main { flex:1; min-width:0; display:flex; flex-direction:column; height:100%; overflow:hidden; }
@@ -2724,19 +2746,29 @@
 
       <!-- Profile popup -->
       <div class="profile-menu-popup" id="profile-menu">
-        <!-- Settings entry point hidden pending redesign -->
-        <button class="profile-menu-item" onclick="showView('downloads')">
+        <!-- User identity header -->
+        <div class="profile-menu-header">
+          <div class="profile-menu-hname" id="profile-menu-name">—</div>
+          <div class="profile-menu-hemail" id="profile-menu-email">—</div>
+        </div>
+        <!-- Wallet -->
+        <button class="profile-menu-item" onclick="showView('upgrade');closeProfileMenu()">
+          <svg width="15" height="15" viewBox="0 0 15 15" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="1" y="4" width="13" height="9" rx="1.5"/><path d="M1 7h13"/><path d="M10 10.5h2"/></svg>
+          My Wallet
+          <span id="profile-menu-balance" style="margin-left:auto;font-size:11.5px;font-weight:700;color:var(--accent);font-family:var(--font-mono)"></span>
+        </button>
+        <button class="profile-menu-item" onclick="showView('downloads');closeProfileMenu()">
           <svg width="15" height="15" viewBox="0 0 15 15" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M7.5 1v9M4 7l3.5 3.5L11 7"/><rect x="1" y="11" width="13" height="3" rx="1"/></svg>
           Perspective Collection
         </button>
         <div class="profile-menu-sep"></div>
-        <button class="profile-menu-item" onclick="showView('help')">
-          <svg width="15" height="15" viewBox="0 0 15 15" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="7.5" cy="7.5" r="6"/><path d="M5.5 5.5a2 2 0 113 1.7c-.5.3-.8.8-.8 1.3v.5"/><circle cx="7.5" cy="11" r=".5" fill="currentColor"/></svg>
-          Get Help
+        <button class="profile-menu-item" onclick="showView('settings');closeProfileMenu()">
+          <svg width="15" height="15" viewBox="0 0 15 15" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="7.5" cy="7.5" r="2"/><path d="M7.5 1v1.5M7.5 12.5V14M1 7.5h1.5M12.5 7.5H14M2.9 2.9l1.1 1.1M11 11l1.1 1.1M2.9 12.1l1.1-1.1M11 4l1.1-1.1"/></svg>
+          Settings
         </button>
-        <button class="profile-menu-item" onclick="showView('upgrade')" style="color:var(--accent)">
-          <svg width="15" height="15" viewBox="0 0 15 15" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M7.5 1L9.5 5.5H14L10.5 8.5l1.5 5L7.5 11l-4.5 2.5 1.5-5L1 5.5h4.5z"/></svg>
-          Upgrade Plans
+        <button class="profile-menu-item" onclick="showView('help');closeProfileMenu()">
+          <svg width="15" height="15" viewBox="0 0 15 15" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="7.5" cy="7.5" r="6"/><path d="M5.5 5.5a2 2 0 113 1.7c-.5.3-.8.8-.8 1.3v.5"/><circle cx="7.5" cy="11" r=".5" fill="currentColor"/></svg>
+          Help
         </button>
         <div class="profile-menu-sep"></div>
         <button class="profile-menu-item danger" onclick="signOut()">
@@ -2750,10 +2782,10 @@
         <button class="profile-btn" id="profile-btn" onclick="toggleProfileMenu()">
           <div class="profile-avatar-badge" id="profile-badge">?</div>
           <div class="profile-text">
-            <div class="profile-name" id="profile-name">Loading…</div>
+            <div class="profile-greeting" id="profile-greeting">Hi there</div>
             <div class="profile-email" id="profile-email"></div>
           </div>
-          <svg class="profile-dots" width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><circle cx="8" cy="3" r="1.5"/><circle cx="8" cy="8" r="1.5"/><circle cx="8" cy="13" r="1.5"/></svg>
+          <svg class="profile-chevron" width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3,5 7,9 11,5"/></svg>
         </button>
       </div>
 
@@ -4300,11 +4332,18 @@ window.addEventListener('resize', () => {
 function toggleProfileMenu() {
   profileMenuOpen = !profileMenuOpen;
   document.getElementById('profile-menu').classList.toggle('open', profileMenuOpen);
+  document.getElementById('profile-btn').classList.toggle('menu-open', profileMenuOpen);
+  // Rotate chevron
+  const chev = document.querySelector('#profile-btn .profile-chevron');
+  if (chev) chev.style.transform = profileMenuOpen ? 'rotate(180deg)' : '';
 }
 
 function closeProfileMenu() {
   profileMenuOpen = false;
   document.getElementById('profile-menu').classList.remove('open');
+  document.getElementById('profile-btn').classList.remove('menu-open');
+  const chev = document.querySelector('#profile-btn .profile-chevron');
+  if (chev) chev.style.transform = '';
 }
 
 document.addEventListener('click', e => {
@@ -4661,13 +4700,16 @@ async function callClaude(system, user) {
 /* ── Balance ── */
 function updateBalanceDisplay(balance) {
   currentBalance = balance;
-  const fmt = `$${parseFloat(balance).toFixed(2)}`;
+  const fmt = balance !== null && balance !== undefined ? `$${parseFloat(balance).toFixed(2)}` : '—';
   const el = document.getElementById('balance-amount');
   if (el) el.textContent = fmt;
   // Sync Cognitive Ledger capital header if visible
   const cl = document.getElementById('cl-balance');
   if (cl) cl.textContent = fmt;
-  if (balance !== null && balance < 0.05) {
+  // Sync profile menu wallet badge
+  const mb = document.getElementById('profile-menu-balance');
+  if (mb) mb.textContent = balance !== null && balance !== undefined ? fmt : '';
+  if (balance !== null && balance !== undefined && balance < 0.05) {
     // Auto-open top-up when balance hits zero during a session
     setTimeout(openTopup, 600);
   }
@@ -5116,11 +5158,8 @@ async function renderCognitiveLedger() {
   const raw   = txnResult.status === 'fulfilled' ? txnResult.value : null;
   const txns  = Array.isArray(raw) ? raw : (raw?.transactions || raw?.data || []);
 
-  // Lifetime insights counter = debit rows
-  const lifetimeCount = txns.filter(t => {
-    const type = (t.type || t.transaction_type || '').toLowerCase();
-    return type.includes('debit') || type.includes('purchase') || type.includes('spend') || parseFloat(t.amount || 0) < 0;
-  }).length;
+  // Lifetime insights counter = debit rows (perspective_spend)
+  const lifetimeCount = txns.filter(t => t.direction === 'debit').length;
   const liEl = document.getElementById('cl-lifetime');
   if (liEl) liEl.textContent = lifetimeCount;
 
@@ -5140,30 +5179,19 @@ async function renderCognitiveLedger() {
       dt.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false });
   }
 
-  function isDebit(t) {
-    const type = (t.type || t.transaction_type || '').toLowerCase();
-    return type.includes('debit') || type.includes('purchase') || type.includes('spend') || parseFloat(t.amount || 0) < 0;
-  }
-
-  function fmtDesc(t) {
-    if (!isDebit(t)) return 'Capital Infusion';
-    const thinker = t.thinker_name || (t.metadata && t.metadata.thinker) || '';
-    return thinker ? 'Perspective Acquisition: ' + thinker : 'Perspective Acquisition';
-  }
-
   const rowsHTML = txns.map(t => {
-    const debit  = isDebit(t);
-    const amt    = parseFloat(t.amount || 0);
-    const amtStr = (debit ? '−' : '+') + '$' + Math.abs(amt).toFixed(2);
-    const desc   = fmtDesc(t);
-    const note   = t.note || t.description || (t.metadata && (t.metadata.decision || t.metadata.note)) || '';
-    const noteSnip = note ? (note.length > 58 ? note.slice(0, 58) + '…' : note) : '';
-    const dateStr = fmtDate(t.created_at || t.date || t.timestamp);
+    const debit    = t.direction === 'debit';
+    const amt      = parseFloat(t.amount || 0);
+    const amtStr   = (debit ? '−' : '+') + '$' + Math.abs(amt).toFixed(2);
+    // Use the label stored at transaction time; fall back to type-based description
+    const desc     = t.label || (debit ? 'Perspective Acquisition' : 'Capital Infusion');
+    const bal      = t.balance_after != null ? '$' + parseFloat(t.balance_after).toFixed(2) + ' remaining' : '';
+    const dateStr  = fmtDate(t.created_at);
     const dateParts = dateStr.split('\n');
     return '<div class="cl-row">' +
       '<div class="cl-row-date">' + dateParts[0] + (dateParts[1] ? '<br>' + dateParts[1] : '') + '</div>' +
       '<div><div class="cl-row-desc">' + desc + '</div>' +
-      (noteSnip ? '<div class="cl-row-desc-sub">' + noteSnip + '</div>' : '') +
+      (bal ? '<div class="cl-row-desc-sub">' + bal + '</div>' : '') +
       '</div>' +
       '<div class="cl-row-status"><div class="cl-dot ' + (debit ? 'cl-dot-debit' : 'cl-dot-credit') + '"></div>' +
       (debit ? 'Debit' : 'Credit') + '</div>' +
@@ -5232,6 +5260,14 @@ function _updateTopupCta(pkg) {
 async function handleTopup() {
   const pkg = selectedPkgEl || document.querySelector('.topup-pkg.selected');
   if (!pkg) return;
+
+  // Must be logged in to purchase — prompt auth if not
+  if (!currentUser) {
+    closeTopup();
+    showLoginScreen();
+    return;
+  }
+
   const credits   = parseInt(pkg.dataset.credits, 10);
   const price_usd = parseFloat(pkg.dataset.price);
   const notice    = document.getElementById('topup-notice');
@@ -5245,7 +5281,7 @@ async function handleTopup() {
   try {
     const res = await fetch('/api/create-checkout-session', {
       method:  'POST',
-      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${TOKEN}` },
+      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${getAuthToken()}` },
       body:    JSON.stringify({ credits, price_usd }),
       signal:  AbortSignal.timeout(15000),
     });
@@ -7705,28 +7741,42 @@ function applyAuthState(user) {
   currentUser = user;
   if (user) {
     USER_ID = user.id;
+    const firstName = (user.name || 'there').split(' ')[0];
+    const initials  = (user.name || 'U').split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase();
+
+    // Sidebar profile button
     document.getElementById('sidebar-profile-area').style.display = '';
     document.getElementById('sidebar-signin-area').style.display  = 'none';
-    document.getElementById('profile-name').textContent  = user.name  || 'User';
-    document.getElementById('profile-email').textContent = user.email || '';
-    document.getElementById('profile-badge').textContent =
-      (user.name || 'U').split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase();
-    // Show dashboard greeting with first name
-    const firstName = (user.name || 'there').split(' ')[0];
+    document.getElementById('profile-greeting').textContent = `Hi ${firstName}`;
+    document.getElementById('profile-email').textContent    = user.email || '';
+    document.getElementById('profile-badge').textContent    = initials;
+
+    // Profile menu header
+    document.getElementById('profile-menu-name').textContent  = user.name  || 'User';
+    document.getElementById('profile-menu-email').textContent = user.email || '';
+
+    // Dashboard greeting
     document.getElementById('dc-greeting-name').textContent = `Hi ${firstName}`;
     document.getElementById('dc-greeting-row').style.display = '';
+
+    // Thinker nav
     if (user.thinker_access) {
       document.getElementById('thinker-nav-section').style.display = '';
       document.getElementById('mob-nav-thinker').style.display = '';
     } else {
       document.getElementById('mob-nav-thinker').style.display = 'none';
     }
+
+    // Fetch live balance
+    fetchBalance();
   } else {
     document.getElementById('sidebar-profile-area').style.display = 'none';
     document.getElementById('sidebar-signin-area').style.display  = '';
     document.getElementById('thinker-nav-section').style.display  = 'none';
     document.getElementById('mob-nav-thinker').style.display      = 'none';
     document.getElementById('dc-greeting-row').style.display      = 'none';
+    // Clear balance display when logged out
+    updateBalanceDisplay(null);
   }
 }
 
@@ -7762,6 +7812,12 @@ async function initAuth() {
     if (!res.ok) throw new Error('invalid');
     const user = await res.json();
     applyAuthState(user);
+    if (tokenParam) {
+      // Fresh OAuth login — navigate to home and greet the user
+      const firstName = (user.name || '').split(' ')[0];
+      showView('recents');
+      setTimeout(() => showToast(`Welcome${firstName ? ', ' + firstName : ''}! ✓`), 300);
+    }
     if (topupOk) {
       // Stripe redirected back after successful payment — refresh balance and show toast
       setTimeout(() => {
@@ -7780,6 +7836,9 @@ function showLoginScreen(errorCode) {
   if (errorCode) {
     const msgs = {
       oauth_failed:         'OAuth sign-in failed. Please try again.',
+      google_failed:        'Google sign-in failed. Please try again.',
+      linkedin_failed:      'LinkedIn sign-in failed. Please try again.',
+      no_code:              'Sign-in was cancelled. Please try again.',
       email_exists:         'An account with that email already exists. Try logging in instead.',
       invalid_credentials:  'Incorrect email or password.',
       user_not_found:       'No account found. Please sign up first.',
@@ -7859,6 +7918,8 @@ async function submitEmailAuth() {
     closeLoginScreen();
     const firstName = (data.user.name || '').split(' ')[0];
     showToast(`Welcome${isReg ? '' : ' back'}${firstName ? ', ' + firstName : ''}! ✓`);
+    // Navigate to home so the user sees the personalised dashboard
+    showView('recents');
   } catch {
     errEl.textContent = 'Network error. Please check your connection.';
     errEl.classList.add('visible');

@@ -34,25 +34,29 @@ export async function getOrCreateWallet(userId) {
   return rows[0];
 }
 
-export async function deductCredit(userId, amount, description, metadata = {}) {
+export async function deductCredit(userId, amount, label, _metadata = {}) {
   const client = await pool.connect();
   try {
     await client.query('BEGIN');
     const { rows } = await client.query(
       `UPDATE wallets
-       SET credit_balance = credit_balance - $2, updated_at = NOW()
+       SET credit_balance  = credit_balance  - $2,
+           lifetime_spent  = lifetime_spent  + $2,
+           updated_at      = NOW()
        WHERE user_id = $1 AND credit_balance >= $2
        RETURNING *`,
       [userId, amount]
     );
     if (!rows.length) throw new Error('INSUFFICIENT_FUNDS');
+    const wallet = rows[0];
     await client.query(
-      `INSERT INTO transactions (wallet_id, type, amount, description, metadata)
-       VALUES ($1, 'debit', $2, $3, $4)`,
-      [rows[0].id, amount, description, metadata]
+      `INSERT INTO wallet_transactions
+         (wallet_id, line_item_type, amount, direction, balance_after, label)
+       VALUES ($1, 'perspective_spend', $2, 'debit', $3, $4)`,
+      [wallet.id, amount, wallet.credit_balance, label]
     );
     await client.query('COMMIT');
-    return rows[0];
+    return wallet;
   } catch (err) {
     await client.query('ROLLBACK');
     throw err;
@@ -61,25 +65,29 @@ export async function deductCredit(userId, amount, description, metadata = {}) {
   }
 }
 
-export async function creditWallet(userId, amount, description, metadata = {}) {
+export async function creditWallet(userId, amount, label, _metadata = {}) {
   const client = await pool.connect();
   try {
     await client.query('BEGIN');
     const { rows } = await client.query(
-      `INSERT INTO wallets (user_id, credit_balance)
-       VALUES ($1, $2)
+      `INSERT INTO wallets (user_id, credit_balance, lifetime_earned)
+       VALUES ($1, $2, $2)
        ON CONFLICT (user_id) DO UPDATE
-         SET credit_balance = wallets.credit_balance + $2, updated_at = NOW()
+         SET credit_balance  = wallets.credit_balance  + $2,
+             lifetime_earned = wallets.lifetime_earned + $2,
+             updated_at      = NOW()
        RETURNING *`,
       [userId, amount]
     );
+    const wallet = rows[0];
     await client.query(
-      `INSERT INTO transactions (wallet_id, type, amount, description, metadata)
-       VALUES ($1, 'credit', $2, $3, $4)`,
-      [rows[0].id, amount, description, metadata]
+      `INSERT INTO wallet_transactions
+         (wallet_id, line_item_type, amount, direction, balance_after, label)
+       VALUES ($1, 'topup', $2, 'credit', $3, $4)`,
+      [wallet.id, amount, wallet.credit_balance, label]
     );
     await client.query('COMMIT');
-    return rows[0];
+    return wallet;
   } catch (err) {
     await client.query('ROLLBACK');
     throw err;

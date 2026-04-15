@@ -404,8 +404,8 @@ app.get('/api/wallet/history', async (req, res) => {
     if (!walletRows.length) return res.json([]);
 
     const { rows } = await pool.query(
-      `SELECT type, amount, description, metadata, created_at
-       FROM transactions WHERE wallet_id = $1
+      `SELECT line_item_type, amount, direction, label, balance_after, created_at
+       FROM wallet_transactions WHERE wallet_id = $1
        ORDER BY created_at DESC LIMIT 50`,
       [walletRows[0].id]
     );
