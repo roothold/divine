@@ -193,6 +193,7 @@ const HTML_FILE = join(__dirname, 'index.html');
 app.get('/', (_req, res) => {
   try {
     res.setHeader('Content-Type', 'text/html; charset=utf-8');
+    res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate');
     res.send(readFileSync(HTML_FILE, 'utf8'));
   } catch {
     res.status(404).send('App not found.');
@@ -715,6 +716,7 @@ app.get('*', (req, res, next) => {
   if (req.path.startsWith('/api/') || req.path.startsWith('/auth/')) return next();
   try {
     res.setHeader('Content-Type', 'text/html; charset=utf-8');
+    res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate');
     res.send(readFileSync(HTML_FILE, 'utf8'));
   } catch {
     res.status(404).send('App not found.');

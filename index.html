@@ -2609,6 +2609,23 @@
 </head>
 <body>
 
+<!-- Auth status banner — appears immediately when logged in, impossible to miss -->
+<div id="auth-banner" style="
+  display:none;
+  position:fixed;top:0;left:0;right:0;z-index:99999;
+  background:#22c55e;color:#fff;
+  font-family:'Inter',sans-serif;font-size:13px;font-weight:600;
+  padding:9px 20px;text-align:center;letter-spacing:.01em;
+  box-shadow:0 2px 8px rgba(0,0,0,.15);
+  animation:banner-drop .3s ease;
+">
+  ✓ Logged in as <span id="auth-banner-name"></span> — <a onclick="signOut();return false" style="color:#fff;text-decoration:underline;cursor:pointer">Sign out</a>
+</div>
+<style>
+  @keyframes banner-drop { from{transform:translateY(-100%)} to{transform:translateY(0)} }
+  body.logged-in .app-body { padding-top: 38px; }
+</style>
+
 <div class="sidebar-backdrop" id="sidebar-backdrop" onclick="toggleSidebar()"></div>
 
 <div class="app-body">
@@ -7791,6 +7808,15 @@ function clearAuth() {
 function applyAuthState(user) {
   currentUser = user;
   console.log('[Auth]', user ? `Logged in as ${user.name || user.email} (id:${user.id})` : 'Logged out');
+
+  // ── Auth banner (fixed top bar — most visible indicator) ──────────────────
+  const banner     = document.getElementById('auth-banner');
+  const bannerName = document.getElementById('auth-banner-name');
+  if (banner) banner.style.display = user ? '' : 'none';
+  if (bannerName && user) bannerName.textContent = (user.name || user.email || 'User');
+  document.body.classList.toggle('logged-in', !!user);
+  // ─────────────────────────────────────────────────────────────────────────
+
   if (user) {
     USER_ID = user.id;
     const firstName = (user.name || 'there').split(' ')[0];
@@ -7937,6 +7963,12 @@ function closeLoginScreen() {
   const errEl = document.getElementById('auth-error');
   errEl.classList.remove('visible');
   errEl.textContent = '';
+  // Close any overlays that might be stacked above screen-0 and block the post-login view
+  try { if (typeof closePerspectiveFlow === 'function') closePerspectiveFlow(); } catch(e) {}
+  try {
+    const pf = document.getElementById('perspective-flow');
+    if (pf) pf.style.display = 'none';
+  } catch(e) {}
 }
 
 let _authMode = 'login'; // 'login' | 'register'
@@ -7997,6 +8029,8 @@ async function submitEmailAuth() {
       return;
     }
     // ── Success path ──────────────────────────────────────────────────────
+    if (!data.user) throw new Error('Server returned no user object — cannot complete login');
+    if (!data.token) throw new Error('Server returned no token — cannot complete login');
     setAuthToken(data.token);
     try { applyAuthState(data.user); } catch(e) { console.error('[Auth] applyAuthState error:', e); }
     try { closeLoginScreen(); }       catch(e) { console.error('[Auth] closeLoginScreen error:', e); }
