@@ -5389,8 +5389,19 @@ function clearAllData() {
 /* ════════════════════════════════
    RECENTS
 ════════════════════════════════ */
+function _sortSessions(list) {
+  return list.slice().sort((a, b) => {
+    // Pinned always above unpinned
+    const pa = a.pinned ? 1 : 0;
+    const pb = b.pinned ? 1 : 0;
+    if (pb !== pa) return pb - pa;
+    // Within the same group, most recent first
+    return new Date(b.updatedAt || b.createdAt || 0) - new Date(a.updatedAt || a.createdAt || 0);
+  });
+}
+
 function renderRecents() {
-  const chatList = loadChatSessions();
+  const chatList = _sortSessions(loadChatSessions());
   const el       = document.getElementById('recents-list');
   if (!chatList.length) {
     el.innerHTML = '<p class="recents-empty">Your conversations appear here.</p>';
@@ -7605,9 +7616,7 @@ function pinChatSession(id) {
   const s = sessions.find(x => x.id === id);
   if (!s) return;
   s.pinned = !s.pinned;
-  // Move pinned items to top
-  sessions.sort((a, b) => (b.pinned ? 1 : 0) - (a.pinned ? 1 : 0));
-  saveChatSessions(sessions);
+  saveChatSessions(_sortSessions(sessions));
   renderRecents();
 }
 
