@@ -2850,7 +2850,7 @@
                   <path d="M34 30 Q66 30 66 50 Q66 70 34 70"/>
                 </g>
               </svg>
-              <span class="dc-greeting-text" id="dc-greeting-name">Hi Michael</span>
+              <span class="dc-greeting-text" id="dc-greeting-name"></span>
             </div>
             <h1 class="dc-headline">What perspective do you need today?</h1>
 
@@ -2883,6 +2883,12 @@
                 </div>
                 <button class="dc-input-submit" id="dc-input-submit" onclick="dcSubmitInput()" disabled>New Perspective</button>
               </div>
+            </div>
+
+            <!-- Recent Perspectives — hidden until populated by renderDcRecents() -->
+            <div id="dc-recents-section" style="margin-bottom:28px;display:none">
+              <div class="dc-section-head">Recent Perspectives</div>
+              <div id="dc-recents-grid"></div>
             </div>
 
             <!-- Top Sought: available thinker cards -->
@@ -4881,13 +4887,15 @@ function renderDcThinkerGrid() {
 }
 
 function renderDcRecents() {
-  const grid = document.getElementById('dc-recents-grid');
+  const grid    = document.getElementById('dc-recents-grid');
+  const section = document.getElementById('dc-recents-section');
   if (!grid) return;
   const recents = loadRecents().slice(0, 6);
   if (!recents.length) {
-    grid.innerHTML = '<div style="padding:20px 0;font-family:\'Cormorant Garamond\',serif;font-style:italic;color:var(--text-3);font-size:15px">No perspectives acquired yet. Secure your first insight above.</div>';
+    if (section) section.style.display = 'none';
     return;
   }
+  if (section) section.style.display = '';
 
   // Icon SVG variants to visually differentiate session types
   function rowIcon(r) {
@@ -6634,14 +6642,21 @@ function pickThinker(id) {
 }
 
 function syncThinkerUI() {
-  document.getElementById('lens-name').textContent       = activeThinker.name;
-  document.getElementById('lens-dot').style.background   = activeThinker.color;
-  document.getElementById('callout-avatar').textContent  = activeThinker.initials;
-  document.getElementById('callout-avatar').style.background = activeThinker.color;
-  document.getElementById('callout-name').textContent  = activeThinker.name;
-  document.getElementById('callout-title').textContent = activeThinker.title;
-  document.getElementById('callout-lens').textContent  = activeThinker.lens;
-  document.getElementById('context-sub').textContent   = `Help ${activeThinker.name.split(' ')[0]} see the full picture.`;
+  const lensName = document.getElementById('lens-name');
+  const lensDot  = document.getElementById('lens-dot');
+  if (lensName) lensName.textContent       = activeThinker.name;
+  if (lensDot)  lensDot.style.background   = activeThinker.color;
+
+  const ca = document.getElementById('callout-avatar');
+  const cn = document.getElementById('callout-name');
+  const ct = document.getElementById('callout-title');
+  const cl = document.getElementById('callout-lens');
+  const cs = document.getElementById('context-sub');
+  if (ca) { ca.textContent = activeThinker.initials; ca.style.background = activeThinker.color; }
+  if (cn) cn.textContent = activeThinker.name;
+  if (ct) ct.textContent = activeThinker.title;
+  if (cl) cl.textContent = activeThinker.lens;
+  if (cs) cs.textContent = `Help ${activeThinker.name.split(' ')[0]} see the full picture.`;
 }
 
 /* ════════════════════════════════
