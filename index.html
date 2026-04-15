@@ -6568,6 +6568,9 @@ function saveChatSessions(list) {
 }
 
 function openChat(prefill) {
+  // Clear nav active state — no nav item is "active" while in a chat
+  document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+
   // Create a fresh session
   const thinker = activeThinker || THINKERS[0];
   _chatSession = {
@@ -6617,6 +6620,9 @@ function openChatSession(sessionId) {
   const sessions = loadChatSessions();
   const s = sessions.find(x => x.id === sessionId);
   if (!s) { openChat(); return; }
+
+  // Clear nav active state — no nav item is "active" while in a chat
+  document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
 
   _chatSession  = s;
   _chatStreaming = false;
