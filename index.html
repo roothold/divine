@@ -2360,6 +2360,8 @@
     .chat-msg-bubble-wrap:hover .chat-copy-btn { opacity:1; }
     .chat-copy-btn:hover { background:var(--surface); color:var(--text-1); }
     .chat-copy-btn.copied { color:var(--accent); border-color:var(--accent); }
+    /* For user bubbles the copy button sits to the left of the bubble */
+    .chat-msg.user .chat-copy-btn { right:auto; left:-36px; }
 
     /* ── Follow-up suggestion chips ──────────────────────────────────────── */
     .chat-suggestions {
@@ -7130,8 +7132,10 @@ function _appendChatMsg(role, content, opts = {}) {
     wrap.innerHTML = `
       <div class="chat-msg-ts">${tsStr}</div>
       <div class="chat-msg-bubble-wrap">
+        <button class="chat-copy-btn" title="Copy message">${_copyIcon()}</button>
         <div class="chat-msg-bubble">${_escapeHtml(content)}</div>
       </div>`;
+    _attachCopyBtn(wrap, content);
   } else {
     // Assistant: render markdown (or raw text during streaming), add copy button
     const bubbleContent = opts.streaming
