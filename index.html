@@ -876,8 +876,8 @@
     /* ─── Live Ledger feed (sidebar recents) ─── */
     .recents-header { display:flex; align-items:center; justify-content:space-between; padding:8px 12px 4px 14px; flex-shrink:0; }
     .recents-label { font-size:9px; font-weight:700; letter-spacing:.12em; text-transform:uppercase; color:var(--text-3); }
-    /* Live pulse dot next to label */
-    .recents-live-dot { width:5px; height:5px; border-radius:50%; background:var(--coral,#BF452A); margin-left:5px; display:inline-block; vertical-align:middle; animation:cc-live-pulse 2.4s ease-in-out infinite; }
+    /* Live pulse dot — moved to active chat item */
+    .recents-live-dot { display:none; }
     .recents-list { padding:2px 8px 8px; display:flex; flex-direction:column; gap:1px; }
     .recents-empty { padding:10px 14px; font-size:12px; color:var(--text-3); line-height:1.5; }
     /* recent-item base — overridden by the full block lower in the stylesheet */
@@ -2248,8 +2248,8 @@
       white-space:pre-wrap; /* user messages stay as plain text */
     }
     .chat-msg.assistant .chat-msg-bubble {
-      background:var(--surface); border:1px solid var(--border-lt);
-      border-bottom-left-radius:4px;
+      background:transparent; border:none; border-radius:0;
+      padding:4px 0; /* flush left, no card */
     }
     /* During streaming, keep pre-wrap so raw text reads cleanly */
     .chat-msg.assistant .chat-cursor { white-space:pre-wrap; }
@@ -2262,7 +2262,7 @@
 
     /* ── Markdown rendering inside assistant bubbles ─────────────────────── */
     .chat-msg-bubble .chat-p {
-      margin:0 0 10px; line-height:1.7;
+      margin:0 0 6px; line-height:1.6;
     }
     .chat-msg-bubble .chat-p:last-child { margin-bottom:0; }
     .chat-msg-bubble .chat-h2 {
@@ -2277,10 +2277,7 @@
       font-size:12.5px; font-weight:700; color:var(--text-2);
       margin:10px 0 4px; text-transform:uppercase; letter-spacing:.06em;
     }
-    .chat-msg-bubble .chat-hr {
-      border:none; border-top:1px solid var(--border-md);
-      margin:14px 0; opacity:.6;
-    }
+    .chat-msg-bubble .chat-hr { display:none; } /* dividers removed */
     .chat-msg-bubble .chat-ul,
     .chat-msg-bubble .chat-ol {
       margin:6px 0 10px; padding-left:18px; display:flex; flex-direction:column; gap:5px;
@@ -2304,12 +2301,10 @@
     /* Section labels: **The Reframe**, **Strategic Levers**, **Required Inputs** */
     .chat-section-label {
       font-size:10px; font-weight:800; letter-spacing:.1em; text-transform:uppercase;
-      color:var(--text-3); font-family:var(--font-mono,'JetBrains Mono',monospace);
-      margin:2px 0 6px; display:flex; align-items:center; gap:8px;
+      color:var(--text-3); font-family:inherit; /* sans-serif, no mono */
+      margin:10px 0 4px; display:flex; align-items:center; gap:8px;
     }
-    .chat-section-label::after {
-      content:''; flex:1; height:1px; background:var(--border-md); opacity:.6;
-    }
+    .chat-section-label::after { content:none; } /* no divider line */
     /* → Next Logical Question CTA */
     .chat-next-q {
       display:flex; align-items:baseline; flex-wrap:wrap; gap:5px;
@@ -2322,7 +2317,7 @@
     }
     .chat-next-q-label {
       font-size:10px; font-weight:800; letter-spacing:.08em; text-transform:uppercase;
-      color:var(--text-3); font-family:var(--font-mono,'JetBrains Mono',monospace);
+      color:var(--text-3); font-family:inherit;
       flex-shrink:0;
     }
     .chat-next-q-text {
@@ -2330,24 +2325,22 @@
     }
     /* [SYSTEM REFRAME] header — legacy */
     .chat-reframe {
-      margin:0 -16px 12px; padding:8px 16px;
-      background:linear-gradient(135deg,rgba(191,69,42,.08),rgba(191,69,42,.03));
-      border-left:3px solid var(--accent); border-radius:0 0 6px 0;
+      margin:0 0 10px; padding:8px 12px;
+      background:linear-gradient(135deg,rgba(191,69,42,.06),rgba(191,69,42,.02));
+      border-left:3px solid var(--accent); border-radius:0 6px 6px 0;
     }
     .chat-reframe-label {
       font-size:10px; font-weight:800; letter-spacing:.12em; text-transform:uppercase;
-      color:var(--accent); font-family:var(--font-mono,'JetBrains Mono',monospace);
+      color:var(--accent); font-family:inherit;
     }
     /* [NEXT INQUIRY] section — legacy */
     .chat-inquiry-header {
-      margin:14px 0 6px;
+      margin:12px 0 5px;
       font-size:10px; font-weight:800; letter-spacing:.12em; text-transform:uppercase;
-      color:var(--text-3); font-family:var(--font-mono,'JetBrains Mono',monospace);
+      color:var(--text-3); font-family:inherit;
       display:flex; align-items:center; gap:6px;
     }
-    .chat-inquiry-header::after {
-      content:''; flex:1; height:1px; background:var(--border-md);
-    }
+    .chat-inquiry-header::after { content:none; } /* no divider line */
     .chat-inquiry-item { color:var(--text-1); font-size:13px; }
 
     /* ── Copy-on-hover ───────────────────────────────────────────────────── */
@@ -2450,6 +2443,12 @@
     .recent-item::before { content:none; } /* kill any legacy ::before timestamp */
     .recent-item:hover { background:var(--surface-2); }
     .recent-item.active-recent { background:rgba(0,0,0,.06); }
+    /* Active-chat indicator dot */
+    .recent-item.active-recent .recent-item-title::after {
+      content:''; display:inline-block; width:5px; height:5px; border-radius:50%;
+      background:var(--accent); margin-left:6px; vertical-align:middle;
+      flex-shrink:0; animation:cc-live-pulse 2.4s ease-in-out infinite;
+    }
     .recent-item-title {
       flex:1; min-width:0;
       font-size:13px; font-weight:500; color:var(--text-0);
