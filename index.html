@@ -404,14 +404,7 @@
     .recents-list { padding:2px 10px 8px; display:flex; flex-direction:column; gap:2px; }
     .recents-empty { padding:12px 22px; font-size:12.5px; color:var(--text-3); line-height:1.5; }
 
-    .recent-item { display:flex; align-items:flex-start; gap:9px; padding:9px 12px; border-radius:var(--r-sm); cursor:pointer; transition:background 0.13s; border:none; background:transparent; text-align:left; width:100%; }
-    .recent-item:hover { background:var(--surface-2); }
-    .recent-item.active-recent { background:var(--accent-lt); }
-    .recent-avatar { width:22px; height:22px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:8px; font-weight:700; color:#fff; flex-shrink:0; margin-top:1px; }
-    .recent-info { flex:1; min-width:0; }
-    .recent-decision { font-size:12.5px; color:var(--text-1); font-weight:500; line-height:1.35; overflow:hidden; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; margin-bottom:3px; }
-    .recent-meta { font-size:10.5px; color:var(--text-3); display:flex; align-items:center; gap:5px; }
-    .recent-meta-dot { width:2px; height:2px; border-radius:50%; background:var(--text-3); }
+    /* recent-item base rules now in the chat-input section below */
 
     /* ═══ SIDEBAR BOTTOM — Profile ═══ */
     .sidebar-bottom { flex-shrink:0; border-top:1px solid var(--border); position:relative; }
@@ -2447,31 +2440,93 @@
       font-size:11px; color:var(--text-3);
     }
     .chat-input-meta-sep { width:1px; height:10px; background:var(--border-md); }
-
-    /* Recent item actions (edit + delete) */
-    .recent-item { position:relative; cursor:pointer; }
-    .recent-actions {
-      display:flex; align-items:center; gap:2px; flex-shrink:0;
-      opacity:0; transition:opacity .12s; margin-left:auto;
+    /* Rate limit counter pill */
+    .chat-usage-pill {
+      margin-left:auto; font-size:10.5px; font-family:var(--font-mono,'JetBrains Mono',monospace);
+      color:var(--text-3); letter-spacing:.02em;
     }
-    .recent-item:hover .recent-actions,
-    .recent-item.editing .recent-actions { opacity:1; }
-    .recent-action-btn {
+    .chat-usage-pill.warn  { color:#B58A2A; }
+    .chat-usage-pill.empty { color:var(--accent); font-weight:600; }
+    /* Rate limit blocked banner */
+    .chat-rate-banner {
+      display:none; align-items:flex-start; gap:10px;
+      background:rgba(191,69,42,.06); border:1px solid rgba(191,69,42,.18);
+      border-radius:10px; padding:12px 14px; margin-bottom:10px;
+      font-size:12.5px; line-height:1.55;
+    }
+    .chat-rate-banner.visible { display:flex; }
+    .chat-rate-banner-icon { font-size:16px; flex-shrink:0; margin-top:1px; }
+    .chat-rate-banner-body { flex:1; min-width:0; }
+    .chat-rate-banner-title { font-weight:700; color:var(--text-0); margin-bottom:2px; }
+    .chat-rate-banner-sub   { color:var(--text-2); }
+
+    /* ── Recent items — clean list style ──────────────────────────────── */
+    .recent-item {
+      position:relative; cursor:pointer; display:flex; align-items:center;
+      gap:8px; padding:7px 8px; border-radius:7px;
+      background:transparent; border:none; width:100%; text-align:left;
+      transition:background .12s;
+    }
+    .recent-item:hover { background:var(--surface-2); }
+    .recent-item.active-recent { background:rgba(0,0,0,.06); }
+    .recent-item-title {
+      flex:1; min-width:0;
+      font-size:13px; font-weight:500; color:var(--text-0);
+      white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+      line-height:1.35;
+    }
+    /* 3-dot menu trigger */
+    .recent-menu-btn {
       width:26px; height:26px; border-radius:6px; border:none; background:transparent;
       cursor:pointer; display:flex; align-items:center; justify-content:center;
-      color:var(--text-3); transition:background .12s, color .12s; flex-shrink:0;
-      padding:0;
+      color:var(--text-3); flex-shrink:0; padding:0;
+      opacity:0; transition:opacity .12s, background .12s, color .12s;
     }
-    .recent-action-btn:hover { background:var(--border-lt); color:var(--text-1); }
-    .recent-action-btn.delete:hover { background:rgba(191,69,42,.1); color:var(--accent); }
-    .recent-action-btn.save:hover  { background:rgba(60,140,60,.1); color:#3c8c3c; }
+    .recent-item:hover .recent-menu-btn,
+    .recent-item.menu-open .recent-menu-btn { opacity:1; }
+    .recent-menu-btn:hover { background:var(--border-lt); color:var(--text-1); }
+
+    /* Dropdown menu */
+    .recent-dropdown {
+      position:fixed; z-index:600;
+      background:#fff; border:1px solid var(--border-md);
+      border-radius:10px; padding:4px;
+      box-shadow:0 4px 20px rgba(0,0,0,.12), 0 1px 4px rgba(0,0,0,.06);
+      min-width:148px;
+      animation:dropdown-in .12s ease;
+    }
+    @keyframes dropdown-in {
+      from { opacity:0; transform:scale(.96) translateY(-4px); }
+      to   { opacity:1; transform:scale(1)  translateY(0); }
+    }
+    .recent-dropdown-item {
+      display:flex; align-items:center; gap:9px;
+      width:100%; padding:8px 10px; border:none; background:transparent;
+      border-radius:7px; font-size:13px; font-weight:500; color:var(--text-0);
+      cursor:pointer; text-align:left; transition:background .1s;
+    }
+    .recent-dropdown-item:hover { background:var(--surface-2); }
+    .recent-dropdown-item.danger:hover { background:rgba(191,69,42,.08); color:var(--accent); }
+    .recent-dropdown-item svg { flex-shrink:0; color:var(--text-3); }
+    .recent-dropdown-item:hover svg { color:inherit; }
+    .recent-dropdown-sep {
+      height:1px; background:var(--border-lt); margin:3px 6px;
+    }
     /* Inline rename input */
     .recent-rename-input {
-      font-size:12.5px; font-weight:500; color:var(--text-0); font-family:inherit;
+      font-size:13px; font-weight:500; color:var(--text-0); font-family:inherit;
       background:var(--surface); border:1.5px solid var(--accent);
-      border-radius:6px; padding:2px 6px; width:100%; min-width:0;
-      outline:none; line-height:1.4;
+      border-radius:6px; padding:3px 7px; width:100%; min-width:0;
+      outline:none; line-height:1.35; flex:1;
     }
+    /* Save/cancel micro-buttons shown during inline rename */
+    .recent-action-btn {
+      width:24px; height:24px; border-radius:5px; border:none; background:transparent;
+      cursor:pointer; display:flex; align-items:center; justify-content:center;
+      color:var(--text-3); transition:background .1s, color .1s; flex-shrink:0; padding:0;
+    }
+    .recent-action-btn.save:hover  { background:rgba(60,140,60,.1); color:#3c8c3c; }
+    .recent-action-btn.delete:hover { background:rgba(191,69,42,.1); color:var(--accent); }
 
     /* ═══ AUTH / LOGIN SCREEN ═══ */
     .auth-screen { position:fixed; inset:0; z-index:1000; background:var(--bg);
@@ -2986,12 +3041,21 @@
               </svg>
             </button>
           </div>
+          <!-- Rate limit blocked state -->
+          <div class="chat-rate-banner" id="chat-rate-banner">
+            <span class="chat-rate-banner-icon">⏳</span>
+            <div class="chat-rate-banner-body">
+              <div class="chat-rate-banner-title">Perspective limit reached</div>
+              <div class="chat-rate-banner-sub" id="chat-rate-banner-sub">You've used 3 of 3 perspectives this window. Resets in —</div>
+            </div>
+          </div>
           <div class="chat-input-meta">
             <span id="chat-meta-thinker">Michael Akindele</span>
             <div class="chat-input-meta-sep"></div>
             <span id="chat-meta-model">claude-opus-4-5</span>
             <div class="chat-input-meta-sep"></div>
             <span>⌘↵ to send</span>
+            <span class="chat-usage-pill" id="chat-usage-pill"></span>
           </div>
         </div>
       </div>
@@ -5279,31 +5343,17 @@ function renderRecents() {
     return;
   }
   el.innerHTML = chatList.slice(0, 30).map(s => {
-    const t     = s.thinker || THINKERS[0];
-    const title = s.title || 'Untitled conversation';
+    const title  = s.title || 'Untitled conversation';
+    const pinned = s.pinned ? ' pinned' : '';
     return `
-    <div class="recent-item" data-id="${s.id}" onclick="openChatSession('${s.id}')">
-      <div class="recent-avatar" style="background:${t.color || '#BF452A'}">${t.initials || 'AI'}</div>
-      <div class="recent-info">
-        <div class="recent-decision">${_escapeHtml(title)}</div>
-        <div class="recent-meta">
-          <span>${(t.name || '').split(' ')[0]}</span>
-          <span class="recent-meta-dot"></span>
-          <span>${formatDate(s.updatedAt)}</span>
-        </div>
-      </div>
-      <div class="recent-actions">
-        <button class="recent-action-btn" onclick="startRenameSession('${s.id}',event)" title="Rename">
-          <svg width="12" height="12" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6">
-            <path d="M9.5 2.5l2 2L4 12H2v-2L9.5 2.5z"/>
-          </svg>
-        </button>
-        <button class="recent-action-btn delete" onclick="deleteChatSession('${s.id}',event)" title="Delete">
-          <svg width="12" height="12" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6">
-            <path d="M2 3.5h10M5 3.5V2h4v1.5M5.5 6v4.5M8.5 6v4.5M3 3.5l.8 8h6.4l.8-8"/>
-          </svg>
-        </button>
-      </div>
+    <div class="recent-item${pinned}" data-id="${s.id}" onclick="openChatSession('${s.id}')">
+      ${s.pinned ? `<svg width="10" height="10" viewBox="0 0 10 10" fill="var(--accent)" style="flex-shrink:0;opacity:.6"><path d="M6.5 1L9 3.5 6 6l-.5 3-2-2-2.5 2.5L.5 8l2.5-2.5-2-2L4 3z"/></svg>` : ''}
+      <span class="recent-item-title">${_escapeHtml(title)}</span>
+      <button class="recent-menu-btn" onclick="openRecentMenu('${s.id}',event)" title="Options">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor">
+          <circle cx="7" cy="2.5" r="1.2"/><circle cx="7" cy="7" r="1.2"/><circle cx="7" cy="11.5" r="1.2"/>
+        </svg>
+      </button>
     </div>`;
   }).join('');
 }
@@ -6629,6 +6679,7 @@ function _chatSyncTopbar() {
   document.getElementById('chat-title-input').value = _chatSession.title || '';
   document.getElementById('chat-meta-thinker').textContent = t.name || 'Select Architect';
   document.getElementById('chat-meta-model').textContent = ACTIVE_MODEL;
+  _usageRefreshUI(); // always sync rate limit state when entering chat
 }
 
 function openChatThinkerPicker() {
@@ -6648,8 +6699,112 @@ function chatTextareaResize(ta) {
   ta.style.height = Math.min(ta.scrollHeight, 160) + 'px';
 }
 
+/* ════════════════════════════════════════════════════════════════════════════
+   USAGE RATE LIMITER — 3 perspectives per 72-hour rolling window
+   Stored in localStorage as an array of UTC timestamps (ms).
+   Works for guest and authenticated users (client-side).
+════════════════════════════════════════════════════════════════════════════ */
+const RATE_LIMIT_KEY    = 'di_usage_log';
+const RATE_LIMIT_MAX    = 3;
+const RATE_LIMIT_WINDOW = 72 * 60 * 60 * 1000; // 72 hours in ms
+
+function _usageLog() {
+  try { return JSON.parse(localStorage.getItem(RATE_LIMIT_KEY) || '[]'); }
+  catch { return []; }
+}
+
+function _usageLogSave(log) {
+  localStorage.setItem(RATE_LIMIT_KEY, JSON.stringify(log));
+}
+
+/** Returns timestamps within the rolling 72-hour window. */
+function _usageRecent() {
+  const cutoff = Date.now() - RATE_LIMIT_WINDOW;
+  return _usageLog().filter(ts => ts > cutoff);
+}
+
+/** How many perspectives remain in this window (0 = blocked). */
+function _usageRemaining() {
+  return Math.max(0, RATE_LIMIT_MAX - _usageRecent().length);
+}
+
+/** Record one perspective usage. */
+function _usageRecord() {
+  const log = _usageRecent(); // already pruned
+  log.push(Date.now());
+  _usageLogSave(log);
+}
+
+/** When does the next slot free up (ms epoch), or null if not limited. */
+function _usageNextReset() {
+  const recent = _usageRecent();
+  if (recent.length < RATE_LIMIT_MAX) return null;
+  recent.sort((a, b) => a - b);
+  return recent[0] + RATE_LIMIT_WINDOW; // oldest ts + 72h
+}
+
+/** Format a future epoch as "Xh Ym" */
+function _usageCountdown(epoch) {
+  const ms  = Math.max(0, epoch - Date.now());
+  const h   = Math.floor(ms / 3_600_000);
+  const m   = Math.floor((ms % 3_600_000) / 60_000);
+  return h > 0 ? `${h}h ${m}m` : `${m}m`;
+}
+
+/** Refresh the pill + banner + send-button state. Call after any send. */
+function _usageRefreshUI() {
+  const remaining = _usageRemaining();
+  const pill      = document.getElementById('chat-usage-pill');
+  const banner    = document.getElementById('chat-rate-banner');
+  const bannerSub = document.getElementById('chat-rate-banner-sub');
+  const sendBtn   = document.getElementById('chat-send-btn');
+  const textarea  = document.getElementById('chat-textarea');
+
+  // Pill
+  if (pill) {
+    pill.textContent = `${remaining}/${RATE_LIMIT_MAX} left`;
+    pill.className   = 'chat-usage-pill' + (remaining === 0 ? ' empty' : remaining === 1 ? ' warn' : '');
+  }
+
+  // Banner + send button lock
+  if (remaining === 0) {
+    const reset = _usageNextReset();
+    if (banner) {
+      banner.classList.add('visible');
+      if (bannerSub && reset) {
+        bannerSub.textContent = `You've used all 3 perspectives this window. Resets in ${_usageCountdown(reset)}.`;
+      }
+    }
+    if (sendBtn) sendBtn.disabled = true;
+    if (textarea) textarea.disabled = true;
+
+    // Auto-refresh countdown every minute
+    clearInterval(window._rateCountdownInterval);
+    window._rateCountdownInterval = setInterval(() => {
+      if (_usageRemaining() > 0) {
+        // Window has rolled — unlock
+        clearInterval(window._rateCountdownInterval);
+        _usageRefreshUI();
+      } else if (bannerSub && reset) {
+        bannerSub.textContent = `You've used all 3 perspectives this window. Resets in ${_usageCountdown(reset)}.`;
+      }
+    }, 30_000);
+  } else {
+    if (banner)   banner.classList.remove('visible');
+    if (sendBtn && !_chatStreaming) sendBtn.disabled = false;
+    if (textarea) textarea.disabled = false;
+    clearInterval(window._rateCountdownInterval);
+  }
+}
+
 async function sendChatMsg() {
   if (_chatStreaming) return;
+
+  // ── Rate limit check ─────────────────────────────────────────────────────
+  if (_usageRemaining() === 0) {
+    _usageRefreshUI(); // ensure banner is visible
+    return;
+  }
   const ta   = document.getElementById('chat-textarea');
   const text = ta.value.trim();
   if (!text) return;
@@ -6710,16 +6865,17 @@ async function sendChatMsg() {
     return;
   }
 
-  // Stream done: render markdown, wire copy button, show follow-up chips
+  // Stream done: record usage, then render
+  _usageRecord();
+  _usageRefreshUI();
+
   bubble.classList.remove('chat-cursor');
   bubble.innerHTML = _renderChatMarkdown(fullText);
   _attachCopyBtn(aiEl, fullText);
 
-  // Extract [NEXT INQUIRY] questions and show as chips
+  // Extract follow-up chips
   const followUps = _extractNextInquiry(fullText);
-  if (followUps.length) {
-    _showChatSuggestions(followUps);
-  }
+  if (followUps.length) _showChatSuggestions(followUps);
 
   // Update the session messages (replace blank placeholder with real content)
   const lastMsg = _chatSession.messages[_chatSession.messages.length - 1];
@@ -6730,7 +6886,10 @@ async function sendChatMsg() {
   renderRecents();
 
   _chatStreaming = false;
-  document.getElementById('chat-send-btn').disabled = false;
+  // Re-check: don't re-enable send if now at limit
+  if (_usageRemaining() > 0) {
+    document.getElementById('chat-send-btn').disabled = false;
+  }
   msgs.scrollTop = msgs.scrollHeight;
 }
 
@@ -7143,75 +7302,167 @@ function saveChatTitle() {
   renderRecents();
 }
 
+/* ════════════════════════════════════════════════════════════════════════════
+   RECENT ITEM — 3-DOT DROPDOWN MENU
+════════════════════════════════════════════════════════════════════════════ */
+let _activeDropdown = null; // { id, el }
+
+function openRecentMenu(id, e) {
+  e.stopPropagation();
+  closeRecentMenu(); // close any existing
+
+  const btn  = e.currentTarget;
+  const item = btn.closest('.recent-item');
+  if (!item) return;
+  item.classList.add('menu-open');
+
+  const sessions = loadChatSessions();
+  const s        = sessions.find(x => x.id === id);
+  const isPinned = s?.pinned;
+
+  const menu = document.createElement('div');
+  menu.className = 'recent-dropdown';
+  menu.id = 'recent-dropdown-' + id;
+  menu.innerHTML = `
+    <button class="recent-dropdown-item" onclick="pinChatSession('${id}')">
+      <svg width="13" height="13" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6">
+        <path d="M8.5 1.5L12.5 5.5 9 9l-.5 4-2.5-2.5L3.5 13 1 10.5l2.5-2.5L1 5.5l4-.5z"/>
+      </svg>
+      ${isPinned ? 'Unpin' : 'Pin'}
+    </button>
+    <button class="recent-dropdown-item" onclick="startRenameSession('${id}')">
+      <svg width="13" height="13" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6">
+        <path d="M9.5 2.5l2 2L4 12H2v-2L9.5 2.5z"/>
+      </svg>
+      Rename
+    </button>
+    <div class="recent-dropdown-sep"></div>
+    <button class="recent-dropdown-item danger" onclick="deleteChatSession('${id}')">
+      <svg width="13" height="13" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6">
+        <path d="M2 3.5h10M5 3.5V2h4v1.5M5.5 6v4.5M8.5 6v4.5M3 3.5l.8 8h6.4l.8-8"/>
+      </svg>
+      Delete
+    </button>`;
+
+  // Position below the button, aligned to right edge of item
+  document.body.appendChild(menu);
+  const bRect = btn.getBoundingClientRect();
+  const mRect = menu.getBoundingClientRect();
+  let top  = bRect.bottom + 4;
+  let left = bRect.right  - mRect.width;
+  // Keep within viewport
+  if (top + mRect.height > window.innerHeight - 8) top = bRect.top - mRect.height - 4;
+  if (left < 8) left = 8;
+  menu.style.top  = top  + 'px';
+  menu.style.left = left + 'px';
+
+  _activeDropdown = { id, el: menu, item };
+
+  // Close on outside click
+  setTimeout(() => {
+    document.addEventListener('click', _outsideDropdownClose, { once: true, capture: true });
+  }, 0);
+}
+
+function closeRecentMenu() {
+  if (_activeDropdown) {
+    _activeDropdown.el.remove();
+    _activeDropdown.item?.classList.remove('menu-open');
+    _activeDropdown = null;
+  }
+  document.removeEventListener('click', _outsideDropdownClose, true);
+}
+
+function _outsideDropdownClose(e) {
+  if (_activeDropdown && !_activeDropdown.el.contains(e.target)) {
+    closeRecentMenu();
+  }
+}
+
+// ── Pin / Unpin ───────────────────────────────────────────────────────────────
+function pinChatSession(id) {
+  closeRecentMenu();
+  const sessions = loadChatSessions();
+  const s = sessions.find(x => x.id === id);
+  if (!s) return;
+  s.pinned = !s.pinned;
+  // Move pinned items to top
+  sessions.sort((a, b) => (b.pinned ? 1 : 0) - (a.pinned ? 1 : 0));
+  saveChatSessions(sessions);
+  renderRecents();
+}
+
 // ── Inline rename ─────────────────────────────────────────────────────────────
 function startRenameSession(id, e) {
   e && e.stopPropagation();
+  closeRecentMenu();
   const item = document.querySelector(`.recent-item[data-id="${id}"]`);
   if (!item || item.classList.contains('editing')) return;
   item.classList.add('editing');
 
-  const decEl = item.querySelector('.recent-decision');
-  const currentTitle = decEl.textContent;
+  const titleEl      = item.querySelector('.recent-item-title');
+  const currentTitle = titleEl.textContent;
 
-  // Swap title text for an input
-  const input = document.createElement('input');
-  input.className = 'recent-rename-input';
-  input.value = currentTitle;
-  decEl.replaceWith(input);
-  input.focus();
-  input.select();
+  // Replace title span with input + save/cancel inline
+  titleEl.replaceWith(...(() => {
+    const input = document.createElement('input');
+    input.className = 'recent-rename-input';
+    input.value     = currentTitle;
+    input.addEventListener('keydown', ev => {
+      if (ev.key === 'Enter')  { ev.preventDefault(); commitRename(id); }
+      if (ev.key === 'Escape') { ev.preventDefault(); cancelRename(id); }
+    });
 
-  // Swap action buttons for save/cancel
-  const actions = item.querySelector('.recent-actions');
-  actions.innerHTML = `
-    <button class="recent-action-btn save" onclick="commitRename('${id}',event)" title="Save">
-      <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
-        <path d="M1.5 6l3 3 6-6"/>
-      </svg>
-    </button>
-    <button class="recent-action-btn delete" onclick="cancelRename('${id}',event)" title="Cancel">
-      <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
-        <path d="M2 2l8 8M10 2l-8 8"/>
-      </svg>
-    </button>`;
+    const saveBtn = document.createElement('button');
+    saveBtn.className = 'recent-action-btn save';
+    saveBtn.title     = 'Save';
+    saveBtn.onclick   = ev => { ev.stopPropagation(); commitRename(id); };
+    saveBtn.innerHTML = `<svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M1.5 6l3 3 6-6"/></svg>`;
 
-  input.addEventListener('keydown', ev => {
-    if (ev.key === 'Enter')  { ev.preventDefault(); commitRename(id, ev); }
-    if (ev.key === 'Escape') { ev.preventDefault(); cancelRename(id, ev); }
-  });
+    const cancelBtn = document.createElement('button');
+    cancelBtn.className = 'recent-action-btn delete';
+    cancelBtn.title     = 'Cancel';
+    cancelBtn.onclick   = ev => { ev.stopPropagation(); cancelRename(id); };
+    cancelBtn.innerHTML = `<svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M2 2l8 8M10 2l-8 8"/></svg>`;
 
-  // Prevent item click from firing while editing
+    return [input, saveBtn, cancelBtn];
+  })());
+
+  // Focus input after DOM update
+  const inp = item.querySelector('.recent-rename-input');
+  if (inp) { inp.focus(); inp.select(); }
+
+  // Block item click while editing
   item._editClickGuard = ev => ev.stopPropagation();
   item.addEventListener('click', item._editClickGuard, true);
 }
 
-function commitRename(id, e) {
-  e && e.stopPropagation();
-  const item = document.querySelector(`.recent-item[data-id="${id}"]`);
-  if (!item) return;
+function commitRename(id) {
+  const item  = document.querySelector(`.recent-item[data-id="${id}"]`);
+  if (!item)  return;
   const input = item.querySelector('.recent-rename-input');
-  const newTitle = input ? input.value.trim() : '';
+  const newTitle = input?.value.trim();
 
-  const sessions = loadChatSessions();
-  const s = sessions.find(x => x.id === id);
-  if (s && newTitle) {
-    s.title = newTitle;
-    saveChatSessions(sessions);
-    if (_chatSession && _chatSession.id === id) {
-      _chatSession.title = newTitle;
-      const titleInput = document.getElementById('chat-title-input');
-      if (titleInput) titleInput.value = newTitle;
+  if (newTitle) {
+    const sessions = loadChatSessions();
+    const s = sessions.find(x => x.id === id);
+    if (s) {
+      s.title = newTitle;
+      saveChatSessions(sessions);
+      if (_chatSession?.id === id) {
+        _chatSession.title = newTitle;
+        const ti = document.getElementById('chat-title-input');
+        if (ti) ti.value = newTitle;
+      }
     }
   }
   _cleanupRenameItem(item);
   renderRecents();
 }
 
-function cancelRename(id, e) {
-  e && e.stopPropagation();
+function cancelRename(id) {
   const item = document.querySelector(`.recent-item[data-id="${id}"]`);
-  if (!item) return;
-  _cleanupRenameItem(item);
+  if (item) _cleanupRenameItem(item);
   renderRecents();
 }
 
@@ -7226,30 +7477,26 @@ function _cleanupRenameItem(item) {
 // ── Delete session ────────────────────────────────────────────────────────────
 function deleteChatSession(id, e) {
   e && e.stopPropagation();
+  closeRecentMenu();
   const sessions = loadChatSessions();
-  const idx = sessions.findIndex(x => x.id === id);
+  const idx      = sessions.findIndex(x => x.id === id);
   if (idx === -1) return;
 
-  // Animate item out
   const item = document.querySelector(`.recent-item[data-id="${id}"]`);
   if (item) {
-    item.style.transition = 'opacity .18s, transform .18s';
+    item.style.transition = 'opacity .16s, transform .16s';
     item.style.opacity    = '0';
-    item.style.transform  = 'translateX(-8px)';
+    item.style.transform  = 'translateX(-6px)';
   }
-
   setTimeout(() => {
     sessions.splice(idx, 1);
     saveChatSessions(sessions);
-    // If currently viewing the deleted session, open a fresh chat
-    if (_chatSession && _chatSession.id === id) {
-      openChat();
-    }
+    if (_chatSession?.id === id) openChat();
     renderRecents();
-  }, 180);
+  }, 160);
 }
 
-// Legacy alias (kept for any old onclick references)
+// Legacy alias
 function renameChatSession(id, e) { startRenameSession(id, e); }
 
 /* ════════════════════════════════
