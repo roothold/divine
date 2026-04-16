@@ -961,10 +961,29 @@
     .dc-recent-date { font-size:11.5px; color:var(--text-3); white-space:nowrap; flex-shrink:0; padding-top:2px; }
 
     /* Right panel */
-    .dc-panel { background:var(--surface); border:1px solid var(--border); border-radius:14px; overflow:hidden; position:sticky; top:76px; }
-    .dc-panel-tabs { display:grid; grid-template-columns:1fr 1fr; border-bottom:1px solid var(--border); }
-    .dc-ptab { font-size:12px; font-weight:500; color:var(--text-3); background:transparent; border:none; border-bottom:2.5px solid transparent; padding:12px 8px; cursor:pointer; transition:color .15s; margin-bottom:-1px; }
+    /* ── Right panel: sticky, fixed viewport height, internal scroll ── */
+    .dc-panel {
+      background:var(--surface);
+      border:1px solid var(--border);
+      border-radius:14px;
+      overflow:hidden;
+      position:sticky;
+      top:76px;
+      /* Fill remaining viewport so the panel height never changes on tab switch */
+      height:calc(100vh - 108px);
+      min-height:400px;
+      display:flex;
+      flex-direction:column;
+    }
+    /* Tabs bar — never scrolls, always pinned at top of panel */
+    .dc-panel-tabs { display:grid; grid-template-columns:1fr 1fr; border-bottom:1px solid var(--border); flex-shrink:0; }
+    .dc-ptab { font-size:12px; font-weight:500; color:var(--text-3); background:transparent; border:none; border-bottom:2.5px solid transparent; padding:12px 8px; cursor:pointer; transition:color .15s; margin-bottom:-1px; font-family:'Inter',sans-serif; white-space:nowrap; }
     .dc-ptab.active { color:var(--text-0); font-weight:600; border-bottom-color:#2C2820; }
+    /* Each tab div fills remaining height and scrolls internally */
+    #dc-panel-growth,
+    #dc-panel-portfolio,
+    #dc-panel-integrations,
+    #dc-panel-health { flex:1; overflow-y:auto; overscroll-behavior:contain; }
     .dc-panel-body { padding:18px; }
     .dc-panel-section { margin-bottom:20px; }
     .dc-panel-section:last-child { margin-bottom:0; }
@@ -1070,7 +1089,7 @@
     .dc-integration-btn.connected { border-color:#22c55e; color:#22c55e; cursor:default; pointer-events:none; }
 
     /* Right panel: 3-tab support */
-    .dc-panel-tabs.three { grid-template-columns:1fr 1fr 1fr; }
+    .dc-panel-tabs.three { grid-template-columns:repeat(3,1fr); }
 
     /* ═══ THOUGHT LEADERS SCREEN ═══ */
     .tl-filter-row { display:flex; gap:6px; margin-bottom:22px; }
@@ -2121,6 +2140,19 @@
       .dc-input-footer { flex-direction:column; gap:8px; align-items:stretch; }
       .dc-input-proj { justify-content:flex-start; }
       .dc-input-submit { width:100%; text-align:center; padding:12px 18px; font-size:14px; }
+      /* Tabs: allow horizontal scroll on very narrow screens, don't crush */
+      .dc-panel-tabs.three { display:flex; overflow-x:auto; -webkit-overflow-scrolling:touch; scrollbar-width:none; }
+      .dc-panel-tabs.three::-webkit-scrollbar { display:none; }
+      .dc-panel-tabs.three .dc-ptab { flex-shrink:0; padding:11px 14px; }
+      /* Panel body: comfortable mobile padding */
+      .dc-panel-body { padding:14px; }
+      /* KPI grid: side-by-side on mobile */
+      .dc-revenue-kpis { gap:6px; }
+      .dc-rev-kpi-val { font-size:15px; }
+      /* Advisory cards: tighter */
+      .dc-advisory-card { padding:10px; }
+      /* Equity grid */
+      .dc-equity-grid { gap:6px; }
     }
 
     /* ─── Knowledge base: hide thinker strip on mobile ─── */
@@ -2133,8 +2165,23 @@
       /* Recents & small cards: better touch targets */
       .dc-recent-row { padding:16px 14px; }
       .dc-recent-title { font-size:14px; }
-      /* Dashboard right panel (portfolio) hidden on mobile — only show main col */
-      .dc-panel { display:none; }
+      /* Dashboard right panel: un-sticky on mobile, stacks below main content */
+      .dc-panel {
+        position:static;
+        height:auto;
+        min-height:0;
+        /* Clamp so the panel doesn't take over the screen */
+        max-height:none;
+      }
+      /* Each tab div: fixed max-height on mobile so it doesn't feel endless */
+      #dc-panel-growth,
+      #dc-panel-portfolio,
+      #dc-panel-integrations,
+      #dc-panel-health {
+        flex:none;
+        overflow-y:visible;
+        max-height:none;
+      }
       /* Thinker hub: ensure tabs are scrollable */
       .thinker-tabs { -webkit-overflow-scrolling:touch; }
       /* Projects, search: ensure bottom clearance */
@@ -5002,8 +5049,15 @@ function escHtml(s) {
 function renderDcRevenueGraph() {
   const canvas = document.getElementById('dc-revenue-canvas');
   if (!canvas) return;
+  // Sync canvas buffer size to its CSS display size (handles mobile/responsive)
+  const cssW = canvas.clientWidth || canvas.offsetWidth || 260;
+  const dpr   = window.devicePixelRatio || 1;
+  canvas.width  = cssW * dpr;
+  canvas.height = 100 * dpr;
+  canvas.style.height = '100px';
   const ctx = canvas.getContext('2d');
-  const W = canvas.width, H = canvas.height;
+  ctx.scale(dpr, dpr);
+  const W = cssW, H = 100;
   ctx.clearRect(0, 0, W, H);
 
   // Mock data points — 8 quarters
