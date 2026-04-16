@@ -997,6 +997,77 @@
     .dc-market-bar-fill { height:100%; border-radius:3px; background:var(--violet,#BF452A); }
     .dc-market-pct { font-family:var(--font-mono); font-size:11px; color:var(--text-3); width:28px; text-align:right; flex-shrink:0; }
 
+    /* ─── Greeting Card (Action Center header) ─── */
+    .dc-greeting-card { background:#fff; border:1.5px solid var(--border); border-radius:16px; padding:22px 22px 16px; margin-bottom:20px; box-shadow:var(--sh-sm); transition:border-color .15s,box-shadow .15s; }
+    .dc-greeting-card:focus-within { border-color:var(--accent-bdr); box-shadow:0 4px 20px rgba(191,69,42,.10); }
+    .dc-greeting-card-header { display:flex; align-items:center; gap:12px; margin-bottom:14px; }
+    .dc-greeting-d { width:34px; height:34px; flex-shrink:0; }
+    .dc-greeting-card-text { flex:1; }
+    .dc-greeting-card-name { font-family:'Cormorant Garamond',serif; font-size:clamp(22px,3vw,32px); font-weight:600; color:var(--text-0); line-height:1.15; }
+    .dc-greeting-card-sub { font-size:13px; color:var(--text-3); margin-top:2px; font-weight:500; }
+    /* divider between greeting header and input */
+    .dc-greeting-divider { height:1px; background:var(--border); margin:0 -22px 16px; }
+
+    /* ─── Venture / Project Cards ─── */
+    .dc-projects-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:12px; margin-bottom:28px; }
+    @media (max-width:560px) { .dc-projects-grid { grid-template-columns:1fr; } }
+    .dc-project-card { background:#fff; border:1.5px solid var(--border); border-radius:14px; padding:18px 18px 14px; transition:border-color .15s,box-shadow .15s; position:relative; overflow:hidden; }
+    .dc-project-card::before { content:''; position:absolute; top:0; left:0; right:0; height:3px; background:var(--vc,#BF452A); border-radius:14px 14px 0 0; }
+    .dc-project-card:hover { border-color:var(--accent-bdr); box-shadow:0 4px 18px rgba(0,0,0,.06); }
+    .dc-proj-card-top { display:flex; align-items:flex-start; justify-content:space-between; margin-bottom:11px; }
+    .dc-proj-card-left { display:flex; align-items:center; gap:10px; }
+    .dc-proj-avatar { width:36px; height:36px; border-radius:9px; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:700; color:#fff; flex-shrink:0; }
+    .dc-proj-name { font-size:13px; font-weight:700; color:var(--text-0); line-height:1.3; }
+    .dc-proj-tagline { font-size:11px; color:var(--text-3); margin-top:1px; }
+    .dc-proj-fragility { display:flex; flex-direction:column; align-items:flex-end; gap:1px; }
+    .dc-proj-frag-label { font-size:8.5px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:var(--text-3); }
+    .dc-proj-frag-score { font-family:var(--font-mono); font-size:20px; font-weight:700; color:var(--text-0); line-height:1.1; }
+    .dc-proj-frag-bar { height:3px; background:var(--surface-2); border-radius:2px; overflow:hidden; margin-bottom:13px; }
+    .dc-proj-frag-fill { height:100%; border-radius:2px; transition:width .8s cubic-bezier(.2,.8,.4,1); }
+    .dc-proj-actions { display:grid; grid-template-columns:1fr 1fr; gap:7px; }
+    .dc-proj-action-btn { background:transparent; border:1.5px solid var(--border-md); border-radius:8px; padding:8px 6px; font-size:10.5px; font-weight:700; letter-spacing:.025em; text-transform:uppercase; color:var(--text-2); cursor:pointer; transition:all .15s; text-align:center; line-height:1.3; font-family:'Inter',sans-serif; }
+    .dc-proj-action-btn:hover { border-color:var(--accent-bdr); color:var(--accent); background:var(--accent-lt); }
+    .dc-proj-action-btn.primary { background:var(--accent); border-color:var(--accent); color:#fff; }
+    .dc-proj-action-btn.primary:hover { background:var(--accent-mid); }
+
+    /* ─── Growth: Revenue Graph ─── */
+    .dc-revenue-kpis { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:14px; }
+    .dc-rev-kpi { background:var(--surface-2); border-radius:8px; padding:10px 12px; }
+    .dc-rev-kpi-label { font-size:9px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:var(--text-3); margin-bottom:3px; }
+    .dc-rev-kpi-val { font-family:var(--font-mono); font-size:17px; font-weight:700; color:var(--text-0); line-height:1; }
+    .dc-rev-kpi-delta { font-size:10px; font-weight:600; color:#22c55e; margin-top:2px; }
+    .dc-revenue-canvas-wrap { border-radius:10px; overflow:hidden; background:var(--surface-2); padding:10px 8px 4px; margin-bottom:8px; }
+    .dc-revenue-legend { display:flex; gap:14px; font-size:10px; color:var(--text-3); justify-content:center; margin-bottom:6px; }
+    .dc-revenue-legend-dot { display:inline-block; width:7px; height:7px; border-radius:50%; margin-right:4px; vertical-align:middle; }
+    .dc-connect-cta { margin-top:10px; text-align:center; font-size:11px; color:var(--text-3); }
+    .dc-connect-cta a { color:var(--accent); font-weight:600; cursor:pointer; text-decoration:none; }
+    .dc-connect-cta a:hover { text-decoration:underline; }
+
+    /* ─── Growth: Advisory Circle ─── */
+    .dc-advisory-grid { display:flex; flex-direction:column; gap:8px; }
+    .dc-advisory-card { display:flex; align-items:flex-start; gap:10px; padding:11px; background:var(--surface-2); border-radius:10px; cursor:pointer; transition:background .14s,box-shadow .14s; }
+    .dc-advisory-card:hover { background:#ede9e4; box-shadow:0 2px 10px rgba(0,0,0,.05); }
+    .dc-advisory-avatar { width:34px; height:34px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:700; color:#fff; flex-shrink:0; }
+    .dc-advisory-info { flex:1; min-width:0; }
+    .dc-advisory-name { font-size:12px; font-weight:700; color:var(--text-0); }
+    .dc-advisory-role { font-size:10px; color:var(--text-3); margin-bottom:4px; }
+    .dc-advisory-quote { font-family:'Cormorant Garamond',serif; font-size:13px; font-style:italic; color:var(--text-1); line-height:1.45; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
+
+    /* ─── Integrations tab ─── */
+    .dc-integrations-intro { font-size:12px; color:var(--text-3); line-height:1.55; margin-bottom:14px; }
+    .dc-integrations-list { display:flex; flex-direction:column; gap:9px; }
+    .dc-integration-row { display:flex; align-items:center; gap:11px; padding:12px; background:var(--surface-2); border-radius:10px; }
+    .dc-integration-icon { width:34px; height:34px; border-radius:8px; display:flex; align-items:center; justify-content:center; flex-shrink:0; font-size:20px; background:#fff; border:1px solid var(--border); }
+    .dc-integration-info { flex:1; min-width:0; }
+    .dc-integration-name { font-size:12.5px; font-weight:600; color:var(--text-0); }
+    .dc-integration-desc { font-size:10.5px; color:var(--text-3); margin-top:1px; }
+    .dc-integration-btn { font-size:11px; font-weight:700; padding:6px 13px; border-radius:var(--r-pill); border:1.5px solid var(--accent-bdr); color:var(--accent); background:transparent; cursor:pointer; white-space:nowrap; transition:all .15s; flex-shrink:0; font-family:'Inter',sans-serif; }
+    .dc-integration-btn:hover { background:var(--accent); color:#fff; }
+    .dc-integration-btn.connected { border-color:#22c55e; color:#22c55e; cursor:default; pointer-events:none; }
+
+    /* Right panel: 3-tab support */
+    .dc-panel-tabs.three { grid-template-columns:1fr 1fr 1fr; }
+
     /* ═══ THOUGHT LEADERS SCREEN ═══ */
     .tl-filter-row { display:flex; gap:6px; margin-bottom:22px; }
     .tl-filter-btn { font-size:12px; font-weight:600; padding:7px 16px; border-radius:var(--r-pill); border:1.5px solid var(--border-md); background:var(--surface); color:var(--text-2); cursor:pointer; transition:all .15s; }
@@ -2032,14 +2103,17 @@
       .chat-empty-sub { font-size:12.5px; }
     }
 
-    /* ─── Dashboard: hide thinker grid on mobile ─── */
+    /* ─── Dashboard: mobile layout ─── */
     @media (max-width:640px) {
+      /* Hide thinker grid on small screens (declutter) */
       #dc-sect-thinkers, #dc-thinker-grid { display:none; }
-      /* Compact headline */
-      .dc-headline { font-size:clamp(22px,6vw,32px); margin-bottom:18px; }
-      /* Make input card more prominent */
+      /* Greeting card responsive */
+      .dc-greeting-card-name { font-size:clamp(20px,6vw,28px); }
+      /* Projects stack to 1-col on small phones */
+      .dc-projects-grid { grid-template-columns:1fr; }
+      /* Make input more prominent */
       .dc-input-textarea { font-size:15px; min-height:80px; }
-      /* Full-width submit button on mobile */
+      /* Full-width submit button */
       .dc-input-footer { flex-direction:column; gap:8px; align-items:stretch; }
       .dc-input-proj { justify-content:flex-start; }
       .dc-input-submit { width:100%; text-align:center; padding:12px 18px; font-size:14px; }
@@ -2858,29 +2932,33 @@
       <div class="dc-wide-inner">
         <div class="dc-layout">
 
-          <!-- LEFT: Main content -->
+          <!-- LEFT: Action Center -->
           <div>
-            <!-- Greeting row with [D] mark — hidden until logged in -->
-            <div class="dc-greeting-row" id="dc-greeting-row" style="display:none">
-              <svg class="dc-greeting-icon" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <g stroke="#BF452A" stroke-width="9" stroke-linecap="round" fill="none">
-                  <rect x="18" y="12" width="8" height="76" rx="2"/>
-                  <rect x="26" y="12" width="8" height="8" rx="1"/>
-                  <rect x="26" y="80" width="8" height="8" rx="1"/>
-                  <path d="M34 18 Q78 18 78 50 Q78 82 34 82"/>
-                  <path d="M34 30 Q66 30 66 50 Q66 70 34 70"/>
-                </g>
-              </svg>
-              <span class="dc-greeting-text" id="dc-greeting-name"></span>
-            </div>
-            <h1 class="dc-headline" id="dc-headline">What perspective do you need today?</h1>
 
-            <!-- Quick-input card -->
-            <div class="dc-input-card">
+            <!-- ══ GREETING CARD ══ -->
+            <div class="dc-greeting-card">
+              <div class="dc-greeting-card-header">
+                <svg class="dc-greeting-d" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <g stroke="#BF452A" stroke-width="9" stroke-linecap="round" fill="none">
+                    <rect x="18" y="12" width="8" height="76" rx="2"/>
+                    <rect x="26" y="12" width="8" height="8" rx="1"/>
+                    <rect x="26" y="80" width="8" height="8" rx="1"/>
+                    <path d="M34 18 Q78 18 78 50 Q78 82 34 82"/>
+                    <path d="M34 30 Q66 30 66 50 Q66 70 34 70"/>
+                  </g>
+                </svg>
+                <div class="dc-greeting-card-text">
+                  <div class="dc-greeting-card-name" id="dc-greeting-name">What would you like to build?</div>
+                  <div class="dc-greeting-card-sub" id="dc-greeting-sub">Sign in to personalize your experience.</div>
+                </div>
+              </div>
+              <div class="dc-greeting-divider"></div>
+
+              <!-- Quick-input -->
               <textarea class="dc-input-textarea" id="dc-quick-input" rows="2"
-                placeholder="What would you like to work on?"
+                placeholder="Describe a challenge, question, or decision…"
                 oninput="dcInputUpdate(this)"></textarea>
-              <!-- Attachment chip — shown once a file is selected -->
+              <!-- Attachment chip -->
               <div class="dc-attach-chip" id="dc-attach-chip">
                 <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M13.5 8.5l-5.5 5.5a4 4 0 01-5.66-5.66l6-6a2.5 2.5 0 013.54 3.54l-6.01 6a1 1 0 01-1.41-1.41l5.5-5.5"/></svg>
                 <span class="dc-attach-chip-name" id="dc-attach-name">document.pdf</span>
@@ -2896,7 +2974,6 @@
                     <svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M2 4l3 3 3-3"/></svg>
                   </button>
                   <div class="dc-proj-dropdown" id="dc-proj-dropdown" style="display:none;position:absolute;background:#fff;border:1.5px solid var(--border);border-radius:10px;padding:6px;min-width:160px;box-shadow:var(--sh-md);z-index:200;margin-top:36px"></div>
-                  <!-- Upload button -->
                   <input type="file" id="dc-file-input" accept=".pdf,.doc,.docx,.txt,.md,.csv,.pptx,.xlsx" style="display:none" onchange="dcHandleFileUpload(this)">
                   <button class="dc-proj-add" onclick="document.getElementById('dc-file-input').click()" title="Attach document">
                     <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><line x1="6" y1="1" x2="6" y2="11"/><line x1="1" y1="6" x2="11" y2="6"/></svg>
@@ -2904,41 +2981,81 @@
                 </div>
                 <button class="dc-input-submit" id="dc-input-submit" onclick="dcSubmitInput()" disabled>New Perspective</button>
               </div>
+            </div><!-- /dc-greeting-card -->
+
+            <!-- ══ VENTURE CARDS ══ -->
+            <div class="dc-section-head" id="dc-ventures-head" style="display:none">
+              <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="3" width="14" height="11" rx="2"/><path d="M5 3V2a1 1 0 011-1h4a1 1 0 011 1v1"/></svg>
+              Your Ventures
+            </div>
+            <div class="dc-projects-grid" id="dc-projects-grid" style="display:none">
+              <!-- populated by renderDcProjects() -->
             </div>
 
-            <!-- Recent Perspectives — hidden until populated by renderDcRecents() -->
+            <!-- ══ RECENT PERSPECTIVES ══ -->
             <div id="dc-recents-section" style="margin-bottom:28px;display:none">
               <div class="dc-section-head">Recent Perspectives</div>
               <div id="dc-recents-grid"></div>
             </div>
 
-            <!-- Top Sought: available thinker cards -->
+            <!-- ══ THINKER GRID ══ -->
             <div class="dc-section-head" id="dc-sect-thinkers">Curation of verified Human Minds</div>
             <div class="dc-grid" id="dc-thinker-grid">
               <!-- populated by renderDcThinkerGrid() -->
             </div>
 
-          </div>
+          </div><!-- /LEFT Action Center -->
 
-          <!-- RIGHT: Portfolio panel -->
+          <!-- RIGHT: Growth Intelligence -->
           <div class="dc-panel">
-            <div class="dc-panel-tabs">
-              <button class="dc-ptab" onclick="switchDcPanel('health',this)">Market Health</button>
-              <button class="dc-ptab active" onclick="switchDcPanel('portfolio',this)">My Portfolio Ledger</button>
+            <div class="dc-panel-tabs three">
+              <button class="dc-ptab active" onclick="switchDcPanel('growth',this)">Growth</button>
+              <button class="dc-ptab" onclick="switchDcPanel('portfolio',this)">Portfolio</button>
+              <button class="dc-ptab" onclick="switchDcPanel('integrations',this)">Integrations</button>
             </div>
 
-            <!-- Market Health tab -->
-            <div id="dc-panel-health" style="display:none">
+            <!-- ── GROWTH tab: Revenue Graph + Advisory Circle ── -->
+            <div id="dc-panel-growth">
               <div class="dc-panel-body">
-                <div class="dc-panel-section">
-                  <div class="dc-psec-title">Top Thinkers This Week</div>
-                  <div id="dc-market-body"></div>
-                </div>
-              </div>
-            </div>
 
-            <!-- Portfolio Ledger tab -->
-            <div id="dc-panel-portfolio">
+                <!-- Revenue Graph section -->
+                <div class="dc-panel-section">
+                  <div class="dc-psec-title">Projected Revenue</div>
+                  <div class="dc-revenue-kpis">
+                    <div class="dc-rev-kpi">
+                      <div class="dc-rev-kpi-label">NPV (2030)</div>
+                      <div class="dc-rev-kpi-val" id="dc-npv-val">$4.8M</div>
+                      <div class="dc-rev-kpi-delta" id="dc-npv-delta">↑ +22% vs last quarter</div>
+                    </div>
+                    <div class="dc-rev-kpi">
+                      <div class="dc-rev-kpi-label">+$GMV Impact</div>
+                      <div class="dc-rev-kpi-val" id="dc-gmv-val">$143K</div>
+                      <div class="dc-rev-kpi-delta" id="dc-gmv-delta">↑ from recent audits</div>
+                    </div>
+                  </div>
+                  <div class="dc-revenue-canvas-wrap">
+                    <canvas id="dc-revenue-canvas" width="260" height="100" style="width:100%;display:block"></canvas>
+                  </div>
+                  <div class="dc-revenue-legend">
+                    <span><span class="dc-revenue-legend-dot" style="background:#BF452A"></span>NPV Growth</span>
+                    <span><span class="dc-revenue-legend-dot" style="background:#22c55e"></span>+GMV Impact</span>
+                  </div>
+                  <div class="dc-connect-cta">Connect <a onclick="switchDcPanel('integrations', document.querySelector('[onclick*=integrations]'));return false">accounting software</a> for live data</div>
+                </div>
+
+                <!-- Advisory Circle section -->
+                <div class="dc-panel-section">
+                  <div class="dc-psec-title">Your Advisory Circle</div>
+                  <div class="dc-advisory-grid" id="dc-advisory-grid">
+                    <!-- populated by renderDcAdvisoryCircle() -->
+                  </div>
+                </div>
+
+              </div>
+            </div><!-- /dc-panel-growth -->
+
+            <!-- ── PORTFOLIO tab (existing ledger) ── -->
+            <div id="dc-panel-portfolio" style="display:none">
               <div class="dc-panel-body">
 
                 <!-- Cognitive Equity -->
@@ -2984,7 +3101,21 @@
                 </div>
 
               </div>
-            </div>
+            </div><!-- /dc-panel-portfolio -->
+
+            <!-- ── INTEGRATIONS tab ── -->
+            <div id="dc-panel-integrations" style="display:none">
+              <div class="dc-panel-body">
+                <div class="dc-panel-section">
+                  <div class="dc-psec-title">Connected Tools</div>
+                  <p class="dc-integrations-intro">Link your accounting and operations software so Divine can enrich your Revenue Graph with live data.</p>
+                  <div class="dc-integrations-list" id="dc-integrations-list">
+                    <!-- populated by renderDcIntegrations() -->
+                  </div>
+                </div>
+              </div>
+            </div><!-- /dc-panel-integrations -->
+
           </div><!-- /dc-panel -->
 
         </div><!-- /dc-layout -->
@@ -4776,11 +4907,203 @@ function updateBalanceDisplay(balance) {
    DASHBOARD COMMAND CENTER
 ══════════════════════════════════════ */
 
+/* ══════════════════════════════════════════════════════════════════════════
+   LAUNCHPAD — VENTURES DATA
+   ══════════════════════════════════════════════════════════════════════════ */
+const VENTURES = [
+  {
+    id: 'surplus',
+    name: 'Surplus Pods',
+    tagline: 'Storage & Workspace Rentals',
+    initials: 'SP',
+    color: '#BF452A',
+    fragility: 72,
+    actions: [
+      { label: 'Strengthen Asset', primary: true,  prompt: 'How can I strengthen the core asset value and defensibility of Surplus Pods?' },
+      { label: 'Audit Pricing',    primary: false, prompt: 'Conduct a pricing audit for Surplus Pods — benchmark competitors and identify revenue leakage.' }
+    ]
+  },
+  {
+    id: 'roothold',
+    name: 'RootHold',
+    tagline: 'Real Estate Intelligence',
+    initials: 'RH',
+    color: '#2C5282',
+    fragility: 38,
+    actions: [
+      { label: 'Expand Portfolio', primary: true,  prompt: 'What is the optimal expansion strategy for the RootHold real estate portfolio right now?' },
+      { label: 'Risk Assessment',  primary: false, prompt: 'Run a fragility risk assessment on the RootHold portfolio — identify the top 3 vulnerabilities.' }
+    ]
+  }
+];
+
+/* ══ Render venture / project cards ══ */
+function renderDcProjects() {
+  const grid = document.getElementById('dc-projects-grid');
+  const head = document.getElementById('dc-ventures-head');
+  if (!grid) return;
+  if (!VENTURES.length) { grid.style.display = 'none'; if (head) head.style.display = 'none'; return; }
+  grid.style.display = '';
+  if (head) head.style.display = '';
+
+  grid.innerHTML = VENTURES.map(v => {
+    const fragColor = v.fragility >= 70 ? '#ef4444' : v.fragility >= 45 ? '#f59e0b' : '#22c55e';
+    const fragLabel = v.fragility >= 70 ? 'High Fragility' : v.fragility >= 45 ? 'Moderate' : 'Resilient';
+    return '<div class="dc-project-card" style="--vc:' + v.color + '">' +
+      '<div class="dc-proj-card-top">' +
+        '<div class="dc-proj-card-left">' +
+          '<div class="dc-proj-avatar" style="background:' + v.color + '">' + v.initials + '</div>' +
+          '<div>' +
+            '<div class="dc-proj-name">' + v.name + '</div>' +
+            '<div class="dc-proj-tagline">' + v.tagline + '</div>' +
+          '</div>' +
+        '</div>' +
+        '<div class="dc-proj-fragility">' +
+          '<div class="dc-proj-frag-label">Fragility</div>' +
+          '<div class="dc-proj-frag-score" style="color:' + fragColor + '">' + v.fragility + '</div>' +
+        '</div>' +
+      '</div>' +
+      '<div class="dc-proj-frag-bar"><div class="dc-proj-frag-fill" style="width:' + v.fragility + '%;background:' + fragColor + '"></div></div>' +
+      '<div class="dc-proj-actions">' +
+        v.actions.map(a =>
+          '<button class="dc-proj-action-btn' + (a.primary ? ' primary' : '') + '" ' +
+          'onclick="dcVentureAction(\'' + escHtml(a.prompt) + '\')">' + escHtml(a.label) + '</button>'
+        ).join('') +
+      '</div>' +
+    '</div>';
+  }).join('');
+}
+
+function dcVentureAction(prompt) {
+  const ta = document.getElementById('dc-quick-input');
+  if (ta) { ta.value = prompt; dcInputUpdate(ta); ta.focus(); }
+}
+
+function escHtml(s) {
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+}
+
+/* ══ Render revenue graph (mock data until accounting connected) ══ */
+function renderDcRevenueGraph() {
+  const canvas = document.getElementById('dc-revenue-canvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const W = canvas.width, H = canvas.height;
+  ctx.clearRect(0, 0, W, H);
+
+  // Mock data points — 8 quarters
+  const npv  = [1.2, 1.6, 2.1, 2.4, 2.9, 3.5, 4.1, 4.8];
+  const gmv  = [0,   0.01,0.02,0.04,0.06,0.09,0.12,0.143];
+  const pad  = { l:8, r:8, t:8, b:12 };
+  const gW   = W - pad.l - pad.r;
+  const gH   = H - pad.t - pad.b;
+  const maxV = 5.5;
+  const pts  = npv.length;
+
+  function xp(i) { return pad.l + (i / (pts - 1)) * gW; }
+  function yp(v) { return pad.t + gH - (v / maxV) * gH; }
+
+  // Grid lines
+  ctx.strokeStyle = 'rgba(0,0,0,.06)'; ctx.lineWidth = 1;
+  [0, 1.5, 3, 4.5].forEach(v => {
+    ctx.beginPath(); ctx.moveTo(pad.l, yp(v)); ctx.lineTo(pad.l + gW, yp(v)); ctx.stroke();
+  });
+
+  // GMV area
+  ctx.beginPath(); ctx.moveTo(xp(0), yp(0));
+  gmv.forEach((v, i) => ctx.lineTo(xp(i), yp(v * 10)));
+  ctx.lineTo(xp(pts-1), yp(0)); ctx.closePath();
+  ctx.fillStyle = 'rgba(34,197,94,.15)'; ctx.fill();
+
+  // GMV line
+  ctx.beginPath(); ctx.moveTo(xp(0), yp(gmv[0] * 10));
+  gmv.forEach((v, i) => { if (i > 0) ctx.lineTo(xp(i), yp(v * 10)); });
+  ctx.strokeStyle = '#22c55e'; ctx.lineWidth = 1.5; ctx.setLineDash([3,3]); ctx.stroke(); ctx.setLineDash([]);
+
+  // NPV gradient area
+  const grad = ctx.createLinearGradient(0, pad.t, 0, pad.t + gH);
+  grad.addColorStop(0, 'rgba(191,69,42,.25)');
+  grad.addColorStop(1, 'rgba(191,69,42,0)');
+  ctx.beginPath(); ctx.moveTo(xp(0), yp(npv[0]));
+  npv.forEach((v, i) => { if (i > 0) ctx.lineTo(xp(i), yp(v)); });
+  ctx.lineTo(xp(pts-1), yp(0)); ctx.lineTo(xp(0), yp(0)); ctx.closePath();
+  ctx.fillStyle = grad; ctx.fill();
+
+  // NPV line
+  ctx.beginPath(); ctx.moveTo(xp(0), yp(npv[0]));
+  npv.forEach((v, i) => { if (i > 0) ctx.lineTo(xp(i), yp(v)); });
+  ctx.strokeStyle = '#BF452A'; ctx.lineWidth = 2.5; ctx.stroke();
+
+  // End dot
+  ctx.beginPath(); ctx.arc(xp(pts-1), yp(npv[pts-1]), 4, 0, Math.PI*2);
+  ctx.fillStyle = '#BF452A'; ctx.fill();
+  ctx.beginPath(); ctx.arc(xp(pts-1), yp(npv[pts-1]), 4, 0, Math.PI*2);
+  ctx.strokeStyle = '#fff'; ctx.lineWidth = 1.5; ctx.stroke();
+}
+
+/* ══ Render advisory circle (top thinkers) ══ */
+function renderDcAdvisoryCircle() {
+  const grid = document.getElementById('dc-advisory-grid');
+  if (!grid) return;
+  const advisors = (typeof THINKERS !== 'undefined' ? THINKERS : [])
+    .filter(t => t.available !== false).slice(0, 4);
+  if (!advisors.length) {
+    grid.innerHTML = '<div style="font-size:12px;color:var(--text-3);padding:8px 0">No advisors available yet.</div>';
+    return;
+  }
+  grid.innerHTML = advisors.map((t, i) => {
+    const idx = (typeof THINKERS !== 'undefined') ? THINKERS.indexOf(t) : i;
+    const initials = t.initials || t.name.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase();
+    const role = t.title ? t.title.split('·')[0].trim() : 'Advisor';
+    const quote = t.lens || 'Strategic intelligence, applied.';
+    return '<div class="dc-advisory-card" onclick="acquireFromThinker(' + idx + ')">' +
+      '<div class="dc-advisory-avatar" style="background:' + (t.color || '#BF452A') + '">' + initials + '</div>' +
+      '<div class="dc-advisory-info">' +
+        '<div class="dc-advisory-name">' + t.name + '</div>' +
+        '<div class="dc-advisory-role">' + role + '</div>' +
+        '<div class="dc-advisory-quote">"' + quote + '"</div>' +
+      '</div>' +
+    '</div>';
+  }).join('');
+}
+
+/* ══ Render integrations tab ══ */
+const DC_INTEGRATIONS = [
+  { id:'quickbooks', name:'QuickBooks',    icon:'📊', desc:'Sync revenue, P&L, and cash flow for live graph data.', connected:false },
+  { id:'stripe',     name:'Stripe',        icon:'💳', desc:'Track GMV and payment volume from your products.',      connected:false },
+  { id:'xero',       name:'Xero',          icon:'📋', desc:'Import accounting data for portfolio valuation.',       connected:false },
+  { id:'plaid',      name:'Plaid / Bank',  icon:'🏦', desc:'Connect bank accounts for real-time balance tracking.', connected:false }
+];
+function renderDcIntegrations() {
+  const list = document.getElementById('dc-integrations-list');
+  if (!list) return;
+  list.innerHTML = DC_INTEGRATIONS.map(intg =>
+    '<div class="dc-integration-row">' +
+      '<div class="dc-integration-icon">' + intg.icon + '</div>' +
+      '<div class="dc-integration-info">' +
+        '<div class="dc-integration-name">' + intg.name + '</div>' +
+        '<div class="dc-integration-desc">' + intg.desc + '</div>' +
+      '</div>' +
+      '<button class="dc-integration-btn' + (intg.connected ? ' connected' : '') + '" ' +
+      'onclick="dcConnectIntegration(\'' + intg.id + '\')">' +
+      (intg.connected ? '✓ Connected' : 'Connect') + '</button>' +
+    '</div>'
+  ).join('');
+}
+function dcConnectIntegration(id) {
+  showToast('Integration coming soon — stay tuned for ' + id.charAt(0).toUpperCase() + id.slice(1) + ' connectivity.');
+}
+
+/* ══ MAIN DASHBOARD RENDER ══ */
 function renderDashboardHome() {
   renderDcThinkerGrid();
   renderDcRecents();
   renderDcPortfolio();
   renderDcMarket();
+  renderDcProjects();
+  renderDcRevenueGraph();
+  renderDcAdvisoryCircle();
+  renderDcIntegrations();
   dcRenderProjDropdown();
 }
 
@@ -5057,11 +5380,14 @@ function renderDcMarket() {
 function switchDcPanel(tab, btn) {
   document.querySelectorAll('.dc-ptab').forEach(t => t.classList.remove('active'));
   if (btn) btn.classList.add('active');
-  const h = document.getElementById('dc-panel-health');
-  const p = document.getElementById('dc-panel-portfolio');
-  if (h) h.style.display = tab === 'health' ? '' : 'none';
-  if (p) p.style.display = tab === 'portfolio' ? '' : 'none';
-  if (tab === 'health') renderDcMarket();
+  const panels = { growth: 'dc-panel-growth', portfolio: 'dc-panel-portfolio', integrations: 'dc-panel-integrations', health: 'dc-panel-health' };
+  Object.entries(panels).forEach(([key, id]) => {
+    const el = document.getElementById(id);
+    if (el) el.style.display = key === tab ? '' : 'none';
+  });
+  if (tab === 'growth')       { renderDcRevenueGraph(); renderDcAdvisoryCircle(); }
+  if (tab === 'health')       renderDcMarket();
+  if (tab === 'integrations') renderDcIntegrations();
 }
 
 function acquireFromThinker(idx) {
@@ -7833,11 +8159,16 @@ function applyAuthState(user) {
     document.getElementById('profile-menu-name').textContent  = user.name  || 'User';
     document.getElementById('profile-menu-email').textContent = user.email || '';
 
-    // Dashboard greeting
-    document.getElementById('dc-greeting-name').textContent = `Hi ${firstName}`;
-    document.getElementById('dc-greeting-row').style.display = '';
-    const hl = document.getElementById('dc-headline');
-    if (hl) hl.textContent = `${firstName}, what perspective do you need today?`;
+    // Dashboard greeting card
+    const grName = document.getElementById('dc-greeting-name');
+    const grSub  = document.getElementById('dc-greeting-sub');
+    if (grName) grName.textContent = `Hi ${firstName}.`;
+    if (grSub)  grSub.textContent  = 'Ready to build.';
+    // Show venture cards for logged-in users
+    const vHead = document.getElementById('dc-ventures-head');
+    const vGrid = document.getElementById('dc-projects-grid');
+    if (vHead) vHead.style.display = '';
+    if (vGrid) vGrid.style.display = '';
 
     // Thinker nav
     if (user.thinker_access) {
@@ -7860,9 +8191,16 @@ function applyAuthState(user) {
     document.getElementById('sidebar-signin-area').style.display  = '';
     document.getElementById('thinker-nav-section').style.display  = 'none';
     document.getElementById('mob-nav-thinker').style.display      = 'none';
-    document.getElementById('dc-greeting-row').style.display      = 'none';
-    const hl = document.getElementById('dc-headline');
-    if (hl) hl.textContent = 'What perspective do you need today?';
+    // Dashboard greeting card — logged-out state
+    const grName = document.getElementById('dc-greeting-name');
+    const grSub  = document.getElementById('dc-greeting-sub');
+    if (grName) grName.textContent = 'What would you like to build?';
+    if (grSub)  grSub.textContent  = 'Sign in to personalize your experience.';
+    // Hide venture cards for logged-out users
+    const vHead = document.getElementById('dc-ventures-head');
+    const vGrid = document.getElementById('dc-projects-grid');
+    if (vHead) vHead.style.display = 'none';
+    if (vGrid) vGrid.style.display = 'none';
     // Reset mobile nav profile button
     const mnIcon  = document.getElementById('mob-nav-profile-icon');
     const mnLabel = document.getElementById('mob-nav-profile-label');
