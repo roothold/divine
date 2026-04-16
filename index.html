@@ -99,18 +99,6 @@
     /* When chat is active, show title and spread left↔right */
     .content-topbar.chat-mode { justify-content:space-between; }
     .content-topbar.chat-mode .content-chat-title { display:block; }
-    /* Growth button in topbar — only visible in chat mode */
-    .topbar-growth-btn {
-      display:none; align-items:center; gap:5px;
-      font-size:12px; font-weight:600; color:var(--text-2);
-      background:var(--surface); border:1.5px solid var(--border);
-      border-radius:var(--r-pill); padding:5px 12px;
-      cursor:pointer; transition:all .15s; font-family:'Inter',sans-serif;
-      flex-shrink:0;
-    }
-    .content-topbar.chat-mode .topbar-growth-btn { display:flex; }
-    .topbar-growth-btn:hover { border-color:var(--accent-bdr); color:var(--accent); }
-    .topbar-growth-btn.active { background:var(--accent-lt); color:var(--accent); border-color:var(--accent-bdr); }
     /* Sidebar hamburger row */
     .sb-hamburger-row {
       display:flex; align-items:center; justify-content:space-between;
@@ -1133,6 +1121,35 @@
 
     /* ── Chat column (left): fills remaining width ── */
     .is-chat-col { flex:1; display:flex; flex-direction:column; min-width:0; overflow:hidden; }
+
+    /* ── Chat screen sidebar: always visible, no toggle ── */
+    #chat-insight-sidebar {
+      width:260px !important;
+      flex-shrink:0;
+      pointer-events:auto !important;
+      transition:none !important;
+    }
+    /* Remove collapsed effect for chat sidebar */
+    #screen-chat #chat-insight-sidebar.collapsed {
+      width:260px !important;
+      pointer-events:auto !important;
+    }
+    /* On mobile the chat sidebar stacks below, always visible */
+    @media (max-width:768px) {
+      #chat-insight-sidebar {
+        position:static !important;
+        transform:none !important;
+        width:100% !important;
+        height:auto !important;
+        border-left:none !important;
+        border-top:1px solid var(--border) !important;
+        border-radius:0 !important;
+        box-shadow:none !important;
+        max-height:55vh;
+        overflow-y:auto;
+      }
+      #chat-insight-sidebar.mobile-open { transform:none !important; }
+    }
 
     /* ── Insight sidebar (right) ── */
     .is-insight-sidebar {
@@ -3104,13 +3121,6 @@
         placeholder="New conversation" maxlength="80"
         onblur="saveChatTitle()"
         onkeydown="if(event.key==='Enter'){this.blur()}">
-      <button class="topbar-growth-btn" id="topbar-growth-btn" onclick="toggleChatSidebar()" title="Growth Intelligence">
-        <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M2 12 Q4 6 8 8 Q12 10 14 4"/>
-          <circle cx="14" cy="4" r="1.5" fill="currentColor" stroke="none"/>
-        </svg>
-        Growth
-      </button>
       <button class="lens-switcher" onclick="openPicker()" aria-label="Switch perspective">
         <span class="lens-swap-icon">
           <svg width="15" height="15" viewBox="0 0 15 15" fill="none" stroke="currentColor" stroke-width="2">
@@ -3457,19 +3467,22 @@
 
       </div><!-- /.chat-col -->
 
-      <!-- ── Growth Intelligence Sidebar (right, collapsed by default) ── -->
-      <div class="is-insight-sidebar collapsed" id="chat-insight-sidebar">
+      <!-- ── Growth Intelligence Sidebar (right, always visible) ── -->
+      <div class="is-insight-sidebar" id="chat-insight-sidebar">
 
-        <!-- Sidebar header: tabs + close -->
+        <!-- Project context header -->
+        <div id="chat-sidebar-project-bar" style="display:none;align-items:center;gap:8px;padding:10px 14px 0;flex-shrink:0">
+          <div id="chat-sidebar-proj-dot" style="width:8px;height:8px;border-radius:50%;background:var(--accent);flex-shrink:0"></div>
+          <span id="chat-sidebar-proj-name" style="font-size:11px;font-weight:600;color:var(--text-2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis"></span>
+        </div>
+
+        <!-- Sidebar header: tabs only (no close button) -->
         <div class="is-panel-header">
           <div class="is-panel-tabs">
             <button class="is-ptab active" onclick="switchPanel('chat-panel','growth',this)">Growth</button>
             <button class="is-ptab" onclick="switchPanel('chat-panel','portfolio',this)">Portfolio</button>
             <button class="is-ptab" onclick="switchPanel('chat-panel','integrations',this)">Connect</button>
           </div>
-          <button class="is-sidebar-close" onclick="toggleChatSidebar()" title="Close">
-            <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="3" x2="13" y2="13"/><line x1="13" y1="3" x2="3" y2="13"/></svg>
-          </button>
         </div>
 
         <!-- ── Growth tab ── -->
@@ -5113,12 +5126,6 @@ function goHome() {
   if (sb)    { sb.classList.add('collapsed'); sb.classList.remove('mobile-open'); }
   if (isBtn) isBtn.classList.remove('active');
   _isSidebarOpen = false;
-  // Close Chat sidebar if open
-  const csb  = document.getElementById('chat-insight-sidebar');
-  const cBtn = document.getElementById('topbar-growth-btn');
-  if (csb)  { csb.classList.add('collapsed'); csb.classList.remove('mobile-open'); }
-  if (cBtn) cBtn.classList.remove('active');
-  _chatSidebarOpen = false;
   show('screen-0');
 }
 
@@ -7637,12 +7644,15 @@ function openChat(prefill) {
   // Clear nav active state — no nav item is "active" while in a chat
   document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
 
-  // Create a fresh session
+  // Create a fresh session, capturing selected project from launchpad (consume + clear)
   const thinker = activeThinker || THINKERS[0];
+  const projId  = window._dcPrefillProject || null;
+  window._dcPrefillProject = null;  // consume once
   _chatSession = {
     id:        'c_' + Date.now(),
     title:     '',
     thinker,
+    projectId: projId,
     messages:  [],
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
@@ -7662,16 +7672,11 @@ function openChat(prefill) {
   ta.value = '';
   chatTextareaResize(ta);
 
-  // Navigate to screen + push URL with session id
+  // Navigate to screen + always render growth sidebar
   show('screen-chat');
-  // Reset growth sidebar
-  (function() {
-    const sb  = document.getElementById('chat-insight-sidebar');
-    const btn = document.getElementById('topbar-growth-btn');
-    if (sb)  { sb.classList.add('collapsed'); sb.classList.remove('mobile-open'); }
-    if (btn) btn.classList.remove('active');
-    _chatSidebarOpen = false;
-  })();
+  setTimeout(() => {
+    _renderChatSidebarForSession(_chatSession);
+  }, 60);
   setMobNavActive(null);
   router.push('/dashboard/chat/' + _chatSession.id);
 
@@ -7722,17 +7727,14 @@ function openChatSession(sessionId) {
   chatTextareaResize(ta);
 
   show('screen-chat');
-  // Reset growth sidebar
-  (function() {
-    const sb  = document.getElementById('chat-insight-sidebar');
-    const btn = document.getElementById('topbar-growth-btn');
-    if (sb)  { sb.classList.add('collapsed'); sb.classList.remove('mobile-open'); }
-    if (btn) btn.classList.remove('active');
-    _chatSidebarOpen = false;
-  })();
+  // Render growth sidebar for this session
+  setTimeout(() => {
+    _renderChatSidebarForSession(s);
+    msgs.scrollTop = msgs.scrollHeight;
+    ta.focus();
+  }, 80);
   setMobNavActive(null);
   router.push('/dashboard/chat/' + sessionId);
-  setTimeout(() => { msgs.scrollTop = msgs.scrollHeight; ta.focus(); }, 80);
 }
 
 function _chatEmptyState() {
@@ -9905,7 +9907,39 @@ function toggleIsSidebar() {
   if (_isSidebarOpen) renderGrowthPanel('is');
 }
 
-/* ── Chat-screen sidebar toggle ── */
+/* ── Render chat sidebar for a given session (called on openChat / openChatSession) ── */
+function _renderChatSidebarForSession(session) {
+  // Show project context bar if session is linked to a project
+  const bar      = document.getElementById('chat-sidebar-project-bar');
+  const dot      = document.getElementById('chat-sidebar-proj-dot');
+  const nameEl   = document.getElementById('chat-sidebar-proj-name');
+
+  if (session && session.projectId) {
+    const proj = loadProjects().find(p => p.id === session.projectId);
+    if (proj && bar && dot && nameEl) {
+      dot.style.background   = proj.color || 'var(--accent)';
+      nameEl.textContent     = proj.name;
+      bar.style.display      = 'flex';
+    }
+  } else if (bar) {
+    bar.style.display = 'none';
+  }
+
+  // Pre-fill scenario modeler with sensible defaults if empty
+  const flds = { rev:'10000', growth:'8', margin:'40', months:'12' };
+  Object.entries(flds).forEach(([k, v]) => {
+    const el = document.getElementById('chat-scenario-' + k);
+    if (el && !el.value) el.value = v;
+  });
+
+  // Render graph + advisory + integrations + portfolio
+  renderGrowthPanel('chat');
+
+  // Auto-calculate scenario with the pre-filled defaults
+  updateScenario('chat');
+}
+
+/* ── Chat-screen sidebar toggle (kept for keyboard/programmatic use) ── */
 function toggleChatSidebar() {
   const sidebar = document.getElementById('chat-insight-sidebar');
   const btn     = document.getElementById('topbar-growth-btn');
