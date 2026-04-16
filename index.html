@@ -691,6 +691,7 @@
     .project-card:hover { border-color:var(--border-hi); box-shadow:var(--sh-md); }
     .project-dot { width:10px; height:10px; border-radius:50%; margin-bottom:12px; }
     .project-name { font-size:14px; font-weight:600; color:var(--text-0); margin-bottom:4px; }
+    .project-tagline { font-size:12px; color:var(--text-3); margin-bottom:4px; line-height:1.4; }
     .project-count { font-size:12px; color:var(--text-3); }
     .new-project-card { background:transparent; border:1.5px dashed var(--border-hi); border-radius:var(--r); padding:20px 18px; cursor:pointer; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:8px; transition:background 0.15s,border-color 0.15s; min-height:96px; }
     .new-project-card:hover { background:var(--surface); border-color:var(--accent); }
@@ -1008,7 +1009,7 @@
     /* divider between greeting header and input */
     .dc-greeting-divider { height:1px; background:var(--border); margin:0 -22px 16px; }
 
-    /* ─── Venture / Project Cards ─── */
+    /* ─── Project Cards (Launchpad) ─── */
     .dc-projects-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:12px; margin-bottom:28px; }
     @media (max-width:560px) { .dc-projects-grid { grid-template-columns:1fr; } }
     .dc-project-card { background:#fff; border:1.5px solid var(--border); border-radius:14px; padding:18px 18px 14px; transition:border-color .15s,box-shadow .15s; position:relative; overflow:hidden; }
@@ -1019,12 +1020,15 @@
     .dc-proj-avatar { width:36px; height:36px; border-radius:9px; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:700; color:#fff; flex-shrink:0; }
     .dc-proj-name { font-size:13px; font-weight:700; color:var(--text-0); line-height:1.3; }
     .dc-proj-tagline { font-size:11px; color:var(--text-3); margin-top:1px; }
-    .dc-proj-fragility { display:flex; flex-direction:column; align-items:flex-end; gap:1px; }
-    .dc-proj-frag-label { font-size:8.5px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:var(--text-3); }
-    .dc-proj-frag-score { font-family:var(--font-mono); font-size:20px; font-weight:700; color:var(--text-0); line-height:1.1; }
-    .dc-proj-frag-bar { height:3px; background:var(--surface-2); border-radius:2px; overflow:hidden; margin-bottom:13px; }
-    .dc-proj-frag-fill { height:100%; border-radius:2px; transition:width .8s cubic-bezier(.2,.8,.4,1); }
-    .dc-proj-actions { display:grid; grid-template-columns:1fr 1fr; gap:7px; }
+    /* Count badge replacing fragility score */
+    .dc-proj-count-badge { font-size:10px; font-weight:600; color:var(--text-3); background:var(--surface-2); border:1px solid var(--border); border-radius:var(--r-pill); padding:3px 9px; white-space:nowrap; flex-shrink:0; }
+    /* Empty state card */
+    .dc-proj-empty { grid-column:1/-1; display:flex; flex-direction:column; align-items:center; gap:8px; padding:28px 20px; background:var(--surface); border:1.5px dashed var(--border-md); border-radius:14px; cursor:pointer; transition:border-color .15s,background .15s; text-align:center; color:var(--text-3); }
+    .dc-proj-empty:hover { border-color:var(--accent-bdr); background:var(--accent-lt); color:var(--accent); }
+    .dc-proj-empty-title { font-size:13px; font-weight:600; color:var(--text-1); }
+    .dc-proj-empty:hover .dc-proj-empty-title { color:var(--accent); }
+    .dc-proj-empty-sub { font-size:11.5px; color:var(--text-3); line-height:1.5; max-width:220px; }
+    .dc-proj-actions { display:grid; grid-template-columns:1fr 1fr; gap:7px; margin-top:12px; }
     .dc-proj-action-btn { background:transparent; border:1.5px solid var(--border-md); border-radius:8px; padding:8px 6px; font-size:10.5px; font-weight:700; letter-spacing:.025em; text-transform:uppercase; color:var(--text-2); cursor:pointer; transition:all .15s; text-align:center; line-height:1.3; font-family:'Inter',sans-serif; }
     .dc-proj-action-btn:hover { border-color:var(--accent-bdr); color:var(--accent); background:var(--accent-lt); }
     .dc-proj-action-btn.primary { background:var(--accent); border-color:var(--accent); color:#fff; }
@@ -2985,9 +2989,9 @@
             </div><!-- /dc-greeting-card -->
 
             <!-- ══ VENTURE CARDS ══ -->
-            <div class="dc-section-head" id="dc-ventures-head" style="display:none">
+            <div class="dc-section-head" id="dc-projects-head" style="display:none">
               <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="3" width="14" height="11" rx="2"/><path d="M5 3V2a1 1 0 011-1h4a1 1 0 011 1v1"/></svg>
-              Your Ventures
+              Your Projects
             </div>
             <div class="dc-projects-grid" id="dc-projects-grid" style="display:none">
               <!-- populated by renderDcProjects() -->
@@ -3282,7 +3286,8 @@
           <p class="screen-sub">Group sessions by initiative, company, or theme.</p>
         </div>
         <div class="project-form" id="project-form">
-          <input type="text" id="project-name-input" placeholder="Project name…" maxlength="40">
+          <input type="text" id="project-name-input" placeholder="Project name…" maxlength="40" autocomplete="off">
+          <input type="text" id="project-tagline-input" placeholder="Short description (optional)…" maxlength="80" autocomplete="off" style="margin-top:8px">
           <div class="color-swatches" id="color-swatches"></div>
           <div class="form-actions">
             <button class="btn-primary" onclick="saveProject()">Create project</button>
@@ -4909,73 +4914,82 @@ function updateBalanceDisplay(balance) {
 ══════════════════════════════════════ */
 
 /* ══════════════════════════════════════════════════════════════════════════
-   LAUNCHPAD — VENTURES DATA
+   LAUNCHPAD — PROJECT CARDS (driven by user's saved projects)
    ══════════════════════════════════════════════════════════════════════════ */
-const VENTURES = [
-  {
-    id: 'surplus',
-    name: 'Surplus Pods',
-    tagline: 'Storage & Workspace Rentals',
-    initials: 'SP',
-    color: '#BF452A',
-    fragility: 72,
-    actions: [
-      { label: 'Strengthen Asset', primary: true,  prompt: 'How can I strengthen the core asset value and defensibility of Surplus Pods?' },
-      { label: 'Audit Pricing',    primary: false, prompt: 'Conduct a pricing audit for Surplus Pods — benchmark competitors and identify revenue leakage.' }
-    ]
-  },
-  {
-    id: 'roothold',
-    name: 'RootHold',
-    tagline: 'Real Estate Intelligence',
-    initials: 'RH',
-    color: '#2C5282',
-    fragility: 38,
-    actions: [
-      { label: 'Expand Portfolio', primary: true,  prompt: 'What is the optimal expansion strategy for the RootHold real estate portfolio right now?' },
-      { label: 'Risk Assessment',  primary: false, prompt: 'Run a fragility risk assessment on the RootHold portfolio — identify the top 3 vulnerabilities.' }
-    ]
-  }
-];
 
-/* ══ Render venture / project cards ══ */
+/** Derive two-letter initials from a project name */
+function _projInitials(name) {
+  const words = name.trim().split(/\s+/);
+  if (words.length >= 2) return (words[0][0] + words[1][0]).toUpperCase();
+  return name.slice(0, 2).toUpperCase();
+}
+
+/** Generate two context-aware action prompts for a given project name */
+function _projActions(name) {
+  return [
+    { label: 'Explore Strategy', primary: true,
+      prompt: 'Give me a strategic overview of ' + name + ' — what are the highest-leverage opportunities right now?' },
+    { label: 'Audit Risks',      primary: false,
+      prompt: 'Run a fragility and risk audit on ' + name + ' — what are the top vulnerabilities I need to address?' }
+  ];
+}
+
+/* ══ Render project cards on the Launchpad ══ */
 function renderDcProjects() {
   const grid = document.getElementById('dc-projects-grid');
-  const head = document.getElementById('dc-ventures-head');
+  const head = document.getElementById('dc-projects-head');
   if (!grid) return;
-  if (!VENTURES.length) { grid.style.display = 'none'; if (head) head.style.display = 'none'; return; }
-  grid.style.display = '';
-  if (head) head.style.display = '';
 
-  grid.innerHTML = VENTURES.map(v => {
-    const fragColor = v.fragility >= 70 ? '#ef4444' : v.fragility >= 45 ? '#f59e0b' : '#22c55e';
-    const fragLabel = v.fragility >= 70 ? 'High Fragility' : v.fragility >= 45 ? 'Moderate' : 'Resilient';
-    return '<div class="dc-project-card" style="--vc:' + v.color + '">' +
+  const projects = loadProjects();
+  const recents  = loadRecents();
+
+  // Always show the section (header + grid) when logged in
+  if (head) head.style.display = '';
+  grid.style.display = '';
+
+  if (!projects.length) {
+    // Empty state — prompt user to create their first project
+    grid.innerHTML =
+      '<div class="dc-proj-empty" onclick="showView(\'projects\')">' +
+        '<svg width="20" height="20" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round">' +
+          '<rect x="1" y="3" width="14" height="11" rx="1.5"/>' +
+          '<path d="M5 3V2a1 1 0 011-1h4a1 1 0 011 1v1"/>' +
+          '<line x1="8" y1="7" x2="8" y2="11"/><line x1="6" y1="9" x2="10" y2="9"/>' +
+        '</svg>' +
+        '<div class="dc-proj-empty-title">Create your first project</div>' +
+        '<div class="dc-proj-empty-sub">Group your perspectives by initiative, company, or theme.</div>' +
+      '</div>';
+    return;
+  }
+
+  grid.innerHTML = projects.map(p => {
+    const initials   = _projInitials(p.name);
+    const tagline    = p.tagline || '';
+    const count      = recents.filter(r => r.projectId === p.id).length;
+    const countLabel = count + ' perspective' + (count !== 1 ? 's' : '');
+    const actions    = _projActions(p.name);
+    return '<div class="dc-project-card" style="--vc:' + p.color + '">' +
       '<div class="dc-proj-card-top">' +
         '<div class="dc-proj-card-left">' +
-          '<div class="dc-proj-avatar" style="background:' + v.color + '">' + v.initials + '</div>' +
+          '<div class="dc-proj-avatar" style="background:' + p.color + '">' + initials + '</div>' +
           '<div>' +
-            '<div class="dc-proj-name">' + v.name + '</div>' +
-            '<div class="dc-proj-tagline">' + v.tagline + '</div>' +
+            '<div class="dc-proj-name">' + escHtml(p.name) + '</div>' +
+            (tagline ? '<div class="dc-proj-tagline">' + escHtml(tagline) + '</div>' : '') +
           '</div>' +
         '</div>' +
-        '<div class="dc-proj-fragility">' +
-          '<div class="dc-proj-frag-label">Fragility</div>' +
-          '<div class="dc-proj-frag-score" style="color:' + fragColor + '">' + v.fragility + '</div>' +
-        '</div>' +
+        '<div class="dc-proj-count-badge">' + countLabel + '</div>' +
       '</div>' +
-      '<div class="dc-proj-frag-bar"><div class="dc-proj-frag-fill" style="width:' + v.fragility + '%;background:' + fragColor + '"></div></div>' +
       '<div class="dc-proj-actions">' +
-        v.actions.map(a =>
+        actions.map(a =>
           '<button class="dc-proj-action-btn' + (a.primary ? ' primary' : '') + '" ' +
-          'onclick="dcVentureAction(\'' + escHtml(a.prompt) + '\')">' + escHtml(a.label) + '</button>'
+          'onclick="dcProjectAction(\'' + escHtml(a.prompt) + '\')">' + escHtml(a.label) + '</button>'
         ).join('') +
       '</div>' +
     '</div>';
   }).join('');
 }
 
-function dcVentureAction(prompt) {
+function dcProjectAction(prompt) {
   const ta = document.getElementById('dc-quick-input');
   if (ta) { ta.value = prompt; dcInputUpdate(ta); ta.focus(); }
 }
@@ -6203,7 +6217,12 @@ function renderProjects() {
 
   const cards = projects.map(p => {
     const n = recents.filter(r => r.projectId === p.id).length;
-    return `<div class="project-card"><div class="project-dot" style="background:${p.color}"></div><div class="project-name">${p.name}</div><div class="project-count">${n} perspective${n!==1?'s':''}</div></div>`;
+    return `<div class="project-card" onclick="dcFilterByProject('${p.id}')">` +
+      `<div class="project-dot" style="background:${p.color}"></div>` +
+      `<div class="project-name">${p.name}</div>` +
+      (p.tagline ? `<div class="project-tagline">${p.tagline}</div>` : '') +
+      `<div class="project-count">${n} perspective${n!==1?'s':''}</div>` +
+      `</div>`;
   }).join('');
 
   grid.innerHTML = cards + `
@@ -6213,18 +6232,35 @@ function renderProjects() {
     </div>`;
 }
 
+function dcFilterByProject(projectId) {
+  // Navigate to recents filtered by this project
+  const proj = loadProjects().find(p => p.id === projectId);
+  if (!proj) return;
+  const ta = document.getElementById('dc-quick-input');
+  if (ta) { ta.value = 'Show my perspectives for ' + proj.name; dcInputUpdate(ta); ta.focus(); }
+  showView('recents');
+}
+
 function showProjectForm() { document.getElementById('project-form').classList.add('visible'); document.getElementById('project-name-input').focus(); }
-function hideProjectForm() { document.getElementById('project-form').classList.remove('visible'); document.getElementById('project-name-input').value = ''; }
+function hideProjectForm() {
+  document.getElementById('project-form').classList.remove('visible');
+  document.getElementById('project-name-input').value = '';
+  const tg = document.getElementById('project-tagline-input');
+  if (tg) tg.value = '';
+}
 function selectColor(c) { selectedColor = c; renderProjects(); }
 
 function saveProject() {
-  const name = document.getElementById('project-name-input').value.trim();
+  const name    = document.getElementById('project-name-input').value.trim();
   if (!name) return;
+  const tagline = (document.getElementById('project-tagline-input') || {}).value?.trim() || '';
   const p = loadProjects();
-  p.push({ id: String(Date.now()), name, color: selectedColor });
+  p.push({ id: String(Date.now()), name, tagline, color: selectedColor });
   saveProjects(p);
   hideProjectForm();
   renderProjects();
+  // Refresh the Launchpad project cards if visible
+  try { renderDcProjects(); } catch(e) {}
 }
 
 /* ════════════════════════════════
@@ -8172,7 +8208,7 @@ function applyAuthState(user) {
     if (grName) grName.textContent = `Hi ${firstName}.`;
     if (grSub)  grSub.textContent  = 'Ready to build.';
     // Show venture cards for logged-in users
-    const vHead = document.getElementById('dc-ventures-head');
+    const vHead = document.getElementById('dc-projects-head');
     const vGrid = document.getElementById('dc-projects-grid');
     if (vHead) vHead.style.display = '';
     if (vGrid) vGrid.style.display = '';
@@ -8204,7 +8240,7 @@ function applyAuthState(user) {
     if (grName) grName.textContent = 'What would you like to build?';
     if (grSub)  grSub.textContent  = 'Sign in to personalize your experience.';
     // Hide venture cards for logged-out users
-    const vHead = document.getElementById('dc-ventures-head');
+    const vHead = document.getElementById('dc-projects-head');
     const vGrid = document.getElementById('dc-projects-grid');
     if (vHead) vHead.style.display = 'none';
     if (vGrid) vGrid.style.display = 'none';
