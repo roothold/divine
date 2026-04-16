@@ -1114,14 +1114,141 @@
     .tl-acquire-btn:hover { background:var(--accent); color:#fff; }
 
     /* ═══ INQUIRY STREAM ═══ */
-    #screen-replay { display:none; flex-direction:column; }
-    /* Height = viewport minus the content-topbar above it */
+    /* Screen is now a row: [chat col] + [insight sidebar] */
+    #screen-replay { display:none; flex-direction:row; }
     #screen-replay.active { display:flex; height:calc(100vh - var(--header-h)); overflow:hidden; }
     #screen-replay .main-inner { display:none; }
 
+    /* ── Chat column (left): fills remaining width ── */
+    .is-chat-col { flex:1; display:flex; flex-direction:column; min-width:0; overflow:hidden; }
+
+    /* ── Insight sidebar (right) ── */
+    .is-insight-sidebar {
+      width:290px;
+      flex-shrink:0;
+      display:flex;
+      flex-direction:column;
+      border-left:1px solid var(--border);
+      background:var(--surface);
+      overflow:hidden;
+      transition:width .25s cubic-bezier(.4,0,.2,1);
+    }
+    .is-insight-sidebar.collapsed { width:0; pointer-events:none; }
+
+    /* Sidebar header: tabs + close button */
+    .is-panel-header {
+      display:flex;
+      align-items:stretch;
+      border-bottom:1px solid var(--border);
+      flex-shrink:0;
+      background:var(--surface);
+    }
+    .is-panel-tabs { flex:1; display:flex; overflow:hidden; }
+    .is-ptab {
+      flex:1;
+      font-size:11.5px;
+      font-weight:500;
+      color:var(--text-3);
+      background:transparent;
+      border:none;
+      border-bottom:2.5px solid transparent;
+      padding:11px 4px;
+      cursor:pointer;
+      transition:color .15s;
+      white-space:nowrap;
+      font-family:'Inter',sans-serif;
+      margin-bottom:-1px;
+    }
+    .is-ptab.active { color:var(--text-0); font-weight:600; border-bottom-color:#2C2820; }
+    .is-sidebar-close {
+      width:34px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      border:none;
+      border-left:1px solid var(--border);
+      background:transparent;
+      cursor:pointer;
+      color:var(--text-3);
+      flex-shrink:0;
+      transition:color .15s,background .12s;
+    }
+    .is-sidebar-close:hover { color:var(--text-0); background:var(--surface-2); }
+
+    /* Tab bodies: fill height, scroll internally */
+    .is-panel-tab-body { flex:1; overflow-y:auto; overscroll-behavior:contain; }
+
+    /* Panel body & sections */
+    .is-panel-body { padding:14px; }
+    .is-panel-section { margin-bottom:18px; }
+    .is-panel-section:last-child { margin-bottom:0; }
+    .is-panel-section-title { font-family:'Cormorant Garamond',serif; font-size:14px; font-weight:600; color:var(--text-0); margin-bottom:10px; }
+
+    /* Scenario modeler */
+    .is-scenario-wrap { margin-top:10px; padding-top:10px; border-top:1px solid var(--border); }
+    .is-scenario-label { font-size:9.5px; font-weight:700; letter-spacing:.09em; text-transform:uppercase; color:var(--text-3); margin-bottom:8px; }
+    .is-scenario-inputs { display:grid; grid-template-columns:1fr 1fr; gap:7px; }
+    .is-scenario-field label { font-size:9.5px; font-weight:600; color:var(--text-3); display:block; margin-bottom:3px; }
+    .is-scenario-field input {
+      width:100%; box-sizing:border-box;
+      background:var(--surface-2); border:1px solid var(--border); border-radius:7px;
+      padding:6px 8px; font-size:12px; font-family:var(--font-mono); color:var(--text-0);
+      outline:none; transition:border-color .12s;
+    }
+    .is-scenario-field input:focus { border-color:var(--accent-bdr); box-shadow:0 0 0 2px rgba(191,69,42,.08); }
+    .is-scenario-delta { font-size:10px; font-weight:600; color:#22c55e; margin-top:6px; text-align:center; }
+    .is-scenario-delta.negative { color:#ef4444; }
+
+    /* IS panel toggle button in header */
+    .is-panel-toggle-btn {
+      display:flex;
+      align-items:center;
+      gap:5px;
+      font-size:12px;
+      font-weight:600;
+      color:var(--text-2);
+      background:var(--surface);
+      border:1.5px solid var(--border);
+      border-radius:var(--r-pill);
+      padding:5px 12px;
+      cursor:pointer;
+      transition:all .15s;
+      font-family:'Inter',sans-serif;
+    }
+    .is-panel-toggle-btn:hover { border-color:var(--accent-bdr); color:var(--accent); }
+    .is-panel-toggle-btn.active { background:var(--accent-lt); color:var(--accent); border-color:var(--accent-bdr); }
+
     /* Sticky top nav within the stream */
-    .is-header { flex-shrink:0; display:flex; align-items:center; justify-content:space-between; padding:12px 24px; background:var(--bg); }
-    @media (max-width:600px) { .is-header { padding:10px 16px; } }
+    .is-header { flex-shrink:0; display:flex; align-items:center; justify-content:space-between; padding:12px 24px; background:var(--bg); gap:10px; }
+    @media (max-width:600px) { .is-header { padding:10px 14px; } }
+
+    /* Mobile: sidebar becomes bottom drawer */
+    @media (max-width:768px) {
+      .is-insight-sidebar {
+        position:fixed;
+        inset:auto 0 0 0;
+        width:100% !important;
+        height:58vh;
+        border-left:none;
+        border-top:1px solid var(--border);
+        border-radius:16px 16px 0 0;
+        box-shadow:0 -8px 40px rgba(0,0,0,.12);
+        z-index:500;
+        transform:translateY(100%);
+        transition:transform .32s cubic-bezier(.4,0,.2,1);
+      }
+      .is-insight-sidebar.collapsed { transform:translateY(100%); pointer-events:none; }
+      .is-insight-sidebar.mobile-open { transform:translateY(0); pointer-events:auto; }
+      /* Drag handle */
+      .is-panel-header::before {
+        content:'';
+        position:absolute;
+        top:7px; left:50%; transform:translateX(-50%);
+        width:36px; height:4px; border-radius:2px;
+        background:var(--border-hi);
+      }
+      .is-panel-header { position:relative; }
+    }
 
     /* Scrollable content — no padding-bottom trick needed; bottom-bar is flex item */
     .is-scroll-area { flex:1; overflow-y:auto; overflow-x:hidden; scrollbar-width:none; position:relative; }
@@ -3353,52 +3480,161 @@
         <div id="replay-content"></div>
       </div>
 
-      <!-- Inquiry Stream header (fixed, outside scroll area) -->
-      <div class="is-header" id="is-header">
-        <button class="btn-back" onclick="goHome()">← Home</button>
-        <button class="btn-ghost" onclick="startOver()">New session</button>
-      </div>
+      <!-- ── Chat column (left) ── -->
+      <div class="is-chat-col">
 
-      <!-- Inquiry Stream layout -->
-      <div class="is-scroll-area" id="is-scroll-area">
-        <div class="is-inner">
-          <!-- Session header (injected) -->
-          <div id="is-session-header"></div>
-          <!-- Divine Ledger (stepper blocks) -->
-          <div class="is-ledger" id="is-ledger"></div>
-        </div>
-      </div>
-
-      <!-- Fixed bottom bar: probes + input -->
-      <div class="is-bottom-bar" id="is-bottom-bar">
-        <!-- "Encoding Perspective…" thinking pill -->
-        <div class="is-thinking-pill" id="is-thinking-pill">
-          <svg class="is-monogram-spin" width="18" height="18" viewBox="0 0 100 100" fill="none">
-            <g stroke="currentColor" stroke-width="10" stroke-linecap="round" fill="none">
-              <rect x="18" y="12" width="8" height="76" rx="2"/>
-              <rect x="26" y="12" width="8" height="8" rx="1"/>
-              <rect x="26" y="80" width="8" height="8" rx="1"/>
-              <path d="M34 18 Q78 18 78 50 Q78 82 34 82"/>
-              <path d="M34 30 Q66 30 66 50 Q66 70 34 70"/>
-            </g>
-          </svg>
-          <span class="is-thinking-label">Encoding Perspective</span>
-          <span class="is-thinking-dots"></span>
-        </div>
-        <div class="is-bottom-inner">
-          <div class="is-probes" id="is-probes"></div>
-          <div class="is-input-row">
-            <textarea class="is-input" id="is-input" rows="1"
-              placeholder="Deepen the perspective… (+ $0.05)"
-              oninput="isInputUpdate(this)"
-              onkeydown="isInputKeydown(event)"></textarea>
-            <button class="is-send-btn" id="is-send-btn" onclick="isSendFollowup()" disabled>
-              <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="14" x2="8" y2="2"/><path d="M3 7l5-5 5 5"/></svg>
+        <!-- Inquiry Stream header (fixed, outside scroll area) -->
+        <div class="is-header" id="is-header">
+          <button class="btn-back" onclick="goHome()">← Home</button>
+          <div style="display:flex;align-items:center;gap:8px">
+            <button class="is-panel-toggle-btn" id="is-panel-toggle-btn" onclick="toggleIsSidebar()" title="Growth Intelligence">
+              <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M2 12 Q4 6 8 8 Q12 10 14 4"/>
+                <circle cx="14" cy="4" r="1.5" fill="currentColor" stroke="none"/>
+              </svg>
+              Growth
             </button>
+            <button class="btn-ghost" onclick="startOver()">New session</button>
           </div>
         </div>
-      </div>
-    </div>
+
+        <!-- Inquiry Stream layout -->
+        <div class="is-scroll-area" id="is-scroll-area">
+          <div class="is-inner">
+            <!-- Session header (injected) -->
+            <div id="is-session-header"></div>
+            <!-- Divine Ledger (stepper blocks) -->
+            <div class="is-ledger" id="is-ledger"></div>
+          </div>
+        </div>
+
+        <!-- Fixed bottom bar: probes + input -->
+        <div class="is-bottom-bar" id="is-bottom-bar">
+          <!-- "Encoding Perspective…" thinking pill -->
+          <div class="is-thinking-pill" id="is-thinking-pill">
+            <svg class="is-monogram-spin" width="18" height="18" viewBox="0 0 100 100" fill="none">
+              <g stroke="currentColor" stroke-width="10" stroke-linecap="round" fill="none">
+                <rect x="18" y="12" width="8" height="76" rx="2"/>
+                <rect x="26" y="12" width="8" height="8" rx="1"/>
+                <rect x="26" y="80" width="8" height="8" rx="1"/>
+                <path d="M34 18 Q78 18 78 50 Q78 82 34 82"/>
+                <path d="M34 30 Q66 30 66 50 Q66 70 34 70"/>
+              </g>
+            </svg>
+            <span class="is-thinking-label">Encoding Perspective</span>
+            <span class="is-thinking-dots"></span>
+          </div>
+          <div class="is-bottom-inner">
+            <div class="is-probes" id="is-probes"></div>
+            <div class="is-input-row">
+              <textarea class="is-input" id="is-input" rows="1"
+                placeholder="Deepen the perspective… (+ $0.05)"
+                oninput="isInputUpdate(this)"
+                onkeydown="isInputKeydown(event)"></textarea>
+              <button class="is-send-btn" id="is-send-btn" onclick="isSendFollowup()" disabled>
+                <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="14" x2="8" y2="2"/><path d="M3 7l5-5 5 5"/></svg>
+              </button>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /.is-chat-col -->
+
+      <!-- ── Growth Intelligence Sidebar (right, collapsed by default) ── -->
+      <div class="is-insight-sidebar collapsed" id="is-insight-sidebar">
+
+        <!-- Sidebar header: tabs + close -->
+        <div class="is-panel-header">
+          <div class="is-panel-tabs">
+            <button class="is-ptab active" onclick="switchIsPanel('growth',this)">Growth</button>
+            <button class="is-ptab" onclick="switchIsPanel('portfolio',this)">Portfolio</button>
+            <button class="is-ptab" onclick="switchIsPanel('integrations',this)">Connect</button>
+          </div>
+          <button class="is-sidebar-close" onclick="toggleIsSidebar()" title="Close">
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="3" x2="13" y2="13"/><line x1="13" y1="3" x2="3" y2="13"/></svg>
+          </button>
+        </div>
+
+        <!-- ── Growth tab ── -->
+        <div class="is-panel-tab-body" id="is-panel-growth">
+          <div class="is-panel-body">
+
+            <!-- Revenue KPIs -->
+            <div class="is-panel-section">
+              <div class="is-panel-section-title">Revenue Intelligence</div>
+              <div id="is-rev-kpis" style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px">
+                <!-- Populated by renderIsRevenueGraph() -->
+              </div>
+              <canvas id="is-revenue-canvas" height="120" style="width:100%;display:block;border-radius:8px"></canvas>
+              <div id="is-rev-legend" style="display:flex;gap:10px;margin-top:8px;flex-wrap:wrap">
+                <div style="display:flex;align-items:center;gap:4px;font-size:10.5px;color:var(--text-3)">
+                  <span style="width:18px;height:2px;background:var(--accent);display:inline-block;border-radius:1px"></span>Baseline
+                </div>
+                <div style="display:flex;align-items:center;gap:4px;font-size:10.5px;color:var(--text-3)">
+                  <span style="width:18px;height:2px;background:#22c55e;display:inline-block;border-radius:1px;border:none;border-top:2px dashed #22c55e;height:0"></span>Scenario
+                </div>
+              </div>
+            </div>
+
+            <!-- Scenario modeler -->
+            <div class="is-scenario-wrap">
+              <div class="is-scenario-label">Scenario Modeler</div>
+              <div class="is-scenario-inputs">
+                <div class="is-scenario-field">
+                  <label>Monthly Rev ($)</label>
+                  <input type="number" id="is-scenario-rev" placeholder="10000" oninput="isUpdateScenario()">
+                </div>
+                <div class="is-scenario-field">
+                  <label>Growth Rate (%)</label>
+                  <input type="number" id="is-scenario-growth" placeholder="8" oninput="isUpdateScenario()">
+                </div>
+                <div class="is-scenario-field">
+                  <label>Avg. Margin (%)</label>
+                  <input type="number" id="is-scenario-margin" placeholder="40" oninput="isUpdateScenario()">
+                </div>
+                <div class="is-scenario-field">
+                  <label>Months</label>
+                  <input type="number" id="is-scenario-months" placeholder="12" min="1" max="60" oninput="isUpdateScenario()">
+                </div>
+              </div>
+              <div class="is-scenario-delta" id="is-scenario-delta">Enter values to model revenue trajectory</div>
+            </div>
+
+            <!-- Advisory circle -->
+            <div class="is-panel-section" style="margin-top:18px">
+              <div class="is-panel-section-title">Advisory Circle</div>
+              <div id="is-adv-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:7px"></div>
+            </div>
+
+          </div>
+        </div><!-- /#is-panel-growth -->
+
+        <!-- ── Portfolio tab ── -->
+        <div class="is-panel-tab-body" id="is-panel-portfolio" style="display:none">
+          <div class="is-panel-body">
+            <div class="is-panel-section">
+              <div class="is-panel-section-title">Cognitive Equity</div>
+              <div style="font-size:12px;color:var(--text-3);line-height:1.5">
+                Connect your projects and run perspectives to build a portfolio intelligence score.
+              </div>
+              <div id="is-portfolio-projects" style="margin-top:12px;display:flex;flex-direction:column;gap:8px"></div>
+            </div>
+          </div>
+        </div><!-- /#is-panel-portfolio -->
+
+        <!-- ── Integrations / Connect tab ── -->
+        <div class="is-panel-tab-body" id="is-panel-integrations" style="display:none">
+          <div class="is-panel-body">
+            <div class="is-panel-section">
+              <div class="is-panel-section-title">Connect Data Sources</div>
+              <div id="is-int-list" style="display:flex;flex-direction:column;gap:8px"></div>
+            </div>
+          </div>
+        </div><!-- /#is-panel-integrations -->
+
+      </div><!-- /.is-insight-sidebar -->
+
+    </div><!-- /#screen-replay -->
 
     <!-- SCREEN: Settings -->
     <div class="screen" id="screen-settings">
@@ -4534,7 +4770,8 @@ function saveSession(s) {
 /* ════════════════════════════════
    SIDEBAR TOGGLE
 ════════════════════════════════ */
-let sidebarOpen = window.innerWidth > 680;
+let sidebarOpen    = window.innerWidth > 680;
+let _isSidebarOpen = false;  // Growth Intelligence sidebar in IS screen
 document.getElementById('sidebar').classList.toggle('collapsed', !sidebarOpen);
 
 function toggleSidebar() {
@@ -4760,6 +4997,12 @@ function goBack(id) { show(id); }
 function goHome() {
   document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
   setMobNavActive('mob-nav-home');
+  // Close IS sidebar if open (especially mobile drawer)
+  const sb  = document.getElementById('is-insight-sidebar');
+  const btn = document.getElementById('is-panel-toggle-btn');
+  if (sb)  { sb.classList.add('collapsed'); sb.classList.remove('mobile-open'); }
+  if (btn) btn.classList.remove('active');
+  _isSidebarOpen = false;
   show('screen-0');
 }
 
@@ -6107,6 +6350,14 @@ function openRecent(i) {
   if (scrollArea) scrollArea.scrollTop = 0;
 
   show('screen-replay');
+  // Reset IS sidebar to collapsed on each new perspective open
+  (function() {
+    const sb  = document.getElementById('is-insight-sidebar');
+    const btn = document.getElementById('is-panel-toggle-btn');
+    if (sb)  { sb.classList.add('collapsed'); sb.classList.remove('mobile-open'); }
+    if (btn) btn.classList.remove('active');
+    _isSidebarOpen = false;
+  })();
   if (window.innerWidth <= 680 && sidebarOpen) toggleSidebar();
 }
 
@@ -9478,6 +9729,232 @@ function selectPayout(el, schedule) {
 function savePayoutSchedule() {
   saveTkData(TK.payout, selectedPayoutSchedule);
   showToast('Payout schedule updated ✓');
+}
+
+/* ════════════════════════════════
+   GROWTH INTELLIGENCE SIDEBAR (IS screen)
+════════════════════════════════ */
+
+function toggleIsSidebar() {
+  const sidebar = document.getElementById('is-insight-sidebar');
+  const btn     = document.getElementById('is-panel-toggle-btn');
+  if (!sidebar) return;
+
+  const isMobile = window.innerWidth <= 768;
+
+  if (isMobile) {
+    // Mobile: toggle bottom drawer
+    _isSidebarOpen = !sidebar.classList.contains('mobile-open');
+    sidebar.classList.remove('collapsed');
+    sidebar.classList.toggle('mobile-open', _isSidebarOpen);
+  } else {
+    // Desktop: toggle collapsed
+    _isSidebarOpen = sidebar.classList.contains('collapsed');
+    sidebar.classList.toggle('collapsed', !_isSidebarOpen);
+  }
+
+  if (btn) btn.classList.toggle('active', _isSidebarOpen);
+
+  // Render content on first open
+  if (_isSidebarOpen) renderIsPanel();
+}
+
+function switchIsPanel(tab, btn) {
+  ['growth','portfolio','integrations'].forEach(t => {
+    const el = document.getElementById('is-panel-' + t);
+    if (el) el.style.display = (t === tab) ? '' : 'none';
+  });
+  document.querySelectorAll('.is-ptab').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+}
+
+/* ── Master render: called when sidebar first opens ── */
+function renderIsPanel() {
+  renderIsRevenueGraph();
+  renderIsAdvisoryCircle();
+  renderIsIntegrations();
+  renderIsPortfolio();
+}
+
+/* ── Revenue graph (baseline + scenario overlay) ── */
+function renderIsRevenueGraph() {
+  const canvas = document.getElementById('is-revenue-canvas');
+  if (!canvas) return;
+
+  // Detect retina
+  const dpr = window.devicePixelRatio || 1;
+  const W   = canvas.clientWidth || 262;
+  const H   = 120;
+  canvas.width  = W * dpr;
+  canvas.height = H * dpr;
+  canvas.style.width  = W + 'px';
+  canvas.style.height = H + 'px';
+
+  const ctx = canvas.getContext('2d');
+  ctx.scale(dpr, dpr);
+  ctx.clearRect(0, 0, W, H);
+
+  // Baseline: gentle S-curve (12 months of synthetic data)
+  const months = 12;
+  const base = Array.from({length: months}, (_, i) => {
+    return 3000 * Math.pow(1.08, i) + Math.sin(i * 0.7) * 400;
+  });
+
+  const pad = { t:12, r:8, b:20, l:38 };
+  const gW  = W - pad.l - pad.r;
+  const gH  = H - pad.t - pad.b;
+  const maxV = Math.max(...base) * 1.1;
+
+  function toX(i) { return pad.l + (i / (months - 1)) * gW; }
+  function toY(v) { return pad.t + gH - (v / maxV) * gH; }
+
+  // Grid lines
+  ctx.strokeStyle = getComputedStyle(document.documentElement).getPropertyValue('--border') || '#e8e3da';
+  ctx.lineWidth   = 1;
+  [0.25, 0.5, 0.75, 1].forEach(f => {
+    const y = pad.t + gH - f * gH;
+    ctx.beginPath(); ctx.moveTo(pad.l, y); ctx.lineTo(pad.l + gW, y); ctx.stroke();
+    ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--text-3') || '#888';
+    ctx.font = '8px Inter, sans-serif';
+    ctx.textAlign = 'right';
+    ctx.fillText('$' + Math.round(maxV * f / 1000) + 'k', pad.l - 3, y + 3);
+  });
+
+  // Baseline area fill
+  const accentColor = getComputedStyle(document.documentElement).getPropertyValue('--accent') || '#BF452A';
+  const grad = ctx.createLinearGradient(0, pad.t, 0, pad.t + gH);
+  grad.addColorStop(0, accentColor.trim() + '22');
+  grad.addColorStop(1, accentColor.trim() + '00');
+  ctx.beginPath();
+  ctx.moveTo(toX(0), toY(base[0]));
+  base.forEach((v, i) => { if (i > 0) ctx.lineTo(toX(i), toY(v)); });
+  ctx.lineTo(toX(months-1), pad.t + gH);
+  ctx.lineTo(toX(0), pad.t + gH);
+  ctx.closePath();
+  ctx.fillStyle = grad;
+  ctx.fill();
+
+  // Baseline line
+  ctx.strokeStyle = accentColor.trim();
+  ctx.lineWidth   = 2;
+  ctx.lineJoin    = 'round';
+  ctx.beginPath();
+  base.forEach((v, i) => { i === 0 ? ctx.moveTo(toX(i), toY(v)) : ctx.lineTo(toX(i), toY(v)); });
+  ctx.stroke();
+
+  // Scenario overlay (if inputs filled)
+  const scenRev    = parseFloat(document.getElementById('is-scenario-rev')?.value)    || 0;
+  const scenGrowth = parseFloat(document.getElementById('is-scenario-growth')?.value) || 0;
+  if (scenRev > 0) {
+    const scenario = Array.from({length: months}, (_, i) => scenRev * Math.pow(1 + scenGrowth/100, i));
+    const maxScen  = Math.max(Math.max(...base), Math.max(...scenario)) * 1.1;
+    function toYS(v) { return pad.t + gH - (v / maxScen) * gH; }
+    ctx.strokeStyle = '#22c55e';
+    ctx.lineWidth   = 1.5;
+    ctx.setLineDash([4, 3]);
+    ctx.beginPath();
+    scenario.forEach((v, i) => { i === 0 ? ctx.moveTo(toX(i), toYS(v)) : ctx.lineTo(toX(i), toYS(v)); });
+    ctx.stroke();
+    ctx.setLineDash([]);
+  }
+
+  // KPI cards
+  const kpiEl = document.getElementById('is-rev-kpis');
+  if (kpiEl) {
+    const proj12 = Math.round(base[11]);
+    const growth = ((base[11] / base[0] - 1) * 100).toFixed(0);
+    kpiEl.innerHTML = [
+      { label:'12-Mo Proj.', value:'$' + (proj12 >= 1000 ? (proj12/1000).toFixed(1) + 'k' : proj12), pos:true },
+      { label:'Baseline Growth', value:'+' + growth + '%', pos:true }
+    ].map(k => `
+      <div style="background:var(--surface-2);border:1px solid var(--border);border-radius:10px;padding:9px 10px">
+        <div style="font-size:9.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--text-3);margin-bottom:4px">${k.label}</div>
+        <div style="font-size:15px;font-weight:700;color:${k.pos ? 'var(--text-0)' : '#ef4444'};font-family:var(--font-mono)">${k.value}</div>
+      </div>`).join('');
+  }
+}
+
+/* ── Scenario modeler update ── */
+function isUpdateScenario() {
+  const rev    = parseFloat(document.getElementById('is-scenario-rev')?.value)    || 0;
+  const growth = parseFloat(document.getElementById('is-scenario-growth')?.value) || 0;
+  const margin = parseFloat(document.getElementById('is-scenario-margin')?.value) || 0;
+  const months = parseInt(document.getElementById('is-scenario-months')?.value)   || 12;
+  const delta  = document.getElementById('is-scenario-delta');
+  if (!delta) return;
+
+  if (!rev) { delta.textContent = 'Enter values to model revenue trajectory'; delta.className = 'is-scenario-delta'; renderIsRevenueGraph(); return; }
+
+  const endRev  = rev * Math.pow(1 + growth/100, months);
+  const cumRev  = Array.from({length: months}, (_, i) => rev * Math.pow(1 + growth/100, i)).reduce((a,b)=>a+b,0);
+  const cumProf = cumRev * (margin / 100);
+  const fmtK    = v => v >= 1000000 ? '$' + (v/1000000).toFixed(2) + 'M' : v >= 1000 ? '$' + (v/1000).toFixed(1) + 'k' : '$' + Math.round(v);
+
+  delta.innerHTML = `
+    <span style="color:#22c55e">▲ ${fmtK(endRev)}/mo at month ${months}</span>&ensp;·&ensp;
+    <span style="color:var(--text-2)">${fmtK(cumProf)} cumulative profit</span>`;
+  delta.className = 'is-scenario-delta';
+  renderIsRevenueGraph();
+}
+
+/* ── Advisory Circle ── */
+function renderIsAdvisoryCircle() {
+  const grid = document.getElementById('is-adv-grid');
+  if (!grid) return;
+  const advisors = [
+    { name:'Peter Drucker',   role:'Strategy',    color:'#6366f1' },
+    { name:'Nassim Taleb',    role:'Risk',         color:'#BF452A' },
+    { name:'Clayton Christ.', role:'Innovation',   color:'#0891b2' },
+    { name:'Esther Duflo',    role:'Economics',    color:'#059669' },
+  ];
+  grid.innerHTML = advisors.map(a => {
+    const initials = a.name.split(' ').slice(0,2).map(w=>w[0]).join('').toUpperCase();
+    return `<div style="display:flex;align-items:center;gap:7px;background:var(--surface-2);border:1px solid var(--border);border-radius:9px;padding:7px 9px">
+      <div style="width:26px;height:26px;border-radius:50%;background:${a.color};display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:#fff;flex-shrink:0">${initials}</div>
+      <div>
+        <div style="font-size:11px;font-weight:600;color:var(--text-0);line-height:1.3">${a.name}</div>
+        <div style="font-size:9.5px;color:var(--text-3)">${a.role}</div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+/* ── Integrations list (IS sidebar) ── */
+function renderIsIntegrations() {
+  const list = document.getElementById('is-int-list');
+  if (!list) return;
+  list.innerHTML = DC_INTEGRATIONS.map(intg => `
+    <div style="display:flex;align-items:center;gap:9px;background:var(--surface-2);border:1px solid var(--border);border-radius:10px;padding:10px 11px">
+      <span style="color:var(--text-2);display:flex;flex-shrink:0">${intg.icon}</span>
+      <div style="flex:1;min-width:0">
+        <div style="font-size:12px;font-weight:600;color:var(--text-0)">${intg.name}</div>
+        <div style="font-size:10.5px;color:var(--text-3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${intg.desc}</div>
+      </div>
+      <button onclick="showToast('${intg.name} integration coming soon')" style="font-size:10px;font-weight:700;color:var(--accent);background:var(--accent-lt);border:1px solid var(--accent-bdr);border-radius:var(--r-pill);padding:4px 10px;cursor:pointer;white-space:nowrap;font-family:'Inter',sans-serif">
+        ${intg.connected ? 'Connected' : 'Connect'}
+      </button>
+    </div>`).join('');
+}
+
+/* ── Portfolio tab (IS sidebar) ── */
+function renderIsPortfolio() {
+  const el = document.getElementById('is-portfolio-projects');
+  if (!el) return;
+  const projects = loadProjects();
+  if (!projects.length) {
+    el.innerHTML = '<div style="font-size:11.5px;color:var(--text-3);text-align:center;padding:12px 0">No projects yet. <span style="color:var(--accent);cursor:pointer" onclick="showView(\'projects\')">Create one →</span></div>';
+    return;
+  }
+  el.innerHTML = projects.map(p => {
+    const initials = _projInitials(p.name);
+    return `<div style="display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:1px solid var(--border)">
+      <div style="width:24px;height:24px;border-radius:6px;background:${p.color};display:flex;align-items:center;justify-content:center;font-size:8.5px;font-weight:700;color:#fff;flex-shrink:0">${initials}</div>
+      <div style="flex:1;min-width:0">
+        <div style="font-size:12px;font-weight:600;color:var(--text-0);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${escHtml(p.name)}</div>
+        ${p.tagline ? `<div style="font-size:10px;color:var(--text-3);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${escHtml(p.tagline)}</div>` : ''}
+      </div>
+    </div>`;
+  }).join('');
 }
 
 /* ── Toast ── */
