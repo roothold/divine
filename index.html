@@ -99,6 +99,18 @@
     /* When chat is active, show title and spread left↔right */
     .content-topbar.chat-mode { justify-content:space-between; }
     .content-topbar.chat-mode .content-chat-title { display:block; }
+    /* Growth button in topbar — only visible in chat mode */
+    .topbar-growth-btn {
+      display:none; align-items:center; gap:5px;
+      font-size:12px; font-weight:600; color:var(--text-2);
+      background:var(--surface); border:1.5px solid var(--border);
+      border-radius:var(--r-pill); padding:5px 12px;
+      cursor:pointer; transition:all .15s; font-family:'Inter',sans-serif;
+      flex-shrink:0;
+    }
+    .content-topbar.chat-mode .topbar-growth-btn { display:flex; }
+    .topbar-growth-btn:hover { border-color:var(--accent-bdr); color:var(--accent); }
+    .topbar-growth-btn.active { background:var(--accent-lt); color:var(--accent); border-color:var(--accent-bdr); }
     /* Sidebar hamburger row */
     .sb-hamburger-row {
       display:flex; align-items:center; justify-content:space-between;
@@ -2443,7 +2455,8 @@
     .pf-revel-view:hover { background:rgba(191,69,42,.05); }
 
     /* ═══ CHAT SCREEN ═══ */
-    #screen-chat { flex-direction:column; height:100%; padding:0; overflow:hidden; background:var(--bg); }
+    #screen-chat { flex-direction:row; height:100%; padding:0; overflow:hidden; background:var(--bg); }
+    .chat-col { flex:1; display:flex; flex-direction:column; min-width:0; overflow:hidden; height:100%; }
 
     /* .chat-topbar removed — title now lives in content-topbar */
     .chat-thinker-pill {
@@ -3091,6 +3104,13 @@
         placeholder="New conversation" maxlength="80"
         onblur="saveChatTitle()"
         onkeydown="if(event.key==='Enter'){this.blur()}">
+      <button class="topbar-growth-btn" id="topbar-growth-btn" onclick="toggleChatSidebar()" title="Growth Intelligence">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M2 12 Q4 6 8 8 Q12 10 14 4"/>
+          <circle cx="14" cy="4" r="1.5" fill="currentColor" stroke="none"/>
+        </svg>
+        Growth
+      </button>
       <button class="lens-switcher" onclick="openPicker()" aria-label="Switch perspective">
         <span class="lens-swap-icon">
           <svg width="15" height="15" viewBox="0 0 15 15" fill="none" stroke="currentColor" stroke-width="2">
@@ -3370,68 +3390,157 @@
     <!-- SCREEN: Chat -->
     <div class="screen" id="screen-chat">
 
-      <!-- Messages -->
-      <div class="chat-messages" id="chat-messages">
-        <div class="chat-empty" id="chat-empty">
-          <div class="chat-empty-icon">
-            <svg width="22" height="22" viewBox="0 0 100 100" fill="none">
-              <g stroke="currentColor" stroke-width="9" stroke-linecap="round">
-                <rect x="18" y="12" width="8" height="76" rx="2"/>
-                <rect x="26" y="12" width="8" height="8" rx="1"/>
-                <rect x="26" y="80" width="8" height="8" rx="1"/>
-                <path d="M34 18 Q78 18 78 50 Q78 82 34 82"/>
-                <path d="M34 30 Q66 30 66 50 Q66 70 34 70"/>
-              </g>
-            </svg>
-          </div>
-          <div class="chat-empty-headline">Ask your Architect</div>
-          <p class="chat-empty-sub">What decision are you weighing? The more precise your framing, the sharper the perspective.</p>
-        </div>
-      </div>
+      <!-- ── Chat column (left) ── -->
+      <div class="chat-col">
 
-      <!-- Input bar -->
-      <div class="chat-input-bar">
-        <div class="chat-input-inner">
-          <!-- Follow-up question chips (populated dynamically after each response) -->
-          <div class="chat-suggestions" id="chat-suggestions"></div>
-          <div class="chat-input-wrap">
-            <textarea class="chat-textarea" id="chat-textarea"
-              placeholder="What high-stakes decision are you weighing?"
-              rows="1"
-              onkeydown="chatTextareaKeydown(event)"
-              oninput="chatTextareaResize(this)"
-            ></textarea>
-            <button class="chat-send-btn" id="chat-send-btn" onclick="sendChatMsg()" title="Send (⌘↵)">
-              <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                <path d="M8 13V3M3.5 7.5L8 3l4.5 4.5" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <!-- Messages -->
+        <div class="chat-messages" id="chat-messages">
+          <div class="chat-empty" id="chat-empty">
+            <div class="chat-empty-icon">
+              <svg width="22" height="22" viewBox="0 0 100 100" fill="none">
+                <g stroke="currentColor" stroke-width="9" stroke-linecap="round">
+                  <rect x="18" y="12" width="8" height="76" rx="2"/>
+                  <rect x="26" y="12" width="8" height="8" rx="1"/>
+                  <rect x="26" y="80" width="8" height="8" rx="1"/>
+                  <path d="M34 18 Q78 18 78 50 Q78 82 34 82"/>
+                  <path d="M34 30 Q66 30 66 50 Q66 70 34 70"/>
+                </g>
               </svg>
-            </button>
+            </div>
+            <div class="chat-empty-headline">Ask your Architect</div>
+            <p class="chat-empty-sub">What decision are you weighing? The more precise your framing, the sharper the perspective.</p>
           </div>
-          <!-- Rate limit blocked state -->
-          <div class="chat-rate-banner" id="chat-rate-banner">
-            <div class="chat-rate-banner-top">
-              <div class="chat-rate-banner-icon">✦</div>
-              <div class="chat-rate-banner-body">
-                <div class="chat-rate-banner-title" id="chat-rate-banner-title">You've used all 3 free perspectives</div>
-                <div class="chat-rate-banner-sub" id="chat-rate-banner-sub">Create a free account to unlock more, or purchase tokens to continue now.</div>
+        </div>
+
+        <!-- Input bar -->
+        <div class="chat-input-bar">
+          <div class="chat-input-inner">
+            <!-- Follow-up question chips (populated dynamically after each response) -->
+            <div class="chat-suggestions" id="chat-suggestions"></div>
+            <div class="chat-input-wrap">
+              <textarea class="chat-textarea" id="chat-textarea"
+                placeholder="What high-stakes decision are you weighing?"
+                rows="1"
+                onkeydown="chatTextareaKeydown(event)"
+                oninput="chatTextareaResize(this)"
+              ></textarea>
+              <button class="chat-send-btn" id="chat-send-btn" onclick="sendChatMsg()" title="Send (⌘↵)">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                  <path d="M8 13V3M3.5 7.5L8 3l4.5 4.5" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </button>
+            </div>
+            <!-- Rate limit blocked state -->
+            <div class="chat-rate-banner" id="chat-rate-banner">
+              <div class="chat-rate-banner-top">
+                <div class="chat-rate-banner-icon">✦</div>
+                <div class="chat-rate-banner-body">
+                  <div class="chat-rate-banner-title" id="chat-rate-banner-title">You've used all 3 free perspectives</div>
+                  <div class="chat-rate-banner-sub" id="chat-rate-banner-sub">Create a free account to unlock more, or purchase tokens to continue now.</div>
+                </div>
+              </div>
+              <div class="chat-rate-banner-actions" id="chat-rate-banner-actions">
+                <button class="chat-rate-cta-primary" id="chat-rate-cta-primary" onclick="showView('login')">Create free account</button>
+                <button class="chat-rate-cta-secondary" id="chat-rate-cta-secondary" onclick="showView('upgrade')">Buy tokens</button>
               </div>
             </div>
-            <div class="chat-rate-banner-actions" id="chat-rate-banner-actions">
-              <button class="chat-rate-cta-primary" id="chat-rate-cta-primary" onclick="showView('login')">Create free account</button>
-              <button class="chat-rate-cta-secondary" id="chat-rate-cta-secondary" onclick="showView('upgrade')">Buy tokens</button>
+            <div class="chat-input-meta">
+              <span id="chat-meta-thinker">Michael Akindele</span>
+              <div class="chat-input-meta-sep"></div>
+              <span id="chat-meta-model">claude-opus-4-5</span>
+              <div class="chat-input-meta-sep"></div>
+              <span>⌘↵ to send</span>
+              <span class="chat-usage-pill" id="chat-usage-pill"></span>
             </div>
           </div>
-          <div class="chat-input-meta">
-            <span id="chat-meta-thinker">Michael Akindele</span>
-            <div class="chat-input-meta-sep"></div>
-            <span id="chat-meta-model">claude-opus-4-5</span>
-            <div class="chat-input-meta-sep"></div>
-            <span>⌘↵ to send</span>
-            <span class="chat-usage-pill" id="chat-usage-pill"></span>
+        </div>
+
+      </div><!-- /.chat-col -->
+
+      <!-- ── Growth Intelligence Sidebar (right, collapsed by default) ── -->
+      <div class="is-insight-sidebar collapsed" id="chat-insight-sidebar">
+
+        <!-- Sidebar header: tabs + close -->
+        <div class="is-panel-header">
+          <div class="is-panel-tabs">
+            <button class="is-ptab active" onclick="switchPanel('chat-panel','growth',this)">Growth</button>
+            <button class="is-ptab" onclick="switchPanel('chat-panel','portfolio',this)">Portfolio</button>
+            <button class="is-ptab" onclick="switchPanel('chat-panel','integrations',this)">Connect</button>
+          </div>
+          <button class="is-sidebar-close" onclick="toggleChatSidebar()" title="Close">
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="3" x2="13" y2="13"/><line x1="13" y1="3" x2="3" y2="13"/></svg>
+          </button>
+        </div>
+
+        <!-- ── Growth tab ── -->
+        <div class="is-panel-tab-body" id="chat-panel-growth">
+          <div class="is-panel-body">
+            <div class="is-panel-section">
+              <div class="is-panel-section-title">Revenue Intelligence</div>
+              <div id="chat-rev-kpis" style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px"></div>
+              <canvas id="chat-revenue-canvas" height="120" style="width:100%;display:block;border-radius:8px"></canvas>
+              <div style="display:flex;gap:10px;margin-top:8px;flex-wrap:wrap">
+                <div style="display:flex;align-items:center;gap:4px;font-size:10.5px;color:var(--text-3)">
+                  <span style="width:18px;height:2px;background:var(--accent);display:inline-block;border-radius:1px"></span>Baseline
+                </div>
+                <div style="display:flex;align-items:center;gap:4px;font-size:10.5px;color:var(--text-3)">
+                  <span style="width:18px;height:2px;background:#22c55e;display:inline-block;border-radius:1px"></span>Scenario
+                </div>
+              </div>
+            </div>
+            <div class="is-scenario-wrap">
+              <div class="is-scenario-label">Scenario Modeler</div>
+              <div class="is-scenario-inputs">
+                <div class="is-scenario-field">
+                  <label>Monthly Rev ($)</label>
+                  <input type="number" id="chat-scenario-rev" placeholder="10000" oninput="updateScenario('chat')">
+                </div>
+                <div class="is-scenario-field">
+                  <label>Growth Rate (%)</label>
+                  <input type="number" id="chat-scenario-growth" placeholder="8" oninput="updateScenario('chat')">
+                </div>
+                <div class="is-scenario-field">
+                  <label>Avg. Margin (%)</label>
+                  <input type="number" id="chat-scenario-margin" placeholder="40" oninput="updateScenario('chat')">
+                </div>
+                <div class="is-scenario-field">
+                  <label>Months</label>
+                  <input type="number" id="chat-scenario-months" placeholder="12" min="1" max="60" oninput="updateScenario('chat')">
+                </div>
+              </div>
+              <div class="is-scenario-delta" id="chat-scenario-delta">Enter values to model revenue trajectory</div>
+            </div>
+            <div class="is-panel-section" style="margin-top:18px">
+              <div class="is-panel-section-title">Advisory Circle</div>
+              <div id="chat-adv-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:7px"></div>
+            </div>
+          </div>
+        </div><!-- /#chat-panel-growth -->
+
+        <!-- ── Portfolio tab ── -->
+        <div class="is-panel-tab-body" id="chat-panel-portfolio" style="display:none">
+          <div class="is-panel-body">
+            <div class="is-panel-section">
+              <div class="is-panel-section-title">Cognitive Equity</div>
+              <div style="font-size:12px;color:var(--text-3);line-height:1.5">Connect your projects and run perspectives to build a portfolio intelligence score.</div>
+              <div id="chat-portfolio-projects" style="margin-top:12px;display:flex;flex-direction:column;gap:8px"></div>
+            </div>
           </div>
         </div>
-      </div>
-    </div>
+
+        <!-- ── Connect tab ── -->
+        <div class="is-panel-tab-body" id="chat-panel-integrations" style="display:none">
+          <div class="is-panel-body">
+            <div class="is-panel-section">
+              <div class="is-panel-section-title">Connect Data Sources</div>
+              <div id="chat-int-list" style="display:flex;flex-direction:column;gap:8px"></div>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /.chat-insight-sidebar -->
+
+    </div><!-- /#screen-chat -->
 
     <!-- SCREEN: Search -->
     <div class="screen" id="screen-search">
@@ -4770,8 +4879,9 @@ function saveSession(s) {
 /* ════════════════════════════════
    SIDEBAR TOGGLE
 ════════════════════════════════ */
-let sidebarOpen    = window.innerWidth > 680;
-let _isSidebarOpen = false;  // Growth Intelligence sidebar in IS screen
+let sidebarOpen      = window.innerWidth > 680;
+let _isSidebarOpen   = false;  // Growth Intelligence sidebar in IS screen
+let _chatSidebarOpen = false;  // Growth Intelligence sidebar in Chat screen
 document.getElementById('sidebar').classList.toggle('collapsed', !sidebarOpen);
 
 function toggleSidebar() {
@@ -4997,12 +5107,18 @@ function goBack(id) { show(id); }
 function goHome() {
   document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
   setMobNavActive('mob-nav-home');
-  // Close IS sidebar if open (especially mobile drawer)
+  // Close IS sidebar if open
   const sb  = document.getElementById('is-insight-sidebar');
-  const btn = document.getElementById('is-panel-toggle-btn');
-  if (sb)  { sb.classList.add('collapsed'); sb.classList.remove('mobile-open'); }
-  if (btn) btn.classList.remove('active');
+  const isBtn = document.getElementById('is-panel-toggle-btn');
+  if (sb)    { sb.classList.add('collapsed'); sb.classList.remove('mobile-open'); }
+  if (isBtn) isBtn.classList.remove('active');
   _isSidebarOpen = false;
+  // Close Chat sidebar if open
+  const csb  = document.getElementById('chat-insight-sidebar');
+  const cBtn = document.getElementById('topbar-growth-btn');
+  if (csb)  { csb.classList.add('collapsed'); csb.classList.remove('mobile-open'); }
+  if (cBtn) cBtn.classList.remove('active');
+  _chatSidebarOpen = false;
   show('screen-0');
 }
 
@@ -7548,6 +7664,14 @@ function openChat(prefill) {
 
   // Navigate to screen + push URL with session id
   show('screen-chat');
+  // Reset growth sidebar
+  (function() {
+    const sb  = document.getElementById('chat-insight-sidebar');
+    const btn = document.getElementById('topbar-growth-btn');
+    if (sb)  { sb.classList.add('collapsed'); sb.classList.remove('mobile-open'); }
+    if (btn) btn.classList.remove('active');
+    _chatSidebarOpen = false;
+  })();
   setMobNavActive(null);
   router.push('/dashboard/chat/' + _chatSession.id);
 
@@ -7598,6 +7722,14 @@ function openChatSession(sessionId) {
   chatTextareaResize(ta);
 
   show('screen-chat');
+  // Reset growth sidebar
+  (function() {
+    const sb  = document.getElementById('chat-insight-sidebar');
+    const btn = document.getElementById('topbar-growth-btn');
+    if (sb)  { sb.classList.add('collapsed'); sb.classList.remove('mobile-open'); }
+    if (btn) btn.classList.remove('active');
+    _chatSidebarOpen = false;
+  })();
   setMobNavActive(null);
   router.push('/dashboard/chat/' + sessionId);
   setTimeout(() => { msgs.scrollTop = msgs.scrollHeight; ta.focus(); }, 80);
@@ -9732,56 +9864,87 @@ function savePayoutSchedule() {
 }
 
 /* ════════════════════════════════
-   GROWTH INTELLIGENCE SIDEBAR (IS screen)
+   GROWTH INTELLIGENCE SIDEBAR
+   Works for both #screen-chat (ns='chat') and #screen-replay (ns='is')
 ════════════════════════════════ */
 
+/* ── Generic panel tab switcher ── */
+// idPrefix: 'chat-panel' | 'is-panel'
+// btn: the clicked .is-ptab element
+function switchPanel(idPrefix, tab, btn) {
+  ['growth','portfolio','integrations'].forEach(t => {
+    const el = document.getElementById(idPrefix + '-' + t);
+    if (el) el.style.display = (t === tab) ? '' : 'none';
+  });
+  // Only update tabs within the same sidebar header
+  if (btn) {
+    const header = btn.closest('.is-panel-header');
+    if (header) header.querySelectorAll('.is-ptab').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+  }
+}
+
+/* Keep old switchIsPanel alias for any existing HTML references */
+function switchIsPanel(tab, btn) { switchPanel('is-panel', tab, btn); }
+
+/* ── IS-screen sidebar toggle ── */
 function toggleIsSidebar() {
   const sidebar = document.getElementById('is-insight-sidebar');
   const btn     = document.getElementById('is-panel-toggle-btn');
   if (!sidebar) return;
-
   const isMobile = window.innerWidth <= 768;
-
   if (isMobile) {
-    // Mobile: toggle bottom drawer
     _isSidebarOpen = !sidebar.classList.contains('mobile-open');
     sidebar.classList.remove('collapsed');
     sidebar.classList.toggle('mobile-open', _isSidebarOpen);
   } else {
-    // Desktop: toggle collapsed
     _isSidebarOpen = sidebar.classList.contains('collapsed');
     sidebar.classList.toggle('collapsed', !_isSidebarOpen);
   }
-
   if (btn) btn.classList.toggle('active', _isSidebarOpen);
-
-  // Render content on first open
-  if (_isSidebarOpen) renderIsPanel();
+  if (_isSidebarOpen) renderGrowthPanel('is');
 }
 
-function switchIsPanel(tab, btn) {
-  ['growth','portfolio','integrations'].forEach(t => {
-    const el = document.getElementById('is-panel-' + t);
-    if (el) el.style.display = (t === tab) ? '' : 'none';
-  });
-  document.querySelectorAll('.is-ptab').forEach(b => b.classList.remove('active'));
-  if (btn) btn.classList.add('active');
+/* ── Chat-screen sidebar toggle ── */
+function toggleChatSidebar() {
+  const sidebar = document.getElementById('chat-insight-sidebar');
+  const btn     = document.getElementById('topbar-growth-btn');
+  if (!sidebar) return;
+  const isMobile = window.innerWidth <= 768;
+  if (isMobile) {
+    _chatSidebarOpen = !sidebar.classList.contains('mobile-open');
+    sidebar.classList.remove('collapsed');
+    sidebar.classList.toggle('mobile-open', _chatSidebarOpen);
+  } else {
+    _chatSidebarOpen = sidebar.classList.contains('collapsed');
+    sidebar.classList.toggle('collapsed', !_chatSidebarOpen);
+  }
+  if (btn) btn.classList.toggle('active', _chatSidebarOpen);
+  if (_chatSidebarOpen) renderGrowthPanel('chat');
 }
 
-/* ── Master render: called when sidebar first opens ── */
-function renderIsPanel() {
-  renderIsRevenueGraph();
-  renderIsAdvisoryCircle();
-  renderIsIntegrations();
-  renderIsPortfolio();
+/* ── Master render (called when either sidebar first opens) ── */
+// ns: 'is' | 'chat'
+function renderGrowthPanel(ns) {
+  renderRevenueGraph(ns);
+  renderAdvisoryCircle(ns);
+  renderIntegrationsList(ns);
+  renderPortfolioList(ns);
 }
+
+/* Keep old aliases so existing IS-screen HTML still works */
+function renderIsPanel()    { renderGrowthPanel('is'); }
 
 /* ── Revenue graph (baseline + scenario overlay) ── */
-function renderIsRevenueGraph() {
-  const canvas = document.getElementById('is-revenue-canvas');
+function renderRevenueGraph(ns) {
+  const canvasId = ns + '-revenue-canvas';
+  const kpiId    = ns + '-rev-kpis';
+  const scenRevId    = ns + '-scenario-rev';
+  const scenGrowthId = ns + '-scenario-growth';
+
+  const canvas = document.getElementById(canvasId);
   if (!canvas) return;
 
-  // Detect retina
   const dpr = window.devicePixelRatio || 1;
   const W   = canvas.clientWidth || 262;
   const H   = 120;
@@ -9794,118 +9957,123 @@ function renderIsRevenueGraph() {
   ctx.scale(dpr, dpr);
   ctx.clearRect(0, 0, W, H);
 
-  // Baseline: gentle S-curve (12 months of synthetic data)
   const months = 12;
-  const base = Array.from({length: months}, (_, i) => {
-    return 3000 * Math.pow(1.08, i) + Math.sin(i * 0.7) * 400;
-  });
-
-  const pad = { t:12, r:8, b:20, l:38 };
-  const gW  = W - pad.l - pad.r;
-  const gH  = H - pad.t - pad.b;
-  const maxV = Math.max(...base) * 1.1;
+  const base   = Array.from({length: months}, (_, i) => 3000 * Math.pow(1.08, i) + Math.sin(i * 0.7) * 400);
+  const pad    = { t:12, r:8, b:20, l:38 };
+  const gW     = W - pad.l - pad.r;
+  const gH     = H - pad.t - pad.b;
+  const maxV   = Math.max(...base) * 1.1;
 
   function toX(i) { return pad.l + (i / (months - 1)) * gW; }
   function toY(v) { return pad.t + gH - (v / maxV) * gH; }
 
   // Grid lines
-  ctx.strokeStyle = getComputedStyle(document.documentElement).getPropertyValue('--border') || '#e8e3da';
+  const borderColor  = getComputedStyle(document.documentElement).getPropertyValue('--border').trim() || '#e8e3da';
+  const text3Color   = getComputedStyle(document.documentElement).getPropertyValue('--text-3').trim() || '#888';
+  const accentColor  = getComputedStyle(document.documentElement).getPropertyValue('--accent').trim()  || '#BF452A';
+
+  ctx.strokeStyle = borderColor;
   ctx.lineWidth   = 1;
   [0.25, 0.5, 0.75, 1].forEach(f => {
     const y = pad.t + gH - f * gH;
     ctx.beginPath(); ctx.moveTo(pad.l, y); ctx.lineTo(pad.l + gW, y); ctx.stroke();
-    ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--text-3') || '#888';
-    ctx.font = '8px Inter, sans-serif';
+    ctx.fillStyle = text3Color;
+    ctx.font      = '8px Inter, sans-serif';
     ctx.textAlign = 'right';
     ctx.fillText('$' + Math.round(maxV * f / 1000) + 'k', pad.l - 3, y + 3);
   });
 
-  // Baseline area fill
-  const accentColor = getComputedStyle(document.documentElement).getPropertyValue('--accent') || '#BF452A';
+  // Area fill
   const grad = ctx.createLinearGradient(0, pad.t, 0, pad.t + gH);
-  grad.addColorStop(0, accentColor.trim() + '22');
-  grad.addColorStop(1, accentColor.trim() + '00');
+  grad.addColorStop(0, accentColor + '22');
+  grad.addColorStop(1, accentColor + '00');
   ctx.beginPath();
-  ctx.moveTo(toX(0), toY(base[0]));
-  base.forEach((v, i) => { if (i > 0) ctx.lineTo(toX(i), toY(v)); });
+  base.forEach((v, i) => i === 0 ? ctx.moveTo(toX(i), toY(v)) : ctx.lineTo(toX(i), toY(v)));
   ctx.lineTo(toX(months-1), pad.t + gH);
-  ctx.lineTo(toX(0), pad.t + gH);
+  ctx.lineTo(toX(0),        pad.t + gH);
   ctx.closePath();
   ctx.fillStyle = grad;
   ctx.fill();
 
   // Baseline line
-  ctx.strokeStyle = accentColor.trim();
+  ctx.strokeStyle = accentColor;
   ctx.lineWidth   = 2;
   ctx.lineJoin    = 'round';
   ctx.beginPath();
-  base.forEach((v, i) => { i === 0 ? ctx.moveTo(toX(i), toY(v)) : ctx.lineTo(toX(i), toY(v)); });
+  base.forEach((v, i) => i === 0 ? ctx.moveTo(toX(i), toY(v)) : ctx.lineTo(toX(i), toY(v)));
   ctx.stroke();
 
-  // Scenario overlay (if inputs filled)
-  const scenRev    = parseFloat(document.getElementById('is-scenario-rev')?.value)    || 0;
-  const scenGrowth = parseFloat(document.getElementById('is-scenario-growth')?.value) || 0;
+  // Scenario overlay
+  const scenRev    = parseFloat(document.getElementById(scenRevId)?.value)    || 0;
+  const scenGrowth = parseFloat(document.getElementById(scenGrowthId)?.value) || 0;
   if (scenRev > 0) {
     const scenario = Array.from({length: months}, (_, i) => scenRev * Math.pow(1 + scenGrowth/100, i));
-    const maxScen  = Math.max(Math.max(...base), Math.max(...scenario)) * 1.1;
-    function toYS(v) { return pad.t + gH - (v / maxScen) * gH; }
+    const maxAll   = Math.max(Math.max(...base), Math.max(...scenario)) * 1.1;
+    const toYS     = v => pad.t + gH - (v / maxAll) * gH;
     ctx.strokeStyle = '#22c55e';
     ctx.lineWidth   = 1.5;
     ctx.setLineDash([4, 3]);
     ctx.beginPath();
-    scenario.forEach((v, i) => { i === 0 ? ctx.moveTo(toX(i), toYS(v)) : ctx.lineTo(toX(i), toYS(v)); });
+    scenario.forEach((v, i) => i === 0 ? ctx.moveTo(toX(i), toYS(v)) : ctx.lineTo(toX(i), toYS(v)));
     ctx.stroke();
     ctx.setLineDash([]);
   }
 
   // KPI cards
-  const kpiEl = document.getElementById('is-rev-kpis');
+  const kpiEl = document.getElementById(kpiId);
   if (kpiEl) {
     const proj12 = Math.round(base[11]);
     const growth = ((base[11] / base[0] - 1) * 100).toFixed(0);
     kpiEl.innerHTML = [
-      { label:'12-Mo Proj.', value:'$' + (proj12 >= 1000 ? (proj12/1000).toFixed(1) + 'k' : proj12), pos:true },
-      { label:'Baseline Growth', value:'+' + growth + '%', pos:true }
-    ].map(k => `
-      <div style="background:var(--surface-2);border:1px solid var(--border);border-radius:10px;padding:9px 10px">
+      { label:'12-Mo Proj.',    value:'$' + (proj12 >= 1000 ? (proj12/1000).toFixed(1) + 'k' : proj12) },
+      { label:'Baseline Growth',value:'+' + growth + '%' }
+    ].map(k => `<div style="background:var(--surface-2);border:1px solid var(--border);border-radius:10px;padding:9px 10px">
         <div style="font-size:9.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--text-3);margin-bottom:4px">${k.label}</div>
-        <div style="font-size:15px;font-weight:700;color:${k.pos ? 'var(--text-0)' : '#ef4444'};font-family:var(--font-mono)">${k.value}</div>
+        <div style="font-size:15px;font-weight:700;color:var(--text-0);font-family:var(--font-mono)">${k.value}</div>
       </div>`).join('');
   }
 }
 
 /* ── Scenario modeler update ── */
-function isUpdateScenario() {
-  const rev    = parseFloat(document.getElementById('is-scenario-rev')?.value)    || 0;
-  const growth = parseFloat(document.getElementById('is-scenario-growth')?.value) || 0;
-  const margin = parseFloat(document.getElementById('is-scenario-margin')?.value) || 0;
-  const months = parseInt(document.getElementById('is-scenario-months')?.value)   || 12;
-  const delta  = document.getElementById('is-scenario-delta');
+// ns: 'is' | 'chat'  (called by oninput on scenario fields)
+function updateScenario(ns) {
+  const g  = id => document.getElementById(ns + '-scenario-' + id);
+  const rev    = parseFloat(g('rev')?.value)    || 0;
+  const growth = parseFloat(g('growth')?.value) || 0;
+  const margin = parseFloat(g('margin')?.value) || 0;
+  const months = parseInt(g('months')?.value)   || 12;
+  const delta  = g('delta');
   if (!delta) return;
 
-  if (!rev) { delta.textContent = 'Enter values to model revenue trajectory'; delta.className = 'is-scenario-delta'; renderIsRevenueGraph(); return; }
+  if (!rev) {
+    delta.textContent = 'Enter values to model revenue trajectory';
+    delta.className   = 'is-scenario-delta';
+    renderRevenueGraph(ns);
+    return;
+  }
 
   const endRev  = rev * Math.pow(1 + growth/100, months);
   const cumRev  = Array.from({length: months}, (_, i) => rev * Math.pow(1 + growth/100, i)).reduce((a,b)=>a+b,0);
   const cumProf = cumRev * (margin / 100);
   const fmtK    = v => v >= 1000000 ? '$' + (v/1000000).toFixed(2) + 'M' : v >= 1000 ? '$' + (v/1000).toFixed(1) + 'k' : '$' + Math.round(v);
 
-  delta.innerHTML = `
-    <span style="color:#22c55e">▲ ${fmtK(endRev)}/mo at month ${months}</span>&ensp;·&ensp;
-    <span style="color:var(--text-2)">${fmtK(cumProf)} cumulative profit</span>`;
-  delta.className = 'is-scenario-delta';
-  renderIsRevenueGraph();
+  delta.innerHTML   = `<span style="color:#22c55e">▲ ${fmtK(endRev)}/mo at month ${months}</span>&ensp;·&ensp;<span style="color:var(--text-2)">${fmtK(cumProf)} cumulative profit</span>`;
+  delta.className   = 'is-scenario-delta';
+  renderRevenueGraph(ns);
 }
 
+/* Keep old alias for IS screen HTML */
+function isUpdateScenario() { updateScenario('is'); }
+
 /* ── Advisory Circle ── */
-function renderIsAdvisoryCircle() {
-  const grid = document.getElementById('is-adv-grid');
+function renderAdvisoryCircle(ns) {
+  const grid = document.getElementById(ns + '-adv-grid');
   if (!grid) return;
   const advisors = [
-    { name:'Peter Drucker',   role:'Strategy',    color:'#6366f1' },
-    { name:'Nassim Taleb',    role:'Risk',         color:'#BF452A' },
-    { name:'Clayton Christ.', role:'Innovation',   color:'#0891b2' },
-    { name:'Esther Duflo',    role:'Economics',    color:'#059669' },
+    { name:'Peter Drucker',   role:'Strategy',   color:'#6366f1' },
+    { name:'Nassim Taleb',    role:'Risk',        color:'#BF452A' },
+    { name:'Clayton Christ.', role:'Innovation',  color:'#0891b2' },
+    { name:'Esther Duflo',    role:'Economics',   color:'#059669' },
   ];
   grid.innerHTML = advisors.map(a => {
     const initials = a.name.split(' ').slice(0,2).map(w=>w[0]).join('').toUpperCase();
@@ -9918,10 +10086,11 @@ function renderIsAdvisoryCircle() {
     </div>`;
   }).join('');
 }
+function renderIsAdvisoryCircle() { renderAdvisoryCircle('is'); }
 
-/* ── Integrations list (IS sidebar) ── */
-function renderIsIntegrations() {
-  const list = document.getElementById('is-int-list');
+/* ── Integrations list ── */
+function renderIntegrationsList(ns) {
+  const list = document.getElementById(ns + '-int-list');
   if (!list) return;
   list.innerHTML = DC_INTEGRATIONS.map(intg => `
     <div style="display:flex;align-items:center;gap:9px;background:var(--surface-2);border:1px solid var(--border);border-radius:10px;padding:10px 11px">
@@ -9935,10 +10104,11 @@ function renderIsIntegrations() {
       </button>
     </div>`).join('');
 }
+function renderIsIntegrations() { renderIntegrationsList('is'); }
 
-/* ── Portfolio tab (IS sidebar) ── */
-function renderIsPortfolio() {
-  const el = document.getElementById('is-portfolio-projects');
+/* ── Portfolio list ── */
+function renderPortfolioList(ns) {
+  const el = document.getElementById(ns + '-portfolio-projects');
   if (!el) return;
   const projects = loadProjects();
   if (!projects.length) {
@@ -9956,6 +10126,7 @@ function renderIsPortfolio() {
     </div>`;
   }).join('');
 }
+function renderIsPortfolio() { renderPortfolioList('is'); }
 
 /* ── Toast ── */
 function showToast(msg) {
