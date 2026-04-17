@@ -204,6 +204,13 @@ export async function adminMigrateSchema() {
     ALTER TABLE users ADD COLUMN IF NOT EXISTS is_admin    BOOLEAN NOT NULL DEFAULT FALSE;
     ALTER TABLE users ADD COLUMN IF NOT EXISTS is_disabled BOOLEAN NOT NULL DEFAULT FALSE;
   `);
+  // Idempotency table for Stripe webhook events — prevents double-crediting on retries
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS stripe_events (
+      event_id   TEXT PRIMARY KEY,
+      created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+    );
+  `);
 }
 
 /** Full user list with wallet balance + perspective count. */
