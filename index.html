@@ -5382,6 +5382,7 @@ function updateBalanceDisplay(balance) {
 
 /** Derive two-letter initials from a project name */
 function _projInitials(name) {
+  if (!name || typeof name !== 'string') return '??';
   const words = name.trim().split(/\s+/);
   if (words.length >= 2) return (words[0][0] + words[1][0]).toUpperCase();
   return name.slice(0, 2).toUpperCase();
@@ -5587,15 +5588,11 @@ function dcConnectIntegration(id) {
 
 /* ══ MAIN DASHBOARD RENDER ══ */
 function renderDashboardHome() {
-  renderDcThinkerGrid();
-  renderDcRecents();
-  renderDcPortfolio();
-  renderDcMarket();
-  renderDcProjects();
-  renderDcRevenueGraph();
-  renderDcAdvisoryCircle();
-  renderDcIntegrations();
-  dcRenderProjDropdown();
+  // Each render is isolated — one failure never hides another section
+  [renderDcThinkerGrid, renderDcRecents, renderDcPortfolio, renderDcMarket,
+   renderDcProjects, renderDcRevenueGraph, renderDcAdvisoryCircle,
+   renderDcIntegrations, dcRenderProjDropdown
+  ].forEach(fn => { try { fn(); } catch(e) { console.warn('[renderDashboardHome]', fn.name, e.message); } });
 }
 
 /* ── Dashboard quick-input ── */
@@ -7485,7 +7482,8 @@ function toggleKbFAQ(i) {
 }
 
 function escHtml(s) {
-  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  if (!s || typeof s !== 'string') return '';
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
 }
 
 let _helpSearchTimer = null;
