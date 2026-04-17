@@ -63,6 +63,9 @@ const LINKEDIN_REDIRECT_URI  = `${APP_URL}/auth/linkedin/callback`;
 // ── Stripe ────────────────────────────────────────────────────────────────────
 const STRIPE_SECRET_KEY      = process.env.STRIPE_SECRET_KEY      || '';
 const STRIPE_WEBHOOK_SECRET  = process.env.STRIPE_WEBHOOK_SECRET  || '';
+// Monthly subscription Price ID — create a recurring $20/mo price in your Stripe dashboard
+// and set this env var to the price_XXX ID.
+const STRIPE_MONTHLY_PRICE_ID = process.env.STRIPE_MONTHLY_PRICE_ID || '';
 const stripe = STRIPE_SECRET_KEY ? new Stripe(STRIPE_SECRET_KEY, { apiVersion: '2024-06-20' }) : null;
 
 // ── Guest rate-limit constants ────────────────────────────────────────────────
@@ -436,9 +439,17 @@ app.patch('/api/me/password', requireAuth, async (req, res) => {
 // ════════════════════════════════════════════════════════════════════════════
 
 // ── GET /api/balance ──────────────────────────────────────────────────────────
-app.get('/api/balance', async (req, res) => {
+// Accepts user_id query param. If a valid JWT is present, it MUST match the
+// requested user_id — prevents IDOR for authenticated users while keeping
+// guest wallet access working.
+app.get('/api/balance', optionalAuth, async (req, res) => {
   const userId = req.query.user_id;
   if (!userId) return res.status(400).json({ error: 'user_id is required.' });
+
+  // If JWT present, only allow access to own wallet
+  if (req.user && String(req.user.id) !== String(userId) && String(req.user.sub) !== String(userId)) {
+    return res.status(403).json({ error: 'Access denied.' });
+  }
 
   try {
     const wallet = await getOrCreateWallet(userId);
@@ -455,9 +466,15 @@ app.get('/api/balance', async (req, res) => {
 });
 
 // ── GET /api/wallet/history ───────────────────────────────────────────────────
-app.get('/api/wallet/history', async (req, res) => {
+// Same ownership validation as /api/balance.
+app.get('/api/wallet/history', optionalAuth, async (req, res) => {
   const userId = req.query.user_id;
   if (!userId) return res.status(400).json({ error: 'user_id is required.' });
+
+  // If JWT present, only allow access to own wallet
+  if (req.user && String(req.user.id) !== String(userId) && String(req.user.sub) !== String(userId)) {
+    return res.status(403).json({ error: 'Access denied.' });
+  }
 
   try {
     const { rows: walletRows } = await pool.query(
@@ -695,12 +712,22 @@ app.post('/api/top-up', async (req, res) => {
     console.warn('[top-up] Could not record event id (stripe_events missing?):', err.message);
   }
 
+  // Monthly subscription credits per billing period
+  const MONTHLY_CREDITS = 10000; // effectively unlimited at $20/mo
+
   try {
+    // ── One-time purchase completed ─────────────────────────────────────────
     if (event.type === 'checkout.session.completed') {
       const session = event.data.object;
       const userId  = session.metadata?.user_id;
       const credits = parseFloat(session.metadata?.credits || '0');
       const amountUsd = (session.amount_total || 0) / 100;
+
+      // Subscription checkout completion — credits granted on invoice.payment_succeeded
+      if (session.mode === 'subscription') {
+        console.log(`[top-up] Subscription checkout completed for user ${userId} — credits will be granted via invoice event`);
+        return res.json({ received: true, type: 'subscription_started' });
+      }
 
       if (!userId || credits <= 0) {
         console.error('[top-up] checkout.session.completed — missing user_id or credits in metadata');
@@ -716,6 +743,30 @@ app.post('/api/top-up', async (req, res) => {
       return res.json({ received: true, balance: parseFloat(wallet.credit_balance) });
     }
 
+    // ── Monthly subscription renewal ────────────────────────────────────────
+    if (event.type === 'invoice.payment_succeeded') {
+      const invoice = event.data.object;
+      // Only handle subscription invoices (not one-time)
+      if (!invoice.subscription) {
+        return res.json({ received: true, ignored: true });
+      }
+      // Retrieve user_id from the subscription metadata
+      const subscription = await stripe.subscriptions.retrieve(invoice.subscription);
+      const userId = subscription.metadata?.user_id;
+      if (!userId) {
+        console.error('[top-up] invoice.payment_succeeded — no user_id in subscription metadata');
+        return res.status(400).json({ error: 'Missing user_id in subscription metadata.' });
+      }
+      const amountUsd = (invoice.amount_paid || 0) / 100;
+      const wallet = await creditWallet(
+        userId, MONTHLY_CREDITS,
+        `Monthly plan · $${amountUsd.toFixed(2)} (${MONTHLY_CREDITS} perspectives)`,
+        { stripe_invoice_id: invoice.id, stripe_event_id: eventId }
+      );
+      console.log(`[top-up] Monthly: credited ${MONTHLY_CREDITS} perspectives to user ${userId}.`);
+      return res.json({ received: true, balance: parseFloat(wallet.credit_balance) });
+    }
+
     // Fallback: log and acknowledge unhandled event types
     console.log(`[top-up] Unhandled event type: ${event.type}`);
     res.json({ received: true, ignored: true });
@@ -726,41 +777,78 @@ app.post('/api/top-up', async (req, res) => {
 });
 
 // ── POST /api/create-checkout-session ────────────────────────────────────────
+// Supports two modes:
+//   { mode:'payment',  credits:200, price_usd:10 }  — one-time top-up
+//   { mode:'subscription' }                          — $20/month recurring plan
 app.post('/api/create-checkout-session', requireAuth, async (req, res) => {
   if (!stripe) {
     return res.status(503).json({ error: 'Payment processing not configured.' });
   }
 
-  const { credits, price_usd } = req.body;
-  if (!credits || !price_usd || credits <= 0 || price_usd <= 0) {
-    return res.status(400).json({ error: 'Invalid credits or price.' });
-  }
-
   const userId = req.user.id;
-  const amountCents = Math.round(parseFloat(price_usd) * 100);
+  const { mode = 'payment', credits, price_usd } = req.body;
+
+  // ── Allowed one-time packages (credits → cents) ───────────────────────────
+  const ALLOWED_PACKAGES = {
+    100: 500,   // $5
+    200: 1000,  // $10
+    600: 2500,  // $25
+  };
 
   try {
-    const session = await stripe.checkout.sessions.create({
-      payment_method_types: ['card'],
-      mode: 'payment',
-      line_items: [{
-        price_data: {
-          currency: 'usd',
-          unit_amount: amountCents,
-          product_data: {
-            name: `${credits} Divine Perspectives`,
-            description: `${credits} AI-powered perspective sessions on Divine Intelligence`,
+    let session;
+
+    if (mode === 'subscription') {
+      // ── Monthly plan ────────────────────────────────────────────────────
+      if (!STRIPE_MONTHLY_PRICE_ID) {
+        return res.status(503).json({
+          error: 'Monthly plan not yet available. Please add a top-up instead.'
+        });
+      }
+      session = await stripe.checkout.sessions.create({
+        payment_method_types: ['card'],
+        mode: 'subscription',
+        line_items: [{ price: STRIPE_MONTHLY_PRICE_ID, quantity: 1 }],
+        metadata: { user_id: String(userId) },
+        success_url: `${APP_URL}/dashboard/wallet?topup=success`,
+        cancel_url:  `${APP_URL}/dashboard/wallet/topup`,
+      });
+
+    } else {
+      // ── One-time payment ─────────────────────────────────────────────────
+      const creditsNum = parseInt(credits, 10);
+      const expectedCents = ALLOWED_PACKAGES[creditsNum];
+      if (!expectedCents) {
+        return res.status(400).json({ error: 'Invalid package selected.' });
+      }
+      const amountCents = Math.round(parseFloat(price_usd) * 100);
+      // Sanity-check: client price must match server-side expected amount
+      if (amountCents !== expectedCents) {
+        return res.status(400).json({ error: 'Price mismatch — please refresh and try again.' });
+      }
+
+      session = await stripe.checkout.sessions.create({
+        payment_method_types: ['card'],
+        mode: 'payment',
+        line_items: [{
+          price_data: {
+            currency: 'usd',
+            unit_amount: amountCents,
+            product_data: {
+              name: `${creditsNum} Divine Perspectives`,
+              description: `${creditsNum} AI-powered perspective sessions on Divine Intelligence`,
+            },
           },
+          quantity: 1,
+        }],
+        metadata: {
+          user_id:  String(userId),
+          credits:  String(creditsNum),
         },
-        quantity: 1,
-      }],
-      metadata: {
-        user_id: userId,
-        credits: String(credits),
-      },
-      success_url: `${APP_URL}/dashboard/wallet?topup=success`,
-      cancel_url:  `${APP_URL}/dashboard/wallet/topup`,
-    });
+        success_url: `${APP_URL}/dashboard/wallet?topup=success`,
+        cancel_url:  `${APP_URL}/dashboard/wallet/topup`,
+      });
+    }
 
     res.json({ url: session.url, session_id: session.id });
   } catch (err) {
@@ -792,5 +880,6 @@ app.listen(PORT, () => {
   console.log(`  Google OAuth:  ${GOOGLE_CLIENT_ID ? 'configured ✓' : 'NOT SET ⚠'}`);
   console.log(`  LinkedIn OAuth:${LINKEDIN_CLIENT_ID ? 'configured ✓' : ' NOT SET ⚠'}`);
   console.log(`  Stripe:        ${STRIPE_SECRET_KEY ? 'configured ✓' : 'NOT SET ⚠'}`);
+  console.log(`  Monthly plan:  ${STRIPE_MONTHLY_PRICE_ID ? STRIPE_MONTHLY_PRICE_ID + ' ✓' : 'NOT SET — set STRIPE_MONTHLY_PRICE_ID ⚠'}`);
   console.log(`  DB:            ${process.env.DATABASE_URL ? 'configured ✓' : 'NOT SET ⚠'}`);
 });

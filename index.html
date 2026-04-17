@@ -454,62 +454,111 @@
       align-items:center; justify-content:center;
     }
     .modal-overlay.open { display:flex; }
+    /* ── Top-up modal — redesigned ── */
     .topup-modal {
-      background:var(--surface); border-radius:20px;
-      box-shadow:0 24px 60px rgba(0,0,0,0.18);
-      width:min(400px, calc(100vw - 32px)); padding:32px;
-      animation:modal-in 0.2s ease;
+      background:#fff; border-radius:20px;
+      box-shadow:0 28px 70px rgba(0,0,0,0.16);
+      width:min(460px, calc(100vw - 32px)); padding:0;
+      overflow:hidden;
+      animation:modal-in 0.22s cubic-bezier(.16,1,.3,1);
     }
-    @keyframes modal-in { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
-    .topup-header { display:flex; align-items:center; gap:12px; margin-bottom:6px; }
+    @keyframes modal-in { from{opacity:0;transform:translateY(14px)} to{opacity:1;transform:translateY(0)} }
+    .topup-modal-wrap { position:relative; }
+    .topup-close {
+      position:absolute; top:14px; right:14px; z-index:2;
+      background:none; border:none; font-size:20px; cursor:pointer;
+      color:#999; padding:4px 8px; border-radius:8px; line-height:1;
+    }
+    .topup-close:hover { background:#f4f4f4; color:#333; }
+    /* Header */
+    .topup-header-band {
+      padding:26px 28px 20px; border-bottom:1px solid #F0EDE8;
+    }
+    .topup-header { display:flex; align-items:center; gap:12px; margin-bottom:10px; }
     .topup-d-icon {
-      width:40px; height:40px; border-radius:50%; flex-shrink:0;
-      background:var(--accent-lt); border:1.5px solid var(--accent-bdr);
-      display:flex; align-items:center; justify-content:center;
+      width:42px; height:42px; border-radius:50%; flex-shrink:0;
+      background:#FDF5F2; border:1.5px solid #E8C4B5;
+      display:flex; align-items:center; justify-content:center; color:var(--accent);
     }
-    .topup-title { font-family:'Cormorant Garamond',serif; font-size:22px; font-weight:600; color:var(--text-0); }
-    .topup-balance-row { font-size:12px; color:var(--text-3); margin-bottom:20px; }
-    .topup-balance-val { font-weight:600; color:var(--text-1); }
-    .topup-sub { font-size:13px; color:var(--text-2); margin-bottom:18px; line-height:1.5; }
-    .topup-packages { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-bottom:8px; }
+    .topup-title { font-family:'Cormorant Garamond',serif; font-size:24px; font-weight:600; color:#1A1714; letter-spacing:-.01em; }
+    .topup-balance-row {
+      display:inline-flex; align-items:center; gap:6px;
+      background:#F7F4EF; border-radius:20px; padding:5px 12px;
+      font-size:12px; color:#666;
+    }
+    .topup-balance-val { font-weight:700; color:#1A1714; }
+    /* Mode tabs */
+    .topup-tabs {
+      display:flex; gap:0; padding:16px 28px 0; background:#fff;
+    }
+    .topup-tab {
+      flex:1; padding:9px 12px; font-size:13px; font-weight:500;
+      color:#888; background:none; border:none; border-bottom:2px solid transparent;
+      cursor:pointer; transition:all .15s; font-family:'Inter',sans-serif; text-align:center;
+    }
+    .topup-tab.active { color:#1A1714; border-bottom-color:#BF452A; font-weight:600; }
+    /* One-time packages */
+    .topup-panel { padding:20px 28px 24px; }
+    .topup-panel-sub { font-size:12.5px; color:#888; margin-bottom:16px; line-height:1.5; }
+    .topup-packages { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-bottom:6px; }
     .topup-pkg {
-      border:1.5px solid var(--border-md); border-radius:14px; padding:16px 10px 14px;
-      cursor:pointer; text-align:center; transition:border-color .15s, background .15s;
-      background:var(--surface); position:relative;
+      border:1.5px solid #E8E4DF; border-radius:14px; padding:18px 10px 16px;
+      cursor:pointer; text-align:center; transition:border-color .15s, box-shadow .15s;
+      background:#fff; position:relative;
     }
-    .topup-pkg:hover { border-color:var(--accent); background:var(--accent-lt); }
-    .topup-pkg.selected { border-color:var(--accent); background:var(--accent-lt); box-shadow:0 0 0 3px rgba(191,69,42,.1); }
+    .topup-pkg:hover { border-color:#BF452A; }
+    .topup-pkg.selected { border-color:#BF452A; box-shadow:0 0 0 3px rgba(191,69,42,.12); }
     .topup-pkg-badge {
-      position:absolute; top:-9px; left:50%; transform:translateX(-50%);
+      position:absolute; top:-10px; left:50%; transform:translateX(-50%);
       background:var(--accent); color:#fff; font-size:9px; font-weight:700;
-      letter-spacing:.06em; text-transform:uppercase;
-      padding:2px 8px; border-radius:20px; white-space:nowrap;
+      letter-spacing:.07em; text-transform:uppercase;
+      padding:3px 9px; border-radius:20px; white-space:nowrap;
     }
-    .topup-pkg-credits { font-size:20px; font-weight:700; color:var(--text-0); line-height:1; }
-    .topup-pkg-label   { font-size:11px; color:var(--text-3); margin-top:3px; }
-    .topup-pkg-price   { font-size:14px; font-weight:700; color:var(--accent); margin-top:8px; }
-    .topup-pkg-unit    { font-size:10px; color:var(--text-3); margin-top:2px; }
-    .topup-trust { font-size:11px; color:var(--text-3); text-align:center; margin-bottom:18px; }
+    .topup-pkg-badge.best { background:#1A1714; }
+    .topup-pkg-credits { font-size:26px; font-weight:800; color:#1A1714; line-height:1; letter-spacing:-.02em; }
+    .topup-pkg-label   { font-size:10.5px; color:#999; margin-top:3px; }
+    .topup-pkg-price   { font-size:16px; font-weight:700; color:#BF452A; margin-top:10px; }
+    .topup-pkg-unit    { font-size:10px; color:#aaa; margin-top:2px; }
+    /* Monthly plan card */
+    .topup-monthly-card {
+      border:2px solid #1A1714; border-radius:16px; padding:22px 22px 20px;
+      position:relative; background:#fff; margin-bottom:4px;
+    }
+    .topup-monthly-badge {
+      position:absolute; top:-11px; left:20px;
+      background:#1A1714; color:#fff; font-size:9px; font-weight:700;
+      letter-spacing:.08em; text-transform:uppercase;
+      padding:3px 10px; border-radius:20px;
+    }
+    .topup-monthly-price-row { display:flex; align-items:baseline; gap:4px; margin-bottom:4px; }
+    .topup-monthly-price { font-size:36px; font-weight:800; color:#1A1714; letter-spacing:-.03em; line-height:1; }
+    .topup-monthly-per  { font-size:13px; color:#888; }
+    .topup-monthly-desc { font-size:13px; color:#555; margin-bottom:16px; line-height:1.5; }
+    .topup-monthly-features { list-style:none; padding:0; margin:0 0 4px; display:flex; flex-direction:column; gap:7px; }
+    .topup-monthly-features li { display:flex; align-items:center; gap:9px; font-size:13px; color:#333; }
+    .topup-monthly-features li svg { color:#22c55e; flex-shrink:0; }
+    /* Footer */
+    .topup-footer { padding:0 28px 24px; }
+    .topup-trust {
+      display:flex; align-items:center; justify-content:center; gap:16px;
+      font-size:11px; color:#aaa; margin-bottom:14px; flex-wrap:wrap;
+    }
+    .topup-trust-item { display:flex; align-items:center; gap:5px; }
     .topup-notice {
-      font-size:13px; color:var(--text-2); background:var(--surface-2);
-      border-radius:10px; padding:12px 14px; margin-bottom:16px;
-      display:none; line-height:1.5;
+      font-size:13px; color:#c0392b; background:#FEF2F2;
+      border-radius:10px; padding:11px 14px; margin-bottom:14px;
+      display:none; line-height:1.5; border:1px solid #FECACA;
     }
     .topup-notice.visible { display:block; }
     .topup-cta {
-      width:100%; padding:13px; border:none; border-radius:var(--r-pill);
-      background:var(--accent); color:#fff; font-size:14px; font-weight:600;
+      width:100%; padding:15px; border:none; border-radius:var(--r-pill);
+      background:#BF452A; color:#fff; font-size:15px; font-weight:600;
       cursor:pointer; transition:background .15s; font-family:'Inter',sans-serif;
+      letter-spacing:-.01em;
     }
-    .topup-cta:hover { background:var(--accent-mid); }
-    .topup-cta:disabled { background:#D9D9D6; cursor:not-allowed; }
-    .topup-close {
-      position:absolute; top:16px; right:16px;
-      background:none; border:none; font-size:20px; cursor:pointer;
-      color:var(--text-3); padding:4px 8px; border-radius:8px; line-height:1;
-    }
-    .topup-close:hover { background:var(--surface-2); }
-    .topup-modal-wrap { position:relative; }
+    .topup-cta:hover { background:#a83a22; }
+    .topup-cta:disabled { background:#D9D9D6; color:#999; cursor:not-allowed; }
+    .topup-sub { display:none; } /* legacy, hidden */
 
     /* Profile popup */
     .profile-menu-popup {
@@ -964,6 +1013,16 @@
     /* Sidebar section labels + sub-items */
     .nav-section-label { font-size:10px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:var(--text-3); padding:14px 10px 4px; flex-shrink:0; }
     .sidebar.collapsed .nav-section-label { display:none; }
+
+    /* Auth-gated nav items — shown when logged out */
+    .nav-item.nav-auth-gate { opacity:.45; position:relative; }
+    .nav-item.nav-auth-gate::after {
+      content:''; position:absolute; right:10px; top:50%; transform:translateY(-50%);
+      width:10px; height:10px;
+      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 10 10' fill='none' stroke='%23A39B8E' stroke-width='1.5' stroke-linecap='round'%3E%3Crect x='2' y='4.5' width='6' height='4.5' rx='.8'/%3E%3Cpath d='M3.5 4.5V3a1.5 1.5 0 013 0v1.5'/%3E%3C/svg%3E");
+      background-repeat:no-repeat; background-size:contain; opacity:.7;
+    }
+    .sidebar.collapsed .nav-item.nav-auth-gate::after { display:none; }
     .nav-sub-item { display:flex; align-items:center; gap:8px; font-size:13px; color:var(--text-2); padding:6px 14px 6px 36px; cursor:pointer; border-radius:6px; transition:background .12s,color .12s; background:transparent; border:none; text-align:left; width:100%; }
     .nav-sub-item:hover { background:var(--surface-2); color:var(--text-0); }
     .nav-sub-item.active { color:var(--accent); font-weight:500; }
@@ -3147,11 +3206,11 @@
         </button>
         <!-- My Stuff -->
         <div class="nav-section-label">My Stuff</div>
-        <button class="nav-item" id="nav-projects" data-tip="Projects" onclick="showView('projects')">
+        <button class="nav-item nav-auth-gate" id="nav-projects" data-tip="Projects" onclick="_navMyStuff('projects')">
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75"><rect x="2" y="2" width="5" height="5" rx="1.5"/><rect x="9" y="2" width="5" height="5" rx="1.5"/><rect x="2" y="9" width="5" height="5" rx="1.5"/><rect x="9" y="9" width="5" height="5" rx="1.5"/></svg>
           <span class="nav-item-label">Projects</span>
         </button>
-        <button class="nav-item" id="nav-wallet" data-tip="Wallet" onclick="showView('upgrade')">
+        <button class="nav-item nav-auth-gate" id="nav-wallet" data-tip="Wallet" onclick="_navMyStuff('upgrade')">
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75"><rect x="1" y="4" width="14" height="10" rx="2"/><path d="M11 9a1 1 0 110 2 1 1 0 010-2z" fill="currentColor" stroke="none"/><path d="M1 7h14"/></svg>
           <span class="nav-item-label">Wallet</span>
         </button>
@@ -4850,7 +4909,7 @@ e.g. I always start by validating whether the problem is real before evaluating 
     <svg width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="8" cy="5" r="3"/><path d="M2 14c0-3.3 2.7-6 6-6s6 2.7 6 6"/></svg>
     <span>Thinker</span>
   </button>
-  <button class="mob-nav-item" id="mob-nav-projects" onclick="showView('projects'); closeSidebarOnMobile()" aria-label="Projects">
+  <button class="mob-nav-item" id="mob-nav-projects" onclick="_navMyStuff('projects'); closeSidebarOnMobile()" aria-label="Projects">
     <svg width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="2" width="5" height="5" rx="1.5"/><rect x="9" y="2" width="5" height="5" rx="1.5"/><rect x="2" y="9" width="5" height="5" rx="1.5"/><rect x="9" y="9" width="5" height="5" rx="1.5"/></svg>
     <span>Projects</span>
   </button>
@@ -5859,9 +5918,9 @@ function _buildAdvisoryHtml(gridId, onConnectFn) {
         '<div class="dc-advisory-quote">"' + quote + '"</div>' +
       '</div>' +
     '</div>' +
-    '<div class="dc-advisory-add" onclick="window.open(\'https://www.uncharted.ventures/thinker\',\'_blank\')">' +
+    '<div class="dc-advisory-add" onclick="showView(\'thought-leaders\')">' +
       '<svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="6.5" y1="1" x2="6.5" y2="12"/><line x1="1" y1="6.5" x2="12" y2="6.5"/></svg>' +
-      'Add another Thinker to your circle' +
+      'Add a Thinker' +
     '</div>';
 }
 
@@ -6422,17 +6481,54 @@ async function fetchBalance() {
   } catch { /* non-fatal */ }
 }
 
+/**
+ * Poll balance after a Stripe redirect with ?topup=success.
+ * Webhooks are async (5–30 s after redirect) so we retry with backoff
+ * until the balance increases, then show a confirmed toast.
+ */
+function _pollBalanceAfterTopup(prevBalance) {
+  const delays = [2000, 4000, 6000, 9000, 13000, 18000]; // ~52 s total
+  let attempt = 0;
+  const prev = parseFloat(prevBalance) || 0;
+
+  async function check() {
+    attempt++;
+    await fetchBalance();
+    const now = parseFloat(currentBalance) || 0;
+    if (now > prev) {
+      const persp = Math.floor(now / 0.05);
+      showToast(`✓ ${persp} perspectives now in your account!`);
+      // Also refresh the Cognitive Ledger if it's open
+      try { renderCognitiveLedger(); } catch(e) {}
+      return;
+    }
+    if (attempt >= delays.length) {
+      // Webhook may still be in flight — reassure user and stop polling
+      showToast('✓ Payment confirmed. Balance updates within 30 seconds.');
+      return;
+    }
+    setTimeout(check, delays[attempt]);
+  }
+
+  setTimeout(check, delays[0]);
+}
+
 /* ── Top-up modal ── */
+let _topupMode = 'onetime'; // 'onetime' | 'monthly'
+
 function openTopup() {
   document.getElementById('topup-overlay').classList.add('open');
-  // Reset notice
   const notice = document.getElementById('topup-notice');
   notice.textContent = '';
   notice.classList.remove('visible');
-  // Show current balance
   const balEl = document.getElementById('topup-balance-display');
-  if (balEl) balEl.textContent = currentBalance != null ? `${currentBalance} perspectives` : '—';
-  // Pre-select Popular ($10) package
+  // Convert dollar balance → perspective count for display
+  if (balEl) {
+    const perspCount = currentBalance != null ? Math.floor(parseFloat(currentBalance) / 0.05) : null;
+    balEl.textContent = perspCount !== null ? String(perspCount) : '—';
+  }
+  // Default to one-time tab, pre-select Popular ($10)
+  switchTopupTab('onetime');
   document.querySelectorAll('.topup-pkg').forEach(p => p.classList.remove('selected'));
   selectedPkgEl = document.querySelector('.topup-pkg[data-credits="200"]');
   if (selectedPkgEl) { selectedPkgEl.classList.add('selected'); _updateTopupCta(selectedPkgEl); }
@@ -6440,15 +6536,31 @@ function openTopup() {
 function closeTopup() {
   document.getElementById('topup-overlay').classList.remove('open');
 }
+function switchTopupTab(mode) {
+  _topupMode = mode;
+  document.getElementById('topup-tab-onetime').classList.toggle('active', mode === 'onetime');
+  document.getElementById('topup-tab-monthly').classList.toggle('active', mode === 'monthly');
+  document.getElementById('topup-panel-onetime').style.display = mode === 'onetime' ? '' : 'none';
+  document.getElementById('topup-panel-monthly').style.display = mode === 'monthly' ? '' : 'none';
+  const btn = document.getElementById('topup-cta');
+  const notice = document.getElementById('topup-notice');
+  if (notice) { notice.textContent = ''; notice.classList.remove('visible'); }
+  if (mode === 'monthly') {
+    if (btn) { btn.textContent = 'Start Monthly Plan · $20/mo'; btn.disabled = false; }
+  } else {
+    // Restore selected one-time package label
+    const sel = document.querySelector('.topup-pkg.selected');
+    if (sel) _updateTopupCta(sel);
+    else if (btn) btn.textContent = 'Get Perspectives';
+  }
+}
 function selectPkg(el) {
   document.querySelectorAll('.topup-pkg').forEach(p => p.classList.remove('selected'));
   el.classList.add('selected');
   selectedPkgEl = el;
   _updateTopupCta(el);
-  // Clear any previous notice
   const notice = document.getElementById('topup-notice');
-  notice.textContent = '';
-  notice.classList.remove('visible');
+  if (notice) { notice.textContent = ''; notice.classList.remove('visible'); }
 }
 function _updateTopupCta(pkg) {
   const credits = pkg?.dataset.credits;
@@ -6456,48 +6568,55 @@ function _updateTopupCta(pkg) {
   const btn     = document.getElementById('topup-cta');
   if (btn && credits && price) {
     btn.textContent = `Get ${credits} Perspectives · $${parseFloat(price).toFixed(0)}`;
+    btn.disabled = false;
   }
 }
 async function handleTopup() {
-  const pkg = selectedPkgEl || document.querySelector('.topup-pkg.selected');
-  if (!pkg) return;
+  if (!currentUser) { closeTopup(); showLoginScreen(); return; }
 
-  // Must be logged in to purchase — prompt auth if not
-  if (!currentUser) {
-    closeTopup();
-    showLoginScreen();
-    return;
-  }
-
-  const credits   = parseInt(pkg.dataset.credits, 10);
-  const price_usd = parseFloat(pkg.dataset.price);
-  const notice    = document.getElementById('topup-notice');
-  const btn       = document.getElementById('topup-cta');
-
-  btn.disabled    = true;
+  const notice = document.getElementById('topup-notice');
+  const btn    = document.getElementById('topup-cta');
+  notice.textContent = ''; notice.classList.remove('visible');
+  btn.disabled = true;
   btn.textContent = 'Connecting to payment…';
-  notice.textContent = '';
-  notice.classList.remove('visible');
 
   try {
+    let body;
+    if (_topupMode === 'monthly') {
+      body = { mode: 'subscription' };
+    } else {
+      const pkg = selectedPkgEl || document.querySelector('.topup-pkg.selected');
+      if (!pkg) { btn.disabled = false; return; }
+      body = {
+        mode: 'payment',
+        credits:   parseInt(pkg.dataset.credits, 10),
+        price_usd: parseFloat(pkg.dataset.price),
+      };
+    }
+
     const res = await fetch('/api/create-checkout-session', {
       method:  'POST',
       headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${getAuthToken()}` },
-      body:    JSON.stringify({ credits, price_usd }),
+      body:    JSON.stringify(body),
       signal:  AbortSignal.timeout(15000),
     });
     const data = await res.json();
     if (!res.ok) throw new Error(data.error || 'Could not start checkout.');
     if (data.url) {
-      // Redirect to Stripe-hosted checkout page
       window.location.href = data.url;
     } else {
       throw new Error('No checkout URL returned.');
     }
   } catch (err) {
-    btn.disabled    = false;
-    _updateTopupCta(pkg);
-    notice.textContent = err.message || 'Something went wrong. Please try again.';
+    btn.disabled = false;
+    if (_topupMode === 'monthly') btn.textContent = 'Start Monthly Plan · $20/mo';
+    else { const sel = document.querySelector('.topup-pkg.selected'); if (sel) _updateTopupCta(sel); }
+    let msg = err.message || 'Something went wrong. Please try again.';
+    // Friendly fallback for monthly plan not yet configured
+    if (msg.toLowerCase().includes('monthly') || msg.toLowerCase().includes('not yet available')) {
+      msg = 'Monthly plan launching soon — use a one-time top-up for now.';
+    }
+    notice.textContent = msg;
     notice.classList.add('visible');
   }
 }
@@ -7198,7 +7317,17 @@ function selectProjectType(type) {
     if (btn) btn.classList.toggle('active', t === type);
   });
 }
+/** Nav wrapper for My Stuff items — gates on login */
+function _navMyStuff(view) {
+  if (!currentUser) { showLoginScreen(); return; }
+  showView(view);
+}
+
 function showProjectForm() {
+  if (!currentUser) {
+    showLoginScreen();
+    return;
+  }
   document.getElementById('project-form').classList.add('visible');
   document.getElementById('project-name-input').focus();
   selectProjectType('initiative');
@@ -7212,6 +7341,7 @@ function hideProjectForm() {
 function selectColor(c) { selectedColor = c; renderProjects(); }
 
 function saveProject() {
+  if (!currentUser) { showLoginScreen(); return; }
   const name    = document.getElementById('project-name-input').value.trim();
   if (!name) return;
   const tagline = (document.getElementById('project-tagline-input') || {}).value?.trim() || '';
@@ -9511,11 +9641,19 @@ function applyAuthState(user) {
 
     // Fetch live balance
     fetchBalance();
+    // Unlock My Stuff nav items
+    ['nav-projects','nav-wallet'].forEach(id => {
+      document.getElementById(id)?.classList.remove('nav-auth-gate');
+    });
   } else {
     document.getElementById('sidebar-profile-area').style.display = 'none';
     document.getElementById('sidebar-signin-area').style.display  = '';
     document.getElementById('thinker-nav-section').style.display  = 'none';
     document.getElementById('mob-nav-thinker').style.display      = 'none';
+    // Re-lock My Stuff nav items
+    ['nav-projects','nav-wallet'].forEach(id => {
+      document.getElementById(id)?.classList.add('nav-auth-gate');
+    });
     // Dashboard greeting card — logged-out state
     const grName = document.getElementById('dc-greeting-name');
     const grSub  = document.getElementById('dc-greeting-sub');
@@ -9543,6 +9681,11 @@ async function initAuth() {
   const topupOk     = params.get('topup') === 'success';
   const loginPrompt = params.get('login') === '1';
 
+  // ?login=1 — always show splash immediately, before async auth resolves.
+  // This ensures the welcome screen appears for ANY visitor coming from the marketing site,
+  // whether logged in or not.
+  if (loginPrompt) showSplashScreen();
+
   // Clean up URL query params we consume
   if (tokenParam || authError || topupOk || loginPrompt) {
     const clean = new URL(window.location.href);
@@ -9555,6 +9698,7 @@ async function initAuth() {
   }
 
   if (authError) {
+    closeSplashScreen();
     showLoginScreen(authError);
     return;
   }
@@ -9562,7 +9706,7 @@ async function initAuth() {
   const tok = tokenParam || getAuthToken();
   if (!tok) {
     applyAuthState(null);
-    if (loginPrompt) showSplashScreen();
+    // Splash already shown above
     return;
   }
   if (tokenParam) setAuthToken(tokenParam);
@@ -9574,24 +9718,41 @@ async function initAuth() {
     if (!res.ok) throw new Error('invalid');
     const user = await res.json();
     try { applyAuthState(user); } catch(e) { console.error('[initAuth] applyAuthState:', e); }
+
+    if (loginPrompt) {
+      // User is already logged in — update splash to show a "Continue" shortcut
+      _splashShowContinue(user);
+    }
+
     if (tokenParam) {
-      // Fresh OAuth login — navigate to home and greet the user
+      // Fresh OAuth login — close splash, navigate home, greet user
+      closeSplashScreen();
       const firstName = (user.name || user.email || '').split(/[\s@]/)[0];
       try { showView('recents'); } catch(e) { console.error('[initAuth] showView:', e); }
       setTimeout(() => { try { showToast(`Welcome${firstName ? ', ' + firstName : ''}! ✓`); } catch(e) {} }, 300);
     }
     if (topupOk) {
-      // Stripe redirected back after successful payment — refresh balance and show toast
-      setTimeout(() => {
-        fetchBalance();
-        showToast('✓ Payment successful! Your perspectives have been credited.');
-      }, 800);
+      closeSplashScreen();
+      showToast('✓ Payment received — crediting your perspectives…');
+      _pollBalanceAfterTopup(currentBalance);
     }
   } catch {
     clearAuth();
     applyAuthState(null);
-    if (loginPrompt) showSplashScreen();
+    // Splash already shown above — keep it open for logged-out recovery
   }
+}
+
+/** When ?login=1 visitor is already logged in, swap splash buttons to show a Continue option */
+function _splashShowContinue(user) {
+  const firstName = (user && user.name) ? user.name.split(' ')[0] : '';
+  const btns = document.querySelector('.splash-btns');
+  const guest = document.querySelector('.splash-guest');
+  if (btns) btns.innerHTML =
+    `<button class="splash-btn-signup" onclick="closeSplashScreen()" style="min-width:200px">
+       Continue${firstName ? ' as ' + firstName : ' to dashboard'} →
+     </button>`;
+  if (guest) guest.style.display = 'none';
 }
 
 function showLoginScreen(errorCode) {
@@ -11072,57 +11233,102 @@ function showToast(msg) {
   <div class="topup-modal topup-modal-wrap">
     <button class="topup-close" onclick="closeTopup()" aria-label="Close">×</button>
 
-    <div class="topup-header">
-      <div class="topup-d-icon">
-        <svg width="18" height="18" viewBox="0 0 100 100" fill="none">
-          <g stroke="currentColor" stroke-width="10" stroke-linecap="round">
-            <rect x="18" y="12" width="8" height="76" rx="2"/>
-            <rect x="26" y="12" width="8" height="8" rx="1"/>
-            <rect x="26" y="80" width="8" height="8" rx="1"/>
-            <path d="M34 18 Q78 18 78 50 Q78 82 34 82"/>
-            <path d="M34 30 Q66 30 66 50 Q66 70 34 70"/>
-          </g>
-        </svg>
+    <!-- Header -->
+    <div class="topup-header-band">
+      <div class="topup-header">
+        <div class="topup-d-icon">
+          <svg width="20" height="20" viewBox="0 0 100 100" fill="none">
+            <g stroke="currentColor" stroke-width="10" stroke-linecap="round">
+              <rect x="18" y="12" width="8" height="76" rx="2"/>
+              <rect x="26" y="12" width="8" height="8" rx="1"/>
+              <rect x="26" y="80" width="8" height="8" rx="1"/>
+              <path d="M34 18 Q78 18 78 50 Q78 82 34 82"/>
+              <path d="M34 30 Q66 30 66 50 Q66 70 34 70"/>
+            </g>
+          </svg>
+        </div>
+        <div class="topup-title">Add Perspectives</div>
       </div>
-      <div class="topup-title">Add Perspectives</div>
-    </div>
-
-    <div class="topup-balance-row">
-      Current balance: <span class="topup-balance-val" id="topup-balance-display">—</span>
-    </div>
-
-    <div class="topup-sub">Each perspective is $0.05. One-time purchase — no subscription.</div>
-
-    <div class="topup-packages" id="topup-packages">
-      <div class="topup-pkg" data-credits="100" data-price="5.00" onclick="selectPkg(this)">
-        <div class="topup-pkg-credits">100</div>
-        <div class="topup-pkg-label">perspectives</div>
-        <div class="topup-pkg-price">$5</div>
-        <div class="topup-pkg-unit">$0.05 each</div>
-      </div>
-      <div class="topup-pkg selected" data-credits="200" data-price="10.00" onclick="selectPkg(this)">
-        <div class="topup-pkg-badge">Popular</div>
-        <div class="topup-pkg-credits">200</div>
-        <div class="topup-pkg-label">perspectives</div>
-        <div class="topup-pkg-price">$10</div>
-        <div class="topup-pkg-unit">$0.05 each</div>
-      </div>
-      <div class="topup-pkg" data-credits="500" data-price="20.00" onclick="selectPkg(this)">
-        <div class="topup-pkg-badge" style="background:#2C3E50">Best value</div>
-        <div class="topup-pkg-credits">500</div>
-        <div class="topup-pkg-label">perspectives</div>
-        <div class="topup-pkg-price">$20</div>
-        <div class="topup-pkg-unit">$0.04 each</div>
+      <div class="topup-balance-row">
+        Your balance:&nbsp;<span class="topup-balance-val" id="topup-balance-display">—</span>&nbsp;perspectives
       </div>
     </div>
 
-    <div class="topup-trust">🔒 Secured by Stripe · Cancel anytime</div>
+    <!-- Mode tabs -->
+    <div class="topup-tabs">
+      <button class="topup-tab active" id="topup-tab-onetime" onclick="switchTopupTab('onetime')">One-time top-up</button>
+      <button class="topup-tab" id="topup-tab-monthly" onclick="switchTopupTab('monthly')">Monthly plan</button>
+    </div>
 
-    <div class="topup-notice" id="topup-notice"></div>
+    <!-- One-time panel -->
+    <div class="topup-panel" id="topup-panel-onetime">
+      <div class="topup-panel-sub">Each perspective is $0.05. Purchase once, use anytime — no subscription required.</div>
+      <div class="topup-packages">
+        <div class="topup-pkg" data-credits="100" data-price="5.00" data-mode="payment" onclick="selectPkg(this)">
+          <div class="topup-pkg-credits">100</div>
+          <div class="topup-pkg-label">perspectives</div>
+          <div class="topup-pkg-price">$5</div>
+          <div class="topup-pkg-unit">$0.05 each</div>
+        </div>
+        <div class="topup-pkg selected" data-credits="200" data-price="10.00" data-mode="payment" onclick="selectPkg(this)">
+          <div class="topup-pkg-badge">Popular</div>
+          <div class="topup-pkg-credits">200</div>
+          <div class="topup-pkg-label">perspectives</div>
+          <div class="topup-pkg-price">$10</div>
+          <div class="topup-pkg-unit">$0.05 each</div>
+        </div>
+        <div class="topup-pkg" data-credits="600" data-price="25.00" data-mode="payment" onclick="selectPkg(this)">
+          <div class="topup-pkg-badge best">Best value</div>
+          <div class="topup-pkg-credits">600</div>
+          <div class="topup-pkg-label">perspectives</div>
+          <div class="topup-pkg-price">$25</div>
+          <div class="topup-pkg-unit">$0.042 each</div>
+        </div>
+      </div>
+    </div>
 
-    <button class="topup-cta" id="topup-cta" onclick="handleTopup()">
-      Get 200 Perspectives · $10
-    </button>
+    <!-- Monthly panel -->
+    <div class="topup-panel" id="topup-panel-monthly" style="display:none">
+      <div class="topup-monthly-card">
+        <div class="topup-monthly-badge">Best value</div>
+        <div class="topup-monthly-price-row">
+          <div class="topup-monthly-price">$20</div>
+          <div class="topup-monthly-per">/ month</div>
+        </div>
+        <div class="topup-monthly-desc">Unlimited perspectives. Cancel anytime from your account settings.</div>
+        <ul class="topup-monthly-features">
+          <li><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M2 7l3.5 3.5 6.5-7"/></svg>Unlimited AI perspectives per month</li>
+          <li><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M2 7l3.5 3.5 6.5-7"/></svg>Access to all Thinkers, including future additions</li>
+          <li><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M2 7l3.5 3.5 6.5-7"/></svg>Full Growth Intelligence suite</li>
+          <li><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M2 7l3.5 3.5 6.5-7"/></svg>Priority session quality &amp; response speed</li>
+          <li><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M2 7l3.5 3.5 6.5-7"/></svg>Cancel anytime — no lock-in</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Footer — shared -->
+    <div class="topup-footer">
+      <div class="topup-trust">
+        <span class="topup-trust-item">
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><rect x="2" y="5.5" width="8" height="5" rx="1"/><path d="M4 5.5V4a2 2 0 014 0v1.5"/></svg>
+          Secured by Stripe
+        </span>
+        <span class="topup-trust-item">
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M6 1l1.2 3.1L10.5 4l-2.5 2.5.8 3.5L6 8.5 3.2 10l.8-3.5L1.5 4l3.3-.9z"/></svg>
+          No hidden fees
+        </span>
+        <span class="topup-trust-item">
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="6" cy="6" r="4.5"/><path d="M4 6l1.5 1.5 2.5-3"/></svg>
+          Cancel anytime
+        </span>
+      </div>
+
+      <div class="topup-notice" id="topup-notice"></div>
+
+      <button class="topup-cta" id="topup-cta" onclick="handleTopup()">
+        Get 200 Perspectives · $10
+      </button>
+    </div>
   </div>
 </div>
 
