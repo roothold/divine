@@ -498,9 +498,13 @@ async function initAdmin() {
     document.getElementById('sidebar-user-name').textContent = user.name || user.email;
     document.getElementById('admin-shell').style.display = 'flex';
 
-    // Load initial data
-    loadUsers(0);
-    loadRevenue();
+    // Restore active tab from URL hash (browser-refresh-friendly)
+    const hash = (window.location.hash || '').replace('#', '');
+    const startSection = SECTIONS.includes(hash) ? hash : 'users';
+    showSection(startSection);
+
+    // Always pre-load users data
+    if (startSection !== 'users') loadUsers(0);
   } catch (e) {
     showGate('Could not connect to server. Try again later.', true);
   }
@@ -521,13 +525,17 @@ function authHeaders() {
 const SECTIONS = ['users', 'thinkers', 'perspectives', 'revenue'];
 
 function showSection(name) {
+  if (!SECTIONS.includes(name)) name = 'users';
   SECTIONS.forEach(s => {
     document.getElementById('section-' + s).classList.toggle('active', s === name);
     document.getElementById('nav-' + s).classList.toggle('active', s === name);
   });
+  // Persist active tab in URL hash so refresh restores it
+  history.replaceState(null, '', '#' + name);
   // Lazy-load data
   if (name === 'thinkers' && !_thinkersLoaded)  loadThinkers();
   if (name === 'perspectives' && !_perspLoaded) loadPerspectives(0);
+  if (name === 'revenue') loadRevenue();
 }
 
 // ── Toast ─────────────────────────────────────────────────────────────────────
@@ -643,6 +651,9 @@ function renderUsersTable(users) {
           <button class="btn btn-ghost btn-sm" onclick="toggleThinkerAccess('${u.id}', ${!u.thinker_access})">
             ${u.thinker_access ? 'Revoke thinker' : 'Grant thinker'}
           </button>
+          <button class="btn btn-sm" style="background:var(--accent);color:#fff;border-color:var(--accent)" onclick="manualCredit('${u.id}', '${(u.name || u.email).replace(/'/g,"\\'")}')">
+            + Credit
+          </button>
         </div>
       </td>
     </tr>
@@ -698,6 +709,26 @@ async function toggleThinkerAccess(id, access) {
     });
     if (!res.ok) throw new Error((await res.json()).error);
     toast(access ? 'Thinker access granted.' : 'Thinker access revoked.');
+    loadUsers(_usersOffset);
+  } catch (e) { toast('Error: ' + e.message); }
+}
+
+async function manualCredit(userId, userName) {
+  const raw = prompt(`Credit wallet for ${userName}\n\nEnter number of perspectives to add (e.g. 200 = $10.00):`);
+  if (!raw) return;
+  const amount = parseFloat(raw);
+  if (isNaN(amount) || amount <= 0) { toast('Invalid amount — enter a positive number.'); return; }
+  const reason = prompt(`Reason / label (shown in transaction history):`);
+  if (reason === null) return; // cancelled
+  try {
+    const res = await fetch(`${API}/api/admin/credit`, {
+      method: 'POST',
+      headers: authHeaders(),
+      body: JSON.stringify({ user_id: userId, amount, label: reason || `Manual credit for ${userName}` })
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error);
+    toast(`✓ Credited ${amount} perspectives. New balance: ${data.new_balance}`);
     loadUsers(_usersOffset);
   } catch (e) { toast('Error: ' + e.message); }
 }
@@ -880,6 +911,12 @@ function renderRevenueTable(rows) {
     `;
   }).join('');
 }
+
+// ── Browser back/forward support ─────────────────────────────────────────────
+window.addEventListener('hashchange', () => {
+  const hash = (window.location.hash || '').replace('#', '');
+  if (SECTIONS.includes(hash)) showSection(hash);
+});
 
 // ── Boot ──────────────────────────────────────────────────────────────────────
 initAdmin();

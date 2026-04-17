@@ -81,7 +81,7 @@ app.use((req, res, next) => {
   if (!ALLOWED_ORIGINS.length || ALLOWED_ORIGINS.includes(origin)) {
     res.setHeader('Access-Control-Allow-Origin', origin || '*');
   }
-  res.setHeader('Access-Control-Allow-Methods', 'GET,POST,OPTIONS');
+  res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PATCH,OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type,Authorization');
   if (req.method === 'OPTIONS') return res.sendStatus(204);
   next();
@@ -268,6 +268,8 @@ app.get('/auth/google/callback', async (req, res) => {
       avatarUrl: info.picture,
     });
 
+    if (user.is_disabled) return res.redirect('/?auth_error=account_disabled');
+
     const appToken = signToken(user);
     res.redirect(`/?token=${encodeURIComponent(appToken)}`);
   } catch (err) {
@@ -319,6 +321,8 @@ app.get('/auth/linkedin/callback', async (req, res) => {
       name:       info.name,
       avatarUrl:  info.picture,
     });
+
+    if (user.is_disabled) return res.redirect('/?auth_error=account_disabled');
 
     const appToken = signToken(user);
     res.redirect(`/?token=${encodeURIComponent(appToken)}`);
@@ -696,26 +700,32 @@ app.post('/api/top-up', async (req, res) => {
     return res.status(400).json({ error: `Webhook Error: ${err.message}` });
   }
 
-  // Idempotency guard — log the event id to avoid double-crediting
+  // Idempotency guard — only record the event AFTER a successful credit so that
+  // Stripe retries aren't silently blocked when the credit fails.
   const eventId = event.id;
+  let stripeEventsAvailable = true;
+
+  // Pre-check: is this event already successfully processed?
   try {
-    const { rowCount } = await pool.query(
-      `INSERT INTO stripe_events (event_id) VALUES ($1) ON CONFLICT DO NOTHING`, [eventId]
+    const { rows } = await pool.query(
+      `SELECT 1 FROM stripe_events WHERE event_id = $1`, [eventId]
     );
-    if (rowCount === 0) {
-      // Already processed
+    if (rows.length > 0) {
       console.log(`[top-up] Duplicate event ${eventId} — ignored`);
       return res.json({ received: true, duplicate: true });
     }
   } catch (err) {
-    // stripe_events table may not exist yet — log warning but continue
-    console.warn('[top-up] Could not record event id (stripe_events missing?):', err.message);
+    // stripe_events table may not exist — skip idempotency check but continue
+    console.warn('[top-up] stripe_events table missing — skipping idempotency check:', err.message);
+    stripeEventsAvailable = false;
   }
 
   // Monthly subscription credits per billing period
   const MONTHLY_CREDITS = 10000; // effectively unlimited at $20/mo
 
   try {
+    let result;
+
     // ── One-time purchase completed ─────────────────────────────────────────
     if (event.type === 'checkout.session.completed') {
       const session = event.data.object;
@@ -740,11 +750,10 @@ app.post('/api/top-up', async (req, res) => {
         { stripe_session_id: session.id, stripe_event_id: eventId }
       );
       console.log(`[top-up] Credited ${credits} perspectives to user ${userId}. New balance: ${wallet.credit_balance}`);
-      return res.json({ received: true, balance: parseFloat(wallet.credit_balance) });
-    }
+      result = { received: true, balance: parseFloat(wallet.credit_balance) };
 
     // ── Monthly subscription renewal ────────────────────────────────────────
-    if (event.type === 'invoice.payment_succeeded') {
+    } else if (event.type === 'invoice.payment_succeeded') {
       const invoice = event.data.object;
       // Only handle subscription invoices (not one-time)
       if (!invoice.subscription) {
@@ -764,14 +773,26 @@ app.post('/api/top-up', async (req, res) => {
         { stripe_invoice_id: invoice.id, stripe_event_id: eventId }
       );
       console.log(`[top-up] Monthly: credited ${MONTHLY_CREDITS} perspectives to user ${userId}.`);
-      return res.json({ received: true, balance: parseFloat(wallet.credit_balance) });
+      result = { received: true, balance: parseFloat(wallet.credit_balance) };
+
+    } else {
+      // Unhandled event type — acknowledge and move on
+      console.log(`[top-up] Unhandled event type: ${event.type}`);
+      return res.json({ received: true, ignored: true });
     }
 
-    // Fallback: log and acknowledge unhandled event types
-    console.log(`[top-up] Unhandled event type: ${event.type}`);
-    res.json({ received: true, ignored: true });
+    // Credit succeeded — now record the event so retries are blocked
+    if (stripeEventsAvailable) {
+      await pool.query(
+        `INSERT INTO stripe_events (event_id) VALUES ($1) ON CONFLICT DO NOTHING`, [eventId]
+      ).catch(err => console.warn('[top-up] Could not record event id:', err.message));
+    }
+
+    return res.json(result);
+
   } catch (err) {
-    console.error('[top-up error]', err.message);
+    // Credit failed — do NOT record the event id so Stripe can retry
+    console.error('[top-up error]', err.message, err.stack);
     res.status(500).json({ error: 'Could not credit wallet.' });
   }
 });
@@ -988,6 +1009,29 @@ app.get('/api/admin/perspectives', requireAdmin, async (req, res) => {
   }
 });
 
+// ── POST /api/admin/credit ────────────────────────────────────────────────────
+// Manually credit a user's wallet (for recovering missed Stripe payments).
+// Body: { user_id, amount, label }
+app.post('/api/admin/credit', requireAdmin, async (req, res) => {
+  const { user_id, amount, label } = req.body || {};
+  if (!user_id || !amount || isNaN(parseFloat(amount)) || parseFloat(amount) <= 0) {
+    return res.status(400).json({ error: 'user_id and a positive amount are required.' });
+  }
+  try {
+    const wallet = await creditWallet(
+      user_id,
+      parseFloat(amount),
+      label || `Manual credit by admin`,
+      {}
+    );
+    console.log(`[admin/credit] Manually credited ${amount} to user ${user_id} by ${req.adminUser.email}`);
+    res.json({ ok: true, new_balance: parseFloat(wallet.credit_balance) });
+  } catch (err) {
+    console.error('[/api/admin/credit]', err.message);
+    res.status(500).json({ error: err.message });
+  }
+});
+
 // ── GET /api/admin/revenue ────────────────────────────────────────────────────
 app.get('/api/admin/revenue', requireAdmin, async (_req, res) => {
   try {
@@ -999,26 +1043,7 @@ app.get('/api/admin/revenue', requireAdmin, async (_req, res) => {
   }
 });
 
-// ── GET /api/admin/schema-debug ──────────────────────────────────────────────
-app.get('/api/admin/schema-debug', requireAdmin, async (_req, res) => {
-  try {
-    const { rows: cols } = await pool.query(`
-      SELECT table_name, column_name, data_type
-      FROM information_schema.columns
-      WHERE table_name IN ('users','wallets','wallet_transactions')
-      ORDER BY table_name, ordinal_position
-    `);
-    const { rows: types } = await pool.query(`
-      SELECT type, COUNT(*) AS cnt FROM wallet_transactions GROUP BY type ORDER BY cnt DESC
-    `);
-    const { rows: sample } = await pool.query(`
-      SELECT * FROM wallet_transactions ORDER BY created_at DESC LIMIT 3
-    `);
-    res.json({ columns: cols, transaction_types: types, sample });
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-});
+// schema-debug removed — was temporary diagnostic only
 
 // ── SPA catch-all ────────────────────────────────────────────────────────────
 // Serve index.html for every non-API, non-auth route.
