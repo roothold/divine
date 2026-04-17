@@ -1044,17 +1044,17 @@
     .dc-greeting-divider { height:1px; background:var(--border); margin:0 -22px 16px; }
 
     /* ─── Project Cards (Launchpad) ─── */
-    .dc-projects-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:12px; margin-bottom:28px; }
+    .dc-projects-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:14px; margin-bottom:28px; }
     @media (max-width:560px) { .dc-projects-grid { grid-template-columns:1fr; } }
-    .dc-project-card { background:#fff; border:1.5px solid var(--border); border-radius:14px; padding:18px 18px 14px; transition:border-color .15s,box-shadow .15s; position:relative; overflow:hidden; }
-    .dc-project-card::before { content:''; position:absolute; top:0; left:0; right:0; height:3px; background:var(--vc,#BF452A); border-radius:14px 14px 0 0; }
-    .dc-project-card:hover { border-color:var(--accent-bdr); box-shadow:0 4px 18px rgba(0,0,0,.06); }
-    .dc-proj-card-top { display:flex; align-items:flex-start; justify-content:space-between; margin-bottom:11px; }
-    .dc-proj-card-left { display:flex; align-items:center; gap:10px; }
-    .dc-proj-avatar { width:36px; height:36px; border-radius:9px; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:700; color:#fff; flex-shrink:0; }
-    .dc-proj-name { font-size:13px; font-weight:700; color:var(--text-0); line-height:1.3; }
-    .dc-proj-tagline { font-size:11px; color:var(--text-3); margin-top:1px; }
-    /* Count badge replacing fragility score */
+    .dc-project-card { background:var(--surface); border:1.5px solid var(--border); border-radius:16px; padding:20px 20px 16px; transition:border-color .15s,box-shadow .15s; position:relative; overflow:hidden; }
+    .dc-project-card::before { content:''; position:absolute; top:0; left:0; right:0; height:3px; background:var(--vc,#BF452A); border-radius:16px 16px 0 0; }
+    .dc-project-card:hover { border-color:rgba(0,0,0,.14); box-shadow:0 4px 20px rgba(0,0,0,.07); }
+    .dc-proj-card-top { display:flex; align-items:flex-start; justify-content:space-between; gap:10px; margin-bottom:14px; }
+    .dc-proj-card-left { display:flex; align-items:center; gap:11px; min-width:0; }
+    .dc-proj-avatar { width:38px; height:38px; border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:700; color:#fff; flex-shrink:0; }
+    .dc-proj-name { font-size:14px; font-weight:700; color:var(--text-0); line-height:1.3; }
+    .dc-proj-tagline { font-size:11.5px; color:var(--text-3); margin-top:2px; line-height:1.4; }
+    /* Count badge */
     .dc-proj-count-badge { font-size:10px; font-weight:600; color:var(--text-3); background:var(--surface-2); border:1px solid var(--border); border-radius:var(--r-pill); padding:3px 9px; white-space:nowrap; flex-shrink:0; }
     /* Empty state card */
     .dc-proj-empty { grid-column:1/-1; display:flex; flex-direction:column; align-items:center; gap:8px; padding:28px 20px; background:var(--surface); border:1.5px dashed var(--border-md); border-radius:14px; cursor:pointer; transition:border-color .15s,background .15s; text-align:center; color:var(--text-3); }
@@ -1062,11 +1062,13 @@
     .dc-proj-empty-title { font-size:13px; font-weight:600; color:var(--text-1); }
     .dc-proj-empty:hover .dc-proj-empty-title { color:var(--accent); }
     .dc-proj-empty-sub { font-size:11.5px; color:var(--text-3); line-height:1.5; max-width:220px; }
-    .dc-proj-actions { display:grid; grid-template-columns:1fr 1fr; gap:7px; margin-top:12px; }
-    .dc-proj-action-btn { background:transparent; border:1.5px solid var(--border-md); border-radius:8px; padding:8px 6px; font-size:10.5px; font-weight:700; letter-spacing:.025em; text-transform:uppercase; color:var(--text-2); cursor:pointer; transition:all .15s; text-align:center; line-height:1.3; font-family:'Inter',sans-serif; }
-    .dc-proj-action-btn:hover { border-color:var(--accent-bdr); color:var(--accent); background:var(--accent-lt); }
-    .dc-proj-action-btn.primary { background:var(--accent); border-color:var(--accent); color:#fff; }
-    .dc-proj-action-btn.primary:hover { background:var(--accent-mid); }
+    /* Action links — inline text links, not filled buttons */
+    .dc-proj-actions { display:flex; align-items:center; gap:4px; padding-top:12px; border-top:1px solid var(--border); }
+    .dc-proj-action-btn { background:transparent; border:none; border-radius:6px; padding:5px 8px; font-size:12px; font-weight:500; letter-spacing:.005em; color:var(--text-3); cursor:pointer; transition:color .15s,background .15s; text-align:left; font-family:'Inter',sans-serif; display:inline-flex; align-items:center; gap:4px; }
+    .dc-proj-action-btn:hover { color:var(--text-0); background:var(--surface-2); }
+    .dc-proj-action-btn.primary { color:var(--vc,var(--accent)); font-weight:600; }
+    .dc-proj-action-btn.primary:hover { background:var(--surface-2); }
+    .dc-proj-action-sep { width:1px; height:12px; background:var(--border); flex-shrink:0; margin:0 2px; }
 
     /* ─── Growth: Revenue Graph ─── */
     .dc-revenue-kpis { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:14px; }
@@ -2933,6 +2935,65 @@
       width:32px; height:32px; border-radius:8px;
       display:flex; align-items:center; justify-content:center; transition:background .12s,color .12s; }
     .auth-close:hover { background:var(--surface-2); color:var(--text-1); }
+    /* Auth modal logo mark */
+    .auth-logo-mark { display:flex; justify-content:center; margin-bottom:20px; }
+
+    /* ═══ SPLASH SCREEN ═══ */
+    .splash-screen {
+      position:fixed; inset:0; z-index:1200;
+      background:var(--surface);
+      display:flex; flex-direction:column; align-items:center; justify-content:center;
+      padding:48px 24px;
+      animation:splash-in .4s cubic-bezier(.16,1,.3,1) both;
+    }
+    @keyframes splash-in {
+      from { opacity:0; transform:translateY(20px); }
+      to   { opacity:1; transform:translateY(0); }
+    }
+    .splash-logo { margin-bottom:28px; }
+    .splash-wordmark {
+      font-family:'Cormorant Garamond',serif; font-size:13px; font-weight:600;
+      letter-spacing:.18em; text-transform:uppercase; color:var(--text-3);
+      text-align:center; margin-bottom:32px; margin-top:4px;
+    }
+    .splash-title {
+      font-family:'Cormorant Garamond',serif; font-size:38px; font-weight:700;
+      color:var(--text-0); text-align:center; margin-bottom:12px; line-height:1.15;
+    }
+    .splash-sub {
+      font-size:15px; color:var(--text-2); text-align:center;
+      max-width:360px; line-height:1.7; margin-bottom:40px;
+    }
+    .splash-btns {
+      display:flex; gap:12px; flex-wrap:wrap; justify-content:center; margin-bottom:18px;
+    }
+    .splash-btn-login {
+      padding:14px 40px; background:transparent;
+      border:2px solid var(--text-0); border-radius:var(--r-pill);
+      font-size:15px; font-weight:600; font-family:'Inter',sans-serif;
+      color:var(--text-0); cursor:pointer; transition:all .15s; white-space:nowrap;
+    }
+    .splash-btn-login:hover { background:var(--text-0); color:#fff; }
+    .splash-btn-signup {
+      padding:14px 40px; background:var(--text-0);
+      border:2px solid var(--text-0); border-radius:var(--r-pill);
+      font-size:15px; font-weight:600; font-family:'Inter',sans-serif;
+      color:#fff; cursor:pointer; transition:all .15s; white-space:nowrap;
+    }
+    .splash-btn-signup:hover { background:#333; border-color:#333; }
+    .splash-guest {
+      font-size:13px; color:var(--text-3); cursor:pointer;
+      background:none; border:none; font-family:'Inter',sans-serif;
+      padding:8px 14px; transition:color .15s; letter-spacing:.01em;
+    }
+    .splash-guest:hover { color:var(--text-1); }
+    .splash-divider {
+      width:48px; height:1px; background:var(--border); margin:32px auto;
+    }
+    @media (max-width:480px) {
+      .splash-title  { font-size:30px; }
+      .splash-btn-login, .splash-btn-signup { padding:13px 28px; font-size:14px; }
+    }
   </style>
 </head>
 <body>
@@ -3096,9 +3157,9 @@
           My Wallet
           <span id="profile-menu-balance" style="margin-left:auto;font-size:11.5px;font-weight:700;color:var(--accent);font-family:var(--font-mono)"></span>
         </button>
-        <button class="profile-menu-item" onclick="showView('downloads');closeProfileMenu()">
-          <svg width="15" height="15" viewBox="0 0 15 15" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M7.5 1v9M4 7l3.5 3.5L11 7"/><rect x="1" y="11" width="13" height="3" rx="1"/></svg>
-          Perspective Collection
+        <button class="profile-menu-item" onclick="showView('projects');closeProfileMenu()">
+          <svg width="15" height="15" viewBox="0 0 15 15" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="1" y="1" width="5.5" height="5.5" rx="1"/><rect x="8.5" y="1" width="5.5" height="5.5" rx="1"/><rect x="1" y="8.5" width="5.5" height="5.5" rx="1"/><rect x="8.5" y="8.5" width="5.5" height="5.5" rx="1"/></svg>
+          My Projects
         </button>
         <div class="profile-menu-sep"></div>
         <button class="profile-menu-item" onclick="showView('settings');closeProfileMenu()">
@@ -3979,44 +4040,44 @@
     <div class="screen" id="screen-help">
       <div class="main-inner"><div class="screen-inner">
         <div class="screen-header">
-          <div class="screen-label">Knowledge Base</div>
-          <h2 class="screen-title" style="font-family:'Cormorant Garamond',serif;font-size:32px;font-weight:600">How may we illuminate?</h2>
-          <p class="screen-sub">The Divine Library holds answers to every question about the platform, the Thinkers, and the protocols that govern them.</p>
+          <div class="screen-label">Help</div>
+          <h2 class="screen-title" style="font-family:'Cormorant Garamond',serif;font-size:32px;font-weight:600">How can we help?</h2>
+          <p class="screen-sub">Answers to common questions about Divine Intelligence, the Thinkers, and how Perspectives work.</p>
         </div>
 
         <!-- Search -->
         <div class="kb-search-wrap">
           <svg class="kb-search-icon" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="6.5" cy="6.5" r="4.5"/><path d="M11 11l3 3"/></svg>
-          <input class="kb-search-input" id="kb-search" type="text" placeholder="Search the Global Ledger of Wisdom…" oninput="helpSearch(this.value)" autocomplete="off" spellcheck="false">
+          <input class="kb-search-input" id="kb-search" type="text" placeholder="Search for answers…" oninput="helpSearch(this.value)" autocomplete="off" spellcheck="false">
         </div>
 
-        <!-- Tiered assistance cards -->
+        <!-- Quick-access cards -->
         <div class="kb-cards">
-          <div class="kb-card kb-card-archives" onclick="window.open('https://getdivine.ai/docs','_blank')">
+          <div class="kb-card kb-card-archives" onclick="window.open('https://www.uncharted.ventures','_blank')">
             <svg class="kb-card-symbol" width="32" height="32" viewBox="0 0 32 32" fill="none">
               <rect x="3" y="2" width="18" height="24" rx="2.5" stroke="currentColor" stroke-width="1.7" fill="none"/>
               <rect x="3" y="2" width="5.5" height="24" rx="2" fill="currentColor" opacity=".12"/>
               <path d="M11 9h6M11 13.5h6M11 18h4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
               <path d="M25 5v20l-3.5-2.5-3.5 2.5V5" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" fill="none"/>
             </svg>
-            <div class="kb-card-title">The Archives</div>
-            <div class="kb-card-sub">Access the structural blueprints of Divine Intelligence — integration guides, cognitive protocols, and platform architecture.</div>
+            <div class="kb-card-title">About Uncharted</div>
+            <div class="kb-card-sub">Learn about the company behind Divine Intelligence and the broader Uncharted Ventures ecosystem.</div>
             <div class="kb-card-cta">
-              Open Documentation
+              Visit uncharted.ventures
               <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2.5 6h7M6.5 3l3 3-3 3"/></svg>
             </div>
           </div>
-          <div class="kb-card kb-card-emissary" onclick="window.open('mailto:michael@surpluspods.com')">
+          <div class="kb-card kb-card-emissary" onclick="window.open('mailto:hello@uncharted.ventures')">
             <svg class="kb-card-symbol" width="32" height="32" viewBox="0 0 32 32" fill="none">
               <rect x="3" y="7" width="26" height="18" rx="3" stroke="currentColor" stroke-width="1.7" fill="none"/>
               <path d="M3 10l13 9 13-9" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
               <circle cx="25" cy="8" r="4" fill="currentColor"/>
               <path d="M23.5 8h3M25 6.5v3" stroke="#fff" stroke-width="1.4" stroke-linecap="round"/>
             </svg>
-            <div class="kb-card-title">The Emissary</div>
-            <div class="kb-card-sub">Request a direct transmission from our architects. Human oversight ensures every inquiry receives considered counsel.</div>
+            <div class="kb-card-title">Contact Us</div>
+            <div class="kb-card-sub">Have a question that isn't answered here? Reach the team directly and we'll respond with considered counsel.</div>
             <div class="kb-card-cta">
-              Send a Transmission
+              Send a message
               <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2.5 6h7M6.5 3l3 3-3 3"/></svg>
             </div>
           </div>
@@ -4025,23 +4086,23 @@
         <!-- FAQ -->
         <div class="kb-section-head">
           <svg width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M5.5 1L7.8 4.2 11 5.5 7.8 6.8 5.5 10 3.2 6.8 0 5.5 3.2 4.2Z" stroke="currentColor" stroke-width="1.2" fill="none"/></svg>
-          Philosophical Inquiries
+          Frequently Asked Questions
         </div>
         <div id="faq-list"></div>
 
-        <!-- Thinker CTA strip -->
+        <!-- Become a Thinker CTA strip -->
         <div class="kb-thinker-strip">
           <svg class="kb-ts-icon" width="44" height="44" viewBox="0 0 44 44" fill="none">
             <circle cx="22" cy="22" r="20" fill="rgba(255,255,255,.06)" stroke="rgba(255,255,255,.18)" stroke-width="1"/>
-            <path d="M22 8L35 22L22 33L9 22Z" fill="none" stroke="rgba(255,255,255,.6)" stroke-width="1.4"/>
-            <path d="M22 8L35 22L22 19L9 22Z" fill="rgba(255,255,255,.1)" stroke="none"/>
-            <circle cx="22" cy="22" r="3.5" fill="rgba(255,255,255,.45)"/>
+            <circle cx="22" cy="16" r="5" stroke="rgba(255,255,255,.7)" stroke-width="1.5" fill="none"/>
+            <path d="M10 36c0-6.6 5.4-12 12-12s12 5.4 12 12" stroke="rgba(255,255,255,.7)" stroke-width="1.5" stroke-linecap="round" fill="none"/>
+            <path d="M28 10l2 2M32 16h2M29 22l2 2" stroke="rgba(255,255,255,.35)" stroke-width="1.2" stroke-linecap="round"/>
           </svg>
           <div class="kb-ts-body">
-            <div class="kb-ts-title">Are you an Architect of Wisdom?</div>
-            <div class="kb-ts-sub">Visit the Thinker Initiation guide to encode your cognitive framework and join the Divine network.</div>
+            <div class="kb-ts-title">Become a Thinker</div>
+            <div class="kb-ts-sub">Have a distinctive way of seeing the world? Apply to encode your cognitive framework and make your expertise available to others on Divine Intelligence.</div>
           </div>
-          <button class="kb-ts-btn" onclick="showView('thinker-hub')">Begin Initiation</button>
+          <button class="kb-ts-btn" onclick="window.open('https://www.uncharted.ventures/thinker','_blank')">Apply Now</button>
         </div>
 
       </div></div>
@@ -4885,28 +4946,36 @@ const PROJECT_COLORS = ['#BF452A','#0F7A5E','#C0392B','#8E5A02','#7B2D8B','#005B
 
 const FAQS = [
   {
-    q: 'The Mechanics of Cognitive Replication',
-    a: 'You describe a decision, answer a few context questions, and your selected Architect applies their specific cognitive framework to your situation. The intelligence model has been trained on how that Thinker sees the world — not what they would do, but how they would see it. Each Perspective costs $0.05 and is preserved as a Perspective in your Collection.'
+    q: 'What is Divine Intelligence?',
+    a: 'Divine Intelligence is a decision-support platform that lets you consult verified human experts — called Thinkers — on your most important decisions. Each Thinker\'s cognitive framework has been encoded into the platform, allowing you to receive a structured Perspective: how they would interpret your situation, through their specific lens. This is not generic AI advice. It is a direct encounter with a documented way of thinking.'
   },
   {
-    q: 'Who Are the Architects of Insight?',
-    a: 'Architects are verified human experts whose cognitive frameworks have been encoded into Divine Intelligence. Michael Akindele — Builder, Designer, Founder — is the first active Architect. Additional Thinkers are inducted through a rigorous Initiation process and appear in the Thinker Ledger as their frameworks pass encoding validation.'
+    q: 'Who are the Thinkers?',
+    a: 'Thinkers are real, verified experts whose knowledge and reasoning style have been carefully encoded into Divine Intelligence. The first active Thinker is Michael Akindele — Builder, Designer, Founder. Each Thinker is admitted through a rigorous review process and appears in the Thinker Ledger once their framework has been validated. More Thinkers are inducted on an ongoing basis across strategy, design, philosophy, and beyond.'
   },
   {
-    q: 'The Encoding Protocol: How Is My Data Handled?',
-    a: 'Your perspectives are encoded, not stored. Session data lives in your browser\'s local memory — nothing from your deliberation process is persisted to our servers. Only transactional events (credit usage, perspective generation) are recorded in our secure infrastructure to maintain ledger integrity. Your private deliberations remain sovereign to you.'
+    q: 'How does a Perspective work?',
+    a: 'Select a Thinker, describe your decision clearly, and answer a short set of context questions. The platform applies that Thinker\'s cognitive framework to your situation — not to tell you what to do, but to show you how they would see it. Your Perspective streams in real time and is automatically saved to your session history for future reference.'
   },
   {
-    q: 'How Do I Acquire a Perspective?',
-    a: 'Each insight costs $0.05. Top up your balance from the credit panel in the sidebar. Once credited, select an active Architect, describe your decision with precision, answer the context questions, and your Perspective will stream in real time. The session is automatically preserved in your Perspective Collection.'
+    q: 'How much does a Perspective cost?',
+    a: 'Each Perspective costs $0.05. Top up your balance using the Wallet in the sidebar. Credits are applied per session and there is no subscription required. You pay only for the thinking you use.'
   },
   {
-    q: 'What Form Do My Perspectives Take?',
-    a: 'Every completed session generates a Perspective Perspective — a structured intelligence report containing the Architect\'s Key Insight and a set of Cognitive Frames that reinterpret your decision through their lens. Access your Perspective Collection from the profile menu to download print-ready PDF reports or copy a shareable link.'
+    q: 'How is my data handled?',
+    a: 'Your deliberations are private. Session content is stored in your account and never shared with third parties or used to train models. Only transactional records — credits used, sessions generated — are retained for ledger integrity. Your decisions remain yours.'
   },
   {
-    q: 'Can I Contribute My Own Cognitive Framework?',
-    a: 'Yes. If you possess a documented and demonstrably valuable way of thinking, you can apply to become an Architect of Wisdom. Visit the Thinker Hub and initiate the Onboarding Protocol. You\'ll encode your Framework, define your Lens, and map your Domain Constellation before your application enters review.'
+    q: 'Can I search across multiple Thinkers?',
+    a: 'Yes. From the search screen, you can query the full Thinker Ledger by name, domain, or expertise. Each Thinker\'s profile shows their encoded domains, their reasoning style, and the types of decisions they are best suited for. You can also run the same decision through multiple Thinkers to surface contrasting perspectives on the same problem.'
+  },
+  {
+    q: 'Where are my saved sessions?',
+    a: 'All completed sessions are saved to your account automatically. Access them from the sidebar under recent activity, or navigate to My Projects to organise perspectives by venture or topic. Sessions include the full Perspective text and can be revisited, shared, or built upon at any time.'
+  },
+  {
+    q: 'How do I become a Thinker?',
+    a: 'If you have a documented and demonstrably valuable way of thinking — built through years of practice in your field — you can apply to join the Thinker network. The application process involves encoding your cognitive framework, defining your lens, and passing a quality review. Visit uncharted.ventures/thinker to begin your application.'
   },
 ];
 
@@ -5481,9 +5550,13 @@ function renderDcProjects() {
         '<div class="dc-proj-count-badge">' + countLabel + '</div>' +
       '</div>' +
       '<div class="dc-proj-actions">' +
-        actions.map(a =>
+        actions.map((a, i) =>
+          (i > 0 ? '<span class="dc-proj-action-sep"></span>' : '') +
           '<button class="dc-proj-action-btn' + (a.primary ? ' primary' : '') + '" ' +
-          'onclick="dcProjectAction(\'' + escHtml(a.prompt) + '\')">' + escHtml(a.label) + '</button>'
+          'onclick="dcProjectAction(\'' + escHtml(a.prompt) + '\')">' +
+          escHtml(a.label) +
+          '<svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M2 5h6M5.5 2.5L8 5l-2.5 2.5"/></svg>' +
+          '</button>'
         ).join('') +
       '</div>' +
     '</div>';
@@ -8924,17 +8997,19 @@ function applyAuthState(user) {
 }
 
 async function initAuth() {
-  const params     = new URLSearchParams(window.location.search);
-  const tokenParam = params.get('token');
-  const authError  = params.get('auth_error');
-  const topupOk    = params.get('topup') === 'success';
+  const params      = new URLSearchParams(window.location.search);
+  const tokenParam  = params.get('token');
+  const authError   = params.get('auth_error');
+  const topupOk     = params.get('topup') === 'success';
+  const loginPrompt = params.get('login') === '1';
 
   // Clean up URL query params we consume
-  if (tokenParam || authError || topupOk) {
+  if (tokenParam || authError || topupOk || loginPrompt) {
     const clean = new URL(window.location.href);
     clean.searchParams.delete('token');
     clean.searchParams.delete('auth_error');
     clean.searchParams.delete('topup');
+    clean.searchParams.delete('login');
     const qs = clean.search === '?' ? '' : clean.search;
     history.replaceState({}, '', clean.pathname + qs);
   }
@@ -8945,7 +9020,11 @@ async function initAuth() {
   }
 
   const tok = tokenParam || getAuthToken();
-  if (!tok) { applyAuthState(null); return; }
+  if (!tok) {
+    applyAuthState(null);
+    if (loginPrompt) showSplashScreen();
+    return;
+  }
   if (tokenParam) setAuthToken(tokenParam);
 
   try {
@@ -8971,6 +9050,7 @@ async function initAuth() {
   } catch {
     clearAuth();
     applyAuthState(null);
+    if (loginPrompt) showSplashScreen();
   }
 }
 
@@ -9016,6 +9096,41 @@ function closeLoginScreen() {
     if (pf) pf.style.display = 'none';
   } catch(e) {}
 }
+
+/* ════════════════════════════════
+   SPLASH SCREEN
+════════════════════════════════ */
+function showSplashScreen() {
+  document.getElementById('screen-splash').style.display = '';
+}
+
+function closeSplashScreen() {
+  const el = document.getElementById('screen-splash');
+  if (el) el.style.display = 'none';
+}
+
+function _splashOpenLogin(mode) {
+  closeSplashScreen();
+  _authMode = mode;
+  const isReg = mode === 'register';
+  const titleEl = document.getElementById('auth-title');
+  const subEl   = document.getElementById('auth-sub');
+  const nameEl  = document.getElementById('auth-name');
+  const btnEl   = document.getElementById('auth-email-btn');
+  const modeTextEl = document.getElementById('auth-mode-text');
+  const modeLinkEl = document.getElementById('auth-mode-link');
+  if (titleEl)    titleEl.textContent    = isReg ? 'Create your account'  : 'Log in or sign up';
+  if (subEl)      subEl.textContent      = isReg ? 'Join Divine to unlock personalization and Thinker features.' : 'Unlock personalized perspectives and Thinker features.';
+  if (nameEl)     nameEl.style.display   = isReg ? 'block' : 'none';
+  if (btnEl)      btnEl.textContent      = isReg ? 'Create account' : 'Continue';
+  if (modeTextEl) modeTextEl.textContent = isReg ? 'Already have an account?' : "Don't have an account?";
+  if (modeLinkEl) modeLinkEl.textContent = isReg ? 'Log in' : 'Sign up';
+  showLoginScreen();
+}
+
+function splashLogin()    { _splashOpenLogin('login'); }
+function splashRegister() { _splashOpenLogin('register'); }
+function splashGuest()    { closeSplashScreen(); /* continue in guest mode */ }
 
 let _authMode = 'login'; // 'login' | 'register'
 function toggleAuthMode() {
@@ -9136,20 +9251,17 @@ initThinkerAccess();
   const tid    = params.get('thinker'); // e.g. 'michael', 'composite'
   const doLogin = params.get('login');  // ?login=1 → auto-open login modal
 
-  // Strip all known params immediately — keep the address bar clean
-  if (q || tid || doLogin) {
+  // Strip q/thinker params immediately — 'login' is handled + stripped by initAuth()
+  if (q || tid) {
     const clean = new URL(window.location.href);
     clean.searchParams.delete('q');
     clean.searchParams.delete('thinker');
-    clean.searchParams.delete('login');
     history.replaceState({}, '', clean.pathname + (clean.search === '?' ? '' : clean.search));
   }
 
-  // ?login=1 — open login modal after a short paint delay
-  if (doLogin === '1') {
-    setTimeout(() => showLoginScreen(), 300);
-    return; // skip q/thinker processing if just asking for login
-  }
+  // ?login=1 — handled by initAuth() which checks token first;
+  // if no token, initAuth shows the splash screen instead of the modal.
+  if (doLogin === '1') return;
 
   if (!q) return;
 
@@ -10470,6 +10582,34 @@ function showToast(msg) {
   </div>
 </div>
 
+<!-- ═══ SPLASH SCREEN (?login=1) ═══ -->
+<div id="screen-splash" style="display:none">
+  <div class="splash-screen">
+
+    <!-- Uncharted U logo -->
+    <div class="splash-logo">
+      <svg width="80" height="80" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Uncharted">
+        <circle cx="50" cy="50" r="50" fill="#111111"/>
+        <path d="M24 24 L29.5 16 L35 24 L35 56 Q35 71 50 71 Q65 71 65 56 L65 24 L70.5 16 L76 24"
+              stroke="white" stroke-width="7.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+
+    <div class="splash-wordmark">Uncharted Ventures</div>
+
+    <h1 class="splash-title">Divine Intelligence</h1>
+    <p class="splash-sub">Gain clarity on life's most important decisions from history's greatest thinkers.</p>
+
+    <div class="splash-btns">
+      <button class="splash-btn-login"  onclick="splashLogin()">Log in</button>
+      <button class="splash-btn-signup" onclick="splashRegister()">Sign up for free</button>
+    </div>
+
+    <button class="splash-guest" onclick="splashGuest()">Try it first →</button>
+
+  </div>
+</div>
+
 <!-- ═══ LOGIN / REGISTER SCREEN ═══ -->
 <div id="screen-login" style="display:none">
   <div class="auth-screen" onclick="if(event.target===this)closeLoginScreen()">
@@ -10477,6 +10617,15 @@ function showToast(msg) {
       <button class="auth-close" onclick="closeLoginScreen()" aria-label="Close">
         <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="2" y1="2" x2="12" y2="12"/><line x1="12" y1="2" x2="2" y2="12"/></svg>
       </button>
+
+      <!-- Uncharted U logo -->
+      <div class="auth-logo-mark">
+        <svg width="42" height="42" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Uncharted">
+          <circle cx="50" cy="50" r="50" fill="#111111"/>
+          <path d="M24 24 L29.5 16 L35 24 L35 56 Q35 71 50 71 Q65 71 65 56 L65 24 L70.5 16 L76 24"
+                stroke="white" stroke-width="7.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
 
       <h1 class="auth-title" id="auth-title">Log in or sign up</h1>
       <p class="auth-sub" id="auth-sub">Unlock personalized perspectives and Thinker features.</p>
@@ -10510,10 +10659,10 @@ function showToast(msg) {
         <a onclick="toggleAuthMode()"><span id="auth-mode-link">Sign up</span></a>
       </div>
 
-      <!-- Server status row — shows API URL and connection state -->
-      <div id="auth-server-status" style="margin-top:16px;padding-top:12px;border-top:1px solid var(--border);font-size:11px;color:var(--text-3);text-align:center;line-height:1.6">
-        <span id="auth-api-url"></span><br>
-        <span id="auth-conn-status">Checking server…</span>
+      <!-- Server status row — hidden from UI, kept for debug in console -->
+      <div id="auth-server-status" style="display:none">
+        <span id="auth-api-url"></span>
+        <span id="auth-conn-status"></span>
       </div>
     </div>
   </div>
