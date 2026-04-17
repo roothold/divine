@@ -482,16 +482,11 @@ app.get('/api/wallet/history', optionalAuth, async (req, res) => {
   }
 
   try {
-    const { rows: walletRows } = await pool.query(
-      'SELECT id FROM wallets WHERE user_id = $1', [userId]
-    );
-    if (!walletRows.length) return res.json([]);
-
     const { rows } = await pool.query(
-      `SELECT line_item_type, amount, direction, label, balance_after, created_at
-       FROM wallet_transactions WHERE wallet_id = $1
+      `SELECT type, amount, label, balance_after, created_at
+       FROM wallet_transactions WHERE user_id = $1
        ORDER BY created_at DESC LIMIT 50`,
-      [walletRows[0].id]
+      [userId]
     );
     res.json(rows);
   } catch (err) {
@@ -945,7 +940,7 @@ app.get('/api/admin/thinkers', requireAdmin, async (_req, res) => {
     const { rows } = await pool.query(`
       SELECT wt.label, COUNT(*) AS cnt
       FROM wallet_transactions wt
-      WHERE wt.line_item_type = 'perspective_spend'
+      WHERE wt.type = 'perspective_spend'
       GROUP BY wt.label
     `);
     const usageCounts = {};
