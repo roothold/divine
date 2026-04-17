@@ -6327,11 +6327,13 @@ function renderRecents() {
     el.innerHTML = '<p class="recents-empty">Your conversations appear here.</p>';
     return;
   }
+  const activeId = _chatSession ? _chatSession.id : null;
   el.innerHTML = chatList.slice(0, 30).map(s => {
     const title  = s.title || 'Untitled conversation';
     const pinned = s.pinned ? ' pinned' : '';
+    const isActive = activeId === s.id ? ' active-recent' : '';
     return `
-    <div class="recent-item${pinned}" data-id="${s.id}" onclick="openChatSession('${s.id}')">
+    <div class="recent-item${pinned}${isActive}" data-id="${s.id}" onclick="openChatSession('${s.id}')">
       ${s.pinned ? `<svg width="10" height="10" viewBox="0 0 10 10" fill="var(--accent)" style="flex-shrink:0;opacity:.6"><path d="M6.5 1L9 3.5 6 6l-.5 3-2-2-2.5 2.5L.5 8l2.5-2.5-2-2L4 3z"/></svg>` : ''}
       <span class="recent-item-title">${_escapeHtml(title)}</span>
       <button class="recent-menu-btn" onclick="openRecentMenu('${s.id}',event)" title="Options">
@@ -7697,8 +7699,10 @@ function saveChatSessions(list) {
 }
 
 function openChat(prefill) {
-  // Clear nav active state — no nav item is "active" while in a chat
+  // Clear nav active state — no nav item is "active" while in a new chat
   document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+  // Clear any previously highlighted recent item (this is a brand-new session)
+  document.querySelectorAll('.recent-item').forEach(el => el.classList.remove('active-recent'));
 
   // Create a fresh session, capturing selected project from launchpad (consume + clear)
   const thinker = activeThinker || THINKERS[0];
@@ -7758,6 +7762,9 @@ function openChatSession(sessionId) {
 
   // Clear nav active state — no nav item is "active" while in a chat
   document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+  // Highlight the matching recent item in the sidebar
+  document.querySelectorAll('.recent-item').forEach(el =>
+    el.classList.toggle('active-recent', el.dataset.id === sessionId));
 
   _chatSession  = s;
   _chatStreaming = false;
