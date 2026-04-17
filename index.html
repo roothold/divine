@@ -729,6 +729,21 @@
     .status-pill.ok { background:#D1FAE5; color:#065F46; }
     .status-pill.err { background:#FEE2E2; color:#991B1B; }
     .status-pill.idle { background:var(--surface-2); color:var(--text-3); }
+    /* Settings toggle switch */
+    .settings-toggle { position:relative; display:inline-flex; align-items:center; cursor:pointer; flex-shrink:0; }
+    .settings-toggle input { opacity:0; width:0; height:0; position:absolute; }
+    .settings-toggle-track { width:42px; height:24px; background:var(--border-md); border-radius:12px; transition:background 0.2s; display:block; position:relative; }
+    .settings-toggle-track::after { content:''; position:absolute; top:3px; left:3px; width:18px; height:18px; background:#fff; border-radius:50%; transition:transform 0.2s; box-shadow:0 1px 3px rgba(0,0,0,.15); }
+    .settings-toggle input:checked + .settings-toggle-track { background:var(--accent); }
+    .settings-toggle input:checked + .settings-toggle-track::after { transform:translateX(18px); }
+    /* Settings avatar */
+    .settings-avatar { width:56px; height:56px; border-radius:50%; background:var(--accent-lt); display:flex; align-items:center; justify-content:center; font-size:20px; font-weight:700; color:var(--accent); flex-shrink:0; border:2px solid var(--accent-bdr); }
+    /* Settings inline form */
+    .settings-inline-form { display:none; padding:16px; background:var(--surface-2); border-radius:var(--r-sm); margin-top:4px; border:1px solid var(--border); }
+    .settings-inline-form.open { display:block; }
+    .settings-msg { font-size:12.5px; margin-top:6px; padding:6px 10px; border-radius:var(--r-sm); display:none; }
+    .settings-msg.ok  { display:block; background:#D1FAE5; color:#065F46; }
+    .settings-msg.err { display:block; background:#FEE2E2; color:#991B1B; }
 
     /* ═══ DOSSIER COLLECTION ═══ */
     .perspective-count { font-size:11px; font-weight:600; letter-spacing:.08em; text-transform:uppercase; color:var(--text-3); margin-bottom:20px; display:flex; align-items:center; gap:6px; }
@@ -2922,21 +2937,11 @@
 </head>
 <body>
 
-<!-- Auth status banner — appears immediately when logged in, impossible to miss -->
-<div id="auth-banner" style="
-  display:none;
-  position:fixed;top:0;left:0;right:0;z-index:99999;
-  background:#22c55e;color:#fff;
-  font-family:'Inter',sans-serif;font-size:13px;font-weight:600;
-  padding:9px 20px;text-align:center;letter-spacing:.01em;
-  box-shadow:0 2px 8px rgba(0,0,0,.15);
-  animation:banner-drop .3s ease;
-">
-  ✓ Logged in as <span id="auth-banner-name"></span> — <a onclick="signOut();return false" style="color:#fff;text-decoration:underline;cursor:pointer">Sign out</a>
+<!-- auth-banner removed: login state shown in sidebar profile area instead -->
+<div id="auth-banner" style="display:none">
+  <span id="auth-banner-name"></span>
 </div>
 <style>
-  @keyframes banner-drop { from{transform:translateY(-100%)} to{transform:translateY(0)} }
-  body.logged-in .app-body { padding-top: 38px; }
 </style>
 
 <div class="sidebar-backdrop" id="sidebar-backdrop" onclick="toggleSidebar()"></div>
@@ -3812,104 +3817,128 @@
     <div class="screen" id="screen-settings">
       <div class="main-inner"><div class="screen-inner">
         <div class="screen-header">
-          <div class="screen-label">Settings</div>
-          <h2 class="screen-title">Account & API</h2>
+          <div class="screen-label">Account</div>
+          <h2 class="screen-title">Settings</h2>
         </div>
 
-        <!-- API Connection -->
-        <div class="settings-section">
-          <div class="settings-section-title">
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M6 10L4 12a2.8 2.8 0 000 4h0a2.8 2.8 0 004 0l2-2"/><path d="M10 6l2-2a2.8 2.8 0 000-4h0a2.8 2.8 0 00-4 0L6 2"/><line x1="6" y1="10" x2="10" y2="6"/></svg>
-            API Connection
-          </div>
-
-          <!-- Direct API key (primary for browser mode) -->
-          <div class="settings-row">
-            <div>
-              <div class="settings-row-label">Anthropic API Key</div>
-              <div class="settings-row-sub">Stored locally in your browser only — never sent to our servers</div>
-            </div>
-            <div style="display:flex;align-items:center;gap:10px;flex:1;max-width:320px">
-              <input class="settings-input" type="password" id="settings-api-key" placeholder="sk-ant-..." style="flex:1;max-width:none" oninput="updateApiKey(this.value)">
-              <button class="test-btn" onclick="testDirectKey()" style="flex-shrink:0">Test</button>
-            </div>
-          </div>
-          <div class="settings-row" style="align-items:flex-start">
-            <div style="flex:1">
-              <div class="settings-row-label">Key status</div>
-            </div>
-            <span class="status-pill idle" id="key-status">Not tested</span>
-          </div>
-
-          <div class="settings-row">
-            <div>
-              <div class="settings-row-label">Model</div>
-              <div class="settings-row-sub">Anthropic model for perspectives</div>
-            </div>
-            <select class="settings-select" id="settings-model" onchange="updateModel(this.value)">
-              <option value="claude-opus-4-5">Claude Opus 4.5</option>
-              <option value="claude-sonnet-4-5">Claude Sonnet 4.5</option>
-              <option value="claude-haiku-4-5-20251001">Claude Haiku 4.5</option>
-            </select>
-          </div>
-
-          <!-- Optional proxy server (advanced) -->
-          <details style="margin-top:12px">
-            <summary style="font-size:12.5px;color:var(--text-3);cursor:pointer;padding:4px 0;list-style:none;display:flex;align-items:center;gap:6px">
-              <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 4l4 4 4-4"/></svg>
-              Advanced: proxy server (optional)
-            </summary>
-            <div style="margin-top:12px;border-top:1px solid var(--border);padding-top:12px">
-              <div class="settings-row" style="border:none;padding-bottom:0">
-                <div>
-                  <div class="settings-row-label">Proxy server URL</div>
-                  <div class="settings-row-sub">Run server.js locally to keep your key off the browser</div>
-                </div>
-                <div style="display:flex;align-items:center;gap:10px">
-                  <input class="settings-input" type="text" id="settings-api-base" value="http://localhost:3001" oninput="updateApiBase(this.value)">
-                  <button class="test-btn" onclick="testConnection()">Test</button>
-                </div>
-              </div>
-              <div style="margin-top:8px">
-                <span class="status-pill idle" id="settings-status">Not tested</span>
-              </div>
-            </div>
-          </details>
-        </div>
-
-        <!-- Server setup instructions -->
-        <div class="settings-section">
-          <div class="settings-section-title">
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="1" y="3" width="14" height="10" rx="2"/><path d="M4 7l2 2-2 2M8 11h4"/></svg>
-            Server Setup
-          </div>
-          <div style="font-size:13.5px;color:var(--text-2);line-height:1.8">
-            <p style="margin-bottom:10px">Run the proxy server locally to connect to the Anthropic API:</p>
-            <code style="display:block;background:var(--surface-2);border:1px solid var(--border);border-radius:var(--r-sm);padding:12px 16px;font-size:12.5px;color:var(--text-0);line-height:1.8">
-              cp .env.example .env<br>
-              # Add ANTHROPIC_API_KEY=sk-ant-... to .env<br>
-              node server.js
-            </code>
-          </div>
-        </div>
-
-        <!-- Profile -->
+        <!-- ── Profile ── -->
         <div class="settings-section">
           <div class="settings-section-title">
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="8" cy="5" r="3"/><path d="M2 14c0-3.3 2.7-6 6-6s6 2.7 6 6"/></svg>
             Profile
           </div>
-          <div class="settings-row">
-            <div><div class="settings-row-label">Name</div></div>
-            <input class="settings-input" type="text" id="settings-name" value="Michael Akindele" oninput="updateProfile()">
+          <!-- Avatar + current info -->
+          <div style="display:flex;align-items:center;gap:16px;margin-bottom:20px;padding-bottom:20px;border-bottom:1px solid var(--border)">
+            <div class="settings-avatar" id="settings-avatar-badge">MA</div>
+            <div>
+              <div id="settings-display-name-label" style="font-size:16px;font-weight:600;color:var(--text-0)">—</div>
+              <div id="settings-display-email-label" style="font-size:13px;color:var(--text-3);margin-top:2px">—</div>
+            </div>
           </div>
+          <!-- Name edit -->
           <div class="settings-row">
-            <div><div class="settings-row-label">Email</div></div>
-            <input class="settings-input" type="email" id="settings-email" value="michael@surpluspods.com" oninput="updateProfile()">
+            <div>
+              <div class="settings-row-label">Display Name</div>
+              <div class="settings-row-sub">How you appear across the platform</div>
+            </div>
+            <div style="display:flex;align-items:center;gap:10px;flex:1;max-width:300px">
+              <input class="settings-input" type="text" id="settings-name" placeholder="Your name" style="flex:1;max-width:none">
+              <button class="test-btn" id="settings-name-btn" onclick="saveDisplayName()">Save</button>
+            </div>
+          </div>
+          <div class="settings-msg" id="settings-name-msg"></div>
+        </div>
+
+        <!-- ── Security ── -->
+        <div class="settings-section">
+          <div class="settings-section-title">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M8 1L2 4v4c0 3.3 2.6 6.4 6 7 3.4-.6 6-3.7 6-7V4L8 1z"/></svg>
+            Security
+          </div>
+
+          <!-- Email row -->
+          <div class="settings-row">
+            <div>
+              <div class="settings-row-label">Email Address</div>
+              <div class="settings-row-sub" id="settings-email-current-label">—</div>
+            </div>
+            <button class="test-btn" onclick="settingsToggleEmailForm()">Change</button>
+          </div>
+          <!-- Email change inline form -->
+          <div class="settings-inline-form" id="settings-email-form">
+            <div style="display:grid;gap:10px">
+              <input class="settings-input" type="email" id="settings-new-email" placeholder="New email address" style="max-width:100%;width:100%">
+              <input class="settings-input" type="password" id="settings-email-pwd" placeholder="Current password to confirm" style="max-width:100%;width:100%">
+              <div style="display:flex;gap:8px;justify-content:flex-end">
+                <button class="btn-ghost" style="font-size:13px;padding:7px 14px" onclick="settingsToggleEmailForm()">Cancel</button>
+                <button class="btn-primary" style="font-size:13px;padding:7px 18px" onclick="submitEmailChange()">Update Email</button>
+              </div>
+              <div class="settings-msg" id="settings-email-msg"></div>
+            </div>
+          </div>
+
+          <!-- Password row -->
+          <div class="settings-row">
+            <div>
+              <div class="settings-row-label">Password</div>
+              <div class="settings-row-sub">Keep your account secure with a strong password</div>
+            </div>
+            <button class="test-btn" onclick="settingsTogglePwdForm()">Change</button>
+          </div>
+          <!-- Password change inline form -->
+          <div class="settings-inline-form" id="settings-pwd-form">
+            <div style="display:grid;gap:10px">
+              <input class="settings-input" type="password" id="settings-current-pwd" placeholder="Current password" style="max-width:100%;width:100%">
+              <input class="settings-input" type="password" id="settings-new-pwd" placeholder="New password (min. 8 characters)" style="max-width:100%;width:100%">
+              <input class="settings-input" type="password" id="settings-confirm-pwd" placeholder="Confirm new password" style="max-width:100%;width:100%">
+              <div style="display:flex;gap:8px;justify-content:flex-end">
+                <button class="btn-ghost" style="font-size:13px;padding:7px 14px" onclick="settingsTogglePwdForm()">Cancel</button>
+                <button class="btn-primary" style="font-size:13px;padding:7px 18px" onclick="submitPasswordChange()">Update Password</button>
+              </div>
+              <div class="settings-msg" id="settings-pwd-msg"></div>
+            </div>
           </div>
         </div>
 
-        <!-- Danger zone -->
+        <!-- ── Notifications ── -->
+        <div class="settings-section">
+          <div class="settings-section-title">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M8 1a5 5 0 00-5 5v3l-1.5 2.5h13L13 9V6a5 5 0 00-5-5z"/><path d="M6 13.5a2 2 0 004 0"/></svg>
+            Notifications
+          </div>
+          <div class="settings-row">
+            <div>
+              <div class="settings-row-label">Email Notifications</div>
+              <div class="settings-row-sub">Updates about your projects and sessions</div>
+            </div>
+            <label class="settings-toggle">
+              <input type="checkbox" id="notif-email" onchange="toggleNotifPref('email', this.checked)">
+              <span class="settings-toggle-track"></span>
+            </label>
+          </div>
+          <div class="settings-row">
+            <div>
+              <div class="settings-row-label">Weekly Digest</div>
+              <div class="settings-row-sub">Activity summary sent every Monday morning</div>
+            </div>
+            <label class="settings-toggle">
+              <input type="checkbox" id="notif-digest" onchange="toggleNotifPref('digest', this.checked)">
+              <span class="settings-toggle-track"></span>
+            </label>
+          </div>
+          <div class="settings-row">
+            <div>
+              <div class="settings-row-label">Product Updates</div>
+              <div class="settings-row-sub">News about new features and improvements</div>
+            </div>
+            <label class="settings-toggle">
+              <input type="checkbox" id="notif-updates" onchange="toggleNotifPref('updates', this.checked)">
+              <span class="settings-toggle-track"></span>
+            </label>
+          </div>
+        </div>
+
+        <!-- ── Danger Zone ── -->
         <div class="settings-section" style="border-color:#FFCDD2">
           <div class="settings-section-title" style="color:#D63030">
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M8 2L14 13H2L8 2z"/><line x1="8" y1="7" x2="8" y2="10"/><circle cx="8" cy="12" r=".5" fill="currentColor"/></svg>
@@ -3917,12 +3946,20 @@
           </div>
           <div class="settings-row">
             <div>
-              <div class="settings-row-label">Clear all data</div>
+              <div class="settings-row-label">Sign Out</div>
+              <div class="settings-row-sub">Sign out of your account on this device</div>
+            </div>
+            <button class="btn-secondary" style="font-size:13px;padding:8px 18px" onclick="signOut()">Sign Out</button>
+          </div>
+          <div class="settings-row">
+            <div>
+              <div class="settings-row-label">Clear All Data</div>
               <div class="settings-row-sub">Permanently delete all saved sessions and projects</div>
             </div>
-            <button class="btn-danger" onclick="clearAllData()">Clear data</button>
+            <button class="btn-danger" onclick="clearAllData()">Clear Data</button>
           </div>
         </div>
+
       </div></div>
     </div>
 
@@ -5130,7 +5167,7 @@ function showView(view, opts = {}) {
     projects:    () => { document.getElementById('nav-projects').classList.add('active'); setMobNavActive('mob-nav-projects'); renderProjects(); show('screen-projects'); },
     chat:        () => { openChat(); },
     login:       () => { setMobNavActive(null); showLoginScreen(); },
-    settings:    () => { setMobNavActive(null); show('screen-settings'); },
+    settings:    () => { setMobNavActive(null); renderSettingsPage(); show('screen-settings'); },
     downloads:   () => { setMobNavActive(null); renderDownloads(); show('screen-downloads'); },
     help:        () => { setMobNavActive(null); renderFAQ(); show('screen-help'); },
     upgrade:     () => { document.getElementById('nav-wallet')?.classList.add('active'); setMobNavActive(null); renderCognitiveLedger(); show('screen-upgrade'); },
@@ -6208,39 +6245,23 @@ async function checkConnection(quiet=false) {
 }
 
 async function testConnection() {
-  const pill = document.getElementById('settings-status');
-  pill.className = 'status-pill idle'; pill.textContent = 'Testing…';
+  // Legacy: no UI element in new settings; silently checks connection health
   try {
-    const res = await fetch(`${API_BASE}/health`, { signal: AbortSignal.timeout(4000) });
-    if (res.ok) {
-      const data = await res.json();
-      pill.className = 'status-pill ok';
-      pill.textContent = `✓ Connected · ${data.model || 'claude'}`;
-    } else throw new Error();
-  } catch {
-    pill.className = 'status-pill err';
-    pill.textContent = '✗ Cannot reach server';
-  }
+    await fetch(`${API_BASE}/health`, { signal: AbortSignal.timeout(4000) });
+  } catch { /* ignore */ }
 }
 
 /* ════════════════════════════════
-   SETTINGS ACTIONS
+   SETTINGS ACTIONS (API / legacy)
 ════════════════════════════════ */
 function updateApiKey(v) {
   DIRECT_API_KEY = v.trim();
   localStorage.setItem('di_api_key', DIRECT_API_KEY);
-  document.getElementById('key-status').className = 'status-pill idle';
-  document.getElementById('key-status').textContent = 'Not tested';
   checkConnection();
 }
 
 async function testDirectKey() {
-  const pill = document.getElementById('key-status');
-  pill.className = 'status-pill idle'; pill.textContent = 'Testing…';
-  if (!DIRECT_API_KEY) {
-    pill.className = 'status-pill err'; pill.textContent = '✗ No key entered';
-    return;
-  }
+  if (!DIRECT_API_KEY) return;
   try {
     const res = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
@@ -6255,18 +6276,11 @@ async function testDirectKey() {
         messages: [{ role: 'user', content: 'hi' }]
       })
     });
-    if (res.ok || res.status === 400) { // 400 = valid key, bad request shape
-      pill.className = 'status-pill ok'; pill.textContent = '✓ Key valid — live';
-      // update sidebar indicator
+    if (res.ok || res.status === 400) {
       document.getElementById('conn-dot').className = 'conn-dot connected';
       document.getElementById('conn-text').innerHTML = 'API connected (direct)';
-    } else {
-      throw new Error(res.status);
     }
-  } catch(e) {
-    pill.className = 'status-pill err';
-    pill.textContent = e.message?.includes('401') ? '✗ Invalid key' : '✗ Connection failed';
-  }
+  } catch { /* ignore */ }
 }
 
 function updateApiBase(v) {
@@ -6280,20 +6294,183 @@ function updateModel(v) {
   localStorage.setItem('di_model', v);
 }
 
-function updateProfile() {
-  userProfile.name  = document.getElementById('settings-name').value;
-  userProfile.email = document.getElementById('settings-email').value;
-  localStorage.setItem('di_profile', JSON.stringify(userProfile));
-  const firstName = (userProfile.name || 'there').split(' ')[0];
-  const initials  = (userProfile.name || 'U').split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
-  document.getElementById('profile-greeting').textContent = currentUser ? `Hi ${(currentUser.name||'').split(' ')[0]}` : `Hi ${firstName}`;
-  document.getElementById('profile-email').textContent    = userProfile.email || '';
-  document.getElementById('profile-badge').textContent    = initials;
+/* ════════════════════════════════
+   SETTINGS PAGE
+════════════════════════════════ */
+
+function renderSettingsPage() {
+  const user = currentUser;
+  const name  = (user && user.name)  || userProfile.name  || '';
+  const email = (user && user.email) || userProfile.email || '';
+  const initials = name ? name.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase() : '??';
+
+  // Avatar + header labels
+  const avatarEl = document.getElementById('settings-avatar-badge');
+  if (avatarEl) avatarEl.textContent = initials;
+  const nameLabel = document.getElementById('settings-display-name-label');
+  if (nameLabel) nameLabel.textContent = name || 'Not set';
+  const emailLabel = document.getElementById('settings-display-email-label');
+  if (emailLabel) emailLabel.textContent = email || 'No email';
+
+  // Pre-fill name input
+  const nameInput = document.getElementById('settings-name');
+  if (nameInput) nameInput.value = name;
+
+  // Email current label
+  const emailCurrent = document.getElementById('settings-email-current-label');
+  if (emailCurrent) emailCurrent.textContent = email || 'No email set';
+
+  // Close any open inline forms + clear messages
+  ['settings-email-form','settings-pwd-form'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.classList.remove('open');
+  });
+  ['settings-email-msg','settings-pwd-msg','settings-name-msg'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) { el.className = 'settings-msg'; el.textContent = ''; }
+  });
+  ['settings-new-email','settings-email-pwd','settings-current-pwd','settings-new-pwd','settings-confirm-pwd'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.value = '';
+  });
+
+  // Load notification prefs
+  const notifs = JSON.parse(localStorage.getItem('di_notifs') || '{}');
+  ['email','digest','updates'].forEach(k => {
+    const el = document.getElementById(`notif-${k}`);
+    if (el) el.checked = notifs[k] !== false; // default on
+  });
 }
+
+function _settingsMsg(id, type, text) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.className = `settings-msg ${type}`;
+  el.textContent = text;
+}
+
+async function saveDisplayName() {
+  const nameEl = document.getElementById('settings-name');
+  const name = (nameEl && nameEl.value.trim()) || '';
+  if (!name) return _settingsMsg('settings-name-msg', 'err', 'Please enter a display name.');
+
+  const btn = document.getElementById('settings-name-btn');
+  if (btn) { btn.textContent = 'Saving…'; btn.disabled = true; }
+
+  try {
+    if (currentUser) {
+      const token = localStorage.getItem(AUTH_TOKEN_KEY);
+      const res = await fetch('/api/me', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+        body: JSON.stringify({ name })
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Failed to update name.');
+      // Update local state
+      currentUser = { ...currentUser, name };
+      applyAuthState(currentUser);
+    } else {
+      // Offline / guest mode — save to localStorage profile
+      userProfile.name = name;
+      localStorage.setItem('di_profile', JSON.stringify(userProfile));
+    }
+    _settingsMsg('settings-name-msg', 'ok', 'Name updated.');
+    renderSettingsPage();
+  } catch (err) {
+    _settingsMsg('settings-name-msg', 'err', err.message);
+  } finally {
+    if (btn) { btn.textContent = 'Save'; btn.disabled = false; }
+  }
+}
+
+function settingsToggleEmailForm() {
+  const form = document.getElementById('settings-email-form');
+  if (!form) return;
+  form.classList.toggle('open');
+  if (!form.classList.contains('open')) {
+    // Clear on close
+    ['settings-new-email','settings-email-pwd'].forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
+    _settingsMsg('settings-email-msg', '', '');
+  }
+}
+
+async function submitEmailChange() {
+  const newEmail = (document.getElementById('settings-new-email')?.value || '').trim().toLowerCase();
+  const pwd      = (document.getElementById('settings-email-pwd')?.value || '');
+  if (!newEmail) return _settingsMsg('settings-email-msg', 'err', 'Enter a new email address.');
+  if (!pwd)      return _settingsMsg('settings-email-msg', 'err', 'Enter your current password to confirm.');
+
+  const token = localStorage.getItem(AUTH_TOKEN_KEY);
+  if (!token) return _settingsMsg('settings-email-msg', 'err', 'You must be logged in to change your email.');
+
+  try {
+    const res = await fetch('/api/me/email', {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+      body: JSON.stringify({ newEmail, password: pwd })
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || 'Failed to update email.');
+    currentUser = { ...currentUser, email: newEmail };
+    applyAuthState(currentUser);
+    settingsToggleEmailForm();
+    renderSettingsPage();
+    _settingsMsg('settings-email-msg', 'ok', 'Email updated successfully.');
+  } catch (err) {
+    _settingsMsg('settings-email-msg', 'err', err.message);
+  }
+}
+
+function settingsTogglePwdForm() {
+  const form = document.getElementById('settings-pwd-form');
+  if (!form) return;
+  form.classList.toggle('open');
+  if (!form.classList.contains('open')) {
+    ['settings-current-pwd','settings-new-pwd','settings-confirm-pwd'].forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
+    _settingsMsg('settings-pwd-msg', '', '');
+  }
+}
+
+async function submitPasswordChange() {
+  const currentPwd = document.getElementById('settings-current-pwd')?.value || '';
+  const newPwd     = document.getElementById('settings-new-pwd')?.value || '';
+  const confirmPwd = document.getElementById('settings-confirm-pwd')?.value || '';
+
+  if (!currentPwd) return _settingsMsg('settings-pwd-msg', 'err', 'Enter your current password.');
+  if (newPwd.length < 8) return _settingsMsg('settings-pwd-msg', 'err', 'New password must be at least 8 characters.');
+  if (newPwd !== confirmPwd) return _settingsMsg('settings-pwd-msg', 'err', 'Passwords do not match.');
+
+  const token = localStorage.getItem(AUTH_TOKEN_KEY);
+  if (!token) return _settingsMsg('settings-pwd-msg', 'err', 'You must be logged in to change your password.');
+
+  try {
+    const res = await fetch('/api/me/password', {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+      body: JSON.stringify({ currentPassword: currentPwd, newPassword: newPwd })
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || 'Failed to update password.');
+    settingsTogglePwdForm();
+    _settingsMsg('settings-pwd-msg', 'ok', 'Password updated successfully.');
+  } catch (err) {
+    _settingsMsg('settings-pwd-msg', 'err', err.message);
+  }
+}
+
+function toggleNotifPref(key, checked) {
+  const notifs = JSON.parse(localStorage.getItem('di_notifs') || '{}');
+  notifs[key] = checked;
+  localStorage.setItem('di_notifs', JSON.stringify(notifs));
+}
+
+// Legacy — kept for backward compat (no-op in new settings)
+function updateProfile() {}
 
 function clearAllData() {
   if (!confirm('Delete all sessions, projects, and settings? This cannot be undone.')) return;
-  ['di_recents','di_projects','di_profile','di_api_base','di_model'].forEach(k => localStorage.removeItem(k));
+  ['di_recents','di_projects','di_profile','di_api_base','di_model','di_notifs'].forEach(k => localStorage.removeItem(k));
   location.reload();
 }
 
@@ -8672,13 +8849,7 @@ function applyAuthState(user) {
   currentUser = user;
   console.log('[Auth]', user ? `Logged in as ${user.name || user.email} (id:${user.id})` : 'Logged out');
 
-  // ── Auth banner (fixed top bar — most visible indicator) ──────────────────
-  const banner     = document.getElementById('auth-banner');
-  const bannerName = document.getElementById('auth-banner-name');
-  if (banner) banner.style.display = user ? '' : 'none';
-  if (bannerName && user) bannerName.textContent = (user.name || user.email || 'User');
   document.body.classList.toggle('logged-in', !!user);
-  // ─────────────────────────────────────────────────────────────────────────
 
   if (user) {
     USER_ID = user.id;
@@ -8925,16 +9096,7 @@ async function submitEmailAuth() {
 /* ════════════════════════════════
    INIT
 ════════════════════════════════ */
-// Restore settings UI
-document.getElementById('settings-api-base').value = API_BASE;
-document.getElementById('settings-model').value     = ACTIVE_MODEL;
-document.getElementById('settings-name').value      = userProfile.name;
-document.getElementById('settings-email').value     = userProfile.email;
-if (DIRECT_API_KEY) {
-  document.getElementById('settings-api-key').value = DIRECT_API_KEY;
-  document.getElementById('key-status').className   = 'status-pill ok';
-  document.getElementById('key-status').textContent = '✓ Key saved';
-}
+// Settings UI is populated on demand via renderSettingsPage() when the screen opens
 
 // Restore profile display (handled by applyAuthState on load; these are pre-auth fallbacks)
 if (document.getElementById('profile-email')) {

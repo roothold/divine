@@ -32,8 +32,9 @@ import jwt                from 'jsonwebtoken';
 import bcrypt             from 'bcryptjs';
 import pool, {
   getOrCreateWallet, deductCredit, creditWallet,
-  getUserById, getUserByEmail,
+  getUserById, getUserByEmail, getUserByIdRaw,
   upsertGoogleUser, upsertLinkedInUser, createEmailUser,
+  updateUserName, updateUserEmail, updateUserPassword,
 } from './db.js';
 import { getThinker } from './thinkers.js';
 
@@ -365,6 +366,66 @@ app.get('/api/me', requireAuth, async (req, res) => {
     const user = await getUserById(req.user.sub);
     if (!user) return res.status(404).json({ error: 'User not found.' });
     res.json(user);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// ── PATCH /api/me ─────────────────────────────────────────────────────────────
+// Update display name
+app.patch('/api/me', requireAuth, async (req, res) => {
+  const { name } = req.body || {};
+  if (!name || !name.trim()) return res.status(400).json({ error: 'Name is required.' });
+  try {
+    const user = await updateUserName(req.user.sub, name.trim());
+    if (!user) return res.status(404).json({ error: 'User not found.' });
+    res.json(user);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// ── PATCH /api/me/email ───────────────────────────────────────────────────────
+// Change email — requires current password confirmation
+app.patch('/api/me/email', requireAuth, async (req, res) => {
+  const { newEmail, password } = req.body || {};
+  if (!newEmail || !password) return res.status(400).json({ error: 'New email and current password are required.' });
+
+  try {
+    const raw = await getUserByIdRaw(req.user.sub);
+    if (!raw) return res.status(404).json({ error: 'User not found.' });
+    if (!raw.password_hash) return res.status(400).json({ error: 'Password change is not available for OAuth accounts.' });
+    const match = await bcrypt.compare(password, raw.password_hash);
+    if (!match) return res.status(401).json({ error: 'Current password is incorrect.' });
+
+    // Check new email not already taken
+    const existing = await getUserByEmail(newEmail);
+    if (existing && existing.id !== req.user.sub) return res.status(409).json({ error: 'That email is already in use.' });
+
+    const user = await updateUserEmail(req.user.sub, newEmail);
+    res.json(user);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// ── PATCH /api/me/password ────────────────────────────────────────────────────
+// Change password — requires current password confirmation
+app.patch('/api/me/password', requireAuth, async (req, res) => {
+  const { currentPassword, newPassword } = req.body || {};
+  if (!currentPassword || !newPassword) return res.status(400).json({ error: 'Current and new passwords are required.' });
+  if (newPassword.length < 8) return res.status(400).json({ error: 'New password must be at least 8 characters.' });
+
+  try {
+    const raw = await getUserByIdRaw(req.user.sub);
+    if (!raw) return res.status(404).json({ error: 'User not found.' });
+    if (!raw.password_hash) return res.status(400).json({ error: 'Password change is not available for OAuth accounts.' });
+    const match = await bcrypt.compare(currentPassword, raw.password_hash);
+    if (!match) return res.status(401).json({ error: 'Current password is incorrect.' });
+
+    const hash = await bcrypt.hash(newPassword, 12);
+    await updateUserPassword(req.user.sub, hash);
+    res.json({ ok: true });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

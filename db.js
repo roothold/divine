@@ -161,3 +161,36 @@ export async function createEmailUser({ email, name, passwordHash }) {
   );
   return publicUser(rows[0]);
 }
+
+/** Returns raw row including password_hash — only for auth checks, by user ID. */
+export async function getUserByIdRaw(id) {
+  const { rows } = await pool.query('SELECT * FROM users WHERE id = $1', [id]);
+  return rows[0] || null;
+}
+
+/** Update display name. */
+export async function updateUserName(id, name) {
+  const { rows } = await pool.query(
+    `UPDATE users SET name = $1, updated_at = NOW() WHERE id = $2 RETURNING *`,
+    [name, id]
+  );
+  return publicUser(rows[0]);
+}
+
+/** Update email — checks uniqueness. */
+export async function updateUserEmail(id, newEmail) {
+  const email = newEmail.toLowerCase().trim();
+  const { rows } = await pool.query(
+    `UPDATE users SET email = $1, updated_at = NOW() WHERE id = $2 RETURNING *`,
+    [email, id]
+  );
+  return publicUser(rows[0]);
+}
+
+/** Update password hash. */
+export async function updateUserPassword(id, passwordHash) {
+  await pool.query(
+    `UPDATE users SET password_hash = $1, updated_at = NOW() WHERE id = $2`,
+    [passwordHash, id]
+  );
+}
