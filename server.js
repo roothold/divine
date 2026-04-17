@@ -1000,16 +1000,21 @@ app.get('/api/admin/revenue', requireAdmin, async (_req, res) => {
 });
 
 // ── GET /api/admin/schema-debug ──────────────────────────────────────────────
-// Temporary: inspect actual column names in the live DB.
 app.get('/api/admin/schema-debug', requireAdmin, async (_req, res) => {
   try {
-    const { rows } = await pool.query(`
+    const { rows: cols } = await pool.query(`
       SELECT table_name, column_name, data_type
       FROM information_schema.columns
       WHERE table_name IN ('users','wallets','wallet_transactions')
       ORDER BY table_name, ordinal_position
     `);
-    res.json(rows);
+    const { rows: types } = await pool.query(`
+      SELECT type, COUNT(*) AS cnt FROM wallet_transactions GROUP BY type ORDER BY cnt DESC
+    `);
+    const { rows: sample } = await pool.query(`
+      SELECT * FROM wallet_transactions ORDER BY created_at DESC LIMIT 3
+    `);
+    res.json({ columns: cols, transaction_types: types, sample });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
