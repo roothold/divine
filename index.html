@@ -2992,7 +2992,7 @@
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75"><rect x="2" y="2" width="5" height="5" rx="1.5"/><rect x="9" y="2" width="5" height="5" rx="1.5"/><rect x="2" y="9" width="5" height="5" rx="1.5"/><rect x="9" y="9" width="5" height="5" rx="1.5"/></svg>
           <span class="nav-item-label">Projects</span>
         </button>
-        <button class="nav-item" data-tip="Wallet" onclick="showView('upgrade')">
+        <button class="nav-item" id="nav-wallet" data-tip="Wallet" onclick="showView('upgrade')">
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75"><rect x="1" y="4" width="14" height="10" rx="2"/><path d="M11 9a1 1 0 110 2 1 1 0 010-2z" fill="currentColor" stroke="none"/><path d="M1 7h14"/></svg>
           <span class="nav-item-label">Wallet</span>
         </button>
@@ -5139,7 +5139,7 @@ function showView(view, opts = {}) {
     settings:    () => { setMobNavActive(null); show('screen-settings'); },
     downloads:   () => { setMobNavActive(null); renderDownloads(); show('screen-downloads'); },
     help:        () => { setMobNavActive(null); renderFAQ(); show('screen-help'); },
-    upgrade:     () => { setMobNavActive(null); renderCognitiveLedger(); show('screen-upgrade'); },
+    upgrade:     () => { document.getElementById('nav-wallet')?.classList.add('active'); setMobNavActive(null); renderCognitiveLedger(); show('screen-upgrade'); },
     recents:     () => {
       setMobNavActive('mob-nav-home');
       document.getElementById('nav-home')?.classList.add('active');
