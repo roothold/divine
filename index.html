@@ -234,8 +234,8 @@
       transition:background 0.13s,color 0.13s; white-space:nowrap;
       line-height:1;
     }
-    .nav-item:hover { background:rgba(0,0,0,0.06); color:#2C2820; }
-    .nav-item.active { background:rgba(0,0,0,0.06); color:var(--text-0); font-weight:600; }
+    .nav-item:hover { background:var(--surface-2); color:#2C2820; }
+    .nav-item.active { background:var(--surface-2); color:var(--text-0); font-weight:600; }
     /* All icons in nav: fixed 16×16, vertically centred, no shrink */
     .nav-item svg { flex-shrink:0; width:16px; height:16px; display:block; }
     .nav-item-label { display:block; line-height:1; }
@@ -2805,7 +2805,7 @@
     }
     .recent-item::before { content:none; } /* kill any legacy ::before timestamp */
     .recent-item:hover { background:var(--surface-2); }
-    .recent-item.active-recent { background:rgba(0,0,0,.06); }
+    .recent-item.active-recent { background:var(--surface-2); }
     /* Active-chat indicator dot */
     .recent-item.active-recent .recent-item-title::after {
       content:''; display:inline-block; width:5px; height:5px; border-radius:50%;
