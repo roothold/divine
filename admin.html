@@ -1,0 +1,888 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Divine — Admin</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg:         #f5f4f1;
+    --surface:    #ffffff;
+    --surface-2:  #f0ede8;
+    --border:     #e2ddd7;
+    --border-hi:  #ccc6be;
+    --text-0:     #1a1714;
+    --text-1:     #3d3830;
+    --text-2:     #6b6358;
+    --text-3:     #9c9389;
+    --accent:     #bf452a;
+    --accent-lt:  #fdf0ed;
+    --accent-bdr: #e8b4a8;
+    --green:      #2a7a4b;
+    --green-lt:   #e8f5ee;
+    --amber:      #92620a;
+    --amber-lt:   #fef8ec;
+    --r:          10px;
+    --r-sm:       7px;
+  }
+
+  body {
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--text-0);
+    font-size: 14px;
+    min-height: 100vh;
+  }
+
+  /* ── Layout ── */
+  .admin-shell   { display: flex; min-height: 100vh; }
+  .admin-sidebar { width: 220px; background: var(--surface); border-right: 1px solid var(--border); display: flex; flex-direction: column; flex-shrink: 0; }
+  .admin-main    { flex: 1; overflow: auto; }
+
+  /* ── Sidebar ── */
+  .sidebar-header {
+    padding: 20px 18px 16px;
+    border-bottom: 1px solid var(--border);
+  }
+  .sidebar-brand {
+    display: flex; align-items: center; gap: 9px; margin-bottom: 4px;
+  }
+  .sidebar-logo {
+    width: 28px; height: 28px; border-radius: 50%; background: #111; display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  }
+  .sidebar-title { font-size: 13px; font-weight: 700; letter-spacing: .01em; }
+  .sidebar-sub   { font-size: 11px; color: var(--text-3); margin-left: 37px; }
+
+  .sidebar-nav { padding: 10px 10px; flex: 1; }
+  .nav-item {
+    display: flex; align-items: center; gap: 9px; padding: 8px 10px;
+    border-radius: var(--r-sm); cursor: pointer; font-size: 13px;
+    font-weight: 500; color: var(--text-2); transition: background .12s, color .12s;
+    border: none; background: none; width: 100%; text-align: left;
+  }
+  .nav-item:hover    { background: var(--surface-2); color: var(--text-0); }
+  .nav-item.active   { background: var(--accent-lt); color: var(--accent); }
+  .nav-item svg      { flex-shrink: 0; }
+
+  .sidebar-footer {
+    padding: 14px 14px;
+    border-top: 1px solid var(--border);
+    font-size: 11.5px; color: var(--text-3);
+  }
+  .sidebar-user { font-weight: 600; color: var(--text-1); margin-bottom: 2px; }
+
+  /* ── Main content ── */
+  .page-header {
+    padding: 28px 32px 20px;
+    border-bottom: 1px solid var(--border);
+    background: var(--surface);
+  }
+  .page-title  { font-size: 18px; font-weight: 700; margin-bottom: 2px; }
+  .page-sub    { font-size: 13px; color: var(--text-3); }
+
+  .page-body   { padding: 24px 32px; }
+
+  /* ── Stat cards ── */
+  .stat-row    { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; margin-bottom: 24px; }
+  .stat-card   {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--r); padding: 16px 18px;
+  }
+  .stat-label  { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .06em; color: var(--text-3); margin-bottom: 6px; }
+  .stat-val    { font-size: 26px; font-weight: 700; color: var(--text-0); line-height: 1; }
+  .stat-sub    { font-size: 11.5px; color: var(--text-3); margin-top: 4px; }
+
+  /* ── Search / toolbar ── */
+  .toolbar {
+    display: flex; align-items: center; gap: 10px; margin-bottom: 16px;
+  }
+  .search-wrap { position: relative; flex: 1; max-width: 340px; }
+  .search-wrap svg { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); color: var(--text-3); pointer-events: none; }
+  .search-input {
+    width: 100%; padding: 8px 12px 8px 32px;
+    border: 1px solid var(--border); border-radius: var(--r-sm);
+    background: var(--surface); font-size: 13px; color: var(--text-0);
+    font-family: inherit; outline: none; transition: border-color .15s;
+  }
+  .search-input:focus { border-color: var(--accent); }
+  .search-input::placeholder { color: var(--text-3); }
+
+  .btn {
+    padding: 8px 16px; border-radius: var(--r-sm); font-size: 13px;
+    font-weight: 600; cursor: pointer; border: none; font-family: inherit;
+    transition: background .15s, opacity .15s;
+  }
+  .btn-primary   { background: var(--text-0); color: #fff; }
+  .btn-primary:hover { background: #333; }
+  .btn-ghost     { background: var(--surface); border: 1px solid var(--border); color: var(--text-1); }
+  .btn-ghost:hover   { background: var(--surface-2); }
+  .btn-sm        { padding: 5px 11px; font-size: 12px; }
+
+  /* ── Tables ── */
+  .table-wrap {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--r); overflow: hidden;
+  }
+  table { width: 100%; border-collapse: collapse; }
+  th {
+    padding: 11px 14px; text-align: left; font-size: 11px; font-weight: 600;
+    text-transform: uppercase; letter-spacing: .06em; color: var(--text-3);
+    background: var(--surface-2); border-bottom: 1px solid var(--border);
+    white-space: nowrap;
+  }
+  td {
+    padding: 11px 14px; font-size: 13px; color: var(--text-1);
+    border-bottom: 1px solid var(--border); vertical-align: middle;
+  }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: #faf9f7; }
+
+  .user-cell    { display: flex; align-items: center; gap: 10px; }
+  .user-avatar  {
+    width: 30px; height: 30px; border-radius: 50%; background: var(--accent);
+    color: #fff; font-size: 11px; font-weight: 700;
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  }
+  .user-name    { font-weight: 600; color: var(--text-0); font-size: 13px; }
+  .user-email   { font-size: 11.5px; color: var(--text-3); }
+
+  /* ── Badges ── */
+  .badge {
+    display: inline-flex; align-items: center; padding: 2px 8px;
+    border-radius: 99px; font-size: 11px; font-weight: 600; white-space: nowrap;
+  }
+  .badge-green  { background: var(--green-lt);  color: var(--green); }
+  .badge-red    { background: var(--accent-lt); color: var(--accent); }
+  .badge-amber  { background: var(--amber-lt);  color: var(--amber); }
+  .badge-grey   { background: var(--surface-2); color: var(--text-3); }
+  .badge-admin  { background: #ede9fe; color: #5b21b6; }
+
+  /* ── Toggle switch ── */
+  .toggle {
+    position: relative; display: inline-block; width: 34px; height: 20px; cursor: pointer;
+  }
+  .toggle input { opacity: 0; width: 0; height: 0; position: absolute; }
+  .toggle-track {
+    position: absolute; inset: 0; border-radius: 10px;
+    background: var(--border-hi); transition: background .2s;
+  }
+  .toggle input:checked + .toggle-track { background: var(--accent); }
+  .toggle-thumb {
+    position: absolute; top: 3px; left: 3px;
+    width: 14px; height: 14px; border-radius: 50%;
+    background: #fff; transition: transform .2s; box-shadow: 0 1px 3px rgba(0,0,0,.2);
+  }
+  .toggle input:checked ~ .toggle-thumb { transform: translateX(14px); }
+
+  /* ── Pagination ── */
+  .pagination {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 12px 16px; border-top: 1px solid var(--border);
+    font-size: 12px; color: var(--text-3);
+    background: var(--surface);
+  }
+  .page-btns { display: flex; gap: 6px; }
+  .page-btn  {
+    padding: 4px 10px; border-radius: var(--r-sm); border: 1px solid var(--border);
+    background: var(--surface); font-size: 12px; cursor: pointer; font-family: inherit;
+    color: var(--text-1); transition: background .12s;
+  }
+  .page-btn:hover:not(:disabled)  { background: var(--surface-2); }
+  .page-btn:disabled { opacity: .4; cursor: default; }
+
+  /* ── Thinker cards ── */
+  .thinker-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 12px; }
+  .thinker-card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--r); padding: 16px 18px;
+    display: flex; align-items: flex-start; gap: 14px;
+  }
+  .thinker-avatar {
+    width: 40px; height: 40px; border-radius: 50%; background: #111;
+    color: #fff; font-size: 14px; font-weight: 700;
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  }
+  .thinker-info   { flex: 1; min-width: 0; }
+  .thinker-name   { font-weight: 700; font-size: 14px; margin-bottom: 2px; }
+  .thinker-title  { font-size: 11.5px; color: var(--text-3); margin-bottom: 8px; }
+  .thinker-meta   { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+
+  /* ── Tabs ── */
+  .section { display: none; }
+  .section.active { display: block; }
+
+  /* ── Toast ── */
+  #admin-toast {
+    position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
+    background: #1a1714; color: #fff; padding: 9px 20px;
+    border-radius: 99px; font-size: 13px; font-weight: 500;
+    z-index: 9999; opacity: 0; transition: opacity .25s; pointer-events: none;
+    white-space: nowrap;
+  }
+
+  /* ── Auth gate ── */
+  #auth-gate {
+    display: flex; align-items: center; justify-content: center;
+    min-height: 100vh; background: var(--bg);
+  }
+  .auth-gate-card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 14px; padding: 40px 36px; text-align: center; max-width: 340px; width: 100%;
+  }
+  .auth-gate-card h2 { font-size: 18px; margin-bottom: 8px; }
+  .auth-gate-card p  { font-size: 13px; color: var(--text-3); margin-bottom: 24px; }
+  .auth-gate-card a  { color: var(--accent); text-decoration: none; font-weight: 600; }
+
+  /* ── Loading ── */
+  .loading {
+    display: flex; align-items: center; justify-content: center;
+    padding: 40px; color: var(--text-3); font-size: 13px; gap: 8px;
+  }
+  .spinner {
+    width: 16px; height: 16px; border: 2px solid var(--border);
+    border-top-color: var(--accent); border-radius: 50%; animation: spin .6s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* ── Amount colours ── */
+  .amount-credit { color: var(--green);  font-weight: 600; }
+  .amount-debit  { color: var(--accent); font-weight: 600; }
+
+  @media (max-width: 768px) {
+    .admin-sidebar { display: none; }
+    .page-body { padding: 16px; }
+    .stat-row { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Auth gate shown while verifying -->
+<div id="auth-gate" style="display:none">
+  <div class="auth-gate-card">
+    <svg width="40" height="40" viewBox="0 0 100 100" fill="none" style="margin-bottom:16px">
+      <circle cx="50" cy="50" r="50" fill="#111"/>
+      <path d="M22 28L31 14L40 28L40 60Q40 76 50 76Q60 76 60 60L60 28L69 14L78 28" stroke="white" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    <h2>Access Restricted</h2>
+    <p id="auth-gate-msg">You don't have permission to view this page.</p>
+    <a href="/">← Back to Divine</a>
+  </div>
+</div>
+
+<!-- Admin shell (hidden until auth passes) -->
+<div class="admin-shell" id="admin-shell" style="display:none">
+
+  <!-- Sidebar -->
+  <aside class="admin-sidebar">
+    <div class="sidebar-header">
+      <div class="sidebar-brand">
+        <div class="sidebar-logo">
+          <svg width="14" height="14" viewBox="0 0 100 100" fill="none">
+            <path d="M22 28L31 14L40 28L40 60Q40 76 50 76Q60 76 60 60L60 28L69 14L78 28" stroke="white" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <span class="sidebar-title">Divine Admin</span>
+      </div>
+      <div class="sidebar-sub">Control panel</div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <button class="nav-item active" onclick="showSection('users')" id="nav-users">
+        <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="8" cy="5" r="3"/><path d="M2 14c0-3.3 2.7-5.5 6-5.5s6 2.2 6 5.5"/></svg>
+        Users
+      </button>
+      <button class="nav-item" onclick="showSection('thinkers')" id="nav-thinkers">
+        <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M8 2a4 4 0 0 1 4 4c0 1.5-.8 2.8-2 3.5V11H6V9.5A4 4 0 0 1 4 6a4 4 0 0 1 4-4z"/><line x1="6" y1="13" x2="10" y2="13"/><line x1="6.5" y1="15" x2="9.5" y2="15"/></svg>
+        Thinkers
+      </button>
+      <button class="nav-item" onclick="showSection('perspectives')" id="nav-perspectives">
+        <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><rect x="2" y="2" width="12" height="12" rx="2"/><line x1="5" y1="6" x2="11" y2="6"/><line x1="5" y1="9" x2="9" y2="9"/></svg>
+        Perspectives
+      </button>
+      <button class="nav-item" onclick="showSection('revenue')" id="nav-revenue">
+        <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M8 2v12M5 5.5C5 4.1 6.3 3 8 3s3 1.1 3 2.5c0 1.3-1 2-2 2.5l-1 .5c-1 .5-2 1.3-2 2.5C6 12.4 6.9 13 8 13s3-.9 3-2"/></svg>
+        Revenue
+      </button>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="sidebar-user" id="sidebar-user-name">—</div>
+      <div>Admin session</div>
+    </div>
+  </aside>
+
+  <!-- Main -->
+  <main class="admin-main">
+
+    <!-- ── USERS ── -->
+    <section class="section active" id="section-users">
+      <div class="page-header">
+        <div class="page-title">User Management</div>
+        <div class="page-sub">View and manage all registered users.</div>
+      </div>
+      <div class="page-body">
+        <div class="stat-row" id="user-stats-row">
+          <div class="stat-card"><div class="stat-label">Total Users</div><div class="stat-val" id="stat-total-users">—</div></div>
+          <div class="stat-card"><div class="stat-label">Active</div><div class="stat-val" id="stat-active-users">—</div></div>
+          <div class="stat-card"><div class="stat-label">Admins</div><div class="stat-val" id="stat-admin-users">—</div></div>
+          <div class="stat-card"><div class="stat-label">Thinkers</div><div class="stat-val" id="stat-thinker-users">—</div></div>
+        </div>
+        <div class="toolbar">
+          <div class="search-wrap">
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="7" cy="7" r="5"/><line x1="11" y1="11" x2="15" y2="15"/></svg>
+            <input class="search-input" id="user-search" type="text" placeholder="Search by name or email…" oninput="debounceUserSearch()">
+          </div>
+          <button class="btn btn-ghost btn-sm" onclick="loadUsers(0)">Refresh</button>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>User</th>
+                <th>Joined</th>
+                <th>Balance</th>
+                <th>Perspectives</th>
+                <th>Roles</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="users-tbody">
+              <tr><td colspan="7"><div class="loading"><div class="spinner"></div>Loading…</div></td></tr>
+            </tbody>
+          </table>
+          <div class="pagination" id="users-pagination">
+            <span id="users-page-info">—</span>
+            <div class="page-btns">
+              <button class="page-btn" id="users-prev" onclick="usersPage(-1)" disabled>← Prev</button>
+              <button class="page-btn" id="users-next" onclick="usersPage(1)">Next →</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── THINKERS ── -->
+    <section class="section" id="section-thinkers">
+      <div class="page-header">
+        <div class="page-title">Thinker Management</div>
+        <div class="page-sub">Control which thinkers are live on the platform.</div>
+      </div>
+      <div class="page-body">
+        <div class="thinker-grid" id="thinkers-grid">
+          <div class="loading"><div class="spinner"></div>Loading…</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── PERSPECTIVES ── -->
+    <section class="section" id="section-perspectives">
+      <div class="page-header">
+        <div class="page-title">Perspectives Ledger</div>
+        <div class="page-sub">Every perspective served across all users.</div>
+      </div>
+      <div class="page-body">
+        <div class="toolbar">
+          <div class="search-wrap">
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="7" cy="7" r="5"/><line x1="11" y1="11" x2="15" y2="15"/></svg>
+            <input class="search-input" id="persp-search" type="text" placeholder="Search by user or label…" oninput="debouncePerspSearch()">
+          </div>
+          <button class="btn btn-ghost btn-sm" onclick="loadPerspectives(0)">Refresh</button>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>User</th>
+                <th>Thinker / Label</th>
+                <th>Cost</th>
+                <th>Balance After</th>
+              </tr>
+            </thead>
+            <tbody id="persp-tbody">
+              <tr><td colspan="5"><div class="loading"><div class="spinner"></div>Loading…</div></td></tr>
+            </tbody>
+          </table>
+          <div class="pagination" id="persp-pagination">
+            <span id="persp-page-info">—</span>
+            <div class="page-btns">
+              <button class="page-btn" id="persp-prev" onclick="perspPage(-1)" disabled>← Prev</button>
+              <button class="page-btn" id="persp-next" onclick="perspPage(1)">Next →</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── REVENUE ── -->
+    <section class="section" id="section-revenue">
+      <div class="page-header">
+        <div class="page-title">Revenue & Wallet Overview</div>
+        <div class="page-sub">Platform-wide financial activity.</div>
+      </div>
+      <div class="page-body">
+        <div class="stat-row">
+          <div class="stat-card">
+            <div class="stat-label">Total Earned</div>
+            <div class="stat-val" id="rev-earned">—</div>
+            <div class="stat-sub">All-time top-ups</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Total Spent</div>
+            <div class="stat-val" id="rev-spent">—</div>
+            <div class="stat-sub">Perspectives consumed</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Live Balance</div>
+            <div class="stat-val" id="rev-balance">—</div>
+            <div class="stat-sub">Unspent credits</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Perspectives</div>
+            <div class="stat-val" id="rev-perspectives">—</div>
+            <div class="stat-sub">Total served</div>
+          </div>
+        </div>
+
+        <div style="font-size:13px;font-weight:600;margin-bottom:10px;color:var(--text-1)">Recent Transactions</div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>User</th>
+                <th>Type</th>
+                <th>Amount</th>
+                <th>Label</th>
+              </tr>
+            </thead>
+            <tbody id="rev-tbody">
+              <tr><td colspan="5"><div class="loading"><div class="spinner"></div>Loading…</div></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<div id="admin-toast"></div>
+
+<script>
+'use strict';
+
+const API = '';
+const TOKEN_KEY = 'di_auth_token';
+
+// ── Auth check ────────────────────────────────────────────────────────────────
+async function initAdmin() {
+  const token = localStorage.getItem(TOKEN_KEY);
+  if (!token) {
+    showGate('You need to be logged in to access this page.', true);
+    return;
+  }
+  try {
+    const res = await fetch(`${API}/api/me`, {
+      headers: { Authorization: `Bearer ${token}` }
+    });
+    if (!res.ok) { showGate('Session expired. Please log in again.', true); return; }
+    const user = await res.json();
+    if (!user.is_admin) { showGate('Admin access required. Contact the platform owner.', false); return; }
+
+    // Passed — show admin shell
+    document.getElementById('sidebar-user-name').textContent = user.name || user.email;
+    document.getElementById('admin-shell').style.display = 'flex';
+
+    // Load initial data
+    loadUsers(0);
+    loadRevenue();
+  } catch (e) {
+    showGate('Could not connect to server. Try again later.', true);
+  }
+}
+
+function showGate(msg, showBack) {
+  const gate = document.getElementById('auth-gate');
+  document.getElementById('auth-gate-msg').textContent = msg;
+  gate.querySelector('a').style.display = showBack ? '' : '';
+  gate.style.display = 'flex';
+}
+
+function authHeaders() {
+  return { 'Content-Type': 'application/json', Authorization: `Bearer ${localStorage.getItem(TOKEN_KEY)}` };
+}
+
+// ── Navigation ────────────────────────────────────────────────────────────────
+const SECTIONS = ['users', 'thinkers', 'perspectives', 'revenue'];
+
+function showSection(name) {
+  SECTIONS.forEach(s => {
+    document.getElementById('section-' + s).classList.toggle('active', s === name);
+    document.getElementById('nav-' + s).classList.toggle('active', s === name);
+  });
+  // Lazy-load data
+  if (name === 'thinkers' && !_thinkersLoaded)  loadThinkers();
+  if (name === 'perspectives' && !_perspLoaded) loadPerspectives(0);
+}
+
+// ── Toast ─────────────────────────────────────────────────────────────────────
+function toast(msg) {
+  const t = document.getElementById('admin-toast');
+  t.textContent = msg;
+  t.style.opacity = '1';
+  clearTimeout(t._t);
+  t._t = setTimeout(() => { t.style.opacity = '0'; }, 2600);
+}
+
+// ── Utilities ─────────────────────────────────────────────────────────────────
+function fmtDate(iso) {
+  if (!iso) return '—';
+  const d = new Date(iso);
+  return d.toLocaleDateString('en-GB', { day:'2-digit', month:'short', year:'numeric' });
+}
+function fmtDateTime(iso) {
+  if (!iso) return '—';
+  const d = new Date(iso);
+  return d.toLocaleDateString('en-GB', { day:'2-digit', month:'short' }) + ' ' +
+         d.toLocaleTimeString('en-GB', { hour:'2-digit', minute:'2-digit' });
+}
+function fmtMoney(v) { return '$' + parseFloat(v || 0).toFixed(2); }
+function initials(name) {
+  if (!name) return '?';
+  return name.split(' ').map(w => w[0]).join('').toUpperCase().slice(0, 2);
+}
+function escHtml(s) {
+  return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+// ══════════════════════════════════════════════════════════════
+//  USERS
+// ══════════════════════════════════════════════════════════════
+let _usersOffset = 0;
+const USERS_LIMIT = 50;
+let _usersTotal   = 0;
+let _usersData    = [];
+let _userSearchTimer = null;
+
+function debounceUserSearch() {
+  clearTimeout(_userSearchTimer);
+  _userSearchTimer = setTimeout(() => loadUsers(0), 400);
+}
+
+async function loadUsers(offset) {
+  _usersOffset = offset;
+  const search = document.getElementById('user-search').value.trim();
+  const tbody  = document.getElementById('users-tbody');
+  tbody.innerHTML = `<tr><td colspan="7"><div class="loading"><div class="spinner"></div>Loading…</div></td></tr>`;
+
+  try {
+    const res = await fetch(`${API}/api/admin/users?search=${encodeURIComponent(search)}&offset=${offset}&limit=${USERS_LIMIT}`, {
+      headers: authHeaders()
+    });
+    if (!res.ok) throw new Error((await res.json()).error);
+    const { users, total } = await res.json();
+    _usersData  = users;
+    _usersTotal = total;
+
+    // Update stat cards
+    document.getElementById('stat-total-users').textContent   = total;
+    document.getElementById('stat-active-users').textContent  = users.filter(u => !u.is_disabled).length;
+    document.getElementById('stat-admin-users').textContent   = users.filter(u => u.is_admin).length;
+    document.getElementById('stat-thinker-users').textContent = users.filter(u => u.thinker_access).length;
+
+    renderUsersTable(users);
+    renderUsersPagination(total, offset);
+  } catch (e) {
+    tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;color:var(--accent);padding:20px">${escHtml(e.message)}</td></tr>`;
+  }
+}
+
+function renderUsersTable(users) {
+  const tbody = document.getElementById('users-tbody');
+  if (!users.length) {
+    tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;color:var(--text-3);padding:24px">No users found.</td></tr>`;
+    return;
+  }
+  tbody.innerHTML = users.map(u => `
+    <tr>
+      <td>
+        <div class="user-cell">
+          <div class="user-avatar">${escHtml(initials(u.name || u.email))}</div>
+          <div>
+            <div class="user-name">${escHtml(u.name || '—')}</div>
+            <div class="user-email">${escHtml(u.email)}</div>
+          </div>
+        </div>
+      </td>
+      <td style="color:var(--text-3)">${fmtDate(u.created_at)}</td>
+      <td>${fmtMoney(u.balance)}</td>
+      <td>${u.perspective_count || 0}</td>
+      <td>
+        ${u.is_admin      ? '<span class="badge badge-admin">Admin</span> ' : ''}
+        ${u.thinker_access? '<span class="badge badge-amber">Thinker</span>' : ''}
+        ${!u.is_admin && !u.thinker_access ? '<span class="badge badge-grey">User</span>' : ''}
+      </td>
+      <td>
+        <span class="badge ${u.is_disabled ? 'badge-red' : 'badge-green'}">
+          ${u.is_disabled ? 'Disabled' : 'Active'}
+        </span>
+      </td>
+      <td>
+        <div style="display:flex;gap:6px;flex-wrap:wrap">
+          <button class="btn btn-ghost btn-sm" onclick="toggleUserDisabled('${u.id}', ${!u.is_disabled})">
+            ${u.is_disabled ? 'Enable' : 'Disable'}
+          </button>
+          <button class="btn btn-ghost btn-sm" onclick="toggleUserAdmin('${u.id}', ${!u.is_admin})">
+            ${u.is_admin ? 'Revoke admin' : 'Make admin'}
+          </button>
+          <button class="btn btn-ghost btn-sm" onclick="toggleThinkerAccess('${u.id}', ${!u.thinker_access})">
+            ${u.thinker_access ? 'Revoke thinker' : 'Grant thinker'}
+          </button>
+        </div>
+      </td>
+    </tr>
+  `).join('');
+}
+
+function renderUsersPagination(total, offset) {
+  const end = Math.min(offset + USERS_LIMIT, total);
+  document.getElementById('users-page-info').textContent =
+    total ? `${offset + 1}–${end} of ${total} users` : '0 users';
+  document.getElementById('users-prev').disabled = offset === 0;
+  document.getElementById('users-next').disabled = offset + USERS_LIMIT >= total;
+}
+
+function usersPage(dir) {
+  const newOffset = _usersOffset + dir * USERS_LIMIT;
+  if (newOffset < 0 || newOffset >= _usersTotal) return;
+  loadUsers(newOffset);
+}
+
+async function toggleUserDisabled(id, disabled) {
+  try {
+    const res = await fetch(`${API}/api/admin/users/${id}`, {
+      method: 'PATCH',
+      headers: authHeaders(),
+      body: JSON.stringify({ is_disabled: disabled })
+    });
+    if (!res.ok) throw new Error((await res.json()).error);
+    toast(disabled ? 'User disabled.' : 'User enabled.');
+    loadUsers(_usersOffset);
+  } catch (e) { toast('Error: ' + e.message); }
+}
+
+async function toggleUserAdmin(id, isAdmin) {
+  try {
+    const res = await fetch(`${API}/api/admin/users/${id}`, {
+      method: 'PATCH',
+      headers: authHeaders(),
+      body: JSON.stringify({ is_admin: isAdmin })
+    });
+    if (!res.ok) throw new Error((await res.json()).error);
+    toast(isAdmin ? 'Admin access granted.' : 'Admin access revoked.');
+    loadUsers(_usersOffset);
+  } catch (e) { toast('Error: ' + e.message); }
+}
+
+async function toggleThinkerAccess(id, access) {
+  try {
+    const res = await fetch(`${API}/api/admin/users/${id}`, {
+      method: 'PATCH',
+      headers: authHeaders(),
+      body: JSON.stringify({ thinker_access: access })
+    });
+    if (!res.ok) throw new Error((await res.json()).error);
+    toast(access ? 'Thinker access granted.' : 'Thinker access revoked.');
+    loadUsers(_usersOffset);
+  } catch (e) { toast('Error: ' + e.message); }
+}
+
+// ══════════════════════════════════════════════════════════════
+//  THINKERS
+// ══════════════════════════════════════════════════════════════
+let _thinkersLoaded = false;
+
+async function loadThinkers() {
+  _thinkersLoaded = true;
+  const grid = document.getElementById('thinkers-grid');
+  grid.innerHTML = `<div class="loading"><div class="spinner"></div>Loading…</div>`;
+  try {
+    const res = await fetch(`${API}/api/admin/thinkers`, { headers: authHeaders() });
+    if (!res.ok) throw new Error((await res.json()).error);
+    const { thinkers } = await res.json();
+    renderThinkersGrid(thinkers);
+  } catch (e) {
+    grid.innerHTML = `<div style="color:var(--accent);padding:20px">${escHtml(e.message)}</div>`;
+  }
+}
+
+function renderThinkersGrid(thinkers) {
+  const grid = document.getElementById('thinkers-grid');
+  grid.innerHTML = thinkers.map(t => `
+    <div class="thinker-card" id="thinker-card-${t.id}">
+      <div class="thinker-avatar">${escHtml(initials(t.name))}</div>
+      <div class="thinker-info">
+        <div class="thinker-name">${escHtml(t.name)}</div>
+        <div class="thinker-title">${escHtml(t.title)}</div>
+        <div class="thinker-meta">
+          <span class="badge ${t.available ? 'badge-green' : 'badge-grey'}">
+            ${t.available ? 'Live' : 'Hidden'}
+          </span>
+          <span style="font-size:11.5px;color:var(--text-3)">${t.perspectives_served} perspectives</span>
+          <label class="toggle" title="${t.available ? 'Disable thinker' : 'Enable thinker'}">
+            <input type="checkbox" ${t.available ? 'checked' : ''} onchange="toggleThinker('${t.id}', this.checked)">
+            <span class="toggle-track"></span>
+            <span class="toggle-thumb"></span>
+          </label>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+async function toggleThinker(id, available) {
+  try {
+    const res = await fetch(`${API}/api/admin/thinkers/${id}`, {
+      method: 'PATCH',
+      headers: authHeaders(),
+      body: JSON.stringify({ available })
+    });
+    if (!res.ok) throw new Error((await res.json()).error);
+    toast(available ? `${id} is now live.` : `${id} is now hidden.`);
+    loadThinkers();
+  } catch (e) { toast('Error: ' + e.message); }
+}
+
+// ══════════════════════════════════════════════════════════════
+//  PERSPECTIVES
+// ══════════════════════════════════════════════════════════════
+let _perspOffset = 0;
+const PERSP_LIMIT = 50;
+let _perspTotal  = 0;
+let _perspLoaded = false;
+let _perspTimer  = null;
+
+function debouncePerspSearch() {
+  clearTimeout(_perspTimer);
+  _perspTimer = setTimeout(() => loadPerspectives(0), 400);
+}
+
+async function loadPerspectives(offset) {
+  _perspLoaded = true;
+  _perspOffset = offset;
+  const search = document.getElementById('persp-search').value.trim();
+  const tbody  = document.getElementById('persp-tbody');
+  tbody.innerHTML = `<tr><td colspan="5"><div class="loading"><div class="spinner"></div>Loading…</div></td></tr>`;
+
+  try {
+    const res = await fetch(`${API}/api/admin/perspectives?search=${encodeURIComponent(search)}&offset=${offset}&limit=${PERSP_LIMIT}`, {
+      headers: authHeaders()
+    });
+    if (!res.ok) throw new Error((await res.json()).error);
+    const { perspectives, total } = await res.json();
+    _perspTotal = total;
+    renderPerspTable(perspectives);
+    renderPerspPagination(total, offset);
+  } catch (e) {
+    tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;color:var(--accent);padding:20px">${escHtml(e.message)}</td></tr>`;
+  }
+}
+
+function renderPerspTable(rows) {
+  const tbody = document.getElementById('persp-tbody');
+  if (!rows.length) {
+    tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;color:var(--text-3);padding:24px">No perspectives found.</td></tr>`;
+    return;
+  }
+  tbody.innerHTML = rows.map(r => `
+    <tr>
+      <td style="color:var(--text-3);white-space:nowrap">${fmtDateTime(r.created_at)}</td>
+      <td>
+        <div class="user-cell">
+          <div class="user-avatar" style="width:24px;height:24px;font-size:9px">${escHtml(initials(r.user_name || r.user_email))}</div>
+          <div>
+            <div style="font-weight:600;font-size:12.5px">${escHtml(r.user_name || '—')}</div>
+            <div style="font-size:11px;color:var(--text-3)">${escHtml(r.user_email)}</div>
+          </div>
+        </div>
+      </td>
+      <td style="max-width:220px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${escHtml(r.label || '—')}</td>
+      <td class="amount-debit">${fmtMoney(r.amount)}</td>
+      <td>${fmtMoney(r.balance_after)}</td>
+    </tr>
+  `).join('');
+}
+
+function renderPerspPagination(total, offset) {
+  const end = Math.min(offset + PERSP_LIMIT, total);
+  document.getElementById('persp-page-info').textContent =
+    total ? `${offset + 1}–${end} of ${total}` : '0 perspectives';
+  document.getElementById('persp-prev').disabled = offset === 0;
+  document.getElementById('persp-next').disabled = offset + PERSP_LIMIT >= total;
+}
+
+function perspPage(dir) {
+  const newOffset = _perspOffset + dir * PERSP_LIMIT;
+  if (newOffset < 0 || newOffset >= _perspTotal) return;
+  loadPerspectives(newOffset);
+}
+
+// ══════════════════════════════════════════════════════════════
+//  REVENUE
+// ══════════════════════════════════════════════════════════════
+async function loadRevenue() {
+  try {
+    const res = await fetch(`${API}/api/admin/revenue`, { headers: authHeaders() });
+    if (!res.ok) throw new Error((await res.json()).error);
+    const { totals, recent } = await res.json();
+
+    document.getElementById('rev-earned').textContent      = fmtMoney(totals.total_earned);
+    document.getElementById('rev-spent').textContent       = fmtMoney(totals.total_spent);
+    document.getElementById('rev-balance').textContent     = fmtMoney(totals.total_balance);
+    document.getElementById('rev-perspectives').textContent = totals.total_perspectives || 0;
+
+    renderRevenueTable(recent);
+  } catch (e) {
+    document.getElementById('rev-tbody').innerHTML =
+      `<tr><td colspan="5" style="text-align:center;color:var(--accent);padding:20px">${escHtml(e.message)}</td></tr>`;
+  }
+}
+
+function renderRevenueTable(rows) {
+  const tbody = document.getElementById('rev-tbody');
+  if (!rows.length) {
+    tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;color:var(--text-3);padding:24px">No transactions yet.</td></tr>`;
+    return;
+  }
+  tbody.innerHTML = rows.map(r => {
+    const isCredit = r.direction === 'credit';
+    const typeBadge = isCredit
+      ? '<span class="badge badge-green">Top-up</span>'
+      : '<span class="badge badge-amber">Perspective</span>';
+    return `
+      <tr>
+        <td style="color:var(--text-3);white-space:nowrap">${fmtDateTime(r.created_at)}</td>
+        <td>
+          <div style="font-weight:600;font-size:12.5px">${escHtml(r.user_name || '—')}</div>
+          <div style="font-size:11px;color:var(--text-3)">${escHtml(r.user_email)}</div>
+        </td>
+        <td>${typeBadge}</td>
+        <td class="${isCredit ? 'amount-credit' : 'amount-debit'}">
+          ${isCredit ? '+' : '-'}${fmtMoney(r.amount)}
+        </td>
+        <td style="max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--text-3)">${escHtml(r.label || '—')}</td>
+      </tr>
+    `;
+  }).join('');
+}
+
+// ── Boot ──────────────────────────────────────────────────────────────────────
+initAdmin();
+</script>
+</body>
+</html>

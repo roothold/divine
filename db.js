@@ -194,3 +194,156 @@ export async function updateUserPassword(id, passwordHash) {
     [passwordHash, id]
   );
 }
+
+// ── Admin helpers ─────────────────────────────────────────────────────────────
+
+/**
+ * Ensure is_admin and is_disabled columns exist.
+ * Safe to call on every boot — uses IF NOT EXISTS.
+ */
+export async function adminMigrateSchema() {
+  await pool.query(`
+    ALTER TABLE users ADD COLUMN IF NOT EXISTS is_admin    BOOLEAN NOT NULL DEFAULT FALSE;
+    ALTER TABLE users ADD COLUMN IF NOT EXISTS is_disabled BOOLEAN NOT NULL DEFAULT FALSE;
+  `);
+}
+
+/** Full user list with wallet balance + perspective count. */
+export async function adminGetUsers({ search = '', offset = 0, limit = 50 } = {}) {
+  const like = `%${search}%`;
+  const { rows } = await pool.query(
+    `SELECT
+       u.id,
+       u.name,
+       u.email,
+       u.is_admin,
+       u.is_disabled,
+       u.thinker_access,
+       u.created_at,
+       COALESCE(w.credit_balance, 0)   AS balance,
+       COALESCE(w.lifetime_spent, 0)   AS lifetime_spent,
+       COALESCE(w.lifetime_earned, 0)  AS lifetime_earned,
+       COUNT(DISTINCT wt.id) FILTER (WHERE wt.line_item_type = 'perspective_spend') AS perspective_count
+     FROM users u
+     LEFT JOIN wallets w            ON w.user_id = u.id
+     LEFT JOIN wallet_transactions wt ON wt.wallet_id = w.id
+     WHERE ($1 = '' OR u.name ILIKE $2 OR u.email ILIKE $2)
+     GROUP BY u.id, w.credit_balance, w.lifetime_spent, w.lifetime_earned
+     ORDER BY u.created_at DESC
+     LIMIT $3 OFFSET $4`,
+    [search, like, limit, offset]
+  );
+  return rows;
+}
+
+/** Count total users (with optional search filter). */
+export async function adminCountUsers(search = '') {
+  const like = `%${search}%`;
+  const { rows } = await pool.query(
+    `SELECT COUNT(*) AS total FROM users
+     WHERE ($1 = '' OR name ILIKE $2 OR email ILIKE $2)`,
+    [search, like]
+  );
+  return parseInt(rows[0].total, 10);
+}
+
+/** Enable / disable a user account. */
+export async function adminSetUserDisabled(id, disabled) {
+  const { rows } = await pool.query(
+    `UPDATE users SET is_disabled = $1, updated_at = NOW() WHERE id = $2 RETURNING id, is_disabled`,
+    [disabled, id]
+  );
+  return rows[0];
+}
+
+/** Grant / revoke admin flag. */
+export async function adminSetUserAdmin(id, isAdmin) {
+  const { rows } = await pool.query(
+    `UPDATE users SET is_admin = $1, updated_at = NOW() WHERE id = $2 RETURNING id, is_admin`,
+    [isAdmin, id]
+  );
+  return rows[0];
+}
+
+/** Grant / revoke thinker access. */
+export async function adminSetThinkerAccess(id, access) {
+  const { rows } = await pool.query(
+    `UPDATE users SET thinker_access = $1, updated_at = NOW() WHERE id = $2 RETURNING id, thinker_access`,
+    [access, id]
+  );
+  return rows[0];
+}
+
+/** Paginated perspectives ledger (wallet_transactions of type perspective_spend). */
+export async function adminGetPerspectives({ search = '', offset = 0, limit = 50 } = {}) {
+  const like = `%${search}%`;
+  const { rows } = await pool.query(
+    `SELECT
+       wt.id,
+       wt.created_at,
+       wt.label,
+       wt.amount,
+       wt.balance_after,
+       u.id   AS user_id,
+       u.name AS user_name,
+       u.email AS user_email
+     FROM wallet_transactions wt
+     JOIN wallets w ON w.id = wt.wallet_id
+     JOIN users   u ON u.id = w.user_id
+     WHERE wt.line_item_type = 'perspective_spend'
+       AND ($1 = '' OR u.name ILIKE $2 OR u.email ILIKE $2 OR wt.label ILIKE $2)
+     ORDER BY wt.created_at DESC
+     LIMIT $3 OFFSET $4`,
+    [search, like, limit, offset]
+  );
+  return rows;
+}
+
+export async function adminCountPerspectives(search = '') {
+  const like = `%${search}%`;
+  const { rows } = await pool.query(
+    `SELECT COUNT(*) AS total
+     FROM wallet_transactions wt
+     JOIN wallets w ON w.id = wt.wallet_id
+     JOIN users   u ON u.id = w.user_id
+     WHERE wt.line_item_type = 'perspective_spend'
+       AND ($1 = '' OR u.name ILIKE $2 OR u.email ILIKE $2 OR wt.label ILIKE $2)`,
+    [search, like]
+  );
+  return parseInt(rows[0].total, 10);
+}
+
+/** Revenue overview — totals across all wallets. */
+export async function adminGetRevenue() {
+  const { rows: totals } = await pool.query(`
+    SELECT
+      COUNT(DISTINCT u.id)                                       AS total_users,
+      COUNT(DISTINCT u.id) FILTER (WHERE u.is_disabled = FALSE)  AS active_users,
+      COALESCE(SUM(w.lifetime_earned), 0)                        AS total_earned,
+      COALESCE(SUM(w.credit_balance),  0)                        AS total_balance,
+      COALESCE(SUM(w.lifetime_spent),  0)                        AS total_spent,
+      COUNT(wt.id) FILTER (WHERE wt.line_item_type = 'perspective_spend') AS total_perspectives
+    FROM users u
+    LEFT JOIN wallets w            ON w.user_id = u.id
+    LEFT JOIN wallet_transactions wt ON wt.wallet_id = w.id
+  `);
+
+  const { rows: recentTxns } = await pool.query(`
+    SELECT
+      wt.id,
+      wt.created_at,
+      wt.line_item_type,
+      wt.amount,
+      wt.direction,
+      wt.label,
+      u.name  AS user_name,
+      u.email AS user_email
+    FROM wallet_transactions wt
+    JOIN wallets w ON w.id = wt.wallet_id
+    JOIN users   u ON u.id = w.user_id
+    ORDER BY wt.created_at DESC
+    LIMIT 20
+  `);
+
+  return { totals: totals[0], recent: recentTxns };
+}

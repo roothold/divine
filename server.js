@@ -35,6 +35,9 @@ import pool, {
   getUserById, getUserByEmail, getUserByIdRaw,
   upsertGoogleUser, upsertLinkedInUser, createEmailUser,
   updateUserName, updateUserEmail, updateUserPassword,
+  adminMigrateSchema, adminGetUsers, adminCountUsers,
+  adminSetUserDisabled, adminSetUserAdmin, adminSetThinkerAccess,
+  adminGetPerspectives, adminCountPerspectives, adminGetRevenue,
 } from './db.js';
 import { getThinker } from './thinkers.js';
 
@@ -354,6 +357,8 @@ app.post('/auth/email/login', async (req, res) => {
 
     const match = await bcrypt.compare(password, user.password_hash);
     if (!match) return res.status(401).json({ error: 'Invalid email or password.' });
+
+    if (user.is_disabled) return res.status(403).json({ error: 'This account has been disabled. Contact support.' });
 
     const { password_hash, ...safe } = user;
     res.json({ token: signToken(safe), user: safe });
@@ -857,6 +862,148 @@ app.post('/api/create-checkout-session', requireAuth, async (req, res) => {
   }
 });
 
+// ════════════════════════════════════════════════════════════════════════════
+//  ADMIN PANEL
+// ════════════════════════════════════════════════════════════════════════════
+
+/** Middleware: require valid JWT AND is_admin flag. */
+async function requireAdmin(req, res, next) {
+  optionalAuth(req, res, async () => {
+    if (!req.user) return res.status(401).json({ error: 'Authentication required.' });
+    try {
+      const user = await getUserById(req.user.sub);
+      if (!user || !user.is_admin) return res.status(403).json({ error: 'Admin access required.' });
+      req.adminUser = user;
+      next();
+    } catch (err) {
+      res.status(500).json({ error: 'Could not verify admin access.' });
+    }
+  });
+}
+
+// ── GET /admin ────────────────────────────────────────────────────────────────
+// Serve the admin HTML shell. Auth is verified client-side via JWT.
+app.get('/admin', (_req, res) => {
+  try {
+    const adminFile = join(__dirname, 'admin.html');
+    res.setHeader('Content-Type', 'text/html; charset=utf-8');
+    res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate');
+    res.send(readFileSync(adminFile, 'utf8'));
+  } catch {
+    res.status(404).send('Admin panel not found.');
+  }
+});
+
+// ── GET /api/admin/users ──────────────────────────────────────────────────────
+app.get('/api/admin/users', requireAdmin, async (req, res) => {
+  try {
+    const search = (req.query.search || '').trim();
+    const offset = parseInt(req.query.offset || '0', 10);
+    const limit  = parseInt(req.query.limit  || '50', 10);
+    const [users, total] = await Promise.all([
+      adminGetUsers({ search, offset, limit }),
+      adminCountUsers(search),
+    ]);
+    res.json({ users, total, offset, limit });
+  } catch (err) {
+    console.error('[/api/admin/users]', err.message);
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// ── PATCH /api/admin/users/:id ────────────────────────────────────────────────
+// Supports: { is_disabled, is_admin, thinker_access }
+app.patch('/api/admin/users/:id', requireAdmin, async (req, res) => {
+  const { id } = req.params;
+  const { is_disabled, is_admin, thinker_access } = req.body || {};
+  try {
+    let result = {};
+    if (is_disabled !== undefined) result = { ...result, ...(await adminSetUserDisabled(id, is_disabled)) };
+    if (is_admin    !== undefined) result = { ...result, ...(await adminSetUserAdmin(id, is_admin)) };
+    if (thinker_access !== undefined) result = { ...result, ...(await adminSetThinkerAccess(id, thinker_access)) };
+    res.json({ ok: true, ...result });
+  } catch (err) {
+    console.error('[/api/admin/users/:id]', err.message);
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// ── GET /api/admin/thinkers ───────────────────────────────────────────────────
+import { THINKERS } from './thinkers.js';
+
+app.get('/api/admin/thinkers', requireAdmin, async (_req, res) => {
+  try {
+    // Merge static thinker config with per-user thinker_access data
+    const thinkers = Object.values(THINKERS).map(t => ({
+      id:        t.id,
+      name:      t.name,
+      title:     t.title,
+      available: t.available,
+    }));
+
+    // Count how many users have served perspectives from each thinker
+    const { rows } = await pool.query(`
+      SELECT wt.label, COUNT(*) AS cnt
+      FROM wallet_transactions wt
+      WHERE wt.line_item_type = 'perspective_spend'
+      GROUP BY wt.label
+    `);
+    const usageCounts = {};
+    rows.forEach(r => {
+      const key = (r.label || '').toLowerCase().split(' ')[0];
+      usageCounts[key] = (usageCounts[key] || 0) + parseInt(r.cnt, 10);
+    });
+
+    res.json({ thinkers: thinkers.map(t => ({ ...t, perspectives_served: usageCounts[t.id] || 0 })) });
+  } catch (err) {
+    console.error('[/api/admin/thinkers]', err.message);
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// ── PATCH /api/admin/thinkers/:id ────────────────────────────────────────────
+// Toggle thinker availability in the static config (runtime only — persists in memory).
+// For permanent changes, update thinkers.js directly.
+const _thinkerOverrides = {};
+app.patch('/api/admin/thinkers/:id', requireAdmin, (req, res) => {
+  const { id } = req.params;
+  const { available } = req.body || {};
+  if (!THINKERS[id]) return res.status(404).json({ error: 'Thinker not found.' });
+  if (available !== undefined) {
+    THINKERS[id].available = available;
+    _thinkerOverrides[id]  = { available };
+  }
+  res.json({ ok: true, id, available: THINKERS[id].available });
+});
+
+// ── GET /api/admin/perspectives ───────────────────────────────────────────────
+app.get('/api/admin/perspectives', requireAdmin, async (req, res) => {
+  try {
+    const search = (req.query.search || '').trim();
+    const offset = parseInt(req.query.offset || '0', 10);
+    const limit  = parseInt(req.query.limit  || '50', 10);
+    const [perspectives, total] = await Promise.all([
+      adminGetPerspectives({ search, offset, limit }),
+      adminCountPerspectives(search),
+    ]);
+    res.json({ perspectives, total, offset, limit });
+  } catch (err) {
+    console.error('[/api/admin/perspectives]', err.message);
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// ── GET /api/admin/revenue ────────────────────────────────────────────────────
+app.get('/api/admin/revenue', requireAdmin, async (_req, res) => {
+  try {
+    const data = await adminGetRevenue();
+    res.json(data);
+  } catch (err) {
+    console.error('[/api/admin/revenue]', err.message);
+    res.status(500).json({ error: err.message });
+  }
+});
+
 // ── SPA catch-all ────────────────────────────────────────────────────────────
 // Serve index.html for every non-API, non-auth route.
 // This is what makes /dashboard/wallet work on browser refresh — the server
@@ -873,6 +1020,9 @@ app.get('*', (req, res, next) => {
 });
 
 // ── Start ─────────────────────────────────────────────────────────────────────
+// Run admin schema migration before accepting traffic
+adminMigrateSchema().catch(err => console.warn('[admin-migrate]', err.message));
+
 app.listen(PORT, () => {
   console.log(`[Divine Intelligence] Running on :${PORT}`);
   console.log(`  Model:         ${MAIN_MODEL}`);
