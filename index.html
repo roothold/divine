@@ -2914,6 +2914,62 @@
       line-height:1.5; max-height:160px; min-height:22px; overflow-y:auto;
     }
     .chat-textarea::placeholder { color:var(--text-3); }
+
+    /* ── File attachment UI ── */
+    .chat-attach-btn {
+      width:30px; height:30px; border-radius:50%; background:transparent;
+      border:1.5px solid var(--border-md); cursor:pointer;
+      display:flex; align-items:center; justify-content:center;
+      flex-shrink:0; transition:background .14s, border-color .14s;
+      color:var(--text-2);
+    }
+    .chat-attach-btn:hover { background:var(--surface-2); border-color:var(--border-hi); }
+    .chat-attach-btn.active { background:var(--surface-3); border-color:var(--accent); color:var(--accent); }
+
+    .chat-attach-picker {
+      position:absolute; bottom:calc(100% + 8px); left:0;
+      background:#fff; border:1px solid var(--border-md); border-radius:12px;
+      box-shadow:var(--sh-md); padding:6px; min-width:180px; z-index:200;
+      animation:picker-in .15s ease both;
+    }
+    @keyframes picker-in { from { opacity:0; transform:translateY(6px); } to { opacity:1; transform:none; } }
+    .chat-attach-picker-item {
+      display:flex; align-items:center; gap:10px; padding:9px 12px;
+      border-radius:8px; cursor:pointer; font-size:13.5px; color:var(--text-1);
+      border:none; background:none; width:100%; text-align:left; transition:background .1s;
+    }
+    .chat-attach-picker-item:hover { background:var(--surface-2); }
+    .chat-attach-picker-item svg { flex-shrink:0; color:var(--text-2); }
+
+    .chat-attach-chips {
+      display:flex; flex-wrap:wrap; gap:6px; padding:8px 14px 0;
+    }
+    .chat-attach-chip {
+      display:flex; align-items:center; gap:6px; padding:4px 8px 4px 6px;
+      background:var(--surface-2); border:1px solid var(--border-md);
+      border-radius:8px; font-size:12px; color:var(--text-1); max-width:180px;
+    }
+    .chat-attach-chip-thumb {
+      width:20px; height:20px; border-radius:4px; object-fit:cover; flex-shrink:0;
+    }
+    .chat-attach-chip-name {
+      overflow:hidden; text-overflow:ellipsis; white-space:nowrap; flex:1;
+    }
+    .chat-attach-chip-rm {
+      border:none; background:none; cursor:pointer; padding:0; color:var(--text-3);
+      font-size:14px; line-height:1; flex-shrink:0; transition:color .1s;
+    }
+    .chat-attach-chip-rm:hover { color:var(--accent); }
+
+    /* Image thumb in chat bubble */
+    .chat-msg-img-wrap { margin-bottom:8px; display:flex; flex-wrap:wrap; gap:6px; }
+    .chat-msg-img { max-width:200px; max-height:160px; border-radius:8px; object-fit:cover; border:1px solid var(--border); }
+    .chat-msg-file-tag {
+      display:inline-flex; align-items:center; gap:5px; padding:3px 8px;
+      background:var(--surface-2); border:1px solid var(--border); border-radius:6px;
+      font-size:11.5px; color:var(--text-2); margin-bottom:6px;
+    }
+
     .chat-send-btn {
       width:36px; height:36px; border-radius:50%; background:var(--accent);
       border:none; cursor:pointer; display:flex; align-items:center; justify-content:center;
@@ -3681,7 +3737,27 @@
           <div class="chat-input-inner">
             <!-- Follow-up question chips (populated dynamically after each response) -->
             <div class="chat-suggestions" id="chat-suggestions"></div>
-            <div class="chat-input-wrap">
+            <!-- Attached file chips -->
+            <div class="chat-attach-chips" id="chat-attach-chips" style="display:none"></div>
+            <div class="chat-input-wrap" style="position:relative">
+              <!-- Attach picker popup -->
+              <div class="chat-attach-picker" id="chat-attach-picker" style="display:none">
+                <button class="chat-attach-picker-item" onclick="document.getElementById('chat-file-photos').click(); closeAttachPicker()">
+                  <svg width="15" height="15" viewBox="0 0 15 15" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><rect x="1" y="3" width="13" height="9" rx="2"/><circle cx="5" cy="7" r="1.5"/><path d="M9 6l3 3.5"/><path d="M1 9l3.5-3 2 2"/></svg>
+                  Add photos
+                </button>
+                <button class="chat-attach-picker-item" onclick="document.getElementById('chat-file-docs').click(); closeAttachPicker()">
+                  <svg width="15" height="15" viewBox="0 0 15 15" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><rect x="2.5" y="1" width="8" height="13" rx="1.5"/><path d="M5 4.5h4M5 7h4M5 9.5h2.5"/><path d="M10.5 4.5l2 2v7a1 1 0 01-1 1H11"/></svg>
+                  Add files
+                </button>
+              </div>
+              <!-- Hidden file inputs -->
+              <input type="file" id="chat-file-photos" accept="image/*" multiple style="display:none" onchange="handleFileAttach(this,'image')">
+              <input type="file" id="chat-file-docs" accept=".pdf,.txt,.md,.csv,.doc,.docx,.js,.ts,.py,.html,.json" multiple style="display:none" onchange="handleFileAttach(this,'doc')">
+              <!-- Attach button -->
+              <button class="chat-attach-btn" id="chat-attach-btn" onclick="toggleAttachPicker()" title="Attach file or photo">
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="7" y1="1" x2="7" y2="13"/><line x1="1" y1="7" x2="13" y2="7"/></svg>
+              </button>
               <textarea class="chat-textarea" id="chat-textarea"
                 placeholder="What high-stakes decision are you weighing?"
                 rows="1"
@@ -8880,6 +8956,105 @@ function _usageRefreshUI() {
   }
 }
 
+/* ══════════════════════════════════════
+   FILE ATTACHMENT
+══════════════════════════════════════ */
+let _attachedFiles = []; // { type:'image'|'doc', name, content, previewUrl? }
+
+function toggleAttachPicker() {
+  const picker = document.getElementById('chat-attach-picker');
+  const btn    = document.getElementById('chat-attach-btn');
+  const open   = picker.style.display === 'none';
+  picker.style.display = open ? '' : 'none';
+  btn.classList.toggle('active', open);
+  if (open) {
+    // Close on outside click
+    setTimeout(() => document.addEventListener('click', _closePickerOutside, { once: true }), 10);
+  }
+}
+function closeAttachPicker() {
+  document.getElementById('chat-attach-picker').style.display = 'none';
+  document.getElementById('chat-attach-btn')?.classList.remove('active');
+}
+function _closePickerOutside(e) {
+  if (!document.getElementById('chat-attach-picker')?.contains(e.target) &&
+      e.target !== document.getElementById('chat-attach-btn')) {
+    closeAttachPicker();
+  }
+}
+
+function handleFileAttach(input, type) {
+  const files = Array.from(input.files);
+  if (!files.length) return;
+  input.value = ''; // reset so same file can be re-added
+
+  files.forEach(file => {
+    if (type === 'image') {
+      const reader = new FileReader();
+      reader.onload = e => {
+        _attachedFiles.push({ type: 'image', name: file.name, content: e.target.result, previewUrl: e.target.result });
+        _renderAttachChips();
+      };
+      reader.readAsDataURL(file);
+    } else {
+      // Text-readable files
+      const textExts = /\.(txt|md|csv|js|ts|py|html|json)$/i;
+      if (textExts.test(file.name)) {
+        const reader = new FileReader();
+        reader.onload = e => {
+          _attachedFiles.push({ type: 'doc', name: file.name, content: e.target.result });
+          _renderAttachChips();
+        };
+        reader.readAsText(file);
+      } else {
+        // PDF or binary — store name only (content will be noted as [PDF attached])
+        _attachedFiles.push({ type: 'doc', name: file.name, content: null });
+        _renderAttachChips();
+      }
+    }
+  });
+}
+
+function _renderAttachChips() {
+  const wrap = document.getElementById('chat-attach-chips');
+  if (!wrap) return;
+  if (!_attachedFiles.length) { wrap.style.display = 'none'; wrap.innerHTML = ''; return; }
+  wrap.style.display = '';
+  wrap.innerHTML = _attachedFiles.map((f, i) => {
+    const thumb = f.type === 'image'
+      ? `<img class="chat-attach-chip-thumb" src="${f.previewUrl}" alt="">`
+      : `<svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" style="flex-shrink:0;color:var(--text-3)"><rect x="2" y="1" width="8" height="12" rx="1.2"/><path d="M4 4.5h4M4 7h4M4 9.5h2"/></svg>`;
+    const shortName = f.name.length > 20 ? f.name.slice(0, 18) + '…' : f.name;
+    return `<div class="chat-attach-chip">
+      ${thumb}
+      <span class="chat-attach-chip-name" title="${_escapeHtml(f.name)}">${_escapeHtml(shortName)}</span>
+      <button class="chat-attach-chip-rm" onclick="_removeAttach(${i})" title="Remove">×</button>
+    </div>`;
+  }).join('');
+}
+
+function _removeAttach(idx) {
+  _attachedFiles.splice(idx, 1);
+  _renderAttachChips();
+}
+
+function _clearAttachments() {
+  _attachedFiles = [];
+  _renderAttachChips();
+}
+
+/** Build the content to prepend to the message for file context */
+function _buildAttachmentContext() {
+  if (!_attachedFiles.length) return '';
+  const parts = _attachedFiles.map(f => {
+    if (f.type === 'image') return null; // images shown inline, no text needed
+    if (f.content) return `<file name="${f.name}">\n${f.content.slice(0, 8000)}\n</file>`;
+    return `<file name="${f.name}">[File attached — ${f.name.split('.').pop().toUpperCase()} format]</file>`;
+  }).filter(Boolean);
+  if (!parts.length) return '';
+  return parts.join('\n') + '\n\n';
+}
+
 async function sendChatMsg() {
   if (_chatStreaming) return;
 
@@ -8890,7 +9065,7 @@ async function sendChatMsg() {
   }
   const ta   = document.getElementById('chat-textarea');
   const text = ta.value.trim();
-  if (!text) return;
+  if (!text && _attachedFiles.length === 0) return;
 
   ta.value = '';
   chatTextareaResize(ta);
@@ -8911,8 +9086,36 @@ async function sendChatMsg() {
   // Hide any existing suggestions when user sends
   _hideChatSuggestions();
 
-  // Append user message
-  _appendChatMsg('user', text, { ts: new Date().toISOString() });
+  // ── Build full message with attachment context ────────────────────────────
+  const attachedNow = [..._attachedFiles]; // snapshot before clearing
+  const fileContext = _buildAttachmentContext();
+  const fullUserText = fileContext + (text || '');
+  const displayText  = text || (attachedNow.length ? `[${attachedNow.length} file${attachedNow.length>1?'s':''} attached]` : '');
+
+  // Append user message (with inline image previews)
+  const userMsgEl = _appendChatMsg('user', displayText, { ts: new Date().toISOString() });
+  if (attachedNow.length) {
+    const bubble = userMsgEl.querySelector('.chat-msg-bubble');
+    // Prepend image thumbnails + file tags
+    const mediaWrap = document.createElement('div');
+    mediaWrap.className = 'chat-msg-img-wrap';
+    attachedNow.forEach(f => {
+      if (f.type === 'image') {
+        const img = document.createElement('img');
+        img.className = 'chat-msg-img'; img.src = f.previewUrl; img.alt = f.name;
+        mediaWrap.appendChild(img);
+      } else {
+        const tag = document.createElement('div');
+        tag.className = 'chat-msg-file-tag';
+        tag.innerHTML = `<svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><rect x="2" y="1" width="7" height="10" rx="1"/><path d="M4 4h3M4 6h3M4 8h2"/></svg>${_escapeHtml(f.name)}`;
+        mediaWrap.appendChild(tag);
+      }
+    });
+    if (mediaWrap.children.length) bubble.prepend(mediaWrap);
+  }
+
+  // Clear attachments after sending
+  _clearAttachments();
 
   // Append thinking placeholder for AI (streaming mode — raw text during stream)
   const aiId   = 'cm_' + Date.now();
@@ -8932,7 +9135,7 @@ async function sendChatMsg() {
 
   let fullText = '';
   try {
-    fullText = await _callChatAPI(history, text, chunk => {
+    fullText = await _callChatAPI(history, fullUserText, chunk => {
       fullText += chunk;
       // During streaming, show raw text with cursor — avoids partial-markdown glitches
       bubble.textContent = fullText;
@@ -9991,8 +10194,14 @@ initThinkerAccess();
   setTimeout(() => showToast('✓ Mock login active — display is working'), 200);
 })();
 
-// Kick off auth check — verifies stored JWT and applies auth state
-initAuth();
+// Kick off auth check — must run after full DOM is parsed because initAuth()
+// calls showSplashScreen() which accesses #screen-splash, which is defined
+// after this <script> block in the HTML.
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initAuth, { once: true });
+} else {
+  initAuth();
+}
 
 document.addEventListener('keydown', e => {
   if (e.key === 'Escape') { closePicker(); closeProfileMenu(); closeTopup(); }
