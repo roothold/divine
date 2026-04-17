@@ -705,6 +705,74 @@
     .swatch { width:24px; height:24px; border-radius:50%; cursor:pointer; border:2px solid transparent; transition:border-color 0.15s,transform 0.15s; }
     .swatch.selected { border-color:var(--text-0); transform:scale(1.15); }
     .form-actions { display:flex; gap:10px; }
+    /* Project type selector in form */
+    .project-type-row { display:flex; gap:8px; margin-bottom:14px; }
+    .proj-type-btn { flex:1; padding:10px 8px; border:1.5px solid var(--border-md); border-radius:var(--r-sm); background:transparent; font-family:'Inter',sans-serif; font-size:12px; font-weight:500; color:var(--text-2); cursor:pointer; transition:all .15s; text-align:center; }
+    .proj-type-btn:hover { border-color:var(--accent-bdr); color:var(--accent); }
+    .proj-type-btn.active { border-color:var(--accent); background:var(--accent-lt); color:var(--accent); font-weight:600; }
+    .proj-type-label { font-size:10px; font-weight:600; letter-spacing:.06em; text-transform:uppercase; color:var(--text-3); margin-bottom:6px; }
+    /* Type badge on project cards */
+    .project-type-badge { display:inline-block; font-size:10px; font-weight:600; letter-spacing:.05em; text-transform:uppercase; padding:2px 8px; border-radius:var(--r-pill); margin-bottom:8px; }
+    .ptb-initiative { background:#FFF3CD; color:#92400E; }
+    .ptb-company    { background:#D1FAE5; color:#065F46; }
+    .ptb-theme      { background:#EDE9FE; color:#5B21B6; }
+
+    /* ─── Project Detail Screen ─── */
+    #screen-project-detail { overflow-y:auto; }
+    .pd-layout { max-width:860px; margin:0 auto; padding:40px 28px 80px; }
+    .pd-back { display:inline-flex; align-items:center; gap:6px; font-size:13px; color:var(--text-3); background:none; border:none; cursor:pointer; padding:0; margin-bottom:24px; font-family:'Inter',sans-serif; transition:color .15s; }
+    .pd-back:hover { color:var(--text-0); }
+    .pd-header { display:flex; align-items:flex-start; gap:14px; margin-bottom:32px; }
+    .pd-color-dot { width:14px; height:14px; border-radius:50%; flex-shrink:0; margin-top:6px; }
+    .pd-header-main { flex:1; min-width:0; }
+    .pd-title { font-family:'Cormorant Garamond',serif; font-size:30px; font-weight:600; color:var(--text-0); line-height:1.2; margin-bottom:6px; outline:none; }
+    .pd-title[contenteditable="true"]:focus { border-bottom:2px solid var(--accent-bdr); }
+    .pd-subtitle { font-size:14px; color:var(--text-3); outline:none; line-height:1.5; }
+    .pd-subtitle[contenteditable="true"]:focus { border-bottom:1px solid var(--accent-bdr); }
+    .pd-header-actions { display:flex; gap:8px; align-items:center; flex-shrink:0; }
+    .pd-save-btn { font-size:12px; font-weight:600; padding:7px 16px; background:var(--accent); color:#fff; border:none; border-radius:var(--r-pill); cursor:pointer; font-family:'Inter',sans-serif; transition:opacity .15s; }
+    .pd-save-btn:hover { opacity:.85; }
+    /* Sections */
+    .pd-section { background:var(--surface); border:1px solid var(--border); border-radius:var(--r); padding:22px 24px; margin-bottom:16px; }
+    .pd-section-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; }
+    .pd-section-title { font-size:13px; font-weight:600; color:var(--text-0); display:flex; align-items:center; gap:8px; }
+    .pd-section-icon { width:20px; height:20px; border-radius:6px; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+    .pd-section-icon.initiative { background:#FFF3CD; color:#92400E; }
+    .pd-section-icon.company    { background:#D1FAE5; color:#065F46; }
+    .pd-section-icon.theme      { background:#EDE9FE; color:#5B21B6; }
+    .pd-textarea { width:100%; border:1.5px solid var(--border-md); border-radius:var(--r-sm); padding:12px 14px; font-family:'Inter',sans-serif; font-size:13.5px; color:var(--text-0); background:var(--surface-2); resize:vertical; min-height:72px; outline:none; line-height:1.6; transition:border-color .15s; box-sizing:border-box; }
+    .pd-textarea:focus { border-color:var(--accent-bdr); background:var(--surface); }
+    .pd-textarea::placeholder { color:var(--text-3); }
+    /* Milestones / checklist */
+    .pd-checklist { display:flex; flex-direction:column; gap:8px; }
+    .pd-check-row { display:flex; align-items:flex-start; gap:10px; }
+    .pd-check-box { width:18px; height:18px; border:1.5px solid var(--border-md); border-radius:4px; flex-shrink:0; cursor:pointer; display:flex; align-items:center; justify-content:center; margin-top:2px; transition:all .15s; }
+    .pd-check-box.done { background:var(--accent); border-color:var(--accent); color:#fff; }
+    .pd-check-input { flex:1; border:none; background:transparent; font-family:'Inter',sans-serif; font-size:13.5px; color:var(--text-0); outline:none; padding:0; line-height:1.5; }
+    .pd-check-input.done { text-decoration:line-through; color:var(--text-3); }
+    .pd-check-del { color:var(--text-3); cursor:pointer; background:none; border:none; font-size:16px; line-height:1; padding:0 2px; opacity:0; transition:opacity .15s; }
+    .pd-check-row:hover .pd-check-del { opacity:1; }
+    .pd-add-item { display:inline-flex; align-items:center; gap:6px; font-size:12px; font-weight:500; color:var(--text-3); background:none; border:none; cursor:pointer; padding:6px 0 0; font-family:'Inter',sans-serif; transition:color .15s; }
+    .pd-add-item:hover { color:var(--accent); }
+    /* Stakeholders & wiki rows */
+    .pd-item-list { display:flex; flex-direction:column; gap:8px; }
+    .pd-item-row { display:flex; gap:8px; align-items:center; }
+    .pd-item-input { flex:1; border:1.5px solid var(--border-md); border-radius:var(--r-sm); padding:9px 12px; font-family:'Inter',sans-serif; font-size:13px; color:var(--text-0); background:var(--surface-2); outline:none; transition:border-color .15s; }
+    .pd-item-input:focus { border-color:var(--accent-bdr); background:var(--surface); }
+    .pd-item-del { color:var(--text-3); cursor:pointer; background:none; border:none; font-size:18px; line-height:1; padding:2px 4px; opacity:.5; transition:opacity .15s; }
+    .pd-item-del:hover { opacity:1; color:var(--accent); }
+    /* Active perspectives feed */
+    .pd-perspectives-feed { display:flex; flex-direction:column; gap:10px; }
+    .pd-persp-card { background:var(--surface-2); border:1px solid var(--border); border-radius:10px; padding:14px 16px; cursor:pointer; transition:border-color .15s; }
+    .pd-persp-card:hover { border-color:var(--accent-bdr); }
+    .pd-persp-date { font-size:10.5px; color:var(--text-3); margin-bottom:4px; }
+    .pd-persp-decision { font-size:13.5px; font-weight:500; color:var(--text-0); margin-bottom:4px; line-height:1.4; }
+    .pd-persp-insight { font-size:12px; color:var(--text-2); line-height:1.5; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
+    .pd-empty-state { text-align:center; padding:32px 16px; color:var(--text-3); font-size:13px; font-style:italic; }
+    /* Two-col grid for BMC fields */
+    .pd-2col { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+    @media(max-width:600px) { .pd-2col { grid-template-columns:1fr; } }
+    .pd-field-label { font-size:11.5px; font-weight:600; color:var(--text-3); text-transform:uppercase; letter-spacing:.05em; margin-bottom:6px; }
 
     /* ═══ REPLAY ═══ */
     .replay-screen { padding-top:56px; padding-bottom:100px; }
@@ -1092,6 +1160,31 @@
     .dc-advisory-name { font-size:12px; font-weight:700; color:var(--text-0); }
     .dc-advisory-role { font-size:10px; color:var(--text-3); margin-bottom:4px; }
     .dc-advisory-quote { font-family:'Cormorant Garamond',serif; font-size:13px; font-style:italic; color:var(--text-1); line-height:1.45; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
+    /* Add-advisor slot */
+    .dc-advisory-add { display:flex; align-items:center; gap:8px; padding:9px 10px; border:1.5px dashed var(--border-md); border-radius:10px; cursor:pointer; transition:border-color .15s,background .15s; color:var(--text-3); font-size:12px; font-weight:500; margin-top:6px; }
+    .dc-advisory-add:hover { border-color:var(--accent-bdr); background:var(--accent-lt); color:var(--accent); }
+    /* Locked / disabled overlay for unconnected panels */
+    .dc-locked-wrap { position:relative; }
+    .dc-locked-overlay { position:absolute; inset:-4px; background:rgba(253,250,245,0.86); backdrop-filter:blur(4px); -webkit-backdrop-filter:blur(4px); border-radius:12px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:6px; z-index:3; padding:18px 14px; text-align:center; }
+    .dc-locked-icon { color:var(--text-3); opacity:.7; }
+    .dc-locked-label { font-size:12.5px; font-weight:600; color:var(--text-1); }
+    .dc-locked-sub { font-size:11px; color:var(--text-3); line-height:1.55; max-width:180px; }
+    .dc-locked-btn { font-size:11.5px; font-weight:600; color:var(--accent); background:var(--accent-lt); border:1px solid var(--accent-bdr); border-radius:var(--r-pill); padding:6px 16px; cursor:pointer; font-family:'Inter',sans-serif; margin-top:2px; white-space:nowrap; transition:opacity .15s; }
+    .dc-locked-btn:hover { opacity:.8; }
+    /* Connect tools prompt banner */
+    .dc-connect-prompt { display:flex; align-items:center; gap:8px; padding:9px 11px; background:var(--surface-2); border:1px solid var(--border); border-radius:9px; margin-top:12px; cursor:pointer; transition:border-color .15s; }
+    .dc-connect-prompt:hover { border-color:var(--accent-bdr); }
+    .dc-connect-prompt-icon { color:var(--accent); flex-shrink:0; }
+    .dc-connect-prompt-text { font-size:11.5px; color:var(--text-2); line-height:1.45; flex:1; }
+    .dc-connect-prompt-text strong { color:var(--text-0); font-weight:600; display:block; margin-bottom:1px; }
+    .dc-connect-prompt-arrow { color:var(--text-3); flex-shrink:0; font-size:13px; }
+    /* Inline text link — grey default, accent on hover */
+    .dc-text-link { color:var(--text-3); font-weight:600; cursor:pointer; text-decoration:none; transition:color .15s; }
+    .dc-text-link:hover { color:var(--accent); }
+    .dc-locked-sub .dc-text-link { color:var(--text-3); }
+    .dc-locked-sub .dc-text-link:hover { color:var(--accent); }
+    .dc-rev-kpi-delta .dc-text-link { color:var(--text-3); }
+    .dc-rev-kpi-delta .dc-text-link:hover { color:var(--accent); }
 
     /* ─── Integrations tab ─── */
     .dc-integrations-intro { font-size:12px; color:var(--text-3); line-height:1.55; margin-bottom:14px; }
@@ -3310,26 +3403,26 @@
             <div class="dc-panel-tabs three">
               <button class="dc-ptab active" onclick="switchDcPanel('growth',this)">Growth</button>
               <button class="dc-ptab" onclick="switchDcPanel('portfolio',this)">Portfolio</button>
-              <button class="dc-ptab" onclick="switchDcPanel('integrations',this)">Integrations</button>
+              <button class="dc-ptab" onclick="switchDcPanel('integrations',this)">Connect</button>
             </div>
 
             <!-- ── GROWTH tab: Revenue Graph + Advisory Circle ── -->
             <div id="dc-panel-growth">
               <div class="dc-panel-body">
 
-                <!-- Revenue Graph section -->
-                <div class="dc-panel-section">
+                <!-- Revenue Graph section — locked until tools connected -->
+                <div class="dc-panel-section dc-locked-wrap" id="dc-revenue-section">
                   <div class="dc-psec-title">Projected Revenue</div>
                   <div class="dc-revenue-kpis">
                     <div class="dc-rev-kpi">
                       <div class="dc-rev-kpi-label">NPV (2030)</div>
-                      <div class="dc-rev-kpi-val" id="dc-npv-val">$4.8M</div>
-                      <div class="dc-rev-kpi-delta" id="dc-npv-delta">↑ +22% vs last quarter</div>
+                      <div class="dc-rev-kpi-val" id="dc-npv-val">—</div>
+                      <div class="dc-rev-kpi-delta" id="dc-npv-delta">Connect <span class="dc-text-link" onclick="switchDcPanel('integrations',document.querySelectorAll('.dc-ptab')[2])">accounting software</span> for live data</div>
                     </div>
                     <div class="dc-rev-kpi">
                       <div class="dc-rev-kpi-label">+$GMV Impact</div>
-                      <div class="dc-rev-kpi-val" id="dc-gmv-val">$143K</div>
-                      <div class="dc-rev-kpi-delta" id="dc-gmv-delta">↑ from recent audits</div>
+                      <div class="dc-rev-kpi-val" id="dc-gmv-val">—</div>
+                      <div class="dc-rev-kpi-delta" id="dc-gmv-delta">Connect <span class="dc-text-link" onclick="switchDcPanel('integrations',document.querySelectorAll('.dc-ptab')[2])">accounting software</span> for live data</div>
                     </div>
                   </div>
                   <div class="dc-revenue-canvas-wrap">
@@ -3339,7 +3432,13 @@
                     <span><span class="dc-revenue-legend-dot" style="background:#BF452A"></span>NPV Growth</span>
                     <span><span class="dc-revenue-legend-dot" style="background:#22c55e"></span>+GMV Impact</span>
                   </div>
-                  <div class="dc-connect-cta">Connect <a onclick="switchDcPanel('integrations', document.querySelector('[onclick*=integrations]'));return false">accounting software</a> for live data</div>
+                  <!-- Locked overlay — hidden once tools connected -->
+                  <div class="dc-locked-overlay" id="dc-revenue-lock">
+                    <svg class="dc-locked-icon" width="22" height="22" viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><rect x="4" y="10" width="14" height="10" rx="2.5"/><path d="M7 10V7a4 4 0 018 0v3"/></svg>
+                    <div class="dc-locked-label">Revenue data locked</div>
+                    <div class="dc-locked-sub">Connect <span class="dc-text-link" onclick="switchDcPanel('integrations',document.querySelectorAll('.dc-ptab')[2])">accounting software</span> for live data</div>
+                    <button class="dc-locked-btn" onclick="switchDcPanel('integrations',document.querySelectorAll('.dc-ptab')[2])">Connect tools →</button>
+                  </div>
                 </div>
 
                 <!-- Advisory Circle section -->
@@ -3347,6 +3446,12 @@
                   <div class="dc-psec-title">Your Advisory Circle</div>
                   <div class="dc-advisory-grid" id="dc-advisory-grid">
                     <!-- populated by renderDcAdvisoryCircle() -->
+                  </div>
+                  <!-- Connect prompt -->
+                  <div class="dc-connect-prompt" onclick="switchDcPanel('integrations',document.querySelectorAll('.dc-ptab')[2])">
+                    <svg class="dc-connect-prompt-icon" width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M7 1v5M7 8v5M1 7h5M8 7h5"/></svg>
+                    <div class="dc-connect-prompt-text"><strong>Connect your tools</strong>Improve output quality and unlock live insights.</div>
+                    <span class="dc-connect-prompt-arrow">›</span>
                   </div>
                 </div>
 
@@ -3407,7 +3512,7 @@
               <div class="dc-panel-body">
                 <div class="dc-panel-section">
                   <div class="dc-psec-title">Connected Tools</div>
-                  <p class="dc-integrations-intro">Link your accounting and operations software so Divine can enrich your Revenue Graph with live data.</p>
+                  <p class="dc-integrations-intro">Connect your revenue and operations tools to unlock live projections and improve the quality of insights from your Thinkers.</p>
                   <div class="dc-integrations-list" id="dc-integrations-list">
                     <!-- populated by renderDcIntegrations() -->
                   </div>
@@ -3579,7 +3684,7 @@
           <div class="dc-panel-body">
 
             <!-- Revenue Graph section -->
-            <div class="dc-panel-section">
+            <div class="dc-panel-section dc-locked-wrap">
               <div class="dc-psec-title">Projected Revenue</div>
               <div class="dc-revenue-kpis" id="chat-rev-kpis">
                 <!-- populated by renderRevenueGraph('chat') -->
@@ -3623,6 +3728,12 @@
               <div class="dc-advisory-grid" id="chat-adv-grid">
                 <!-- populated by renderAdvisoryCircle('chat') -->
               </div>
+              <!-- Connect prompt -->
+              <div class="dc-connect-prompt" onclick="switchPanel('chat-panel','integrations',document.querySelectorAll('#chat-dc-tabs .dc-ptab')[2])">
+                <svg class="dc-connect-prompt-icon" width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M7 1v5M7 8v5M1 7h5M8 7h5"/></svg>
+                <div class="dc-connect-prompt-text"><strong>Connect your tools</strong>Give your Thinker full context for better outputs.</div>
+                <span class="dc-connect-prompt-arrow">›</span>
+              </div>
             </div>
 
           </div>
@@ -3658,7 +3769,7 @@
           <div class="dc-panel-body">
             <div class="dc-panel-section">
               <div class="dc-psec-title">Connected Tools</div>
-              <p class="dc-integrations-intro">Link your accounting and operations software so Divine can enrich your Revenue Graph with live data.</p>
+              <p class="dc-integrations-intro">Connect your tools so your Thinker has full context — live revenue data, project metrics, and operations signals improve output quality significantly.</p>
               <div class="dc-integrations-list" id="chat-int-list">
                 <!-- populated by renderIntegrationsList('chat') -->
               </div>
@@ -3700,6 +3811,12 @@
         <div class="project-form" id="project-form">
           <input type="text" id="project-name-input" placeholder="Project name…" maxlength="40" autocomplete="off">
           <input type="text" id="project-tagline-input" placeholder="Short description (optional)…" maxlength="80" autocomplete="off" style="margin-top:8px">
+          <div class="proj-type-label" style="margin-top:14px">Project type</div>
+          <div class="project-type-row">
+            <button class="proj-type-btn active" id="ptype-initiative" onclick="selectProjectType('initiative')">⚡ Initiative</button>
+            <button class="proj-type-btn" id="ptype-company" onclick="selectProjectType('company')">🏢 Company</button>
+            <button class="proj-type-btn" id="ptype-theme" onclick="selectProjectType('theme')">💡 Theme</button>
+          </div>
           <div class="color-swatches" id="color-swatches"></div>
           <div class="form-actions">
             <button class="btn-primary" onclick="saveProject()">Create project</button>
@@ -3708,6 +3825,39 @@
         </div>
         <div class="projects-grid" id="projects-grid"></div>
       </div></div>
+    </div>
+
+    <!-- SCREEN: Project Detail -->
+    <div class="screen" id="screen-project-detail">
+      <div class="pd-layout">
+        <button class="pd-back" onclick="showView('projects')">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 2L4 7l5 5"/></svg>
+          Projects
+        </button>
+        <div class="pd-header">
+          <div class="pd-color-dot" id="pd-color-dot"></div>
+          <div class="pd-header-main">
+            <div id="pd-type-badge"></div>
+            <div class="pd-title" id="pd-title" contenteditable="true" spellcheck="false"></div>
+            <div class="pd-subtitle" id="pd-subtitle" contenteditable="true" spellcheck="false" data-placeholder="Add a description…"></div>
+          </div>
+          <div class="pd-header-actions">
+            <button class="pd-save-btn" onclick="saveProjectDetailChanges()">Save</button>
+          </div>
+        </div>
+        <!-- Template content injected by renderProjectDetail() -->
+        <div id="pd-template-body"></div>
+        <!-- Active Perspectives — always shown -->
+        <div class="pd-section" style="margin-top:8px">
+          <div class="pd-section-header">
+            <div class="pd-section-title">
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="7" cy="7" r="5.5"/><path d="M7 4.5v3l1.5 1.5"/></svg>
+              Active Perspectives
+            </div>
+          </div>
+          <div id="pd-perspectives-feed" class="pd-perspectives-feed"></div>
+        </div>
+      </div>
     </div>
 
     <!-- SCREEN: Replay -->
@@ -3798,7 +3948,7 @@
           <div class="is-panel-body">
 
             <!-- Revenue KPIs -->
-            <div class="is-panel-section">
+            <div class="is-panel-section dc-locked-wrap">
               <div class="is-panel-section-title">Revenue Intelligence</div>
               <div id="is-rev-kpis" style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px">
                 <!-- Populated by renderIsRevenueGraph() -->
@@ -5030,12 +5180,15 @@ const AUTH_TOKEN_KEY = 'di_auth_token';
 let currentUser      = null;
 
 /* ════════════════════════════════
-   PERSISTENCE
+   PERSISTENCE — user-scoped keys
+   Keys are namespaced by USER_ID so each account has its own data.
+   Guest/logged-out state uses the 'guest' namespace.
 ════════════════════════════════ */
-function loadRecents()  { try { return JSON.parse(localStorage.getItem('di_recents')  || '[]'); } catch { return []; } }
-function loadProjects() { try { return JSON.parse(localStorage.getItem('di_projects') || '[]'); } catch { return []; } }
-function saveRecents(r)  { localStorage.setItem('di_recents',  JSON.stringify(r)); }
-function saveProjects(p) { localStorage.setItem('di_projects', JSON.stringify(p)); }
+function _sKey(base) { return base + '_' + (USER_ID || 'guest'); }
+function loadRecents()  { try { return JSON.parse(localStorage.getItem(_sKey('di_recents'))  || '[]'); } catch { return []; } }
+function loadProjects() { try { return JSON.parse(localStorage.getItem(_sKey('di_projects')) || '[]'); } catch { return []; } }
+function saveRecents(r)  { localStorage.setItem(_sKey('di_recents'),  JSON.stringify(r)); }
+function saveProjects(p) { localStorage.setItem(_sKey('di_projects'), JSON.stringify(p)); }
 
 function saveSession(s) {
   const r = loadRecents();
@@ -5101,8 +5254,25 @@ document.addEventListener('click', e => {
 
 function signOut() {
   closeProfileMenu();
+
+  // Save any in-progress chat session before clearing state
+  if (typeof currentSession !== 'undefined' && currentSession) {
+    try { saveSession(currentSession); } catch(e) { /* best-effort */ }
+  }
+
+  // Persist chat messages if mid-conversation
+  try {
+    const msgs = document.getElementById('chat-messages');
+    if (msgs && msgs.querySelectorAll('.chat-msg').length > 0 && typeof currentChatId !== 'undefined' && currentChatId) {
+      localStorage.setItem('di_last_chat_id', currentChatId);
+    }
+  } catch(e) { /* best-effort */ }
+
   clearAuth();
-  location.reload();
+
+  // Navigate to root with ?login=1 so initAuth() shows the splash screen
+  // over a clean default dashboard on reload
+  window.location.href = '/?login=1';
 }
 
 /* ════════════════════════════════
@@ -5234,6 +5404,7 @@ function showView(view, opts = {}) {
     },
     'thought-leaders': () => { document.getElementById('nav-search')?.classList.add('active'); setMobNavActive('mob-nav-search'); renderThoughtLeaders(); show('screen-thought-leaders'); },
     projects:    () => { document.getElementById('nav-projects').classList.add('active'); setMobNavActive('mob-nav-projects'); renderProjects(); show('screen-projects'); },
+    'project-detail': () => { document.getElementById('nav-projects')?.classList.add('active'); setMobNavActive('mob-nav-projects'); show('screen-project-detail'); },
     chat:        () => { openChat(); },
     login:       () => { setMobNavActive(null); showLoginScreen(); },
     settings:    () => { setMobNavActive(null); renderSettingsPage(); show('screen-settings'); },
@@ -5600,6 +5771,7 @@ function escHtml(s) {
 
 /* ══ Render revenue graph (mock data until accounting connected) ══ */
 function renderDcRevenueGraph() {
+  _applyRevenueLock('dc-revenue-lock');
   const canvas = document.getElementById('dc-revenue-canvas');
   if (!canvas) return;
   // Sync canvas buffer size to its CSS display size (handles mobile/responsive)
@@ -5663,30 +5835,48 @@ function renderDcRevenueGraph() {
   ctx.strokeStyle = '#fff'; ctx.lineWidth = 1.5; ctx.stroke();
 }
 
-/* ══ Render advisory circle (top thinkers) ══ */
-function renderDcAdvisoryCircle() {
-  const grid = document.getElementById('dc-advisory-grid');
+/* ══ Shared: build advisory circle HTML for a given grid ID ══ */
+function _buildAdvisoryHtml(gridId, onConnectFn) {
+  const grid = document.getElementById(gridId);
   if (!grid) return;
-  const advisors = (typeof THINKERS !== 'undefined' ? THINKERS : [])
-    .filter(t => t.available !== false).slice(0, 4);
-  if (!advisors.length) {
-    grid.innerHTML = '<div style="font-size:12px;color:var(--text-3);padding:8px 0">No advisors available yet.</div>';
+
+  // Always show Michael Akindele as the default assigned Thinker
+  const michael = (typeof THINKERS !== 'undefined' && THINKERS[0]) ? THINKERS[0] : null;
+  if (!michael) {
+    grid.innerHTML = '<div style="font-size:12px;color:var(--text-3);padding:8px 0">No advisors configured.</div>';
     return;
   }
-  grid.innerHTML = advisors.map((t, i) => {
-    const idx = (typeof THINKERS !== 'undefined') ? THINKERS.indexOf(t) : i;
-    const initials = t.initials || t.name.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase();
-    const role = t.title ? t.title.split('·')[0].trim() : 'Advisor';
-    const quote = t.lens || 'Strategic intelligence, applied.';
-    return '<div class="dc-advisory-card" onclick="acquireFromThinker(' + idx + ')">' +
-      '<div class="dc-advisory-avatar" style="background:' + (t.color || '#BF452A') + '">' + initials + '</div>' +
+  const initials = michael.initials || michael.name.split(' ').map(w => w[0]).join('').slice(0,2).toUpperCase();
+  const role     = michael.title ? michael.title.split('·')[0].trim() : 'Advisor';
+  const quote    = michael.lens  || 'Strategic intelligence, applied.';
+
+  grid.innerHTML =
+    '<div class="dc-advisory-card" onclick="acquireFromThinker(0)">' +
+      '<div class="dc-advisory-avatar" style="background:' + (michael.color || '#BF452A') + '">' + initials + '</div>' +
       '<div class="dc-advisory-info">' +
-        '<div class="dc-advisory-name">' + t.name + '</div>' +
+        '<div class="dc-advisory-name">' + michael.name + '</div>' +
         '<div class="dc-advisory-role">' + role + '</div>' +
         '<div class="dc-advisory-quote">"' + quote + '"</div>' +
       '</div>' +
+    '</div>' +
+    '<div class="dc-advisory-add" onclick="window.open(\'https://www.uncharted.ventures/thinker\',\'_blank\')">' +
+      '<svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="6.5" y1="1" x2="6.5" y2="12"/><line x1="1" y1="6.5" x2="12" y2="6.5"/></svg>' +
+      'Add another Thinker to your circle' +
     '</div>';
-  }).join('');
+}
+
+/* ══ Render advisory circle (Launchpad) ══ */
+function renderDcAdvisoryCircle() { _buildAdvisoryHtml('dc-advisory-grid'); }
+
+/* ══ Render revenue lock overlay ══ */
+function _hasConnectedTools() {
+  return (typeof DC_INTEGRATIONS !== 'undefined') && DC_INTEGRATIONS.some(i => i.connected);
+}
+
+function _applyRevenueLock(lockId) {
+  const lock = document.getElementById(lockId);
+  if (!lock) return;
+  lock.style.display = _hasConnectedTools() ? 'none' : '';
 }
 
 /* ══ Render integrations tab ══ */
@@ -5719,7 +5909,9 @@ function renderDcIntegrations() {
   ).join('');
 }
 function dcConnectIntegration(id) {
-  showToast('Integration coming soon — stay tuned for ' + id.charAt(0).toUpperCase() + id.slice(1) + ' connectivity.');
+  const intg = DC_INTEGRATIONS.find(i => i.id === id);
+  const name = intg ? intg.name : id.charAt(0).toUpperCase() + id.slice(1);
+  showToast(name + ' integration coming soon. We\'ll notify you when it\'s ready.');
 }
 
 /* ══ MAIN DASHBOARD RENDER ══ */
@@ -6569,7 +6761,8 @@ function updateProfile() {}
 
 function clearAllData() {
   if (!confirm('Delete all sessions, projects, and settings? This cannot be undone.')) return;
-  ['di_recents','di_projects','di_profile','di_api_base','di_model','di_notifs'].forEach(k => localStorage.removeItem(k));
+  // Clear user-scoped data for current user
+  [_sKey('di_recents'), _sKey('di_projects'), _sKey('di_chats'), 'di_notifs', 'di_profile'].forEach(k => localStorage.removeItem(k));
   location.reload();
 }
 
@@ -6970,10 +7163,13 @@ function renderProjects() {
 
   const cards = projects.map(p => {
     const n = recents.filter(r => r.projectId === p.id).length;
-    return `<div class="project-card" onclick="dcFilterByProject('${p.id}')">` +
+    const typeLabel = { initiative:'⚡ Initiative', company:'🏢 Company', theme:'💡 Theme' }[p.type] || '';
+    const badgeClass = { initiative:'ptb-initiative', company:'ptb-company', theme:'ptb-theme' }[p.type] || '';
+    return `<div class="project-card" onclick="openProjectDetail('${p.id}')">` +
       `<div class="project-dot" style="background:${p.color}"></div>` +
-      `<div class="project-name">${p.name}</div>` +
-      (p.tagline ? `<div class="project-tagline">${p.tagline}</div>` : '') +
+      (typeLabel ? `<div class="project-type-badge ${badgeClass}" style="margin-bottom:8px">${typeLabel}</div>` : '') +
+      `<div class="project-name">${escHtml(p.name)}</div>` +
+      (p.tagline ? `<div class="project-tagline">${escHtml(p.tagline)}</div>` : '') +
       `<div class="project-count">${n} perspective${n!==1?'s':''}</div>` +
       `</div>`;
   }).join('');
@@ -6994,7 +7190,19 @@ function dcFilterByProject(projectId) {
   showView('recents');
 }
 
-function showProjectForm() { document.getElementById('project-form').classList.add('visible'); document.getElementById('project-name-input').focus(); }
+let _selectedProjectType = 'initiative';
+function selectProjectType(type) {
+  _selectedProjectType = type;
+  ['initiative','company','theme'].forEach(t => {
+    const btn = document.getElementById('ptype-' + t);
+    if (btn) btn.classList.toggle('active', t === type);
+  });
+}
+function showProjectForm() {
+  document.getElementById('project-form').classList.add('visible');
+  document.getElementById('project-name-input').focus();
+  selectProjectType('initiative');
+}
 function hideProjectForm() {
   document.getElementById('project-form').classList.remove('visible');
   document.getElementById('project-name-input').value = '';
@@ -7008,13 +7216,324 @@ function saveProject() {
   if (!name) return;
   const tagline = (document.getElementById('project-tagline-input') || {}).value?.trim() || '';
   const p = loadProjects();
-  p.push({ id: String(Date.now()), name, tagline, color: selectedColor });
+  const newProj = {
+    id: String(Date.now()), name, tagline, color: selectedColor,
+    type: _selectedProjectType || 'initiative',
+    // Template fields (empty on creation, filled in project detail)
+    northStar: '', milestones: [], resourceAllocation: '',
+    valuePropositions: '', revenueStreams: '', costStructure: '', customerSegments: '',
+    moat: '', stakeholders: [], wiki: [],
+    centralThesis: '', knowledgeWeb: [], openQuestions: [],
+  };
+  p.push(newProj);
   saveProjects(p);
   hideProjectForm();
   renderProjects();
   // Refresh the Launchpad project cards if visible
   try { renderDcProjects(); } catch(e) {}
+  // Open the project detail immediately so user can fill in the template
+  openProjectDetail(newProj.id);
 }
+
+/* ── Project Detail ── */
+let _pdProjectId = null;
+
+function openProjectDetail(projectId) {
+  const proj = loadProjects().find(p => p.id === projectId);
+  if (!proj) return;
+  _pdProjectId = projectId;
+  renderProjectDetail(proj);
+  showView('project-detail');
+}
+
+function renderProjectDetail(proj) {
+  // Header
+  const dot = document.getElementById('pd-color-dot');
+  if (dot) dot.style.background = proj.color || 'var(--accent)';
+
+  const badge = document.getElementById('pd-type-badge');
+  if (badge) {
+    const labels = { initiative:'⚡ Initiative', company:'🏢 Company', theme:'💡 Theme' };
+    const classes = { initiative:'ptb-initiative', company:'ptb-company', theme:'ptb-theme' };
+    const t = proj.type || 'initiative';
+    badge.innerHTML = `<span class="project-type-badge ${classes[t] || ''}" style="margin-bottom:8px">${labels[t] || t}</span>`;
+  }
+
+  const title = document.getElementById('pd-title');
+  if (title) title.textContent = proj.name || '';
+  const sub = document.getElementById('pd-subtitle');
+  if (sub) { sub.textContent = proj.tagline || ''; if (!proj.tagline) sub.setAttribute('data-placeholder','Add a description…'); }
+
+  // Template body
+  const body = document.getElementById('pd-template-body');
+  if (body) {
+    const type = proj.type || 'initiative';
+    if      (type === 'initiative') body.innerHTML = _buildInitiativeTemplate(proj);
+    else if (type === 'company')    body.innerHTML = _buildCompanyTemplate(proj);
+    else                             body.innerHTML = _buildThemeTemplate(proj);
+  }
+
+  // Active perspectives feed
+  _renderPdPerspectives(proj.id);
+}
+
+function _sv(val) { return escHtml(val || ''); }
+
+function _buildInitiativeTemplate(proj) {
+  const ms = Array.isArray(proj.milestones) ? proj.milestones : [];
+  const msHtml = ms.map((m, i) =>
+    `<div class="pd-check-row" id="pd-ms-${i}">
+      <div class="pd-check-box ${m.done?'done':''}" onclick="pdToggleMilestone(${i})">${m.done?'<svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 5l2.5 2.5 3.5-4"/></svg>':''}</div>
+      <input class="pd-check-input ${m.done?'done':''}" value="${_sv(m.text)}" placeholder="Milestone…" onchange="pdUpdateMilestone(${i},this.value)">
+      <button class="pd-check-del" onclick="pdDeleteMilestone(${i})">×</button>
+    </div>`
+  ).join('');
+
+  return `
+    <div class="pd-section">
+      <div class="pd-section-header">
+        <div class="pd-section-title"><div class="pd-section-icon initiative"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="6" cy="6" r="4"/><path d="M6 3.5v2.5l1.5 1.5"/></svg></div>The North Star</div>
+      </div>
+      <textarea class="pd-textarea" id="pd-northstar" placeholder="Define the single sentence that describes successful completion of this initiative…">${_sv(proj.northStar)}</textarea>
+    </div>
+    <div class="pd-section">
+      <div class="pd-section-header">
+        <div class="pd-section-title"><div class="pd-section-icon initiative"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 10V4l4-2 4 2v6"/><path d="M4 10V7h4v3"/></svg></div>Key Milestones</div>
+      </div>
+      <div class="pd-checklist" id="pd-milestones-list">${msHtml}</div>
+      <button class="pd-add-item" onclick="pdAddMilestone()">
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 2v8M2 6h8"/></svg>Add milestone
+      </button>
+    </div>
+    <div class="pd-section">
+      <div class="pd-section-header">
+        <div class="pd-section-title"><div class="pd-section-icon initiative"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="3" width="8" height="7" rx="1"/><path d="M4 3V2h4v1"/></svg></div>Resource Allocation</div>
+      </div>
+      <textarea class="pd-textarea" id="pd-resources" placeholder="Summarise what is being invested — time, capital, team bandwidth, social equity…">${_sv(proj.resourceAllocation)}</textarea>
+    </div>`;
+}
+
+function _buildCompanyTemplate(proj) {
+  const stakeholders = Array.isArray(proj.stakeholders) ? proj.stakeholders : [];
+  const wiki = Array.isArray(proj.wiki) ? proj.wiki : [];
+
+  const stHtml = stakeholders.map((s, i) =>
+    `<div class="pd-item-row">
+      <input class="pd-item-input" value="${_sv(s.name)}" placeholder="Name…" onchange="pdUpdateStakeholder(${i},'name',this.value)" style="flex:1.2">
+      <input class="pd-item-input" value="${_sv(s.role)}" placeholder="Role / relationship…" onchange="pdUpdateStakeholder(${i},'role',this.value)">
+      <button class="pd-item-del" onclick="pdDeleteStakeholder(${i})">×</button>
+    </div>`).join('');
+
+  const wikiHtml = wiki.map((w, i) =>
+    `<div class="pd-item-row">
+      <input class="pd-item-input" value="${_sv(w.label)}" placeholder="Label…" onchange="pdUpdateWiki(${i},'label',this.value)" style="flex:0.8">
+      <input class="pd-item-input" value="${_sv(w.url)}" placeholder="URL…" onchange="pdUpdateWiki(${i},'url',this.value)">
+      <button class="pd-item-del" onclick="pdDeleteWiki(${i})">×</button>
+    </div>`).join('');
+
+  return `
+    <div class="pd-section">
+      <div class="pd-section-header">
+        <div class="pd-section-title"><div class="pd-section-icon company"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="1" y="2" width="10" height="8" rx="1"/><path d="M1 5h10"/></svg></div>Business Model Canvas</div>
+      </div>
+      <div class="pd-2col" style="margin-bottom:10px">
+        <div>
+          <div class="pd-field-label">Value Propositions</div>
+          <textarea class="pd-textarea" id="pd-value-props" placeholder="What unique value do you deliver to customers?" style="min-height:80px">${_sv(proj.valuePropositions)}</textarea>
+        </div>
+        <div>
+          <div class="pd-field-label">Customer Segments</div>
+          <textarea class="pd-textarea" id="pd-cust-segs" placeholder="Who are you creating value for?" style="min-height:80px">${_sv(proj.customerSegments)}</textarea>
+        </div>
+      </div>
+      <div class="pd-2col">
+        <div>
+          <div class="pd-field-label">Revenue Streams</div>
+          <textarea class="pd-textarea" id="pd-rev-streams" placeholder="How does the business capture value?" style="min-height:80px">${_sv(proj.revenueStreams)}</textarea>
+        </div>
+        <div>
+          <div class="pd-field-label">Cost Structure</div>
+          <textarea class="pd-textarea" id="pd-cost-struct" placeholder="What are the most important costs?" style="min-height:80px">${_sv(proj.costStructure)}</textarea>
+        </div>
+      </div>
+    </div>
+    <div class="pd-section">
+      <div class="pd-section-header">
+        <div class="pd-section-title"><div class="pd-section-icon company"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 2l1.5 3 3.5.5-2.5 2.4.6 3.5L6 9.7l-3.1 1.7.6-3.5L1 5.5 4.5 5z"/></svg></div>The Moat</div>
+      </div>
+      <textarea class="pd-textarea" id="pd-moat" placeholder="What is the proprietary advantage or defensible 'secret sauce' that competitors cannot easily replicate?" style="min-height:90px">${_sv(proj.moat)}</textarea>
+    </div>
+    <div class="pd-section">
+      <div class="pd-section-header">
+        <div class="pd-section-title"><div class="pd-section-icon company"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="6" cy="4" r="2"/><path d="M2 10c0-2 1.8-3.5 4-3.5S10 8 10 10"/></svg></div>Stakeholder Map</div>
+      </div>
+      <div class="pd-item-list" id="pd-stakeholders-list">${stHtml}</div>
+      <button class="pd-add-item" onclick="pdAddStakeholder()">
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 2v8M2 6h8"/></svg>Add stakeholder
+      </button>
+    </div>
+    <div class="pd-section">
+      <div class="pd-section-header">
+        <div class="pd-section-title"><div class="pd-section-icon company"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 2h8v8H2z"/><path d="M4 5h4M4 7h2"/></svg></div>Company Wiki</div>
+      </div>
+      <div class="pd-item-list" id="pd-wiki-list">${wikiHtml}</div>
+      <button class="pd-add-item" onclick="pdAddWiki()">
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 2v8M2 6h8"/></svg>Add link
+      </button>
+    </div>`;
+}
+
+function _buildThemeTemplate(proj) {
+  const kw = Array.isArray(proj.knowledgeWeb) ? proj.knowledgeWeb : [];
+  const oq = Array.isArray(proj.openQuestions) ? proj.openQuestions : [];
+
+  const kwHtml = kw.map((k, i) =>
+    `<div class="pd-item-row">
+      <input class="pd-item-input" value="${_sv(k.title)}" placeholder="Title…" onchange="pdUpdateKW(${i},'title',this.value)" style="flex:1">
+      <input class="pd-item-input" value="${_sv(k.url)}" placeholder="URL (optional)…" onchange="pdUpdateKW(${i},'url',this.value)" style="flex:1.2">
+      <button class="pd-item-del" onclick="pdDeleteKW(${i})">×</button>
+    </div>`).join('');
+
+  const oqHtml = oq.map((q, i) =>
+    `<div class="pd-check-row">
+      <div class="pd-check-box" style="background:var(--surface-2)"><svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="5" cy="5" r="3"/></svg></div>
+      <input class="pd-check-input" value="${_sv(q.text)}" placeholder="Open question…" onchange="pdUpdateOQ(${i},this.value)">
+      <button class="pd-check-del" onclick="pdDeleteOQ(${i})">×</button>
+    </div>`).join('');
+
+  return `
+    <div class="pd-section">
+      <div class="pd-section-header">
+        <div class="pd-section-title"><div class="pd-section-icon theme"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="6" cy="6" r="4.5"/><path d="M6 3.5v2.5l1.5 1.5"/></svg></div>Central Thesis</div>
+      </div>
+      <textarea class="pd-textarea" id="pd-thesis" placeholder="What is the core belief or observation that ties these perspectives together?" style="min-height:90px">${_sv(proj.centralThesis)}</textarea>
+    </div>
+    <div class="pd-section">
+      <div class="pd-section-header">
+        <div class="pd-section-title"><div class="pd-section-icon theme"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 6a3 3 0 006 0A3 3 0 003 6zM6 3v-1M6 10v-1M3 6H2M10 6H9"/></svg></div>Knowledge Web</div>
+      </div>
+      <div class="pd-item-list" id="pd-kw-list">${kwHtml}</div>
+      <button class="pd-add-item" onclick="pdAddKW()">
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 2v8M2 6h8"/></svg>Add resource
+      </button>
+    </div>
+    <div class="pd-section">
+      <div class="pd-section-header">
+        <div class="pd-section-title"><div class="pd-section-icon theme"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 6h2l2-4 2 8 2-4h2"/></svg></div>Cross-Pollination</div>
+      </div>
+      <div id="pd-crosspoll-body" style="font-size:13px;color:var(--text-2);line-height:1.6"></div>
+    </div>
+    <div class="pd-section">
+      <div class="pd-section-header">
+        <div class="pd-section-title"><div class="pd-section-icon theme"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="6" cy="6" r="4.5"/><path d="M6 4v3M6 8.5v.5"/></svg></div>Open Questions</div>
+      </div>
+      <div class="pd-checklist" id="pd-oq-list">${oqHtml}</div>
+      <button class="pd-add-item" onclick="pdAddOQ()">
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 2v8M2 6h8"/></svg>Add question
+      </button>
+    </div>`;
+}
+
+function _renderPdPerspectives(projectId) {
+  const feed = document.getElementById('pd-perspectives-feed');
+  if (!feed) return;
+  const recents = loadRecents().filter(r => r.projectId === projectId);
+  if (!recents.length) {
+    feed.innerHTML = `<div class="pd-empty-state">No perspectives linked to this project yet. Start a session and assign it here.</div>`;
+    return;
+  }
+  feed.innerHTML = recents.slice(0, 20).map(r => {
+    const date = r.date ? new Date(r.date).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}) : '';
+    const insight = r.keyInsight?.body ? r.keyInsight.body.replace(/<[^>]*>/g,'').slice(0,140) : '';
+    const onClick = r.type === 'chat' ? `openChatSession('${r.id}')` : `openRecentById('${r.id}')`;
+    return `<div class="pd-persp-card" onclick="${onClick}">
+      <div class="pd-persp-date">${date}</div>
+      <div class="pd-persp-decision">${escHtml(r.decision || '')}</div>
+      ${insight ? `<div class="pd-persp-insight">${escHtml(insight)}</div>` : ''}
+    </div>`;
+  }).join('');
+
+  // Cross-pollination for theme: show linked initiatives/companies
+  const cp = document.getElementById('pd-crosspoll-body');
+  if (cp) {
+    const projects = loadProjects();
+    const linked = projects.filter(p => p.id !== projectId && ['initiative','company'].includes(p.type));
+    if (!linked.length) { cp.innerHTML = '<em style="color:var(--text-3)">No linked initiatives or companies yet. Tag your perspectives with multiple projects to see connections.</em>'; }
+    else { cp.innerHTML = linked.map(p => `<span class="project-type-badge ${({'initiative':'ptb-initiative','company':'ptb-company','theme':'ptb-theme'})[p.type]||''}" style="margin:2px 4px 2px 0;cursor:pointer" onclick="openProjectDetail('${p.id}')">${escHtml(p.name)}</span>`).join(''); }
+  }
+}
+
+function saveProjectDetailChanges() {
+  if (!_pdProjectId) return;
+  const projects = loadProjects();
+  const idx = projects.findIndex(p => p.id === _pdProjectId);
+  if (idx < 0) return;
+  const proj = projects[idx];
+  const type = proj.type || 'initiative';
+
+  // Title & subtitle
+  const titleEl = document.getElementById('pd-title');
+  const subEl   = document.getElementById('pd-subtitle');
+  if (titleEl) proj.name    = titleEl.textContent.trim() || proj.name;
+  if (subEl)   proj.tagline = subEl.textContent.trim();
+
+  // Template-specific fields
+  if (type === 'initiative') {
+    const ns = document.getElementById('pd-northstar');
+    const ra = document.getElementById('pd-resources');
+    if (ns) proj.northStar = ns.value;
+    if (ra) proj.resourceAllocation = ra.value;
+  } else if (type === 'company') {
+    ['pd-value-props','pd-cust-segs','pd-rev-streams','pd-cost-struct','pd-moat'].forEach((id, i) => {
+      const el = document.getElementById(id);
+      const key = ['valuePropositions','customerSegments','revenueStreams','costStructure','moat'][i];
+      if (el) proj[key] = el.value;
+    });
+  } else if (type === 'theme') {
+    const th = document.getElementById('pd-thesis');
+    if (th) proj.centralThesis = th.value;
+  }
+
+  proj.updatedAt = new Date().toISOString();
+  projects[idx] = proj;
+  saveProjects(projects);
+  showToast('✓ Project saved');
+}
+
+/* ── Project detail list mutations ── */
+function _pdSaveAndRerender() {
+  const projects = loadProjects();
+  const idx = projects.findIndex(p => p.id === _pdProjectId);
+  if (idx < 0) return;
+  const proj = projects[idx];
+  projects[idx] = proj;
+  saveProjects(projects);
+  renderProjectDetail(proj);
+}
+function _pdGetProj() {
+  return loadProjects().find(p => p.id === _pdProjectId);
+}
+function pdToggleMilestone(i) {
+  const p = _pdGetProj(); if (!p) return;
+  if (p.milestones[i]) p.milestones[i].done = !p.milestones[i].done;
+  const ps = loadProjects(); const idx = ps.findIndex(x=>x.id===_pdProjectId); ps[idx]=p; saveProjects(ps);
+  renderProjectDetail(p);
+}
+function pdUpdateMilestone(i, val) { const p=_pdGetProj(); if(!p||!p.milestones[i]) return; p.milestones[i].text=val; const ps=loadProjects(); const idx=ps.findIndex(x=>x.id===_pdProjectId); ps[idx]=p; saveProjects(ps); }
+function pdDeleteMilestone(i) { const p=_pdGetProj(); if(!p) return; p.milestones.splice(i,1); const ps=loadProjects(); const idx=ps.findIndex(x=>x.id===_pdProjectId); ps[idx]=p; saveProjects(ps); renderProjectDetail(p); }
+function pdAddMilestone() { const p=_pdGetProj(); if(!p) return; if(!p.milestones) p.milestones=[]; p.milestones.push({text:'',done:false}); const ps=loadProjects(); const idx=ps.findIndex(x=>x.id===_pdProjectId); ps[idx]=p; saveProjects(ps); renderProjectDetail(p); setTimeout(()=>{ const inputs=document.querySelectorAll('#pd-milestones-list .pd-check-input'); if(inputs.length) inputs[inputs.length-1].focus(); },50); }
+function pdUpdateStakeholder(i,key,val) { const p=_pdGetProj(); if(!p||!p.stakeholders[i]) return; p.stakeholders[i][key]=val; const ps=loadProjects(); const idx=ps.findIndex(x=>x.id===_pdProjectId); ps[idx]=p; saveProjects(ps); }
+function pdDeleteStakeholder(i) { const p=_pdGetProj(); if(!p) return; p.stakeholders.splice(i,1); const ps=loadProjects(); const idx=ps.findIndex(x=>x.id===_pdProjectId); ps[idx]=p; saveProjects(ps); renderProjectDetail(p); }
+function pdAddStakeholder() { const p=_pdGetProj(); if(!p) return; if(!p.stakeholders) p.stakeholders=[]; p.stakeholders.push({name:'',role:''}); const ps=loadProjects(); const idx=ps.findIndex(x=>x.id===_pdProjectId); ps[idx]=p; saveProjects(ps); renderProjectDetail(p); }
+function pdUpdateWiki(i,key,val) { const p=_pdGetProj(); if(!p||!p.wiki[i]) return; p.wiki[i][key]=val; const ps=loadProjects(); const idx=ps.findIndex(x=>x.id===_pdProjectId); ps[idx]=p; saveProjects(ps); }
+function pdDeleteWiki(i) { const p=_pdGetProj(); if(!p) return; p.wiki.splice(i,1); const ps=loadProjects(); const idx=ps.findIndex(x=>x.id===_pdProjectId); ps[idx]=p; saveProjects(ps); renderProjectDetail(p); }
+function pdAddWiki() { const p=_pdGetProj(); if(!p) return; if(!p.wiki) p.wiki=[]; p.wiki.push({label:'',url:''}); const ps=loadProjects(); const idx=ps.findIndex(x=>x.id===_pdProjectId); ps[idx]=p; saveProjects(ps); renderProjectDetail(p); }
+function pdUpdateKW(i,key,val) { const p=_pdGetProj(); if(!p||!p.knowledgeWeb[i]) return; p.knowledgeWeb[i][key]=val; const ps=loadProjects(); const idx=ps.findIndex(x=>x.id===_pdProjectId); ps[idx]=p; saveProjects(ps); }
+function pdDeleteKW(i) { const p=_pdGetProj(); if(!p) return; p.knowledgeWeb.splice(i,1); const ps=loadProjects(); const idx=ps.findIndex(x=>x.id===_pdProjectId); ps[idx]=p; saveProjects(ps); renderProjectDetail(p); }
+function pdAddKW() { const p=_pdGetProj(); if(!p) return; if(!p.knowledgeWeb) p.knowledgeWeb=[]; p.knowledgeWeb.push({title:'',url:''}); const ps=loadProjects(); const idx=ps.findIndex(x=>x.id===_pdProjectId); ps[idx]=p; saveProjects(ps); renderProjectDetail(p); }
+function pdUpdateOQ(i,val) { const p=_pdGetProj(); if(!p||!p.openQuestions[i]) return; p.openQuestions[i].text=val; const ps=loadProjects(); const idx=ps.findIndex(x=>x.id===_pdProjectId); ps[idx]=p; saveProjects(ps); }
+function pdDeleteOQ(i) { const p=_pdGetProj(); if(!p) return; p.openQuestions.splice(i,1); const ps=loadProjects(); const idx=ps.findIndex(x=>x.id===_pdProjectId); ps[idx]=p; saveProjects(ps); renderProjectDetail(p); }
+function pdAddOQ() { const p=_pdGetProj(); if(!p) return; if(!p.openQuestions) p.openQuestions=[]; p.openQuestions.push({text:''}); const ps=loadProjects(); const idx=ps.findIndex(x=>x.id===_pdProjectId); ps[idx]=p; saveProjects(ps); renderProjectDetail(p); setTimeout(()=>{ const inputs=document.querySelectorAll('#pd-oq-list .pd-check-input'); if(inputs.length) inputs[inputs.length-1].focus(); },50); }
 
 /* ════════════════════════════════
    DOWNLOADS
@@ -7960,10 +8479,10 @@ let _chatSession   = null;   // { id, title, thinker, messages: [], createdAt, u
 let _chatStreaming  = false;
 
 function loadChatSessions() {
-  try { return JSON.parse(localStorage.getItem('di_chats') || '[]'); } catch { return []; }
+  try { return JSON.parse(localStorage.getItem(_sKey('di_chats')) || '[]'); } catch { return []; }
 }
 function saveChatSessions(list) {
-  localStorage.setItem('di_chats', JSON.stringify(list));
+  localStorage.setItem(_sKey('di_chats'), JSON.stringify(list));
 }
 
 function openChat(prefill) {
@@ -8941,7 +9460,9 @@ function getAuthToken()    { return localStorage.getItem(AUTH_TOKEN_KEY); }
 function setAuthToken(tok) { localStorage.setItem(AUTH_TOKEN_KEY, tok); }
 function clearAuth() {
   localStorage.removeItem(AUTH_TOKEN_KEY);
+  localStorage.removeItem('di_last_chat_id');
   currentUser = null;
+  USER_ID = null;  // Reset so _sKey() uses 'guest' namespace
 }
 
 function applyAuthState(user) {
@@ -10319,10 +10840,34 @@ function renderIsPanel()    { renderGrowthPanel('is'); }
 
 /* ── Revenue graph (baseline + scenario overlay) ── */
 function renderRevenueGraph(ns) {
-  const canvasId = ns + '-revenue-canvas';
-  const kpiId    = ns + '-rev-kpis';
+  const canvasId     = ns + '-revenue-canvas';
+  const kpiId        = ns + '-rev-kpis';
   const scenRevId    = ns + '-scenario-rev';
   const scenGrowthId = ns + '-scenario-growth';
+
+  // Show/hide lock overlay for NS-specific revenue section
+  const lockId = ns + '-revenue-lock';
+  let lock = document.getElementById(lockId);
+  if (!lock) {
+    // Dynamically inject a lock overlay into the parent dc-locked-wrap if one exists
+    const canvas = document.getElementById(canvasId);
+    if (canvas && !_hasConnectedTools()) {
+      const wrap = canvas.closest('.dc-locked-wrap');
+      if (wrap && !wrap.querySelector('.dc-locked-overlay')) {
+        lock = document.createElement('div');
+        lock.id = lockId;
+        lock.className = 'dc-locked-overlay';
+        lock.innerHTML =
+          '<svg class="dc-locked-icon" width="22" height="22" viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><rect x="4" y="10" width="14" height="10" rx="2.5"/><path d="M7 10V7a4 4 0 018 0v3"/></svg>' +
+          '<div class="dc-locked-label">Revenue data locked</div>' +
+          `<div class="dc-locked-sub">Connect <span class="dc-text-link" onclick="switchPanel('${ns}-panel','integrations',null)">accounting software</span> for live data</div>` +
+          `<button class="dc-locked-btn" onclick="switchPanel('${ns}-panel','integrations',null)">Connect tools →</button>`;
+        wrap.appendChild(lock);
+      }
+    }
+  } else {
+    lock.style.display = _hasConnectedTools() ? 'none' : '';
+  }
 
   const canvas = document.getElementById(canvasId);
   if (!canvas) return;
@@ -10448,28 +10993,8 @@ function updateScenario(ns) {
 /* Keep old alias for IS screen HTML */
 function isUpdateScenario() { updateScenario('is'); }
 
-/* ── Advisory Circle — uses dc-advisory-card classes to match Launchpad ── */
-function renderAdvisoryCircle(ns) {
-  const grid = document.getElementById(ns + '-adv-grid');
-  if (!grid) return;
-  const advisors = [
-    { name:'Peter Drucker',     role:'Strategy',   color:'#6366f1', quote:'Efficiency is doing things right; effectiveness is doing the right things.' },
-    { name:'Nassim Taleb',      role:'Risk',        color:'#BF452A', quote:'The three most harmful addictions are heroin, carbohydrates, and a monthly salary.' },
-    { name:'Clayton Christ.',   role:'Innovation',  color:'#0891b2', quote:'Disruptive innovations often start as lower-quality alternatives that improve over time.' },
-    { name:'Esther Duflo',      role:'Economics',   color:'#059669', quote:'Data lets us test our intuitions — and often exposes when we are wrong.' },
-  ];
-  grid.innerHTML = advisors.map(a => {
-    const initials = a.name.split(' ').slice(0,2).map(w=>w[0]).join('').toUpperCase();
-    return `<div class="dc-advisory-card">
-      <div class="dc-advisory-avatar" style="background:${a.color}">${initials}</div>
-      <div class="dc-advisory-info">
-        <div class="dc-advisory-name">${a.name}</div>
-        <div class="dc-advisory-role">${a.role}</div>
-        <div class="dc-advisory-quote">${a.quote}</div>
-      </div>
-    </div>`;
-  }).join('');
-}
+/* ── Advisory Circle — NS version (chat / is) uses shared builder ── */
+function renderAdvisoryCircle(ns) { _buildAdvisoryHtml(ns + '-adv-grid'); }
 function renderIsAdvisoryCircle() { renderAdvisoryCircle('is'); }
 
 /* ── Integrations list — uses dc-integration-row classes to match Launchpad ── */
