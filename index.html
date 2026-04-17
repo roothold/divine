@@ -9821,8 +9821,10 @@ function applyAuthState(user) {
     const grSub  = document.getElementById('dc-greeting-sub');
     if (grName) grName.textContent = `Hi ${firstName}.`;
     if (grSub)  grSub.textContent  = 'Ready to build.';
-    // Re-render project section now that currentUser is set
+    // Re-render project sections now that currentUser is set
     try { renderDcProjects(); } catch(e) {}
+    try { renderPortfolioList('chat'); } catch(e) {}
+    try { renderPortfolioList('is'); } catch(e) {}
 
     // Thinker nav
     if (user.thinker_access) {
@@ -9862,8 +9864,10 @@ function applyAuthState(user) {
     const grSub  = document.getElementById('dc-greeting-sub');
     if (grName) grName.textContent = 'What would you like to build?';
     if (grSub)  grSub.textContent  = 'Sign in to personalize your experience.';
-    // Hide project section immediately on logout
+    // Hide all project/portfolio data immediately on logout
     try { renderDcProjects(); } catch(e) {}
+    try { renderPortfolioList('chat'); } catch(e) {}
+    try { renderPortfolioList('is'); } catch(e) {}
     // Reset mobile nav profile button
     const mnIcon  = document.getElementById('mob-nav-profile-icon');
     const mnLabel = document.getElementById('mob-nav-profile-label');
@@ -11388,15 +11392,27 @@ function renderIsIntegrations() { renderIntegrationsList('is'); }
 
 /* ── Portfolio list — uses dc-advisory-card style rows ── */
 function renderPortfolioList(ns) {
-  const el = document.getElementById(ns + '-portfolio-projects');
+  const el      = document.getElementById(ns + '-portfolio-projects');
+  const eqTotal = document.getElementById(ns + '-eq-total');
+  const eqVal   = document.getElementById(ns + '-eq-val');
   if (!el) return;
 
-  // Update cognitive equity counts for chat namespace
+  // Gate on auth — hide all portfolio data pre-login
+  if (!currentUser) {
+    if (eqTotal) eqTotal.textContent = '—';
+    if (eqVal)   eqVal.textContent   = '—';
+    el.innerHTML = `<div style="text-align:center;padding:20px 0 8px">
+      <div style="font-size:12px;color:var(--text-3);line-height:1.5">
+        <a href="#" onclick="showLoginScreen();return false;" style="color:var(--accent);font-weight:600;text-decoration:none">Sign in</a> to view your projects.
+      </div>
+    </div>`;
+    return;
+  }
+
+  // Update cognitive equity counts
   const sessions = loadChatSessions ? loadChatSessions() : [];
   const recents  = loadRecents ? loadRecents() : [];
   const total    = sessions.length + recents.length;
-  const eqTotal  = document.getElementById(ns + '-eq-total');
-  const eqVal    = document.getElementById(ns + '-eq-val');
   if (eqTotal) eqTotal.textContent = total;
   if (eqVal)   eqVal.textContent   = '$' + (total * 12).toFixed(0);
 
