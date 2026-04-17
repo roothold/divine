@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Divine</title>
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='50' fill='%23BF452A'/%3E%3Cg stroke='%23ffffff' stroke-width='5.5' fill='none' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='24' y='18' width='7' height='64' rx='2'/%3E%3Crect x='31' y='18' width='6' height='6' rx='1'/%3E%3Crect x='31' y='76' width='6' height='6' rx='1'/%3E%3Cpath d='M37 23 Q76 23 76 50 Q76 77 37 77'/%3E%3Cpath d='M37 33 Q66 33 66 50 Q66 67 37 67'/%3E%3C/g%3E%3C/svg%3E">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='50' fill='%23111111'/%3E%3Cpath d='M22 28 L31 14 L40 28 L40 60 Q40 76 50 76 Q60 76 60 60 L60 28 L69 14 L78 28' stroke='white' stroke-width='8' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
@@ -1231,12 +1231,9 @@
     .dc-locked-btn { font-size:11.5px; font-weight:600; color:var(--accent); background:var(--accent-lt); border:1px solid var(--accent-bdr); border-radius:var(--r-pill); padding:6px 16px; cursor:pointer; font-family:'Inter',sans-serif; margin-top:2px; white-space:nowrap; transition:opacity .15s; }
     .dc-locked-btn:hover { opacity:.8; }
     /* Connect tools prompt banner */
-    .dc-connect-prompt { display:flex; align-items:center; gap:8px; padding:9px 11px; background:var(--surface-2); border:1px solid var(--border); border-radius:9px; margin-top:12px; cursor:pointer; transition:border-color .15s; }
-    .dc-connect-prompt:hover { border-color:var(--accent-bdr); }
-    .dc-connect-prompt-icon { color:var(--accent); flex-shrink:0; }
-    .dc-connect-prompt-text { font-size:11.5px; color:var(--text-2); line-height:1.45; flex:1; }
-    .dc-connect-prompt-text strong { color:var(--text-0); font-weight:600; display:block; margin-bottom:1px; }
-    .dc-connect-prompt-arrow { color:var(--text-3); flex-shrink:0; font-size:13px; }
+    .dc-connect-prompt { display:flex; align-items:center; gap:8px; padding:9px 10px; background:transparent; border:1.5px dashed var(--border-md); border-radius:10px; margin-top:6px; cursor:pointer; transition:border-color .15s,background .15s,color .15s; color:var(--text-3); font-size:12px; font-weight:500; }
+    .dc-connect-prompt:hover { border-color:var(--accent-bdr); background:var(--accent-lt); color:var(--accent); }
+    .dc-connect-prompt-icon { flex-shrink:0; }
     /* Inline text link — grey default, accent on hover */
     .dc-text-link { color:var(--text-3); font-weight:600; cursor:pointer; text-decoration:none; transition:color .15s; }
     .dc-text-link:hover { color:var(--accent); }
@@ -3564,9 +3561,8 @@
                   </div>
                   <!-- Connect prompt -->
                   <div class="dc-connect-prompt" onclick="switchDcPanel('integrations',document.querySelectorAll('.dc-ptab')[2])">
-                    <svg class="dc-connect-prompt-icon" width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M7 1v5M7 8v5M1 7h5M8 7h5"/></svg>
-                    <div class="dc-connect-prompt-text"><strong>Connect your tools</strong>Improve output quality and unlock live insights.</div>
-                    <span class="dc-connect-prompt-arrow">›</span>
+                    <svg class="dc-connect-prompt-icon" width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="6.5" y1="1" x2="6.5" y2="12"/><line x1="1" y1="6.5" x2="12" y2="6.5"/></svg>
+                    Connect your tools
                   </div>
                 </div>
 
@@ -3865,9 +3861,8 @@
               </div>
               <!-- Connect prompt -->
               <div class="dc-connect-prompt" onclick="switchPanel('chat-panel','integrations',document.querySelectorAll('#chat-dc-tabs .dc-ptab')[2])">
-                <svg class="dc-connect-prompt-icon" width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M7 1v5M7 8v5M1 7h5M8 7h5"/></svg>
-                <div class="dc-connect-prompt-text"><strong>Connect your tools</strong>Give your Thinker full context for better outputs.</div>
-                <span class="dc-connect-prompt-arrow">›</span>
+                <svg class="dc-connect-prompt-icon" width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="6.5" y1="1" x2="6.5" y2="12"/><line x1="1" y1="6.5" x2="12" y2="6.5"/></svg>
+                Connect your tools
               </div>
             </div>
 
@@ -5405,9 +5400,9 @@ function signOut() {
 
   clearAuth();
 
-  // Navigate to root with ?login=1 so initAuth() shows the splash screen
-  // over a clean default dashboard on reload
-  window.location.href = '/?login=1';
+  // Reload to the plain dashboard in logged-out state (no splash).
+  // The splash is only shown via ?login=1, which is for inbound marketing links.
+  window.location.href = '/';
 }
 
 /* ════════════════════════════════
@@ -5996,7 +5991,7 @@ function _buildAdvisoryHtml(gridId, onConnectFn) {
     '</div>' +
     '<div class="dc-advisory-add" onclick="showView(\'thought-leaders\')">' +
       '<svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="6.5" y1="1" x2="6.5" y2="12"/><line x1="1" y1="6.5" x2="12" y2="6.5"/></svg>' +
-      'Add a Thinker' +
+      'Add a thinker' +
     '</div>';
 }
 
@@ -9826,8 +9821,8 @@ function applyAuthState(user) {
     const grSub  = document.getElementById('dc-greeting-sub');
     if (grName) grName.textContent = `Hi ${firstName}.`;
     if (grSub)  grSub.textContent  = 'Ready to build.';
-    // Project section visibility is managed entirely by renderDcProjects()
-    // which gates on currentUser — no toggle needed here.
+    // Re-render project section now that currentUser is set
+    try { renderDcProjects(); } catch(e) {}
 
     // Thinker nav
     if (user.thinker_access) {
@@ -9867,7 +9862,8 @@ function applyAuthState(user) {
     const grSub  = document.getElementById('dc-greeting-sub');
     if (grName) grName.textContent = 'What would you like to build?';
     if (grSub)  grSub.textContent  = 'Sign in to personalize your experience.';
-    // Project section visibility is managed entirely by renderDcProjects()
+    // Hide project section immediately on logout
+    try { renderDcProjects(); } catch(e) {}
     // Reset mobile nav profile button
     const mnIcon  = document.getElementById('mob-nav-profile-icon');
     const mnLabel = document.getElementById('mob-nav-profile-label');
@@ -11554,8 +11550,8 @@ function showToast(msg) {
     <div class="splash-logo">
       <svg width="80" height="80" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Uncharted">
         <circle cx="50" cy="50" r="50" fill="#111111"/>
-        <path d="M24 24 L29.5 16 L35 24 L35 56 Q35 71 50 71 Q65 71 65 56 L65 24 L70.5 16 L76 24"
-              stroke="white" stroke-width="7.5" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M22 28 L31 14 L40 28 L40 60 Q40 76 50 76 Q60 76 60 60 L60 28 L69 14 L78 28"
+              stroke="white" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
       </svg>
     </div>
 
@@ -11586,8 +11582,8 @@ function showToast(msg) {
       <div class="auth-logo-mark">
         <svg width="42" height="42" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Uncharted">
           <circle cx="50" cy="50" r="50" fill="#111111"/>
-          <path d="M24 24 L29.5 16 L35 24 L35 56 Q35 71 50 71 Q65 71 65 56 L65 24 L70.5 16 L76 24"
-                stroke="white" stroke-width="7.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M22 28 L31 14 L40 28 L40 60 Q40 76 50 76 Q60 76 60 60 L60 28 L69 14 L78 28"
+                stroke="white" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
       </div>
 
