@@ -1004,6 +1004,22 @@ app.get('/api/admin/revenue', requireAdmin, async (_req, res) => {
   }
 });
 
+// ── GET /api/admin/schema-debug ──────────────────────────────────────────────
+// Temporary: inspect actual column names in the live DB.
+app.get('/api/admin/schema-debug', requireAdmin, async (_req, res) => {
+  try {
+    const { rows } = await pool.query(`
+      SELECT table_name, column_name, data_type
+      FROM information_schema.columns
+      WHERE table_name IN ('users','wallets','wallet_transactions')
+      ORDER BY table_name, ordinal_position
+    `);
+    res.json(rows);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 // ── SPA catch-all ────────────────────────────────────────────────────────────
 // Serve index.html for every non-API, non-auth route.
 // This is what makes /dashboard/wallet work on browser refresh — the server
