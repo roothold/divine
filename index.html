@@ -1053,7 +1053,7 @@
     .dc-proj-card-left { display:flex; align-items:center; gap:11px; min-width:0; }
     .dc-proj-avatar { width:38px; height:38px; border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:700; color:#fff; flex-shrink:0; }
     .dc-proj-name { font-size:14px; font-weight:700; color:var(--text-0); line-height:1.3; }
-    .dc-proj-tagline { font-size:11.5px; color:var(--text-3); margin-top:2px; line-height:1.4; }
+    .dc-proj-tagline { font-size:11.5px; color:var(--text-3); margin-top:3px; line-height:1.45; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
     /* Count badge */
     .dc-proj-count-badge { font-size:10px; font-weight:600; color:var(--text-3); background:var(--surface-2); border:1px solid var(--border); border-radius:var(--r-pill); padding:3px 9px; white-space:nowrap; flex-shrink:0; }
     /* Empty state card */
@@ -5486,6 +5486,25 @@ function updateBalanceDisplay(balance) {
    LAUNCHPAD — PROJECT CARDS (driven by user's saved projects)
    ══════════════════════════════════════════════════════════════════════════ */
 
+/**
+ * Auto-generate a short tagline for a project if none was entered.
+ * Uses a deterministic template keyed to the project name so the same
+ * project always gets the same description, and all descriptions are
+ * the same approximate length (one readable sentence ≈ 2 display lines).
+ */
+function _projTagline(name, existing) {
+  if (existing && existing.trim()) return existing.trim();
+  const n = (name || 'this project').trim();
+  const templates = [
+    `Exploring strategy, opportunities, and key decisions for ${n}.`,
+    `Tracking growth, risks, and direction across ${n}.`,
+    `Building clarity and forward momentum around ${n}.`,
+    `Mapping the vision, priorities, and path forward for ${n}.`,
+  ];
+  const idx = n.split('').reduce((a, c) => a + c.charCodeAt(0), 0) % templates.length;
+  return templates[idx];
+}
+
 /** Derive two-letter initials from a project name */
 function _projInitials(name) {
   if (!name || typeof name !== 'string') return '??';
@@ -5510,12 +5529,19 @@ function renderDcProjects() {
   const head = document.getElementById('dc-projects-head');
   if (!grid) return;
 
-  const projects = loadProjects();
-  const recents  = loadRecents();
-
-  // Always show the section (header + grid) when logged in
+  // Gate on auth — section is only visible for logged-in users.
+  // This is the single source of truth: no other code path should
+  // toggle these elements' visibility, preventing flicker.
+  if (!currentUser) {
+    if (head) head.style.display = 'none';
+    grid.style.display = 'none';
+    return;
+  }
   if (head) head.style.display = '';
   grid.style.display = '';
+
+  const projects = loadProjects();
+  const recents  = loadRecents();
 
   if (!projects.length) {
     // Empty state — prompt user to create their first project
@@ -5534,7 +5560,7 @@ function renderDcProjects() {
 
   grid.innerHTML = projects.map(p => {
     const initials   = _projInitials(p.name);
-    const tagline    = p.tagline || '';
+    const tagline    = _projTagline(p.name, p.tagline);
     const count      = recents.filter(r => r.projectId === p.id).length;
     const countLabel = count + ' perspective' + (count !== 1 ? 's' : '');
     const actions    = _projActions(p.name);
@@ -5542,9 +5568,9 @@ function renderDcProjects() {
       '<div class="dc-proj-card-top">' +
         '<div class="dc-proj-card-left">' +
           '<div class="dc-proj-avatar" style="background:' + p.color + '">' + initials + '</div>' +
-          '<div>' +
+          '<div style="min-width:0">' +
             '<div class="dc-proj-name">' + escHtml(p.name) + '</div>' +
-            (tagline ? '<div class="dc-proj-tagline">' + escHtml(tagline) + '</div>' : '') +
+            '<div class="dc-proj-tagline">' + escHtml(tagline) + '</div>' +
           '</div>' +
         '</div>' +
         '<div class="dc-proj-count-badge">' + countLabel + '</div>' +
@@ -8945,11 +8971,8 @@ function applyAuthState(user) {
     const grSub  = document.getElementById('dc-greeting-sub');
     if (grName) grName.textContent = `Hi ${firstName}.`;
     if (grSub)  grSub.textContent  = 'Ready to build.';
-    // Show venture cards for logged-in users
-    const vHead = document.getElementById('dc-projects-head');
-    const vGrid = document.getElementById('dc-projects-grid');
-    if (vHead) vHead.style.display = '';
-    if (vGrid) vGrid.style.display = '';
+    // Project section visibility is managed entirely by renderDcProjects()
+    // which gates on currentUser — no toggle needed here.
 
     // Thinker nav
     if (user.thinker_access) {
@@ -8977,11 +9000,7 @@ function applyAuthState(user) {
     const grSub  = document.getElementById('dc-greeting-sub');
     if (grName) grName.textContent = 'What would you like to build?';
     if (grSub)  grSub.textContent  = 'Sign in to personalize your experience.';
-    // Hide venture cards for logged-out users
-    const vHead = document.getElementById('dc-projects-head');
-    const vGrid = document.getElementById('dc-projects-grid');
-    if (vHead) vHead.style.display = 'none';
-    if (vGrid) vGrid.style.display = 'none';
+    // Project section visibility is managed entirely by renderDcProjects()
     // Reset mobile nav profile button
     const mnIcon  = document.getElementById('mob-nav-profile-icon');
     const mnLabel = document.getElementById('mob-nav-profile-label');
