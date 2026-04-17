@@ -503,8 +503,8 @@ async function initAdmin() {
     const startSection = SECTIONS.includes(hash) ? hash : 'users';
     showSection(startSection);
 
-    // Always pre-load users data
-    if (startSection !== 'users') loadUsers(0);
+    // Load data for the starting section
+    loadUsers(0);
   } catch (e) {
     showGate('Could not connect to server. Try again later.', true);
   }
@@ -532,7 +532,8 @@ function showSection(name) {
   });
   // Persist active tab in URL hash so refresh restores it
   history.replaceState(null, '', '#' + name);
-  // Lazy-load data
+  // Lazy-load data for each section
+  if (name === 'users')        loadUsers(0);
   if (name === 'thinkers' && !_thinkersLoaded)  loadThinkers();
   if (name === 'perspectives' && !_perspLoaded) loadPerspectives(0);
   if (name === 'revenue') loadRevenue();
