@@ -6135,6 +6135,7 @@ function dcSubmitInput() {
 }
 
 function dcToggleProjDropdown() {
+  if (!currentUser) { showLoginScreen(); return; }
   const dd = document.getElementById('dc-proj-dropdown');
   if (!dd) return;
   const isOpen = dd.style.display !== 'none';
@@ -9844,19 +9845,23 @@ function applyAuthState(user) {
 
     // Fetch live balance
     fetchBalance();
-    // Unlock My Stuff nav items
+    // Unlock My Stuff nav items + project button
     ['nav-projects','nav-wallet'].forEach(id => {
       document.getElementById(id)?.classList.remove('nav-auth-gate');
     });
+    const projBtn = document.getElementById('dc-proj-btn');
+    if (projBtn) { projBtn.style.opacity = ''; projBtn.style.pointerEvents = ''; }
   } else {
     document.getElementById('sidebar-profile-area').style.display = 'none';
     document.getElementById('sidebar-signin-area').style.display  = '';
     document.getElementById('thinker-nav-section').style.display  = 'none';
     document.getElementById('mob-nav-thinker').style.display      = 'none';
-    // Re-lock My Stuff nav items
+    // Re-lock My Stuff nav items + dim project button
     ['nav-projects','nav-wallet'].forEach(id => {
       document.getElementById(id)?.classList.add('nav-auth-gate');
     });
+    const projBtn = document.getElementById('dc-proj-btn');
+    if (projBtn) { projBtn.style.opacity = '0.4'; projBtn.style.pointerEvents = 'none'; }
     // Dashboard greeting card — logged-out state
     const grName = document.getElementById('dc-greeting-name');
     const grSub  = document.getElementById('dc-greeting-sub');
