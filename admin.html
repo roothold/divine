@@ -860,7 +860,7 @@ function renderRevenueTable(rows) {
     return;
   }
   tbody.innerHTML = rows.map(r => {
-    const isCredit = r.direction === 'credit';
+    const isCredit = r.type !== 'perspective_spend';
     const typeBadge = isCredit
       ? '<span class="badge badge-green">Top-up</span>'
       : '<span class="badge badge-amber">Perspective</span>';

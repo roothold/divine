@@ -220,15 +220,13 @@ export async function adminGetUsers({ search = '', offset = 0, limit = 50 } = {}
        u.is_disabled,
        u.thinker_access,
        u.created_at,
-       COALESCE(w.credit_balance, 0)   AS balance,
-       COALESCE(w.lifetime_spent, 0)   AS lifetime_spent,
-       COALESCE(w.lifetime_earned, 0)  AS lifetime_earned,
-       COUNT(DISTINCT wt.id) FILTER (WHERE wt.line_item_type = 'perspective_spend') AS perspective_count
+       COALESCE(w.credit_balance, 0) AS balance,
+       COUNT(wt.id) FILTER (WHERE wt.type = 'perspective_spend') AS perspective_count
      FROM users u
-     LEFT JOIN wallets w            ON w.user_id = u.id
-     LEFT JOIN wallet_transactions wt ON wt.wallet_id = w.id
+     LEFT JOIN wallets w              ON w.user_id = u.id
+     LEFT JOIN wallet_transactions wt ON wt.user_id = u.id
      WHERE ($1 = '' OR u.name ILIKE $2 OR u.email ILIKE $2)
-     GROUP BY u.id, w.credit_balance, w.lifetime_spent, w.lifetime_earned
+     GROUP BY u.id, w.credit_balance
      ORDER BY u.created_at DESC
      LIMIT $3 OFFSET $4`,
     [search, like, limit, offset]
@@ -284,13 +282,12 @@ export async function adminGetPerspectives({ search = '', offset = 0, limit = 50
        wt.label,
        wt.amount,
        wt.balance_after,
-       u.id   AS user_id,
-       u.name AS user_name,
+       u.id    AS user_id,
+       u.name  AS user_name,
        u.email AS user_email
      FROM wallet_transactions wt
-     JOIN wallets w ON w.id = wt.wallet_id
-     JOIN users   u ON u.id = w.user_id
-     WHERE wt.line_item_type = 'perspective_spend'
+     JOIN users u ON u.id = wt.user_id
+     WHERE wt.type = 'perspective_spend'
        AND ($1 = '' OR u.name ILIKE $2 OR u.email ILIKE $2 OR wt.label ILIKE $2)
      ORDER BY wt.created_at DESC
      LIMIT $3 OFFSET $4`,
@@ -304,43 +301,40 @@ export async function adminCountPerspectives(search = '') {
   const { rows } = await pool.query(
     `SELECT COUNT(*) AS total
      FROM wallet_transactions wt
-     JOIN wallets w ON w.id = wt.wallet_id
-     JOIN users   u ON u.id = w.user_id
-     WHERE wt.line_item_type = 'perspective_spend'
+     JOIN users u ON u.id = wt.user_id
+     WHERE wt.type = 'perspective_spend'
        AND ($1 = '' OR u.name ILIKE $2 OR u.email ILIKE $2 OR wt.label ILIKE $2)`,
     [search, like]
   );
   return parseInt(rows[0].total, 10);
 }
 
-/** Revenue overview — totals across all wallets. */
+/** Revenue overview — totals across all wallets and transactions. */
 export async function adminGetRevenue() {
   const { rows: totals } = await pool.query(`
     SELECT
-      COUNT(DISTINCT u.id)                                       AS total_users,
-      COUNT(DISTINCT u.id) FILTER (WHERE u.is_disabled = FALSE)  AS active_users,
-      COALESCE(SUM(w.lifetime_earned), 0)                        AS total_earned,
-      COALESCE(SUM(w.credit_balance),  0)                        AS total_balance,
-      COALESCE(SUM(w.lifetime_spent),  0)                        AS total_spent,
-      COUNT(wt.id) FILTER (WHERE wt.line_item_type = 'perspective_spend') AS total_perspectives
+      COUNT(DISTINCT u.id)                                              AS total_users,
+      COUNT(DISTINCT u.id) FILTER (WHERE u.is_disabled = FALSE)         AS active_users,
+      COALESCE(SUM(w.credit_balance), 0)                                AS total_balance,
+      COALESCE(SUM(wt.amount) FILTER (WHERE wt.type = 'perspective_spend'), 0) AS total_spent,
+      COALESCE(SUM(wt.amount) FILTER (WHERE wt.type != 'perspective_spend'), 0) AS total_earned,
+      COUNT(wt.id) FILTER (WHERE wt.type = 'perspective_spend')         AS total_perspectives
     FROM users u
-    LEFT JOIN wallets w            ON w.user_id = u.id
-    LEFT JOIN wallet_transactions wt ON wt.wallet_id = w.id
+    LEFT JOIN wallets w              ON w.user_id = u.id
+    LEFT JOIN wallet_transactions wt ON wt.user_id = u.id
   `);
 
   const { rows: recentTxns } = await pool.query(`
     SELECT
       wt.id,
       wt.created_at,
-      wt.line_item_type,
+      wt.type,
       wt.amount,
-      wt.direction,
       wt.label,
       u.name  AS user_name,
       u.email AS user_email
     FROM wallet_transactions wt
-    JOIN wallets w ON w.id = wt.wallet_id
-    JOIN users   u ON u.id = w.user_id
+    JOIN users u ON u.id = wt.user_id
     ORDER BY wt.created_at DESC
     LIMIT 20
   `);
