@@ -992,7 +992,7 @@ app.get('/api/admin/thinkers', requireAdmin, async (_req, res) => {
     const { rows } = await pool.query(`
       SELECT wt.label, COUNT(*) AS cnt
       FROM wallet_transactions wt
-      WHERE wt.direction = 'debit'
+      WHERE wt.type = 'debit'
       GROUP BY wt.label
     `);
     const usageCounts = {};

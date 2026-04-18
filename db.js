@@ -199,25 +199,28 @@ export async function updateUserPassword(id, passwordHash) {
 
 /**
  * Boot-time schema migration — idempotent, runs before the server accepts traffic.
- * Adds missing columns to match the current schema without dropping existing data.
+ * Each statement is isolated so one failure never blocks the rest.
  */
 export async function adminMigrateSchema() {
-  // ── users table ────────────────────────────────────────────────────────────
-  await pool.query(`
-    ALTER TABLE users ADD COLUMN IF NOT EXISTS is_admin    BOOLEAN NOT NULL DEFAULT FALSE;
-    ALTER TABLE users ADD COLUMN IF NOT EXISTS is_disabled BOOLEAN NOT NULL DEFAULT FALSE;
-  `);
+  const run = async (label, sql) => {
+    try { await pool.query(sql); }
+    catch (e) { console.warn(`[migrate:${label}]`, e.message); }
+  };
 
-  // ── stripe_events idempotency table ───────────────────────────────────────
-  await pool.query(`
+  // ── users ──────────────────────────────────────────────────────────────────
+  await run('users.is_admin',    `ALTER TABLE users ADD COLUMN IF NOT EXISTS is_admin    BOOLEAN NOT NULL DEFAULT FALSE`);
+  await run('users.is_disabled', `ALTER TABLE users ADD COLUMN IF NOT EXISTS is_disabled BOOLEAN NOT NULL DEFAULT FALSE`);
+
+  // ── stripe_events ──────────────────────────────────────────────────────────
+  await run('stripe_events', `
     CREATE TABLE IF NOT EXISTS stripe_events (
       event_id   TEXT PRIMARY KEY,
       created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
-    );
+    )
   `);
 
-  // ── thinker_earnings ledger ────────────────────────────────────────────────
-  await pool.query(`
+  // ── thinker_earnings ───────────────────────────────────────────────────────
+  await run('thinker_earnings', `
     CREATE TABLE IF NOT EXISTS thinker_earnings (
       id         BIGSERIAL     PRIMARY KEY,
       thinker_id TEXT          NOT NULL,
@@ -225,15 +228,13 @@ export async function adminMigrateSchema() {
       amount     NUMERIC(10,4) NOT NULL,
       label      TEXT,
       created_at TIMESTAMPTZ   NOT NULL DEFAULT NOW()
-    );
-    CREATE INDEX IF NOT EXISTS thinker_earnings_thinker_idx
-      ON thinker_earnings (thinker_id, created_at DESC);
-    CREATE INDEX IF NOT EXISTS thinker_earnings_user_idx
-      ON thinker_earnings (user_id, created_at DESC);
+    )
   `);
+  await run('thinker_earnings.idx1', `CREATE INDEX IF NOT EXISTS thinker_earnings_thinker_idx ON thinker_earnings (thinker_id, created_at DESC)`);
+  await run('thinker_earnings.idx2', `CREATE INDEX IF NOT EXISTS thinker_earnings_user_idx    ON thinker_earnings (user_id,    created_at DESC)`);
 
-  // ── user_sessions ─────────────────────────────────────────────────────────
-  await pool.query(`
+  // ── user_sessions ──────────────────────────────────────────────────────────
+  await run('user_sessions', `
     CREATE TABLE IF NOT EXISTS user_sessions (
       id          TEXT        NOT NULL,
       user_id     TEXT        NOT NULL,
@@ -244,67 +245,44 @@ export async function adminMigrateSchema() {
       project_id  TEXT,
       created_at  TIMESTAMPTZ NOT NULL DEFAULT NOW(),
       PRIMARY KEY (id, user_id)
-    );
-    CREATE INDEX IF NOT EXISTS user_sessions_user_id_idx
-      ON user_sessions (user_id, created_at DESC);
+    )
+  `);
+  await run('user_sessions.idx', `CREATE INDEX IF NOT EXISTS user_sessions_user_id_idx ON user_sessions (user_id, created_at DESC)`);
+
+  // ── wallet_transactions — add new columns one at a time ───────────────────
+  // The live DB may have been created from an older schema that used
+  // (user_id, type) instead of (wallet_id, direction, line_item_type).
+  // Each ADD COLUMN is isolated so a pre-existing column never blocks the rest.
+  await run('wt.wallet_id',      `ALTER TABLE wallet_transactions ADD COLUMN IF NOT EXISTS wallet_id      UUID`);
+  await run('wt.direction',      `ALTER TABLE wallet_transactions ADD COLUMN IF NOT EXISTS direction      TEXT`);
+  await run('wt.line_item_type', `ALTER TABLE wallet_transactions ADD COLUMN IF NOT EXISTS line_item_type TEXT`);
+  await run('wt.balance_after',  `ALTER TABLE wallet_transactions ADD COLUMN IF NOT EXISTS balance_after  DECIMAL(12,4)`);
+  await run('wt.label',          `ALTER TABLE wallet_transactions ADD COLUMN IF NOT EXISTS label          TEXT`);
+
+  // Back-fill wallet_id from old user_id column (if user_id still exists)
+  await run('wt.backfill.wallet_id', `
+    UPDATE wallet_transactions wt
+    SET    wallet_id = w.id
+    FROM   wallets w
+    WHERE  w.user_id::text = wt.user_id::text
+      AND  wt.wallet_id IS NULL
   `);
 
-  // ── wallet_transactions — add new columns if the table was created from an
-  //    older schema that used (user_id, type) instead of (wallet_id, direction).
-  //    Each step is idempotent.
-  await pool.query(`
-    ALTER TABLE wallet_transactions ADD COLUMN IF NOT EXISTS wallet_id      UUID;
-    ALTER TABLE wallet_transactions ADD COLUMN IF NOT EXISTS direction      TEXT;
-    ALTER TABLE wallet_transactions ADD COLUMN IF NOT EXISTS line_item_type TEXT;
-    ALTER TABLE wallet_transactions ADD COLUMN IF NOT EXISTS balance_after  DECIMAL(12,4);
-    ALTER TABLE wallet_transactions ADD COLUMN IF NOT EXISTS label          TEXT;
+  // Back-fill direction from old type column (if type still exists)
+  await run('wt.backfill.direction', `
+    UPDATE wallet_transactions
+    SET    direction = CASE WHEN type = 'credit' THEN 'credit' ELSE 'debit' END
+    WHERE  direction IS NULL
+      AND  type      IS NOT NULL
   `);
 
-  // Back-fill wallet_id from old user_id column if it exists on the table
-  await pool.query(`
-    DO $$
-    BEGIN
-      IF EXISTS (
-        SELECT 1 FROM information_schema.columns
-        WHERE table_name = 'wallet_transactions' AND column_name = 'user_id'
-      ) THEN
-        UPDATE wallet_transactions wt
-        SET wallet_id = w.id
-        FROM wallets w
-        WHERE w.user_id = wt.user_id
-          AND wt.wallet_id IS NULL;
-      END IF;
-    END $$;
-  `);
+  // Default remaining nulls
+  await run('wt.default.direction',      `UPDATE wallet_transactions SET direction      = 'debit'             WHERE direction      IS NULL`);
+  await run('wt.default.line_item_type', `UPDATE wallet_transactions SET line_item_type = 'perspective_spend'  WHERE line_item_type IS NULL`);
+  await run('wt.default.balance_after',  `UPDATE wallet_transactions SET balance_after  = 0                   WHERE balance_after  IS NULL`);
+  await run('wt.default.label',          `UPDATE wallet_transactions SET label          = 'migrated'           WHERE label          IS NULL`);
 
-  // Back-fill direction from old type column if it exists
-  await pool.query(`
-    DO $$
-    BEGIN
-      IF EXISTS (
-        SELECT 1 FROM information_schema.columns
-        WHERE table_name = 'wallet_transactions' AND column_name = 'type'
-      ) THEN
-        UPDATE wallet_transactions
-        SET direction = CASE WHEN type = 'credit' THEN 'credit' ELSE 'debit' END
-        WHERE direction IS NULL AND type IS NOT NULL;
-      END IF;
-    END $$;
-  `);
-
-  // Default any remaining nulls
-  await pool.query(`
-    UPDATE wallet_transactions SET direction      = 'debit'              WHERE direction      IS NULL;
-    UPDATE wallet_transactions SET line_item_type = 'perspective_spend'  WHERE line_item_type IS NULL;
-    UPDATE wallet_transactions SET balance_after  = 0                    WHERE balance_after  IS NULL;
-    UPDATE wallet_transactions SET label          = 'migrated'           WHERE label          IS NULL;
-  `);
-
-  // Create missing index
-  await pool.query(`
-    CREATE INDEX IF NOT EXISTS idx_wt_wallet
-      ON wallet_transactions(wallet_id, created_at DESC);
-  `);
+  await run('wt.idx', `CREATE INDEX IF NOT EXISTS idx_wt_wallet ON wallet_transactions(wallet_id, created_at DESC)`);
 
   console.log('[DB] Schema migration complete.');
 }
@@ -321,11 +299,11 @@ export async function adminGetUsers({ search = '', offset = 0, limit = 50 } = {}
        u.is_disabled,
        u.thinker_access,
        u.created_at,
-       COALESCE(w.credit_balance, 0) AS balance,
-       COUNT(wt.id) FILTER (WHERE wt.direction = 'debit') AS perspective_count
+       COALESCE(w.credit_balance, 0)                   AS balance,
+       COUNT(wt.id) FILTER (WHERE wt.type = 'debit') AS perspective_count
      FROM users u
      LEFT JOIN wallets w              ON w.user_id = u.id
-     LEFT JOIN wallet_transactions wt ON wt.wallet_id = w.id
+     LEFT JOIN wallet_transactions wt ON wt.user_id = u.id
      WHERE ($1 = '' OR u.name ILIKE $2 OR u.email ILIKE $2)
      GROUP BY u.id, w.id, w.credit_balance
      ORDER BY u.created_at DESC
@@ -400,9 +378,8 @@ export async function adminGetPerspectives({ search = '', offset = 0, limit = 50
        u.name  AS user_name,
        u.email AS user_email
      FROM wallet_transactions wt
-     JOIN wallets w ON w.id = wt.wallet_id
-     JOIN users u   ON u.id = w.user_id
-     WHERE wt.direction = 'debit'
+     JOIN users u ON u.id = wt.user_id
+     WHERE wt.type = 'debit'
        AND ($1 = '' OR u.name ILIKE $2 OR u.email ILIKE $2 OR wt.label ILIKE $2)
      ORDER BY wt.created_at DESC
      LIMIT $3 OFFSET $4`,
@@ -416,9 +393,8 @@ export async function adminCountPerspectives(search = '') {
   const { rows } = await pool.query(
     `SELECT COUNT(*) AS total
      FROM wallet_transactions wt
-     JOIN wallets w ON w.id = wt.wallet_id
-     JOIN users u   ON u.id = w.user_id
-     WHERE wt.direction = 'debit'
+     JOIN users u ON u.id = wt.user_id
+     WHERE wt.type = 'debit'
        AND ($1 = '' OR u.name ILIKE $2 OR u.email ILIKE $2 OR wt.label ILIKE $2)`,
     [search, like]
   );
@@ -429,30 +405,29 @@ export async function adminCountPerspectives(search = '') {
 export async function adminGetRevenue() {
   const { rows: totals } = await pool.query(`
     SELECT
-      COUNT(DISTINCT u.id)                                                         AS total_users,
-      COUNT(DISTINCT u.id) FILTER (WHERE u.is_disabled = FALSE)                   AS active_users,
-      COALESCE(SUM(w.credit_balance), 0)                                           AS total_balance,
-      COALESCE(SUM(wt.amount) FILTER (WHERE wt.direction = 'debit'),  0)           AS total_spent,
-      COALESCE(SUM(wt.amount) FILTER (WHERE wt.direction = 'credit'), 0)           AS total_earned,
-      COUNT(wt.id)          FILTER (WHERE wt.direction = 'debit')                  AS total_perspectives
+      COUNT(DISTINCT u.id)                                                                       AS total_users,
+      COUNT(DISTINCT u.id) FILTER (WHERE u.is_disabled = FALSE)                                 AS active_users,
+      COALESCE(SUM(w.credit_balance), 0)                                                         AS total_balance,
+      COALESCE(SUM(wt.amount) FILTER (WHERE wt.type = 'debit'),  0)  AS total_spent,
+      COALESCE(SUM(wt.amount) FILTER (WHERE wt.type = 'credit'), 0)  AS total_earned,
+      COUNT(wt.id)          FILTER (WHERE wt.type = 'debit')         AS total_perspectives
     FROM users u
     LEFT JOIN wallets w              ON w.user_id = u.id
-    LEFT JOIN wallet_transactions wt ON wt.wallet_id = w.id
+    LEFT JOIN wallet_transactions wt ON wt.user_id = u.id
   `);
 
   const { rows: recentTxns } = await pool.query(`
     SELECT
       wt.id,
       wt.created_at,
-      wt.line_item_type,
-      wt.direction,
+      wt.type                                            AS line_item_type,
+      wt.type                                            AS direction,
       wt.amount,
       wt.label,
       u.name  AS user_name,
       u.email AS user_email
     FROM wallet_transactions wt
-    JOIN wallets w ON w.id = wt.wallet_id
-    JOIN users u   ON u.id = w.user_id
+    JOIN users u ON u.id = wt.user_id
     ORDER BY wt.created_at DESC
     LIMIT 20
   `);
