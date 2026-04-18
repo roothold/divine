@@ -1474,6 +1474,35 @@
     .is-scenario-challenge .isc-thinker { color:var(--accent); transition:color .14s; }
     .is-scenario-challenge:hover .isc-thinker { color:rgba(255,255,255,.85); }
 
+    /* Field tooltip */
+    .is-scenario-field label { display:flex; align-items:center; gap:3px; }
+    .is-tt {
+      display:inline-flex; align-items:center; justify-content:center;
+      width:12px; height:12px; border-radius:50%;
+      border:1.2px solid var(--text-3); color:var(--text-3);
+      font-size:7.5px; font-weight:700; cursor:help;
+      flex-shrink:0; position:relative; line-height:1;
+    }
+    .is-tt::after {
+      content: attr(data-tip);
+      position:absolute; bottom:calc(100% + 6px); left:50%;
+      transform:translateX(-50%);
+      background:#1a1814; color:#f5f0ea;
+      font-size:10px; font-weight:400; line-height:1.45;
+      padding:7px 10px; border-radius:7px;
+      white-space:normal; width:165px; z-index:300;
+      pointer-events:none; opacity:0; transition:opacity .12s;
+      font-family:'Inter',sans-serif; letter-spacing:0;
+      text-transform:none; font-style:normal;
+    }
+    .is-tt::before {
+      content:''; position:absolute; bottom:calc(100% + 2px); left:50%;
+      transform:translateX(-50%);
+      border:4px solid transparent; border-top-color:#1a1814;
+      z-index:301; pointer-events:none; opacity:0; transition:opacity .12s;
+    }
+    .is-tt:hover::after, .is-tt:hover::before { opacity:1; }
+
     /* IS panel toggle button in header */
     .is-panel-toggle-btn {
       display:flex;
@@ -3649,11 +3678,38 @@
               <button class="dc-ptab" onclick="switchDcPanel('integrations',this)">Connect</button>
             </div>
 
-            <!-- ── GROWTH tab: Revenue Graph + Advisory Circle ── -->
+            <!-- ── GROWTH tab ── -->
             <div id="dc-panel-growth">
               <div class="dc-panel-body">
 
-                <!-- Revenue Graph section — locked until tools connected -->
+                <!-- Model your trajectory — entry point, always first -->
+                <div class="dc-panel-section">
+                  <div class="dc-psec-title">Model your trajectory</div>
+                  <div class="is-scenario-inputs">
+                    <div class="is-scenario-field">
+                      <label>Monthly Rev ($) <span class="is-tt" data-tip="Your current average monthly revenue. If pre-revenue, use your target for month 1.">i</span></label>
+                      <input type="number" id="dc-scenario-rev" placeholder="10000" oninput="updateScenario('dc')">
+                    </div>
+                    <div class="is-scenario-field">
+                      <label>Growth Rate (%) <span class="is-tt" data-tip="Expected month-over-month revenue growth. 5–15% is typical for early-stage SaaS; 3–8% for marketplace.">i</span></label>
+                      <input type="number" id="dc-scenario-growth" placeholder="8" oninput="updateScenario('dc')">
+                    </div>
+                    <div class="is-scenario-field">
+                      <label>Avg. Margin (%) <span class="is-tt" data-tip="Gross profit as a % of revenue after direct costs. 60–80% for software; 30–50% for marketplace or physical goods.">i</span></label>
+                      <input type="number" id="dc-scenario-margin" placeholder="40" oninput="updateScenario('dc')">
+                    </div>
+                    <div class="is-scenario-field">
+                      <label>Months <span class="is-tt" data-tip="How far ahead to project. 12 months gives a clear runway view; 24 months shows compounding effects.">i</span></label>
+                      <input type="number" id="dc-scenario-months" placeholder="12" min="1" max="60" oninput="updateScenario('dc')">
+                    </div>
+                  </div>
+                  <div class="is-scenario-delta" id="dc-scenario-delta" style="margin-top:8px">Enter values to model revenue trajectory</div>
+                  <button class="is-scenario-challenge" id="dc-scenario-challenge" onclick="challengeScenarioModel('dc')">
+                    Challenge this model with <span class="isc-thinker" id="dc-scenario-challenge-name">your Thinker</span> →
+                  </button>
+                </div>
+
+                <!-- Projected Revenue — locked until tools connected -->
                 <div class="dc-panel-section dc-locked-wrap" id="dc-revenue-section">
                   <div class="dc-psec-title">Projected Revenue</div>
                   <div class="dc-revenue-kpis">
@@ -3945,7 +4001,34 @@
         <div class="chat-panel-tab-body" id="chat-panel-growth">
           <div class="dc-panel-body">
 
-            <!-- Revenue Graph section -->
+            <!-- Model your trajectory — entry point, always first -->
+            <div class="dc-panel-section">
+              <div class="dc-psec-title">Model your trajectory</div>
+              <div class="is-scenario-inputs">
+                <div class="is-scenario-field">
+                  <label>Monthly Rev ($) <span class="is-tt" data-tip="Your current average monthly revenue. If pre-revenue, use your target for month 1.">i</span></label>
+                  <input type="number" id="chat-scenario-rev" placeholder="10000" oninput="updateScenario('chat')">
+                </div>
+                <div class="is-scenario-field">
+                  <label>Growth Rate (%) <span class="is-tt" data-tip="Expected month-over-month revenue growth. 5–15% is typical for early-stage SaaS; 3–8% for marketplace.">i</span></label>
+                  <input type="number" id="chat-scenario-growth" placeholder="8" oninput="updateScenario('chat')">
+                </div>
+                <div class="is-scenario-field">
+                  <label>Avg. Margin (%) <span class="is-tt" data-tip="Gross profit as a % of revenue after direct costs. 60–80% for software; 30–50% for marketplace or physical goods.">i</span></label>
+                  <input type="number" id="chat-scenario-margin" placeholder="40" oninput="updateScenario('chat')">
+                </div>
+                <div class="is-scenario-field">
+                  <label>Months <span class="is-tt" data-tip="How far ahead to project. 12 months gives a clear runway view; 24 months shows compounding effects.">i</span></label>
+                  <input type="number" id="chat-scenario-months" placeholder="12" min="1" max="60" oninput="updateScenario('chat')">
+                </div>
+              </div>
+              <div class="is-scenario-delta" id="chat-scenario-delta" style="margin-top:8px">Enter values to model revenue trajectory</div>
+              <button class="is-scenario-challenge" id="chat-scenario-challenge" onclick="challengeScenarioModel('chat')">
+                Challenge this model with <span class="isc-thinker" id="chat-scenario-challenge-name">your Thinker</span> →
+              </button>
+            </div>
+
+            <!-- Revenue Graph section — shows scenario overlay once inputs are set -->
             <div class="dc-panel-section dc-locked-wrap">
               <div class="dc-psec-title">Projected Revenue</div>
               <div class="dc-revenue-kpis" id="chat-rev-kpis">
@@ -3958,33 +4041,6 @@
                 <span><span class="dc-revenue-legend-dot" style="background:var(--accent)"></span>Baseline</span>
                 <span><span class="dc-revenue-legend-dot" style="background:#22c55e"></span>Scenario</span>
               </div>
-            </div>
-
-            <!-- Scenario Modeler section -->
-            <div class="dc-panel-section">
-              <div class="dc-psec-title">Scenario Modeler</div>
-              <div class="is-scenario-inputs">
-                <div class="is-scenario-field">
-                  <label>Monthly Rev ($)</label>
-                  <input type="number" id="chat-scenario-rev" placeholder="10000" oninput="updateScenario('chat')">
-                </div>
-                <div class="is-scenario-field">
-                  <label>Growth Rate (%)</label>
-                  <input type="number" id="chat-scenario-growth" placeholder="8" oninput="updateScenario('chat')">
-                </div>
-                <div class="is-scenario-field">
-                  <label>Avg. Margin (%)</label>
-                  <input type="number" id="chat-scenario-margin" placeholder="40" oninput="updateScenario('chat')">
-                </div>
-                <div class="is-scenario-field">
-                  <label>Months</label>
-                  <input type="number" id="chat-scenario-months" placeholder="12" min="1" max="60" oninput="updateScenario('chat')">
-                </div>
-              </div>
-              <div class="is-scenario-delta" id="chat-scenario-delta" style="margin-top:8px">Enter values to model revenue trajectory</div>
-              <button class="is-scenario-challenge" id="chat-scenario-challenge" onclick="challengeScenarioModel('chat')">
-                Challenge this model with <span class="isc-thinker" id="chat-scenario-challenge-name">your Thinker</span> →
-              </button>
             </div>
 
             <!-- Advisory Circle section -->
@@ -4228,24 +4284,24 @@
               </div>
             </div>
 
-            <!-- Scenario modeler -->
+            <!-- Model your trajectory -->
             <div class="is-scenario-wrap">
-              <div class="is-scenario-label">Scenario Modeler</div>
+              <div class="is-scenario-label">Model your trajectory</div>
               <div class="is-scenario-inputs">
                 <div class="is-scenario-field">
-                  <label>Monthly Rev ($)</label>
+                  <label>Monthly Rev ($) <span class="is-tt" data-tip="Your current average monthly revenue. If pre-revenue, use your target for month 1.">i</span></label>
                   <input type="number" id="is-scenario-rev" placeholder="10000" oninput="isUpdateScenario()">
                 </div>
                 <div class="is-scenario-field">
-                  <label>Growth Rate (%)</label>
+                  <label>Growth Rate (%) <span class="is-tt" data-tip="Expected month-over-month revenue growth. 5–15% is typical for early-stage SaaS; 3–8% for marketplace.">i</span></label>
                   <input type="number" id="is-scenario-growth" placeholder="8" oninput="isUpdateScenario()">
                 </div>
                 <div class="is-scenario-field">
-                  <label>Avg. Margin (%)</label>
+                  <label>Avg. Margin (%) <span class="is-tt" data-tip="Gross profit as a % of revenue after direct costs. 60–80% for software; 30–50% for marketplace or physical goods.">i</span></label>
                   <input type="number" id="is-scenario-margin" placeholder="40" oninput="isUpdateScenario()">
                 </div>
                 <div class="is-scenario-field">
-                  <label>Months</label>
+                  <label>Months <span class="is-tt" data-tip="How far ahead to project. 12 months gives a clear runway view; 24 months shows compounding effects.">i</span></label>
                   <input type="number" id="is-scenario-months" placeholder="12" min="1" max="60" oninput="isUpdateScenario()">
                 </div>
               </div>
@@ -6324,6 +6380,14 @@ function renderDashboardHome() {
    renderDcProjects, renderDcRevenueGraph, renderDcAdvisoryCircle,
    renderDcIntegrations, dcRenderProjDropdown
   ].forEach(fn => { try { fn(); } catch(e) { console.warn('[renderDashboardHome]', fn.name, e.message); } });
+
+  // Pre-fill dashboard scenario modeler with defaults and auto-calculate
+  const dcFlds = { rev:'10000', growth:'8', margin:'40', months:'12' };
+  Object.entries(dcFlds).forEach(([k, v]) => {
+    const el = document.getElementById('dc-scenario-' + k);
+    if (el && !el.value) el.value = v;
+  });
+  try { updateScenario('dc'); } catch(e) {}
 }
 
 /* ── Dashboard quick-input ── */
