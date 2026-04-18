@@ -3015,6 +3015,40 @@
       border-color:var(--accent); color:var(--accent); background:rgba(191,69,42,.04);
     }
 
+    /* ── Intake card (pre-analysis clarifying questions) ─────────────────── */
+    .chat-intake { display:flex; flex-direction:column; gap:16px; }
+    .chat-intake-intro {
+      font-size:12px; color:var(--text-3); font-style:italic; margin-bottom:-4px;
+    }
+    .chat-intake-qlabel {
+      font-size:12.5px; font-weight:600; color:var(--text-0);
+      line-height:1.4; margin-bottom:7px;
+    }
+    .chat-intake-opts { display:flex; flex-direction:column; gap:5px; }
+    .chat-intake-opt {
+      text-align:left; padding:7px 12px;
+      background:var(--surface-2); border:1.5px solid var(--border);
+      border-radius:8px; font-size:12px; color:var(--text-1);
+      cursor:pointer; font-family:inherit; line-height:1.35;
+      transition:border-color .12s, background .12s, color .12s;
+    }
+    .chat-intake-opt:hover {
+      border-color:var(--accent-bdr); background:var(--surface);
+    }
+    .chat-intake-opt.selected {
+      border-color:var(--accent); background:rgba(191,69,42,.07);
+      color:var(--text-0); font-weight:600;
+    }
+    .chat-intake-go {
+      margin-top:4px; padding:9px 18px;
+      background:var(--accent); border:none; border-radius:8px;
+      color:#fff; font-size:12.5px; font-weight:600;
+      font-family:inherit; cursor:pointer; align-self:flex-start;
+      display:flex; align-items:center; gap:6px;
+      transition:opacity .15s;
+    }
+    .chat-intake-go:disabled { opacity:.3; cursor:not-allowed; }
+
     .chat-input-bar {
       flex-shrink:0; padding:12px 16px 16px;
       border-top:1px solid var(--border-lt); background:var(--bg);
@@ -9213,6 +9247,60 @@ function goToDone() {
 let _chatSession   = null;   // { id, title, thinker, messages: [], createdAt, updatedAt }
 let _chatStreaming  = false;
 
+// ── Intake flow state ────────────────────────────────────────────────────────
+let _intakeOriginalMsg = null;  // saved first message, compiled with answers on submit
+let _intakeSelections  = {};    // { questionIndex: selectedOptionText }
+const INTAKE_QUESTIONS = [
+  {
+    q: 'Where are you with this decision?',
+    opts: ['Exploring — figuring out my options', 'Have direction — need it pressure-tested', 'Ready to act — want blind spots identified']
+  },
+  {
+    q: 'What matters most right now?',
+    opts: ['Getting it right — accuracy over speed', 'Moving fast — speed is the constraint', 'Seeing what I\'m missing — blind spots first']
+  }
+];
+
+function _showIntakeCard(originalMsg, bubbleEl) {
+  _intakeOriginalMsg = originalMsg;
+  _intakeSelections  = {};
+  let html = `<div class="chat-intake">`;
+  html += `<div class="chat-intake-intro">Two quick things before I go deep:</div>`;
+  INTAKE_QUESTIONS.forEach((item, qi) => {
+    html += `<div>`;
+    html += `<div class="chat-intake-qlabel">${_escapeHtml(item.q)}</div>`;
+    html += `<div class="chat-intake-opts">`;
+    item.opts.forEach(opt => {
+      html += `<button class="chat-intake-opt" onclick="_intakeSelect(this,${qi})">${_escapeHtml(opt)}</button>`;
+    });
+    html += `</div></div>`;
+  });
+  html += `<button class="chat-intake-go" id="chat-intake-go" onclick="_intakeSubmit()" disabled>`;
+  html += `Analyze <svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 6h8M6.5 2.5l3.5 3.5-3.5 3.5"/></svg></button>`;
+  html += `</div>`;
+  bubbleEl.innerHTML = html;
+}
+
+function _intakeSelect(btn, qi) {
+  btn.closest('.chat-intake-opts').querySelectorAll('.chat-intake-opt').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+  _intakeSelections[qi] = btn.textContent.trim();
+  const answered = Object.keys(_intakeSelections).length;
+  const go = document.getElementById('chat-intake-go');
+  if (go) go.disabled = answered < INTAKE_QUESTIONS.length;
+}
+
+function _intakeSubmit() {
+  if (!_intakeOriginalMsg) return;
+  const context = Object.values(_intakeSelections).join(' · ');
+  const fullMsg  = _intakeOriginalMsg + '\n\n[My context: ' + context + ']';
+  _intakeOriginalMsg = null;
+  _intakeSelections  = {};
+  const ta = document.getElementById('chat-textarea');
+  if (ta) { ta.value = fullMsg; chatTextareaResize(ta); }
+  sendChatMsg();
+}
+
 function loadChatSessions() {
   try { return JSON.parse(localStorage.getItem(_sKey('di_chats')) || '[]'); } catch { return []; }
 }
@@ -9637,6 +9725,9 @@ async function sendChatMsg() {
   const empty = document.getElementById('chat-empty');
   if (empty) empty.remove();
 
+  // Detect first message BEFORE anything is saved to session
+  const _isFirstMsg = _chatSession.messages.length === 0 && !_intakeOriginalMsg;
+
   // Auto-title from first message
   if (!_chatSession.title && _chatSession.messages.length === 0) {
     const short = text.length > 52 ? text.slice(0, 50) + '…' : text;
@@ -9700,10 +9791,25 @@ async function sendChatMsg() {
   // Clear attachments after sending
   _clearAttachments();
 
-  // Append thinking placeholder for AI (streaming mode — raw text during stream)
+  // Append AI bubble (streaming placeholder or intake card)
   const aiId   = 'cm_' + Date.now();
-  const aiEl   = _appendChatMsg('assistant', '', { id: aiId, streaming: true });
+  const aiEl   = _appendChatMsg('assistant', '', { id: aiId, streaming: true, skipSave: _isFirstMsg });
   const bubble = aiEl.querySelector('.chat-msg-bubble');
+
+  // ── Intake flow: first message → show clarifying questions, skip API ────
+  if (_isFirstMsg) {
+    bubble.classList.remove('chat-cursor');
+    _showIntakeCard(text, bubble);
+    // Remove the user message from session (intake exchange is transient —
+    // the compiled message sent after selection becomes the real first turn)
+    _chatSession.messages = _chatSession.messages.filter(m => m !== _chatSession.messages.find(x => x.role === 'user' && x.content === displayText));
+    _chatStreaming = false;
+    document.getElementById('chat-send-btn').disabled = false;
+    const msgs2 = document.getElementById('chat-messages');
+    msgs2.scrollTop = msgs2.scrollHeight;
+    return;
+  }
+
   bubble.classList.add('chat-cursor');
   bubble.textContent = '';
 
@@ -9922,43 +10028,14 @@ function _renderChatMarkdown(raw) {
 // ── Extract follow-up questions from response ─────────────────────────────────
 // Scans for: Required Inputs section bullets, [NEXT INQUIRY] bullets,
 // and the → Next Logical Question line.
+// Extracts only the "→ Next Logical Question" line — shown as a single
+// clickable chip below the input. Required Inputs bullets are already
+// visible in the response body so are deliberately NOT repeated here.
 function _extractNextInquiry(text) {
-  const questions = [];
-
-  // 1. → Next Logical Question: (single CTA line)
-  const ctaMatch = text.match(/→\s*Next Logical Question:\s*(.+)/i);
-  if (ctaMatch) {
-    const q = ctaMatch[1].replace(/\*\*/g,'').replace(/`/g,'').replace(/\[ui-action:[^\]]*\]/gi,'').trim();
-    if (q) questions.push(q);
-  }
-
-  // 2. Required Inputs section bullets
-  const riIdx = text.search(/\*\*Required Inputs\*\*/i);
-  if (riIdx !== -1) {
-    const section = text.slice(riIdx, riIdx + 800);
-    const re = /^[-*]\s+(.+)/gm;
-    let m;
-    while ((m = re.exec(section)) !== null && questions.length < 3) {
-      const q = m[1].replace(/\*\*/g,'').replace(/`/g,'').trim();
-      if (q) questions.push(q);
-    }
-  }
-
-  // 3. Legacy [NEXT INQUIRY] fallback
-  if (!questions.length) {
-    const idx = text.search(/\[NEXT INQUIRY\]/i);
-    if (idx !== -1) {
-      const section = text.slice(idx);
-      const re = /^[-*\d.]\s+(.+)/gm;
-      let m;
-      while ((m = re.exec(section)) !== null && questions.length < 3) {
-        const q = m[1].replace(/\*\*/g,'').replace(/`/g,'').trim();
-        if (q) questions.push(q);
-      }
-    }
-  }
-
-  return questions.slice(0, 3);
+  const match = text.match(/→\s*Next Logical Question:\s*(.+)/i);
+  if (!match) return [];
+  const q = match[1].replace(/\*\*/g,'').replace(/`/g,'').replace(/\[ui-action:[^\]]*\]/gi,'').trim();
+  return q ? [q] : [];
 }
 
 // ── Follow-up suggestion chips ────────────────────────────────────────────────
