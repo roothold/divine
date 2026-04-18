@@ -977,8 +977,6 @@ app.patch('/api/admin/users/:id', requireAdmin, async (req, res) => {
 });
 
 // ── GET /api/admin/thinkers ───────────────────────────────────────────────────
-import { THINKERS } from './thinkers.js';
-
 app.get('/api/admin/thinkers', requireAdmin, async (_req, res) => {
   try {
     // Merge static thinker config with per-user thinker_access data
