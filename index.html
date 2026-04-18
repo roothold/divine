@@ -1293,66 +1293,26 @@
     .dc-panel-tabs.three { grid-template-columns:repeat(3,1fr); }
 
     /* ═══ THOUGHT LEADERS SCREEN ═══ */
-    /* ── Thinker Management Table ── */
-    .tm-wrap { background:var(--surface); border:1px solid var(--border); border-radius:var(--r); overflow:hidden; }
-    .tm-toolbar { display:flex; align-items:center; gap:10px; padding:14px 18px; border-bottom:1px solid var(--border); background:var(--surface-2); flex-wrap:wrap; }
-    .tm-toolbar-title { font-size:11px; font-weight:800; letter-spacing:.1em; text-transform:uppercase; color:var(--text-0); flex:1; min-width:120px; }
-    .tm-count-pill { font-size:10px; font-weight:700; letter-spacing:.06em; background:var(--accent-lt); color:var(--accent); border-radius:var(--r-pill); padding:3px 9px; }
-    .tm-filter-wrap { display:flex; gap:6px; }
-    .tm-filter-btn { font-size:11px; font-weight:600; letter-spacing:.04em; border:1px solid var(--border-md); border-radius:var(--r-pill); padding:5px 12px; background:transparent; color:var(--text-2); cursor:pointer; transition:all .15s; }
-    .tm-filter-btn.active,.tm-filter-btn:hover { background:var(--accent); color:#fff; border-color:var(--accent); }
-    .tm-scroll { overflow-x:auto; scrollbar-width:thin; }
-    .tm-table { width:100%; border-collapse:collapse; min-width:780px; }
-    .tm-table thead th { font-size:9.5px; font-weight:800; letter-spacing:.1em; text-transform:uppercase; color:var(--text-3); padding:10px 14px; text-align:left; border-bottom:1px solid var(--border); background:var(--surface-2); white-space:nowrap; }
-    .tm-table thead th:first-child { padding-left:18px; }
-    .tm-table thead th:last-child { padding-right:18px; text-align:center; }
-    .tm-table tbody tr { border-bottom:1px solid var(--border); transition:background .13s; }
-    .tm-table tbody tr:last-child { border-bottom:none; }
-    .tm-table tbody tr:hover { background:var(--surface-2); }
-    .tm-table tbody tr.tm-row-inactive { opacity:.6; }
-    .tm-td { padding:14px 14px; vertical-align:middle; }
-    .tm-td:first-child { padding-left:18px; }
-    .tm-td:last-child { padding-right:18px; text-align:center; }
-    /* Thinker cell */
-    .tm-thinker-cell { display:flex; align-items:center; gap:12px; min-width:180px; }
-    .tm-avatar { width:38px; height:38px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:800; color:#fff; flex-shrink:0; }
-    .tm-thinker-name { font-size:12px; font-weight:700; color:var(--text-0); letter-spacing:.02em; }
-    .tm-thinker-title { font-size:10px; color:var(--text-3); margin-top:2px; }
-    /* Status badge */
-    .tm-status { display:inline-flex; align-items:center; gap:5px; font-size:10px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; border-radius:var(--r-pill); padding:4px 9px; white-space:nowrap; }
-    .tm-status-live { background:rgba(22,163,74,.10); color:#16A34A; }
-    .tm-status-live::before { content:''; width:6px; height:6px; border-radius:50%; background:#16A34A; animation:tm-pulse 2s ease-in-out infinite; }
-    .tm-status-soon { background:var(--border-md); color:var(--text-3); }
-    @keyframes tm-pulse { 0%,100%{opacity:1} 50%{opacity:.4} }
-    /* Capabilities */
-    .tm-caps { display:flex; flex-wrap:wrap; gap:4px; max-width:240px; }
-    .tm-cap-tag { font-size:9.5px; font-weight:600; color:var(--text-1); background:var(--surface-2); border:1px solid var(--border); border-radius:4px; padding:2px 7px; white-space:nowrap; }
-    /* Categories */
-    .tm-cats { display:flex; flex-wrap:wrap; gap:4px; max-width:180px; }
-    .tm-cat-tag { font-size:9.5px; font-weight:700; letter-spacing:.04em; color:var(--accent); background:var(--accent-lt); border-radius:4px; padding:2px 7px; white-space:nowrap; }
-    /* Score */
-    .tm-score-cell { min-width:90px; }
-    .tm-score-num { font-size:18px; font-weight:800; color:var(--text-0); line-height:1; font-family:'Cormorant Garamond',serif; }
-    .tm-score-bar-bg { height:3px; background:var(--border-md); border-radius:2px; margin-top:5px; overflow:hidden; }
-    .tm-score-bar-fill { height:100%; border-radius:2px; background:linear-gradient(90deg,var(--accent),#C9A84C); transition:width .6s ease; }
-    /* Earnings */
-    .tm-earnings-cell { min-width:90px; }
-    .tm-earnings-val { font-size:14px; font-weight:700; color:var(--text-0); font-family:'Cormorant Garamond',serif; }
-    .tm-earnings-sub { font-size:9.5px; color:var(--text-3); margin-top:2px; }
-    /* Action */
-    .tm-action-btn { background:transparent; color:var(--accent); border:1.5px solid var(--accent); border-radius:var(--r-pill); padding:6px 14px; font-size:11px; font-weight:700; cursor:pointer; transition:background .15s,color .15s; white-space:nowrap; }
-    .tm-action-btn:hover { background:var(--accent); color:#fff; }
-    .tm-action-soon { font-size:10px; font-weight:600; color:var(--text-3); letter-spacing:.06em; text-transform:uppercase; }
-    @media (max-width:680px) {
-      .tm-caps,.tm-cats { max-width:140px; }
-      .tm-table { min-width:680px; }
-    }
-
-    /* Legacy card styles kept for dc-card references elsewhere */
-    .tl-avatar { width:46px; height:46px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:14px; font-weight:700; color:#fff; flex-shrink:0; }
-    .tl-acquire-btn { background:transparent; color:var(--accent); border:1.5px solid var(--accent); border-radius:var(--r-pill); padding:9px; font-size:12px; font-weight:700; cursor:pointer; transition:background .15s,color .15s; display:flex; align-items:center; justify-content:center; gap:6px; }
-    .tl-acquire-btn:hover { background:var(--accent); color:#fff; }
+    .tl-filter-row { display:flex; gap:6px; margin-bottom:22px; }
+    .tl-filter-btn { font-size:12px; font-weight:600; padding:7px 16px; border-radius:var(--r-pill); border:1.5px solid var(--border-md); background:var(--surface); color:var(--text-2); cursor:pointer; transition:all .15s; }
+    .tl-filter-btn:hover { border-color:var(--accent-bdr); color:var(--accent); }
+    .tl-filter-btn.active { background:var(--accent); border-color:var(--accent); color:#fff; }
+    .tl-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:14px; }
+    @media (max-width:560px) { .tl-grid { grid-template-columns:1fr; } }
+    .tl-card { background:var(--surface); border:1.5px solid var(--border); border-radius:14px; padding:20px; cursor:pointer; transition:border-color .15s,box-shadow .15s,transform .15s,opacity .4s; }
+    .tl-card:hover { border-color:var(--accent-bdr); box-shadow:0 4px 18px rgba(191,69,42,.09); transform:translateY(-1px); }
+    .tl-card-top { display:flex; align-items:center; gap:13px; margin-bottom:14px; }
+    .tl-avatar { width:46px; height:46px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:14px; font-weight:700; color:#fff; flex-shrink:0; transition:box-shadow .4s; }
+    .tl-name { font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:var(--text-0); line-height:1.35; }
+    .tl-title { font-size:9.5px; font-weight:700; letter-spacing:.07em; text-transform:uppercase; color:var(--text-3); margin-top:3px; }
+    .tl-lens-label { font-size:9px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:var(--text-3); margin-bottom:5px; }
+    .tl-lens-text { font-family:'Cormorant Garamond',serif; font-size:15px; font-style:italic; color:var(--text-1); line-height:1.5; margin-bottom:14px; }
+    .tl-demand-row { display:flex; align-items:center; gap:8px; margin-bottom:14px; }
+    .tl-demand-bar-bg { flex:1; height:4px; background:var(--border-md); border-radius:2px; overflow:hidden; }
     .tl-demand-fill { height:100%; background:var(--accent); border-radius:2px; transition:width .6s ease; }
+    .tl-demand-label { font-size:10px; font-weight:700; color:var(--text-3); white-space:nowrap; }
+    .tl-acquire-btn { width:100%; background:transparent; color:var(--accent); border:1.5px solid var(--accent); border-radius:var(--r-pill); padding:9px; font-size:12px; font-weight:700; cursor:pointer; transition:background .15s,color .15s; display:flex; align-items:center; justify-content:center; gap:6px; }
+    .tl-acquire-btn:hover { background:var(--accent); color:#fff; }
 
     /* ═══ INQUIRY STREAM ═══ */
     /* Screen is now a row: [chat col] + [insight sidebar] */
@@ -5079,50 +5039,19 @@ e.g. I always start by validating whether the problem is real before evaluating 
   </div></div>
 </div>
 
-    <!-- SCREEN: Thought Leaders / Thinker Management -->
+    <!-- SCREEN: Thought Leaders -->
     <div class="screen" id="screen-thought-leaders">
       <div class="main-inner"><div class="screen-inner">
         <div class="screen-header">
-          <div class="screen-label">Management</div>
-          <h2 class="screen-title">Thinker Management</h2>
-          <p class="screen-sub">Verified cognitive frameworks — earnings, status, and capabilities at a glance.</p>
+          <div class="screen-label">Explore</div>
+          <h2 class="screen-title">Thought Leaders</h2>
+          <p class="screen-sub">Curated human minds with verified cognitive frameworks.</p>
         </div>
-
-        <div class="tm-wrap">
-          <!-- Toolbar -->
-          <div class="tm-toolbar">
-            <div class="tm-toolbar-title">
-              Thinker Roster
-              <span class="tm-count-pill" id="tm-count">—</span>
-            </div>
-            <div class="tm-filter-wrap">
-              <button class="tm-filter-btn active" id="tm-btn-all"    onclick="setTmFilter('all',this)">All</button>
-              <button class="tm-filter-btn"         id="tm-btn-live"   onclick="setTmFilter('live',this)">Live</button>
-              <button class="tm-filter-btn"         id="tm-btn-score"  onclick="setTmFilter('score',this)">Top Score</button>
-            </div>
-          </div>
-
-          <!-- Table -->
-          <div class="tm-scroll">
-            <table class="tm-table" id="tm-table">
-              <thead>
-                <tr>
-                  <th>Thinker</th>
-                  <th>Status</th>
-                  <th>Core Capabilities</th>
-                  <th>Categories</th>
-                  <th>Moat Score</th>
-                  <th>Total Earnings</th>
-                  <th>Action</th>
-                </tr>
-              </thead>
-              <tbody id="tm-body">
-                <tr><td colspan="7" style="text-align:center;padding:36px;color:var(--text-3);font-family:'Cormorant Garamond',serif;font-size:15px">Loading thinkers…</td></tr>
-              </tbody>
-            </table>
-          </div>
+        <div class="tl-filter-row">
+          <button class="tl-filter-btn active" id="tl-btn-top" onclick="setTlFilter('top')">Top Sought</button>
+          <button class="tl-filter-btn" id="tl-btn-recent" onclick="setTlFilter('recent')">Recently Added</button>
         </div>
-
+        <div class="tl-grid" id="tl-grid"></div>
       </div></div>
     </div>
 
@@ -5808,7 +5737,7 @@ function showView(view, opts = {}) {
       if (si) { si.value = ''; runSearch(''); }
       setTimeout(() => si && si.focus(), 120);
     },
-    'thought-leaders': () => { document.getElementById('nav-search')?.classList.add('active'); setMobNavActive('mob-nav-search'); renderThoughtLeaders(); _loadTmEarnings(); show('screen-thought-leaders'); },
+    'thought-leaders': () => { document.getElementById('nav-search')?.classList.add('active'); setMobNavActive('mob-nav-search'); renderThoughtLeaders(); show('screen-thought-leaders'); },
     projects:    () => { document.getElementById('nav-projects').classList.add('active'); setMobNavActive('mob-nav-projects'); renderProjects(); show('screen-projects'); },
     'project-detail': () => { document.getElementById('nav-projects')?.classList.add('active'); setMobNavActive('mob-nav-projects'); show('screen-project-detail'); },
     chat:        () => { openChat(); },
@@ -6686,127 +6615,68 @@ function scrollToDcSection(id) {
 
 /* ── Thinker Management Table ── */
 let _tmFilter = 'all';
-let _tmEarnings = {};   // { thinkerId: '$0.00' } populated async
+/* ── Thought Leaders ── */
+let _tlFilter = 'top';
 
-function setTmFilter(filter, btn) {
-  _tmFilter = filter;
-  document.querySelectorAll('.tm-filter-btn').forEach(b => b.classList.remove('active'));
-  if (btn) btn.classList.add('active');
+function setTlFilter(filter) {
+  _tlFilter = filter;
+  ['top','recent'].forEach(f => {
+    const btn = document.getElementById('tl-btn-' + f);
+    if (btn) btn.classList.toggle('active', f === filter);
+  });
   renderThoughtLeaders();
 }
 
-// Attempt to load earnings for the authenticated thinker from the API
-async function _loadTmEarnings() {
-  try {
-    const token = getAuthToken();
-    if (!token || !(currentUser && currentUser.thinker_access)) return;
-    const res = await fetch(API_BASE + '/api/thinker/stats', {
-      headers: { 'Authorization': 'Bearer ' + token }
-    });
-    if (!res.ok) return;
-    const data = await res.json();
-    if (data && data.total_earned != null) {
-      // Map earnings to the thinker whose payoutEmail matches the logged-in user.
-      // In the browser we don't store payoutEmail, so we match by user email vs
-      // thinker ID for known mappings, falling back to the first available thinker.
-      const userEmail = currentUser && currentUser.email;
-      const emailToId = { 'michael@surpluspods.com': 'michael' };
-      const thinkerId = (userEmail && emailToId[userEmail]) ||
-                        (THINKERS.find(t => t.available) || {}).id ||
-                        'michael';
-      _tmEarnings[thinkerId] = '$' + parseFloat(data.total_earned || 0).toFixed(2);
-      renderThoughtLeaders();
-    }
-  } catch (e) { /* earnings unavailable — silently ignore */ }
-}
-
 function renderThoughtLeaders() {
-  const tbody = document.getElementById('tm-body');
-  const countPill = document.getElementById('tm-count');
-  if (!tbody) return;
-
-  // Apply filter
-  let list;
-  if (_tmFilter === 'live') {
-    list = THINKERS.filter(t => t.available);
-  } else if (_tmFilter === 'score') {
-    list = [...THINKERS].sort((a, b) => (b.score || 0) - (a.score || 0));
-  } else {
-    // "all" — live first, then coming soon, alpha within each group
-    const live = THINKERS.filter(t => t.available).sort((a,b) => a.name.localeCompare(b.name));
-    const soon = THINKERS.filter(t => !t.available).sort((a,b) => a.name.localeCompare(b.name));
-    list = [...live, ...soon];
+  const grid = document.getElementById('tl-grid');
+  if (!grid) return;
+  function seededDemand(name) {
+    let h = 0;
+    for (let i = 0; i < name.length; i++) h = (h * 31 + name.charCodeAt(i)) & 0xffffffff;
+    return 40 + Math.abs(h % 61);
   }
-
-  if (countPill) countPill.textContent = list.length + ' thinker' + (list.length !== 1 ? 's' : '');
-
-  if (!list.length) {
-    tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:36px;color:var(--text-3);font-family:\'Cormorant Garamond\',serif;font-size:15px">No thinkers found.</td></tr>';
+  let thinkers = THINKERS.filter(t => t.available !== false);
+  if (_tlFilter === 'top') {
+    thinkers = [...thinkers].sort((a, b) => seededDemand(b.name) - seededDemand(a.name));
+  } else {
+    thinkers = [...thinkers].reverse();
+  }
+  const maxDemand = Math.max(...thinkers.map(t => seededDemand(t.name)));
+  if (!thinkers.length) {
+    grid.innerHTML = '<div style="grid-column:1/-1;padding:24px;text-align:center;font-family:\'Cormorant Garamond\',serif;font-style:italic;color:var(--text-3)">No thinkers available yet.</div>';
     return;
   }
-
-  tbody.innerHTML = list.map(t => {
+  grid.innerHTML = thinkers.map((t) => {
     const idx = THINKERS.indexOf(t);
-    const initials = t.initials || t.name.split(' ').map(w => w[0]).join('').slice(0,2).toUpperCase();
-    const color    = t.color || '#BF452A';
-    const score    = t.score || 0;
-    const caps     = (t.capabilities || []).slice(0,4);
-    const cats     = (t.categories || []).slice(0,3);
-    const earnings = _tmEarnings[t.id] || (t.available ? '$—' : '—');
-
-    const statusBadge = t.available
-      ? '<span class="tm-status tm-status-live">Live</span>'
-      : '<span class="tm-status tm-status-soon">Coming Soon</span>';
-
-    const capTags = caps.map(c => '<span class="tm-cap-tag">' + c + '</span>').join('');
-    const catTags = cats.map(c => '<span class="tm-cat-tag">' + c + '</span>').join('');
-
-    const actionBtn = t.available
-      ? '<button class="tm-action-btn" onclick="acquireFromThinker(' + idx + ')">Acquire · $0.05</button>'
-      : '<span class="tm-action-soon">Encoding</span>';
-
-    return '<tr class="' + (t.available ? '' : 'tm-row-inactive') + '">' +
-      // Thinker
-      '<td class="tm-td">' +
-        '<div class="tm-thinker-cell">' +
-          '<div class="tm-avatar" style="background:' + color + '">' + initials + '</div>' +
-          '<div>' +
-            '<div class="tm-thinker-name">' + t.name + '</div>' +
-            '<div class="tm-thinker-title">' + (t.title || '') + '</div>' +
-          '</div>' +
-        '</div>' +
-      '</td>' +
-      // Status
-      '<td class="tm-td">' + statusBadge + '</td>' +
-      // Core Capabilities
-      '<td class="tm-td"><div class="tm-caps">' + (capTags || '<span style="color:var(--text-3);font-size:10px">—</span>') + '</div></td>' +
-      // Categories
-      '<td class="tm-td"><div class="tm-cats">' + (catTags || '<span style="color:var(--text-3);font-size:10px">—</span>') + '</div></td>' +
-      // Moat Score
-      '<td class="tm-td tm-score-cell">' +
-        '<div class="tm-score-num">' + (score || '—') + '</div>' +
-        (score ? '<div class="tm-score-bar-bg"><div class="tm-score-bar-fill" style="width:0%" data-pct="' + score + '"></div></div>' : '') +
-      '</td>' +
-      // Total Earnings
-      '<td class="tm-td tm-earnings-cell">' +
-        '<div class="tm-earnings-val">' + earnings + '</div>' +
-        '<div class="tm-earnings-sub">' + (t.available ? 'YTD wisdom royalties' : 'Not yet active') + '</div>' +
-      '</td>' +
-      // Action
-      '<td class="tm-td">' + actionBtn + '</td>' +
-      '</tr>';
+    const ini = t.initials || t.name.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase();
+    const parts = t.name.split(' ');
+    const lastName  = parts[parts.length - 1].toUpperCase() + ',';
+    const firstName = parts.slice(0, -1).join(' ').toUpperCase();
+    const demand    = seededDemand(t.name);
+    const demandPct = Math.round(demand / maxDemand * 100);
+    const domain    = t.title ? t.title.split('·')[0].trim() : 'Other';
+    return '<div class="tl-card" data-domain="' + domain + '" onclick="acquireFromThinker(' + idx + ')">' +
+      '<div class="tl-card-top">' +
+      '<div class="tl-avatar" style="background:' + (t.color || '#BF452A') + '">' + ini + '</div>' +
+      '<div><div class="tl-name">' + (firstName ? firstName + ' ' : '') + lastName + '</div>' +
+      '<div class="tl-title">' + (t.title || '') + '</div></div>' +
+      '</div>' +
+      '<div class="tl-lens-label">Signature Lens</div>' +
+      '<div class="tl-lens-text">' + (t.lens || 'Cognitive framework defined.') + '</div>' +
+      '<div class="tl-demand-row">' +
+      '<div class="tl-demand-bar-bg"><div class="tl-demand-fill" style="width:0%" data-pct="' + demandPct + '"></div></div>' +
+      '<span class="tl-demand-label">' + demand + ' req/wk</span></div>' +
+      '<button class="tl-acquire-btn" onclick="event.stopPropagation();acquireFromThinker(' + idx + ')">' +
+      '<svg width="12" height="12" viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6.5 1L8.4 4.7 12.5 5.3 9.5 8.3l.7 4.1L6.5 10.4 2.3 12.4l.7-4.1L0 5.3l4.1-.6z"/></svg>' +
+      'Acquire Insight · $0.05</button>' +
+      '</div>';
   }).join('');
-
-  // Animate score bars after paint
   requestAnimationFrame(() => requestAnimationFrame(() => {
-    tbody.querySelectorAll('.tm-score-bar-fill').forEach(el => {
-      el.style.width = (el.dataset.pct || 0) + '%';
+    grid.querySelectorAll('.tl-demand-fill').forEach(el => {
+      el.style.width = el.dataset.pct + '%';
     });
   }));
 }
-
-// Legacy stub — kept so any surviving old references don't break
-function setTlFilter() { setTmFilter('all'); }
 
 function drawMoatGauge(canvasId, signalPct) {
   const canvas = document.getElementById(canvasId);
