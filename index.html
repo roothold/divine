@@ -1576,6 +1576,11 @@
     }
     .is-tt:hover::after, .is-tt:hover::before { opacity:1; }
 
+    /* Left-column fields: open tooltip rightward so it stays in-panel */
+    .is-scenario-inputs .is-scenario-field:nth-child(odd)  .is-tt::after { right:auto; left:0; }
+    /* Right-column fields: keep tooltip leftward (existing default) */
+    .is-scenario-inputs .is-scenario-field:nth-child(even) .is-tt::after { left:auto;  right:0; }
+
     /* IS panel toggle button in header */
     .is-panel-toggle-btn {
       display:flex;
