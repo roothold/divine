@@ -1458,6 +1458,21 @@
     .is-scenario-field input:focus { border-color:var(--accent-bdr); box-shadow:0 0 0 2px rgba(191,69,42,.08); }
     .is-scenario-delta { font-size:10px; font-weight:600; color:#22c55e; margin-top:6px; text-align:center; }
     .is-scenario-delta.negative { color:#ef4444; }
+    .is-scenario-challenge {
+      display:none; width:100%; margin-top:9px;
+      background:var(--surface-2); border:1.5px solid var(--border);
+      border-radius:8px; padding:8px 12px;
+      font-size:11.5px; font-weight:600; font-family:'Inter',sans-serif;
+      color:var(--text-1); cursor:pointer; text-align:center;
+      transition:background .14s, border-color .14s, color .14s;
+      letter-spacing:.01em;
+    }
+    .is-scenario-challenge:hover {
+      background:var(--accent); border-color:var(--accent);
+      color:#fff;
+    }
+    .is-scenario-challenge .isc-thinker { color:var(--accent); transition:color .14s; }
+    .is-scenario-challenge:hover .isc-thinker { color:rgba(255,255,255,.85); }
 
     /* IS panel toggle button in header */
     .is-panel-toggle-btn {
@@ -3967,6 +3982,9 @@
                 </div>
               </div>
               <div class="is-scenario-delta" id="chat-scenario-delta" style="margin-top:8px">Enter values to model revenue trajectory</div>
+              <button class="is-scenario-challenge" id="chat-scenario-challenge" onclick="challengeScenarioModel('chat')">
+                Challenge this model with <span class="isc-thinker" id="chat-scenario-challenge-name">your Thinker</span> →
+              </button>
             </div>
 
             <!-- Advisory Circle section -->
@@ -4232,6 +4250,9 @@
                 </div>
               </div>
               <div class="is-scenario-delta" id="is-scenario-delta">Enter values to model revenue trajectory</div>
+              <button class="is-scenario-challenge" id="is-scenario-challenge" onclick="challengeScenarioModel('is')">
+                Challenge this model with <span class="isc-thinker" id="is-scenario-challenge-name">your Thinker</span> →
+              </button>
             </div>
 
             <!-- Advisory circle -->
@@ -5402,6 +5423,33 @@ const FAQS = [
 let activeThinker   = THINKERS[0];
 let decisionText    = '';
 let sessionQs       = [];
+
+/* Fetch current thinker availability from the server and patch the local
+   THINKERS array so unavailable thinkers are hidden/locked without a page
+   reload.  Called once on startup and can be re-called after admin toggles. */
+async function syncThinkerAvailability() {
+  try {
+    const res = await fetch(`${API_BASE}/api/thinkers`, { signal: AbortSignal.timeout(5000) });
+    if (!res.ok) return;
+    const { thinkers } = await res.json();
+    if (!Array.isArray(thinkers)) return;
+    thinkers.forEach(serverT => {
+      const local = THINKERS.find(t => t.id === serverT.id);
+      if (local) local.available = serverT.available;
+    });
+    // If the currently active thinker was just disabled, fall back to first available
+    if (activeThinker && !activeThinker.available) {
+      const fallback = THINKERS.find(t => t.available);
+      if (fallback) { activeThinker = fallback; syncThinkerUI && syncThinkerUI(); }
+    }
+    // Re-render any thinker grids that are currently visible
+    try { renderDcThinkerGrid && renderDcThinkerGrid(); } catch(_) {}
+    try { pfRenderThinkers && pfRenderThinkers(); } catch(_) {}
+    try { renderGrid && renderGrid(''); } catch(_) {}
+  } catch (e) {
+    // Non-fatal — app works with static defaults if server is unreachable
+  }
+}
 let sessionAnswers  = [];
 let currentSession  = null;
 let selectedColor   = PROJECT_COLORS[0];
@@ -5844,6 +5892,16 @@ async function callPerspective({ stage, decision, answers, onChunk }) {
       throw new Error(data.error || 'Rate limit reached.');
     }
 
+    if (res.status === 503) {
+      let data = {};
+      try { data = await res.json(); } catch {}
+      if (data.code === 'THINKER_UNAVAILABLE') {
+        // Refresh local availability so the UI updates immediately
+        syncThinkerAvailability && syncThinkerAvailability();
+        throw new Error('THINKER_UNAVAILABLE:' + (data.error || 'This thinker is currently unavailable.'));
+      }
+    }
+
     if (!res.ok) {
       // Surface real server errors instead of silently falling to direct-API path
       let errMsg = `Server error (${res.status})`;
@@ -5879,6 +5937,7 @@ async function callPerspective({ stage, decision, answers, onChunk }) {
     proxyFailed = true;
   } catch (e) {
     if (e.message === 'INSUFFICIENT_FUNDS') throw e;
+    if (e.message?.startsWith('THINKER_UNAVAILABLE:')) throw e;
     proxyFailed = true;
   }
 
@@ -8725,6 +8784,11 @@ async function pfToEncoding() {
   } catch(e) {
     clearTimeout(_pfEncTimer);
     if (e.message === 'INSUFFICIENT_FUNDS') { closePerspectiveFlow(); return; }
+    if (e.message?.startsWith('THINKER_UNAVAILABLE:')) {
+      closePerspectiveFlow();
+      showToast(e.message.replace('THINKER_UNAVAILABLE:', ''));
+      return;
+    }
 
     encDot.classList.remove('pf-expanding', 'pf-breathing');
     encDot.style.cssText = 'width:14px;height:14px;background:#BF452A;opacity:.7';
@@ -9595,9 +9659,13 @@ async function sendChatMsg() {
       msgs.scrollTop = msgs.scrollHeight;
     });
   } catch (err) {
+    const unavailMsg = err.message?.startsWith('THINKER_UNAVAILABLE:')
+      ? err.message.replace('THINKER_UNAVAILABLE:', '') : null;
     bubble.textContent = err.message === 'NO_KEY'
       ? '⚠ No API key configured. Add one in Settings.'
-      : `⚠ ${err.message || 'Could not connect — please try again.'}`;
+      : unavailMsg
+        ? `⚠ ${unavailMsg}`
+        : `⚠ ${err.message || 'Could not connect — please try again.'}`;
     bubble.classList.remove('chat-cursor');
     _chatStreaming = false;
     document.getElementById('chat-send-btn').disabled = false;
@@ -10005,6 +10073,15 @@ RULES: No filler. No 'great question.' No 'I understand.' No double blank lines 
       _usageLogSave(log);
       _usageRefreshUI();
       throw new Error(data.error || 'Rate limit reached.');
+    }
+
+    if (res.status === 503) {
+      let data = {};
+      try { data = await res.json(); } catch {}
+      if (data.code === 'THINKER_UNAVAILABLE') {
+        syncThinkerAvailability && syncThinkerAvailability();
+        throw new Error('THINKER_UNAVAILABLE:' + (data.error || 'This thinker is currently unavailable.'));
+      }
     }
 
     if (!res.ok) {
@@ -10683,10 +10760,12 @@ initThinkerAccess();
 // Kick off auth check — must run after full DOM is parsed because initAuth()
 // calls showSplashScreen() which accesses #screen-splash, which is defined
 // after this <script> block in the HTML.
+// Also sync thinker availability from the server so admin toggles take effect.
 if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', initAuth, { once: true });
+  document.addEventListener('DOMContentLoaded', () => { initAuth(); syncThinkerAvailability(); }, { once: true });
 } else {
   initAuth();
+  syncThinkerAvailability();
 }
 
 document.addEventListener('keydown', e => {
@@ -11827,11 +11906,21 @@ function updateScenario(ns) {
   const margin = parseFloat(g('margin')?.value) || 0;
   const months = parseInt(g('months')?.value)   || 12;
   const delta  = g('delta');
+  const challengeBtn  = document.getElementById(ns + '-scenario-challenge');
+  const challengeName = document.getElementById(ns + '-scenario-challenge-name');
   if (!delta) return;
+
+  // Keep thinker name in button label live
+  if (challengeName) {
+    const tname = activeThinker?.name || 'your Thinker';
+    const fname = tname.split(' ')[0];
+    challengeName.textContent = fname;
+  }
 
   if (!rev) {
     delta.textContent = 'Enter values to model revenue trajectory';
     delta.className   = 'is-scenario-delta';
+    if (challengeBtn) challengeBtn.style.display = 'none';
     renderRevenueGraph(ns);
     return;
   }
@@ -11841,13 +11930,53 @@ function updateScenario(ns) {
   const cumProf = cumRev * (margin / 100);
   const fmtK    = v => v >= 1000000 ? '$' + (v/1000000).toFixed(2) + 'M' : v >= 1000 ? '$' + (v/1000).toFixed(1) + 'k' : '$' + Math.round(v);
 
-  delta.innerHTML   = `<span style="color:#22c55e">▲ ${fmtK(endRev)}/mo at month ${months}</span>&ensp;·&ensp;<span style="color:var(--text-2)">${fmtK(cumProf)} cumulative profit</span>`;
-  delta.className   = 'is-scenario-delta';
+  delta.innerHTML = `<span style="color:#22c55e">▲ ${fmtK(endRev)}/mo at month ${months}</span>&ensp;·&ensp;<span style="color:var(--text-2)">${fmtK(cumProf)} cumulative profit</span>`;
+  delta.className = 'is-scenario-delta';
+  if (challengeBtn) challengeBtn.style.display = 'block';
   renderRevenueGraph(ns);
 }
 
 /* Keep old alias for IS screen HTML */
 function isUpdateScenario() { updateScenario('is'); }
+
+/* ── Challenge Scenario Model ──────────────────────────────────────────────
+   Reads the current scenario inputs, builds a rich context prompt, and
+   fires it into a new chat session with the active Thinker pre-loaded.
+   The message is long enough to auto-send (≥20 chars).
+────────────────────────────────────────────────────────────────────────── */
+function challengeScenarioModel(ns) {
+  const g  = id => document.getElementById(ns + '-scenario-' + id);
+  const rev    = parseFloat(g('rev')?.value)    || 0;
+  const growth = parseFloat(g('growth')?.value) || 0;
+  const margin = parseFloat(g('margin')?.value) || 0;
+  const months = parseInt(g('months')?.value)   || 12;
+
+  if (!rev) return; // button should be hidden anyway, but guard
+
+  const endRev  = rev * Math.pow(1 + growth / 100, months);
+  const cumRev  = Array.from({length: months}, (_, i) => rev * Math.pow(1 + growth / 100, i)).reduce((a,b) => a + b, 0);
+  const cumProf = cumRev * (margin / 100);
+  const fmt     = v => v >= 1_000_000 ? '$' + (v/1_000_000).toFixed(2) + 'M'
+                     : v >= 1_000     ? '$' + (v/1_000).toFixed(1) + 'k'
+                     : '$' + Math.round(v);
+
+  const thinker = activeThinker || THINKERS[0];
+
+  const prompt =
+    `I've modelled a growth scenario and I need you to stress-test it.\n\n` +
+    `Model inputs:\n` +
+    `• Starting monthly revenue: ${fmt(rev)}\n` +
+    `• Monthly growth rate: ${growth}%\n` +
+    `• Average gross margin: ${margin}%\n` +
+    `• Projection horizon: ${months} months\n\n` +
+    `Model output:\n` +
+    `• Revenue at month ${months}: ${fmt(endRev)}/mo\n` +
+    `• Cumulative gross profit: ${fmt(cumProf)}\n\n` +
+    `What are the assumptions in this model most likely to be wrong? ` +
+    `Which variable has the biggest leverage on the outcome, and what should I be stress-testing first?`;
+
+  openChat(prompt);
+}
 
 /* ── Advisory Circle — NS version (chat / is) uses shared builder ── */
 function renderAdvisoryCircle(ns) { _buildAdvisoryHtml(ns + '-adv-grid'); }

@@ -510,6 +510,22 @@ app.get('/api/wallet/history', optionalAuth, async (req, res) => {
   }
 });
 
+// ── GET /api/thinkers ─────────────────────────────────────────────────────────
+// Public endpoint — returns each thinker's id, name, title, and current
+// availability (including any in-memory admin overrides).
+app.get('/api/thinkers', (_req, res) => {
+  const list = Object.values(THINKERS).map(t => ({
+    id:        t.id,
+    name:      t.name,
+    title:     t.title,
+    available: t.available,
+    score:     t.score,
+    categories:    t.categories    || [],
+    capabilities:  t.capabilities  || [],
+  }));
+  res.json({ thinkers: list });
+});
+
 // ── POST /api/get-perspective ─────────────────────────────────────────────────
 app.post('/api/get-perspective', async (req, res) => {
   const { user_id, thinker_id, stage, decision, answers,
@@ -558,6 +574,7 @@ app.post('/api/get-perspective', async (req, res) => {
 
   const thinker = getThinker(thinker_id);
   if (!thinker) return res.status(404).json({ error: 'Thinker not found.' });
+  if (!thinker.available) return res.status(503).json({ error: `${thinker.name} is currently unavailable.`, code: 'THINKER_UNAVAILABLE' });
 
   let conversationHistory = [];
   let summaryPrefix       = '';
