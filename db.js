@@ -198,37 +198,41 @@ export async function updateUserPassword(id, passwordHash) {
 // ── Admin helpers ─────────────────────────────────────────────────────────────
 
 /**
- * Ensure is_admin and is_disabled columns exist.
- * Safe to call on every boot — uses IF NOT EXISTS.
+ * Boot-time schema migration — idempotent, runs before the server accepts traffic.
+ * Adds missing columns to match the current schema without dropping existing data.
  */
 export async function adminMigrateSchema() {
+  // ── users table ────────────────────────────────────────────────────────────
   await pool.query(`
     ALTER TABLE users ADD COLUMN IF NOT EXISTS is_admin    BOOLEAN NOT NULL DEFAULT FALSE;
     ALTER TABLE users ADD COLUMN IF NOT EXISTS is_disabled BOOLEAN NOT NULL DEFAULT FALSE;
   `);
-  // Idempotency table for Stripe webhook events — prevents double-crediting on retries
+
+  // ── stripe_events idempotency table ───────────────────────────────────────
   await pool.query(`
     CREATE TABLE IF NOT EXISTS stripe_events (
       event_id   TEXT PRIMARY KEY,
       created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
     );
   `);
-  // Thinker earnings ledger — 70% of each perspective cost recorded here
+
+  // ── thinker_earnings ledger ────────────────────────────────────────────────
   await pool.query(`
     CREATE TABLE IF NOT EXISTS thinker_earnings (
-      id         BIGSERIAL  PRIMARY KEY,
-      thinker_id TEXT       NOT NULL,
+      id         BIGSERIAL     PRIMARY KEY,
+      thinker_id TEXT          NOT NULL,
       user_id    TEXT,
       amount     NUMERIC(10,4) NOT NULL,
       label      TEXT,
-      created_at TIMESTAMPTZ  NOT NULL DEFAULT NOW()
+      created_at TIMESTAMPTZ   NOT NULL DEFAULT NOW()
     );
     CREATE INDEX IF NOT EXISTS thinker_earnings_thinker_idx
       ON thinker_earnings (thinker_id, created_at DESC);
     CREATE INDEX IF NOT EXISTS thinker_earnings_user_idx
       ON thinker_earnings (user_id, created_at DESC);
   `);
-  // User sessions — perspective history synced by account across devices
+
+  // ── user_sessions ─────────────────────────────────────────────────────────
   await pool.query(`
     CREATE TABLE IF NOT EXISTS user_sessions (
       id          TEXT        NOT NULL,
@@ -241,8 +245,68 @@ export async function adminMigrateSchema() {
       created_at  TIMESTAMPTZ NOT NULL DEFAULT NOW(),
       PRIMARY KEY (id, user_id)
     );
-    CREATE INDEX IF NOT EXISTS user_sessions_user_id_idx ON user_sessions (user_id, created_at DESC);
+    CREATE INDEX IF NOT EXISTS user_sessions_user_id_idx
+      ON user_sessions (user_id, created_at DESC);
   `);
+
+  // ── wallet_transactions — add new columns if the table was created from an
+  //    older schema that used (user_id, type) instead of (wallet_id, direction).
+  //    Each step is idempotent.
+  await pool.query(`
+    ALTER TABLE wallet_transactions ADD COLUMN IF NOT EXISTS wallet_id      UUID;
+    ALTER TABLE wallet_transactions ADD COLUMN IF NOT EXISTS direction      TEXT;
+    ALTER TABLE wallet_transactions ADD COLUMN IF NOT EXISTS line_item_type TEXT;
+    ALTER TABLE wallet_transactions ADD COLUMN IF NOT EXISTS balance_after  DECIMAL(12,4);
+    ALTER TABLE wallet_transactions ADD COLUMN IF NOT EXISTS label          TEXT;
+  `);
+
+  // Back-fill wallet_id from old user_id column if it exists on the table
+  await pool.query(`
+    DO $$
+    BEGIN
+      IF EXISTS (
+        SELECT 1 FROM information_schema.columns
+        WHERE table_name = 'wallet_transactions' AND column_name = 'user_id'
+      ) THEN
+        UPDATE wallet_transactions wt
+        SET wallet_id = w.id
+        FROM wallets w
+        WHERE w.user_id = wt.user_id
+          AND wt.wallet_id IS NULL;
+      END IF;
+    END $$;
+  `);
+
+  // Back-fill direction from old type column if it exists
+  await pool.query(`
+    DO $$
+    BEGIN
+      IF EXISTS (
+        SELECT 1 FROM information_schema.columns
+        WHERE table_name = 'wallet_transactions' AND column_name = 'type'
+      ) THEN
+        UPDATE wallet_transactions
+        SET direction = CASE WHEN type = 'credit' THEN 'credit' ELSE 'debit' END
+        WHERE direction IS NULL AND type IS NOT NULL;
+      END IF;
+    END $$;
+  `);
+
+  // Default any remaining nulls
+  await pool.query(`
+    UPDATE wallet_transactions SET direction      = 'debit'              WHERE direction      IS NULL;
+    UPDATE wallet_transactions SET line_item_type = 'perspective_spend'  WHERE line_item_type IS NULL;
+    UPDATE wallet_transactions SET balance_after  = 0                    WHERE balance_after  IS NULL;
+    UPDATE wallet_transactions SET label          = 'migrated'           WHERE label          IS NULL;
+  `);
+
+  // Create missing index
+  await pool.query(`
+    CREATE INDEX IF NOT EXISTS idx_wt_wallet
+      ON wallet_transactions(wallet_id, created_at DESC);
+  `);
+
+  console.log('[DB] Schema migration complete.');
 }
 
 /** Full user list with wallet balance + perspective count. */
@@ -263,7 +327,7 @@ export async function adminGetUsers({ search = '', offset = 0, limit = 50 } = {}
      LEFT JOIN wallets w              ON w.user_id = u.id
      LEFT JOIN wallet_transactions wt ON wt.wallet_id = w.id
      WHERE ($1 = '' OR u.name ILIKE $2 OR u.email ILIKE $2)
-     GROUP BY u.id, w.credit_balance
+     GROUP BY u.id, w.id, w.credit_balance
      ORDER BY u.created_at DESC
      LIMIT $3 OFFSET $4`,
     [search, like, limit, offset]

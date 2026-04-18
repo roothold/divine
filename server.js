@@ -838,7 +838,7 @@ app.post('/api/create-checkout-session', requireAuth, async (req, res) => {
     return res.status(503).json({ error: 'Payment processing not configured.' });
   }
 
-  const userId = req.user.id;
+  const userId = req.user.sub;
   const { mode = 'payment', credits, price_usd } = req.body;
 
   // ── Allowed one-time packages (credits → cents) ───────────────────────────
@@ -1035,7 +1035,7 @@ function requireThinker(req, res, next) {
 // GET /api/thinker/stats — lifetime earnings summary
 app.get('/api/thinker/stats', requireThinker, async (req, res) => {
   try {
-    const id = req.query.thinker_id || req.user.id;
+    const id = req.query.thinker_id || req.user.sub;
     const stats = await getThinkerStats(id);
     res.json({
       total_perspectives: parseInt(stats.total_perspectives, 10),
@@ -1052,7 +1052,7 @@ app.get('/api/thinker/stats', requireThinker, async (req, res) => {
 // GET /api/thinker/transactions — recent earning records
 app.get('/api/thinker/transactions', requireThinker, async (req, res) => {
   try {
-    const id     = req.query.thinker_id || req.user.id;
+    const id     = req.query.thinker_id || req.user.sub;
     const period = req.query.period || 'month';
     const rows   = await getThinkerTransactions(id, period);
     res.json({ transactions: rows });
@@ -1065,7 +1065,7 @@ app.get('/api/thinker/transactions', requireThinker, async (req, res) => {
 // GET /api/thinker/earnings — aggregated chart data by period
 app.get('/api/thinker/earnings', requireThinker, async (req, res) => {
   try {
-    const id     = req.query.thinker_id || req.user.id;
+    const id     = req.query.thinker_id || req.user.sub;
     const period = req.query.period || 'month';
     const rows   = await getThinkerEarningsByPeriod(id, period);
     res.json({ earnings: rows });
@@ -1133,7 +1133,7 @@ app.get('/api/admin/revenue', requireAdmin, async (_req, res) => {
 // GET /api/sessions — load all sessions for the authenticated user
 app.get('/api/sessions', requireAuth, async (req, res) => {
   try {
-    const sessions = await getUserSessions(req.user.id);
+    const sessions = await getUserSessions(req.user.sub);
     res.json({ sessions });
   } catch (err) {
     console.error('[/api/sessions GET]', err.message);
@@ -1146,7 +1146,7 @@ app.post('/api/sessions', requireAuth, async (req, res) => {
   const session = req.body;
   if (!session?.id) return res.status(400).json({ error: 'session.id is required.' });
   try {
-    await upsertSession(req.user.id, session);
+    await upsertSession(req.user.sub, session);
     res.json({ ok: true });
   } catch (err) {
     console.error('[/api/sessions POST]', err.message);
@@ -1157,7 +1157,7 @@ app.post('/api/sessions', requireAuth, async (req, res) => {
 // DELETE /api/sessions/:id — delete a session belonging to the authenticated user
 app.delete('/api/sessions/:id', requireAuth, async (req, res) => {
   try {
-    await deleteSession(req.user.id, req.params.id);
+    await deleteSession(req.user.sub, req.params.id);
     res.json({ ok: true });
   } catch (err) {
     console.error('[/api/sessions DELETE]', err.message);
@@ -1181,29 +1181,36 @@ app.get('*', (req, res, next) => {
 });
 
 // ── Start ─────────────────────────────────────────────────────────────────────
-// Run schema migrations sequentially before accepting traffic
+// Migrations run sequentially and MUST complete before the server accepts traffic.
+// This guarantees wallet_transactions has wallet_id / direction / line_item_type
+// regardless of which schema version the live DB was created from.
+const WUA_INTERVAL_MS = 6 * 60 * 60 * 1000; // 6 hours
+
 adminMigrateSchema()
   .then(() => migrateThinkerLogicSchema())
-  .catch(err => console.warn('[schema-migrate]', err.message));
+  .then(() => {
+    // Weight Update Job — starts after DB is ready
+    setInterval(() => {
+      runWeightUpdateJob()
+        .then(({ processed, total }) => {
+          if (total > 0) console.log(`[WUA v2.0] Job complete — ${processed}/${total} outcomes processed`);
+        })
+        .catch(err => console.error('[WUA v2.0] Job error:', err.message));
+    }, WUA_INTERVAL_MS);
 
-// Weight Update Job — runs every 6 hours
-// Processes all pending outcome_verifications using WUA v2.0
-const WUA_INTERVAL_MS = 6 * 60 * 60 * 1000;  // 6 hours
-setInterval(() => {
-  runWeightUpdateJob()
-    .then(({ processed, total }) => {
-      if (total > 0) console.log(`[WUA v2.0] Job complete — ${processed}/${total} outcomes processed`);
-    })
-    .catch(err => console.error('[WUA v2.0] Job error:', err.message));
-}, WUA_INTERVAL_MS);
-
-app.listen(PORT, () => {
-  console.log(`[Divine Intelligence] Running on :${PORT}`);
-  console.log(`  Model:         ${MAIN_MODEL}`);
-  console.log(`  Insight cost:  $${INSIGHT_COST}`);
-  console.log(`  Google OAuth:  ${GOOGLE_CLIENT_ID ? 'configured ✓' : 'NOT SET ⚠'}`);
-  console.log(`  LinkedIn OAuth:${LINKEDIN_CLIENT_ID ? 'configured ✓' : ' NOT SET ⚠'}`);
-  console.log(`  Stripe:        ${STRIPE_SECRET_KEY ? 'configured ✓' : 'NOT SET ⚠'}`);
-  console.log(`  Monthly plan:  ${STRIPE_MONTHLY_PRICE_ID ? STRIPE_MONTHLY_PRICE_ID + ' ✓' : 'NOT SET — set STRIPE_MONTHLY_PRICE_ID ⚠'}`);
-  console.log(`  DB:            ${process.env.DATABASE_URL ? 'configured ✓' : 'NOT SET ⚠'}`);
-});
+    // Begin accepting traffic only after migrations succeed
+    app.listen(PORT, () => {
+      console.log(`[Divine Intelligence] Running on :${PORT}`);
+      console.log(`  Model:         ${MAIN_MODEL}`);
+      console.log(`  Insight cost:  $${INSIGHT_COST}`);
+      console.log(`  Google OAuth:  ${GOOGLE_CLIENT_ID ? 'configured ✓' : 'NOT SET ⚠'}`);
+      console.log(`  LinkedIn OAuth:${LINKEDIN_CLIENT_ID ? 'configured ✓' : ' NOT SET ⚠'}`);
+      console.log(`  Stripe:        ${STRIPE_SECRET_KEY ? 'configured ✓' : 'NOT SET ⚠'}`);
+      console.log(`  Monthly plan:  ${STRIPE_MONTHLY_PRICE_ID ? STRIPE_MONTHLY_PRICE_ID + ' ✓' : 'NOT SET — set STRIPE_MONTHLY_PRICE_ID ⚠'}`);
+      console.log(`  DB:            ${process.env.DATABASE_URL ? 'configured ✓' : 'NOT SET ⚠'}`);
+    });
+  })
+  .catch(err => {
+    console.error('[FATAL] Schema migration failed — server will not start:', err.message);
+    process.exit(1);
+  });
