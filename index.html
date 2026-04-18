@@ -1471,8 +1471,7 @@
       background:var(--accent); border-color:var(--accent);
       color:#fff;
     }
-    .is-scenario-challenge .isc-thinker { color:var(--accent); transition:color .14s; }
-    .is-scenario-challenge:hover .isc-thinker { color:rgba(255,255,255,.85); }
+
 
     /* Field tooltip */
     .is-scenario-field label { display:flex; align-items:center; gap:3px; }
@@ -3685,6 +3684,7 @@
                 <!-- Model your trajectory — entry point, always first -->
                 <div class="dc-panel-section">
                   <div class="dc-psec-title">Model your trajectory</div>
+                  <div style="font-size:10.5px;color:var(--text-3);margin-bottom:10px;line-height:1.45">Rough numbers are fine. Your Thinker will find what's fragile.</div>
                   <div class="is-scenario-inputs">
                     <div class="is-scenario-field">
                       <label>Monthly Rev ($) <span class="is-tt" data-tip="Your current average monthly revenue. If pre-revenue, use your target for month 1.">i</span></label>
@@ -3705,7 +3705,7 @@
                   </div>
                   <div class="is-scenario-delta" id="dc-scenario-delta" style="margin-top:8px">Enter values to model revenue trajectory</div>
                   <button class="is-scenario-challenge" id="dc-scenario-challenge" onclick="challengeScenarioModel('dc')">
-                    Challenge this model with <span class="isc-thinker" id="dc-scenario-challenge-name">your Thinker</span> →
+                    Get the perspective →
                   </button>
                 </div>
 
@@ -4004,6 +4004,7 @@
             <!-- Model your trajectory — entry point, always first -->
             <div class="dc-panel-section">
               <div class="dc-psec-title">Model your trajectory</div>
+              <div style="font-size:10.5px;color:var(--text-3);margin-bottom:10px;line-height:1.45">Rough numbers are fine. Your Thinker will find what's fragile.</div>
               <div class="is-scenario-inputs">
                 <div class="is-scenario-field">
                   <label>Monthly Rev ($) <span class="is-tt" data-tip="Your current average monthly revenue. If pre-revenue, use your target for month 1.">i</span></label>
@@ -4024,7 +4025,7 @@
               </div>
               <div class="is-scenario-delta" id="chat-scenario-delta" style="margin-top:8px">Enter values to model revenue trajectory</div>
               <button class="is-scenario-challenge" id="chat-scenario-challenge" onclick="challengeScenarioModel('chat')">
-                Challenge this model with <span class="isc-thinker" id="chat-scenario-challenge-name">your Thinker</span> →
+                Get the perspective →
               </button>
             </div>
 
@@ -4287,6 +4288,7 @@
             <!-- Model your trajectory -->
             <div class="is-scenario-wrap">
               <div class="is-scenario-label">Model your trajectory</div>
+              <div style="font-size:10px;color:var(--text-3);margin-bottom:8px;line-height:1.45">Rough numbers are fine. Your Thinker will find what's fragile.</div>
               <div class="is-scenario-inputs">
                 <div class="is-scenario-field">
                   <label>Monthly Rev ($) <span class="is-tt" data-tip="Your current average monthly revenue. If pre-revenue, use your target for month 1.">i</span></label>
@@ -4307,7 +4309,7 @@
               </div>
               <div class="is-scenario-delta" id="is-scenario-delta">Enter values to model revenue trajectory</div>
               <button class="is-scenario-challenge" id="is-scenario-challenge" onclick="challengeScenarioModel('is')">
-                Challenge this model with <span class="isc-thinker" id="is-scenario-challenge-name">your Thinker</span> →
+                Get the perspective →
               </button>
             </div>
 
@@ -11970,16 +11972,8 @@ function updateScenario(ns) {
   const margin = parseFloat(g('margin')?.value) || 0;
   const months = parseInt(g('months')?.value)   || 12;
   const delta  = g('delta');
-  const challengeBtn  = document.getElementById(ns + '-scenario-challenge');
-  const challengeName = document.getElementById(ns + '-scenario-challenge-name');
+  const challengeBtn = document.getElementById(ns + '-scenario-challenge');
   if (!delta) return;
-
-  // Keep thinker name in button label live
-  if (challengeName) {
-    const tname = activeThinker?.name || 'your Thinker';
-    const fname = tname.split(' ')[0];
-    challengeName.textContent = fname;
-  }
 
   if (!rev) {
     delta.textContent = 'Enter values to model revenue trajectory';
