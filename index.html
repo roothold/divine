@@ -161,6 +161,25 @@
       transition: width 0.22s cubic-bezier(0.4,0,0.2,1), opacity 0.18s ease;
     }
     .sidebar.collapsed { width:56px; opacity:1; pointer-events:auto; }
+
+    /* ── Sidebar drag-to-resize handle ── */
+    .sidebar-drag-handle {
+      position:absolute; top:0; right:0;
+      width:6px; height:100%;
+      cursor:col-resize; z-index:200;
+      /* Invisible by default; becomes visible on hover/drag */
+    }
+    .sidebar-drag-handle::after {
+      content:''; position:absolute; top:0; right:0;
+      width:2px; height:100%;
+      background:var(--accent);
+      opacity:0; transition:opacity .15s;
+    }
+    .sidebar-drag-handle:hover::after,
+    .sidebar-drag-handle.dragging::after { opacity:1; }
+    /* Hide handle when sidebar is collapsed or on mobile */
+    .sidebar.collapsed .sidebar-drag-handle { display:none; }
+    @media (max-width:680px) { .sidebar-drag-handle { display:none; } }
     /* Sidebar search button */
     .sb-search-btn { width:36px; height:36px; border-radius:8px; border:none; background:transparent; cursor:pointer; display:flex; align-items:center; justify-content:center; color:var(--text-2); transition:background .15s; flex-shrink:0; }
     .sb-search-btn:hover { background:var(--surface-2); color:var(--text-1); }
@@ -3677,6 +3696,10 @@
         </button>
       </div>
     </div>
+
+    <!-- Drag-to-resize handle -->
+    <div class="sidebar-drag-handle" id="sidebar-drag-handle" aria-hidden="true"></div>
+
   </nav>
 
   <!-- MAIN -->
@@ -5725,6 +5748,77 @@ function toggleSidebar() {
 function closeSidebarOnMobile() {
   if (window.innerWidth <= 680 && sidebarOpen) toggleSidebar();
 }
+
+/* ── Sidebar drag-to-resize ────────────────────────────────────────────────
+   Lets the user drag the right edge of the sidebar to any width between
+   180px and 400px. Width is persisted to localStorage.
+───────────────────────────────────────────────────────────────────────────── */
+(function initSidebarResize() {
+  const STORAGE_KEY = 'di_sidebar_w';
+  const MIN_W = 180;
+  const MAX_W = 400;
+  const DEFAULT_W = 240;
+
+  // Restore persisted width on load
+  const stored = parseInt(localStorage.getItem(STORAGE_KEY));
+  if (stored && stored >= MIN_W && stored <= MAX_W) {
+    document.documentElement.style.setProperty('--sidebar-w', stored + 'px');
+  }
+
+  const handle  = document.getElementById('sidebar-drag-handle');
+  const sidebar = document.getElementById('sidebar');
+  if (!handle || !sidebar) return;
+
+  let dragging  = false;
+  let startX    = 0;
+  let startW    = 0;
+
+  handle.addEventListener('mousedown', e => {
+    // Desktop only, not when collapsed
+    if (window.innerWidth <= 680) return;
+    if (sidebar.classList.contains('collapsed')) return;
+
+    dragging = true;
+    startX   = e.clientX;
+    startW   = sidebar.getBoundingClientRect().width;
+
+    handle.classList.add('dragging');
+    // Disable transition so the sidebar tracks the mouse in real time
+    sidebar.style.transition = 'none';
+    document.body.style.cursor     = 'col-resize';
+    document.body.style.userSelect = 'none';
+
+    e.preventDefault();
+  });
+
+  document.addEventListener('mousemove', e => {
+    if (!dragging) return;
+    const delta  = e.clientX - startX;
+    const newW   = Math.min(MAX_W, Math.max(MIN_W, startW + delta));
+    document.documentElement.style.setProperty('--sidebar-w', newW + 'px');
+  });
+
+  document.addEventListener('mouseup', () => {
+    if (!dragging) return;
+    dragging = false;
+    handle.classList.remove('dragging');
+
+    // Re-enable the sidebar transition
+    sidebar.style.transition = '';
+    document.body.style.cursor     = '';
+    document.body.style.userSelect = '';
+
+    // Persist the final width
+    const finalW = sidebar.getBoundingClientRect().width;
+    localStorage.setItem(STORAGE_KEY, Math.round(finalW));
+  });
+
+  // Double-click the handle to reset to default width
+  handle.addEventListener('dblclick', () => {
+    document.documentElement.style.setProperty('--sidebar-w', DEFAULT_W + 'px');
+    localStorage.setItem(STORAGE_KEY, DEFAULT_W);
+  });
+})();
 
 function setMobNavActive(id) {
   document.querySelectorAll('.mob-nav-item').forEach(el => el.classList.remove('mob-active'));
