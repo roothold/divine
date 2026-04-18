@@ -432,10 +432,7 @@
 
     /* Recents scrollable area */
     .recents-wrap { flex:1; overflow-y:auto; overflow-x:hidden; scrollbar-width:thin; scrollbar-color:var(--border-md) transparent; }
-    .recents-header { display:flex; align-items:center; justify-content:space-between; padding:6px 12px 4px 22px; flex-shrink:0; }
-    .recents-label { font-size:10px; font-weight:600; letter-spacing:0.08em; text-transform:uppercase; color:var(--text-3); }
-    .recents-list { padding:2px 10px 8px; display:flex; flex-direction:column; gap:2px; }
-    .recents-empty { padding:12px 22px; font-size:12.5px; color:var(--text-3); line-height:1.5; }
+    /* recents-header, recents-label, recents-list, recents-empty defined in the live-ledger block below */
 
     /* recent-item base rules now in the chat-input section below */
 
@@ -608,7 +605,7 @@
 
     /* Profile button */
     .profile-btn {
-      display:flex; align-items:center; gap:10px; padding:10px 14px;
+      display:flex; align-items:center; gap:10px; padding:10px 12px;
       border:none; background:transparent; cursor:pointer; width:100%;
       text-align:left; transition:background 0.13s; border-radius:10px;
       margin:4px 8px; width:calc(100% - 16px);
@@ -1107,12 +1104,15 @@
     .sidebar.collapsed .cc-flat { justify-content:center; padding:10px 0; }
 
     /* ─── Live Ledger feed (sidebar recents) ─── */
-    .recents-header { display:flex; align-items:center; justify-content:space-between; padding:8px 12px 4px 14px; flex-shrink:0; }
-    .recents-label { font-size:9px; font-weight:700; letter-spacing:.12em; text-transform:uppercase; color:var(--text-3); }
+    /* Left padding = 20px (matching nav-section-label: 10px sidebar-nav + 10px own pad) */
+    .recents-header { display:flex; align-items:center; justify-content:space-between; padding:8px 12px 4px 20px; flex-shrink:0; }
+    /* Unify recents label style with .nav-section-label */
+    .recents-label { font-size:10px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:var(--text-3); }
     /* Live pulse dot — moved to active chat item */
     .recents-live-dot { display:none; }
-    .recents-list { padding:2px 8px 8px; display:flex; flex-direction:column; gap:1px; }
-    .recents-empty { padding:10px 14px; font-size:12px; color:var(--text-3); line-height:1.5; }
+    /* List left-pad 10px so items (padding:7px 8px 7px 10px) land at 10+10=20px */
+    .recents-list { padding:2px 8px 8px 10px; display:flex; flex-direction:column; gap:1px; }
+    .recents-empty { padding:10px 10px 10px 20px; font-size:12px; color:var(--text-3); line-height:1.5; }
     /* recent-item base — overridden by the full block lower in the stylesheet */
     .recent-item { position:relative; }
 
@@ -3308,7 +3308,7 @@
     /* ── Recent items — clean list style ──────────────────────────────── */
     .recent-item {
       position:relative; cursor:pointer; display:flex; align-items:center;
-      gap:8px; padding:7px 8px; border-radius:7px;
+      gap:8px; padding:7px 8px 7px 10px; border-radius:7px;
       background:transparent; border:none; width:100%; text-align:left;
       transition:background .12s;
     }
