@@ -38,8 +38,18 @@ import pool, {
   adminMigrateSchema, adminGetUsers, adminCountUsers,
   adminSetUserDisabled, adminSetUserAdmin, adminSetThinkerAccess,
   adminGetPerspectives, adminCountPerspectives, adminGetRevenue,
+  upsertSession, getUserSessions, deleteSession,
+  recordThinkerEarning, getThinkerStats,
+  getThinkerTransactions, getThinkerEarningsByPeriod,
+  // Thinker Logic v2.0
+  migrateThinkerLogicSchema,
+  computeWeightDelta, rankAxiomsThompson, computeTemporalDecay,
+  getOutcomeWindow, computeConfoundingDiscount,
+  computeProtocolConfidenceInterval,
+  getFragilityPoints, recordFragilityInstance,
+  runWeightUpdateJob,
 } from './db.js';
-import { getThinker } from './thinkers.js';
+import { getThinker, THINKERS } from './thinkers.js';
 
 const __dirname  = dirname(fileURLToPath(import.meta.url));
 const app        = express();
@@ -47,6 +57,7 @@ const anthropic  = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
 
 // ── Constants ─────────────────────────────────────────────────────────────────
 const INSIGHT_COST    = parseFloat(process.env.INSIGHT_COST    || '0.05');
+const THINKER_CUT     = parseFloat(process.env.THINKER_CUT     || '0.70'); // 70% to thinker
 const MAIN_MODEL      = process.env.ANTHROPIC_MODEL             || 'claude-sonnet-4-5';
 const SUMMARY_MODEL   = 'claude-haiku-4-5';
 const MAX_CTX_CHARS   = 12_000;
@@ -646,6 +657,27 @@ app.post('/api/get-perspective', async (req, res) => {
           cache_read:    finalMsg.usage?.cache_read_input_tokens,
           cache_write:   finalMsg.usage?.cache_creation_input_tokens,
         });
+
+        // ── 70/30 thinker payout ─────────────────────────────────────────
+        const thinkerPayoutAmount = parseFloat((INSIGHT_COST * THINKER_CUT).toFixed(4));
+        const thinkerPayoutLabel  = `Perspective earned · ${thinker.name} · ${stage}`;
+        // Resolve thinker's linked user account (if they have payoutEmail configured)
+        let thinkerUserId = null;
+        if (thinker.payoutEmail) {
+          try {
+            const payoutUser = await getUserByEmail(thinker.payoutEmail);
+            if (payoutUser) {
+              thinkerUserId = payoutUser.id;
+              // Credit their user wallet so earnings are visible in their balance
+              await creditWallet(thinkerUserId, thinkerPayoutAmount, thinkerPayoutLabel, { line_item_type: 'thinker_royalty' });
+            }
+          } catch (lookupErr) {
+            console.warn('[thinker-payout] user lookup failed:', lookupErr.message);
+          }
+        }
+        // Always record in thinker_earnings ledger (even if wallet credit fails)
+        await recordThinkerEarning(thinker_id, thinkerUserId, thinkerPayoutAmount, thinkerPayoutLabel);
+        // ─────────────────────────────────────────────────────────────────
       } catch (deductErr) {
         console.error('[deduct]', deductErr.message);
       }
@@ -992,6 +1024,58 @@ app.patch('/api/admin/thinkers/:id', requireAdmin, (req, res) => {
   res.json({ ok: true, id, available: THINKERS[id].available });
 });
 
+// ── Thinker Dashboard Endpoints (authenticated; thinker_access required) ──────
+
+function requireThinker(req, res, next) {
+  requireAuth(req, res, () => {
+    if (!req.user?.thinker_access) return res.status(403).json({ error: 'Thinker access required.' });
+    next();
+  });
+}
+
+// GET /api/thinker/stats — lifetime earnings summary
+app.get('/api/thinker/stats', requireThinker, async (req, res) => {
+  try {
+    const id = req.query.thinker_id || req.user.id;
+    const stats = await getThinkerStats(id);
+    res.json({
+      total_perspectives: parseInt(stats.total_perspectives, 10),
+      total_earned:       parseFloat(stats.total_earned   || 0),
+      last_activity:      stats.last_activity || null,
+      thinker_cut:        THINKER_CUT,
+    });
+  } catch (err) {
+    console.error('[/api/thinker/stats]', err.message);
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// GET /api/thinker/transactions — recent earning records
+app.get('/api/thinker/transactions', requireThinker, async (req, res) => {
+  try {
+    const id     = req.query.thinker_id || req.user.id;
+    const period = req.query.period || 'month';
+    const rows   = await getThinkerTransactions(id, period);
+    res.json({ transactions: rows });
+  } catch (err) {
+    console.error('[/api/thinker/transactions]', err.message);
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// GET /api/thinker/earnings — aggregated chart data by period
+app.get('/api/thinker/earnings', requireThinker, async (req, res) => {
+  try {
+    const id     = req.query.thinker_id || req.user.id;
+    const period = req.query.period || 'month';
+    const rows   = await getThinkerEarningsByPeriod(id, period);
+    res.json({ earnings: rows });
+  } catch (err) {
+    console.error('[/api/thinker/earnings]', err.message);
+    res.status(500).json({ error: err.message });
+  }
+});
+
 // ── GET /api/admin/perspectives ───────────────────────────────────────────────
 app.get('/api/admin/perspectives', requireAdmin, async (req, res) => {
   try {
@@ -1022,7 +1106,7 @@ app.post('/api/admin/credit', requireAdmin, async (req, res) => {
       user_id,
       parseFloat(amount),
       label || `Manual credit by admin`,
-      {}
+      { line_item_type: 'admin_adjustment' }
     );
     console.log(`[admin/credit] Manually credited ${amount} to user ${user_id} by ${req.adminUser.email}`);
     res.json({ ok: true, new_balance: parseFloat(wallet.credit_balance) });
@@ -1045,6 +1129,43 @@ app.get('/api/admin/revenue', requireAdmin, async (_req, res) => {
 
 // schema-check removed — constraint confirmed: type IN ('credit', 'debit')
 
+// ── Session sync endpoints ────────────────────────────────────────────────────
+
+// GET /api/sessions — load all sessions for the authenticated user
+app.get('/api/sessions', requireAuth, async (req, res) => {
+  try {
+    const sessions = await getUserSessions(req.user.id);
+    res.json({ sessions });
+  } catch (err) {
+    console.error('[/api/sessions GET]', err.message);
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// POST /api/sessions — upsert a single session
+app.post('/api/sessions', requireAuth, async (req, res) => {
+  const session = req.body;
+  if (!session?.id) return res.status(400).json({ error: 'session.id is required.' });
+  try {
+    await upsertSession(req.user.id, session);
+    res.json({ ok: true });
+  } catch (err) {
+    console.error('[/api/sessions POST]', err.message);
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// DELETE /api/sessions/:id — delete a session belonging to the authenticated user
+app.delete('/api/sessions/:id', requireAuth, async (req, res) => {
+  try {
+    await deleteSession(req.user.id, req.params.id);
+    res.json({ ok: true });
+  } catch (err) {
+    console.error('[/api/sessions DELETE]', err.message);
+    res.status(500).json({ error: err.message });
+  }
+});
+
 // ── SPA catch-all ────────────────────────────────────────────────────────────
 // Serve index.html for every non-API, non-auth route.
 // This is what makes /dashboard/wallet work on browser refresh — the server
@@ -1061,8 +1182,21 @@ app.get('*', (req, res, next) => {
 });
 
 // ── Start ─────────────────────────────────────────────────────────────────────
-// Run admin schema migration before accepting traffic
-adminMigrateSchema().catch(err => console.warn('[admin-migrate]', err.message));
+// Run schema migrations sequentially before accepting traffic
+adminMigrateSchema()
+  .then(() => migrateThinkerLogicSchema())
+  .catch(err => console.warn('[schema-migrate]', err.message));
+
+// Weight Update Job — runs every 6 hours
+// Processes all pending outcome_verifications using WUA v2.0
+const WUA_INTERVAL_MS = 6 * 60 * 60 * 1000;  // 6 hours
+setInterval(() => {
+  runWeightUpdateJob()
+    .then(({ processed, total }) => {
+      if (total > 0) console.log(`[WUA v2.0] Job complete — ${processed}/${total} outcomes processed`);
+    })
+    .catch(err => console.error('[WUA v2.0] Job error:', err.message));
+}, WUA_INTERVAL_MS);
 
 app.listen(PORT, () => {
   console.log(`[Divine Intelligence] Running on :${PORT}`);

@@ -14,6 +14,10 @@ export const THINKERS = {
     name: 'Michael Akindele',
     title: 'Builder · Designer · Founder',
     available: true,
+    payoutEmail: 'michael@surpluspods.com', // 70% of each $0.05 perspective credited to this account
+    score: 94,                              // Cognitive Moat Score (0–100)
+    categories: ['Startups', 'Product', 'Brand'],
+    capabilities: ['Problem Validation', 'Market Audit', 'Scale Thinking', 'Brand Signal', 'Direct Truth'],
     systemPrompt: `You are Michael Akindele — builder, designer, and founder. You have built products from zero, raised investment, pitched to partners, and shipped things that failed and things that worked.
 
 Your cognitive framework:
@@ -33,6 +37,9 @@ Format your response using clear sections. Use the founder's specific situation 
     name: 'Indra Nooyi',
     title: 'Global CEO · Strategist',
     available: false,
+    score: 91,
+    categories: ['Strategy', 'Corporate', 'Sustainability'],
+    capabilities: ['Long-term Vision', 'Stakeholder Alignment', 'P&L Discipline', 'Corporate Purpose', 'Global Scale'],
     systemPrompt: `You are Indra Nooyi — former CEO of PepsiCo, architect of Performance with Purpose. You operate at the intersection of shareholder value and long-term societal impact.`
   },
 
@@ -41,6 +48,9 @@ Format your response using clear sections. Use the founder's specific situation 
     name: 'Brian Chesky',
     title: 'Co-founder · Design CEO',
     available: false,
+    score: 89,
+    categories: ['Product', 'Design', 'Experience'],
+    capabilities: ['Experience Design', '11-Star Thinking', 'Founder Mode', 'Community Building', 'Product Vision'],
     systemPrompt: `You are Brian Chesky — co-founder of Airbnb. You work backward from the perfect 5-star experience and refuse to ship anything you wouldn't personally be proud to use.`
   },
 
@@ -49,6 +59,9 @@ Format your response using clear sections. Use the founder's specific situation 
     name: 'Oprah Winfrey',
     title: 'Media · Human Connection',
     available: false,
+    score: 88,
+    categories: ['Media', 'Brand', 'Community'],
+    capabilities: ['Human Story', 'Authentic Voice', 'Audience Trust', 'Brand Purpose', 'Empathy Architecture'],
     systemPrompt: `You are Oprah Winfrey — media mogul, storyteller, connector of humans. You find the human story inside every business decision and ask who this is really for.`
   },
 
@@ -57,6 +70,9 @@ Format your response using clear sections. Use the founder's specific situation 
     name: 'Sara Blakely',
     title: 'Founder · Bootstrapper',
     available: false,
+    score: 87,
+    categories: ['Startups', 'Consumer', 'Bootstrapping'],
+    capabilities: ['Constraint Leverage', 'Bootstrapped Growth', 'Customer Obsession', 'Unconventional Tactics', 'Founder Intuition'],
     systemPrompt: `You are Sara Blakely — founder of Spanx, bootstrapped to a billion. You question every assumption about the right way to do things and find leverage in constraints.`
   },
 
@@ -65,6 +81,9 @@ Format your response using clear sections. Use the founder's specific situation 
     name: 'Satya Nadella',
     title: 'CEO · Culture Builder',
     available: false,
+    score: 92,
+    categories: ['Enterprise', 'Culture', 'Technology'],
+    capabilities: ['Growth Mindset', 'Culture Change', 'Platform Strategy', 'Cloud Architecture', 'Empathy at Scale'],
     systemPrompt: `You are Satya Nadella — CEO of Microsoft, author of Hit Refresh. You apply growth mindset to strategic inflection points and rebuild cultures that had stopped learning.`
   },
 
@@ -73,6 +92,9 @@ Format your response using clear sections. Use the founder's specific situation 
     name: 'Reid Hoffman',
     title: 'VC · Network Theorist',
     available: false,
+    score: 90,
+    categories: ['VC / Fundraising', 'Networks', 'Scale'],
+    capabilities: ['Network Effects', 'Platform Thinking', 'Blitzscaling', 'Investment Thesis', 'Ecosystem Design'],
     systemPrompt: `You are Reid Hoffman — co-founder of LinkedIn, partner at Greylock. You think in networks, platform effects, and leverage at scale. You ask who else benefits if this wins.`
   },
 
@@ -81,6 +103,9 @@ Format your response using clear sections. Use the founder's specific situation 
     name: 'Jessica Alba',
     title: 'Founder · Consumer Brand',
     available: false,
+    score: 85,
+    categories: ['Consumer', 'Brand', 'Mission'],
+    capabilities: ['Mission-Driven Brand', 'Authentic Positioning', 'Consumer Trust', 'Retail Strategy', 'Founder Narrative'],
     systemPrompt: `You are Jessica Alba — founder of The Honest Company. You build brands around authentic personal conviction and ask whether the founder is the right person to tell this story.`
   },
 };

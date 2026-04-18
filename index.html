@@ -1000,12 +1000,33 @@
     .dc-proj-select:hover { border-color:var(--accent-bdr); color:var(--accent); }
     .dc-proj-add { width:28px; height:28px; border-radius:50%; border:1.5px solid var(--border); background:transparent; cursor:pointer; display:flex; align-items:center; justify-content:center; color:var(--text-3); transition:border-color .12s,color .12s,background .12s; }
     .dc-proj-add:hover { border-color:var(--accent-bdr); color:var(--accent); background:var(--accent-lt); }
-    /* Attachment chip */
-    .dc-attach-chip { display:none; align-items:center; gap:6px; background:var(--accent-lt); border:1px solid var(--accent-bdr); border-radius:var(--r-pill); padding:4px 10px 4px 8px; font-size:12px; font-weight:500; color:var(--accent); max-width:220px; margin-top:6px; }
-    .dc-attach-chip.visible { display:flex; }
-    .dc-attach-chip-name { white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:130px; }
-    .dc-attach-remove { background:none; border:none; cursor:pointer; color:var(--accent); display:flex; align-items:center; padding:0; opacity:.7; transition:opacity .12s; flex-shrink:0; }
-    .dc-attach-remove:hover { opacity:1; }
+    /* Dashboard attachment chip */
+    .dc-attach-chip {
+      display: none; align-items: center; gap: 8px;
+      background: var(--surface-2); border: 1.5px solid var(--border-hi);
+      border-radius: 10px; padding: 6px 10px 6px 8px;
+      font-size: 12px; font-weight: 500; color: var(--text-1);
+      max-width: 260px; margin-top: 8px;
+      box-shadow: 0 1px 3px rgba(0,0,0,.06);
+      transition: border-color .15s;
+    }
+    .dc-attach-chip.visible { display: flex; }
+    .dc-attach-chip-icon {
+      width: 28px; height: 28px; border-radius: 7px;
+      background: var(--accent-lt); border: 1px solid var(--accent-bdr);
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0; color: var(--accent);
+    }
+    .dc-attach-chip-body { display: flex; flex-direction: column; gap: 1px; min-width: 0; flex: 1; }
+    .dc-attach-chip-name { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 160px; color: var(--text-1); font-weight: 500; font-size: 12px; }
+    .dc-attach-chip-ext  { font-size: 10px; font-weight: 600; color: var(--text-3); letter-spacing: .04em; text-transform: uppercase; }
+    .dc-attach-remove {
+      background: none; border: none; cursor: pointer; padding: 3px;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--text-3); border-radius: 5px; flex-shrink: 0;
+      transition: color .12s, background .12s;
+    }
+    .dc-attach-remove:hover { color: var(--accent); background: var(--accent-lt); }
     .dc-input-submit { background:#D9D9D6; color:#fff; border:none; border-radius:var(--r-pill); padding:8px 18px; font-size:13px; font-weight:600; cursor:not-allowed; transition:background .2s; font-family:'Inter',sans-serif; white-space:nowrap; flex-shrink:0; }
     .dc-input-submit.ready { background:var(--accent); cursor:pointer; }
     .dc-input-submit.ready:hover { background:var(--accent-mid); }
@@ -1272,26 +1293,66 @@
     .dc-panel-tabs.three { grid-template-columns:repeat(3,1fr); }
 
     /* ═══ THOUGHT LEADERS SCREEN ═══ */
-    .tl-filter-row { display:flex; gap:6px; margin-bottom:22px; }
-    .tl-filter-btn { font-size:12px; font-weight:600; padding:7px 16px; border-radius:var(--r-pill); border:1.5px solid var(--border-md); background:var(--surface); color:var(--text-2); cursor:pointer; transition:all .15s; }
-    .tl-filter-btn:hover { border-color:var(--accent-bdr); color:var(--accent); }
-    .tl-filter-btn.active { background:var(--accent); border-color:var(--accent); color:#fff; }
-    .tl-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:14px; }
-    @media (max-width:560px) { .tl-grid { grid-template-columns:1fr; } }
-    .tl-card { background:var(--surface); border:1.5px solid var(--border); border-radius:14px; padding:20px; cursor:pointer; transition:border-color .15s,box-shadow .15s,transform .15s,opacity .4s; }
-    .tl-card:hover { border-color:var(--accent-bdr); box-shadow:0 4px 18px rgba(191,69,42,.09); transform:translateY(-1px); }
-    .tl-card-top { display:flex; align-items:center; gap:13px; margin-bottom:14px; }
-    .tl-avatar { width:46px; height:46px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:14px; font-weight:700; color:#fff; flex-shrink:0; transition:box-shadow .4s; }
-    .tl-name { font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:var(--text-0); line-height:1.35; }
-    .tl-title { font-size:9.5px; font-weight:700; letter-spacing:.07em; text-transform:uppercase; color:var(--text-3); margin-top:3px; }
-    .tl-lens-label { font-size:9px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:var(--text-3); margin-bottom:5px; }
-    .tl-lens-text { font-family:'Cormorant Garamond',serif; font-size:15px; font-style:italic; color:var(--text-1); line-height:1.5; margin-bottom:14px; }
-    .tl-demand-row { display:flex; align-items:center; gap:8px; margin-bottom:14px; }
-    .tl-demand-bar-bg { flex:1; height:4px; background:var(--border-md); border-radius:2px; overflow:hidden; }
-    .tl-demand-fill { height:100%; background:var(--accent); border-radius:2px; transition:width .6s ease; }
-    .tl-demand-label { font-size:10px; font-weight:700; color:var(--text-3); white-space:nowrap; }
-    .tl-acquire-btn { width:100%; background:transparent; color:var(--accent); border:1.5px solid var(--accent); border-radius:var(--r-pill); padding:9px; font-size:12px; font-weight:700; cursor:pointer; transition:background .15s, color .15s; display:flex; align-items:center; justify-content:center; gap:6px; }
+    /* ── Thinker Management Table ── */
+    .tm-wrap { background:var(--surface); border:1px solid var(--border); border-radius:var(--r); overflow:hidden; }
+    .tm-toolbar { display:flex; align-items:center; gap:10px; padding:14px 18px; border-bottom:1px solid var(--border); background:var(--surface-2); flex-wrap:wrap; }
+    .tm-toolbar-title { font-size:11px; font-weight:800; letter-spacing:.1em; text-transform:uppercase; color:var(--text-0); flex:1; min-width:120px; }
+    .tm-count-pill { font-size:10px; font-weight:700; letter-spacing:.06em; background:var(--accent-lt); color:var(--accent); border-radius:var(--r-pill); padding:3px 9px; }
+    .tm-filter-wrap { display:flex; gap:6px; }
+    .tm-filter-btn { font-size:11px; font-weight:600; letter-spacing:.04em; border:1px solid var(--border-md); border-radius:var(--r-pill); padding:5px 12px; background:transparent; color:var(--text-2); cursor:pointer; transition:all .15s; }
+    .tm-filter-btn.active,.tm-filter-btn:hover { background:var(--accent); color:#fff; border-color:var(--accent); }
+    .tm-scroll { overflow-x:auto; scrollbar-width:thin; }
+    .tm-table { width:100%; border-collapse:collapse; min-width:780px; }
+    .tm-table thead th { font-size:9.5px; font-weight:800; letter-spacing:.1em; text-transform:uppercase; color:var(--text-3); padding:10px 14px; text-align:left; border-bottom:1px solid var(--border); background:var(--surface-2); white-space:nowrap; }
+    .tm-table thead th:first-child { padding-left:18px; }
+    .tm-table thead th:last-child { padding-right:18px; text-align:center; }
+    .tm-table tbody tr { border-bottom:1px solid var(--border); transition:background .13s; }
+    .tm-table tbody tr:last-child { border-bottom:none; }
+    .tm-table tbody tr:hover { background:var(--surface-2); }
+    .tm-table tbody tr.tm-row-inactive { opacity:.6; }
+    .tm-td { padding:14px 14px; vertical-align:middle; }
+    .tm-td:first-child { padding-left:18px; }
+    .tm-td:last-child { padding-right:18px; text-align:center; }
+    /* Thinker cell */
+    .tm-thinker-cell { display:flex; align-items:center; gap:12px; min-width:180px; }
+    .tm-avatar { width:38px; height:38px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:800; color:#fff; flex-shrink:0; }
+    .tm-thinker-name { font-size:12px; font-weight:700; color:var(--text-0); letter-spacing:.02em; }
+    .tm-thinker-title { font-size:10px; color:var(--text-3); margin-top:2px; }
+    /* Status badge */
+    .tm-status { display:inline-flex; align-items:center; gap:5px; font-size:10px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; border-radius:var(--r-pill); padding:4px 9px; white-space:nowrap; }
+    .tm-status-live { background:rgba(22,163,74,.10); color:#16A34A; }
+    .tm-status-live::before { content:''; width:6px; height:6px; border-radius:50%; background:#16A34A; animation:tm-pulse 2s ease-in-out infinite; }
+    .tm-status-soon { background:var(--border-md); color:var(--text-3); }
+    @keyframes tm-pulse { 0%,100%{opacity:1} 50%{opacity:.4} }
+    /* Capabilities */
+    .tm-caps { display:flex; flex-wrap:wrap; gap:4px; max-width:240px; }
+    .tm-cap-tag { font-size:9.5px; font-weight:600; color:var(--text-1); background:var(--surface-2); border:1px solid var(--border); border-radius:4px; padding:2px 7px; white-space:nowrap; }
+    /* Categories */
+    .tm-cats { display:flex; flex-wrap:wrap; gap:4px; max-width:180px; }
+    .tm-cat-tag { font-size:9.5px; font-weight:700; letter-spacing:.04em; color:var(--accent); background:var(--accent-lt); border-radius:4px; padding:2px 7px; white-space:nowrap; }
+    /* Score */
+    .tm-score-cell { min-width:90px; }
+    .tm-score-num { font-size:18px; font-weight:800; color:var(--text-0); line-height:1; font-family:'Cormorant Garamond',serif; }
+    .tm-score-bar-bg { height:3px; background:var(--border-md); border-radius:2px; margin-top:5px; overflow:hidden; }
+    .tm-score-bar-fill { height:100%; border-radius:2px; background:linear-gradient(90deg,var(--accent),#C9A84C); transition:width .6s ease; }
+    /* Earnings */
+    .tm-earnings-cell { min-width:90px; }
+    .tm-earnings-val { font-size:14px; font-weight:700; color:var(--text-0); font-family:'Cormorant Garamond',serif; }
+    .tm-earnings-sub { font-size:9.5px; color:var(--text-3); margin-top:2px; }
+    /* Action */
+    .tm-action-btn { background:transparent; color:var(--accent); border:1.5px solid var(--accent); border-radius:var(--r-pill); padding:6px 14px; font-size:11px; font-weight:700; cursor:pointer; transition:background .15s,color .15s; white-space:nowrap; }
+    .tm-action-btn:hover { background:var(--accent); color:#fff; }
+    .tm-action-soon { font-size:10px; font-weight:600; color:var(--text-3); letter-spacing:.06em; text-transform:uppercase; }
+    @media (max-width:680px) {
+      .tm-caps,.tm-cats { max-width:140px; }
+      .tm-table { min-width:680px; }
+    }
+
+    /* Legacy card styles kept for dc-card references elsewhere */
+    .tl-avatar { width:46px; height:46px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:14px; font-weight:700; color:#fff; flex-shrink:0; }
+    .tl-acquire-btn { background:transparent; color:var(--accent); border:1.5px solid var(--accent); border-radius:var(--r-pill); padding:9px; font-size:12px; font-weight:700; cursor:pointer; transition:background .15s,color .15s; display:flex; align-items:center; justify-content:center; gap:6px; }
     .tl-acquire-btn:hover { background:var(--accent); color:#fff; }
+    .tl-demand-fill { height:100%; background:var(--accent); border-radius:2px; transition:width .6s ease; }
 
     /* ═══ INQUIRY STREAM ═══ */
     /* Screen is now a row: [chat col] + [insight sidebar] */
@@ -3000,24 +3061,49 @@
     .chat-attach-picker-item svg { flex-shrink:0; color:var(--text-2); }
 
     .chat-attach-chips {
-      display:flex; flex-wrap:wrap; gap:6px; padding:8px 14px 0;
+      display: flex; flex-wrap: wrap; gap: 7px; padding: 10px 14px 2px;
     }
     .chat-attach-chip {
-      display:flex; align-items:center; gap:6px; padding:4px 8px 4px 6px;
-      background:var(--surface-2); border:1px solid var(--border-md);
-      border-radius:8px; font-size:12px; color:var(--text-1); max-width:180px;
+      display: flex; align-items: center; gap: 8px;
+      padding: 5px 8px 5px 6px;
+      background: var(--surface); border: 1.5px solid var(--border-hi);
+      border-radius: 10px; font-size: 12px; color: var(--text-1);
+      max-width: 220px; box-shadow: 0 1px 3px rgba(0,0,0,.06);
+      transition: border-color .12s, box-shadow .12s;
     }
+    .chat-attach-chip:hover { border-color: var(--accent-bdr); box-shadow: 0 1px 5px rgba(0,0,0,.09); }
+    /* Image chip thumbnail */
     .chat-attach-chip-thumb {
-      width:20px; height:20px; border-radius:4px; object-fit:cover; flex-shrink:0;
+      width: 32px; height: 32px; border-radius: 6px;
+      object-fit: cover; flex-shrink: 0;
+      border: 1px solid var(--border);
     }
+    /* Doc chip icon box */
+    .chat-attach-chip-icon {
+      width: 32px; height: 32px; border-radius: 7px; flex-shrink: 0;
+      background: var(--accent-lt); border: 1px solid var(--accent-bdr);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--accent);
+    }
+    .chat-attach-chip-body { display: flex; flex-direction: column; gap: 1px; min-width: 0; flex: 1; }
     .chat-attach-chip-name {
-      overflow:hidden; text-overflow:ellipsis; white-space:nowrap; flex:1;
+      overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+      font-weight: 500; font-size: 12px; color: var(--text-1);
+    }
+    .chat-attach-chip-meta {
+      font-size: 10px; font-weight: 600; letter-spacing: .04em;
+      text-transform: uppercase; color: var(--text-3);
     }
     .chat-attach-chip-rm {
-      border:none; background:none; cursor:pointer; padding:0; color:var(--text-3);
-      font-size:14px; line-height:1; flex-shrink:0; transition:color .1s;
+      border: none; background: none; cursor: pointer;
+      padding: 3px; border-radius: 5px;
+      color: var(--text-3); flex-shrink: 0;
+      line-height: 1; transition: color .1s, background .1s;
+      display: flex; align-items: center; justify-content: center;
     }
-    .chat-attach-chip-rm:hover { color:var(--accent); }
+    .chat-attach-chip-rm:hover { color: var(--accent); background: var(--accent-lt); }
+    @keyframes chip-pulse { 0%,100%{opacity:1} 50%{opacity:.45} }
+    .chat-attach-chip.loading .chat-attach-chip-meta { animation: chip-pulse 1.2s ease-in-out infinite; }
 
     /* Image thumb in chat bubble */
     .chat-msg-img-wrap { margin-bottom:8px; display:flex; flex-wrap:wrap; gap:6px; }
@@ -3261,6 +3347,10 @@
       .splash-btn-login, .splash-btn-signup { padding:13px 28px; font-size:14px; }
     }
   </style>
+  <!-- PDF text extraction -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+  <!-- DOCX text extraction -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
 </head>
 <body>
 
@@ -3531,10 +3621,15 @@
                 oninput="dcInputUpdate(this)"></textarea>
               <!-- Attachment chip -->
               <div class="dc-attach-chip" id="dc-attach-chip">
-                <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M13.5 8.5l-5.5 5.5a4 4 0 01-5.66-5.66l6-6a2.5 2.5 0 013.54 3.54l-6.01 6a1 1 0 01-1.41-1.41l5.5-5.5"/></svg>
-                <span class="dc-attach-chip-name" id="dc-attach-name">document.pdf</span>
-                <button class="dc-attach-remove" onclick="dcRemoveAttachment()" title="Remove">
-                  <svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><line x1="2" y1="2" x2="10" y2="10"/><line x1="10" y1="2" x2="2" y2="10"/></svg>
+                <div class="dc-attach-chip-icon">
+                  <svg width="13" height="13" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"><rect x="2" y="1" width="8" height="12" rx="1.5"/><path d="M4 4.5h4M4 7h4M4 9.5h2.5"/></svg>
+                </div>
+                <div class="dc-attach-chip-body">
+                  <span class="dc-attach-chip-name" id="dc-attach-name">document.pdf</span>
+                  <span class="dc-attach-chip-ext" id="dc-attach-ext">Document</span>
+                </div>
+                <button class="dc-attach-remove" onclick="dcRemoveAttachment()" title="Remove attachment">
+                  <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="2" y1="2" x2="10" y2="10"/><line x1="10" y1="2" x2="2" y2="10"/></svg>
                 </button>
               </div>
               <div class="dc-input-footer">
@@ -4984,19 +5079,50 @@ e.g. I always start by validating whether the problem is real before evaluating 
   </div></div>
 </div>
 
-    <!-- SCREEN: Thought Leaders -->
+    <!-- SCREEN: Thought Leaders / Thinker Management -->
     <div class="screen" id="screen-thought-leaders">
       <div class="main-inner"><div class="screen-inner">
         <div class="screen-header">
-          <div class="screen-label">Explore</div>
-          <h2 class="screen-title">Thought Leaders</h2>
-          <p class="screen-sub">Curated human minds with verified cognitive frameworks.</p>
+          <div class="screen-label">Management</div>
+          <h2 class="screen-title">Thinker Management</h2>
+          <p class="screen-sub">Verified cognitive frameworks — earnings, status, and capabilities at a glance.</p>
         </div>
-        <div class="tl-filter-row">
-          <button class="tl-filter-btn active" id="tl-btn-top" onclick="setTlFilter('top')">Top Sought</button>
-          <button class="tl-filter-btn" id="tl-btn-recent" onclick="setTlFilter('recent')">Recently Added</button>
+
+        <div class="tm-wrap">
+          <!-- Toolbar -->
+          <div class="tm-toolbar">
+            <div class="tm-toolbar-title">
+              Thinker Roster
+              <span class="tm-count-pill" id="tm-count">—</span>
+            </div>
+            <div class="tm-filter-wrap">
+              <button class="tm-filter-btn active" id="tm-btn-all"    onclick="setTmFilter('all',this)">All</button>
+              <button class="tm-filter-btn"         id="tm-btn-live"   onclick="setTmFilter('live',this)">Live</button>
+              <button class="tm-filter-btn"         id="tm-btn-score"  onclick="setTmFilter('score',this)">Top Score</button>
+            </div>
+          </div>
+
+          <!-- Table -->
+          <div class="tm-scroll">
+            <table class="tm-table" id="tm-table">
+              <thead>
+                <tr>
+                  <th>Thinker</th>
+                  <th>Status</th>
+                  <th>Core Capabilities</th>
+                  <th>Categories</th>
+                  <th>Moat Score</th>
+                  <th>Total Earnings</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody id="tm-body">
+                <tr><td colspan="7" style="text-align:center;padding:36px;color:var(--text-3);font-family:'Cormorant Garamond',serif;font-size:15px">Loading thinkers…</td></tr>
+              </tbody>
+            </table>
+          </div>
         </div>
-        <div class="tl-grid" id="tl-grid"></div>
+
       </div></div>
     </div>
 
@@ -5273,15 +5399,38 @@ e.g. I always start by validating whether the problem is real before evaluating 
 ════════════════════════════════ */
 const THINKERS = [
   { id:'michael', name:'Michael Akindele', initials:'MA', color:'#2C3E50', title:'Builder · Designer · Founder', role:'Founder',
+    score:94, categories:['Startups','Product','Brand'],
+    capabilities:['Problem Validation','Market Audit','Scale Thinking','Brand Signal','Direct Truth'],
     lens:"Validates whether the problem is real, audits the market landscape, and tells you — directly — if you're not thinking big enough.", available:true,
     aiFrame:`Validate whether the problem is real before evaluating any solution — ask what signals prove real people experience this pain. Audit what already exists in the market before building anything — ask what is different about this, what can be learned from competitors' mistakes, what does this reveal about positioning, and how can it be made 10x better. Challenge the founder to think bigger — surface where they have artificially constrained their vision by current resources or market. Examine how the founder is showing up externally (brand, presentation, email, deck) and whether the signal undermines the idea before it gets a fair hearing. Be direct, specific, and willing to say what others won't.` },
-  { id:'indra',   name:'Indra Nooyi',   initials:'IN', color:'#0F7A5E', title:'Global CEO · Strategist',  role:'CEO',      lens:"Applies performance with purpose.", available:false, aiFrame:'' },
-  { id:'brian',   name:'Brian Chesky',  initials:'BC', color:'#C0392B', title:'Co-founder · Design CEO',  role:'Founder',  lens:'Works backward from a 5-star experience.', available:false, aiFrame:'' },
-  { id:'oprah',   name:'Oprah Winfrey', initials:'OW', color:'#8E5A02', title:'Media · Human Connection', role:'Media',    lens:'Finds the human story in every decision.', available:false, aiFrame:'' },
-  { id:'sara',    name:'Sara Blakely',  initials:'SB', color:'#7B2D8B', title:'Founder · Bootstrapper',   role:'Founder',  lens:'Questions every assumption about the right way.', available:false, aiFrame:'' },
-  { id:'satya',   name:'Satya Nadella', initials:'SN', color:'#005B9E', title:'CEO · Culture Builder',    role:'CEO',      lens:'Applies growth mindset to strategic inflection.', available:false, aiFrame:'' },
-  { id:'reid',    name:'Reid Hoffman',  initials:'RH', color:'#1D4E89', title:'VC · Network Theorist',    role:'Investor', lens:'Thinks in networks and leverage at scale.', available:false, aiFrame:'' },
-  { id:'jessica', name:'Jessica Alba',  initials:'JA', color:'#B5451B', title:'Founder · Consumer Brand', role:'Founder',  lens:"Builds brands around authentic personal conviction.", available:false, aiFrame:'' },
+  { id:'indra',   name:'Indra Nooyi',   initials:'IN', color:'#0F7A5E', title:'Global CEO · Strategist',  role:'CEO',
+    score:91, categories:['Strategy','Corporate','Sustainability'],
+    capabilities:['Long-term Vision','Stakeholder Alignment','P&L Discipline','Corporate Purpose','Global Scale'],
+    lens:"Applies performance with purpose.", available:false, aiFrame:'' },
+  { id:'brian',   name:'Brian Chesky',  initials:'BC', color:'#C0392B', title:'Co-founder · Design CEO',  role:'Founder',
+    score:89, categories:['Product','Design','Experience'],
+    capabilities:['Experience Design','11-Star Thinking','Founder Mode','Community Building','Product Vision'],
+    lens:'Works backward from a 5-star experience.', available:false, aiFrame:'' },
+  { id:'oprah',   name:'Oprah Winfrey', initials:'OW', color:'#8E5A02', title:'Media · Human Connection', role:'Media',
+    score:88, categories:['Media','Brand','Community'],
+    capabilities:['Human Story','Authentic Voice','Audience Trust','Brand Purpose','Empathy Architecture'],
+    lens:'Finds the human story in every decision.', available:false, aiFrame:'' },
+  { id:'sara',    name:'Sara Blakely',  initials:'SB', color:'#7B2D8B', title:'Founder · Bootstrapper',   role:'Founder',
+    score:87, categories:['Startups','Consumer','Bootstrapping'],
+    capabilities:['Constraint Leverage','Bootstrapped Growth','Customer Obsession','Unconventional Tactics','Founder Intuition'],
+    lens:'Questions every assumption about the right way.', available:false, aiFrame:'' },
+  { id:'satya',   name:'Satya Nadella', initials:'SN', color:'#005B9E', title:'CEO · Culture Builder',    role:'CEO',
+    score:92, categories:['Enterprise','Culture','Technology'],
+    capabilities:['Growth Mindset','Culture Change','Platform Strategy','Cloud Architecture','Empathy at Scale'],
+    lens:'Applies growth mindset to strategic inflection.', available:false, aiFrame:'' },
+  { id:'reid',    name:'Reid Hoffman',  initials:'RH', color:'#1D4E89', title:'VC · Network Theorist',    role:'Investor',
+    score:90, categories:['VC / Fundraising','Networks','Scale'],
+    capabilities:['Network Effects','Platform Thinking','Blitzscaling','Investment Thesis','Ecosystem Design'],
+    lens:'Thinks in networks and leverage at scale.', available:false, aiFrame:'' },
+  { id:'jessica', name:'Jessica Alba',  initials:'JA', color:'#B5451B', title:'Founder · Consumer Brand', role:'Founder',
+    score:85, categories:['Consumer','Brand','Mission'],
+    capabilities:['Mission-Driven Brand','Authentic Positioning','Consumer Trust','Retail Strategy','Founder Narrative'],
+    lens:"Builds brands around authentic personal conviction.", available:false, aiFrame:'' },
 ];
 
 const PROJECT_COLORS = ['#BF452A','#0F7A5E','#C0392B','#8E5A02','#7B2D8B','#005B9E','#1D4E89','#B5451B'];
@@ -5384,10 +5533,75 @@ function saveProjects(p) { localStorage.setItem(_sKey('di_projects'), JSON.strin
 
 function saveSession(s) {
   const r = loadRecents();
+  // Replace existing entry with same id, or prepend
+  const idx = r.findIndex(x => x.id === s.id);
+  if (idx !== -1) r.splice(idx, 1);
   r.unshift(s);
   if (r.length > 100) r.pop();
   saveRecents(r);
   renderRecents();
+  // Sync to server (fire-and-forget) when logged in
+  if (currentUser) {
+    const token = getAuthToken();
+    fetch(`${API_BASE}/api/sessions`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+      body: JSON.stringify(s),
+    }).catch(() => { /* best-effort — localStorage is source of truth */ });
+  }
+}
+
+/**
+ * Pull sessions from the server and merge with local storage.
+ * Server is authoritative for cross-device history; local additions
+ * (made during this session before sync) are preserved and uploaded.
+ * @param {string} userId      - the real account UUID (USER_ID is already set to this)
+ * @param {string|null} guestId - the previous guest USER_ID, to migrate pre-login sessions
+ */
+async function _syncSessionsFromServer(userId, guestId) {
+  try {
+    const token = getAuthToken();
+    const res = await fetch(`${API_BASE}/api/sessions`, {
+      headers: { 'Authorization': `Bearer ${token}` },
+    });
+    if (!res.ok) return;
+    const serverSessions = await res.json(); // newest-first array
+
+    // Migrate any IS-perspective sessions created before login (stored under the guest namespace)
+    let guestSessions = [];
+    if (guestId) {
+      const guestKey = 'di_recents_' + guestId;
+      try { guestSessions = JSON.parse(localStorage.getItem(guestKey) || '[]'); } catch {}
+      if (guestSessions.length) {
+        localStorage.removeItem(guestKey);
+        // Upload guest sessions to server (fire-and-forget)
+        guestSessions.forEach(gs => {
+          fetch(`${API_BASE}/api/sessions`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+            body: JSON.stringify(gs),
+          }).catch(() => {});
+        });
+      }
+    }
+
+    // Merge: server sessions + guest sessions + existing account-scoped local sessions, deduplicated by id
+    const local = loadRecents(); // now uses real USER_ID namespace
+    const merged = [...serverSessions];
+    const serverIds = new Set(serverSessions.map(s => s.id));
+    // Preserve local-only items (created this session before first sync completed, or guest sessions)
+    [...guestSessions, ...local].forEach(s => {
+      if (!serverIds.has(s.id)) merged.push(s);
+    });
+    // Sort newest-first
+    merged.sort((a, b) => new Date(b.date || 0) - new Date(a.date || 0));
+    if (merged.length > 100) merged.length = 100;
+
+    saveRecents(merged);
+    renderRecents();
+  } catch (e) {
+    console.warn('[Sessions] Sync failed:', e.message);
+  }
 }
 
 /* ════════════════════════════════
@@ -5594,7 +5808,7 @@ function showView(view, opts = {}) {
       if (si) { si.value = ''; runSearch(''); }
       setTimeout(() => si && si.focus(), 120);
     },
-    'thought-leaders': () => { document.getElementById('nav-search')?.classList.add('active'); setMobNavActive('mob-nav-search'); renderThoughtLeaders(); show('screen-thought-leaders'); },
+    'thought-leaders': () => { document.getElementById('nav-search')?.classList.add('active'); setMobNavActive('mob-nav-search'); renderThoughtLeaders(); _loadTmEarnings(); show('screen-thought-leaders'); },
     projects:    () => { document.getElementById('nav-projects').classList.add('active'); setMobNavActive('mob-nav-projects'); renderProjects(); show('screen-projects'); },
     'project-detail': () => { document.getElementById('nav-projects')?.classList.add('active'); setMobNavActive('mob-nav-projects'); show('screen-project-detail'); },
     chat:        () => { openChat(); },
@@ -6134,32 +6348,88 @@ function dcInputUpdate(ta) {
 let _dcAttachedFile = null;
 let _dcAttachedText = null;
 
-function dcHandleFileUpload(input) {
+/* ══════════════════════════════════════
+   FILE TEXT EXTRACTION  (PDF · DOCX · text)
+══════════════════════════════════════ */
+async function _extractFileText(file) {
+  const name = file.name.toLowerCase();
+
+  // Plain-text formats — fast path
+  if (/\.(txt|md|csv|js|ts|py|html|json)$/.test(name)) {
+    return new Promise((resolve, reject) => {
+      const r = new FileReader();
+      r.onload  = e => resolve(e.target.result);
+      r.onerror = () => reject(new Error('Could not read ' + file.name));
+      r.readAsText(file);
+    });
+  }
+
+  // PDF — extract via PDF.js
+  if (/\.pdf$/.test(name)) {
+    try {
+      const pdfjsLib = window['pdfjs-dist/build/pdf'];
+      if (!pdfjsLib) return '[PDF attached — PDF.js not loaded]';
+      pdfjsLib.GlobalWorkerOptions.workerSrc =
+        'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+      const data = await file.arrayBuffer();
+      const pdf  = await pdfjsLib.getDocument({ data }).promise;
+      let text = '';
+      const maxPages = Math.min(pdf.numPages, 60);
+      for (let i = 1; i <= maxPages; i++) {
+        const page    = await pdf.getPage(i);
+        const content = await page.getTextContent();
+        text += content.items.map(item => item.str).join(' ') + '\n';
+      }
+      const extracted = text.trim();
+      return extracted || '[PDF — no extractable text (possibly scanned/image-only)]';
+    } catch (e) {
+      return '[PDF extraction failed: ' + e.message + ']';
+    }
+  }
+
+  // DOCX — extract via mammoth.js
+  if (/\.docx$/.test(name)) {
+    try {
+      if (typeof mammoth === 'undefined') return '[DOCX attached — mammoth.js not loaded]';
+      const data   = await file.arrayBuffer();
+      const result = await mammoth.extractRawText({ arrayBuffer: data });
+      const extracted = result.value.trim();
+      return extracted || '[DOCX — document appears empty]';
+    } catch (e) {
+      return '[DOCX extraction failed: ' + e.message + ']';
+    }
+  }
+
+  // Other binary formats (PPTX, XLSX, etc.) — informative placeholder
+  const ext = name.split('.').pop().toUpperCase();
+  return '[Attached ' + ext + ' file: ' + file.name + ' — open the file to view its contents]';
+}
+
+async function dcHandleFileUpload(input) {
   const file = input.files[0];
   if (!file) return;
   _dcAttachedFile = file;
+  input.value = ''; // reset so same file can be re-selected
 
-  // Show chip
-  const chip = document.getElementById('dc-attach-chip');
+  // Show chip immediately
+  const chip   = document.getElementById('dc-attach-chip');
   const nameEl = document.getElementById('dc-attach-name');
-  if (chip) chip.classList.add('visible');
+  const extEl  = document.getElementById('dc-attach-ext');
+  const ext    = file.name.split('.').pop().toUpperCase() || 'File';
+  if (chip)   chip.classList.add('visible');
   if (nameEl) nameEl.textContent = file.name;
+  if (extEl)  extEl.textContent = ext + ' · reading…';
 
-  // Read file text for context injection (text-based files)
-  const reader = new FileReader();
-  const isText = /\.(txt|md|csv)$/i.test(file.name);
-  if (isText) {
-    reader.onload = e => { _dcAttachedText = e.target.result; };
-    reader.readAsText(file);
-  } else {
-    // For binary files (PDF, DOCX etc.) store filename as context hint
-    _dcAttachedText = '[Attached document: ' + file.name + ']';
+  // Extract content (async — PDF/DOCX may take a moment)
+  _dcAttachedText = null;
+  try {
+    _dcAttachedText = await _extractFileText(file);
+  } catch (e) {
+    _dcAttachedText = '[Could not read file: ' + file.name + ']';
   }
+  if (extEl) extEl.textContent = ext; // clear loading label
 
-  // Reset file input so same file can be re-selected
-  input.value = '';
-
-  // Enable submit if not already enabled
+  // Enable submit
   const btn = document.getElementById('dc-input-submit');
   if (btn) { btn.classList.add('ready'); btn.disabled = false; }
 }
@@ -6180,12 +6450,13 @@ function dcSubmitInput() {
   const val = ta.value.trim();
   if (!val && !_dcAttachedFile) return;
 
-  // Build prefill: combine typed text + document context
+  // Build prefill: combine typed text + document context (up to 12 000 chars)
   let prefill = val;
   if (_dcAttachedText) {
+    const docChunk = _dcAttachedText.slice(0, 12000);
     prefill = val
-      ? val + '\n\n---\nContext from ' + (_dcAttachedFile ? _dcAttachedFile.name : 'document') + ':\n' + _dcAttachedText.slice(0, 4000)
-      : 'Please analyse the following document:\n\n' + _dcAttachedText.slice(0, 4000);
+      ? val + '\n\n---\nContext from ' + (_dcAttachedFile ? _dcAttachedFile.name : 'document') + ':\n' + docChunk
+      : 'Please analyse the following document:\n\n' + docChunk;
   }
 
   const di = document.getElementById('decision-input');
@@ -6413,69 +6684,129 @@ function scrollToDcSection(id) {
   }, 120);
 }
 
-/* ── Thought Leaders ── */
-let _tlFilter = 'top';
+/* ── Thinker Management Table ── */
+let _tmFilter = 'all';
+let _tmEarnings = {};   // { thinkerId: '$0.00' } populated async
 
-function setTlFilter(filter) {
-  _tlFilter = filter;
-  ['top','recent'].forEach(f => {
-    const btn = document.getElementById('tl-btn-' + f);
-    if (btn) btn.classList.toggle('active', f === filter);
-  });
+function setTmFilter(filter, btn) {
+  _tmFilter = filter;
+  document.querySelectorAll('.tm-filter-btn').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
   renderThoughtLeaders();
 }
 
+// Attempt to load earnings for the authenticated thinker from the API
+async function _loadTmEarnings() {
+  try {
+    const token = getAuthToken();
+    if (!token || !(currentUser && currentUser.thinker_access)) return;
+    const res = await fetch(API_BASE + '/api/thinker/stats', {
+      headers: { 'Authorization': 'Bearer ' + token }
+    });
+    if (!res.ok) return;
+    const data = await res.json();
+    if (data && data.total_earned != null) {
+      // Map earnings to the thinker whose payoutEmail matches the logged-in user.
+      // In the browser we don't store payoutEmail, so we match by user email vs
+      // thinker ID for known mappings, falling back to the first available thinker.
+      const userEmail = currentUser && currentUser.email;
+      const emailToId = { 'michael@surpluspods.com': 'michael' };
+      const thinkerId = (userEmail && emailToId[userEmail]) ||
+                        (THINKERS.find(t => t.available) || {}).id ||
+                        'michael';
+      _tmEarnings[thinkerId] = '$' + parseFloat(data.total_earned || 0).toFixed(2);
+      renderThoughtLeaders();
+    }
+  } catch (e) { /* earnings unavailable — silently ignore */ }
+}
+
 function renderThoughtLeaders() {
-  const grid = document.getElementById('tl-grid');
-  if (!grid) return;
-  function seededDemand(name) {
-    let h = 0;
-    for (let i = 0; i < name.length; i++) h = (h * 31 + name.charCodeAt(i)) & 0xffffffff;
-    return 40 + Math.abs(h % 61);
-  }
-  let thinkers = THINKERS.filter(t => t.available !== false);
-  if (_tlFilter === 'top') {
-    thinkers = [...thinkers].sort((a, b) => seededDemand(b.name) - seededDemand(a.name));
+  const tbody = document.getElementById('tm-body');
+  const countPill = document.getElementById('tm-count');
+  if (!tbody) return;
+
+  // Apply filter
+  let list;
+  if (_tmFilter === 'live') {
+    list = THINKERS.filter(t => t.available);
+  } else if (_tmFilter === 'score') {
+    list = [...THINKERS].sort((a, b) => (b.score || 0) - (a.score || 0));
   } else {
-    thinkers = [...thinkers].reverse();
+    // "all" — live first, then coming soon, alpha within each group
+    const live = THINKERS.filter(t => t.available).sort((a,b) => a.name.localeCompare(b.name));
+    const soon = THINKERS.filter(t => !t.available).sort((a,b) => a.name.localeCompare(b.name));
+    list = [...live, ...soon];
   }
-  const maxDemand = Math.max(...thinkers.map(t => seededDemand(t.name)));
-  if (!thinkers.length) {
-    grid.innerHTML = '<div style="grid-column:1/-1;padding:24px;text-align:center;font-family:\'Cormorant Garamond\',serif;font-style:italic;color:var(--text-3)">No thinkers available yet.</div>';
+
+  if (countPill) countPill.textContent = list.length + ' thinker' + (list.length !== 1 ? 's' : '');
+
+  if (!list.length) {
+    tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:36px;color:var(--text-3);font-family:\'Cormorant Garamond\',serif;font-size:15px">No thinkers found.</td></tr>';
     return;
   }
-  grid.innerHTML = thinkers.map((t, i) => {
+
+  tbody.innerHTML = list.map(t => {
     const idx = THINKERS.indexOf(t);
-    const initials = t.initials || t.name.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase();
-    const parts = t.name.split(' ');
-    const lastName = parts[parts.length - 1].toUpperCase() + ',';
-    const firstName = parts.slice(0, -1).join(' ').toUpperCase();
-    const demand = seededDemand(t.name);
-    const demandPct = Math.round(demand / maxDemand * 100);
-    const domain = t.title ? t.title.split('·')[0].trim() : 'Other';
-    return '<div class="tl-card" data-domain="' + domain + '" onclick="acquireFromThinker(' + idx + ')">' +
-      '<div class="tl-card-top">' +
-      '<div class="tl-avatar" style="background:' + (t.color || '#BF452A') + '">' + initials + '</div>' +
-      '<div><div class="tl-name">' + (firstName ? firstName + ' ' : '') + lastName + '</div>' +
-      '<div class="tl-title">' + (t.title || '') + '</div></div>' +
-      '</div>' +
-      '<div class="tl-lens-label">Signature Lens</div>' +
-      '<div class="tl-lens-text">' + (t.lens || 'Cognitive framework defined.') + '</div>' +
-      '<div class="tl-demand-row">' +
-      '<div class="tl-demand-bar-bg"><div class="tl-demand-fill" style="width:0%" data-pct="' + demandPct + '"></div></div>' +
-      '<span class="tl-demand-label">' + demand + ' req/wk</span></div>' +
-      '<button class="tl-acquire-btn" onclick="event.stopPropagation();acquireFromThinker(' + idx + ')">' +
-      '<svg width="12" height="12" viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6.5 1L8.4 4.7 12.5 5.3 9.5 8.3l.7 4.1L6.5 10.4 2.3 12.4l.7-4.1L0 5.3l4.1-.6z"/></svg>' +
-      'Acquire Insight · $0.05</button>' +
-      '</div>';
+    const initials = t.initials || t.name.split(' ').map(w => w[0]).join('').slice(0,2).toUpperCase();
+    const color    = t.color || '#BF452A';
+    const score    = t.score || 0;
+    const caps     = (t.capabilities || []).slice(0,4);
+    const cats     = (t.categories || []).slice(0,3);
+    const earnings = _tmEarnings[t.id] || (t.available ? '$—' : '—');
+
+    const statusBadge = t.available
+      ? '<span class="tm-status tm-status-live">Live</span>'
+      : '<span class="tm-status tm-status-soon">Coming Soon</span>';
+
+    const capTags = caps.map(c => '<span class="tm-cap-tag">' + c + '</span>').join('');
+    const catTags = cats.map(c => '<span class="tm-cat-tag">' + c + '</span>').join('');
+
+    const actionBtn = t.available
+      ? '<button class="tm-action-btn" onclick="acquireFromThinker(' + idx + ')">Acquire · $0.05</button>'
+      : '<span class="tm-action-soon">Encoding</span>';
+
+    return '<tr class="' + (t.available ? '' : 'tm-row-inactive') + '">' +
+      // Thinker
+      '<td class="tm-td">' +
+        '<div class="tm-thinker-cell">' +
+          '<div class="tm-avatar" style="background:' + color + '">' + initials + '</div>' +
+          '<div>' +
+            '<div class="tm-thinker-name">' + t.name + '</div>' +
+            '<div class="tm-thinker-title">' + (t.title || '') + '</div>' +
+          '</div>' +
+        '</div>' +
+      '</td>' +
+      // Status
+      '<td class="tm-td">' + statusBadge + '</td>' +
+      // Core Capabilities
+      '<td class="tm-td"><div class="tm-caps">' + (capTags || '<span style="color:var(--text-3);font-size:10px">—</span>') + '</div></td>' +
+      // Categories
+      '<td class="tm-td"><div class="tm-cats">' + (catTags || '<span style="color:var(--text-3);font-size:10px">—</span>') + '</div></td>' +
+      // Moat Score
+      '<td class="tm-td tm-score-cell">' +
+        '<div class="tm-score-num">' + (score || '—') + '</div>' +
+        (score ? '<div class="tm-score-bar-bg"><div class="tm-score-bar-fill" style="width:0%" data-pct="' + score + '"></div></div>' : '') +
+      '</td>' +
+      // Total Earnings
+      '<td class="tm-td tm-earnings-cell">' +
+        '<div class="tm-earnings-val">' + earnings + '</div>' +
+        '<div class="tm-earnings-sub">' + (t.available ? 'YTD wisdom royalties' : 'Not yet active') + '</div>' +
+      '</td>' +
+      // Action
+      '<td class="tm-td">' + actionBtn + '</td>' +
+      '</tr>';
   }).join('');
-  // Animate demand bars
+
+  // Animate score bars after paint
   requestAnimationFrame(() => requestAnimationFrame(() => {
-    grid.querySelectorAll('.tl-demand-fill').forEach(el => {
-      el.style.width = el.dataset.pct + '%';
+    tbody.querySelectorAll('.tm-score-bar-fill').forEach(el => {
+      el.style.width = (el.dataset.pct || 0) + '%';
     });
   }));
 }
+
+// Legacy stub — kept so any surviving old references don't break
+function setTlFilter() { setTmFilter('all'); }
 
 function drawMoatGauge(canvasId, signalPct) {
   const canvas = document.getElementById(canvasId);
@@ -8145,6 +8476,70 @@ function generatePerspectiveHTML(r) {
   .perspective-footer-id { font-size:10px; color:#bbb; font-family:monospace; letter-spacing:.04em; }
   /* Print button */
   .print-cta { position:fixed; bottom:24px; right:24px; background:#BF452A; color:#fff; border:none; border-radius:100px; padding:12px 24px; font-size:13px; font-weight:600; cursor:pointer; box-shadow:0 4px 16px rgba(191,69,42,.35); font-family:'Inter',sans-serif; }
+
+  /* ══════════════════════════════════════════════════════════
+     DELIBERATION STATE — Inline component
+     Renders inside the content container (q-list / match-content /
+     reframe-content) directly below the user's input echo.
+     The screen header and decision echo remain fully visible.
+  ══════════════════════════════════════════════════════════ */
+
+  /* SVG node animations */
+  @keyframes deli-sat-pulse {
+    0%,100% { opacity:.28; transform:scale(1);    }
+    50%     { opacity:.88; transform:scale(1.35); }
+  }
+  @keyframes deli-core-breathe {
+    0%,100% { transform:scale(1);    }
+    50%     { transform:scale(1.06); }
+  }
+  @keyframes deli-ring-ripple {
+    0%   { transform:scale(1);   opacity:.32; }
+    70%  { transform:scale(1.8); opacity:0;   }
+    100% { transform:scale(1.8); opacity:0;   }
+  }
+  @keyframes deli-orbit-cw  { to { transform:rotate( 360deg); } }
+  @keyframes deli-orbit-ccw { to { transform:rotate(-360deg); } }
+  @keyframes deli-edge-drift  { 0%,100%{opacity:.05;} 50%{opacity:.20;} }
+  @keyframes deli-spoke-pulse { 0%,100%{opacity:.04;} 50%{opacity:.18;} }
+  @keyframes deli-fade-in { from{opacity:0;transform:translateY(6px)} to{opacity:1;transform:none} }
+
+  .deli-sat  { transform-box:fill-box; transform-origin:center; animation:deli-sat-pulse var(--dur,3s) ease-in-out var(--del,0s) infinite; }
+  .deli-core { transform-box:fill-box; transform-origin:center; animation:deli-core-breathe 2.2s ease-in-out infinite; }
+  .deli-ring { transform-box:fill-box; transform-origin:center; animation:deli-ring-ripple 3s ease-out var(--del,0s) infinite; }
+  .deli-orb-cw  { transform-box:fill-box; transform-origin:center; animation:deli-orbit-cw  24s linear infinite; }
+  .deli-orb-ccw { transform-box:fill-box; transform-origin:center; animation:deli-orbit-ccw 36s linear infinite; }
+  .deli-edge  { animation:deli-edge-drift  4s ease-in-out var(--del,0s) infinite; }
+  .deli-spoke { animation:deli-spoke-pulse 3s ease-in-out var(--del,0s) infinite; }
+
+  /* Inline deliberation wrapper */
+  .deli-inline {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 36px 20px 32px;
+    animation: deli-fade-in 0.3s ease both;
+    user-select: none;
+  }
+  .deli-inline-status {
+    margin-top: 18px;
+    font-family: 'IBM Plex Mono', 'Courier New', monospace;
+    font-size: 11px;
+    letter-spacing: .03em;
+    color: var(--text-2, #8A9BB5);
+    text-align: center;
+    max-width: 380px;
+    line-height: 1.75;
+    transition: opacity .38s ease;
+  }
+  .deli-inline-badge {
+    margin-top: 14px;
+    font-family: 'IBM Plex Mono', 'Courier New', monospace;
+    font-size: 8.5px;
+    letter-spacing: .18em;
+    color: #C9A84C;
+    opacity: .2;
+  }
 </style>
 </head>
 <body>
@@ -8688,10 +9083,16 @@ async function _startSessionLegacy() {
   show('screen-context');
   document.getElementById('context-echo').textContent = decisionText;
   document.getElementById('context-next').disabled = true;
-  document.getElementById('q-list').innerHTML = '<div class="dots"><span></span><span></span><span></span></div>';
+  document.getElementById('q-list').innerHTML = '';
+
+  // ── Deliberation state ──
+  const _deliThinker = activeThinker?.name || 'THE THINKER';
+  const _deliVenture = decisionText ? decisionText.split(' ').slice(0, 4).join(' ') : 'YOUR VENTURE';
+  showDeliberation('q-list', _deliThinker, _deliVenture);
 
   try {
     const raw = await callPerspective({ stage: 'questions', decision: decisionText, onChunk: null });
+    hideDeliberation();
     const qs = parseJSON(raw) || [
       { question:'What signals prove real people experience this problem — not assumptions, but evidence?' },
       { question:'What already exists that addresses this? What can you learn from their gaps?' },
@@ -8705,6 +9106,7 @@ async function _startSessionLegacy() {
         <textarea placeholder="Your answer…" rows="3" oninput="checkAnswers()"></textarea>
       </div>`).join('');
   } catch(e) {
+    hideDeliberation();
     if (e.message !== 'INSUFFICIENT_FUNDS') {
       document.getElementById('q-list').innerHTML =
         `<p style="color:var(--text-2);font-size:14px;padding:20px 0">⚠️ Could not connect to AI — please try again shortly</p>`;
@@ -8724,9 +9126,14 @@ async function goToMatch() {
 
   show('screen-match');
   document.getElementById('match-footer').style.display = 'none';
-  document.getElementById('match-content').innerHTML = '<div class="dots"><span></span><span></span><span></span></div>';
+  document.getElementById('match-content').innerHTML = '';
 
-  const qa = sessionAnswers.map(x=>`Q: ${x.q}\nA: ${x.a}`).join('\n\n');
+  // ── Deliberation state ──
+  showDeliberation(
+    'match-content',
+    activeThinker?.name || 'THE THINKER',
+    decisionText ? decisionText.split(' ').slice(0, 4).join(' ') : 'YOUR VENTURE'
+  );
 
   try {
     const raw = await callPerspective({ stage: 'match', decision: decisionText, answers: sessionAnswers, onChunk: null });
@@ -8741,6 +9148,7 @@ async function goToMatch() {
       </div>`;
     document.getElementById('match-footer').style.display = 'flex';
   } catch {
+    hideDeliberation();
     document.getElementById('match-content').innerHTML =
       `<p style="color:var(--text-2);font-size:14px">⚠️ Could not connect to AI — please try again shortly</p>`;
     document.getElementById('match-footer').style.display = 'flex';
@@ -8750,9 +9158,14 @@ async function goToMatch() {
 async function goToReframe() {
   show('screen-reframe');
   document.getElementById('reframe-footer').style.display = 'none';
-  document.getElementById('reframe-content').innerHTML = '<div class="dots"><span></span><span></span><span></span></div>';
+  document.getElementById('reframe-content').innerHTML = '';
 
-  const qa = sessionAnswers.map(x=>`Q: ${x.q}\nA: ${x.a}`).join('\n\n');
+  // ── Deliberation state (final judgment phase) ──
+  showDeliberation(
+    'reframe-content',
+    activeThinker?.name || 'THE THINKER',
+    decisionText ? decisionText.split(' ').slice(0, 4).join(' ') : 'YOUR VENTURE'
+  );
 
   try {
     const raw = await callPerspective({ stage: 'reframe', decision: decisionText, answers: sessionAnswers, onChunk: null });
@@ -8775,6 +9188,7 @@ async function goToReframe() {
     } else throw new Error('parse');
     document.getElementById('reframe-footer').style.display = 'flex';
   } catch {
+    hideDeliberation();
     document.getElementById('reframe-content').innerHTML =
       `<p style="color:var(--text-2);font-size:14px">⚠️ Could not connect to AI — please try again shortly</p>`;
     document.getElementById('reframe-footer').style.display = 'flex';
@@ -9121,20 +9535,19 @@ function handleFileAttach(input, type) {
       };
       reader.readAsDataURL(file);
     } else {
-      // Text-readable files
-      const textExts = /\.(txt|md|csv|js|ts|py|html|json)$/i;
-      if (textExts.test(file.name)) {
-        const reader = new FileReader();
-        reader.onload = e => {
-          _attachedFiles.push({ type: 'doc', name: file.name, content: e.target.result });
-          _renderAttachChips();
-        };
-        reader.readAsText(file);
-      } else {
-        // PDF or binary — store name only (content will be noted as [PDF attached])
-        _attachedFiles.push({ type: 'doc', name: file.name, content: null });
+      // All doc types — extract full text via _extractFileText (handles PDF, DOCX, text)
+      const slot = { type: 'doc', name: file.name, content: null, loading: true };
+      _attachedFiles.push(slot);
+      _renderAttachChips();
+      _extractFileText(file).then(text => {
+        slot.content = text;
+        slot.loading = false;
         _renderAttachChips();
-      }
+      }).catch(() => {
+        slot.content = '[Could not read: ' + file.name + ']';
+        slot.loading = false;
+        _renderAttachChips();
+      });
     }
   });
 }
@@ -9145,14 +9558,31 @@ function _renderAttachChips() {
   if (!_attachedFiles.length) { wrap.style.display = 'none'; wrap.innerHTML = ''; return; }
   wrap.style.display = '';
   wrap.innerHTML = _attachedFiles.map((f, i) => {
-    const thumb = f.type === 'image'
-      ? `<img class="chat-attach-chip-thumb" src="${f.previewUrl}" alt="">`
-      : `<svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" style="flex-shrink:0;color:var(--text-3)"><rect x="2" y="1" width="8" height="12" rx="1.2"/><path d="M4 4.5h4M4 7h4M4 9.5h2"/></svg>`;
-    const shortName = f.name.length > 20 ? f.name.slice(0, 18) + '…' : f.name;
-    return `<div class="chat-attach-chip">
-      ${thumb}
-      <span class="chat-attach-chip-name" title="${_escapeHtml(f.name)}">${_escapeHtml(shortName)}</span>
-      <button class="chat-attach-chip-rm" onclick="_removeAttach(${i})" title="Remove">×</button>
+    const ext       = f.name.split('.').pop().toUpperCase() || 'File';
+    const shortName = f.name.length > 24 ? f.name.slice(0, 22) + '…' : f.name;
+    const metaLabel = f.loading ? 'Reading…' : (f.type === 'image' ? 'Image' : ext);
+    const loadClass = f.loading ? ' loading' : '';
+
+    const preview = f.type === 'image'
+      ? `<img class="chat-attach-chip-thumb" src="${f.previewUrl}" alt="${_escapeHtml(f.name)}">`
+      : `<div class="chat-attach-chip-icon">
+           <svg width="13" height="13" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round">
+             <rect x="2" y="1" width="8" height="12" rx="1.5"/>
+             <path d="M4 4.5h4M4 7h4M4 9.5h2.5"/>
+           </svg>
+         </div>`;
+
+    return `<div class="chat-attach-chip${loadClass}" title="${_escapeHtml(f.name)}">
+      ${preview}
+      <div class="chat-attach-chip-body">
+        <span class="chat-attach-chip-name">${_escapeHtml(shortName)}</span>
+        <span class="chat-attach-chip-meta">${_escapeHtml(metaLabel)}</span>
+      </div>
+      <button class="chat-attach-chip-rm" onclick="_removeAttach(${i})" title="Remove">
+        <svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+          <line x1="1.5" y1="1.5" x2="8.5" y2="8.5"/><line x1="8.5" y1="1.5" x2="1.5" y2="8.5"/>
+        </svg>
+      </button>
     </div>`;
   }).join('');
 }
@@ -9172,8 +9602,8 @@ function _buildAttachmentContext() {
   if (!_attachedFiles.length) return '';
   const parts = _attachedFiles.map(f => {
     if (f.type === 'image') return null; // images shown inline, no text needed
-    if (f.content) return `<file name="${f.name}">\n${f.content.slice(0, 8000)}\n</file>`;
-    return `<file name="${f.name}">[File attached — ${f.name.split('.').pop().toUpperCase()} format]</file>`;
+    if (f.content) return `<file name="${f.name}">\n${f.content.slice(0, 20000)}\n</file>`;
+    return `<file name="${f.name}">[File attached — ${f.name.split('.').pop().toUpperCase()} format — content still loading]</file>`;
   }).filter(Boolean);
   if (!parts.length) return '';
   return parts.join('\n') + '\n\n';
@@ -9212,9 +9642,31 @@ async function sendChatMsg() {
 
   // ── Build full message with attachment context ────────────────────────────
   const attachedNow = [..._attachedFiles]; // snapshot before clearing
-  const fileContext = _buildAttachmentContext();
+  const fileContext  = _buildAttachmentContext();
   const fullUserText = fileContext + (text || '');
   const displayText  = text || (attachedNow.length ? `[${attachedNow.length} file${attachedNow.length>1?'s':''} attached]` : '');
+
+  // Build userContent: plain string, or multi-part array when images are present
+  const imageFiles = attachedNow.filter(f => f.type === 'image');
+  let userContent;
+  if (imageFiles.length > 0) {
+    userContent = [];
+    if (fullUserText) userContent.push({ type: 'text', text: fullUserText });
+    imageFiles.forEach(f => {
+      // f.content is a data URL: "data:<mime>;base64,<data>"
+      const match = f.content && f.content.match(/^data:([^;]+);base64,(.+)$/s);
+      if (match) {
+        userContent.push({
+          type: 'image',
+          source: { type: 'base64', media_type: match[1], data: match[2] }
+        });
+      }
+    });
+    // Safety: if no valid blocks built, fall back to text
+    if (!userContent.length) userContent = fullUserText;
+  } else {
+    userContent = fullUserText;
+  }
 
   // Append user message (with inline image previews)
   const userMsgEl = _appendChatMsg('user', displayText, { ts: new Date().toISOString() });
@@ -9259,7 +9711,7 @@ async function sendChatMsg() {
 
   let fullText = '';
   try {
-    fullText = await _callChatAPI(history, fullUserText, chunk => {
+    fullText = await _callChatAPI(history, userContent, chunk => {
       fullText += chunk;
       // During streaming, show raw text with cursor — avoids partial-markdown glitches
       bubble.textContent = fullText;
@@ -9644,6 +10096,10 @@ Restate what is actually being asked beneath the surface question. One paragraph
 RULES: No filler. No 'great question.' No 'I understand.' No double blank lines between bullets. Compress every idea to its sharpest form.`;
 
   const messages = [...history, { role: 'user', content: newMsg }];
+  // decision field must be a string (server-side logging); extract text from content array if needed
+  const decisionStr = Array.isArray(newMsg)
+    ? (newMsg.find(b => b.type === 'text')?.text || '[image message]')
+    : newMsg;
 
   // ── Try proxy server (SSE) ───────────────────────────────────────────────
   try {
@@ -9654,7 +10110,7 @@ RULES: No filler. No 'great question.' No 'I understand.' No double blank lines 
         user_id:    USER_ID,
         thinker_id: thinker.id || 'default',
         stage:      'chat',
-        decision:   newMsg,
+        decision:   decisionStr,
         messages,
         system,
       }),
@@ -9904,6 +10360,14 @@ function deleteChatSession(id, e) {
     saveChatSessions(sessions);
     if (_chatSession?.id === id) openChat();
     renderRecents();
+    // Sync delete to server
+    if (currentUser) {
+      const token = getAuthToken();
+      fetch(`${API_BASE}/api/sessions/${encodeURIComponent(id)}`, {
+        method: 'DELETE',
+        headers: { 'Authorization': `Bearer ${token}` },
+      }).catch(() => {});
+    }
   }, 160);
 }
 
@@ -9929,6 +10393,7 @@ function applyAuthState(user) {
   document.body.classList.toggle('logged-in', !!user);
 
   if (user) {
+    const _prevGuestId = USER_ID !== user.id ? USER_ID : null; // capture guest id before overwriting
     USER_ID = user.id;
     const firstName = (user.name || 'there').split(' ')[0];
     const initials  = (user.name || 'U').split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase();
@@ -9970,6 +10435,9 @@ function applyAuthState(user) {
 
     // Fetch live balance
     fetchBalance();
+    // Load server-side session history and merge into localStorage.
+    // Pass the pre-login guest ID so any locally-created sessions can be migrated.
+    _syncSessionsFromServer(user.id, _prevGuestId);
     // Unlock My Stuff nav items + project button
     ['nav-projects','nav-wallet'].forEach(id => {
       document.getElementById(id)?.classList.remove('nav-auth-gate');
@@ -11586,6 +12054,176 @@ function showToast(msg) {
   clearTimeout(t._timer);
   t._timer = setTimeout(() => { t.style.opacity = '0'; }, 2400);
 }
+
+/* ════════════════════════════════
+   DELIBERATION STATE  — Inline
+   Renders the Thinker Matrix + Operator Feed inside the content
+   container that will receive the AI result. Screen header, decision
+   echo, and progress bar all stay fully visible.
+
+   Usage:
+     showDeliberation(containerId, thinkerName, ventureName)
+     hideDeliberation()  ← content replacement is usually sufficient,
+                           but call this on error paths.
+════════════════════════════════ */
+let _deliTimer    = null;
+let _deliContainerId = null;
+
+/* Inline SVG string — same constellation, scaled to 160×160 display */
+const _DELI_SVG = `
+<svg width="160" height="160" viewBox="0 0 300 300" overflow="visible" aria-hidden="true">
+  <defs>
+    <radialGradient id="deli-core-grad" cx="40%" cy="35%" r="65%">
+      <stop offset="0%"   stop-color="#F0D47A"/>
+      <stop offset="55%"  stop-color="#C9A84C"/>
+      <stop offset="100%" stop-color="#7A5E18"/>
+    </radialGradient>
+    <filter id="deli-glow-gold" x="-70%" y="-70%" width="240%" height="240%">
+      <feGaussianBlur stdDeviation="6" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="deli-glow-sat" x="-80%" y="-80%" width="260%" height="260%">
+      <feGaussianBlur stdDeviation="2.5" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+  <g class="deli-orb-cw">
+    <circle cx="150" cy="150" r="100" fill="none" stroke="#C9A84C" stroke-width="0.5" stroke-dasharray="1 12" opacity="0.14"/>
+  </g>
+  <g class="deli-orb-ccw">
+    <circle cx="150" cy="150" r="72" fill="none" stroke="#364152" stroke-width="0.5" stroke-dasharray="1 7" opacity="0.22"/>
+  </g>
+  <line class="deli-edge" style="--del:0s"    x1="150" y1="52"  x2="221" y2="88"  stroke="#364152" stroke-width="0.6"/>
+  <line class="deli-edge" style="--del:.55s"  x1="221" y1="88"  x2="250" y2="167" stroke="#364152" stroke-width="0.6"/>
+  <line class="deli-edge" style="--del:1.1s"  x1="250" y1="167" x2="214" y2="242" stroke="#364152" stroke-width="0.6"/>
+  <line class="deli-edge" style="--del:.35s"  x1="214" y1="242" x2="150" y2="262" stroke="#364152" stroke-width="0.6"/>
+  <line class="deli-edge" style="--del:1.65s" x1="150" y1="262" x2="84"  y2="242" stroke="#364152" stroke-width="0.6"/>
+  <line class="deli-edge" style="--del:.8s"   x1="84"  y1="242" x2="48"  y2="167" stroke="#364152" stroke-width="0.6"/>
+  <line class="deli-edge" style="--del:1.35s" x1="48"  y1="167" x2="80"  y2="88"  stroke="#364152" stroke-width="0.6"/>
+  <line class="deli-edge" style="--del:.2s"   x1="80"  y1="88"  x2="150" y2="52"  stroke="#364152" stroke-width="0.6"/>
+  <line class="deli-edge" style="--del:.5s"   x1="150" y1="52"  x2="150" y2="262" stroke="#364152" stroke-width="0.5" opacity="0.5"/>
+  <line class="deli-edge" style="--del:1.2s"  x1="250" y1="167" x2="48"  y2="167" stroke="#364152" stroke-width="0.5" opacity="0.5"/>
+  <line class="deli-edge" style="--del:.9s"   x1="221" y1="88"  x2="84"  y2="242" stroke="#364152" stroke-width="0.5" opacity="0.5"/>
+  <line class="deli-spoke" style="--del:0s"    x1="150" y1="150" x2="150" y2="52"  stroke="#C9A84C" stroke-width="0.4" stroke-dasharray="2 7"/>
+  <line class="deli-spoke" style="--del:.55s"  x1="150" y1="150" x2="221" y2="88"  stroke="#C9A84C" stroke-width="0.4" stroke-dasharray="2 7"/>
+  <line class="deli-spoke" style="--del:1.1s"  x1="150" y1="150" x2="250" y2="167" stroke="#C9A84C" stroke-width="0.4" stroke-dasharray="2 7"/>
+  <line class="deli-spoke" style="--del:.35s"  x1="150" y1="150" x2="214" y2="242" stroke="#C9A84C" stroke-width="0.4" stroke-dasharray="2 7"/>
+  <line class="deli-spoke" style="--del:1.65s" x1="150" y1="150" x2="150" y2="262" stroke="#C9A84C" stroke-width="0.4" stroke-dasharray="2 7"/>
+  <line class="deli-spoke" style="--del:.8s"   x1="150" y1="150" x2="84"  y2="242" stroke="#C9A84C" stroke-width="0.4" stroke-dasharray="2 7"/>
+  <line class="deli-spoke" style="--del:1.35s" x1="150" y1="150" x2="48"  y2="167" stroke="#C9A84C" stroke-width="0.4" stroke-dasharray="2 7"/>
+  <line class="deli-spoke" style="--del:.2s"   x1="150" y1="150" x2="80"  y2="88"  stroke="#C9A84C" stroke-width="0.4" stroke-dasharray="2 7"/>
+  <g class="deli-sat" style="--dur:3.2s;--del:0s">
+    <circle cx="150" cy="52"  r="9.5"  fill="#1C2A3C" opacity="0.45"/>
+    <circle cx="150" cy="52"  r="4.5"  fill="#364152" filter="url(#deli-glow-sat)"/>
+    <circle cx="148.6" cy="50.6" r="1.4" fill="#5A7090" opacity="0.55"/>
+  </g>
+  <g class="deli-sat" style="--dur:2.8s;--del:.55s">
+    <circle cx="221" cy="88"  r="8.5"  fill="#1C2A3C" opacity="0.45"/>
+    <circle cx="221" cy="88"  r="3.5"  fill="#364152" filter="url(#deli-glow-sat)"/>
+    <circle cx="219.9" cy="86.9" r="1.1" fill="#5A7090" opacity="0.55"/>
+  </g>
+  <g class="deli-sat" style="--dur:3.6s;--del:1.1s">
+    <circle cx="250" cy="167" r="10.5" fill="#1C2A3C" opacity="0.45"/>
+    <circle cx="250" cy="167" r="5.5"  fill="#364152" filter="url(#deli-glow-sat)"/>
+    <circle cx="248.4" cy="165.4" r="1.8" fill="#5A7090" opacity="0.55"/>
+  </g>
+  <g class="deli-sat" style="--dur:2.9s;--del:.35s">
+    <circle cx="214" cy="242" r="9"    fill="#1C2A3C" opacity="0.45"/>
+    <circle cx="214" cy="242" r="4"    fill="#364152" filter="url(#deli-glow-sat)"/>
+    <circle cx="212.8" cy="240.8" r="1.3" fill="#5A7090" opacity="0.55"/>
+  </g>
+  <g class="deli-sat" style="--dur:3.1s;--del:1.65s">
+    <circle cx="150" cy="262" r="8"    fill="#1C2A3C" opacity="0.45"/>
+    <circle cx="150" cy="262" r="3"    fill="#364152" filter="url(#deli-glow-sat)"/>
+    <circle cx="149.1" cy="261.1" r="1" fill="#5A7090" opacity="0.55"/>
+  </g>
+  <g class="deli-sat" style="--dur:2.7s;--del:.8s">
+    <circle cx="84"  cy="242" r="9.5"  fill="#1C2A3C" opacity="0.45"/>
+    <circle cx="84"  cy="242" r="4.5"  fill="#364152" filter="url(#deli-glow-sat)"/>
+    <circle cx="82.6" cy="240.6" r="1.4" fill="#5A7090" opacity="0.55"/>
+  </g>
+  <g class="deli-sat" style="--dur:3.4s;--del:1.35s">
+    <circle cx="48"  cy="167" r="8.5"  fill="#1C2A3C" opacity="0.45"/>
+    <circle cx="48"  cy="167" r="3.5"  fill="#364152" filter="url(#deli-glow-sat)"/>
+    <circle cx="46.9" cy="165.9" r="1.1" fill="#5A7090" opacity="0.55"/>
+  </g>
+  <g class="deli-sat" style="--dur:3.0s;--del:.2s">
+    <circle cx="80"  cy="88"  r="8"    fill="#1C2A3C" opacity="0.45"/>
+    <circle cx="80"  cy="88"  r="3"    fill="#364152" filter="url(#deli-glow-sat)"/>
+    <circle cx="79.1" cy="87.1" r="1" fill="#5A7090" opacity="0.55"/>
+  </g>
+  <g class="deli-ring" style="--del:0s">
+    <circle cx="150" cy="150" r="26" fill="none" stroke="#C9A84C" stroke-width="1" opacity="0.3"/>
+  </g>
+  <g class="deli-ring" style="--del:1s">
+    <circle cx="150" cy="150" r="26" fill="none" stroke="#C9A84C" stroke-width="1" opacity="0.3"/>
+  </g>
+  <g class="deli-ring" style="--del:2s">
+    <circle cx="150" cy="150" r="26" fill="none" stroke="#C9A84C" stroke-width="1" opacity="0.3"/>
+  </g>
+  <g class="deli-core">
+    <circle cx="150" cy="150" r="28" fill="none" stroke="#C9A84C" stroke-width="0.8" opacity="0.28"/>
+    <circle cx="150" cy="150" r="20" fill="url(#deli-core-grad)" filter="url(#deli-glow-gold)"/>
+    <ellipse cx="145" cy="143" rx="5.5" ry="3.5" fill="white" opacity="0.18"/>
+    <text x="150" y="155" text-anchor="middle" dominant-baseline="middle"
+      fill="#100D00" font-size="11" font-weight="800"
+      font-family="Georgia,'Times New Roman',serif" letter-spacing="0.5"
+      style="user-select:none;pointer-events:none">D</text>
+  </g>
+</svg>`;
+
+function showDeliberation(containerId, thinkerName, ventureName) {
+  const t = (thinkerName || 'THE THINKER').toUpperCase();
+  const v = (ventureName  || 'YOUR VENTURE').toUpperCase();
+
+  const MSGS = [
+    `>> INITIALIZING_PROTOCOL: Awaiting perspective from ${t}...`,
+    `>> ACCESSING_CORPUS: Mapping logic against Asset: ${v}...`,
+    `>> AUDITING_LEDGER: Cross-referencing QuickBooks delta (if active)...`,
+    `>> FINALIZING_JUDGMENT: Forging high-moat Outcome Protocol...`,
+  ];
+
+  clearInterval(_deliTimer);
+  _deliContainerId = containerId;
+
+  // Inject inline component into the target content container
+  const container = document.getElementById(containerId);
+  if (!container) return;
+  container.innerHTML = `
+    <div class="deli-inline" role="status" aria-live="polite" aria-label="Deliberating">
+      ${_DELI_SVG}
+      <div class="deli-inline-status" id="deli-inline-status" style="opacity:0">${MSGS[0]}</div>
+      <div class="deli-inline-badge">─── DIVINE INTELLIGENCE ENGINE ───</div>
+    </div>`;
+
+  // Fade in first message
+  const statusEl = container.querySelector('#deli-inline-status');
+  setTimeout(() => { if (statusEl) statusEl.style.opacity = '0.7'; }, 80);
+
+  // Cycle messages every 1.5 s
+  let idx = 0;
+  _deliTimer = setInterval(() => {
+    if (!statusEl || !statusEl.isConnected) { clearInterval(_deliTimer); return; }
+    statusEl.style.opacity = '0';
+    setTimeout(() => {
+      if (!statusEl.isConnected) return;
+      idx = (idx + 1) % MSGS.length;
+      statusEl.textContent = MSGS[idx];
+      statusEl.style.opacity = '0.7';
+    }, 380);
+  }, 1500);
+}
+
+function hideDeliberation() {
+  clearInterval(_deliTimer);
+  _deliTimer = null;
+  // Content replacement by the caller is the normal path.
+  // This clears the container only on explicit error dismissal.
+  if (_deliContainerId) {
+    const c = document.getElementById(_deliContainerId);
+    if (c && c.querySelector('.deli-inline')) c.innerHTML = '';
+  }
+}
 </script>
 
 <!-- Top-up Modal -->
@@ -11777,6 +12415,8 @@ function showToast(msg) {
     </div>
   </div>
 </div>
+
+<!-- Deliberation state is rendered inline by showDeliberation() -->
 
 </body>
 </html>
