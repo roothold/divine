@@ -1532,13 +1532,21 @@
       font-size:9px; font-weight:500; color:var(--text-3);
       line-height:1.3; margin-top:1px;
     }
-    .sm-badge {
-      display:inline-flex; align-items:center;
-      font-size:8.5px; font-weight:700; padding:1px 5px;
-      border-radius:4px; margin-left:4px;
-      background:rgba(34,197,94,.12); color:#22c55e;
+    .sm-benchmark {
+      font-size:9px; font-weight:600; margin-top:3px;
+      line-height:1.3; display:flex; align-items:center; gap:4px;
     }
-    .sm-badge.neg { background:rgba(239,68,68,.12); color:#ef4444; }
+    .sm-benchmark-dot {
+      width:5px; height:5px; border-radius:50%; flex-shrink:0;
+    }
+    .sm-benchmark.conservative .sm-benchmark-dot { background:#22c55e; }
+    .sm-benchmark.conservative { color:#22c55e; }
+    .sm-benchmark.moderate .sm-benchmark-dot    { background:#22c55e; }
+    .sm-benchmark.moderate    { color:#22c55e; }
+    .sm-benchmark.aggressive .sm-benchmark-dot  { background:#f59e0b; }
+    .sm-benchmark.aggressive  { color:#f59e0b; }
+    .sm-benchmark.exceptional .sm-benchmark-dot { background:#ef4444; }
+    .sm-benchmark.exceptional { color:#ef4444; }
     .is-scenario-challenge {
       display:none; width:100%; margin-top:9px;
       background:var(--surface-2); border:1.5px solid var(--border);
@@ -12153,6 +12161,19 @@ function renderRevenueGraph(ns) {
   }
 }
 
+/* ── Growth rate benchmark classifier ─────────────────────────────────────
+   Maps monthly growth % to a calibration tier + benchmark context string.
+   Surfaces reality-check signals without moralising — just orientation.
+───────────────────────────────────────────────────────────────────────────── */
+function growthBenchmark(pct) {
+  if (pct <= 0)  return { tier: 'conservative', label: 'Flat or declining', ref: 'No growth modelled — check your inputs' };
+  if (pct < 3)   return { tier: 'conservative', label: 'Conservative',      ref: 'Typical of mature or capital-efficient businesses' };
+  if (pct < 6)   return { tier: 'moderate',     label: 'Moderate',          ref: 'Median early-stage SaaS: 3–6%/mo' };
+  if (pct < 10)  return { tier: 'aggressive',   label: 'Aggressive',        ref: 'Top-quartile SaaS: 6–10%/mo — validate your pipeline' };
+  if (pct < 20)  return { tier: 'exceptional',  label: 'Exceptional',       ref: '>10%/mo is rare — confirm with real demand signals' };
+  return           { tier: 'exceptional',  label: 'Hyper-growth',       ref: '>20%/mo — assumptions need stress-testing' };
+}
+
 /* ── Scenario modeler update ── */
 // ns: 'is' | 'chat'  (called by oninput on scenario fields)
 function updateScenario(ns) {
@@ -12181,17 +12202,21 @@ function updateScenario(ns) {
                      : '$' + Math.round(v);
 
   const isPos   = cumProf >= 0;
-  const arrow   = isPos ? '▲' : '▼';
-  const badgeCls = isPos ? '' : ' neg';
-  const numCls   = isPos ? 'positive' : 'negative';
+  const numCls  = isPos ? 'positive' : 'negative';
+
+  const bm = growthBenchmark(growth);
 
   delta.className = 'is-scenario-delta';
   delta.innerHTML = `
     <div class="sm-cards">
       <div class="sm-card">
-        <div class="sm-card-label">Revenue · Mo ${months}<span class="sm-badge${badgeCls}">${arrow} ${growth}%/mo</span></div>
+        <div class="sm-card-label">Revenue · Mo ${months}</div>
         <div class="sm-card-number ${numCls}">${fmtK(endRev)}</div>
         <div class="sm-card-sub">from ${fmtK(rev)} base &middot; ${months}-mo trajectory</div>
+        <div class="sm-benchmark ${bm.tier}">
+          <span class="sm-benchmark-dot"></span>
+          <span>${bm.label} &middot; ${bm.ref}</span>
+        </div>
       </div>
       <div class="sm-card">
         <div class="sm-card-label">Cumulative Profit</div>
