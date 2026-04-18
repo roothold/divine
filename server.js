@@ -987,11 +987,11 @@ app.get('/api/admin/thinkers', requireAdmin, async (_req, res) => {
       available: t.available,
     }));
 
-    // Count how many users have served perspectives from each thinker
+    // Count how many perspectives have been served per thinker
     const { rows } = await pool.query(`
       SELECT wt.label, COUNT(*) AS cnt
       FROM wallet_transactions wt
-      WHERE wt.type = 'debit'
+      WHERE wt.direction = 'debit'
       GROUP BY wt.label
     `);
     const usageCounts = {};

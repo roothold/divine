@@ -258,10 +258,10 @@ export async function adminGetUsers({ search = '', offset = 0, limit = 50 } = {}
        u.thinker_access,
        u.created_at,
        COALESCE(w.credit_balance, 0) AS balance,
-       COUNT(wt.id) FILTER (WHERE wt.type = 'debit') AS perspective_count
+       COUNT(wt.id) FILTER (WHERE wt.direction = 'debit') AS perspective_count
      FROM users u
      LEFT JOIN wallets w              ON w.user_id = u.id
-     LEFT JOIN wallet_transactions wt ON wt.user_id = u.id
+     LEFT JOIN wallet_transactions wt ON wt.wallet_id = w.id
      WHERE ($1 = '' OR u.name ILIKE $2 OR u.email ILIKE $2)
      GROUP BY u.id, w.credit_balance
      ORDER BY u.created_at DESC
