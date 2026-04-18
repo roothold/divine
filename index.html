@@ -1166,6 +1166,58 @@
     .dc-panel-section:last-child { margin-bottom:0; }
     .dc-psec-title { font-size:15px; font-weight:700; color:var(--text-0); margin-bottom:12px; font-family:'Cormorant Garamond',serif; }
 
+    /* Decision Log */
+    .dl-header { display:flex; align-items:baseline; justify-content:space-between; margin-bottom:14px; }
+    .dl-header-title { font-size:15px; font-weight:700; color:var(--text-0); font-family:'Cormorant Garamond',serif; }
+    .dl-header-count { font-size:11px; color:var(--text-3); font-weight:500; }
+    .dl-list { display:flex; flex-direction:column; gap:0; }
+    .dl-card {
+      display:flex; align-items:flex-start; gap:10px;
+      padding:11px 0; border-bottom:1px solid var(--border);
+      cursor:pointer; transition:opacity .12s;
+    }
+    .dl-card:last-child { border-bottom:none; }
+    .dl-card:hover { opacity:.75; }
+    .dl-avatar {
+      width:28px; height:28px; border-radius:50%; flex-shrink:0;
+      display:flex; align-items:center; justify-content:center;
+      font-size:9.5px; font-weight:700; color:#fff; letter-spacing:.3px;
+      margin-top:1px;
+    }
+    .dl-body { flex:1; min-width:0; }
+    .dl-topic {
+      font-size:12px; font-weight:500; color:var(--text-0);
+      line-height:1.4; display:-webkit-box; -webkit-line-clamp:2;
+      -webkit-box-orient:vertical; overflow:hidden;
+      margin-bottom:4px;
+    }
+    .dl-meta { font-size:10.5px; color:var(--text-3); display:flex; gap:4px; align-items:center; }
+    .dl-meta-sep { opacity:.4; }
+    .dl-insight-dot {
+      width:5px; height:5px; border-radius:50%;
+      background:var(--accent); flex-shrink:0; margin-top:1px;
+    }
+    .dl-arr { font-size:11px; color:var(--text-3); flex-shrink:0; margin-top:2px; }
+    .dl-empty {
+      display:flex; flex-direction:column; align-items:center;
+      padding:32px 16px; text-align:center;
+    }
+    .dl-empty-ring {
+      width:44px; height:44px; border-radius:50%;
+      border:1.5px dashed var(--border); display:flex;
+      align-items:center; justify-content:center;
+      margin-bottom:14px; color:var(--text-3); font-size:18px;
+    }
+    .dl-empty-title { font-size:13px; font-weight:600; color:var(--text-1); margin-bottom:5px; }
+    .dl-empty-sub { font-size:11.5px; color:var(--text-3); line-height:1.5; margin-bottom:16px; }
+    .dl-empty-cta {
+      font-size:11.5px; font-weight:600; color:var(--accent);
+      background:none; border:1px solid var(--accent);
+      border-radius:6px; padding:6px 14px; cursor:pointer;
+      transition:background .12s, color .12s;
+    }
+    .dl-empty-cta:hover { background:var(--accent); color:#fff; }
+
     /* Cognitive Equity */
     .dc-equity-grid { display:grid; grid-template-columns:1fr 1fr; gap:9px; }
     .dc-eq-card { background:var(--surface-2); border-radius:8px; padding:12px; }
@@ -1456,8 +1508,37 @@
       outline:none; transition:border-color .12s;
     }
     .is-scenario-field input:focus { border-color:var(--accent-bdr); box-shadow:0 0 0 2px rgba(191,69,42,.08); }
-    .is-scenario-delta { font-size:10px; font-weight:600; color:#22c55e; margin-top:6px; text-align:center; }
+    .is-scenario-delta { margin-top:10px; }
+    .is-scenario-delta.placeholder { font-size:10px; font-weight:600; color:var(--text-3); text-align:center; margin-top:6px; }
     .is-scenario-delta.negative { color:#ef4444; }
+    /* Metric cards */
+    .sm-cards { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+    .sm-card {
+      background:var(--surface-2); border:1px solid var(--border);
+      border-radius:10px; padding:10px 10px 8px;
+      display:flex; flex-direction:column; gap:2px;
+    }
+    .sm-card-label {
+      font-size:8.5px; font-weight:700; letter-spacing:.09em;
+      text-transform:uppercase; color:var(--text-3); line-height:1;
+    }
+    .sm-card-number {
+      font-size:26px; font-weight:800; font-family:var(--font-mono);
+      line-height:1.1; letter-spacing:-.02em; color:var(--text-0);
+    }
+    .sm-card-number.positive { color:#22c55e; }
+    .sm-card-number.negative { color:#ef4444; }
+    .sm-card-sub {
+      font-size:9px; font-weight:500; color:var(--text-3);
+      line-height:1.3; margin-top:1px;
+    }
+    .sm-badge {
+      display:inline-flex; align-items:center;
+      font-size:8.5px; font-weight:700; padding:1px 5px;
+      border-radius:4px; margin-left:4px;
+      background:rgba(34,197,94,.12); color:#22c55e;
+    }
+    .sm-badge.neg { background:rgba(239,68,68,.12); color:#ef4444; }
     .is-scenario-challenge {
       display:none; width:100%; margin-top:9px;
       background:var(--surface-2); border:1.5px solid var(--border);
@@ -1484,8 +1565,8 @@
     }
     .is-tt::after {
       content: attr(data-tip);
-      position:absolute; bottom:calc(100% + 6px); left:50%;
-      transform:translateX(-50%);
+      position:absolute; bottom:calc(100% + 6px); right:0; left:auto;
+      transform:none;
       background:#1a1814; color:#f5f0ea;
       font-size:10px; font-weight:400; line-height:1.45;
       padding:7px 10px; border-radius:7px;
@@ -3790,52 +3871,18 @@
               </div>
             </div><!-- /dc-panel-growth -->
 
-            <!-- ── PORTFOLIO tab (existing ledger) ── -->
+            <!-- ── PORTFOLIO tab — Decision Log ── -->
             <div id="dc-panel-portfolio" style="display:none">
               <div class="dc-panel-body">
-
-                <!-- Cognitive Equity -->
                 <div class="dc-panel-section">
-                  <div class="dc-psec-title">Cognitive Equity</div>
-                  <div class="dc-equity-grid">
-                    <div class="dc-eq-card">
-                      <div class="dc-eq-label">Total Insights Secured</div>
-                      <div class="dc-eq-val" id="dc-eq-total">0</div>
-                      <div class="dc-eq-sub">High-Vibration Insights</div>
-                    </div>
-                    <div class="dc-eq-card">
-                      <div class="dc-eq-label">Estimated Valuation</div>
-                      <div class="dc-eq-val" id="dc-eq-val">$0.00</div>
-                      <div class="dc-eq-sub">UTD (2030 Proj.)</div>
-                    </div>
+                  <div class="dl-header">
+                    <div class="dl-header-title">Decision Log</div>
+                    <div class="dl-header-count" id="dc-dl-count"></div>
+                  </div>
+                  <div class="dl-list" id="dc-dl-list">
+                    <!-- populated by renderDcPortfolio() -->
                   </div>
                 </div>
-
-                <!-- Moat Score -->
-                <div class="dc-panel-section">
-                  <div class="dc-psec-title">Moat Score (Signal vs. Noise)</div>
-                  <div class="dc-gauge-wrap">
-                    <canvas id="dc-gauge-canvas" width="160" height="88"></canvas>
-                    <div class="dc-gauge-pct" id="dc-gauge-pct">—%</div>
-                    <div class="dc-gauge-labels">
-                      <span class="dc-gauge-lbl-s" id="dc-gauge-s">—%</span>
-                      <span class="dc-gauge-lbl-n" id="dc-gauge-n">—%</span>
-                    </div>
-                    <div style="display:flex;justify-content:space-between;width:160px;font-size:9.5px;color:var(--text-3);margin-top:1px">
-                      <span>Verified Human Signal</span><span>Generic AI Noise</span>
-                    </div>
-                  </div>
-                </div>
-
-                <!-- Portfolio Diversification -->
-                <div class="dc-panel-section">
-                  <div class="dc-psec-title">Portfolio Diversification</div>
-                  <div class="dc-div-wrap">
-                    <canvas id="dc-pie-canvas" width="90" height="90" style="flex-shrink:0"></canvas>
-                    <div class="dc-div-legend" id="dc-pie-legend"></div>
-                  </div>
-                </div>
-
               </div>
             </div><!-- /dc-panel-portfolio -->
 
@@ -4094,27 +4141,17 @@
           </div>
         </div><!-- /#chat-panel-growth -->
 
-        <!-- ── PORTFOLIO tab ── -->
+        <!-- ── PORTFOLIO tab — Decision Log ── -->
         <div class="chat-panel-tab-body" id="chat-panel-portfolio" style="display:none">
           <div class="dc-panel-body">
             <div class="dc-panel-section">
-              <div class="dc-psec-title">Cognitive Equity</div>
-              <div class="dc-equity-grid">
-                <div class="dc-eq-card">
-                  <div class="dc-eq-label">Total Sessions</div>
-                  <div class="dc-eq-val" id="chat-eq-total">0</div>
-                  <div class="dc-eq-sub">High-Signal Perspectives</div>
-                </div>
-                <div class="dc-eq-card">
-                  <div class="dc-eq-label">Est. Value</div>
-                  <div class="dc-eq-val" id="chat-eq-val">$0</div>
-                  <div class="dc-eq-sub">UTD (2030 Proj.)</div>
-                </div>
+              <div class="dl-header">
+                <div class="dl-header-title">Decision Log</div>
+                <div class="dl-header-count" id="chat-dl-count"></div>
               </div>
-            </div>
-            <div class="dc-panel-section">
-              <div class="dc-psec-title">Your Projects</div>
-              <div id="chat-portfolio-projects" style="display:flex;flex-direction:column;gap:0"></div>
+              <div class="dl-list" id="chat-dl-list">
+                <!-- populated by renderDcPortfolio() -->
+              </div>
             </div>
           </div>
         </div>
@@ -6677,58 +6714,95 @@ function renderDcRecents() {
     '</div>';
 }
 
-function renderDcPortfolio() {
-  const recents = loadRecents();
-  const total = recents.length;
-  // Projected 2030 valuation: $0.05 × insights × 6.2× knowledge multiplier
-  const valuation = (total * 0.05 * 6.2).toFixed(2);
+// ── Decision Log helpers ─────────────────────────────────────────────────────
+function _dlRelDate(iso) {
+  if (!iso) return '';
+  const diff = Date.now() - new Date(iso).getTime();
+  const mins  = Math.floor(diff / 60000);
+  const hours = Math.floor(diff / 3600000);
+  const days  = Math.floor(diff / 86400000);
+  if (mins  < 2)  return 'Just now';
+  if (mins  < 60) return mins + 'm ago';
+  if (hours < 24) return hours + 'h ago';
+  if (days  === 1) return 'Yesterday';
+  if (days  < 7)  return days + ' days ago';
+  if (days  < 30) return Math.floor(days / 7) + 'w ago';
+  return Math.floor(days / 30) + 'mo ago';
+}
 
-  const totalEl = document.getElementById('dc-eq-total');
-  const valEl   = document.getElementById('dc-eq-val');
-  if (totalEl) totalEl.textContent = total;
-  if (valEl)   valEl.textContent   = '$' + valuation;
+function _dlBuildEntries() {
+  // Merge perspective sessions + chat sessions into a unified log
+  const persp = loadRecents().map(r => ({
+    id:      r.id,
+    date:    r.date,
+    topic:   r.decision || '',
+    thinker: r.thinker || {},
+    hasInsight: !!(r.keyInsight),
+    type:    'perspective',
+    raw:     r,
+  }));
 
-  // Moat Score — starts at 72%, grows with each verified human insight
-  const signalPct = total === 0 ? 72 : Math.min(97, Math.round(72 + total * 1.1));
-  const noisePct  = 100 - signalPct;
-  const gEl = document.getElementById('dc-gauge-pct');
-  const sEl = document.getElementById('dc-gauge-s');
-  const nEl = document.getElementById('dc-gauge-n');
-  if (gEl) gEl.textContent = signalPct + '%';
-  if (sEl) sEl.textContent = signalPct + '%';
-  if (nEl) nEl.textContent = noisePct + '%';
-  requestAnimationFrame(() => requestAnimationFrame(() => drawMoatGauge('dc-gauge-canvas', signalPct)));
-
-  // Portfolio diversification — group by thinker title domain
-  const PALETTE = ['#BF452A','#BF452A','#E8613A','#f59e0b','#22C55E','#aaa'];
-  let domainMap = {};
-  recents.forEach(r => {
-    const key = (r.thinker && r.thinker.title) ? r.thinker.title.split('·')[0].trim() : 'Other';
-    domainMap[key] = (domainMap[key] || 0) + 1;
+  const chats = loadChatSessions().map(s => {
+    const firstUser = (s.messages || []).find(m => m.role === 'user');
+    return {
+      id:      s.id,
+      date:    s.updatedAt || s.createdAt || '',
+      topic:   firstUser ? firstUser.content : (s.title || 'Untitled conversation'),
+      thinker: s.thinker || {},
+      hasInsight: false,
+      type:    'chat',
+      raw:     s,
+    };
   });
-  let segs = Object.entries(domainMap)
-    .sort((a, b) => b[1] - a[1])
-    .map(([label, count], i) => ({ label, count, color: PALETTE[i % PALETTE.length] }));
 
-  if (!segs.length) {
-    segs = [
-      { label:'Stoic Philosophy', count:40, color:'#4A7C6F' },
-      { label:'Startup Strategy',  count:30, color:'#4A7FB5' },
-      { label:'Cognitive Design',  count:20, color:'#C9A84C' },
-      { label:'Other',             count:10, color:'#9E9E9E' },
-    ];
-  }
-  requestAnimationFrame(() => requestAnimationFrame(() => drawDivPie('dc-pie-canvas', segs)));
+  return [...persp, ...chats]
+    .filter(e => e.topic && e.topic.trim())
+    .sort((a, b) => new Date(b.date || 0) - new Date(a.date || 0));
+}
 
-  const legendEl = document.getElementById('dc-pie-legend');
-  if (legendEl) {
-    const tot = segs.reduce((s, x) => s + x.count, 0);
-    legendEl.innerHTML = segs.slice(0, 5).map(s =>
-      '<div class="dc-div-legend-row">' +
-      '<div class="dc-div-dot" style="background:' + s.color + '"></div>' +
-      '<span>' + s.label + ' ' + Math.round(s.count / tot * 100) + '%</span></div>'
-    ).join('');
+function _dlRenderList(listId, countId, entries) {
+  const listEl  = document.getElementById(listId);
+  const countEl = document.getElementById(countId);
+  if (!listEl) return;
+
+  if (countEl) countEl.textContent = entries.length ? entries.length + (entries.length === 1 ? ' session' : ' sessions') : '';
+
+  if (!entries.length) {
+    listEl.innerHTML = `
+      <div class="dl-empty">
+        <div class="dl-empty-ring">◎</div>
+        <div class="dl-empty-title">No decisions logged yet</div>
+        <div class="dl-empty-sub">Your next Thinker conversation will appear here — every session is automatically recorded.</div>
+        <button class="dl-empty-cta" onclick="openChat()">Start a conversation</button>
+      </div>`;
+    return;
   }
+
+  listEl.innerHTML = entries.slice(0, 30).map(e => {
+    const initials = e.thinker.initials || (e.thinker.name || '?').split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase();
+    const color    = e.thinker.color || '#4A7C6F';
+    const name     = e.thinker.name  || 'Thinker';
+    const topic    = e.topic.replace(/\[My context:[^\]]*\]/g, '').trim();
+    const date     = _dlRelDate(e.date);
+    const dot      = e.hasInsight ? '<div class="dl-insight-dot" title="Key insight recorded"></div>' : '';
+    const onclick  = e.type === 'chat'
+      ? `openChatById('${e.id}')`
+      : `openSessionById && openSessionById('${e.id}')`;
+    return `<div class="dl-card" onclick="${onclick}" title="Open session">
+      <div class="dl-avatar" style="background:${color}">${initials}</div>
+      <div class="dl-body">
+        <div class="dl-topic">${topic.replace(/</g,'&lt;')}</div>
+        <div class="dl-meta">${dot}<span>${name}</span><span class="dl-meta-sep">·</span><span>${date}</span></div>
+      </div>
+      <div class="dl-arr">→</div>
+    </div>`;
+  }).join('');
+}
+
+function renderDcPortfolio() {
+  const entries = _dlBuildEntries();
+  _dlRenderList('dc-dl-list',   'dc-dl-count',   entries);
+  _dlRenderList('chat-dl-list', 'chat-dl-count', entries);
 }
 
 function renderDcMarket() {
@@ -6765,6 +6839,7 @@ function switchDcPanel(tab, btn) {
   if (tab === 'growth')       { renderDcRevenueGraph(); renderDcAdvisoryCircle(); }
   if (tab === 'health')       renderDcMarket();
   if (tab === 'integrations') renderDcIntegrations();
+  if (tab === 'portfolio')    renderDcPortfolio();
 }
 
 function acquireFromThinker(idx) {
@@ -10915,6 +10990,40 @@ document.addEventListener('keydown', e => {
   if (e.key === 'Escape') { closePicker(); closeProfileMenu(); closeTopup(); }
 });
 
+/* ── Auto-route keystrokes to active chat input ────────────────────────────
+   When the user starts typing printable characters anywhere on a chat screen
+   and focus isn't already in an input/textarea, redirect the input to the
+   relevant chat textarea so typing just works naturally.
+───────────────────────────────────────────────────────────────────────────── */
+document.addEventListener('keydown', e => {
+  // Only plain printable chars — ignore shortcuts, function keys, nav keys
+  if (e.key.length !== 1)        return;
+  if (e.ctrlKey || e.metaKey)    return;
+  if (e.altKey)                  return;
+
+  // Don't steal focus from existing inputs
+  const tag = document.activeElement?.tagName?.toLowerCase();
+  if (tag === 'input' || tag === 'textarea' || tag === 'select') return;
+  if (document.activeElement?.isContentEditable) return;
+
+  // Determine which chat screen is currently visible
+  const chatScreen   = document.getElementById('screen-chat');
+  const replayScreen = document.getElementById('screen-replay');
+
+  let targetId = null;
+  if (chatScreen?.classList.contains('active'))   targetId = 'chat-textarea';
+  else if (replayScreen?.classList.contains('active')) targetId = 'is-input';
+
+  if (!targetId) return;
+
+  const ta = document.getElementById(targetId);
+  if (!ta || ta.disabled || ta.readOnly) return;
+
+  // Focus and let the keystroke land naturally in the textarea
+  ta.focus();
+  // No need to manually insert the char — the browser will replay it into the now-focused element
+});
+
 /* ════════════════════════════════
    THINKER PORTAL
 ════════════════════════════════ */
@@ -11831,7 +11940,11 @@ function switchPanel(idPrefix, tab, btn) {
     if (bar) bar.querySelectorAll('.dc-ptab, .is-ptab').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
   }
+  if (tab === 'portfolio') renderDcPortfolio();
 }
+
+// Alias used by Decision Log cards to reopen a past chat session
+function openChatById(id) { openChatSession(id); }
 
 /* Keep old switchIsPanel alias for any existing HTML references */
 function switchIsPanel(tab, btn) { switchPanel('is-panel', tab, btn); }
@@ -12053,8 +12166,8 @@ function updateScenario(ns) {
   if (!delta) return;
 
   if (!rev) {
-    delta.textContent = 'Enter values to model revenue trajectory';
-    delta.className   = 'is-scenario-delta';
+    delta.className   = 'is-scenario-delta placeholder';
+    delta.innerHTML   = 'Enter values to model revenue trajectory';
     if (challengeBtn) challengeBtn.style.display = 'none';
     renderRevenueGraph(ns);
     return;
@@ -12063,10 +12176,29 @@ function updateScenario(ns) {
   const endRev  = rev * Math.pow(1 + growth/100, months);
   const cumRev  = Array.from({length: months}, (_, i) => rev * Math.pow(1 + growth/100, i)).reduce((a,b)=>a+b,0);
   const cumProf = cumRev * (margin / 100);
-  const fmtK    = v => v >= 1000000 ? '$' + (v/1000000).toFixed(2) + 'M' : v >= 1000 ? '$' + (v/1000).toFixed(1) + 'k' : '$' + Math.round(v);
+  const fmtK    = v => v >= 1_000_000 ? '$' + (v/1_000_000).toFixed(2) + 'M'
+                     : v >= 1_000     ? '$' + (v/1_000).toFixed(1) + 'k'
+                     : '$' + Math.round(v);
 
-  delta.innerHTML = `<span style="color:#22c55e">▲ ${fmtK(endRev)}/mo at month ${months}</span>&ensp;·&ensp;<span style="color:var(--text-2)">${fmtK(cumProf)} cumulative profit</span>`;
+  const isPos   = cumProf >= 0;
+  const arrow   = isPos ? '▲' : '▼';
+  const badgeCls = isPos ? '' : ' neg';
+  const numCls   = isPos ? 'positive' : 'negative';
+
   delta.className = 'is-scenario-delta';
+  delta.innerHTML = `
+    <div class="sm-cards">
+      <div class="sm-card">
+        <div class="sm-card-label">Revenue · Mo ${months}<span class="sm-badge${badgeCls}">${arrow} ${growth}%/mo</span></div>
+        <div class="sm-card-number ${numCls}">${fmtK(endRev)}</div>
+        <div class="sm-card-sub">from ${fmtK(rev)} base &middot; ${months}-mo trajectory</div>
+      </div>
+      <div class="sm-card">
+        <div class="sm-card-label">Cumulative Profit</div>
+        <div class="sm-card-number ${numCls}">${fmtK(cumProf)}</div>
+        <div class="sm-card-sub">${margin}% margin &middot; across ${months} months</div>
+      </div>
+    </div>`;
   if (challengeBtn) challengeBtn.style.display = 'block';
   renderRevenueGraph(ns);
 }

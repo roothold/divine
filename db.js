@@ -1269,3 +1269,57 @@ export async function recordFragilityInstance(fragilityId) {
     client.release();
   }
 }
+
+
+// ── Thinker Logic — runtime helpers ──────────────────────────────────────────
+
+/**
+ * Load all active axioms for a thinker, merged with per-venture live weights.
+ * Falls back to base_weight when no venture row exists yet.
+ *
+ * @param {string} thinkerId
+ * @param {string} ventureId  UUID (user_id used as venture proxy)
+ * @returns {Array<{logic_id, category, axiom_text, current_weight,
+ *                  success_count, rejection_count, application_count}>}
+ */
+export async function loadThinkerAxioms(thinkerId, ventureId) {
+  const { rows } = await pool.query(
+    `SELECT
+       ta.logic_id,
+       ta.category,
+       ta.axiom_text,
+       ta.base_weight,
+       COALESCE(aw.current_weight,    ta.base_weight) AS current_weight,
+       COALESCE(aw.success_count,     0)              AS success_count,
+       COALESCE(aw.rejection_count,   0)              AS rejection_count,
+       COALESCE(aw.application_count, 0)              AS application_count
+     FROM   thinker_axioms ta
+     LEFT JOIN axiom_weights aw
+            ON aw.logic_id   = ta.logic_id
+           AND aw.venture_id = $2
+     WHERE  ta.thinker_id   = $1
+       AND  ta.deprecated_at IS NULL
+     ORDER BY current_weight DESC`,
+    [thinkerId, ventureId]
+  );
+  return rows;
+}
+
+/**
+ * Seed a thinker's axioms from their profile if no rows exist yet.
+ * Idempotent — uses INSERT … ON CONFLICT DO NOTHING.
+ *
+ * @param {string} thinkerId
+ * @param {Array<{logic_id, category, axiom_text, base_weight?}>} axiomDefs
+ */
+export async function seedThinkerAxioms(thinkerId, axiomDefs) {
+  if (!axiomDefs?.length) return;
+  for (const ax of axiomDefs) {
+    await pool.query(
+      `INSERT INTO thinker_axioms (logic_id, thinker_id, category, axiom_text, base_weight)
+       VALUES ($1, $2, $3, $4, $5)
+       ON CONFLICT (logic_id) DO NOTHING`,
+      [ax.logic_id, thinkerId, ax.category, ax.axiom_text, ax.base_weight ?? 1.0]
+    );
+  }
+}

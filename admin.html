@@ -256,6 +256,12 @@
   .amount-credit { color: var(--green);  font-weight: 600; }
   .amount-debit  { color: var(--accent); font-weight: 600; }
 
+  /* ── Live sync indicator ── */
+  .sync-info { display:flex; align-items:center; gap:5px; font-size:11px; color:var(--text-3); margin-top:4px; }
+  .live-dot  { width:6px; height:6px; border-radius:50%; background:var(--green); display:inline-block; flex-shrink:0; }
+  .sync-sep  { opacity:.35; }
+  .sync-time { font-variant-numeric: tabular-nums; }
+
   @media (max-width: 768px) {
     .admin-sidebar { display: none; }
     .page-body { padding: 16px; }
@@ -328,6 +334,7 @@
       <div class="page-header">
         <div class="page-title">User Management</div>
         <div class="page-sub">View and manage all registered users.</div>
+        <div class="sync-info"><span class="live-dot"></span><span>Live</span><span class="sync-sep">·</span><span>Updated <span class="sync-time" id="users-sync-time">—</span></span></div>
       </div>
       <div class="page-body">
         <div class="stat-row" id="user-stats-row">
@@ -376,8 +383,13 @@
       <div class="page-header">
         <div class="page-title">Thinker Management</div>
         <div class="page-sub">Control which thinkers are live on the platform.</div>
+        <div class="sync-info"><span class="live-dot"></span><span>Live</span><span class="sync-sep">·</span><span>Updated <span class="sync-time" id="thinkers-sync-time">—</span></span></div>
       </div>
       <div class="page-body" style="padding:0">
+        <div class="toolbar" style="padding:12px 20px 0">
+          <div></div>
+          <button class="btn btn-ghost btn-sm" onclick="loadThinkers()">Refresh</button>
+        </div>
         <div class="thinker-table-wrap">
           <table class="thinker-table" id="thinkers-grid">
             <thead>
@@ -401,6 +413,7 @@
       <div class="page-header">
         <div class="page-title">Perspectives Ledger</div>
         <div class="page-sub">Every perspective served across all users.</div>
+        <div class="sync-info"><span class="live-dot"></span><span>Live · every 15 s</span><span class="sync-sep">·</span><span>Updated <span class="sync-time" id="perspectives-sync-time">—</span></span></div>
       </div>
       <div class="page-body">
         <div class="toolbar">
@@ -441,6 +454,7 @@
       <div class="page-header">
         <div class="page-title">Revenue & Wallet Overview</div>
         <div class="page-sub">Platform-wide financial activity.</div>
+        <div class="sync-info"><span class="live-dot"></span><span>Live</span><span class="sync-sep">·</span><span>Updated <span class="sync-time" id="revenue-sync-time">—</span></span></div>
       </div>
       <div class="page-body">
         <div class="stat-row">
@@ -466,7 +480,10 @@
           </div>
         </div>
 
-        <div style="font-size:13px;font-weight:600;margin-bottom:10px;color:var(--text-1)">Recent Transactions</div>
+        <div class="toolbar">
+          <div style="font-size:13px;font-weight:600;color:var(--text-1)">Recent Transactions</div>
+          <button class="btn btn-ghost btn-sm" onclick="loadRevenue()">Refresh</button>
+        </div>
         <div class="table-wrap">
           <table>
             <thead>
@@ -517,12 +534,10 @@ async function initAdmin() {
     document.getElementById('admin-shell').style.display = 'flex';
 
     // Restore active tab from URL hash (browser-refresh-friendly)
+    // showSection handles initial data load + polling — no extra call needed
     const hash = (window.location.hash || '').replace('#', '');
     const startSection = SECTIONS.includes(hash) ? hash : 'users';
     showSection(startSection);
-
-    // Load data for the starting section
-    loadUsers(0);
   } catch (e) {
     showGate('Could not connect to server. Try again later.', true);
   }
@@ -539,22 +554,54 @@ function authHeaders() {
   return { 'Content-Type': 'application/json', Authorization: `Bearer ${localStorage.getItem(TOKEN_KEY)}` };
 }
 
+// ── Unified polling engine ────────────────────────────────────────────────────
+// One active interval at a time — switching tabs tears down the previous one.
+let _tabInterval = null;
+
+function _startPoll(fn, ms) {
+  clearInterval(_tabInterval);
+  _tabInterval = setInterval(fn, ms);
+}
+
+function _stopPoll() {
+  clearInterval(_tabInterval);
+  _tabInterval = null;
+}
+
+// Stamp "Updated HH:MM:SS" in section header after a successful fetch.
+function _touchSync(sectionId) {
+  const el = document.getElementById(sectionId + '-sync-time');
+  if (el) el.textContent = new Date().toLocaleTimeString('en-GB',
+    { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+}
+
 // ── Navigation ────────────────────────────────────────────────────────────────
 const SECTIONS = ['users', 'thinkers', 'perspectives', 'revenue'];
 
 function showSection(name) {
   if (!SECTIONS.includes(name)) name = 'users';
+  _stopPoll();
   SECTIONS.forEach(s => {
     document.getElementById('section-' + s).classList.toggle('active', s === name);
     document.getElementById('nav-' + s).classList.toggle('active', s === name);
   });
-  // Persist active tab in URL hash so refresh restores it
+  // Persist active tab in URL hash so browser-refresh restores it
   history.replaceState(null, '', '#' + name);
-  // Lazy-load data for each section
-  if (name === 'users')        loadUsers(0);
-  if (name === 'thinkers' && !_thinkersLoaded)  loadThinkers();
-  if (name === 'perspectives' && !_perspLoaded) loadPerspectives(0);
-  if (name === 'revenue') loadRevenue();
+
+  // Each section: initial load + interval that respects current page offset
+  if (name === 'users') {
+    loadUsers(0);
+    _startPoll(() => loadUsers(_usersOffset), 20_000);
+  } else if (name === 'thinkers') {
+    loadThinkers();
+    _startPoll(() => loadThinkers(), 30_000);
+  } else if (name === 'perspectives') {
+    if (!_perspLoaded) loadPerspectives(0);
+    _startPoll(() => loadPerspectives(_perspOffset), 15_000);
+  } else if (name === 'revenue') {
+    loadRevenue();
+    _startPoll(() => loadRevenue(), 20_000);
+  }
 }
 
 // ── Toast ─────────────────────────────────────────────────────────────────────
@@ -624,6 +671,7 @@ async function loadUsers(offset) {
 
     renderUsersTable(users);
     renderUsersPagination(total, offset);
+    _touchSync('users');
   } catch (e) {
     tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;color:var(--accent);padding:20px">${escHtml(e.message)}</td></tr>`;
   }
@@ -755,10 +803,7 @@ async function manualCredit(userId, userName) {
 // ══════════════════════════════════════════════════════════════
 //  THINKERS
 // ══════════════════════════════════════════════════════════════
-let _thinkersLoaded = false;
-
 async function loadThinkers() {
-  _thinkersLoaded = true;
   const tbody = document.getElementById('thinkers-body');
   tbody.innerHTML = `<tr><td colspan="4" style="text-align:center;padding:32px;color:var(--text-3);font-size:13px"><div class="loading" style="justify-content:center"><div class="spinner"></div>Loading…</div></td></tr>`;
   try {
@@ -766,6 +811,7 @@ async function loadThinkers() {
     if (!res.ok) throw new Error((await res.json()).error);
     const { thinkers } = await res.json();
     renderThinkersGrid(thinkers);
+    _touchSync('thinkers');
   } catch (e) {
     tbody.innerHTML = `<tr><td colspan="4" style="color:var(--accent);padding:20px">${escHtml(e.message)}</td></tr>`;
   }
@@ -823,11 +869,11 @@ async function toggleThinker(id, available) {
 // ══════════════════════════════════════════════════════════════
 //  PERSPECTIVES
 // ══════════════════════════════════════════════════════════════
-let _perspOffset = 0;
+let _perspOffset  = 0;
 const PERSP_LIMIT = 50;
-let _perspTotal  = 0;
-let _perspLoaded = false;
-let _perspTimer  = null;
+let _perspTotal   = 0;
+let _perspLoaded  = false;
+let _perspTimer   = null;
 
 function debouncePerspSearch() {
   clearTimeout(_perspTimer);
@@ -850,6 +896,7 @@ async function loadPerspectives(offset) {
     _perspTotal = total;
     renderPerspTable(perspectives);
     renderPerspPagination(total, offset);
+    _touchSync('perspectives');
   } catch (e) {
     tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;color:var(--accent);padding:20px">${escHtml(e.message)}</td></tr>`;
   }
@@ -909,6 +956,7 @@ async function loadRevenue() {
     document.getElementById('rev-perspectives').textContent = totals.total_perspectives || 0;
 
     renderRevenueTable(recent);
+    _touchSync('revenue');
   } catch (e) {
     document.getElementById('rev-tbody').innerHTML =
       `<tr><td colspan="5" style="text-align:center;color:var(--accent);padding:20px">${escHtml(e.message)}</td></tr>`;

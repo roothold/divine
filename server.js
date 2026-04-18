@@ -48,6 +48,7 @@ import pool, {
   computeProtocolConfidenceInterval,
   getFragilityPoints, recordFragilityInstance,
   runWeightUpdateJob,
+  loadThinkerAxioms, seedThinkerAxioms,
 } from './db.js';
 import { getThinker, THINKERS } from './thinkers.js';
 
@@ -604,7 +605,12 @@ app.post('/api/get-perspective', async (req, res) => {
 
   // ── Build the messages array and system prompt for this stage ────────────
   let messages;
-  let systemPrompt = thinker.systemPrompt;
+  // For authenticated users, enhance the system prompt with Thompson-ranked axioms
+  // and fragility alerts derived from this venture's weight history.
+  // Guests receive the base system prompt unchanged (no stable venture_id).
+  let systemPrompt = isGuest
+    ? thinker.systemPrompt
+    : await buildEnhancedSystemPrompt(thinker, user_id);
 
   if (stage === 'chat') {
     // Conversational chat: client sends full message history + optional system override.
@@ -1197,6 +1203,101 @@ app.get('*', (req, res, next) => {
   }
 });
 
+// ── Thinker axiom seed definitions (derived from each thinker's profile) ─────
+// These are inserted once and then evolved by the WUA. ON CONFLICT DO NOTHING
+// ensures re-seeding on redeploy never overwrites live weight evolution.
+const THINKER_AXIOM_SEEDS = {
+  michael: [
+    {
+      logic_id:   'michael.problem_validation',
+      category:   'Problem Validation',
+      axiom_text: 'Validate whether the problem is real before evaluating any solution. '
+                + 'Demand evidence — waitlists, conversations, money spent, workarounds built. '
+                + 'Not assumptions, not vibes.',
+      base_weight: 1.0,
+    },
+    {
+      logic_id:   'michael.market_audit',
+      category:   'Market Audit',
+      axiom_text: 'Audit what already exists before building anything. Surface what competitors '
+                + 'got wrong, what this reveals about positioning, and where the 10x improvement '
+                + 'lies — not 10%.',
+      base_weight: 1.0,
+    },
+    {
+      logic_id:   'michael.scale_thinking',
+      category:   'Scale Thinking',
+      axiom_text: 'Challenge the founder to think bigger. Surface where they have artificially '
+                + 'constrained their vision based on current resources or market familiarity. '
+                + 'Ask what unlimited resources would unlock, then work backward.',
+      base_weight: 1.0,
+    },
+    {
+      logic_id:   'michael.brand_signal',
+      category:   'Brand Signal',
+      axiom_text: 'Examine how the founder is showing up externally — brand, deck, email, '
+                + 'first impression. Flag honestly when the external signal undermines the idea '
+                + 'before it gets a fair hearing.',
+      base_weight: 1.0,
+    },
+    {
+      logic_id:   'michael.direct_truth',
+      category:   'Direct Truth',
+      axiom_text: 'Be direct, specific, and willing to say what others won\'t. Do not soften '
+                + 'hard truths with compliments. Do not validate weak ideas to protect feelings.',
+      base_weight: 1.0,
+    },
+  ],
+};
+
+// ── buildEnhancedSystemPrompt ─────────────────────────────────────────────────
+// Runs Thompson sampling over this thinker's axioms (weighted by the venture's
+// historical signal) and injects the top-ranked frames + fragility alerts into
+// the system prompt. Falls back to base prompt if no axioms are seeded yet.
+//
+// Called per-request for authenticated users — gracefully no-ops on any DB error.
+async function buildEnhancedSystemPrompt(thinker, ventureId) {
+  try {
+    const axioms = await loadThinkerAxioms(thinker.id, ventureId);
+    if (!axioms.length) return thinker.systemPrompt; // no axioms seeded yet — use base
+
+    // Thompson-rank to get top 5 frames for this session
+    const ranked = rankAxiomsThompson(axioms, 5);
+
+    // Load fragility points for each ranked axiom (all verticals, all stages)
+    const fragilityRows = (
+      await Promise.all(ranked.map(ax => getFragilityPoints(ax.logic_id)))
+    ).flat();
+
+    // ── Build addendum ────────────────────────────────────────────────────────
+    const axiomLines = ranked.map((ax, i) =>
+      `${i + 1}. [${ax.category}] ${ax.axiom_text.trim()}`
+    ).join('\n');
+
+    let prompt = thinker.systemPrompt.trimEnd();
+
+    prompt += `\n\n--- Active reasoning threads for this session ---\n`
+            + `The following frameworks carry elevated weight based on this venture's track record. `
+            + `Lead with them. Adjust emphasis as new signal emerges.\n\n`
+            + axiomLines;
+
+    if (fragilityRows.length) {
+      const fpLines = fragilityRows
+        .slice(0, 4)
+        .map(fp => `• ${fp.condition} → ${fp.failure_mode}`)
+        .join('\n');
+      prompt += `\n\n--- Fragility alerts ---\n`
+              + `Conditions where this context is most likely to break. Navigate with precision.\n\n`
+              + fpLines;
+    }
+
+    return prompt;
+  } catch (err) {
+    console.warn('[thinker-logic] buildEnhancedSystemPrompt failed — using base prompt:', err.message);
+    return thinker.systemPrompt;
+  }
+}
+
 // ── Start ─────────────────────────────────────────────────────────────────────
 // Migrations run sequentially and MUST complete before the server accepts traffic.
 // This guarantees wallet_transactions has wallet_id / direction / line_item_type
@@ -1205,6 +1306,15 @@ const WUA_INTERVAL_MS = 6 * 60 * 60 * 1000; // 6 hours
 
 adminMigrateSchema()
   .then(() => migrateThinkerLogicSchema())
+  .then(async () => {
+    // Seed axioms for all thinkers that have profile-level axiom definitions.
+    // Idempotent — ON CONFLICT DO NOTHING so live weights are never overwritten.
+    for (const [thinkerId, axiomDefs] of Object.entries(THINKER_AXIOM_SEEDS)) {
+      await seedThinkerAxioms(thinkerId, axiomDefs)
+        .then(() => console.log(`[Axioms] Seeded ${axiomDefs.length} axioms for thinker: ${thinkerId}`))
+        .catch(err => console.warn(`[Axioms] Seed failed for ${thinkerId}:`, err.message));
+    }
+  })
   .then(() => {
     // Weight Update Job — starts after DB is ready
     setInterval(() => {
