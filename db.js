@@ -51,7 +51,7 @@ export async function deductCredit(userId, amount, label, _metadata = {}) {
     await client.query(
       `INSERT INTO wallet_transactions
          (user_id, type, amount, balance_after, label)
-       VALUES ($1, 'perspective_spend', $2, $3, $4)`,
+       VALUES ($1, 'debit', $2, $3, $4)`,
       [userId, amount, wallet.credit_balance, label]
     );
     await client.query('COMMIT');
@@ -81,7 +81,7 @@ export async function creditWallet(userId, amount, label, _metadata = {}) {
     await client.query(
       `INSERT INTO wallet_transactions
          (user_id, type, amount, balance_after, label)
-       VALUES ($1, 'topup', $2, $3, $4)`,
+       VALUES ($1, 'credit', $2, $3, $4)`,
       [userId, amount, wallet.credit_balance, label]
     );
     await client.query('COMMIT');
@@ -226,7 +226,7 @@ export async function adminGetUsers({ search = '', offset = 0, limit = 50 } = {}
        u.thinker_access,
        u.created_at,
        COALESCE(w.credit_balance, 0) AS balance,
-       COUNT(wt.id) FILTER (WHERE wt.type = 'perspective_spend') AS perspective_count
+       COUNT(wt.id) FILTER (WHERE wt.type = 'debit') AS perspective_count
      FROM users u
      LEFT JOIN wallets w              ON w.user_id = u.id
      LEFT JOIN wallet_transactions wt ON wt.user_id = u.id
@@ -292,7 +292,7 @@ export async function adminGetPerspectives({ search = '', offset = 0, limit = 50
        u.email AS user_email
      FROM wallet_transactions wt
      JOIN users u ON u.id = wt.user_id
-     WHERE wt.type = 'perspective_spend'
+     WHERE wt.type = 'debit'
        AND ($1 = '' OR u.name ILIKE $2 OR u.email ILIKE $2 OR wt.label ILIKE $2)
      ORDER BY wt.created_at DESC
      LIMIT $3 OFFSET $4`,
@@ -307,7 +307,7 @@ export async function adminCountPerspectives(search = '') {
     `SELECT COUNT(*) AS total
      FROM wallet_transactions wt
      JOIN users u ON u.id = wt.user_id
-     WHERE wt.type = 'perspective_spend'
+     WHERE wt.type = 'debit'
        AND ($1 = '' OR u.name ILIKE $2 OR u.email ILIKE $2 OR wt.label ILIKE $2)`,
     [search, like]
   );
@@ -321,9 +321,9 @@ export async function adminGetRevenue() {
       COUNT(DISTINCT u.id)                                              AS total_users,
       COUNT(DISTINCT u.id) FILTER (WHERE u.is_disabled = FALSE)         AS active_users,
       COALESCE(SUM(w.credit_balance), 0)                                AS total_balance,
-      COALESCE(SUM(wt.amount) FILTER (WHERE wt.type = 'perspective_spend'), 0) AS total_spent,
-      COALESCE(SUM(wt.amount) FILTER (WHERE wt.type != 'perspective_spend'), 0) AS total_earned,
-      COUNT(wt.id) FILTER (WHERE wt.type = 'perspective_spend')         AS total_perspectives
+      COALESCE(SUM(wt.amount) FILTER (WHERE wt.type = 'debit'), 0) AS total_spent,
+      COALESCE(SUM(wt.amount) FILTER (WHERE wt.type = 'credit'), 0) AS total_earned,
+      COUNT(wt.id) FILTER (WHERE wt.type = 'debit')         AS total_perspectives
     FROM users u
     LEFT JOIN wallets w              ON w.user_id = u.id
     LEFT JOIN wallet_transactions wt ON wt.user_id = u.id

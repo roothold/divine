@@ -961,7 +961,7 @@ app.get('/api/admin/thinkers', requireAdmin, async (_req, res) => {
     const { rows } = await pool.query(`
       SELECT wt.label, COUNT(*) AS cnt
       FROM wallet_transactions wt
-      WHERE wt.type = 'perspective_spend'
+      WHERE wt.type = 'debit'
       GROUP BY wt.label
     `);
     const usageCounts = {};
@@ -1043,26 +1043,7 @@ app.get('/api/admin/revenue', requireAdmin, async (_req, res) => {
   }
 });
 
-// ── GET /api/admin/schema-check ──────────────────────────────────────────────
-// Temporary: returns the wallet_transactions type check constraint so we know allowed values.
-app.get('/api/admin/schema-check', requireAdmin, async (_req, res) => {
-  try {
-    const { rows } = await pool.query(`
-      SELECT pg_get_constraintdef(oid) AS def
-      FROM pg_constraint
-      WHERE conname = 'wallet_transactions_type_check'
-    `);
-    const { rows: cols } = await pool.query(`
-      SELECT column_name, data_type, column_default
-      FROM information_schema.columns
-      WHERE table_name = 'wallet_transactions'
-      ORDER BY ordinal_position
-    `);
-    res.json({ type_constraint: rows[0]?.def || 'not found', columns: cols });
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-});
+// schema-check removed — constraint confirmed: type IN ('credit', 'debit')
 
 // ── SPA catch-all ────────────────────────────────────────────────────────────
 // Serve index.html for every non-API, non-auth route.
