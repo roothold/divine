@@ -35,7 +35,7 @@ import pool, {
   getUserById, getUserByEmail, getUserByIdRaw,
   upsertGoogleUser, upsertLinkedInUser, createEmailUser,
   updateUserName, updateUserEmail, updateUserPassword,
-  adminMigrateSchema, adminGetUsers, adminCountUsers,
+  adminMigrateSchema, adminGetUsers, adminCountUsers, adminGetUserStats,
   adminSetUserDisabled, adminSetUserAdmin, adminSetThinkerAccess,
   adminGetPerspectives, adminCountPerspectives, adminGetRevenue,
   upsertSession, getUserSessions, deleteSession,
@@ -948,11 +948,12 @@ app.get('/api/admin/users', requireAdmin, async (req, res) => {
     const search = (req.query.search || '').trim();
     const offset = parseInt(req.query.offset || '0', 10);
     const limit  = parseInt(req.query.limit  || '50', 10);
-    const [users, total] = await Promise.all([
+    const [users, total, stats] = await Promise.all([
       adminGetUsers({ search, offset, limit }),
       adminCountUsers(search),
+      adminGetUserStats(),
     ]);
-    res.json({ users, total, offset, limit });
+    res.json({ users, total, offset, limit, stats });
   } catch (err) {
     console.error('[/api/admin/users]', err.message);
     res.status(500).json({ error: err.message });

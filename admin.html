@@ -612,15 +612,15 @@ async function loadUsers(offset) {
       headers: authHeaders()
     });
     if (!res.ok) throw new Error((await res.json()).error);
-    const { users, total } = await res.json();
+    const { users, total, stats } = await res.json();
     _usersData  = users;
     _usersTotal = total;
 
-    // Update stat cards
-    document.getElementById('stat-total-users').textContent   = total;
-    document.getElementById('stat-active-users').textContent  = users.filter(u => !u.is_disabled).length;
-    document.getElementById('stat-admin-users').textContent   = users.filter(u => u.is_admin).length;
-    document.getElementById('stat-thinker-users').textContent = users.filter(u => u.thinker_access).length;
+    // Update stat cards — use server-side totals so counts are always platform-wide, not page-limited
+    document.getElementById('stat-total-users').textContent   = stats ? stats.total_users   : total;
+    document.getElementById('stat-active-users').textContent  = stats ? stats.active_users  : '—';
+    document.getElementById('stat-admin-users').textContent   = stats ? stats.admin_users   : '—';
+    document.getElementById('stat-thinker-users').textContent = stats ? stats.thinker_users : '—';
 
     renderUsersTable(users);
     renderUsersPagination(total, offset);

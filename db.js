@@ -271,6 +271,19 @@ export async function adminGetUsers({ search = '', offset = 0, limit = 50 } = {}
   return rows;
 }
 
+/** Platform-wide user stat counts (unaffected by search/pagination). */
+export async function adminGetUserStats() {
+  const { rows } = await pool.query(`
+    SELECT
+      COUNT(*)                                    AS total_users,
+      COUNT(*) FILTER (WHERE NOT is_disabled)     AS active_users,
+      COUNT(*) FILTER (WHERE is_admin = TRUE)     AS admin_users,
+      COUNT(*) FILTER (WHERE thinker_access = TRUE) AS thinker_users
+    FROM users
+  `);
+  return rows[0];
+}
+
 /** Count total users (with optional search filter). */
 export async function adminCountUsers(search = '') {
   const like = `%${search}%`;
