@@ -10259,6 +10259,7 @@ function setAuthToken(tok) { localStorage.setItem(AUTH_TOKEN_KEY, tok); }
 function clearAuth() {
   localStorage.removeItem(AUTH_TOKEN_KEY);
   localStorage.removeItem('di_last_chat_id');
+  localStorage.removeItem('di_user_id'); // clear so guest gets a fresh device ID on next load
   currentUser = null;
   USER_ID = null;  // Reset so _sKey() uses 'guest' namespace
 }
@@ -10272,6 +10273,7 @@ function applyAuthState(user) {
   if (user) {
     const _prevGuestId = USER_ID !== user.id ? USER_ID : null; // capture guest id before overwriting
     USER_ID = user.id;
+    localStorage.setItem('di_user_id', user.id); // persist so next page-load gets correct key immediately
     const firstName = (user.name || 'there').split(' ')[0];
     const initials  = (user.name || 'U').split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase();
 
