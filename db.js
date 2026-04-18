@@ -323,8 +323,9 @@ export async function adminGetPerspectives({ search = '', offset = 0, limit = 50
        u.name  AS user_name,
        u.email AS user_email
      FROM wallet_transactions wt
-     JOIN users u ON u.id = wt.user_id
-     WHERE wt.type = 'debit'
+     JOIN wallets w ON w.id = wt.wallet_id
+     JOIN users u   ON u.id = w.user_id
+     WHERE wt.direction = 'debit'
        AND ($1 = '' OR u.name ILIKE $2 OR u.email ILIKE $2 OR wt.label ILIKE $2)
      ORDER BY wt.created_at DESC
      LIMIT $3 OFFSET $4`,
@@ -338,8 +339,9 @@ export async function adminCountPerspectives(search = '') {
   const { rows } = await pool.query(
     `SELECT COUNT(*) AS total
      FROM wallet_transactions wt
-     JOIN users u ON u.id = wt.user_id
-     WHERE wt.type = 'debit'
+     JOIN wallets w ON w.id = wt.wallet_id
+     JOIN users u   ON u.id = w.user_id
+     WHERE wt.direction = 'debit'
        AND ($1 = '' OR u.name ILIKE $2 OR u.email ILIKE $2 OR wt.label ILIKE $2)`,
     [search, like]
   );
@@ -350,28 +352,30 @@ export async function adminCountPerspectives(search = '') {
 export async function adminGetRevenue() {
   const { rows: totals } = await pool.query(`
     SELECT
-      COUNT(DISTINCT u.id)                                              AS total_users,
-      COUNT(DISTINCT u.id) FILTER (WHERE u.is_disabled = FALSE)         AS active_users,
-      COALESCE(SUM(w.credit_balance), 0)                                AS total_balance,
-      COALESCE(SUM(wt.amount) FILTER (WHERE wt.type = 'debit'), 0) AS total_spent,
-      COALESCE(SUM(wt.amount) FILTER (WHERE wt.type = 'credit'), 0) AS total_earned,
-      COUNT(wt.id) FILTER (WHERE wt.type = 'debit')         AS total_perspectives
+      COUNT(DISTINCT u.id)                                                         AS total_users,
+      COUNT(DISTINCT u.id) FILTER (WHERE u.is_disabled = FALSE)                   AS active_users,
+      COALESCE(SUM(w.credit_balance), 0)                                           AS total_balance,
+      COALESCE(SUM(wt.amount) FILTER (WHERE wt.direction = 'debit'),  0)           AS total_spent,
+      COALESCE(SUM(wt.amount) FILTER (WHERE wt.direction = 'credit'), 0)           AS total_earned,
+      COUNT(wt.id)          FILTER (WHERE wt.direction = 'debit')                  AS total_perspectives
     FROM users u
     LEFT JOIN wallets w              ON w.user_id = u.id
-    LEFT JOIN wallet_transactions wt ON wt.user_id = u.id
+    LEFT JOIN wallet_transactions wt ON wt.wallet_id = w.id
   `);
 
   const { rows: recentTxns } = await pool.query(`
     SELECT
       wt.id,
       wt.created_at,
-      wt.type,
+      wt.line_item_type,
+      wt.direction,
       wt.amount,
       wt.label,
       u.name  AS user_name,
       u.email AS user_email
     FROM wallet_transactions wt
-    JOIN users u ON u.id = wt.user_id
+    JOIN wallets w ON w.id = wt.wallet_id
+    JOIN users u   ON u.id = w.user_id
     ORDER BY wt.created_at DESC
     LIMIT 20
   `);

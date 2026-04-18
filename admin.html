@@ -922,10 +922,13 @@ function renderRevenueTable(rows) {
     return;
   }
   tbody.innerHTML = rows.map(r => {
-    const isCredit = r.type !== 'perspective_spend';
+    const isCredit = r.direction === 'credit';
+    const typeLabel = isCredit
+      ? (r.line_item_type === 'admin_adjustment' ? 'Admin Credit' : 'Top-up')
+      : (r.line_item_type === 'thinker_royalty'  ? 'Royalty'      : 'Perspective');
     const typeBadge = isCredit
-      ? '<span class="badge badge-green">Top-up</span>'
-      : '<span class="badge badge-amber">Perspective</span>';
+      ? `<span class="badge badge-green">${typeLabel}</span>`
+      : `<span class="badge badge-amber">${typeLabel}</span>`;
     return `
       <tr>
         <td style="color:var(--text-3);white-space:nowrap">${fmtDateTime(r.created_at)}</td>
