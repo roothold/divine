@@ -5830,7 +5830,7 @@ async function callPerspective({ stage, decision, answers, onChunk }) {
       method:  'POST',
       headers: { 'content-type': 'application/json' },
       body:    JSON.stringify(body),
-      signal:  AbortSignal.timeout(8000),
+      signal:  AbortSignal.timeout(90000),
     });
 
     if (res.status === 402) { openTopup(); throw new Error('INSUFFICIENT_FUNDS'); }
@@ -5842,6 +5842,13 @@ async function callPerspective({ stage, decision, answers, onChunk }) {
       _usageLogSave(log);
       _usageRefreshUI();
       throw new Error(data.error || 'Rate limit reached.');
+    }
+
+    if (!res.ok) {
+      // Surface real server errors instead of silently falling to direct-API path
+      let errMsg = `Server error (${res.status})`;
+      try { const d = await res.json(); errMsg = d.error || errMsg; } catch {}
+      throw new Error(errMsg);
     }
 
     if (res.ok) {
@@ -9482,8 +9489,8 @@ function _buildAttachmentContext() {
 async function sendChatMsg() {
   if (_chatStreaming) return;
 
-  // ── Rate limit check ─────────────────────────────────────────────────────
-  if (_usageRemaining() === 0) {
+  // ── Rate limit check (guest-only — auth users governed by wallet balance) ──
+  if (!currentUser && _usageRemaining() === 0) {
     _usageRefreshUI(); // ensure banner is visible
     return;
   }
@@ -9597,8 +9604,8 @@ async function sendChatMsg() {
     return;
   }
 
-  // Stream done: record usage, then render
-  _usageRecord();
+  // Stream done: record usage (guest-only), then refresh UI
+  if (!currentUser) _usageRecord();
   _usageRefreshUI();
 
   bubble.classList.remove('chat-cursor');
