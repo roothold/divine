@@ -3947,7 +3947,7 @@
                 onkeydown="chatTextareaKeydown(event)"
                 oninput="chatTextareaResize(this)"
               ></textarea>
-              <button class="chat-send-btn" id="chat-send-btn" onclick="sendChatMsg()" title="Send (⌘↵)">
+              <button class="chat-send-btn" id="chat-send-btn" onclick="sendChatMsg()" title="Send (↵)">
                 <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
                   <path d="M8 13V3M3.5 7.5L8 3l4.5 4.5" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
@@ -3972,7 +3972,7 @@
               <div class="chat-input-meta-sep"></div>
               <span id="chat-meta-model">claude-opus-4-5</span>
               <div class="chat-input-meta-sep"></div>
-              <span>⌘↵ to send</span>
+              <span>↵ to send · ⇧↵ new line</span>
               <span class="chat-usage-pill" id="chat-usage-pill"></span>
             </div>
           </div>
@@ -9358,7 +9358,7 @@ function openChatThinkerPicker() {
 }
 
 function chatTextareaKeydown(e) {
-  if ((e.metaKey || e.ctrlKey) && e.key === 'Enter') {
+  if (e.key === 'Enter' && !e.shiftKey) {
     e.preventDefault();
     sendChatMsg();
   }
