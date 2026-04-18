@@ -1023,6 +1023,20 @@
       background-repeat:no-repeat; background-size:contain; opacity:.7;
     }
     .sidebar.collapsed .nav-item.nav-auth-gate::after { display:none; }
+
+    /* ── Mobile bottom-nav auth gate ──────────────────────────────────── */
+    .mob-nav-item.mob-auth-gate { opacity:.4; }
+    /* Small padlock badge on the gated icon */
+    .mob-nav-item.mob-auth-gate .mob-lock-badge {
+      display:block;
+      position:absolute; top:6px; right:calc(50% - 20px);
+      width:10px; height:10px; pointer-events:none;
+      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 10 10' fill='none' stroke='%23A39B8E' stroke-width='1.6' stroke-linecap='round'%3E%3Crect x='2' y='4.5' width='6' height='4.5' rx='.8'/%3E%3Cpath d='M3.5 4.5V3a1.5 1.5 0 013 0v1.5'/%3E%3C/svg%3E");
+      background-repeat:no-repeat; background-size:contain;
+    }
+    .mob-nav-item:not(.mob-auth-gate) .mob-lock-badge { display:none; }
+    .mob-nav-item.mob-auth-gate { position:relative; }
+
     .nav-sub-item { display:flex; align-items:center; gap:8px; font-size:13px; color:var(--text-2); padding:6px 14px 6px 36px; cursor:pointer; border-radius:6px; transition:background .12s,color .12s; background:transparent; border:none; text-align:left; width:100%; }
     .nav-sub-item:hover { background:var(--surface-2); color:var(--text-0); }
     .nav-sub-item.active { color:var(--accent); font-weight:500; }
@@ -2398,6 +2412,53 @@
     @media (max-width:520px) {
       .bank-form-grid { grid-template-columns:1fr; }
     }
+
+    /* ─── Topup packages: 3-col → 2-col → 1-col ─── */
+    @media (max-width:480px) {
+      .topup-packages { grid-template-columns:1fr 1fr; }
+      .topup-panel    { padding:14px 14px 18px; }
+    }
+    @media (max-width:360px) {
+      .topup-packages { grid-template-columns:1fr; }
+    }
+
+    /* ─── Plans grid: 1-col on small screens ─── */
+    @media (max-width:520px) {
+      .plans-grid { grid-template-columns:1fr; }
+      .plan-card  { padding:22px 18px; }
+      .plan-price { font-size:34px; }
+    }
+
+    /* ─── Project detail: compact on mobile ─── */
+    @media (max-width:640px) {
+      .pd-layout          { padding:16px 14px 80px; }
+      .pd-header          { flex-wrap:wrap; gap:10px; margin-bottom:20px; }
+      .pd-header-actions  { width:100%; justify-content:flex-end; }
+      .pd-title           { font-size:24px; }
+      .pd-section         { padding:16px; }
+    }
+
+    /* ─── My Stuff mobile gate card ─── */
+    .mob-my-stuff-gate {
+      display:none; /* shown via JS on mobile pre-login */
+      flex-direction:column; align-items:center; justify-content:center;
+      text-align:center; padding:48px 24px 32px; gap:16px;
+    }
+    .mob-my-stuff-gate-icon {
+      width:52px; height:52px; border-radius:50%;
+      background:var(--surface-2); border:1.5px solid var(--border-md);
+      display:flex; align-items:center; justify-content:center;
+      color:var(--text-3); margin-bottom:4px;
+    }
+    .mob-my-stuff-gate-title { font-size:17px; font-weight:600; color:var(--text-0); }
+    .mob-my-stuff-gate-sub   { font-size:13.5px; color:var(--text-2); line-height:1.55; max-width:260px; }
+    .mob-my-stuff-gate-btn   {
+      margin-top:8px; padding:12px 28px; border-radius:var(--r-pill);
+      background:var(--accent); color:#fff; border:none; cursor:pointer;
+      font-family:'Inter',sans-serif; font-size:14px; font-weight:600;
+      transition:opacity .15s;
+    }
+    .mob-my-stuff-gate-btn:hover { opacity:.85; }
 
     /* ─── Settings rows: stack label + control on mobile ─── */
     @media (max-width:560px) {
@@ -4980,7 +5041,8 @@ e.g. I always start by validating whether the problem is real before evaluating 
     <svg width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="8" cy="5" r="3"/><path d="M2 14c0-3.3 2.7-6 6-6s6 2.7 6 6"/></svg>
     <span>Thinker</span>
   </button>
-  <button class="mob-nav-item" id="mob-nav-projects" onclick="_navMyStuff('projects'); closeSidebarOnMobile()" aria-label="Projects">
+  <button class="mob-nav-item mob-auth-gate" id="mob-nav-projects" onclick="_navMyStuff('projects'); closeSidebarOnMobile()" aria-label="Projects">
+    <span class="mob-lock-badge"></span>
     <svg width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="2" width="5" height="5" rx="1.5"/><rect x="9" y="2" width="5" height="5" rx="1.5"/><rect x="2" y="9" width="5" height="5" rx="1.5"/><rect x="9" y="9" width="5" height="5" rx="1.5"/></svg>
     <span>Projects</span>
   </button>
@@ -5777,6 +5839,8 @@ function updateBalanceDisplay(balance) {
   if (ranOut) {
     setTimeout(openTopup, 600);
   }
+  // Keep the chat pill in sync whenever balance changes
+  _usageRefreshUI();
 }
 
 /* ══════════════════════════════════════
@@ -7391,7 +7455,55 @@ function selectProjectType(type) {
 }
 /** Nav wrapper for My Stuff items — gates on login */
 function _navMyStuff(view) {
-  if (!currentUser) { showLoginScreen(); return; }
+  if (!currentUser) {
+    // On mobile: show the target screen with an inline sign-in gate
+    if (window.innerWidth <= 640) {
+      const icons = {
+        projects: `<svg width="24" height="24" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="2" y="2" width="5" height="5" rx="1.5"/><rect x="9" y="2" width="5" height="5" rx="1.5"/><rect x="2" y="9" width="5" height="5" rx="1.5"/><rect x="9" y="9" width="5" height="5" rx="1.5"/></svg>`,
+        upgrade:  `<svg width="24" height="24" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="1" y="4" width="14" height="10" rx="2"/><path d="M11 9a1 1 0 110 2 1 1 0 010-2z" fill="currentColor" stroke="none"/><path d="M1 7h14"/></svg>`,
+      };
+      const titles = { projects: 'Your Projects', upgrade: 'Wallet & Credits' };
+      const subs   = {
+        projects: 'Sign in to organise and track your perspectives by project.',
+        upgrade:  'Sign in to view your credit balance and purchase perspectives.',
+      };
+      const screenId = view === 'upgrade' ? 'screen-upgrade' : 'screen-projects';
+      const gridId   = view === 'upgrade' ? null : 'projects-grid';
+      // Show the screen with a gate card instead of real content
+      show(screenId);
+      if (gridId) {
+        const grid = document.getElementById(gridId);
+        if (grid) grid.innerHTML = '';
+      }
+      // Inject gate into the screen-inner
+      const inner = document.querySelector('#' + screenId + ' .screen-inner');
+      if (inner) {
+        // Avoid double-inject
+        if (!inner.querySelector('.mob-my-stuff-gate')) {
+          const gate = document.createElement('div');
+          gate.className = 'mob-my-stuff-gate';
+          gate.style.display = 'flex';
+          gate.innerHTML = `
+            <div class="mob-my-stuff-gate-icon">${icons[view] || icons.projects}</div>
+            <div class="mob-my-stuff-gate-title">${titles[view] || 'My Stuff'}</div>
+            <div class="mob-my-stuff-gate-sub">${subs[view] || 'Sign in to continue.'}</div>
+            <button class="mob-my-stuff-gate-btn" onclick="showLoginScreen()">Sign in</button>`;
+          inner.prepend(gate);
+        } else {
+          inner.querySelector('.mob-my-stuff-gate').style.display = 'flex';
+        }
+      }
+      return;
+    }
+    showLoginScreen();
+    return;
+  }
+  // Remove any lingering gate when navigating logged-in
+  const screens = ['screen-projects','screen-upgrade'];
+  screens.forEach(sid => {
+    const g = document.querySelector('#' + sid + ' .mob-my-stuff-gate');
+    if (g) g.style.display = 'none';
+  });
   showView(view);
 }
 
@@ -8890,59 +9002,75 @@ function _usageCountdown(epoch) {
 
 /** Refresh the pill + banner + send-button state. Call after any send. */
 function _usageRefreshUI() {
-  const remaining = _usageRemaining();
-  const pill      = document.getElementById('chat-usage-pill');
-  const banner    = document.getElementById('chat-rate-banner');
-  const bannerSub = document.getElementById('chat-rate-banner-sub');
-  const sendBtn   = document.getElementById('chat-send-btn');
-  const textarea  = document.getElementById('chat-textarea');
+  const pill    = document.getElementById('chat-usage-pill');
+  const banner  = document.getElementById('chat-rate-banner');
+  const sendBtn = document.getElementById('chat-send-btn');
+  const textarea = document.getElementById('chat-textarea');
 
-  // Pill
+  // ── Authenticated users: governed by wallet balance, not local log ──────────
+  if (currentUser) {
+    // Show wallet balance as perspective count in the pill
+    if (pill) {
+      if (currentBalance !== null) {
+        const perspCount = Math.floor(parseFloat(currentBalance) / 0.05);
+        pill.textContent  = `${perspCount} left`;
+        pill.className    = 'chat-usage-pill' + (perspCount === 0 ? ' empty' : perspCount <= 5 ? ' warn' : '');
+      } else {
+        pill.textContent = '';
+        pill.className   = 'chat-usage-pill';
+      }
+    }
+    // If balance is zero, show the top-up banner; otherwise ensure it's hidden
+    if (currentBalance !== null && parseFloat(currentBalance) < 0.05) {
+      if (banner) {
+        banner.classList.add('visible');
+        const titleEl      = document.getElementById('chat-rate-banner-title');
+        const bannerSub    = document.getElementById('chat-rate-banner-sub');
+        const primaryBtn   = document.getElementById('chat-rate-cta-primary');
+        const secondaryBtn = document.getElementById('chat-rate-cta-secondary');
+        if (titleEl)      titleEl.textContent    = 'Your balance is empty';
+        if (bannerSub)    bannerSub.textContent   = 'Top up to keep the conversation going.';
+        if (primaryBtn)   { primaryBtn.textContent = 'Top up'; primaryBtn.onclick = () => showView('upgrade'); }
+        if (secondaryBtn) secondaryBtn.style.display = 'none';
+      }
+      if (sendBtn)  sendBtn.disabled  = true;
+      if (textarea) textarea.disabled = true;
+    } else {
+      if (banner)   banner.classList.remove('visible');
+      if (sendBtn && !_chatStreaming)  sendBtn.disabled  = false;
+      if (textarea) textarea.disabled = false;
+    }
+    clearInterval(window._rateCountdownInterval);
+    return;
+  }
+
+  // ── Guest users: local 3-perspective rolling window ─────────────────────────
+  const remaining = _usageRemaining();
+
   if (pill) {
     pill.textContent = `${remaining}/${RATE_LIMIT_MAX} left`;
     pill.className   = 'chat-usage-pill' + (remaining === 0 ? ' empty' : remaining === 1 ? ' warn' : '');
   }
 
-  // Banner + send button lock
   if (remaining === 0) {
-    const reset      = _usageNextReset();
-    const isLoggedIn = !!USER_ID;
-
+    const reset = _usageNextReset();
     if (banner) {
       banner.classList.add('visible');
-
-      const titleEl   = document.getElementById('chat-rate-banner-title');
-      const actionsEl = document.getElementById('chat-rate-banner-actions');
-      const primaryBtn  = document.getElementById('chat-rate-cta-primary');
+      const titleEl      = document.getElementById('chat-rate-banner-title');
+      const bannerSub    = document.getElementById('chat-rate-banner-sub');
+      const primaryBtn   = document.getElementById('chat-rate-cta-primary');
       const secondaryBtn = document.getElementById('chat-rate-cta-secondary');
-
-      if (isLoggedIn) {
-        // Authenticated: prompt to buy more tokens
-        if (titleEl) titleEl.textContent = 'You\'ve used all your perspectives';
-        if (bannerSub) {
-          const resetStr = reset ? ` Free perspectives reset in ${_usageCountdown(reset)}.` : '';
-          bannerSub.textContent = 'Purchase tokens to keep the conversation going.' + resetStr;
-        }
-        if (primaryBtn) { primaryBtn.textContent = 'Purchase tokens'; primaryBtn.onclick = () => showView('upgrade'); }
-        if (secondaryBtn) secondaryBtn.style.display = 'none'; // hide sign-up option for logged-in users
-      } else {
-        // Guest: push toward account creation, wallet as secondary
-        if (titleEl) titleEl.textContent = 'You\'ve used all 3 free perspectives';
-        if (bannerSub) bannerSub.textContent = 'Create a free account to unlock more, or purchase tokens to continue now.';
-        if (primaryBtn) { primaryBtn.textContent = 'Create free account'; primaryBtn.onclick = () => showView('login'); }
-        if (secondaryBtn) { secondaryBtn.style.display = ''; secondaryBtn.textContent = 'Buy tokens'; secondaryBtn.onclick = () => showView('upgrade'); }
-      }
+      if (titleEl)   titleEl.textContent  = 'You\'ve used all 3 free perspectives';
+      if (bannerSub) bannerSub.textContent = 'Create a free account to unlock more, or purchase tokens to continue now.' +
+                                             (reset ? ` Resets in ${_usageCountdown(reset)}.` : '');
+      if (primaryBtn)   { primaryBtn.textContent = 'Create free account'; primaryBtn.onclick = () => showView('login'); }
+      if (secondaryBtn) { secondaryBtn.style.display = ''; secondaryBtn.textContent = 'Buy tokens'; secondaryBtn.onclick = () => showView('upgrade'); }
     }
-    if (sendBtn) sendBtn.disabled = true;
+    if (sendBtn)  sendBtn.disabled  = true;
     if (textarea) textarea.disabled = true;
-
-    // Auto-refresh countdown every 30s — auto-unlock if window rolls
     clearInterval(window._rateCountdownInterval);
     window._rateCountdownInterval = setInterval(() => {
-      if (_usageRemaining() > 0) {
-        clearInterval(window._rateCountdownInterval);
-        _usageRefreshUI();
-      }
+      if (_usageRemaining() > 0) { clearInterval(window._rateCountdownInterval); _usageRefreshUI(); }
     }, 30_000);
   } else {
     if (banner)   banner.classList.remove('visible');
@@ -9846,6 +9974,10 @@ function applyAuthState(user) {
     ['nav-projects','nav-wallet'].forEach(id => {
       document.getElementById(id)?.classList.remove('nav-auth-gate');
     });
+    // Unlock mobile bottom nav Projects button
+    document.getElementById('mob-nav-projects')?.classList.remove('mob-auth-gate');
+    // Hide any inline My Stuff gate cards left from pre-login browsing
+    document.querySelectorAll('.mob-my-stuff-gate').forEach(el => el.style.display = 'none');
     const projBtn = document.getElementById('dc-proj-btn');
     if (projBtn) { projBtn.style.opacity = ''; projBtn.style.pointerEvents = ''; }
   } else {
@@ -9857,6 +9989,8 @@ function applyAuthState(user) {
     ['nav-projects','nav-wallet'].forEach(id => {
       document.getElementById(id)?.classList.add('nav-auth-gate');
     });
+    // Re-lock mobile bottom nav Projects button
+    document.getElementById('mob-nav-projects')?.classList.add('mob-auth-gate');
     const projBtn = document.getElementById('dc-proj-btn');
     if (projBtn) { projBtn.style.opacity = '0.4'; projBtn.style.pointerEvents = 'none'; }
     // Dashboard greeting card — logged-out state
