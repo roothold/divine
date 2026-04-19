@@ -1143,8 +1143,8 @@
     .dc-card-title { font-size:9.5px; font-weight:700; letter-spacing:.07em; text-transform:uppercase; color:var(--text-3); margin-top:3px; }
     .dc-lens-label { font-size:9.5px; font-weight:700; letter-spacing:.09em; text-transform:uppercase; color:var(--text-3); margin-bottom:5px; }
     .dc-lens-text { font-family:'Cormorant Garamond',serif; font-size:16px; font-style:italic; color:var(--text-1); line-height:1.55; margin-bottom:14px; flex:1; display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden; }
-    .dc-acquire-btn { width:100%; background:transparent; color:var(--accent); border:1.5px solid var(--accent); border-radius:var(--r-pill); padding:9px; font-size:12px; font-weight:700; cursor:pointer; transition:background .15s, color .15s; display:flex; align-items:center; justify-content:center; gap:6px; letter-spacing:.02em; margin-top:auto; }
-    .dc-acquire-btn:hover { background:var(--accent); color:#fff; }
+    .dc-acquire-btn { width:100%; background:transparent; color:var(--text-2); border:1.5px solid var(--border-md); border-radius:var(--r-pill); padding:9px; font-size:12px; font-weight:700; cursor:pointer; transition:background .15s,color .15s,border-color .15s; display:flex; align-items:center; justify-content:center; gap:6px; letter-spacing:.02em; margin-top:auto; }
+    .dc-acquire-btn:hover { background:var(--accent); color:#fff; border-color:var(--accent); }
 
     /* Recent session cards */
     .dc-card-recent { flex-direction:column; min-height:0; }
@@ -1389,8 +1389,8 @@
     .tl-demand-bar-bg { flex:1; height:4px; background:var(--border-md); border-radius:2px; overflow:hidden; }
     .tl-demand-fill { height:100%; background:var(--accent); border-radius:2px; transition:width .6s ease; }
     .tl-demand-label { font-size:10px; font-weight:700; color:var(--text-3); white-space:nowrap; }
-    .tl-acquire-btn { width:100%; background:transparent; color:var(--accent); border:1.5px solid var(--accent); border-radius:var(--r-pill); padding:9px; font-size:12px; font-weight:700; cursor:pointer; transition:background .15s,color .15s; display:flex; align-items:center; justify-content:center; gap:6px; }
-    .tl-acquire-btn:hover { background:var(--accent); color:#fff; }
+    .tl-acquire-btn { width:100%; background:transparent; color:var(--text-2); border:1.5px solid var(--border-md); border-radius:var(--r-pill); padding:9px; font-size:12px; font-weight:700; cursor:pointer; transition:background .15s,color .15s,border-color .15s; display:flex; align-items:center; justify-content:center; gap:6px; }
+    .tl-acquire-btn:hover { background:var(--accent); color:#fff; border-color:var(--accent); }
 
     /* ═══ INQUIRY STREAM ═══ */
     /* Screen is now a row: [chat col] + [insight sidebar] */
@@ -5328,7 +5328,7 @@ e.g. I always start by validating whether the problem is real before evaluating 
 
   <!-- Top bar -->
   <div class="ob-topbar">
-    <span class="ob-brand">getdivine.ai · Thinker Protocol</span>
+    <span class="ob-brand">Thinker Protocol</span>
     <button class="ob-close" onclick="closeObFlow()" aria-label="Close">×</button>
   </div>
 
@@ -6447,19 +6447,39 @@ function _buildAdvisoryHtml(gridId, onConnectFn) {
   const role     = michael.title ? michael.title.split('·')[0].trim() : 'Advisor';
   const quote    = michael.lens  || 'Strategic intelligence, applied.';
 
+  const nameParts = michael.name.split(' ');
+  const lastName  = nameParts[nameParts.length - 1].toUpperCase() + ',';
+  const firstName = nameParts.slice(0, -1).join(' ').toUpperCase();
+  const demand    = typeof seededDemand === 'function' ? seededDemand(michael.name) : 41;
   grid.innerHTML =
-    '<div class="dc-advisory-card" onclick="acquireFromThinker(0)">' +
-      '<div class="dc-advisory-avatar" style="background:' + (michael.color || '#BF452A') + '">' + initials + '</div>' +
-      '<div class="dc-advisory-info">' +
-        '<div class="dc-advisory-name">' + michael.name + '</div>' +
-        '<div class="dc-advisory-role">' + role + '</div>' +
-        '<div class="dc-advisory-quote">"' + quote + '"</div>' +
+    '<div class="dc-card" style="cursor:pointer" onclick="acquireFromThinker(0)">' +
+      '<div class="dc-card-top">' +
+        '<div class="dc-card-avatar" style="background:' + (michael.color || '#BF452A') + '">' + initials + '</div>' +
+        '<div>' +
+          '<div class="dc-card-name">' + (firstName ? firstName + ' ' : '') + lastName + '</div>' +
+          '<div class="dc-card-title">' + (michael.title || '') + '</div>' +
+        '</div>' +
       '</div>' +
+      '<div class="dc-lens-label">Signature Lens</div>' +
+      '<div class="dc-lens-text">' + quote + '</div>' +
+      '<div class="tl-demand-row">' +
+        '<div class="tl-demand-bar-bg"><div class="tl-demand-fill" style="width:0%" data-pct="88"></div></div>' +
+        '<span class="tl-demand-label">' + demand + ' req/wk</span>' +
+      '</div>' +
+      '<button class="dc-acquire-btn" onclick="event.stopPropagation();acquireFromThinker(0)">' +
+        '<svg width="12" height="12" viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6.5 1L8.4 4.7 12.5 5.3 9.5 8.3l.7 4.1L6.5 10.4 2.3 12.4l.7-4.1L0 5.3l4.1-.6z"/></svg>' +
+        'Acquire Insight · $0.05' +
+      '</button>' +
     '</div>' +
     '<div class="dc-advisory-add" onclick="showView(\'thought-leaders\')">' +
       '<svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="6.5" y1="1" x2="6.5" y2="12"/><line x1="1" y1="6.5" x2="12" y2="6.5"/></svg>' +
       'Add a thinker' +
     '</div>';
+  requestAnimationFrame(() => requestAnimationFrame(() => {
+    grid.querySelectorAll('.tl-demand-fill').forEach(el => {
+      el.style.width = el.dataset.pct + '%';
+    });
+  }));
 }
 
 /* ══ Render advisory circle (Launchpad) ══ */
@@ -8492,7 +8512,7 @@ function generateMasterPerspectiveHTML(sessions) {
     sessionBlocks +
     '<div style="margin-top:40px;padding-top:16px;border-top:1px solid #e8e8e4;display:flex;align-items:center;justify-content:space-between;">' +
     '<div style="font-family:\'Cormorant Garamond\',serif;font-size:14px;color:#999;">Divine<span style="color:#BF452A">.</span> Intelligence Platform</div>' +
-    '<div style="font-size:10px;color:#bbb;font-family:monospace;letter-spacing:.04em;">getdivine.ai</div></div>\n' +
+    '</div>\n' +
     '</div></body></html>';
 }
 
@@ -8763,7 +8783,7 @@ function generatePerspectiveHTML(r) {
 
   <!-- Footer -->
   <div class="perspective-footer">
-    <div class="perspective-footer-brand">D<span>I</span>VINE Intelligence &middot; getdivine.ai</div>
+    <div class="perspective-footer-brand">D<span>I</span>VINE Intelligence</div>
     <div class="perspective-footer-id">DOSSIER-${r.id}</div>
   </div>
 
