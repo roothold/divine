@@ -1348,6 +1348,9 @@
     .projects-shared-header { font-size:11px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:var(--text-3); margin:24px 0 10px; display:flex; align-items:center; gap:8px; }
     .projects-shared-count { background:var(--surface-2); color:var(--text-2); font-size:11px; font-weight:700; border-radius:100px; padding:2px 8px; }
     .project-card-shared { border-style:dashed; opacity:.9; }
+    .proj-admin-badge { display:inline-flex; align-items:center; background:var(--accent); color:#fff; font-size:9.5px; font-weight:700; border-radius:100px; padding:1px 7px; margin-left:6px; letter-spacing:.04em; text-transform:uppercase; vertical-align:middle; }
+    .project-collab-row { display:flex; align-items:center; gap:5px; font-size:11px; color:var(--text-3); margin-top:6px; }
+    .project-owner-row { display:flex; align-items:center; gap:5px; font-size:11px; color:var(--text-3); margin-top:5px; }
     .project-card-shared:hover { opacity:1; }
     .project-shared-pill { display:inline-flex; align-items:center; gap:4px; margin-top:10px; padding:3px 9px; border-radius:100px; background:var(--surface-2); border:1px solid var(--border); font-size:11px; font-weight:600; color:var(--text-2); }
     /* Viewer mode — all editable fields become read-only visually */
@@ -10209,25 +10212,36 @@ function renderProjects() {
     const n = recents.filter(r => r.projectId === p.id).length;
     const typeLabel = { initiative:'<svg width="9" height="10" viewBox="0 0 9 10" fill="currentColor" style="vertical-align:-1px;margin-right:3px"><path d="M5.5 0.5L1.5 5.5H4L3 9.5 7.5 4.5H5z"/></svg> Initiative', company:'<svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.1" style="vertical-align:-1px;margin-right:3px"><rect x="1" y="1.5" width="8" height="7.5" rx="0.4"/><path d="M3.5 9V6H6.5V9"/><line x1="1" y1="4.5" x2="9" y2="4.5"/></svg> Company', theme:'<svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.1" style="vertical-align:-1px;margin-right:3px"><circle cx="5" cy="4" r="2.5"/><path d="M3.5 7h3M3.8 8.3h2.4"/></svg> Theme' }[p.type] || '';
     const badgeClass = { initiative:'ptb-initiative', company:'ptb-company', theme:'ptb-theme' }[p.type] || '';
+    const teamCount = Array.isArray(p.team) ? p.team.filter(m => m.role !== 'admin').length : 0;
+    const isOwner = !p.ownerId || p.ownerId === (currentUser?.id || '');
+    const adminBadge = isOwner
+      ? `<span class="proj-admin-badge">Admin</span>`
+      : '';
+    const collabHint = teamCount > 0
+      ? `<div class="project-collab-row"><svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="3.5" cy="3" r="1.5"/><circle cx="6.5" cy="3" r="1.5"/><path d="M1 8c0-1.1.9-2 2.5-2s2.5.9 2.5 2"/><path d="M6.5 6c1.2 0 2 .7 2 1.7"/></svg> ${teamCount} collaborator${teamCount!==1?'s':''}</div>`
+      : '';
     return `<div class="project-card" onclick="openProjectDetail('${p.id}')">` +
       `<div class="project-dot" style="background:${p.color}"></div>` +
-      (typeLabel ? `<div class="project-type-badge ${badgeClass}" style="margin-bottom:8px">${typeLabel}</div>` : '') +
+      (typeLabel ? `<div class="project-type-badge ${badgeClass}" style="margin-bottom:8px">${typeLabel}${adminBadge}</div>` : adminBadge) +
       `<div class="project-name">${escHtml(p.name)}</div>` +
       (p.tagline ? `<div class="project-tagline">${escHtml(p.tagline)}</div>` : '') +
       `<div class="project-count">${n} perspective${n!==1?'s':''}</div>` +
+      collabHint +
       `</div>`;
   }).join('');
 
   const sharedCards = _sharedProjects.map(p => {
     const typeLabel = { initiative:'<svg width="9" height="10" viewBox="0 0 9 10" fill="currentColor" style="vertical-align:-1px;margin-right:3px"><path d="M5.5 0.5L1.5 5.5H4L3 9.5 7.5 4.5H5z"/></svg> Initiative', company:'<svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.1" style="vertical-align:-1px;margin-right:3px"><rect x="1" y="1.5" width="8" height="7.5" rx="0.4"/><path d="M3.5 9V6H6.5V9"/><line x1="1" y1="4.5" x2="9" y2="4.5"/></svg> Company', theme:'<svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.1" style="vertical-align:-1px;margin-right:3px"><circle cx="5" cy="4" r="2.5"/><path d="M3.5 7h3M3.8 8.3h2.4"/></svg> Theme' }[p.type] || '';
     const badgeClass = { initiative:'ptb-initiative', company:'ptb-company', theme:'ptb-theme' }[p.type] || '';
-    const ROLE_LABELS = { thinker:'Thinker', advisory:'Advisor', investor:'Investor', staff:'Staff' };
+    const ROLE_LABELS = { thinker:'Thinker', advisory:'Advisor', investor:'Investor', staff:'Staff', admin:'Admin' };
+    const ownerLine = p._ownerName ? `<div class="project-owner-row"><svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="5" cy="3.5" r="2"/><path d="M1.5 9c0-1.5 1.6-2.5 3.5-2.5s3.5 1 3.5 2.5"/></svg> ${escHtml(p._ownerName)}</div>` : '';
     return `<div class="project-card project-card-shared" onclick="_openSharedProject('${p.id}','${p._ownerKey}','${p._sharedRole}')">` +
       `<div class="project-dot" style="background:${p.color}"></div>` +
       (typeLabel ? `<div class="project-type-badge ${badgeClass}" style="margin-bottom:8px">${typeLabel}</div>` : '') +
       `<div class="project-name">${escHtml(p.name)}</div>` +
       (p.tagline ? `<div class="project-tagline">${escHtml(p.tagline)}</div>` : '') +
-      `<div class="project-shared-pill"><svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="3" cy="5" r="1.5"/><circle cx="7" cy="2" r="1.5"/><circle cx="7" cy="8" r="1.5"/><line x1="4.5" y1="4.2" x2="5.5" y2="2.8"/><line x1="4.5" y1="5.8" x2="5.5" y2="7.2"/></svg> Shared · ${escHtml(ROLE_LABELS[p._sharedRole] || p._sharedRole)}</div>` +
+      `<div class="project-shared-pill"><svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="3" cy="5" r="1.5"/><circle cx="7" cy="2" r="1.5"/><circle cx="7" cy="8" r="1.5"/><line x1="4.5" y1="4.2" x2="5.5" y2="2.8"/><line x1="4.5" y1="5.8" x2="5.5" y2="7.2"/></svg> ${escHtml(ROLE_LABELS[p._sharedRole] || p._sharedRole)}</div>` +
+      ownerLine +
       `</div>`;
   }).join('');
 
@@ -10339,6 +10353,13 @@ function saveProject() {
   const newProj = {
     id: String(Date.now()), name, tagline, color: selectedColor,
     type: _selectedProjectType || 'initiative',
+    createdAt: new Date().toISOString(),
+    // Owner / admin — always the creating user
+    ownerId:    currentUser.id    || '',
+    ownerEmail: currentUser.email || '',
+    ownerName:  currentUser.name  || currentUser.email || '',
+    // Team — owner is always first entry as admin
+    team: [{ email: currentUser.email || '', name: currentUser.name || '', role: 'admin', status: 'active', joinedAt: new Date().toISOString() }],
     // Template fields (empty on creation, filled in project detail)
     northStar: '', milestones: [], resourceAllocation: '',
     valuePropositions: '', revenueStreams: '', costStructure: '', customerSegments: '',
@@ -10374,7 +10395,18 @@ function _writeShareRecord(email, projectId, role) {
   let list = [];
   try { list = JSON.parse(localStorage.getItem(key) || '[]'); } catch(e) {}
   list = list.filter(s => s.projectId !== projectId); // dedupe
-  list.push({ projectId, ownerKey: _sKey('di_projects'), role, addedAt: new Date().toISOString() });
+  // Include owner identity so shared users know whose project it is
+  const ownerProjects = (() => { try { return JSON.parse(localStorage.getItem(_sKey('di_projects')) || '[]'); } catch(e) { return []; } })();
+  const ownerProj = ownerProjects.find(p => p.id === projectId);
+  list.push({
+    projectId,
+    ownerKey:   _sKey('di_projects'),
+    ownerEmail: currentUser?.email || '',
+    ownerName:  currentUser?.name  || currentUser?.email || '',
+    projectName: ownerProj?.name || '',
+    role,
+    addedAt: new Date().toISOString(),
+  });
   localStorage.setItem(key, JSON.stringify(list));
 }
 
@@ -10401,9 +10433,12 @@ function _loadSharedProjects(email) {
       if (proj) {
         _sharedProjects.push({
           ...proj,
-          _isShared:   true,
-          _sharedRole: entry.role,
-          _ownerKey:   entry.ownerKey,
+          _isShared:    true,
+          _sharedRole:  entry.role,
+          _ownerKey:    entry.ownerKey,
+          _ownerEmail:  entry.ownerEmail  || proj.ownerEmail || '',
+          _ownerName:   entry.ownerName   || proj.ownerName  || '',
+          _projectName: entry.projectName || proj.name       || '',
         });
       }
     } catch(e) {}
@@ -10421,6 +10456,11 @@ function _openSharedProject(projectId, ownerKey, role) {
   _viewerOwnerKey = ownerKey;
   _viewerRole     = role || 'staff';
   _pdProjectId    = null; // prevent writes
+  // Carry owner name so banner can display it
+  const sharedEntry = _sharedProjects.find(p => p.id === projectId);
+  if (sharedEntry && !proj._ownerName) {
+    proj = { ...proj, _ownerName: sharedEntry._ownerName || '' };
+  }
   renderProjectDetail(proj);
   const type   = proj.type || 'initiative';
   const urlKey = proj.slug  || proj.id;
@@ -10509,16 +10549,26 @@ function renderProjectDetail(proj) {
   const pdLayout = document.querySelector('.pd-layout');
   const existingBanner = document.getElementById('pd-viewer-banner');
   if (existingBanner) existingBanner.remove();
+  // Thinker role can edit; all others are read-only
+  const _canEdit = !_isViewerMode || _viewerRole === 'thinker';
   if (_isViewerMode) {
     const ROLE_LABELS_V = { thinker:'Thinker Lab', advisory:'Advisory Board', investor:'Investor', staff:'Staff' };
     const roleLabel = ROLE_LABELS_V[_viewerRole] || (_viewerRole || 'Member');
     const banner = document.createElement('div');
     banner.id = 'pd-viewer-banner';
     banner.className = 'pd-viewer-banner';
+    const ownerLabel = proj._ownerName ? (' by <strong>' + escHtml(proj._ownerName) + '</strong>') : '';
     banner.innerHTML = '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="8" cy="8" r="6.5"/><path d="M8 7v4M8 5v.5" stroke-linecap="round"/></svg>' +
-      '<span><strong>Shared with you</strong> &mdash; you\'re viewing as <span class=\"pd-viewer-role-pill\">' + escHtml(roleLabel) + '</span> · Read only</span>';
+      '<span>Shared' + ownerLabel + ' · Your role: <span class=\"pd-viewer-role-pill\">' + escHtml(roleLabel) + '</span>' +
+      (_viewerRole === 'thinker' ? ' · <span style=\"color:var(--accent);font-weight:600\">Can edit</span>' : ' · Read only') +
+      '</span>';
     if (pdLayout) pdLayout.insertBefore(banner, pdLayout.firstChild);
-    document.getElementById('screen-project-detail')?.classList.add('pd-viewer-mode');
+    // Only lock the UI for non-editor roles
+    if (!_canEdit) {
+      document.getElementById('screen-project-detail')?.classList.add('pd-viewer-mode');
+    } else {
+      document.getElementById('screen-project-detail')?.classList.remove('pd-viewer-mode');
+    }
   } else {
     document.getElementById('screen-project-detail')?.classList.remove('pd-viewer-mode');
   }
@@ -16570,6 +16620,9 @@ function cpAddTeamMember() {
   const email = document.getElementById('cp-team-email')?.value.trim();
   const role  = document.getElementById('cp-team-role')?.value || 'staff';
   if (!email || !email.includes('@')) { showToast('Enter a valid email address', 'error'); return; }
+  if (email.toLowerCase() === (currentUser?.email || '').toLowerCase()) {
+    showToast("You\'re already the admin of this project.", 'error'); return;
+  }
 
   const projects = loadProjects();
   const idx = projects.findIndex(p => p.id === _pdProjectId);
