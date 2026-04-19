@@ -7393,105 +7393,182 @@ function signOut() {
    VIEW ROUTING
 ════════════════════════════════ */
 /* ════════════════════════════════════════════════════════════════════════
-   URL ROUTER — History API client-side routing (no full-page reloads)
-   Every showView() call pushes a clean URL. Refresh lands on the right view.
+   URL ROUTER — Hash-based client-side routing
+   Every showView() call pushes a hash URL. Refresh always lands on the
+   correct view regardless of server configuration (works for file://, CDN,
+   and any static host without URL rewriting).
+
    URL schema:
-     /dashboard                  → Main dashboard
-     /dashboard/wallet           → Wallet / Cognitive Ledger
-     /dashboard/wallet/topup     → Wallet + top-up modal open
-     /dashboard/chat             → New chat
-     /dashboard/chat/:id         → Specific chat session
-     /dashboard/audit/:id        → Perspective replay
-     /search                     → Search
-     /thought-leaders            → Thought leaders
-     /projects                   → Projects
-     /settings                   → Settings
-     /help                       → Help & FAQ
-     /downloads                  → Downloads
-     /thinker                    → Thinker hub (overview)
-     /thinker/onboarding         → Thinker hub — onboarding tab
-     /thinker/train              → Thinker hub — train tab
-     /thinker/reports            → Thinker hub — reports tab
-     /thinker/payments           → Thinker hub — payments tab
-     /uncharted/logic-intake     → New perspective (chat)
+     #/                            → Launchpad
+     #/wallet                      → Wallet / Cognitive Ledger
+     #/wallet/topup                → Wallet + top-up modal open
+     #/chat                        → New chat
+     #/chat/:id                    → Specific chat session
+     #/audit/:id                   → Perspective replay
+     #/search                      → Search
+     #/team                        → Team directory
+     #/projects                    → Projects list
+     #/projects/company/:id        → Company project detail
+     #/projects/initiative/:id     → Initiative project detail
+     #/projects/theme/:id          → Theme project detail
+     #/ir                          → Investor Room setup
+     #/ir/view                     → IR investor view
+     #/thinker                     → Thinker hub (overview)
+     #/thinker/onboarding          → Thinker hub — onboarding tab
+     #/thinker/train               → Thinker hub — train tab
+     #/thinker/reports             → Thinker hub — reports tab
+     #/thinker/payments            → Thinker hub — payments tab
+     #/profile                     → User profile
+     #/settings                    → Settings
+     #/help                        → Help & FAQ
+     #/downloads                   → Downloads / archive
+
+   Public shared links (data-embedded, no auth required):
+     #c/:slug?d=BASE64             → Public company profile
+     #ir?d=BASE64                  → Investor Room public view
+     #/share/perspective/:encoded  → Shared perspective
 ════════════════════════════════════════════════════════════════════════ */
 const router = (() => {
-  // View name → canonical URL path
-  const VIEW_TO_PATH = {
-    'recents':         '/dashboard',
-    'upgrade':         '/dashboard/wallet',
-    'chat':            '/dashboard/chat',
-    'search':          '/search',
-    'thought-leaders': '/thought-leaders',
-    'projects':        '/projects',
-    'settings':        '/settings',
-    'help':            '/help',
-    'downloads':       '/downloads',
-    'thinker-hub':     '/thinker',
-    'login':           '/login',
-    'ir-page':         '/ir',
-    'ir-view':         '/ir/view',
-    'ir-public':       '/c',
-    'user-profile':    '/profile',
+  // View name → canonical hash URL
+  const VIEW_TO_HASH = {
+    'recents':         '#/',
+    'upgrade':         '#/wallet',
+    'chat':            '#/chat',
+    'search':          '#/search',
+    'thought-leaders': '#/team',
+    'projects':        '#/projects',
+    'project-detail':  '#/projects',
+    'settings':        '#/settings',
+    'help':            '#/help',
+    'downloads':       '#/downloads',
+    'thinker-hub':     '#/thinker',
+    'login':           '#/login',
+    'ir-page':         '#/ir',
+    'ir-view':         '#/ir/view',
+    'ir-public':       '#/c',
+    'user-profile':    '#/profile',
   };
 
+  // Normalise hash → path segment (strips leading # and trailing slashes)
+  function _hashPath() {
+    const h = window.location.hash || '#/';
+    // Public page hashes: #c/... and #ir?... — leave untouched for irBootFromURL
+    if (h.startsWith('#c/') || h.startsWith('#ir?') || h.startsWith('#/share/')) return h;
+    return h.replace(/^#/, '').replace(/\/+$/, '') || '/';
+  }
+
   // Ordered route table — first match wins
-  // Each fn receives the regex match array; _act(view) activates without re-pushing.
   function buildRoutes() { return [
-    { re: /^\/$|^\/dashboard$/,             fn: ()      => _act('recents') },
-    { re: /^\/dashboard\/wallet\/topup$/,   fn: ()      => { _act('upgrade'); setTimeout(openTopup, 200); } },
-    { re: /^\/dashboard\/wallet$/,          fn: ()      => _act('upgrade') },
-    { re: /^\/dashboard\/chat\/(.+)$/,      fn: (m)     => openChatSession(m[1]) },
-    { re: /^\/dashboard\/chat$/,            fn: ()      => openChat() },
-    { re: /^\/dashboard\/audit\/(.+)$/,     fn: (m)     => openAuditById(m[1]) },
-    { re: /^\/search$/,                     fn: ()      => _act('search') },
-    { re: /^\/thought-leaders$/,            fn: ()      => _act('thought-leaders') },
-    { re: /^\/projects$/,                   fn: ()      => _act('projects') },
-    { re: /^\/settings$/,                   fn: ()      => _act('settings') },
-    { re: /^\/help$/,                       fn: ()      => _act('help') },
-    { re: /^\/downloads$/,                  fn: ()      => _act('downloads') },
-    { re: /^\/thinker\/onboarding$/,        fn: ()      => _actThinkerTab('onboarding') },
-    { re: /^\/thinker\/train$/,             fn: ()      => _actThinkerTab('train') },
-    { re: /^\/thinker\/reports$/,           fn: ()      => _actThinkerTab('reports') },
-    { re: /^\/thinker\/payments$/,          fn: ()      => _actThinkerTab('payments') },
-    { re: /^\/thinker/,                     fn: ()      => _act('thinker-hub') },
-    { re: /^\/uncharted\/logic-intake$/,    fn: ()      => openChat() },
-    { re: /^\/login$/,                      fn: ()      => showLoginScreen() },
+    // Project detail deep links
+    { re: /^\/projects\/company\/(.+)$/,    fn: (m) => _openProjectById(m[1], 'company') },
+    { re: /^\/projects\/initiative\/(.+)$/, fn: (m) => _openProjectById(m[1], 'initiative') },
+    { re: /^\/projects\/theme\/(.+)$/,      fn: (m) => _openProjectById(m[1], 'theme') },
+
+    // Chat & audit
+    { re: /^\/chat\/(.+)$/,                  fn: (m) => openChatSession(m[1]) },
+    { re: /^\/chat$/,                          fn: ()  => openChat() },
+    { re: /^\/audit\/(.+)$/,                 fn: (m) => openAuditById(m[1]) },
+
+    // Wallet
+    { re: /^\/wallet\/topup$/,               fn: ()  => { _act('upgrade'); setTimeout(openTopup, 200); } },
+    { re: /^\/wallet$/,                        fn: ()  => _act('upgrade') },
+
+    // Thinker hub tabs
+    { re: /^\/thinker\/onboarding$/,         fn: ()  => _actThinkerTab('onboarding') },
+    { re: /^\/thinker\/train$/,              fn: ()  => _actThinkerTab('train') },
+    { re: /^\/thinker\/reports$/,            fn: ()  => _actThinkerTab('reports') },
+    { re: /^\/thinker\/payments$/,           fn: ()  => _actThinkerTab('payments') },
+    { re: /^\/thinker/,                       fn: ()  => _act('thinker-hub') },
+
+    // Standard views
+    { re: /^\/$|^\/dashboard$/,              fn: ()  => _act('recents') },
+    { re: /^\/search$/,                       fn: ()  => _act('search') },
+    { re: /^\/team$/,                         fn: ()  => _act('thought-leaders') },
+    { re: /^\/projects$/,                     fn: ()  => _act('projects') },
+    { re: /^\/settings$/,                     fn: ()  => _act('settings') },
+    { re: /^\/help$/,                         fn: ()  => _act('help') },
+    { re: /^\/downloads$/,                    fn: ()  => _act('downloads') },
+    { re: /^\/ir\/view$/,                    fn: ()  => _act('ir-view') },
+    { re: /^\/ir$/,                           fn: ()  => _act('ir-page') },
+    { re: /^\/profile$/,                      fn: ()  => _act('user-profile') },
+    { re: /^\/login$/,                        fn: ()  => showLoginScreen() },
+
+    // Shared perspective
+    { re: /^\/share\/perspective\/(.+)$/,   fn: (m) => _openSharedPerspective(m[1]) },
+
+    // Public pages handled separately by irBootFromURL
+    { re: /^#c\/|^#ir\?/,                   fn: ()  => { /* handled by irBootFromURL */ } },
   ]; }
 
-  // Activate a named view without emitting another pushState (avoids loops)
+  // Activate a named view without pushing another hash entry
   function _act(view) { showView(view, { _noHistory: true }); }
 
   function _actThinkerTab(tab) {
     _act('thinker-hub');
-    // Small defer so the hub screen renders before the tab switches
     setTimeout(() => switchThinkerTab(tab, null), 80);
   }
 
-  function resolve(path) {
-    const pathname = (path || '/').split('?')[0].replace(/\/+$/, '') || '/';
-    const routes = buildRoutes();
-    const route  = routes.find(r => r.re.test(pathname));
-    if (route) route.fn(pathname.match(route.re));
-    else _act('recents');  // unknown path → dashboard
-  }
-
-  function push(path) {
-    if (window.location.pathname !== path) {
-      history.pushState({ path }, '', path);
+  // Open a project by id or slug, with optional type hint
+  function _openProjectById(idOrSlug, typeHint) {
+    const projects = loadProjects();
+    const proj = projects.find(p =>
+      p.id === idOrSlug ||
+      (p.slug && p.slug === idOrSlug) ||
+      (typeHint ? p.type === typeHint : true) && p.id === idOrSlug
+    ) || projects.find(p => p.id === idOrSlug || (p.slug && p.slug === idOrSlug));
+    if (proj) {
+      _pdProjectId = proj.id;
+      renderProjectDetail(proj);
+      showView('project-detail', { _noHistory: true });
+    } else {
+      _act('projects');
     }
   }
 
-  function replace(path) {
-    history.replaceState({ path }, '', path);
+  // Decode and open a shared perspective from URL
+  function _openSharedPerspective(encoded) {
+    try {
+      const json = JSON.parse(atob(decodeURIComponent(encoded)));
+      // Reconstruct as a recent session and open
+      if (json && json.id) openChatSession(json.id);
+      else _act('recents');
+    } catch(e) { _act('recents'); }
+  }
+
+  function resolve(rawHash) {
+    const h = rawHash !== undefined ? rawHash : (window.location.hash || '#/');
+    // Public embedded-data pages — hand off to irBootFromURL
+    if (h.startsWith('#c/') || h.startsWith('#ir?')) {
+      if (typeof irBootFromURL === 'function') irBootFromURL();
+      return;
+    }
+    const path = h.replace(/^#/, '').replace(/\/+$/, '') || '/';
+    const routes = buildRoutes();
+    const route  = routes.find(r => r.re.test(path));
+    if (route) route.fn(path.match(route.re));
+    else _act('recents');
+  }
+
+  function push(hashOrPath) {
+    // Accept both '#/foo' and '/foo' forms, normalise to '#/foo'
+    const h = hashOrPath.startsWith('#') ? hashOrPath : '#' + hashOrPath;
+    if (window.location.hash !== h) {
+      history.pushState({}, '', window.location.pathname + window.location.search + h);
+    }
+  }
+
+  function replace(hashOrPath) {
+    const h = hashOrPath.startsWith('#') ? hashOrPath : '#' + hashOrPath;
+    history.replaceState({}, '', window.location.pathname + window.location.search + h);
   }
 
   function pathForView(view) {
-    return VIEW_TO_PATH[view] || '/dashboard';
+    return VIEW_TO_HASH[view] || '#/';
   }
 
-  // Back / forward button support
-  window.addEventListener('popstate', () => resolve(window.location.pathname));
+  // Back / forward button support — hashchange fires on hash navigation
+  window.addEventListener('hashchange', () => resolve(window.location.hash));
+  window.addEventListener('popstate',   () => resolve(window.location.hash));
 
   return { resolve, push, replace, pathForView };
 })();
@@ -9790,7 +9867,11 @@ function openProjectDetail(projectId) {
   if (!proj) return;
   _pdProjectId = projectId;
   renderProjectDetail(proj);
-  showView('project-detail');
+  // Push type-specific deep-link URL so refresh restores this project
+  const type    = proj.type || 'initiative';
+  const urlKey  = proj.slug || proj.id;
+  router.push('#/projects/' + type + '/' + encodeURIComponent(urlKey));
+  showView('project-detail', { _noHistory: true });
 }
 
 function renderProjectDetail(proj) {
@@ -9835,22 +9916,48 @@ function renderProjectDetail(proj) {
     hdActions.insertBefore(shareBtn, hdActions.firstChild);
   }
 
+  // Company projects get an "Investor Room" quick-link button
+  if (proj.type === 'company') {
+    const existing = hdActions.querySelector('.pd-ir-btn');
+    if (!existing) {
+      const irBtn = document.createElement('button');
+      irBtn.className = 'pd-header-btn pd-ir-btn';
+      irBtn.style.cssText = 'display:inline-flex;align-items:center;gap:6px;padding:7px 14px;border:1.5px solid var(--border-md);border-radius:var(--r-pill);background:var(--surface);color:var(--text-2);font-size:12.5px;font-weight:600;cursor:pointer;font-family:var(--font-ui);transition:all .15s';
+      irBtn.innerHTML = '<svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="1" y="3" width="10" height="8" rx="1"/><path d="M3.5 3V2a1.5 1.5 0 013 0v1"/></svg>Investor Room';
+      irBtn.onmouseover = () => { irBtn.style.borderColor = 'var(--accent)'; irBtn.style.color = 'var(--accent)'; };
+      irBtn.onmouseout  = () => { irBtn.style.borderColor = 'var(--border-md)'; irBtn.style.color = 'var(--text-2)'; };
+      irBtn.onclick = () => showIRForProject(proj);
+      hdActions.appendChild(irBtn);
+    }
+  }
+
   // Active perspectives feed
   _renderPdPerspectives(proj.id);
 }
 
 
 function _cpSharePublicPage(proj) {
-  // Derive the public URL from the project slug, or fall back to IR public link
-  const slug = (proj.slug || proj.name || '').toLowerCase().replace(/[^a-z0-9-]/g,'-').replace(/-+/g,'-');
   const base = window.location.origin + window.location.pathname;
-  const pubLink = localStorage.getItem('di_ir_pub_link') || '';
-  const shareUrl = slug ? (base + '#c/' + slug) : pubLink;
-  if (!shareUrl) { showToast('Publish your company page first to get a shareable link.', 'error'); return; }
-  if (navigator.clipboard) {
-    navigator.clipboard.writeText(shareUrl).then(() => showToast('Public page link copied to clipboard', 'success'));
+  let shareUrl;
+
+  if (proj.type === 'company') {
+    // Company projects: prefer IR public link (encoded data page) if available,
+    // else fall back to the deep-link route
+    const irPub = localStorage.getItem('di_ir_pub_link') || '';
+    const slug  = (proj.slug || proj.name || '').toLowerCase().replace(/[^a-z0-9-]/g,'-').replace(/-+/g,'-');
+    shareUrl = irPub || (slug ? base + '#c/' + slug : '');
   } else {
-    prompt('Copy your public page link:', shareUrl);
+    // Initiatives, themes — deep-link (requires the recipient to be logged in)
+    const type   = proj.type || 'initiative';
+    const urlKey = encodeURIComponent(proj.slug || proj.id);
+    shareUrl = base + '#/projects/' + type + '/' + urlKey;
+  }
+
+  if (!shareUrl) { showToast('No shareable link available yet.', 'error'); return; }
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(shareUrl).then(() => showToast('Link copied to clipboard', 'success'));
+  } else {
+    prompt('Copy your link:', shareUrl);
   }
 }
 function _sv(val) { return escHtml(val || ''); }
@@ -11459,7 +11566,7 @@ function openChat(prefill) {
     _renderChatSidebarForSession(_chatSession);
   }, 60);
   setMobNavActive(null);
-  router.push('/dashboard/chat/' + _chatSession.id);
+  router.push('#/chat/' + _chatSession.id);
 
   // Pre-fill if coming from dashboard input or URL param
   if (prefill && prefill.trim()) {
@@ -11518,7 +11625,7 @@ function openChatSession(sessionId) {
     ta.focus();
   }, 80);
   setMobNavActive(null);
-  router.push('/dashboard/chat/' + sessionId);
+  router.push('#/chat/' + sessionId);
 }
 
 function _chatEmptyState() {
@@ -12732,7 +12839,7 @@ async function initAuth() {
     clean.searchParams.delete('topup');
     clean.searchParams.delete('login');
     const qs = clean.search === '?' ? '' : clean.search;
-    history.replaceState({}, '', clean.pathname + qs);
+    history.replaceState({}, '', clean.pathname + qs + (window.location.hash || ''));
   }
 
   if (authError) {
@@ -12986,16 +13093,14 @@ if (!localStorage.getItem('di_welcome_seen')) {
 }
 
 // ── URL-based initial routing ────────────────────────────────────────────
-// Resolve the current pathname so that a refresh on /dashboard/wallet
-// loads the wallet view directly, not the dashboard.
-// renderDashboardHome() is called by router.resolve → showView('recents')
-// for the default case, so we only call it explicitly for non-dashboard paths.
+// Hash-based routing: resolve current hash so a refresh or direct link
+// always opens the correct view. Falls back to Launchpad if hash is empty.
 (function initRouter() {
-  const path = window.location.pathname;
-  // Always pre-render dashboard data in case we need it for back-navigation
+  // Always pre-render dashboard data for back-navigation
   renderDashboardHome();
-  // Now activate the view matching the current URL
-  router.resolve(path);
+  // Resolve from hash — handles #/projects/company/abc123, #c/slug?d=..., etc.
+  const hash = window.location.hash || '#/';
+  router.resolve(hash);
 })();
 
 /* ════════════════════════════════
@@ -13014,7 +13119,7 @@ if (!localStorage.getItem('di_welcome_seen')) {
     const clean = new URL(window.location.href);
     clean.searchParams.delete('q');
     clean.searchParams.delete('thinker');
-    history.replaceState({}, '', clean.pathname + (clean.search === '?' ? '' : clean.search));
+    history.replaceState({}, '', clean.pathname + (clean.search === '?' ? '' : clean.search) + (window.location.hash || ''));
   }
 
   // ?login=1 — handled by initAuth() which checks token first;
@@ -13043,7 +13148,7 @@ if (!localStorage.getItem('di_welcome_seen')) {
 (function checkMockLogin() {
   const p = new URLSearchParams(window.location.search);
   if (p.get('mock_login') !== '1') return;
-  history.replaceState({}, '', window.location.pathname);
+  history.replaceState({}, '', window.location.pathname + (window.location.hash || ''));
   applyAuthState({ id: 'mock-user', name: 'Michael', email: 'michael@surpluspods.com', thinker_access: true });
   setTimeout(() => showToast('✓ Mock login active — display is working'), 200);
 })();
@@ -13512,7 +13617,7 @@ async function checkForNewSales() {
 /* ── Tab switching ── */
 // Navigate to a thinker hub sub-tab and push the right URL
 function navigateThinkerTab(tab) {
-  const path = (!tab || tab === 'overview') ? '/thinker' : '/thinker/' + tab;
+  const path = (!tab || tab === 'overview') ? '#/thinker' : '#/thinker/' + tab;
   router.push(path);
   show('screen-thinker-hub');
   try { initThinkerHub(); } catch(e) {}
@@ -14393,6 +14498,21 @@ function irAutoSave() {
   const d = irCollectForm();
   const saved = irLoadData();
   irSaveData({ ...saved, ...d });
+  // ── Sync identity fields back to linked company project ──────────────────
+  if (saved.linkedProjectId) {
+    const ps  = loadProjects();
+    const idx = ps.findIndex(p => p.id === saved.linkedProjectId);
+    if (idx >= 0) {
+      if (d.company)  ps[idx].name    = d.company;
+      if (d.tagline)  ps[idx].tagline = d.tagline;
+      if (d.slug)     ps[idx].slug    = d.slug;
+      if (d.color)    ps[idx].color   = d.color;
+      if (d.industry) ps[idx].industry = d.industry;
+      if (d.founded)  ps[idx].founded  = d.founded;
+      ps[idx].updatedAt = new Date().toISOString();
+      saveProjects(ps);
+    }
+  }
   // Runway calc
   const runway = (d.cash && d.burn) ? Math.round(d.cash / d.burn) : null;
   const el = document.getElementById('ir-runway-display');
@@ -14406,8 +14526,42 @@ function irAutoSave() {
 }
 
 /* ── Initialise the setup screen ── */
+/* ── IR ↔ Company project sync ────────────────────────────────────────────
+   Open the Investor Room pre-linked to a specific company project.
+   Call this from a company project detail to establish the sync link.
+──────────────────────────────────────────────────────────────────────── */
+function showIRForProject(proj) {
+  const ir = irLoadData();
+  // Establish the link; only pre-populate company identity fields if IR is blank
+  const patch = { linkedProjectId: proj.id };
+  if (!ir.company) {
+    patch.company  = proj.name    || '';
+    patch.tagline  = proj.tagline || '';
+    patch.slug     = proj.slug    || irToSlug(proj.name || '');
+    patch.color    = proj.color   || '#BF452A';
+    patch.industry = proj.industry || '';
+    patch.founded  = proj.founded  || '';
+  }
+  irSaveData({ ...ir, ...patch });
+  showView('ir-page');
+}
+
 function irInitSetup() {
-  const d = irLoadData();
+  let d = irLoadData();
+  // If linked to a company project, pull fresh identity fields from it
+  if (d.linkedProjectId) {
+    const linked = loadProjects().find(p => p.id === d.linkedProjectId);
+    if (linked) {
+      d = { ...d,
+        company:  linked.name     || d.company  || '',
+        tagline:  linked.tagline  || d.tagline  || '',
+        slug:     linked.slug     || d.slug     || '',
+        color:    linked.color    || d.color    || '#BF452A',
+        industry: linked.industry || d.industry || '',
+        founded:  linked.founded  || d.founded  || '',
+      };
+    }
+  }
   const setVal = (id, val) => { const el = document.getElementById(id); if (el && val !== undefined) el.value = val; };
   setVal('ir-company',   d.company   || (currentUser ? (currentUser.name || '').split(' ')[0] + '\'s Company' : ''));
   setVal('ir-stage',     d.stage     || 'Series A');
