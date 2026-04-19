@@ -1726,7 +1726,7 @@
     .tl-filter-btn:hover { border-color:var(--accent-bdr); color:var(--accent); }
     .tl-filter-btn.active { background:var(--accent); border-color:var(--accent); color:#fff; }
     /* Domain filter chips */
-    .tl-domain-row { display:flex; gap:6px; flex-wrap:wrap; margin-bottom:20px; }
+    .tl-domain-row { display:none !important; }
     .tl-domain-chip { font-size:11.5px; font-weight:500; padding:5px 13px; border-radius:var(--r-pill); border:1.5px solid var(--border); background:var(--surface-2); color:var(--text-2); cursor:pointer; transition:all .15s; }
     .tl-domain-chip:hover { border-color:var(--border-md); color:var(--text-1); }
     .tl-domain-chip.active { background:var(--text-0); border-color:var(--text-0); color:#fff; }
@@ -4268,7 +4268,7 @@
 
         <!-- Explore -->
         <div class="nav-section-label">Explore</div>
-        <button class="nav-item" id="nav-search" data-tip="Thinkers" onclick="showView('thought-leaders')">
+        <button class="nav-item" id="nav-search" data-tip="Team" onclick="showView('thought-leaders')">
           <!-- [D] bracket logo mark -->
           <svg width="16" height="16" viewBox="0 0 100 100" fill="none">
             <g stroke="currentColor" stroke-width="9" stroke-linecap="round" fill="none">
@@ -4279,7 +4279,7 @@
               <path d="M34 30 Q66 30 66 50 Q66 70 34 70"/>
             </g>
           </svg>
-          <span class="nav-item-label">Thinkers</span>
+          <span class="nav-item-label">Team</span>
         </button>
         <!-- My Stuff -->
         <div class="nav-section-label">My Stuff</div>
@@ -8527,17 +8527,7 @@ function setTlDomain(domain) {
   renderThoughtLeaders();
 }
 
-function _renderTlDomainChips() {
-  const row = document.getElementById('tl-domain-row');
-  if (!row) return;
-  // Collect all unique categories across available thinkers
-  const cats = new Set();
-  THINKERS.filter(t => t.available !== false).forEach(t => (t.categories || []).forEach(c => cats.add(c)));
-  if (!cats.size) { row.style.display = 'none'; return; }
-  row.innerHTML = Array.from(cats).map(c =>
-    `<button class="tl-domain-chip${_tlDomain === c ? ' active' : ''}" data-domain="${c}" onclick="setTlDomain('${c}')">${c}</button>`
-  ).join('');
-}
+function _renderTlDomainChips() { /* domain chips removed */ }
 
 /* ══════════════════════════════════════════════════════════════════════
    TEAM PAGE — role-grouped directory with invite capability
@@ -17945,7 +17935,7 @@ document.addEventListener('keydown', function _lpKeyCapture(e) {
     .tl-filter-btn:hover { border-color:var(--accent-bdr); color:var(--accent); }
     .tl-filter-btn.active { background:var(--accent); border-color:var(--accent); color:#fff; }
     /* Domain filter chips */
-    .tl-domain-row { display:flex; gap:6px; flex-wrap:wrap; margin-bottom:20px; }
+    .tl-domain-row { display:none !important; }
     .tl-domain-chip { font-size:11.5px; font-weight:500; padding:5px 13px; border-radius:var(--r-pill); border:1.5px solid var(--border); background:var(--surface-2); color:var(--text-2); cursor:pointer; transition:all .15s; }
     .tl-domain-chip:hover { border-color:var(--border-md); color:var(--text-1); }
     .tl-domain-chip.active { background:var(--text-0); border-color:var(--text-0); color:#fff; }
@@ -20458,7 +20448,7 @@ document.addEventListener('keydown', function _lpKeyCapture(e) {
 
         <!-- Explore -->
         <div class="nav-section-label">Explore</div>
-        <button class="nav-item" id="nav-search" data-tip="Thinkers" onclick="showView('thought-leaders')">
+        <button class="nav-item" id="nav-search" data-tip="Team" onclick="showView('thought-leaders')">
           <!-- [D] bracket logo mark -->
           <svg width="16" height="16" viewBox="0 0 100 100" fill="none">
             <g stroke="currentColor" stroke-width="9" stroke-linecap="round" fill="none">
@@ -20469,7 +20459,7 @@ document.addEventListener('keydown', function _lpKeyCapture(e) {
               <path d="M34 30 Q66 30 66 50 Q66 70 34 70"/>
             </g>
           </svg>
-          <span class="nav-item-label">Thinkers</span>
+          <span class="nav-item-label">Team</span>
         </button>
         <!-- My Stuff -->
         <div class="nav-section-label">My Stuff</div>
