@@ -14,7 +14,7 @@ export const THINKERS = {
     name: 'Michael Akindele',
     title: 'Builder · Designer · Founder',
     available: true,
-    payoutEmail: 'michael@surpluspods.com', // 70% of each $0.05 perspective credited to this account
+    payoutEmail: 'makindel@gmail.com', // 70% of each $0.05 perspective credited to this account
     score: 94,                              // Cognitive Moat Score (0–100)
     categories: ['Startups', 'Product', 'Brand'],
     capabilities: ['Problem Validation', 'Market Audit', 'Scale Thinking', 'Brand Signal', 'Direct Truth'],

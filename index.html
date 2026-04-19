@@ -1097,10 +1097,12 @@
       0%,100% { box-shadow:0 0 0 3px rgba(191,69,42,.18); }
       50%      { box-shadow:0 0 0 6px rgba(191,69,42,.06); }
     }
-    /* CC flat items — same level as Command Center, coral active state */
+    /* CC flat items — match standard nav-item hover/active palette */
     .cc-flat { color:var(--text-2); }
-    .cc-flat:hover { background:rgba(191,69,42,.06); color:var(--coral,#BF452A); }
-    .cc-flat.active { color:var(--coral,#BF452A); font-weight:600; background:rgba(191,69,42,.08); }
+    .cc-flat:hover { background:var(--surface-2); color:#2C2820; }
+    .cc-flat.active { background:var(--surface-2); color:var(--text-0); font-weight:600; }
+    /* Active Command Center parent: standard active style, no coral override */
+    .nav-item.cc-parent.active { background:var(--surface-2); color:var(--text-0); font-weight:600; }
     .sidebar.collapsed .cc-flat { justify-content:center; padding:10px 0; }
 
     /* ─── Live Ledger feed (sidebar recents) ─── */
@@ -10650,7 +10652,7 @@ function applyAuthState(user) {
     const grName = document.getElementById('dc-greeting-name');
     const grSub  = document.getElementById('dc-greeting-sub');
     if (grName) grName.textContent = `Hi ${firstName}.`;
-    if (grSub)  grSub.textContent  = 'Ready to build.';
+    if (grSub)  grSub.textContent  = 'What are you working through?';
     // Re-render project sections now that currentUser is set
     try { renderDcProjects(); } catch(e) {}
     try { renderPortfolioList('chat'); } catch(e) {}
@@ -11326,29 +11328,30 @@ async function initThinkerHub() {
   document.getElementById('th-stat-rating').textContent   = '—';
   document.getElementById('th-stat-hours').textContent    = seedSessions ? `${(seedSessions*1.5).toFixed(0)} hrs saved` : '— hrs saved';
 
-  // Try live stats
+  // Try live stats — auth header required by requireThinker middleware
   try {
-    const res = await fetch(`${API_BASE}/api/thinker/stats?thinker_id=${USER_ID}`,
-      { signal: AbortSignal.timeout(5000) });
+    const authTok = getAuthToken();
+    const res = await fetch(`${API_BASE}/api/thinker/stats`,
+      { headers: { 'Authorization': `Bearer ${authTok}` },
+        signal: AbortSignal.timeout(5000) });
     if (res.ok) {
       const s = await res.json();
-      const inquiries  = s.sessions || s.perspectives || s.total_sessions || seedSessions;
-      const earnings   = parseFloat(s.earnings || s.total_earnings || seedEarnings);
-      const ratingRaw  = parseFloat(s.rating || s.avg_rating || 0);
-      const ratingDisp = ratingRaw ? `${ratingRaw.toFixed(1)}★` : '—';
+      // Server returns: { total_perspectives, total_earned, last_activity, thinker_cut }
+      const inquiries  = parseInt(s.total_perspectives || s.sessions || s.perspectives || 0, 10) || seedSessions;
+      const earnings   = parseFloat(s.total_earned     || s.earnings || s.total_earnings  || 0) || parseFloat(seedEarnings);
       const hoursSaved = `${(inquiries * 1.5).toFixed(0)} hrs of clarity delivered`;
-      set('cc-stat-sessions', inquiries);
+      set('cc-stat-sessions', inquiries || '—');
       set('cc-stat-earnings', `$${earnings.toFixed(2)}`);
-      set('cc-stat-rating',   ratingDisp);
       set('cc-stat-hours',    hoursSaved);
       // R1: Re-render Next Step with live session count
       ccRenderNextStep(prof, fw, doms, inquiries);
-      document.getElementById('th-stat-sessions').textContent = inquiries;
+      document.getElementById('th-stat-sessions').textContent = inquiries || '—';
       document.getElementById('th-stat-earnings').textContent = `$${earnings.toFixed(2)}`;
-      document.getElementById('th-stat-rating').textContent   = ratingDisp;
       document.getElementById('th-stat-hours').textContent    = `${(inquiries*1.5).toFixed(0)} hrs saved`;
+    } else {
+      console.warn('[thinker/stats] API returned', res.status, '— check thinker_access flag for this account');
     }
-  } catch { /* non-fatal */ }
+  } catch (e) { console.warn('[thinker/stats] fetch failed:', e.message); }
 
   // R3: Setup tab completion state
   ccUpdateSetupTab(prof, fw, doms);
@@ -12409,14 +12412,14 @@ function updateScenario(ns) {
   delta.innerHTML = `
     <div class="sm-cards">
       <div class="sm-card">
-        <div class="sm-card-label">Revenue · Mo ${months}</div>
+        <div class="sm-card-label">Rev · Mo ${months}</div>
         <div class="sm-card-number ${numCls}">${fmtK(endRev)}</div>
-        <div class="sm-card-sub">from ${fmtK(rev)} base &middot; ${months}-mo trajectory</div>
+        <div class="sm-card-sub">${fmtK(rev)} base &middot; ${months}mo out</div>
       </div>
       <div class="sm-card">
-        <div class="sm-card-label">Cumulative Profit</div>
+        <div class="sm-card-label">Profit · ${months}mo</div>
         <div class="sm-card-number ${numCls}">${fmtK(cumProf)}</div>
-        <div class="sm-card-sub">${margin}% margin &middot; across ${months} months</div>
+        <div class="sm-card-sub">${margin}% margin &middot; cumulative</div>
       </div>
     </div>`;
   if (challengeBtn) challengeBtn.style.display = 'block';
