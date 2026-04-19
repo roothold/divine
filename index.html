@@ -1896,6 +1896,100 @@
       background:#4ade80; animation:cc-live-pulse 2s infinite; }
     .cc-hero-version { font-size:11px; color:var(--text-3); font-weight:500; }
 
+    /* Notification badge on nav items */
+    .tk-nav-badge {
+      position:absolute; top:4px; right:4px;
+      min-width:16px; height:16px; border-radius:8px;
+      background:var(--accent); color:#fff;
+      font-size:10px; font-weight:700; line-height:16px;
+      text-align:center; padding:0 3px;
+      pointer-events:none;
+    }
+    #nav-thinker { position:relative; }
+    #mob-nav-thinker { position:relative; }
+
+    /* Pause toggle + Preview card */
+    .cc-pause-toggle {
+      display:inline-flex; align-items:center; gap:5px;
+      background:transparent; border:1px solid var(--border-md);
+      border-radius:100px; padding:4px 10px;
+      font-size:11px; font-weight:600; letter-spacing:.04em;
+      color:var(--text-2); cursor:pointer; font-family:'Inter',sans-serif;
+      transition:all .15s;
+    }
+    .cc-pause-toggle:hover { border-color:var(--accent); color:var(--accent); background:var(--accent-lt); }
+    .cc-pause-toggle.paused {
+      background:rgba(251,191,36,.1); border-color:rgba(251,191,36,.4);
+      color:#B45309;
+    }
+    .cc-pause-toggle.paused:hover { background:rgba(251,191,36,.18); }
+    .cc-preview-card-btn {
+      display:inline-flex; align-items:center; gap:5px;
+      background:transparent; border:1px solid var(--border-md);
+      border-radius:100px; padding:4px 10px;
+      font-size:11px; font-weight:600; letter-spacing:.04em;
+      color:var(--text-2); cursor:pointer; font-family:'Inter',sans-serif;
+      transition:all .15s;
+    }
+    .cc-preview-card-btn:hover { border-color:var(--accent); color:var(--accent); background:var(--accent-lt); }
+
+    /* Thinker Card Preview Modal */
+    .tk-card-modal-overlay {
+      display:none; position:fixed; inset:0; z-index:1200;
+      background:rgba(0,0,0,.45); backdrop-filter:blur(6px);
+      align-items:center; justify-content:center;
+    }
+    .tk-card-modal-overlay.open { display:flex; }
+    .tk-card-modal {
+      background:#fff; border-radius:20px; padding:32px;
+      width:min(480px,92vw); box-shadow:0 24px 72px rgba(0,0,0,.22);
+      display:flex; flex-direction:column; gap:20px;
+    }
+    .tk-card-modal-head {
+      display:flex; align-items:center; justify-content:space-between;
+    }
+    .tk-card-modal-title { font-size:12px; font-weight:700; letter-spacing:.08em;
+      text-transform:uppercase; color:var(--text-3); }
+    .tk-card-modal-close {
+      width:30px; height:30px; border:none; background:transparent;
+      cursor:pointer; border-radius:8px; display:flex;
+      align-items:center; justify-content:center; color:var(--text-3);
+    }
+    .tk-card-modal-close:hover { background:var(--surface-2); }
+    .tk-card-preview {
+      background:var(--surface); border:1px solid var(--border);
+      border-radius:16px; padding:24px; display:flex; gap:16px;
+      align-items:flex-start;
+    }
+    .tk-card-preview-avatar {
+      width:56px; height:56px; border-radius:50%; flex-shrink:0;
+      display:flex; align-items:center; justify-content:center;
+      font-size:20px; font-weight:700; color:#fff;
+    }
+    .tk-card-preview-body { flex:1; min-width:0; }
+    .tk-card-preview-name { font-size:17px; font-weight:700; color:var(--text-0); margin-bottom:3px; }
+    .tk-card-preview-title { font-size:12.5px; color:var(--text-3); margin-bottom:10px; }
+    .tk-card-preview-lens {
+      font-size:14px; font-style:italic; color:var(--accent);
+      line-height:1.5; margin-bottom:12px;
+    }
+    .tk-card-preview-domains { display:flex; flex-wrap:wrap; gap:6px; }
+    .tk-card-preview-domain {
+      font-size:11px; font-weight:600; padding:3px 10px;
+      border-radius:100px; background:var(--accent-lt); color:var(--accent);
+      letter-spacing:.04em;
+    }
+    .tk-card-preview-stats {
+      display:flex; gap:20px; padding-top:16px; border-top:1px solid var(--border);
+    }
+    .tk-card-preview-stat { display:flex; flex-direction:column; gap:2px; }
+    .tk-card-preview-stat-val { font-size:18px; font-weight:700; color:var(--text-0); }
+    .tk-card-preview-stat-label { font-size:11px; color:var(--text-3); }
+    .tk-card-modal-note {
+      font-size:12.5px; color:var(--text-3); text-align:center;
+      line-height:1.6;
+    }
+
     /* Stats row */
     .cc-stats { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; }
     @media (max-width:600px) { .cc-stats { grid-template-columns:1fr 1fr; } }
@@ -2188,6 +2282,14 @@
     }
     .ns-commit-btn:hover { background:#A53922; transform:translateY(-1px); box-shadow:var(--sh-md); }
     .ns-commit-btn:disabled { background:#ccc; cursor:not-allowed; transform:none; box-shadow:none; }
+    .ns-preview-btn {
+      display:inline-flex; align-items:center; gap:6px;
+      padding:0 16px; height:40px; border:1.5px solid var(--border-md);
+      border-radius:20px; background:transparent; cursor:pointer;
+      font-size:13px; font-weight:500; color:var(--text-1);
+      font-family:'Inter',sans-serif; transition:all .15s;
+    }
+    .ns-preview-btn:hover { background:var(--surface-2); border-color:var(--accent); color:var(--accent); }
 
     /* Commit encoding overlay */
     .ns-encoding-overlay {
@@ -3732,7 +3834,7 @@
       </div>
       <div class="recents-wrap">
         <div class="recents-list" id="recents-list">
-          <p class="recents-empty">Your perspectives appear here after each session.</p>
+          <p class="recents-empty">Your sessions appear here — each one sharpens your financial intelligence.</p>
         </div>
       </div>
     </div>
@@ -3856,15 +3958,15 @@
                   </g>
                 </svg>
                 <div class="dc-greeting-card-text">
-                  <div class="dc-greeting-card-name" id="dc-greeting-name">What would you like to build?</div>
-                  <div class="dc-greeting-card-sub" id="dc-greeting-sub">Sign in to personalize your experience.</div>
+                  <div class="dc-greeting-card-name" id="dc-greeting-name">Your Financial Intelligence Terminal</div>
+                  <div class="dc-greeting-card-sub" id="dc-greeting-sub">Sign in to connect your data and activate your protocols.</div>
                 </div>
               </div>
               <div class="dc-greeting-divider"></div>
 
               <!-- Quick-input -->
               <textarea class="dc-input-textarea" id="dc-quick-input" rows="2"
-                placeholder="Describe a challenge, question, or decision…"
+                placeholder="Describe a growth challenge, team question, or investor concern…"
                 oninput="dcInputUpdate(this)"></textarea>
               <!-- Attachment chip -->
               <div class="dc-attach-chip" id="dc-attach-chip">
@@ -3905,9 +4007,9 @@
               <!-- populated by renderDcProjects() -->
             </div>
 
-            <!-- ══ RECENT PERSPECTIVES ══ -->
+            <!-- ══ RECENT SESSIONS ══ -->
             <div id="dc-recents-section" style="margin-bottom:28px;display:none">
-              <div class="dc-section-head">Recent Perspectives</div>
+              <div class="dc-section-head">Recent Sessions</div>
               <div id="dc-recents-grid"></div>
             </div>
 
@@ -3928,7 +4030,7 @@
                 <!-- Model your trajectory — entry point, always first -->
                 <div class="dc-panel-section">
                   <div class="dc-psec-title">Model your trajectory</div>
-                  <div style="font-size:10.5px;color:var(--text-3);margin-bottom:10px;line-height:1.45">Rough numbers are fine. Your Thinker will find what's fragile.</div>
+                  <div style="font-size:10.5px;color:var(--text-3);margin-bottom:10px;line-height:1.45">Rough numbers are fine. The terminal will identify what's fragile before your investors do.</div>
                   <div class="is-scenario-inputs">
                     <div class="is-scenario-field">
                       <label>Monthly Rev ($) <span class="is-tt" data-tip="Your current average monthly revenue. If pre-revenue, use your target for month 1.">i</span></label>
@@ -3949,7 +4051,7 @@
                   </div>
                   <div class="is-scenario-delta" id="dc-scenario-delta" style="margin-top:8px">Enter values to model revenue trajectory</div>
                   <button class="is-scenario-challenge" id="dc-scenario-challenge" onclick="challengeScenarioModel('dc')">
-                    Get perspective →
+                    Audit this model →
                   </button>
                 </div>
 
@@ -3986,7 +4088,7 @@
 
                 <!-- Advisory Circle section -->
                 <div class="dc-panel-section">
-                  <div class="dc-psec-title">Your Advisory Circle</div>
+                  <div class="dc-psec-title">Your Intelligence Council</div>
                   <div class="dc-advisory-grid" id="dc-advisory-grid">
                     <!-- populated by renderDcAdvisoryCircle() -->
                   </div>
@@ -4120,8 +4222,8 @@
                 </g>
               </svg>
             </div>
-            <div class="chat-empty-headline">Ask your Architect</div>
-            <p class="chat-empty-sub">What decision are you weighing? The more precise your framing, the sharper the perspective.</p>
+            <div class="chat-empty-headline">Run a protocol</div>
+            <p class="chat-empty-sub">Describe a growth challenge, a team audit question, or a metric you need to explain to your investors.</p>
           </div>
         </div>
 
@@ -4214,7 +4316,7 @@
             <!-- Model your trajectory — entry point, always first -->
             <div class="dc-panel-section">
               <div class="dc-psec-title">Model your trajectory</div>
-              <div style="font-size:10.5px;color:var(--text-3);margin-bottom:10px;line-height:1.45">Rough numbers are fine. Your Thinker will find what's fragile.</div>
+              <div style="font-size:10.5px;color:var(--text-3);margin-bottom:10px;line-height:1.45">Rough numbers are fine. The terminal will identify what's fragile before your investors do.</div>
               <div class="is-scenario-inputs">
                 <div class="is-scenario-field">
                   <label>Monthly Rev ($) <span class="is-tt" data-tip="Your current average monthly revenue. If pre-revenue, use your target for month 1.">i</span></label>
@@ -4488,7 +4590,7 @@
             <!-- Model your trajectory -->
             <div class="is-scenario-wrap">
               <div class="is-scenario-label">Model your trajectory</div>
-              <div style="font-size:10px;color:var(--text-3);margin-bottom:8px;line-height:1.45">Rough numbers are fine. Your Thinker will find what's fragile.</div>
+              <div style="font-size:10px;color:var(--text-3);margin-bottom:8px;line-height:1.45">Rough numbers are fine. The terminal will identify what's fragile before your investors do.</div>
               <div class="is-scenario-inputs">
                 <div class="is-scenario-field">
                   <label>Monthly Rev ($) <span class="is-tt" data-tip="Your current average monthly revenue. If pre-revenue, use your target for month 1.">i</span></label>
@@ -4528,7 +4630,7 @@
             <div class="is-panel-section">
               <div class="is-panel-section-title">Cognitive Equity</div>
               <div style="font-size:12px;color:var(--text-3);line-height:1.5">
-                Connect your projects and run perspectives to build a portfolio intelligence score.
+                Connect your projects and run analysis sessions to build your portfolio intelligence score. Each session adds a verified data point to your financial model.
               </div>
               <div id="is-portfolio-projects" style="margin-top:12px;display:flex;flex-direction:column;gap:8px"></div>
             </div>
@@ -4876,8 +4978,17 @@
           <div class="cc-hero-nnh-bar"><div class="cc-hero-nnh-fill" style="width:94%"></div></div>
         </div>
         <div class="cc-hero-badges">
-          <div class="cc-hero-live"><span class="cc-hero-live-dot"></span>Live</div>
+          <div class="cc-hero-live" id="cc-hero-live-badge"><span class="cc-hero-live-dot" id="cc-live-dot"></span><span id="cc-live-label">Live</span></div>
           <div class="cc-hero-version" id="cc-hero-ver">v1.0</div>
+          <button class="cc-pause-toggle" id="cc-pause-toggle" onclick="toggleThinkerPause()" title="Pause or resume accepting new requests">
+            <svg class="cc-pause-icon" width="12" height="12" viewBox="0 0 12 12" fill="currentColor"><rect x="2" y="1.5" width="3" height="9" rx="1"/><rect x="7" y="1.5" width="3" height="9" rx="1"/></svg>
+            <svg class="cc-play-icon" width="12" height="12" viewBox="0 0 12 12" fill="currentColor" style="display:none"><polygon points="2,1 10,6 2,11"/></svg>
+            <span id="cc-pause-label">Pause requests</span>
+          </button>
+          <button class="cc-preview-card-btn" onclick="showThinkerCardPreview()">
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="1" y="2" width="10" height="8" rx="1.5"/><circle cx="4" cy="5.5" r="1.2"/><path d="M1 9.5l3-2.5 2 2 2-2 3 2.5"/></svg>
+            Preview card
+          </button>
         </div>
       </div>
 
@@ -4894,10 +5005,12 @@
           <div class="cc-stat-val" id="cc-stat-earnings">$—</div>
           <div class="cc-stat-sub">Wisdom royalties (YTD)</div>
         </div>
-        <div class="cc-stat">
-          <div class="cc-stat-label">Cognitive Moat Score</div>
+        <div class="cc-stat" onclick="showMoatExplainer()" style="cursor:pointer;position:relative" title="Click to see score breakdown">
+          <div class="cc-stat-label">Cognitive Moat Score
+            <svg width="11" height="11" viewBox="0 0 11 11" fill="none" stroke="currentColor" stroke-width="1.6" style="vertical-align:middle;margin-left:3px;opacity:.5"><circle cx="5.5" cy="5.5" r="4.5"/><path d="M5.5 5v2.5M5.5 3.5v.5"/></svg>
+          </div>
           <div class="cc-stat-val" id="cc-stat-rating" style="color:#2C3E50">—</div>
-          <div class="cc-stat-sub">Verified signal strength</div>
+          <div class="cc-stat-sub">Tap to see breakdown →</div>
         </div>
       </div>
 
@@ -5119,16 +5232,22 @@ e.g. I always start by validating whether the problem is real before evaluating 
         </div>
       </div>
 
-      <!-- ── Commit to Ledger ── -->
+      <!-- ── Save & Publish ── -->
       <div class="ns-commit-bar">
         <div class="ns-commit-info">
           <div class="ns-commit-label">Neural Model</div>
-          <div class="ns-version-text" id="ns-version-text">Current: <span id="ns-current-version">v1.0</span> · Save to increment</div>
+          <div class="ns-version-text" id="ns-version-text">Current: <span id="ns-current-version">v1.0</span> · Publish to increment</div>
         </div>
-        <button class="ns-commit-btn" id="ns-commit-btn" onclick="nsCommitToLedger()">
-          <svg width="15" height="15" viewBox="0 0 15 15" fill="none" stroke="currentColor" stroke-width="2"><path d="M7.5 1L13.5 4v4c0 3.4-2.7 5.6-6 6-3.3-.4-6-2.6-6-6V4l6-3z"/></svg>
-          Commit to Ledger
-        </button>
+        <div style="display:flex;gap:10px;align-items:center">
+          <button class="ns-preview-btn" id="ns-preview-btn" onclick="showSampleOutput()">
+            <svg width="13" height="13" viewBox="0 0 15 15" fill="none" stroke="currentColor" stroke-width="2"><circle cx="7.5" cy="7.5" r="6"/><path d="M5 7.5h5M7.5 5v5"/></svg>
+            Preview output
+          </button>
+          <button class="ns-commit-btn" id="ns-commit-btn" onclick="nsCommitToLedger()">
+            <svg width="15" height="15" viewBox="0 0 15 15" fill="none" stroke="currentColor" stroke-width="2"><path d="M7.5 1L13.5 4v4c0 3.4-2.7 5.6-6 6-3.3-.4-6-2.6-6-6V4l6-3z"/></svg>
+            Save &amp; Publish
+          </button>
+        </div>
       </div>
 
     </div>
@@ -5136,8 +5255,8 @@ e.g. I always start by validating whether the problem is real before evaluating 
     <!-- Neural Sculpting encoding overlay -->
     <div class="ns-encoding-overlay" id="ns-encoding-overlay">
       <div class="ns-enc-dot-large"></div>
-      <div class="ns-enc-text" id="ns-enc-text">Committing to Ledger...</div>
-      <div class="ns-enc-sub" id="ns-enc-sub">Divine Global Ledger · Version recording</div>
+      <div class="ns-enc-text" id="ns-enc-text">Saving & publishing...</div>
+      <div class="ns-enc-sub" id="ns-enc-sub">Divine · Encoding your model version</div>
     </div>
 
     <!-- ─── REPORTS ─── -->
@@ -5171,7 +5290,13 @@ e.g. I always start by validating whether the problem is real before evaluating 
             <div class="th-perf-dot" id="th-perf-dot"></div>
             High-Resolution Performance Ledger
           </div>
-          <span style="font-size:11px;color:var(--text-3);font-family:var(--font-mono)" id="rpt-live-label">Live · synced with Railway</span>
+          <div style="display:flex;align-items:center;gap:12px">
+            <button onclick="downloadLedgerCSV()" style="display:inline-flex;align-items:center;gap:5px;padding:4px 12px;font-size:11.5px;font-weight:600;border:1px solid var(--border-md);border-radius:20px;background:transparent;cursor:pointer;color:var(--text-2);font-family:'Inter',sans-serif;transition:all .15s" onmouseover="this.style.borderColor='var(--accent)';this.style.color='var(--accent)'" onmouseout="this.style.borderColor='var(--border-md)';this.style.color='var(--text-2)'">
+              <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 1v7M3 5.5l3 3 3-3"/><path d="M1 10h10"/></svg>
+              Export CSV
+            </button>
+            <span style="font-size:11px;color:var(--text-3);font-family:var(--font-mono)" id="rpt-live-label">Live · synced with Railway</span>
+          </div>
         </div>
         <div class="ledger-scroll-wrap">
         <table class="ledger-table" id="ledger-table">
@@ -5264,7 +5389,7 @@ e.g. I always start by validating whether the problem is real before evaluating 
         <div class="screen-header">
           <div class="screen-label">Explore</div>
           <h2 class="screen-title">Thinkers</h2>
-          <p class="screen-sub">Curated human minds with verified cognitive frameworks.</p>
+          <p class="screen-sub">Verified experts who've encoded their financial and strategic intelligence into the platform. Each session challenges one assumption you're carrying.</p>
         </div>
         <div class="tl-filter-row">
           <button class="tl-filter-btn active" id="tl-btn-top" onclick="setTlFilter('top')">Top Sought</button>
@@ -5298,37 +5423,99 @@ e.g. I always start by validating whether the problem is real before evaluating 
   </div>
 </div>
 
+<!-- THINKER CARD PREVIEW MODAL -->
+<div class="tk-card-modal-overlay" id="tk-card-modal-overlay" onclick="if(event.target===this)closeThinkerCardPreview()">
+  <div class="tk-card-modal">
+    <div class="tk-card-modal-head">
+      <div class="tk-card-modal-title">Your public Thinker Card</div>
+      <button class="tk-card-modal-close" onclick="closeThinkerCardPreview()">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2"><line x1="2" y1="2" x2="12" y2="12"/><line x1="12" y1="2" x2="2" y2="12"/></svg>
+      </button>
+    </div>
+    <div class="tk-card-preview" id="tk-card-preview-body">
+      <!-- Populated by showThinkerCardPreview() -->
+    </div>
+    <div class="tk-card-modal-note">This is exactly how founders see you when browsing the Thinkers directory.<br>Update your lens and domains in the <strong>Train Model</strong> tab to refine it.</div>
+  </div>
+</div>
+
+<!-- COGNITIVE MOAT SCORE EXPLAINER MODAL -->
+<div class="tk-card-modal-overlay" id="moat-modal-overlay" onclick="if(event.target===this)closeMoatModal()">
+  <div class="tk-card-modal" style="gap:16px">
+    <div class="tk-card-modal-head">
+      <div class="tk-card-modal-title">Cognitive Moat Score — How it's calculated</div>
+      <button class="tk-card-modal-close" onclick="closeMoatModal()">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2"><line x1="2" y1="2" x2="12" y2="12"/><line x1="12" y1="2" x2="2" y2="12"/></svg>
+      </button>
+    </div>
+    <div style="font-size:13.5px;color:var(--text-1);line-height:1.65">
+      Your Cognitive Moat Score measures how defensible and distinct your expertise signal is. It ranges from 0–100 and is computed across five dimensions.
+    </div>
+    <div id="moat-breakdown-rows" style="display:flex;flex-direction:column;gap:8px">
+      <!-- Populated by showMoatExplainer() -->
+    </div>
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px 16px">
+      <div style="font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--text-3);margin-bottom:8px">How to improve your score</div>
+      <div style="font-size:13px;color:var(--text-2);line-height:1.65">
+        1. <strong>Sharpen your Theory of Victory</strong> — the more specific, the higher your Framework Depth score.<br>
+        2. <strong>Add 5–10 domains</strong> to your constellation to improve Domain Coverage.<br>
+        3. <strong>Accumulate sessions</strong> — each perspective served raises your Signal Strength.<br>
+        4. <strong>Write a precise Lens statement</strong> — one clear sentence outperforms vague generalism.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SAMPLE OUTPUT PREVIEW MODAL -->
+<div class="tk-card-modal-overlay" id="sample-output-overlay" onclick="if(event.target===this)closeSampleOutput()">
+  <div class="tk-card-modal" style="max-width:560px;gap:16px">
+    <div class="tk-card-modal-head">
+      <div class="tk-card-modal-title">Sample perspective output</div>
+      <button class="tk-card-modal-close" onclick="closeSampleOutput()">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2"><line x1="2" y1="2" x2="12" y2="12"/><line x1="12" y1="2" x2="2" y2="12"/></svg>
+      </button>
+    </div>
+    <div style="font-size:13px;color:var(--text-3);line-height:1.6">
+      This is a representative example of how your model responds to a founder's question. It uses your current framework and lens — publish to make it live.
+    </div>
+    <div id="sample-output-body" style="background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:20px;font-size:14px;color:var(--text-1);line-height:1.75">
+      <!-- Populated by showSampleOutput() -->
+    </div>
+    <div style="font-size:12px;color:var(--text-3);text-align:center">This preview is generated from your saved framework — it costs nothing to preview.</div>
+  </div>
+</div>
+
 <!-- WELCOME MODAL (first-session guided moment) -->
 <div id="di-welcome-overlay" style="display:none;position:fixed;inset:0;z-index:8000;background:rgba(15,14,12,0.55);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);align-items:center;justify-content:center;">
   <div id="di-welcome-modal" style="background:#fff;border-radius:20px;padding:40px 36px 32px;width:min(480px,92vw);box-shadow:0 24px 72px rgba(0,0,0,0.2);display:flex;flex-direction:column;gap:0;position:relative;">
-    <div style="font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);margin-bottom:12px;">Welcome to Divine</div>
-    <h2 style="font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:600;color:var(--text-0);line-height:1.2;margin-bottom:10px;">Get a perspective from a real mind.</h2>
-    <p style="font-size:14px;color:var(--text-2);line-height:1.65;margin-bottom:28px;">Divine connects you with verified human experts — called Thinkers — who've encoded their decision-making frameworks into the platform. Each session costs $0.05.</p>
+    <div style="font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);margin-bottom:12px;">Financial Intelligence Terminal</div>
+    <h2 style="font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:600;color:var(--text-0);line-height:1.2;margin-bottom:10px;">The operating system for founders who run on data.</h2>
+    <p style="font-size:14px;color:var(--text-2);line-height:1.65;margin-bottom:28px;">Divine automates your growth protocols, audits team performance against real benchmarks, and delivers live financial transparency directly to your investors — no decks, no delays.</p>
     <!-- 3-step loop -->
     <div style="display:flex;flex-direction:column;gap:12px;margin-bottom:32px;">
       <div class="di-welcome-step">
         <div class="di-welcome-step-num">1</div>
         <div>
-          <div class="di-welcome-step-title">Frame your decision</div>
-          <div class="di-welcome-step-sub">Describe the high-stakes decision you're weighing. The more specific, the sharper the insight.</div>
+          <div class="di-welcome-step-title">Automate growth protocols</div>
+          <div class="di-welcome-step-sub">Model your revenue trajectory, identify fragile assumptions, and get a structured growth challenge from a verified expert.</div>
         </div>
       </div>
       <div class="di-welcome-step">
         <div class="di-welcome-step-num">2</div>
         <div>
-          <div class="di-welcome-step-title">Choose a Thinker</div>
-          <div class="di-welcome-step-sub">Select from a curated roster of experts. Each has a verified cognitive framework and a distinct lens.</div>
+          <div class="di-welcome-step-title">Audit team performance</div>
+          <div class="di-welcome-step-sub">Run your numbers against the five diligence triggers that investors actually use. Know where you stand before they ask.</div>
         </div>
       </div>
       <div class="di-welcome-step">
         <div class="di-welcome-step-num">3</div>
         <div>
-          <div class="di-welcome-step-title">Receive a Perspective</div>
-          <div class="di-welcome-step-sub">Get a structured response — key insight plus analytical frames — through their specific way of thinking.</div>
+          <div class="di-welcome-step-title">Brief your investors in real time</div>
+          <div class="di-welcome-step-sub">Grant sovereign access to your live financial ledger. Your board never has to ask for an update again.</div>
         </div>
       </div>
     </div>
-    <button onclick="dismissWelcomeModal()" style="width:100%;background:var(--accent);color:#fff;border:none;border-radius:var(--r-pill);padding:13px 0;font-size:14px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;transition:background .15s;" onmouseover="this.style.background='var(--accent-mid)'" onmouseout="this.style.background='var(--accent)'">Start exploring →</button>
+    <button onclick="dismissWelcomeModal()" style="width:100%;background:var(--accent);color:#fff;border:none;border-radius:var(--r-pill);padding:13px 0;font-size:14px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;transition:background .15s;" onmouseover="this.style.background='var(--accent-mid)'" onmouseout="this.style.background='var(--accent)'">Open your terminal →</button>
     <button onclick="dismissWelcomeModal()" style="margin-top:10px;width:100%;background:transparent;color:var(--text-3);border:none;font-size:12.5px;cursor:pointer;font-family:'Inter',sans-serif;">Skip</button>
   </div>
 </div>
@@ -5645,7 +5832,7 @@ const PROJECT_COLORS = ['#BF452A','#0F7A5E','#C0392B','#8E5A02','#7B2D8B','#005B
 const FAQS = [
   {
     q: 'What is Divine Intelligence?',
-    a: 'Divine Intelligence is a decision-support platform that lets you consult verified human experts — called Thinkers — on your most important decisions. Each Thinker\'s cognitive framework has been encoded into the platform, allowing you to receive a structured Perspective: how they would interpret your situation, through their specific lens. This is not generic AI advice. It is a direct encounter with a documented way of thinking.'
+    a: 'Divine is a Financial Intelligence Terminal for founders. It helps you automate growth protocols, audit team performance against real financial benchmarks, and deliver live transparency to your investors — without decks, delays, or manual updates. At its core is a network of verified Thinkers: experts who\'ve encoded their decision-making frameworks into the platform. When your numbers surface a fragile assumption, you can run it through a Thinker\'s lens in seconds. The result is structured analysis, not generic AI advice — applied intelligence, grounded in your actual data.'
   },
   {
     q: 'Who are the Thinkers?',
@@ -9801,7 +9988,7 @@ function _chatEmptyState() {
       </svg>
     </div>
     <div class="chat-empty-headline">Ask your Thinker</div>
-    <p class="chat-empty-sub">What decision are you weighing? The more precise your framing, the sharper the perspective.</p>`;
+    <p class="chat-empty-sub">What growth challenge, team question, or investor concern are you working through? The more specific, the sharper the analysis.</p>`;
   return el;
 }
 
@@ -10886,7 +11073,7 @@ function applyAuthState(user) {
     const grName = document.getElementById('dc-greeting-name');
     const grSub  = document.getElementById('dc-greeting-sub');
     if (grName) grName.textContent = `Hi ${firstName}.`;
-    if (grSub)  grSub.textContent  = 'What are you working through?';
+    if (grSub)  grSub.textContent  = 'Your terminal is live. What are you auditing today?';
     // Re-render project sections now that currentUser is set
     try { renderDcProjects(); } catch(e) {}
     try { renderPortfolioList('chat'); } catch(e) {}
@@ -10937,8 +11124,8 @@ function applyAuthState(user) {
     // Dashboard greeting card — logged-out state
     const grName = document.getElementById('dc-greeting-name');
     const grSub  = document.getElementById('dc-greeting-sub');
-    if (grName) grName.textContent = 'What would you like to build?';
-    if (grSub)  grSub.textContent  = 'Sign in to personalize your experience.';
+    if (grName) grName.textContent = 'Your Financial Intelligence Terminal';
+    if (grSub)  grSub.textContent  = 'Sign in to connect your data and activate your protocols.';
     // Hide all project/portfolio data immediately on logout
     try { renderDcProjects(); } catch(e) {}
     try { renderPortfolioList('chat'); } catch(e) {}
@@ -11367,6 +11554,8 @@ const TK = {
   bank:     'di_tk_bank',
   payout:   'di_tk_payout',
   version:  'di_tk_version',
+  paused:   'di_tk_paused',
+  lastSeen: 'di_tk_last_seen',
 };
 
 function loadTkData(key, fallback) {
@@ -11632,6 +11821,21 @@ async function initThinkerHub() {
 
   // Reports
   renderReports('last');
+
+  // Pause state
+  const paused = loadTkData(TK.paused, false);
+  _applyPauseState(!!paused);
+
+  // Notification badge — count perspectives served since last visit
+  const lastSeen = loadTkData(TK.lastSeen, 0);
+  const nowTs    = Date.now();
+  const newCount = Math.max(0, seedSessions - lastSeen);
+  if (newCount > 0) _refreshTkBadge(newCount);
+  // Mark as seen after 3s so badge persists for the session
+  setTimeout(() => {
+    saveTkData(TK.lastSeen, seedSessions);
+    _refreshTkBadge(0);
+  }, 3000);
 
   // Start sale polling (every 30s)
   clearInterval(window._thSaleInterval);
@@ -12214,9 +12418,9 @@ function nsAddDomain() {
   inp.value = '';
 }
 
-/* ── Commit to Ledger ── */
+/* ── Save & Publish ── */
 const NS_COMMIT_MSGS = [
-  'Committing to Ledger...',
+  'Saving & publishing...',
   'Encoding model version...',
   'Neural architecture sealed.',
 ];
@@ -12225,7 +12429,7 @@ let nsCurrentVersion = 1;
 async function nsCommitToLedger() {
   const fw   = document.getElementById('train-framework')?.value?.trim() || '';
   const lens = document.getElementById('train-lens')?.value?.trim() || '';
-  if (!fw) { showToast('Add your Theory of Victory before committing.'); return; }
+  if (!fw) { showToast('Add your Theory of Victory before publishing.', 'error'); return; }
 
   // Version increment
   nsCurrentVersion = (loadTkData(TK.version, 1) || 1) + 1;
@@ -12269,7 +12473,7 @@ async function nsCommitToLedger() {
     const vstr = `v${nsCurrentVersion}.0`;
     if (pill) pill.textContent = vstr;
     if (ver2) ver2.textContent = vstr;
-    showToast(`Model committed — ${vstr} sealed to Ledger ✦`);
+    showToast(`Published — ${vstr} is now live ✦`, 'success');
   }, 3200);
 }
 
@@ -12312,6 +12516,232 @@ function saveLens()      { nsCommitToLedger(); }
 const trainDomains = [];
 function addTrainDomain() { nsAddDomain(); }
 function renderTrainDomains() { nsRenderConstellation(); }
+
+/* ── Pause / Resume requests toggle ── */
+let _thinkerPaused = false;
+
+function _applyPauseState(paused) {
+  _thinkerPaused = paused;
+  const btn       = document.getElementById('cc-pause-toggle');
+  const liveB     = document.getElementById('cc-hero-live-badge');
+  const liveDot   = document.getElementById('cc-live-dot');
+  const liveLabel = document.getElementById('cc-live-label');
+  const pauseLbl  = document.getElementById('cc-pause-label');
+  const pauseIcon = btn?.querySelector('.cc-pause-icon');
+  const playIcon  = btn?.querySelector('.cc-play-icon');
+  if (!btn) return;
+  if (paused) {
+    btn.classList.add('paused');
+    if (pauseLbl) pauseLbl.textContent = 'Resume requests';
+    if (pauseIcon) pauseIcon.style.display = 'none';
+    if (playIcon)  playIcon.style.display  = '';
+    if (liveB) { liveB.style.background='rgba(251,191,36,.08)'; liveB.style.borderColor='rgba(251,191,36,.3)'; liveB.style.color='#B45309'; }
+    if (liveDot) { liveDot.style.background='#F59E0B'; liveDot.style.animation='none'; }
+    if (liveLabel) liveLabel.textContent = 'Paused';
+  } else {
+    btn.classList.remove('paused');
+    if (pauseLbl) pauseLbl.textContent = 'Pause requests';
+    if (pauseIcon) pauseIcon.style.display = '';
+    if (playIcon)  playIcon.style.display  = 'none';
+    if (liveB) { liveB.style.background=''; liveB.style.borderColor=''; liveB.style.color=''; }
+    if (liveDot) { liveDot.style.background=''; liveDot.style.animation=''; }
+    if (liveLabel) liveLabel.textContent = 'Live';
+  }
+}
+
+function toggleThinkerPause() {
+  const next = !_thinkerPaused;
+  saveTkData(TK.paused, next);
+  _applyPauseState(next);
+  showToast(next ? 'Requests paused — you won\'t receive new perspectives' : 'Requests resumed — you\'re live again', next ? 'error' : 'success');
+}
+
+/* ── Preview public Thinker Card ── */
+function showThinkerCardPreview() {
+  const name   = loadTkData(TK.profile, {})?.name || userProfile?.name || 'Your Name';
+  const title  = loadTkData(TK.profile, {})?.title || 'Builder · Designer · Founder';
+  const lens   = loadTkData(TK.lens, '') || 'Your lens statement will appear here.';
+  const doms   = loadTkData(TK.domains, []);
+  const ver    = loadTkData(TK.version, 1) || 1;
+  const sessions = parseInt(document.getElementById('cc-stat-sessions')?.textContent) || 0;
+  const initials = name.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
+  const color = activeThinker?.color || 'var(--accent)';
+
+  const domainsHtml = doms.length
+    ? doms.map(d => `<span class="tk-card-preview-domain">${d}</span>`).join('')
+    : '<span class="tk-card-preview-domain" style="opacity:.45">No domains yet</span>';
+
+  document.getElementById('tk-card-preview-body').innerHTML = `
+    <div class="tk-card-preview-avatar" style="background:${color}">${initials}</div>
+    <div class="tk-card-preview-body">
+      <div class="tk-card-preview-name">${name}</div>
+      <div class="tk-card-preview-title">${title}</div>
+      <div class="tk-card-preview-lens">"${lens}"</div>
+      <div class="tk-card-preview-domains">${domainsHtml}</div>
+      <div class="tk-card-preview-stats">
+        <div class="tk-card-preview-stat">
+          <div class="tk-card-preview-stat-val">${sessions || '—'}</div>
+          <div class="tk-card-preview-stat-label">Perspectives</div>
+        </div>
+        <div class="tk-card-preview-stat">
+          <div class="tk-card-preview-stat-val">v${ver}.0</div>
+          <div class="tk-card-preview-stat-label">Model version</div>
+        </div>
+        <div class="tk-card-preview-stat">
+          <div class="tk-card-preview-stat-val">${doms.length}</div>
+          <div class="tk-card-preview-stat-label">Domains</div>
+        </div>
+      </div>
+    </div>`;
+
+  document.getElementById('tk-card-modal-overlay').classList.add('open');
+}
+
+function closeThinkerCardPreview() {
+  document.getElementById('tk-card-modal-overlay').classList.remove('open');
+}
+
+/* ── Cognitive Moat Score explainer ── */
+function showMoatExplainer() {
+  const fw      = loadTkData(TK.framework, '');
+  const lens    = loadTkData(TK.lens, '');
+  const doms    = loadTkData(TK.domains, []);
+  const ver     = loadTkData(TK.version, 1) || 1;
+  const sessions = parseInt(document.getElementById('cc-stat-sessions')?.textContent) || 0;
+
+  // Compute sub-scores (0–20 each, total 0–100)
+  const fwWords    = fw.trim().split(/\s+/).filter(Boolean).length;
+  const frameworkD = Math.min(20, Math.round((fwWords / 60) * 20)); // depth by word count
+  const lensClarity = lens.trim().length > 12 ? Math.min(20, 10 + Math.round((lens.length / 200) * 10)) : 5;
+  const domainCov  = Math.min(20, Math.round((doms.length / 8) * 20));
+  const versionM   = Math.min(20, Math.round((ver / 5) * 20));
+  const signalStr  = Math.min(20, Math.round((sessions / 50) * 20));
+  const total      = frameworkD + lensClarity + domainCov + versionM + signalStr;
+
+  const dims = [
+    { label:'Framework Depth',  score:frameworkD, max:20, tip:'Write a more detailed Theory of Victory (aim for 50+ words).' },
+    { label:'Lens Clarity',     score:lensClarity, max:20, tip:'Write a concise, specific lens statement — one clear sentence.' },
+    { label:'Domain Coverage',  score:domainCov,   max:20, tip:'Add 6–10 domains to your constellation.' },
+    { label:'Version Maturity', score:versionM,    max:20, tip:'Publish new versions regularly as your thinking evolves.' },
+    { label:'Signal Strength',  score:signalStr,   max:20, tip:'Serve more perspectives — reputation compounds with use.' },
+  ];
+
+  document.getElementById('moat-breakdown-rows').innerHTML = dims.map(d => {
+    const pct  = Math.round((d.score / d.max) * 100);
+    const col  = pct >= 70 ? '#22C55E' : pct >= 40 ? '#F59E0B' : '#EF4444';
+    return `<div style="display:flex;flex-direction:column;gap:5px;padding:10px 12px;border:1px solid var(--border);border-radius:10px;background:var(--surface)">
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <span style="font-size:13px;font-weight:600;color:var(--text-1)">${d.label}</span>
+        <span style="font-size:13px;font-weight:700;color:${col}">${d.score}/${d.max}</span>
+      </div>
+      <div style="height:5px;border-radius:3px;background:var(--border-md);overflow:hidden">
+        <div style="height:100%;width:${pct}%;background:${col};border-radius:3px;transition:width .5s"></div>
+      </div>
+      ${d.score < d.max ? `<div style="font-size:11.5px;color:var(--text-3);margin-top:2px">💡 ${d.tip}</div>` : '<div style="font-size:11.5px;color:#22C55E;margin-top:2px">✓ Fully optimised</div>'}
+    </div>`;
+  }).join('') + `<div style="display:flex;justify-content:space-between;align-items:center;padding:12px 14px;background:var(--accent-lt);border-radius:10px;border:1px solid rgba(191,69,42,.15)">
+    <span style="font-size:14px;font-weight:700;color:var(--accent)">Total Cognitive Moat Score</span>
+    <span style="font-size:22px;font-weight:800;color:var(--accent)">${total}</span>
+  </div>`;
+
+  // Update the stat card value too
+  const el = document.getElementById('cc-stat-rating');
+  if (el) { el.textContent = total; el.style.color = total >= 70 ? '#16A34A' : total >= 40 ? '#B45309' : '#DC2626'; }
+
+  document.getElementById('moat-modal-overlay').classList.add('open');
+}
+
+function closeMoatModal() {
+  document.getElementById('moat-modal-overlay').classList.remove('open');
+}
+
+/* ── Sample Output preview ── */
+const SAMPLE_QUESTIONS = [
+  'Should I hire a VP of Sales before we hit $1M ARR?',
+  'We have two customers who represent 60% of our revenue — is that a problem?',
+  'My co-founder wants to pivot. How do I know if it\'s the right call?',
+  'Our burn rate just jumped 40% — how do I explain this to investors?',
+];
+
+function showSampleOutput() {
+  const fw   = loadTkData(TK.framework, '');
+  const lens = loadTkData(TK.lens, '');
+  const name = loadTkData(TK.profile, {})?.name || userProfile?.name || 'Your Thinker';
+  const q    = SAMPLE_QUESTIONS[Math.floor(Math.random() * SAMPLE_QUESTIONS.length)];
+
+  const body = document.getElementById('sample-output-body');
+
+  if (!fw.trim()) {
+    body.innerHTML = `<div style="color:var(--text-3);font-style:italic;text-align:center;padding:20px">Add your Theory of Victory in the train model fields above to generate a preview.</div>`;
+  } else {
+    // Generate a structurally representative sample answer from the framework
+    const fwSnippet = fw.length > 90 ? fw.slice(0, 90) + '…' : fw;
+    body.innerHTML = `
+      <div style="font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--text-3);margin-bottom:10px">Sample question a founder might ask</div>
+      <div style="font-style:italic;color:var(--text-1);border-left:3px solid var(--accent);padding-left:12px;margin-bottom:18px">"${q}"</div>
+      <div style="font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--text-3);margin-bottom:10px">${name}'s perspective</div>
+      <div style="line-height:1.75;color:var(--text-1)">
+        <p style="margin:0 0 12px">Based on my framework — <em>${fwSnippet}</em> — here's how I'd approach this.</p>
+        <p style="margin:0 0 12px">The question isn't whether this is risky; everything at this stage is risky. The question is whether you're being honest about what the risk actually is, and whether you have a clear decision criterion before you act.</p>
+        ${lens.trim() ? `<p style="margin:0;padding:10px 14px;background:var(--accent-lt);border-radius:8px;font-style:italic;color:var(--accent)">${lens}</p>` : ''}
+      </div>`;
+  }
+
+  document.getElementById('sample-output-overlay').classList.add('open');
+}
+
+function closeSampleOutput() {
+  document.getElementById('sample-output-overlay').classList.remove('open');
+}
+
+/* ── CSV Export for ledger ── */
+function downloadLedgerCSV() {
+  const rows = document.querySelectorAll('#ledger-body tr');
+  const lines = [['Date','Stage','Decision','Gross','Your Cut']];
+  rows.forEach(tr => {
+    const cells = tr.querySelectorAll('td');
+    if (cells.length >= 5) {
+      lines.push([...cells].map(td => `"${td.textContent.replace(/"/g,'""').trim()}"`));
+    }
+  });
+  if (lines.length <= 1) { showToast('No transactions to export yet', 'error'); return; }
+  const csv = lines.map(r => r.join(',')).join('\n');
+  const blob = new Blob([csv], { type:'text/csv' });
+  const url  = URL.createObjectURL(blob);
+  const a    = Object.assign(document.createElement('a'), { href:url, download:`divine-ledger-${new Date().toISOString().slice(0,10)}.csv` });
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  showToast('Ledger exported as CSV', 'success');
+}
+
+/* ── New-perspectives notification badge ── */
+let _tkNewCount = 0;
+
+function _refreshTkBadge(count) {
+  _tkNewCount = count;
+  ['nav-thinker','mob-nav-thinker'].forEach(id => {
+    const btn = document.getElementById(id);
+    if (!btn) return;
+    let badge = btn.querySelector('.tk-nav-badge');
+    if (count > 0) {
+      if (!badge) {
+        badge = document.createElement('span');
+        badge.className = 'tk-nav-badge';
+        btn.appendChild(badge);
+      }
+      badge.textContent = count > 9 ? '9+' : count;
+    } else {
+      badge?.remove();
+    }
+  });
+  // Also surface in the cc-stat-sessions sub-label
+  const sub = document.getElementById('cc-stat-hours');
+  if (sub && count > 0) {
+    const existing = sub.dataset._base || sub.textContent;
+    sub.dataset._base = sub.dataset._base || existing;
+    // handled in initThinkerHub
+  }
+}
 
 /* ── Reports ── */
 let currentReportPeriod = 'last';
@@ -12410,7 +12840,7 @@ function saveBankInfo() {
     type:     document.getElementById('bank-type').value,
   };
   saveTkData(TK.bank, bank);
-  showToast('Bank details saved securely ✓');
+  showToast('Bank details saved securely', 'success');
 }
 
 let selectedPayoutSchedule = 'weekly';
@@ -12818,18 +13248,40 @@ function renderPortfolioList(ns) {
 function renderIsPortfolio() { renderPortfolioList('is'); }
 
 /* ── Toast ── */
-function showToast(msg) {
+function showToast(msg, type) {
   let t = document.getElementById('di-toast');
   if (!t) {
     t = document.createElement('div');
     t.id = 'di-toast';
-    t.style.cssText = 'position:fixed;bottom:32px;left:50%;transform:translateX(-50%);background:#1a1a2e;color:#fff;padding:10px 22px;border-radius:24px;font-size:13.5px;font-weight:500;z-index:9999;transition:opacity 0.3s;pointer-events:none;white-space:nowrap';
     document.body.appendChild(t);
   }
-  t.textContent = msg;
+  // Base styles
+  t.style.cssText = [
+    'position:fixed','bottom:32px','left:50%','transform:translateX(-50%) translateY(0)',
+    'padding:11px 20px 11px 16px','border-radius:28px',
+    'font-size:13.5px','font-weight:500','z-index:9999',
+    'transition:opacity 0.3s,transform 0.3s','pointer-events:none',
+    'display:flex','align-items:center','gap:10px','white-space:nowrap',
+    'box-shadow:0 4px 20px rgba(0,0,0,0.18)',
+  ].join(';');
+
+  const palettes = {
+    success: { bg:'#0F4C2A', border:'#1A7A42', icon:'#4ADE80', text:'#E6F9EE',
+                svg:'<svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="#4ADE80" stroke-width="2.2"><circle cx="8" cy="8" r="6.5"/><path d="M5 8l2 2 4-4"/></svg>' },
+    error:   { bg:'#4C1012', border:'#8B1A1D', icon:'#F87171', text:'#FEE2E2',
+                svg:'<svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="#F87171" stroke-width="2.2"><circle cx="8" cy="8" r="6.5"/><path d="M8 5v4M8 11v.5"/></svg>' },
+    default: { bg:'#1a1a2e', border:'#333', icon:'#aaa', text:'#fff', svg:'' },
+  };
+  const p = palettes[type] || palettes.default;
+  t.style.background = p.bg;
+  t.style.border = `1px solid ${p.border}`;
+  t.style.color = p.text;
+  t.innerHTML = (p.svg ? `<span style="flex-shrink:0;display:flex">${p.svg}</span>` : '') +
+                `<span>${msg}</span>`;
   t.style.opacity = '1';
+  t.style.transform = 'translateX(-50%) translateY(0)';
   clearTimeout(t._timer);
-  t._timer = setTimeout(() => { t.style.opacity = '0'; }, 2400);
+  t._timer = setTimeout(() => { t.style.opacity = '0'; }, 2800);
 }
 
 /* ════════════════════════════════
