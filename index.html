@@ -4926,19 +4926,19 @@
                   <div class="is-scenario-inputs">
                     <div class="is-scenario-field">
                       <label>Monthly Rev ($) <span class="is-tt" data-tip="Your current average monthly revenue. If pre-revenue, use your target for month 1.">i</span></label>
-                      <input type="number" id="dc-scenario-rev" placeholder="10000" oninput="updateScenario('dc')">
+                      <input type="number" id="dc-scenario-rev" placeholder="0" oninput="updateScenario('dc')">
                     </div>
                     <div class="is-scenario-field">
                       <label>Growth Rate (%) <span class="is-tt" data-tip="Expected month-over-month revenue growth. 5–15% is typical for early-stage SaaS; 3–8% for marketplace.">i</span></label>
-                      <input type="number" id="dc-scenario-growth" placeholder="8" oninput="updateScenario('dc')">
+                      <input type="number" id="dc-scenario-growth" placeholder="0" oninput="updateScenario('dc')">
                     </div>
                     <div class="is-scenario-field">
                       <label>Avg. Margin (%) <span class="is-tt" data-tip="Gross profit as a % of revenue after direct costs. 60–80% for software; 30–50% for marketplace or physical goods.">i</span></label>
-                      <input type="number" id="dc-scenario-margin" placeholder="40" oninput="updateScenario('dc')">
+                      <input type="number" id="dc-scenario-margin" placeholder="0" oninput="updateScenario('dc')">
                     </div>
                     <div class="is-scenario-field">
                       <label>Months <span class="is-tt" data-tip="How far ahead to project. 12 months gives a clear runway view; 24 months shows compounding effects.">i</span></label>
-                      <input type="number" id="dc-scenario-months" placeholder="12" min="1" max="60" oninput="updateScenario('dc')">
+                      <input type="number" id="dc-scenario-months" placeholder="0" min="0" max="60" oninput="updateScenario('dc')">
                     </div>
                   </div>
                   <div class="is-scenario-delta" id="dc-scenario-delta" style="margin-top:8px">Enter values to model revenue trajectory</div>
@@ -5212,19 +5212,19 @@
               <div class="is-scenario-inputs">
                 <div class="is-scenario-field">
                   <label>Monthly Rev ($) <span class="is-tt" data-tip="Your current average monthly revenue. If pre-revenue, use your target for month 1.">i</span></label>
-                  <input type="number" id="chat-scenario-rev" placeholder="10000" oninput="updateScenario('chat')">
+                  <input type="number" id="chat-scenario-rev" placeholder="0" oninput="updateScenario('chat')">
                 </div>
                 <div class="is-scenario-field">
                   <label>Growth Rate (%) <span class="is-tt" data-tip="Expected month-over-month revenue growth. 5–15% is typical for early-stage SaaS; 3–8% for marketplace.">i</span></label>
-                  <input type="number" id="chat-scenario-growth" placeholder="8" oninput="updateScenario('chat')">
+                  <input type="number" id="chat-scenario-growth" placeholder="0" oninput="updateScenario('chat')">
                 </div>
                 <div class="is-scenario-field">
                   <label>Avg. Margin (%) <span class="is-tt" data-tip="Gross profit as a % of revenue after direct costs. 60–80% for software; 30–50% for marketplace or physical goods.">i</span></label>
-                  <input type="number" id="chat-scenario-margin" placeholder="40" oninput="updateScenario('chat')">
+                  <input type="number" id="chat-scenario-margin" placeholder="0" oninput="updateScenario('chat')">
                 </div>
                 <div class="is-scenario-field">
                   <label>Months <span class="is-tt" data-tip="How far ahead to project. 12 months gives a clear runway view; 24 months shows compounding effects.">i</span></label>
-                  <input type="number" id="chat-scenario-months" placeholder="12" min="1" max="60" oninput="updateScenario('chat')">
+                  <input type="number" id="chat-scenario-months" placeholder="0" min="0" max="60" oninput="updateScenario('chat')">
                 </div>
               </div>
               <div class="is-scenario-delta" id="chat-scenario-delta" style="margin-top:8px">Enter values to model revenue trajectory</div>
@@ -5486,7 +5486,7 @@
               <div class="is-scenario-inputs">
                 <div class="is-scenario-field">
                   <label>Monthly Rev ($) <span class="is-tt" data-tip="Your current average monthly revenue. If pre-revenue, use your target for month 1.">i</span></label>
-                  <input type="number" id="is-scenario-rev" placeholder="10000" oninput="isUpdateScenario()">
+                  <input type="number" id="is-scenario-rev" placeholder="0" oninput="isUpdateScenario()">
                 </div>
                 <div class="is-scenario-field">
                   <label>Growth Rate (%) <span class="is-tt" data-tip="Expected month-over-month revenue growth. 5–15% is typical for early-stage SaaS; 3–8% for marketplace.">i</span></label>
@@ -5498,7 +5498,7 @@
                 </div>
                 <div class="is-scenario-field">
                   <label>Months <span class="is-tt" data-tip="How far ahead to project. 12 months gives a clear runway view; 24 months shows compounding effects.">i</span></label>
-                  <input type="number" id="is-scenario-months" placeholder="12" min="1" max="60" oninput="isUpdateScenario()">
+                  <input type="number" id="is-scenario-months" placeholder="0" min="0" max="60" oninput="isUpdateScenario()">
                 </div>
               </div>
               <div class="is-scenario-delta" id="is-scenario-delta">Enter values to model revenue trajectory</div>
@@ -8628,7 +8628,7 @@ function renderDashboardHome() {
   ].forEach(fn => { try { fn(); } catch(e) { console.warn('[renderDashboardHome]', fn.name, e.message); } });
 
   // Pre-fill dashboard scenario modeler with defaults and auto-calculate
-  const dcFlds = { rev:'10000', growth:'8', margin:'40', months:'12' };
+  const dcFlds = { rev:'0', growth:'0', margin:'0', months:'0' };
   Object.entries(dcFlds).forEach(([k, v]) => {
     const el = document.getElementById('dc-scenario-' + k);
     if (el && !el.value) el.value = v;
@@ -9064,6 +9064,7 @@ function loadTeamStaff()      { try { return JSON.parse(localStorage.getItem(TM_
 function saveTeamStaff(a)     { localStorage.setItem(TM_STAFF_KEY, JSON.stringify(a)); }
 
 function openInviteModal() {
+  if (!currentUser) { showToast('Sign in to add team members', 'error'); showView('login'); return; }
   const modal = document.getElementById('tm-invite-modal');
   if (!modal) return;
   modal.classList.add('open');
@@ -9080,6 +9081,7 @@ function closeInviteModal() {
 }
 
 function tmInviteMember() {
+  if (!currentUser) { showToast('Sign in to add team members', 'error'); return; }
   const email = document.getElementById('tm-inv-email')?.value.trim();
   const name  = document.getElementById('tm-inv-name')?.value.trim();
   const role  = document.getElementById('tm-inv-role')?.value || 'thinker';
@@ -9190,6 +9192,20 @@ function renderTeamMemberSections() {
 function renderTeamPage() {
   renderThoughtLeaders();
   renderTeamMemberSections();
+  // Lock/unlock the Add member button based on auth state
+  document.querySelectorAll('.tm-add-btn').forEach(btn => {
+    if (!currentUser) {
+      btn.setAttribute('disabled', '');
+      btn.title = 'Sign in to add team members';
+      btn.style.opacity = '0.45';
+      btn.style.cursor  = 'not-allowed';
+    } else {
+      btn.removeAttribute('disabled');
+      btn.title = '';
+      btn.style.opacity = '';
+      btn.style.cursor  = '';
+    }
+  });
 }
 
 function renderThoughtLeaders() {
@@ -15649,7 +15665,7 @@ function _renderChatSidebarForSession(session) {
   }
 
   // Pre-fill scenario modeler with sensible defaults if empty
-  const flds = { rev:'10000', growth:'8', margin:'40', months:'12' };
+  const flds = { rev:'0', growth:'0', margin:'0', months:'0' };
   Object.entries(flds).forEach(([k, v]) => {
     const el = document.getElementById('chat-scenario-' + k);
     if (el && !el.value) el.value = v;
@@ -21521,19 +21537,19 @@ document.addEventListener('keydown', function _lpKeyCapture(e) {
                   <div class="is-scenario-inputs">
                     <div class="is-scenario-field">
                       <label>Monthly Rev ($) <span class="is-tt" data-tip="Your current average monthly revenue. If pre-revenue, use your target for month 1.">i</span></label>
-                      <input type="number" id="dc-scenario-rev" placeholder="10000" oninput="updateScenario('dc')">
+                      <input type="number" id="dc-scenario-rev" placeholder="0" oninput="updateScenario('dc')">
                     </div>
                     <div class="is-scenario-field">
                       <label>Growth Rate (%) <span class="is-tt" data-tip="Expected month-over-month revenue growth. 5–15% is typical for early-stage SaaS; 3–8% for marketplace.">i</span></label>
-                      <input type="number" id="dc-scenario-growth" placeholder="8" oninput="updateScenario('dc')">
+                      <input type="number" id="dc-scenario-growth" placeholder="0" oninput="updateScenario('dc')">
                     </div>
                     <div class="is-scenario-field">
                       <label>Avg. Margin (%) <span class="is-tt" data-tip="Gross profit as a % of revenue after direct costs. 60–80% for software; 30–50% for marketplace or physical goods.">i</span></label>
-                      <input type="number" id="dc-scenario-margin" placeholder="40" oninput="updateScenario('dc')">
+                      <input type="number" id="dc-scenario-margin" placeholder="0" oninput="updateScenario('dc')">
                     </div>
                     <div class="is-scenario-field">
                       <label>Months <span class="is-tt" data-tip="How far ahead to project. 12 months gives a clear runway view; 24 months shows compounding effects.">i</span></label>
-                      <input type="number" id="dc-scenario-months" placeholder="12" min="1" max="60" oninput="updateScenario('dc')">
+                      <input type="number" id="dc-scenario-months" placeholder="0" min="0" max="60" oninput="updateScenario('dc')">
                     </div>
                   </div>
                   <div class="is-scenario-delta" id="dc-scenario-delta" style="margin-top:8px">Enter values to model revenue trajectory</div>
@@ -21807,19 +21823,19 @@ document.addEventListener('keydown', function _lpKeyCapture(e) {
               <div class="is-scenario-inputs">
                 <div class="is-scenario-field">
                   <label>Monthly Rev ($) <span class="is-tt" data-tip="Your current average monthly revenue. If pre-revenue, use your target for month 1.">i</span></label>
-                  <input type="number" id="chat-scenario-rev" placeholder="10000" oninput="updateScenario('chat')">
+                  <input type="number" id="chat-scenario-rev" placeholder="0" oninput="updateScenario('chat')">
                 </div>
                 <div class="is-scenario-field">
                   <label>Growth Rate (%) <span class="is-tt" data-tip="Expected month-over-month revenue growth. 5–15% is typical for early-stage SaaS; 3–8% for marketplace.">i</span></label>
-                  <input type="number" id="chat-scenario-growth" placeholder="8" oninput="updateScenario('chat')">
+                  <input type="number" id="chat-scenario-growth" placeholder="0" oninput="updateScenario('chat')">
                 </div>
                 <div class="is-scenario-field">
                   <label>Avg. Margin (%) <span class="is-tt" data-tip="Gross profit as a % of revenue after direct costs. 60–80% for software; 30–50% for marketplace or physical goods.">i</span></label>
-                  <input type="number" id="chat-scenario-margin" placeholder="40" oninput="updateScenario('chat')">
+                  <input type="number" id="chat-scenario-margin" placeholder="0" oninput="updateScenario('chat')">
                 </div>
                 <div class="is-scenario-field">
                   <label>Months <span class="is-tt" data-tip="How far ahead to project. 12 months gives a clear runway view; 24 months shows compounding effects.">i</span></label>
-                  <input type="number" id="chat-scenario-months" placeholder="12" min="1" max="60" oninput="updateScenario('chat')">
+                  <input type="number" id="chat-scenario-months" placeholder="0" min="0" max="60" oninput="updateScenario('chat')">
                 </div>
               </div>
               <div class="is-scenario-delta" id="chat-scenario-delta" style="margin-top:8px">Enter values to model revenue trajectory</div>
@@ -22081,7 +22097,7 @@ document.addEventListener('keydown', function _lpKeyCapture(e) {
               <div class="is-scenario-inputs">
                 <div class="is-scenario-field">
                   <label>Monthly Rev ($) <span class="is-tt" data-tip="Your current average monthly revenue. If pre-revenue, use your target for month 1.">i</span></label>
-                  <input type="number" id="is-scenario-rev" placeholder="10000" oninput="isUpdateScenario()">
+                  <input type="number" id="is-scenario-rev" placeholder="0" oninput="isUpdateScenario()">
                 </div>
                 <div class="is-scenario-field">
                   <label>Growth Rate (%) <span class="is-tt" data-tip="Expected month-over-month revenue growth. 5–15% is typical for early-stage SaaS; 3–8% for marketplace.">i</span></label>
@@ -22093,7 +22109,7 @@ document.addEventListener('keydown', function _lpKeyCapture(e) {
                 </div>
                 <div class="is-scenario-field">
                   <label>Months <span class="is-tt" data-tip="How far ahead to project. 12 months gives a clear runway view; 24 months shows compounding effects.">i</span></label>
-                  <input type="number" id="is-scenario-months" placeholder="12" min="1" max="60" oninput="isUpdateScenario()">
+                  <input type="number" id="is-scenario-months" placeholder="0" min="0" max="60" oninput="isUpdateScenario()">
                 </div>
               </div>
               <div class="is-scenario-delta" id="is-scenario-delta">Enter values to model revenue trajectory</div>
