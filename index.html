@@ -3653,10 +3653,10 @@
 
         <button class="nav-item cc-flat" id="cc-payments" data-tip="Payments"
           onclick="ccActivate('payments',this); navigateThinkerTab('payments')">
-          <!-- Key -->
+          <!-- Bank / building -->
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="5.5" cy="7" r="3"/>
-            <path d="M8.2 9.3l5.3 4.2M11 11.5l1.5 1.2"/>
+            <path d="M1.5 6h13M8 1.5L1.5 6v8.5h13V6z"/>
+            <line x1="4" y1="10" x2="4" y2="14.5"/><line x1="8" y1="10" x2="8" y2="14.5"/><line x1="12" y1="10" x2="12" y2="14.5"/>
           </svg>
           <span class="nav-item-label">Payments</span>
         </button>
@@ -4791,9 +4791,9 @@
         <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"><path d="M8 1.5C5 1.5 2.5 4 2.5 7"/><path d="M8 3.5C6 3.5 4.5 5.1 4.5 7"/><path d="M8 5.5C7 5.5 6.5 6.2 6.5 7"/><path d="M8 1.5c3 0 5.5 2.5 5.5 5.5"/><path d="M8 3.5C10 3.5 11.5 5.1 11.5 7"/><path d="M8 5.5c1 0 1.5.7 1.5 1.5v1.5"/><path d="M4.5 9c.1 2 1.5 5 3.5 5.5"/><path d="M2.5 8.5c0 3 2 6 5.5 6"/><path d="M6.5 7v1c0 2 .5 4.5 1.5 6"/></svg>
         Reports
       </button>
-      <!-- Payments: key — matches sidebar Payments -->
+      <!-- Payments: bank/building — matches sidebar Payments -->
       <button class="thinker-tab" onclick="switchThinkerTab('payments',this)">
-        <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="5.5" cy="7" r="3"/><path d="M8.2 9.3l5.3 4.2M11 11.5l1.5 1.2"/></svg>
+        <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M1.5 6h13M8 1.5L1.5 6v8.5h13V6z"/><line x1="4" y1="10" x2="4" y2="14.5"/><line x1="8" y1="10" x2="8" y2="14.5"/><line x1="12" y1="10" x2="12" y2="14.5"/></svg>
         Payments
       </button>
     </div>
@@ -5612,7 +5612,7 @@ if (_isStaleLocalhost) {
 }
 let API_BASE = (_isStaleLocalhost ? null : _storedBase) || _defaultBase;
 let ACTIVE_MODEL   = localStorage.getItem('di_model')     || 'claude-opus-4-5';
-let userProfile    = JSON.parse(localStorage.getItem('di_profile') || '{"name":"Michael Akindele","email":"michael@surpluspods.com"}');
+let userProfile    = JSON.parse(localStorage.getItem('di_profile') || '{"name":"Michael Akindele","email":"makindel@gmail.com"}');
 let DIRECT_API_KEY = localStorage.getItem('di_api_key')   || '';
 
 // Persistent device user_id — wallet identifier
@@ -11350,10 +11350,12 @@ async function initThinkerHub() {
   document.getElementById('th-stat-rating').textContent   = '—';
   document.getElementById('th-stat-hours').textContent    = seedSessions ? `${(seedSessions*1.5).toFixed(0)} hrs saved` : '— hrs saved';
 
-  // Try live stats — auth header required by requireThinker middleware
+  // Try live stats — auth header + thinker_id param required
   try {
-    const authTok = getAuthToken();
-    const res = await fetch(`${API_BASE}/api/thinker/stats`,
+    const authTok  = getAuthToken();
+    const tkId     = activeThinker?.id || (typeof THINKERS !== 'undefined' && THINKERS[0]?.id) || 'michael';
+    const statsUrl = `${API_BASE}/api/thinker/stats?thinker_id=${encodeURIComponent(tkId)}`;
+    const res = await fetch(statsUrl,
       { headers: { 'Authorization': `Bearer ${authTok}` },
         signal: AbortSignal.timeout(5000) });
     if (res.ok) {
@@ -11370,8 +11372,13 @@ async function initThinkerHub() {
       document.getElementById('th-stat-sessions').textContent = inquiries || '—';
       document.getElementById('th-stat-earnings').textContent = `$${earnings.toFixed(2)}`;
       document.getElementById('th-stat-hours').textContent    = `${(inquiries*1.5).toFixed(0)} hrs saved`;
+      console.info('[thinker/stats] loaded — perspectives:', inquiries, 'earned: $' + earnings.toFixed(2));
+    } else if (res.status === 403) {
+      console.warn('[thinker/stats] 403 — thinker_access flag is not enabled for this account. Go to /admin → Users → enable Thinker Access for makindel@gmail.com.');
+    } else if (res.status === 401) {
+      console.warn('[thinker/stats] 401 — no valid auth token. User may need to log in again.');
     } else {
-      console.warn('[thinker/stats] API returned', res.status, '— check thinker_access flag for this account');
+      console.warn('[thinker/stats] unexpected status', res.status);
     }
   } catch (e) { console.warn('[thinker/stats] fetch failed:', e.message); }
 
@@ -11482,13 +11489,16 @@ function pingThinkerSaleDot() {
 let _lastTxnCount = 0;
 async function checkForNewSales() {
   try {
-    const res = await fetch(`${API_BASE}/api/thinker/stats?thinker_id=${USER_ID}`);
+    const tkId = activeThinker?.id || 'michael';
+    const res = await fetch(
+      `${API_BASE}/api/thinker/stats?thinker_id=${encodeURIComponent(tkId)}`,
+      { headers: { 'Authorization': `Bearer ${getAuthToken()}` }, signal: AbortSignal.timeout(5000) }
+    );
     if (!res.ok) return;
     const s = await res.json();
-    const count = s.sessions || s.perspectives || s.total_sessions || 0;
+    const count = parseInt(s.total_perspectives || s.sessions || s.perspectives || 0, 10);
     if (_lastTxnCount > 0 && count > _lastTxnCount) {
       pingThinkerSaleDot();
-      // Refresh stats + reports if reports tab is active
       const panel = document.getElementById('tp-reports');
       if (panel && panel.style.display !== 'none') renderReports(currentReportPeriod);
     }
@@ -12077,7 +12087,11 @@ function switchReportPeriod(period, btn) {
 }
 
 async function renderReports(period) {
-  // Show loading state in ledger
+  // Map UI period labels → server period strings
+  const periodMap = { last: 'month', this: 'week', ytd: 'year' };
+  const serverPeriod = periodMap[period] || 'month';
+
+  // Show loading state
   document.getElementById('ledger-body').innerHTML =
     '<tr><td colspan="5" style="text-align:center;color:var(--text-3);padding:28px;font-family:\'Cormorant Garamond\',serif;font-size:15px">Loading performance data…</td></tr>';
 
@@ -12085,36 +12099,38 @@ async function renderReports(period) {
   const doms = loadTkData(TK.domains, []);
   renderThinkerHeatmap(doms);
 
-  let txns = [], stats = { sessions: 0, revenue: 0, unique: 0 };
+  // Auth + correct thinker_id param — requireThinker blocks without both
+  const authHeaders = { 'Authorization': `Bearer ${getAuthToken()}` };
+  const tkId = activeThinker?.id || 'michael';
+
+  let txns = [];
 
   try {
-    // Try period-scoped earnings endpoint
-    const [txnRes, statsRes] = await Promise.allSettled([
-      fetch(`${API_BASE}/api/thinker/transactions?thinker_id=${USER_ID}&period=${period}`).then(r => r.ok ? r.json() : null),
-      fetch(`${API_BASE}/api/thinker/earnings?thinker_id=${USER_ID}&period=${period}`).then(r => r.ok ? r.json() : null),
-    ]);
-    if (txnRes.status === 'fulfilled' && txnRes.value) {
-      txns = Array.isArray(txnRes.value) ? txnRes.value : (txnRes.value.transactions || txnRes.value.data || []);
-    }
-    if (statsRes.status === 'fulfilled' && statsRes.value) {
-      const s = statsRes.value;
-      stats.sessions = s.sessions || s.perspectives || s.count || txns.length;
-      stats.revenue  = parseFloat(s.revenue || s.gross || s.total || txns.length * 0.05 || 0);
-      stats.unique   = s.unique || s.unique_founders || s.users || 0;
+    const res = await fetch(
+      `${API_BASE}/api/thinker/transactions?thinker_id=${encodeURIComponent(tkId)}&period=${serverPeriod}`,
+      { headers: authHeaders, signal: AbortSignal.timeout(6000) }
+    );
+    if (res.ok) {
+      const data = await res.json();
+      // Server returns { transactions: [...rows] }
+      // Each row: { id, thinker_id, amount, label, created_at }
+      //   amount = thinker's 70% cut ($0.035), label = "Perspective earned · Name · stage"
+      txns = Array.isArray(data) ? data : (data.transactions || []);
     } else {
-      // Derive from txns
-      stats.sessions = txns.length;
-      stats.revenue  = txns.length * 0.05;
-      stats.unique   = new Set(txns.map(t => t.user_id || t.founder_id)).size;
+      console.warn('[renderReports] transactions fetch', res.status);
     }
-  } catch { /* non-fatal — leave zeroes */ }
+  } catch (e) { console.warn('[renderReports] fetch failed:', e.message); }
 
-  const payout = (stats.revenue * 0.7).toFixed(2);
-  document.getElementById('rpt-sessions').textContent     = stats.sessions;
-  document.getElementById('rpt-revenue').textContent      = `$${stats.revenue.toFixed(2)}`;
-  document.getElementById('rpt-payout').textContent       = `$${payout}`;
-  document.getElementById('rpt-unique').textContent       = stats.unique;
-  _lastTxnCount = stats.sessions;
+  // Derive all stats from transaction rows (amount = 70% cut, gross = amount / 0.70)
+  const totalPayout  = txns.reduce((s, t) => s + parseFloat(t.amount || 0), 0);
+  const totalGross   = txns.length * 0.05; // $0.05 per perspective sold
+  const uniqueSellers = new Set(txns.map(t => t.thinker_id || tkId)).size; // placeholder
+
+  document.getElementById('rpt-sessions').textContent = txns.length || '0';
+  document.getElementById('rpt-revenue').textContent  = `$${totalGross.toFixed(2)}`;
+  document.getElementById('rpt-payout').textContent   = `$${totalPayout.toFixed(2)}`;
+  document.getElementById('rpt-unique').textContent   = txns.length > 0 ? txns.length : '0';
+  _lastTxnCount = txns.length;
 
   if (!txns.length) {
     document.getElementById('ledger-body').innerHTML =
@@ -12126,19 +12142,23 @@ async function renderReports(period) {
     if (!d) return '—';
     return new Date(d).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: '2-digit' });
   }
+  // Parse stage from label: "Perspective earned · Michael Akindele · chat" → "chat"
+  function parseStage(label) {
+    if (!label) return '—';
+    const parts = label.split(' · ');
+    return parts.length >= 3 ? parts[2] : (parts[1] || '—');
+  }
 
   document.getElementById('ledger-body').innerHTML = txns.map(t => {
-    const gross = parseFloat(t.amount || t.gross || 0.05);
-    const cut   = (gross * 0.7).toFixed(3);
-    const decision = t.decision || t.description || t.note || (t.metadata && t.metadata.decision) || '—';
-    const decSnip  = decision.length > 48 ? decision.slice(0, 48) + '…' : decision;
-    const stage    = t.stage || t.thinker_name || t.architect || '—';
+    const cut   = parseFloat(t.amount || 0);
+    const gross = parseFloat((cut / 0.70).toFixed(4));
+    const stage = parseStage(t.label);
     return `<tr>
-      <td style="font-family:var(--font-mono);font-size:12px">${fmtDateShort(t.created_at || t.date || t.timestamp)}</td>
-      <td>${stage}</td>
-      <td style="font-style:italic;color:var(--text-2)">${decSnip}</td>
-      <td class="ledger-amt" style="font-family:var(--font-mono)">$${gross.toFixed(2)}</td>
-      <td style="font-family:var(--font-mono);font-weight:600;color:var(--violet,#BF452A)">$${cut}</td>
+      <td style="font-family:var(--font-mono);font-size:12px">${fmtDateShort(t.created_at)}</td>
+      <td style="text-transform:capitalize">${stage}</td>
+      <td style="font-style:italic;color:var(--text-2)">${t.label ? t.label.slice(0,52) + (t.label.length > 52 ? '…' : '') : '—'}</td>
+      <td style="font-family:var(--font-mono)">$${gross.toFixed(2)}</td>
+      <td style="font-family:var(--font-mono);font-weight:600;color:var(--accent)">$${cut.toFixed(3)}</td>
     </tr>`;
   }).join('');
 }
