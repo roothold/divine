@@ -338,6 +338,276 @@
       text-align:center; font-size:13.5px; color:#15803D; font-weight:500;
     }
 
+    /* ══ INVESTOR ROOM — Premium redesign ══════════════════════════════════ */
+
+    /* Command strip: sticky publish bar */
+    .ir-command-strip {
+      position:sticky; top:0; z-index:40; background:var(--surface);
+      border-bottom:1px solid var(--border);
+      display:flex; align-items:center; justify-content:space-between;
+      padding:11px 0; margin-bottom:28px; flex-wrap:wrap; gap:10px;
+    }
+    .ir-command-left  { display:flex; align-items:center; gap:10px; }
+    .ir-command-right { display:flex; align-items:center; gap:8px; }
+
+    .ir-act-ghost {
+      display:inline-flex; align-items:center; gap:5px;
+      padding:7px 14px; border-radius:var(--r-pill);
+      border:1.5px solid var(--border-md); background:transparent;
+      color:var(--text-2); font-size:12.5px; font-weight:600;
+      cursor:pointer; font-family:var(--font-ui); transition:all .15s; white-space:nowrap;
+    }
+    .ir-act-ghost:hover { border-color:var(--accent); color:var(--accent); }
+    .ir-act-primary {
+      display:inline-flex; align-items:center; gap:5px;
+      padding:8px 18px; border-radius:var(--r-pill); border:none;
+      background:var(--accent); color:#fff; font-size:13px; font-weight:600;
+      cursor:pointer; font-family:var(--font-ui); transition:background .15s; white-space:nowrap;
+    }
+    .ir-act-primary:hover { background:var(--accent-mid); }
+
+    /* Links panel after publish */
+    .ir-links-panel {
+      display:grid; grid-template-columns:1fr 1fr; gap:12px;
+      padding:0 0 24px; border-bottom:1px solid var(--border); margin-bottom:28px;
+    }
+    @media(max-width:520px){ .ir-links-panel { grid-template-columns:1fr; } }
+    .ir-link-card {
+      background:var(--surface-2); border-radius:12px; padding:14px 16px;
+    }
+    .ir-link-card-label {
+      display:flex; align-items:center; gap:6px;
+      font-size:10px; font-weight:700; letter-spacing:.1em;
+      text-transform:uppercase; color:var(--text-3); margin-bottom:10px;
+    }
+    .ir-link-card-url {
+      font-size:11.5px; color:var(--text-2); font-family:var(--font-mono);
+      white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+      background:#fff; border:1px solid var(--border-md);
+      border-radius:8px; padding:7px 10px; margin-bottom:8px;
+    }
+    .ir-link-card-copy {
+      width:100%; padding:7px 0; border:1px solid var(--border-md);
+      border-radius:8px; background:#fff; color:var(--text-2);
+      font-size:12px; font-weight:600; cursor:pointer; font-family:var(--font-ui);
+      transition:all .15s;
+    }
+    .ir-link-card-copy:hover { border-color:var(--accent); color:var(--accent); }
+    .ir-link-card-hint { font-size:10.5px; color:var(--text-3); margin-top:6px; }
+
+    /* Section system replaces ir-card */
+    .ir-section {
+      padding:24px 0; border-bottom:1px solid var(--border);
+    }
+    .ir-section:last-child { border-bottom:none; padding-bottom:8px; }
+    .ir-section-hd {
+      display:flex; align-items:flex-start; justify-content:space-between;
+      margin-bottom:20px;
+    }
+    .ir-section-eyebrow {
+      font-size:10px; font-weight:700; letter-spacing:.12em;
+      text-transform:uppercase; color:var(--accent); margin-bottom:3px;
+    }
+    .ir-section-title {
+      font-size:16px; font-weight:700; color:var(--text-0);
+    }
+    .ir-section-sub {
+      font-size:12.5px; color:var(--text-3); margin-top:3px; line-height:1.5;
+    }
+    .ir-section-done {
+      width:22px; height:22px; border-radius:50%; flex-shrink:0; margin-top:1px;
+      display:flex; align-items:center; justify-content:center;
+      border:1.5px solid var(--border-md); color:transparent; transition:all .2s;
+    }
+    .ir-section-done.filled {
+      background:var(--accent); border-color:var(--accent); color:#fff;
+    }
+
+    /* Financials 2-col inside section */
+    .ir-fin-grid {
+      display:grid; grid-template-columns:1fr 1fr; gap:12px;
+    }
+    .ir-runway-bar {
+      grid-column:1/-1; padding:12px 16px;
+      background:var(--surface-2); border-radius:10px;
+      display:flex; align-items:center; gap:28px; flex-wrap:wrap;
+      margin-top:4px;
+    }
+    .ir-rw-item { }
+    .ir-rw-label { font-size:10.5px; color:var(--text-3); font-weight:600;
+      letter-spacing:.05em; text-transform:uppercase; }
+    .ir-rw-val { font-size:18px; font-weight:700; color:var(--text-0); margin-top:2px; }
+    .ir-rw-val.accent { color:var(--accent); }
+
+    /* ══ PUBLIC PROFILE — Premium investor-facing page ══════════════════════ */
+    .irp-page {
+      min-height:100vh; display:flex; flex-direction:column; align-items:center;
+      background:#F5F4F1; padding:0 0 80px;
+    }
+
+    /* Brand band at top — uses company colour via inline style */
+    .irp-brand-band {
+      width:100%; height:220px; position:relative; overflow:hidden; flex-shrink:0;
+    }
+    .irp-brand-band-fill {
+      position:absolute; inset:0;
+    }
+    .irp-brand-band-noise {
+      position:absolute; inset:0;
+      background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.08'/%3E%3C/svg%3E");
+      opacity:.5; mix-blend-mode:overlay;
+    }
+    .irp-brand-band-vignette {
+      position:absolute; bottom:0; left:0; right:0; height:120px;
+      background:linear-gradient(to bottom,transparent,#F5F4F1);
+    }
+
+    /* Main card — floats above the band */
+    .irp-card {
+      background:#fff; border-radius:20px;
+      width:min(580px,94vw); margin-top:-100px; position:relative;
+      box-shadow:0 2px 2px rgba(0,0,0,.04),0 8px 32px rgba(0,0,0,.08),0 24px 64px rgba(0,0,0,.06);
+    }
+
+    /* Identity section */
+    .irp-identity {
+      padding:32px 36px 0;
+    }
+    .irp-logo-wrap {
+      display:flex; align-items:flex-start; gap:16px; margin-bottom:20px;
+    }
+    .irp-logo {
+      width:60px; height:60px; border-radius:16px; flex-shrink:0;
+      display:flex; align-items:center; justify-content:center;
+      font-size:24px; font-weight:800; color:#fff; letter-spacing:-.5px;
+    }
+    .irp-company-name {
+      font-size:28px; font-weight:800; color:#0A0A0A;
+      letter-spacing:-.5px; line-height:1.1; margin:0 0 8px;
+    }
+    .irp-badges { display:flex; align-items:center; gap:6px; flex-wrap:wrap; }
+    .irp-badge {
+      padding:4px 11px; border-radius:100px; font-size:11px; font-weight:600;
+      letter-spacing:.04em; text-transform:uppercase;
+    }
+    .irp-badge-stage { background:rgba(191,69,42,.1); color:var(--accent); }
+    .irp-badge-industry { background:var(--surface-2); color:var(--text-3); border:1px solid var(--border-md); }
+    .irp-badge-founded { background:var(--surface-2); color:var(--text-3); border:1px solid var(--border-md); }
+
+    /* Tagline */
+    .irp-tagline {
+      padding:0 36px 20px;
+      font-family:'Cormorant Garamond',Georgia,serif;
+      font-size:21px; line-height:1.55; color:#3a3530;
+      border-bottom:1px solid #EDEAE6;
+    }
+
+    /* Vault preview — blurred teaser of data room contents */
+    .irp-vault {
+      padding:24px 36px 20px;
+      border-bottom:1px solid #EDEAE6;
+    }
+    .irp-vault-eyebrow {
+      font-size:10px; font-weight:700; letter-spacing:.12em;
+      text-transform:uppercase; color:#B0A99E; margin-bottom:16px;
+      display:flex; align-items:center; gap:8px;
+    }
+    .irp-vault-grid {
+      display:grid; grid-template-columns:repeat(3,1fr); gap:10px;
+      position:relative; filter:blur(5px); user-select:none; pointer-events:none;
+    }
+    .irp-vault-metric {
+      background:#F7F6F3; border-radius:10px; padding:14px 14px 12px;
+      border:1px solid #EDEAE6;
+    }
+    .irp-vault-val {
+      font-size:20px; font-weight:800; color:#0A0A0A;
+      letter-spacing:-.5px; margin-bottom:4px;
+      font-variant-numeric:tabular-nums;
+    }
+    .irp-vault-lbl {
+      font-size:10.5px; color:#9A9489; font-weight:600;
+      text-transform:uppercase; letter-spacing:.06em;
+    }
+    .irp-vault-overlay {
+      position:absolute; inset:0; display:flex; flex-direction:column;
+      align-items:center; justify-content:center; gap:8px;
+    }
+    .irp-vault-overlay-chip {
+      display:inline-flex; align-items:center; gap:7px;
+      background:rgba(255,255,255,.95); border:1px solid #DEDAD5;
+      border-radius:100px; padding:7px 16px;
+      font-size:12px; font-weight:700; color:#3a3530;
+      box-shadow:0 2px 12px rgba(0,0,0,.08);
+    }
+
+    /* Gate form */
+    .irp-gate {
+      padding:24px 36px 32px;
+    }
+    .irp-gate-title {
+      font-size:17px; font-weight:700; color:#0A0A0A;
+      margin:0 0 6px; letter-spacing:-.2px;
+    }
+    .irp-gate-sub {
+      font-size:13px; color:#9A9489; line-height:1.55; margin-bottom:18px;
+    }
+    .irp-gate-input {
+      width:100%; padding:12px 14px; font-size:14px;
+      border:1.5px solid #DDD9D4; border-radius:12px; outline:none;
+      font-family:'Inter',sans-serif; color:#0A0A0A;
+      background:#FAFAF8; box-sizing:border-box;
+      transition:border-color .15s, box-shadow .15s; margin-bottom:10px;
+    }
+    .irp-gate-input:focus {
+      border-color:var(--accent); background:#fff;
+      box-shadow:0 0 0 3px rgba(191,69,42,.1);
+    }
+    .irp-gate-btn {
+      display:block; width:100%; padding:14px 0; text-align:center;
+      background:var(--accent); color:#fff; border:none; border-radius:12px;
+      font-size:14px; font-weight:700; font-family:'Inter',sans-serif;
+      cursor:pointer; letter-spacing:.02em;
+      transition:background .15s, transform .1s, box-shadow .15s;
+      box-shadow:0 2px 8px rgba(191,69,42,.35);
+    }
+    .irp-gate-btn:hover {
+      background:#A83B22;
+      box-shadow:0 4px 16px rgba(191,69,42,.4); transform:translateY(-1px);
+    }
+    .irp-gate-btn:active { transform:translateY(0); }
+    .irp-gate-access {
+      text-align:center; margin-top:14px;
+      font-size:12.5px; color:#B0A99E;
+    }
+    .irp-gate-access a {
+      color:var(--accent); text-decoration:none; font-weight:600;
+    }
+    .irp-sent {
+      display:none; padding:14px 16px;
+      background:rgba(22,163,74,.07); border:1px solid rgba(22,163,74,.2);
+      border-radius:12px; text-align:center;
+      font-size:13.5px; color:#15803D; font-weight:500;
+      margin-bottom:10px;
+    }
+
+    /* Footer */
+    .irp-footer {
+      margin-top:24px; font-size:12px; color:#B0A99E;
+      display:flex; align-items:center; gap:6px;
+    }
+    .irp-footer-logo {
+      font-size:11px; font-weight:800; letter-spacing:.05em;
+      color:#6B6560; text-transform:uppercase;
+    }
+    @media(max-width:480px){
+      .irp-identity,.irp-tagline,.irp-vault,.irp-gate { padding-left:24px; padding-right:24px; }
+      .irp-company-name { font-size:22px; }
+      .irp-tagline { font-size:18px; }
+    }
+
+
+
     /* Slug editor */
     .ir-slug-row {
       display:flex; align-items:center; gap:0;
@@ -1732,39 +2002,132 @@
     .tl-domain-chip.active { background:var(--text-0); border-color:var(--text-0); color:#fff; }
     .tl-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:14px; }
     @media (max-width:560px) { .tl-grid { grid-template-columns:1fr; } }
-    .tl-card { background:var(--surface); border:1.5px solid var(--border); border-radius:14px; padding:20px; cursor:pointer; transition:border-color .15s,box-shadow .15s,transform .15s,opacity .4s; }
-    .tl-card:hover { border-color:var(--accent-bdr); box-shadow:0 4px 18px rgba(191,69,42,.09); transform:translateY(-1px); }
+    .tl-card { background:var(--surface); border:1.5px solid var(--border); border-radius:16px; padding:22px; cursor:pointer; transition:border-color .2s,box-shadow .2s,transform .18s,opacity .4s; }
+    .tl-card:hover { border-color:var(--accent-bdr); box-shadow:0 6px 24px rgba(191,69,42,.1); transform:translateY(-2px); }
     /* Team page — invite panel + role sections */
-    .tm-invite-panel { background:var(--surface); border:1.5px solid var(--border); border-radius:14px; padding:18px 20px; margin-bottom:28px; }
-    .tm-invite-label { font-size:11px; font-weight:700; letter-spacing:.07em; text-transform:uppercase; color:var(--text-3); margin-bottom:12px; }
-    .tm-invite-row { display:flex; gap:8px; flex-wrap:wrap; align-items:center; }
-    .tm-inv-input { flex:1; min-width:130px; padding:9px 13px; font-size:13.5px; font-family:'Inter',sans-serif; border:1.5px solid var(--border-md); border-radius:10px; background:#fff; color:var(--text-0); outline:none; transition:border-color .15s; }
-    .tm-inv-input:focus { border-color:var(--accent); }
-    .tm-inv-select { padding:9px 13px; font-size:13.5px; font-family:'Inter',sans-serif; border:1.5px solid var(--border-md); border-radius:10px; background:#fff; color:var(--text-0); outline:none; cursor:pointer; transition:border-color .15s; }
+    /* ── Team page — premium redesign ────────────────────────── */
+    .tm-invite-panel { background:var(--surface); border:1.5px solid var(--border); border-radius:16px; padding:22px 24px; margin-bottom:36px; box-shadow:0 1px 4px rgba(0,0,0,.04); }
+    .tm-invite-label { font-size:11.5px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:var(--text-3); margin-bottom:16px; display:flex; align-items:center; gap:8px; }
+    .tm-invite-label svg { opacity:.6; }
+    .tm-invite-row { display:grid; grid-template-columns:1fr 1fr minmax(130px,auto) auto; gap:10px; align-items:center; }
+    @media (max-width:640px) { .tm-invite-row { grid-template-columns:1fr 1fr; } .tm-inv-btn { grid-column:1/-1; } }
+    .tm-inv-input { padding:10px 14px; font-size:13.5px; font-family:'Inter',sans-serif; border:1.5px solid var(--border-md); border-radius:10px; background:var(--surface-2); color:var(--text-0); outline:none; transition:border-color .15s,background .15s,box-shadow .15s; }
+    .tm-inv-input:focus { border-color:var(--accent); background:#fff; box-shadow:0 0 0 3px rgba(191,69,42,.07); }
+    .tm-inv-input::placeholder { color:var(--text-3); }
+    .tm-inv-select { padding:10px 32px 10px 14px; font-size:13.5px; font-family:'Inter',sans-serif; border:1.5px solid var(--border-md); border-radius:10px; background:var(--surface-2) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23999' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat right 12px center; color:var(--text-0); outline:none; cursor:pointer; transition:border-color .15s; appearance:none; -webkit-appearance:none; }
     .tm-inv-select:focus { border-color:var(--accent); }
-    .tm-inv-btn { padding:9px 20px; font-size:13.5px; font-weight:600; border:none; border-radius:10px; background:var(--accent); color:#fff; cursor:pointer; white-space:nowrap; transition:opacity .15s; }
-    .tm-inv-btn:hover { opacity:.88; }
-    .tm-section { margin-bottom:36px; }
-    .tm-section-head { display:flex; align-items:center; gap:10px; margin-bottom:16px; border-bottom:1.5px solid var(--border); padding-bottom:12px; }
-    .tm-section-title { font-size:14px; font-weight:700; letter-spacing:.04em; color:var(--text-0); }
-    .tm-section-badge { font-size:11px; font-weight:600; padding:3px 10px; border-radius:var(--r-pill); background:var(--surface-2); color:var(--text-2); border:1px solid var(--border); }
-    .tm-member-list { display:flex; flex-direction:column; gap:9px; }
-    .tm-member-card { display:flex; align-items:center; gap:12px; background:var(--surface); border:1.5px solid var(--border); border-radius:12px; padding:13px 16px; transition:border-color .15s; }
-    .tm-member-card:hover { border-color:var(--border-md); }
-    .tm-member-avatar { width:38px; height:38px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:700; color:#fff; flex-shrink:0; }
+    .tm-inv-btn { padding:10px 22px; font-size:13.5px; font-weight:600; border:none; border-radius:10px; background:var(--accent); color:#fff; cursor:pointer; white-space:nowrap; transition:opacity .15s,box-shadow .15s; letter-spacing:.01em; }
+    .tm-inv-btn:hover { opacity:.9; box-shadow:0 4px 14px rgba(191,69,42,.28); }
+    .tm-section { margin-bottom:44px; }
+    .tm-section-head { display:flex; align-items:center; gap:11px; margin-bottom:18px; padding-bottom:14px; border-bottom:1.5px solid var(--border); }
+    .tm-section-icon { width:32px; height:32px; border-radius:9px; background:var(--surface-2); border:1.5px solid var(--border); display:flex; align-items:center; justify-content:center; color:var(--text-2); flex-shrink:0; }
+    .tm-section-title { font-size:15px; font-weight:700; color:var(--text-0); flex:1; letter-spacing:-.01em; }
+    .tm-section-badge { font-size:11px; font-weight:700; padding:4px 11px; border-radius:var(--r-pill); background:var(--surface-2); color:var(--text-2); border:1px solid var(--border); min-width:26px; text-align:center; }
+    .tm-member-list { display:flex; flex-direction:column; gap:8px; }
+    .tm-member-card { display:flex; align-items:center; gap:13px; background:var(--surface); border:1.5px solid var(--border); border-radius:13px; padding:13px 16px; transition:border-color .15s,box-shadow .15s,transform .12s; }
+    .tm-member-card:hover { border-color:var(--border-md); box-shadow:0 3px 12px rgba(0,0,0,.06); transform:translateY(-1px); }
+    .tm-member-avatar { width:40px; height:40px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:700; color:#fff; flex-shrink:0; letter-spacing:.03em; box-shadow:0 2px 6px rgba(0,0,0,.15); }
     .tm-member-body { flex:1; min-width:0; }
-    .tm-member-name { font-size:13.5px; font-weight:600; color:var(--text-0); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-    .tm-member-meta { font-size:12px; color:var(--text-2); margin-top:2px; }
-    .tm-status { font-size:11px; font-weight:600; padding:3px 10px; border-radius:var(--r-pill); flex-shrink:0; }
-    .tm-status-active { background:#ECFDF5; color:#059669; border:1px solid #A7F3D0; }
-    .tm-status-invited { background:#FFF7ED; color:#C2410C; border:1px solid #FED7AA; }
-    .tm-member-btn { font-size:12px; font-weight:500; padding:5px 12px; border-radius:8px; border:1.5px solid var(--border-md); background:transparent; cursor:pointer; color:var(--text-2); transition:all .12s; flex-shrink:0; }
-    .tm-member-btn:hover { border-color:var(--border-dark); color:var(--text-0); }
-    .tm-member-btn.approve { color:var(--accent); border-color:var(--accent); }
-    .tm-member-btn.approve:hover { background:var(--accent); color:#fff; }
-    .tm-empty { padding:22px; text-align:center; font-style:italic; color:var(--text-3); font-size:13px; border:1.5px dashed var(--border); border-radius:12px; }
+    .tm-member-name { font-size:14px; font-weight:600; color:var(--text-0); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .tm-member-meta { font-size:12px; color:var(--text-3); margin-top:2px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .tm-status { font-size:11px; font-weight:600; padding:4px 11px; border-radius:var(--r-pill); flex-shrink:0; letter-spacing:.03em; }
+    .tm-status-active { background:rgba(5,150,105,.09); color:#059669; border:1px solid rgba(5,150,105,.22); }
+    .tm-status-invited { background:rgba(194,65,12,.07); color:#C2410C; border:1px solid rgba(194,65,12,.2); }
+    .tm-member-btn { font-size:12px; font-weight:500; padding:5px 13px; border-radius:8px; border:1.5px solid var(--border-md); background:transparent; cursor:pointer; color:var(--text-2); transition:all .12s; flex-shrink:0; }
+    .tm-member-btn:hover { border-color:var(--text-2); color:var(--text-0); }
+    .tm-member-btn.approve { color:var(--accent); border-color:rgba(191,69,42,.35); }
+    .tm-member-btn.approve:hover { background:var(--accent); color:#fff; border-color:var(--accent); }
+    .tm-empty { padding:32px 24px; text-align:center; border:1.5px dashed var(--border); border-radius:13px; }
+    .tm-empty-title { font-size:13.5px; font-weight:600; color:var(--text-2); margin-bottom:5px; }
+    .tm-empty-sub { font-size:12.5px; color:var(--text-3); line-height:1.6; }
+    .tl-section-controls .tl-filter-btn:hover { border-color:var(--accent-bdr); color:var(--accent); }
+    .tl-section-controls .tl-filter-btn.active { background:var(--accent); border-color:var(--accent); color:#fff; }
+
+    /* ═══════════════════════════════════════════════════════════════════
+       MOBILE RESPONSIVENESS — comprehensive fixes
+       ─────────────────────────────────────────────────────────────────
+       1. iOS input zoom prevention (font-size must be ≥ 16px on inputs)
+       2. Grid collapse rules for missing breakpoints
+       3. Layout & spacing fixes at small screens
+    ═══════════════════════════════════════════════════════════════════ */
+
+    /* ── 1. iOS zoom fix: bump all interactive inputs to 16px on mobile ── */
+    @media (max-width:680px) {
+      input, select, textarea,
+      .tm-inv-input, .tm-inv-select,
+      .ir-slug-input, .ir-invite-input, .ir-gate-input,
+      .irp-gate-input, .onboard-select,
+      .bank-input, .pd-textarea, .pd-check-input, .pd-item-input,
+      .settings-input, .settings-select,
+      .kb-search-input, .dc-input-textarea, .dc-proj-select,
+      .dc-quick-input, .ob-big-input, .ob-textarea,
+      .rename-input, .pd-field-input {
+        font-size: 16px !important;
+      }
+      /* Exception: hint/label text — keep small, not interactive */
+      .ir-field-hint, .pd-field-label, .tm-inv-input::placeholder { font-size: inherit !important; }
+    }
+
+    /* ── 2. Missing grid collapse rules ── */
+    @media (max-width:520px) {
+      .projects-grid { grid-template-columns:1fr !important; }
+    }
+    @media (max-width:480px) {
+      .team-role-grid { grid-template-columns:1fr !important; }
+      .ir-fin-grid { grid-template-columns:1fr !important; }
+      .tl-grid { grid-template-columns:1fr !important; }
+    }
+
+    /* ── 3. Screen padding on very small screens ── */
+    @media (max-width:380px) {
+      .screen-inner { padding-top:48px; padding-bottom:90px; }
+      .main-inner { padding:0 14px; }
+    }
+
+    /* ── 4. Team invite panel — single col on very small screens ── */
+    @media (max-width:400px) {
+      .tm-invite-row { grid-template-columns:1fr !important; }
+      .tm-inv-btn { width:100%; }
+    }
+
+    /* ── 5. Thinker card — full width on phone, reduce padding ── */
+    @media (max-width:480px) {
+      .tl-card { padding:16px; border-radius:12px; }
+      .tl-card-top { gap:10px; margin-bottom:10px; }
+      .tl-avatar { width:40px; height:40px; }
+      .tl-lens-text { font-size:13.5px; margin-bottom:10px; }
+    }
+
+    /* ── 6. Member cards on mobile ── */
+    @media (max-width:480px) {
+      .tm-member-card { padding:11px 13px; gap:10px; }
+      .tm-member-name { font-size:13px; }
+      .tm-member-btn { padding:5px 10px; font-size:11.5px; }
+    }
+
+    /* ── 7. Project detail 2-col collapsing properly ── */
+    @media (max-width:480px) {
+      .pd-2col { grid-template-columns:1fr !important; }
+    }
+
+    /* ── 8. IR page fixes on mobile ── */
+    @media (max-width:520px) {
+      .ir-command-strip,
+      .ir-links-panel { border-radius:12px; padding:16px; }
+      .ir-section { border-radius:12px; }
+    }
+
+    /* ── 9. Content topbar on narrow screens ── */
+    @media (max-width:360px) {
+      .content-topbar { padding:0 12px; }
+      .screen-title { font-size:20px; }
+    }
+    .tl-section-controls { display:flex; align-items:center; gap:8px; margin-bottom:16px; }
+    .tl-section-controls .tl-filter-btn { font-size:12px; font-weight:600; padding:6px 15px; border-radius:var(--r-pill); border:1.5px solid var(--border-md); background:var(--surface); color:var(--text-2); cursor:pointer; transition:all .15s; }
+    .tl-section-controls .tl-filter-btn:hover { border-color:var(--accent-bdr); color:var(--accent); }
+    .tl-section-controls .tl-filter-btn.active { background:var(--accent); border-color:var(--accent); color:#fff; }
     .tl-card-top { display:flex; align-items:center; gap:13px; margin-bottom:14px; }
-    .tl-avatar { width:46px; height:46px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:14px; font-weight:700; color:#fff; flex-shrink:0; transition:box-shadow .4s; }
+    .tl-avatar { width:48px; height:48px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:14px; font-weight:700; color:#fff; flex-shrink:0; transition:box-shadow .4s; box-shadow:0 3px 8px rgba(0,0,0,.16); letter-spacing:.02em; }
     .tl-name { font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:var(--text-0); line-height:1.35; }
     .tl-title { font-size:9.5px; font-weight:700; letter-spacing:.07em; text-transform:uppercase; color:var(--text-3); margin-top:3px; }
     .tl-lens-label { font-size:9px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:var(--text-3); margin-bottom:5px; }
@@ -1773,7 +2136,7 @@
     .tl-demand-bar-bg { flex:1; height:4px; background:var(--border-md); border-radius:2px; overflow:hidden; }
     .tl-demand-fill { height:100%; background:var(--accent); border-radius:2px; transition:width .6s ease; }
     .tl-demand-label { font-size:10px; font-weight:700; color:var(--text-3); white-space:nowrap; }
-    .tl-acquire-btn { width:100%; background:transparent; color:var(--text-2); border:1.5px solid var(--border-md); border-radius:var(--r-pill); padding:9px; font-size:12px; font-weight:700; cursor:pointer; transition:background .15s,color .15s,border-color .15s; display:flex; align-items:center; justify-content:center; gap:6px; }
+    .tl-acquire-btn { width:100%; background:transparent; color:var(--text-2); border:1.5px solid var(--border-md); border-radius:var(--r-pill); padding:10px; font-size:12px; font-weight:600; cursor:pointer; transition:background .15s,color .15s,border-color .15s,box-shadow .15s; display:flex; align-items:center; justify-content:center; gap:6px; letter-spacing:.01em; }
     .tl-acquire-btn:hover { background:var(--accent); color:#fff; border-color:var(--accent); }
 
     /* ═══ INQUIRY STREAM ═══ */
@@ -4462,19 +4825,7 @@
         placeholder="New conversation" maxlength="80"
         onblur="saveChatTitle()"
         onkeydown="if(event.key==='Enter'){this.blur()}">
-      <button class="lens-switcher" onclick="openPicker()" aria-label="Switch perspective">
-        <span class="lens-swap-icon">
-          <svg width="15" height="15" viewBox="0 0 15 15" fill="none" stroke="currentColor" stroke-width="1.75">
-            <path d="M2 5h9M8 2l3 3-3 3"/>
-            <path d="M13 10H4M7 7l-3 3 3 3"/>
-          </svg>
-        </span>
-        <div class="lens-info">
-          <span class="lens-eyebrow">Perspective</span>
-          <span class="lens-name" id="lens-name">Michael Akindele</span>
-        </div>
-        <div class="lens-color-dot" id="lens-dot" style="background:#BF452A"></div>
-      </button>
+
     </div>
 
     <!-- SCREEN 0: Home — Divine Command Center -->
@@ -4591,7 +4942,7 @@
                   </div>
                   <div class="is-scenario-delta" id="dc-scenario-delta" style="margin-top:8px">Enter values to model revenue trajectory</div>
                   <button class="is-scenario-challenge" id="dc-scenario-challenge" onclick="challengeScenarioModel('dc')">
-                    Audit this model →
+                    Get perspective →
                   </button>
                 </div>
 
@@ -6220,7 +6571,7 @@ e.g. I always start by validating whether the problem is real before evaluating 
               <div class="ir-field">
                 <label>Company URL slug</label>
                 <div class="ir-slug-row">
-                  <div class="ir-slug-prefix">divine.app/c/</div>
+                  <div class="ir-slug-prefix">divine.uncharted.ventures/c/</div>
                   <input class="ir-slug-input" id="ir-slug" placeholder="vela-payments"
                     oninput="irSlugInput(this)">
                   <div class="ir-slug-check" id="ir-slug-check">✓ available</div>
@@ -6422,34 +6773,40 @@ e.g. I always start by validating whether the problem is real before evaluating 
     <div class="screen" id="screen-thought-leaders">
       <div class="main-inner"><div class="screen-inner">
         <div class="screen-header">
-          <div class="screen-label">Explore</div>
+          <div class="screen-label">People</div>
           <h2 class="screen-title">Team</h2>
-          <p class="screen-sub">Build your team — connect with Thinkers, invite advisors, attract investors, and delegate to staff.</p>
+          <p class="screen-sub">Build the team behind your vision — connect with Thinkers, invite advisors, attract investors, and delegate to staff.</p>
         </div>
 
-        <!-- Invite Panel -->
+        <!-- Invite Command Strip -->
         <div class="tm-invite-panel" id="tm-invite-panel">
-          <div class="tm-invite-label">Invite a team member</div>
+          <div class="tm-invite-label">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="6" cy="4" r="2.5"/><path d="M1 12c0-2.76 2.24-5 5-5s5 2.24 5 5"/><line x1="11" y1="6" x2="13" y2="6"/><line x1="12" y1="5" x2="12" y2="7"/></svg>
+            Add team member
+          </div>
           <div class="tm-invite-row">
             <input id="tm-inv-email" type="email" placeholder="Email address" class="tm-inv-input">
             <input id="tm-inv-name" type="text" placeholder="Name (optional)" class="tm-inv-input">
             <select id="tm-inv-role" class="tm-inv-select">
-              <option value="thinker">Thinker</option>
               <option value="advisory">Advisor</option>
               <option value="investor">Investor</option>
               <option value="staff">Staff</option>
+              <option value="thinker">Thinker</option>
             </select>
-            <button class="tm-inv-btn" onclick="tmInviteMember()">Add member →</button>
+            <button class="tm-inv-btn" onclick="tmInviteMember()">Add member</button>
           </div>
         </div>
 
         <!-- Section: Thinkers -->
         <div class="tm-section" id="tms-thinkers">
           <div class="tm-section-head">
-            <div class="tm-section-title">Thinkers</div>
+            <div class="tm-section-icon">
+              <svg width="16" height="16" viewBox="0 0 26 26" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="13" cy="13" r="3"/><circle cx="13" cy="3.5" r="2"/><circle cx="21" cy="8" r="2"/><circle cx="21" cy="18" r="2"/><circle cx="13" cy="22.5" r="2"/><circle cx="5" cy="18" r="2"/><circle cx="5" cy="8" r="2"/><line x1="13" y1="16" x2="13" y2="5.5"/><line x1="15.5" y1="11.2" x2="19" y2="9.8"/><line x1="15.5" y1="14.8" x2="19" y2="16.2"/><line x1="13" y1="16" x2="13" y2="20.5"/><line x1="10.5" y1="14.8" x2="7" y2="16.2"/><line x1="10.5" y1="11.2" x2="7" y2="9.8"/></svg>
+            </div>
+            <div class="tm-section-title">Thinker Lab</div>
             <span class="tm-section-badge" id="tms-thinker-count">0</span>
           </div>
-          <div class="tl-filter-row">
+          <div class="tl-section-controls">
             <button class="tl-filter-btn active" id="tl-btn-top" onclick="setTlFilter('top')">Top Sought</button>
             <button class="tl-filter-btn" id="tl-btn-recent" onclick="setTlFilter('recent')">Recently Added</button>
           </div>
@@ -6460,6 +6817,9 @@ e.g. I always start by validating whether the problem is real before evaluating 
         <!-- Section: Advisors -->
         <div class="tm-section" id="tms-advisors">
           <div class="tm-section-head">
+            <div class="tm-section-icon">
+              <svg width="16" height="16" viewBox="0 0 26 26" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="13" cy="13" r="9"/><circle cx="13" cy="13" r="5"/><circle cx="13" cy="13" r="1.5" fill="currentColor" stroke="none"/></svg>
+            </div>
             <div class="tm-section-title">Advisory Board</div>
             <span class="tm-section-badge" id="tms-adv-count">0</span>
           </div>
@@ -6469,6 +6829,9 @@ e.g. I always start by validating whether the problem is real before evaluating 
         <!-- Section: Investors -->
         <div class="tm-section" id="tms-investors">
           <div class="tm-section-head">
+            <div class="tm-section-icon">
+              <svg width="16" height="16" viewBox="0 0 26 26" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="16" width="5" height="7" rx="0.5"/><rect x="10.5" y="10" width="5" height="13" rx="0.5"/><rect x="18" y="4" width="5" height="19" rx="0.5"/><line x1="2" y1="23" x2="24" y2="23"/></svg>
+            </div>
             <div class="tm-section-title">Investors</div>
             <span class="tm-section-badge" id="tms-inv-count">0</span>
           </div>
@@ -6478,7 +6841,10 @@ e.g. I always start by validating whether the problem is real before evaluating 
         <!-- Section: Staff -->
         <div class="tm-section" id="tms-staff">
           <div class="tm-section-head">
-            <div class="tm-section-title">Staff</div>
+            <div class="tm-section-icon">
+              <svg width="16" height="16" viewBox="0 0 26 26" fill="currentColor"><path d="M15 2L6 14h7l-1.5 10L22 12h-7z"/></svg>
+            </div>
+            <div class="tm-section-title">Staff Terminal</div>
             <span class="tm-section-badge" id="tms-staff-count">0</span>
           </div>
           <div class="tm-member-list" id="tms-staff-list"></div>
@@ -8700,7 +9066,7 @@ function renderTeamMemberSections() {
   if (advList) {
     advList.innerHTML = advisors.length
       ? advisors.map((a,i) => _tmMemberCard(a,'advisory',i)).join('')
-      : '<div class="tm-empty">Your advisory board is empty. Invite your first domain expert above.</div>';
+      : '<div class="tm-empty"><div class="tm-empty-title">No advisors yet</div><div class="tm-empty-sub">Invite domain experts in Marketing, Product, and Sales — they see your team outputs, not your finances.</div></div>';
   }
   // Investors
   const investors = loadTeamInvestors();
@@ -8710,7 +9076,7 @@ function renderTeamMemberSections() {
   if (invList) {
     invList.innerHTML = investors.length
       ? investors.map((m,i) => _tmMemberCard(m,'investor',i)).join('')
-      : '<div class="tm-empty">No investors yet. Add your first through the invite form above.</div>';
+      : '<div class="tm-empty"><div class="tm-empty-title">No investors yet</div><div class="tm-empty-sub">Add investors to give them live access to your data room via the Investor Room.</div></div>';
   }
   // Staff
   const staff  = loadTeamStaff();
@@ -8720,7 +9086,7 @@ function renderTeamMemberSections() {
   if (stList) {
     stList.innerHTML = staff.length
       ? staff.map((m,i) => _tmMemberCard(m,'staff',i)).join('')
-      : '<div class="tm-empty">No staff yet. Add your first through the invite form above.</div>';
+      : '<div class="tm-empty"><div class="tm-empty-title">No staff yet</div><div class="tm-empty-sub">Delegate tasks with clear Success Protocols — everyone knows exactly what done looks like.</div></div>';
   }
 }
 
@@ -18095,10 +18461,10 @@ document.addEventListener('keydown', function _lpKeyCapture(e) {
     .tl-domain-chip.active { background:var(--text-0); border-color:var(--text-0); color:#fff; }
     .tl-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:14px; }
     @media (max-width:560px) { .tl-grid { grid-template-columns:1fr; } }
-    .tl-card { background:var(--surface); border:1.5px solid var(--border); border-radius:14px; padding:20px; cursor:pointer; transition:border-color .15s,box-shadow .15s,transform .15s,opacity .4s; }
-    .tl-card:hover { border-color:var(--accent-bdr); box-shadow:0 4px 18px rgba(191,69,42,.09); transform:translateY(-1px); }
+    .tl-card { background:var(--surface); border:1.5px solid var(--border); border-radius:16px; padding:22px; cursor:pointer; transition:border-color .2s,box-shadow .2s,transform .18s,opacity .4s; }
+    .tl-card:hover { border-color:var(--accent-bdr); box-shadow:0 6px 24px rgba(191,69,42,.1); transform:translateY(-2px); }
     .tl-card-top { display:flex; align-items:center; gap:13px; margin-bottom:14px; }
-    .tl-avatar { width:46px; height:46px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:14px; font-weight:700; color:#fff; flex-shrink:0; transition:box-shadow .4s; }
+    .tl-avatar { width:48px; height:48px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:14px; font-weight:700; color:#fff; flex-shrink:0; transition:box-shadow .4s; box-shadow:0 3px 8px rgba(0,0,0,.16); letter-spacing:.02em; }
     .tl-name { font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:var(--text-0); line-height:1.35; }
     .tl-title { font-size:9.5px; font-weight:700; letter-spacing:.07em; text-transform:uppercase; color:var(--text-3); margin-top:3px; }
     .tl-lens-label { font-size:9px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:var(--text-3); margin-bottom:5px; }
@@ -18107,7 +18473,7 @@ document.addEventListener('keydown', function _lpKeyCapture(e) {
     .tl-demand-bar-bg { flex:1; height:4px; background:var(--border-md); border-radius:2px; overflow:hidden; }
     .tl-demand-fill { height:100%; background:var(--accent); border-radius:2px; transition:width .6s ease; }
     .tl-demand-label { font-size:10px; font-weight:700; color:var(--text-3); white-space:nowrap; }
-    .tl-acquire-btn { width:100%; background:transparent; color:var(--text-2); border:1.5px solid var(--border-md); border-radius:var(--r-pill); padding:9px; font-size:12px; font-weight:700; cursor:pointer; transition:background .15s,color .15s,border-color .15s; display:flex; align-items:center; justify-content:center; gap:6px; }
+    .tl-acquire-btn { width:100%; background:transparent; color:var(--text-2); border:1.5px solid var(--border-md); border-radius:var(--r-pill); padding:10px; font-size:12px; font-weight:600; cursor:pointer; transition:background .15s,color .15s,border-color .15s,box-shadow .15s; display:flex; align-items:center; justify-content:center; gap:6px; letter-spacing:.01em; }
     .tl-acquire-btn:hover { background:var(--accent); color:#fff; border-color:var(--accent); }
 
     /* ═══ INQUIRY STREAM ═══ */
@@ -20387,6 +20753,20 @@ document.addEventListener('keydown', function _lpKeyCapture(e) {
       .splash-title  { font-size:30px; }
       .splash-btn-login, .splash-btn-signup { padding:13px 28px; font-size:14px; }
     }
+  
+    /* ── Mobile fixes (synced from primary stylesheet) ── */
+    @media (max-width:680px) {
+      input, select, textarea { font-size:16px !important; }
+    }
+    @media (max-width:520px) {
+      .projects-grid { grid-template-columns:1fr !important; }
+    }
+    @media (max-width:480px) {
+      .team-role-grid { grid-template-columns:1fr !important; }
+      .ir-fin-grid { grid-template-columns:1fr !important; }
+      .tl-grid { grid-template-columns:1fr !important; }
+      .tl-card { padding:16px; border-radius:12px; }
+    }
   </style>
   <!-- PDF text extraction -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
@@ -20796,19 +21176,7 @@ document.addEventListener('keydown', function _lpKeyCapture(e) {
         placeholder="New conversation" maxlength="80"
         onblur="saveChatTitle()"
         onkeydown="if(event.key==='Enter'){this.blur()}">
-      <button class="lens-switcher" onclick="openPicker()" aria-label="Switch perspective">
-        <span class="lens-swap-icon">
-          <svg width="15" height="15" viewBox="0 0 15 15" fill="none" stroke="currentColor" stroke-width="1.75">
-            <path d="M2 5h9M8 2l3 3-3 3"/>
-            <path d="M13 10H4M7 7l-3 3 3 3"/>
-          </svg>
-        </span>
-        <div class="lens-info">
-          <span class="lens-eyebrow">Perspective</span>
-          <span class="lens-name" id="lens-name">Michael Akindele</span>
-        </div>
-        <div class="lens-color-dot" id="lens-dot" style="background:#BF452A"></div>
-      </button>
+
     </div>
 
     <!-- SCREEN 0: Home — Divine Command Center -->
@@ -20925,7 +21293,7 @@ document.addEventListener('keydown', function _lpKeyCapture(e) {
                   </div>
                   <div class="is-scenario-delta" id="dc-scenario-delta" style="margin-top:8px">Enter values to model revenue trajectory</div>
                   <button class="is-scenario-challenge" id="dc-scenario-challenge" onclick="challengeScenarioModel('dc')">
-                    Audit this model →
+                    Get perspective →
                   </button>
                 </div>
 
@@ -22554,7 +22922,7 @@ e.g. I always start by validating whether the problem is real before evaluating 
               <div class="ir-field">
                 <label>Company URL slug</label>
                 <div class="ir-slug-row">
-                  <div class="ir-slug-prefix">divine.app/c/</div>
+                  <div class="ir-slug-prefix">divine.uncharted.ventures/c/</div>
                   <input class="ir-slug-input" id="ir-slug" placeholder="vela-payments"
                     oninput="irSlugInput(this)">
                   <div class="ir-slug-check" id="ir-slug-check">✓ available</div>
@@ -22756,34 +23124,40 @@ e.g. I always start by validating whether the problem is real before evaluating 
     <div class="screen" id="screen-thought-leaders">
       <div class="main-inner"><div class="screen-inner">
         <div class="screen-header">
-          <div class="screen-label">Explore</div>
+          <div class="screen-label">People</div>
           <h2 class="screen-title">Team</h2>
-          <p class="screen-sub">Build your team — connect with Thinkers, invite advisors, attract investors, and delegate to staff.</p>
+          <p class="screen-sub">Build the team behind your vision — connect with Thinkers, invite advisors, attract investors, and delegate to staff.</p>
         </div>
 
-        <!-- Invite Panel -->
+        <!-- Invite Command Strip -->
         <div class="tm-invite-panel" id="tm-invite-panel">
-          <div class="tm-invite-label">Invite a team member</div>
+          <div class="tm-invite-label">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="6" cy="4" r="2.5"/><path d="M1 12c0-2.76 2.24-5 5-5s5 2.24 5 5"/><line x1="11" y1="6" x2="13" y2="6"/><line x1="12" y1="5" x2="12" y2="7"/></svg>
+            Add team member
+          </div>
           <div class="tm-invite-row">
             <input id="tm-inv-email" type="email" placeholder="Email address" class="tm-inv-input">
             <input id="tm-inv-name" type="text" placeholder="Name (optional)" class="tm-inv-input">
             <select id="tm-inv-role" class="tm-inv-select">
-              <option value="thinker">Thinker</option>
               <option value="advisory">Advisor</option>
               <option value="investor">Investor</option>
               <option value="staff">Staff</option>
+              <option value="thinker">Thinker</option>
             </select>
-            <button class="tm-inv-btn" onclick="tmInviteMember()">Add member →</button>
+            <button class="tm-inv-btn" onclick="tmInviteMember()">Add member</button>
           </div>
         </div>
 
         <!-- Section: Thinkers -->
         <div class="tm-section" id="tms-thinkers">
           <div class="tm-section-head">
-            <div class="tm-section-title">Thinkers</div>
+            <div class="tm-section-icon">
+              <svg width="16" height="16" viewBox="0 0 26 26" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="13" cy="13" r="3"/><circle cx="13" cy="3.5" r="2"/><circle cx="21" cy="8" r="2"/><circle cx="21" cy="18" r="2"/><circle cx="13" cy="22.5" r="2"/><circle cx="5" cy="18" r="2"/><circle cx="5" cy="8" r="2"/><line x1="13" y1="16" x2="13" y2="5.5"/><line x1="15.5" y1="11.2" x2="19" y2="9.8"/><line x1="15.5" y1="14.8" x2="19" y2="16.2"/><line x1="13" y1="16" x2="13" y2="20.5"/><line x1="10.5" y1="14.8" x2="7" y2="16.2"/><line x1="10.5" y1="11.2" x2="7" y2="9.8"/></svg>
+            </div>
+            <div class="tm-section-title">Thinker Lab</div>
             <span class="tm-section-badge" id="tms-thinker-count">0</span>
           </div>
-          <div class="tl-filter-row">
+          <div class="tl-section-controls">
             <button class="tl-filter-btn active" id="tl-btn-top" onclick="setTlFilter('top')">Top Sought</button>
             <button class="tl-filter-btn" id="tl-btn-recent" onclick="setTlFilter('recent')">Recently Added</button>
           </div>
@@ -22794,6 +23168,9 @@ e.g. I always start by validating whether the problem is real before evaluating 
         <!-- Section: Advisors -->
         <div class="tm-section" id="tms-advisors">
           <div class="tm-section-head">
+            <div class="tm-section-icon">
+              <svg width="16" height="16" viewBox="0 0 26 26" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="13" cy="13" r="9"/><circle cx="13" cy="13" r="5"/><circle cx="13" cy="13" r="1.5" fill="currentColor" stroke="none"/></svg>
+            </div>
             <div class="tm-section-title">Advisory Board</div>
             <span class="tm-section-badge" id="tms-adv-count">0</span>
           </div>
@@ -22803,6 +23180,9 @@ e.g. I always start by validating whether the problem is real before evaluating 
         <!-- Section: Investors -->
         <div class="tm-section" id="tms-investors">
           <div class="tm-section-head">
+            <div class="tm-section-icon">
+              <svg width="16" height="16" viewBox="0 0 26 26" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="16" width="5" height="7" rx="0.5"/><rect x="10.5" y="10" width="5" height="13" rx="0.5"/><rect x="18" y="4" width="5" height="19" rx="0.5"/><line x1="2" y1="23" x2="24" y2="23"/></svg>
+            </div>
             <div class="tm-section-title">Investors</div>
             <span class="tm-section-badge" id="tms-inv-count">0</span>
           </div>
@@ -22812,7 +23192,10 @@ e.g. I always start by validating whether the problem is real before evaluating 
         <!-- Section: Staff -->
         <div class="tm-section" id="tms-staff">
           <div class="tm-section-head">
-            <div class="tm-section-title">Staff</div>
+            <div class="tm-section-icon">
+              <svg width="16" height="16" viewBox="0 0 26 26" fill="currentColor"><path d="M15 2L6 14h7l-1.5 10L22 12h-7z"/></svg>
+            </div>
+            <div class="tm-section-title">Staff Terminal</div>
             <span class="tm-section-badge" id="tms-staff-count">0</span>
           </div>
           <div class="tm-member-list" id="tms-staff-list"></div>
