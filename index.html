@@ -2006,18 +2006,33 @@
     .tl-card:hover { border-color:var(--accent-bdr); box-shadow:0 6px 24px rgba(191,69,42,.1); transform:translateY(-2px); }
     /* Team page — invite panel + role sections */
     /* ── Team page — premium redesign ────────────────────────── */
-    .tm-invite-panel { background:var(--surface); border:1.5px solid var(--border); border-radius:16px; padding:22px 24px; margin-bottom:36px; box-shadow:0 1px 4px rgba(0,0,0,.04); }
-    .tm-invite-label { font-size:11.5px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:var(--text-3); margin-bottom:16px; display:flex; align-items:center; gap:8px; }
-    .tm-invite-label svg { opacity:.6; }
-    .tm-invite-row { display:grid; grid-template-columns:1fr 1fr minmax(130px,auto) auto; gap:10px; align-items:center; }
-    @media (max-width:640px) { .tm-invite-row { grid-template-columns:1fr 1fr; } .tm-inv-btn { grid-column:1/-1; } }
-    .tm-inv-input { padding:10px 14px; font-size:13.5px; font-family:'Inter',sans-serif; border:1.5px solid var(--border-md); border-radius:10px; background:var(--surface-2); color:var(--text-0); outline:none; transition:border-color .15s,background .15s,box-shadow .15s; }
+    /* ── Team page header CTA button ── */
+    .tm-page-actions { display:flex; align-items:flex-start; justify-content:space-between; gap:16px; margin-bottom:32px; }
+    .tm-page-text { flex:1; min-width:0; }
+    .tm-add-btn { display:inline-flex; align-items:center; gap:7px; padding:9px 18px; border:none; border-radius:10px; background:var(--accent); color:#fff; font-size:13px; font-weight:600; cursor:pointer; white-space:nowrap; flex-shrink:0; transition:opacity .15s,box-shadow .15s; letter-spacing:.01em; margin-top:4px; }
+    .tm-add-btn:hover { opacity:.9; box-shadow:0 4px 14px rgba(191,69,42,.28); }
+    /* ── Invite modal ── */
+    .tm-modal-overlay { display:none; position:fixed; inset:0; z-index:800; background:rgba(15,14,12,0.4); backdrop-filter:blur(6px); -webkit-backdrop-filter:blur(6px); align-items:center; justify-content:center; }
+    .tm-modal-overlay.open { display:flex; }
+    .tm-modal { background:#fff; border-radius:18px; padding:28px; width:min(460px,92vw); box-shadow:0 24px 60px rgba(0,0,0,0.18),0 4px 16px rgba(0,0,0,0.08); display:flex; flex-direction:column; gap:0; animation:tm-modal-in .2s cubic-bezier(.34,1.3,.64,1); }
+    @keyframes tm-modal-in { from { opacity:0; transform:translateY(10px) scale(.97); } to { opacity:1; transform:none; } }
+    .tm-modal-head { display:flex; align-items:center; justify-content:space-between; margin-bottom:22px; }
+    .tm-modal-title { font-size:16px; font-weight:700; color:var(--text-0); letter-spacing:-.01em; }
+    .tm-modal-close { width:32px; height:32px; border:none; background:var(--surface-2); border-radius:8px; cursor:pointer; display:flex; align-items:center; justify-content:center; color:var(--text-2); transition:background .15s; }
+    .tm-modal-close:hover { background:var(--surface-3); color:var(--text-0); }
+    .tm-modal-field { display:flex; flex-direction:column; gap:5px; margin-bottom:14px; }
+    .tm-modal-label { font-size:12px; font-weight:600; color:var(--text-2); letter-spacing:.02em; }
+    .tm-modal-footer { display:flex; gap:10px; margin-top:24px; }
+    .tm-modal-cancel { flex:1; padding:11px; border:1.5px solid var(--border-md); border-radius:10px; background:transparent; color:var(--text-2); font-size:13.5px; font-weight:500; cursor:pointer; transition:border-color .15s,color .15s; font-family:'Inter',sans-serif; }
+    .tm-modal-cancel:hover { border-color:var(--text-2); color:var(--text-0); }
+    .tm-modal-submit { flex:2; padding:11px; border:none; border-radius:10px; background:var(--accent); color:#fff; font-size:13.5px; font-weight:600; cursor:pointer; transition:opacity .15s,box-shadow .15s; letter-spacing:.01em; font-family:'Inter',sans-serif; }
+    .tm-modal-submit:hover { opacity:.9; box-shadow:0 4px 14px rgba(191,69,42,.28); }
+    .tm-inv-input { padding:10px 14px; font-size:13.5px; font-family:'Inter',sans-serif; border:1.5px solid var(--border-md); border-radius:10px; background:var(--surface-2); color:var(--text-0); outline:none; transition:border-color .15s,background .15s,box-shadow .15s; width:100%; }
     .tm-inv-input:focus { border-color:var(--accent); background:#fff; box-shadow:0 0 0 3px rgba(191,69,42,.07); }
     .tm-inv-input::placeholder { color:var(--text-3); }
-    .tm-inv-select { padding:10px 32px 10px 14px; font-size:13.5px; font-family:'Inter',sans-serif; border:1.5px solid var(--border-md); border-radius:10px; background:var(--surface-2) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23999' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat right 12px center; color:var(--text-0); outline:none; cursor:pointer; transition:border-color .15s; appearance:none; -webkit-appearance:none; }
+    .tm-inv-select { padding:10px 32px 10px 14px; font-size:13.5px; font-family:'Inter',sans-serif; border:1.5px solid var(--border-md); border-radius:10px; background:var(--surface-2) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23999' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat right 12px center; color:var(--text-0); outline:none; cursor:pointer; transition:border-color .15s; appearance:none; -webkit-appearance:none; width:100%; }
     .tm-inv-select:focus { border-color:var(--accent); }
-    .tm-inv-btn { padding:10px 22px; font-size:13.5px; font-weight:600; border:none; border-radius:10px; background:var(--accent); color:#fff; cursor:pointer; white-space:nowrap; transition:opacity .15s,box-shadow .15s; letter-spacing:.01em; }
-    .tm-inv-btn:hover { opacity:.9; box-shadow:0 4px 14px rgba(191,69,42,.28); }
+    .tm-inv-btn { display:none; }
     .tm-section { margin-bottom:44px; }
     .tm-section-head { display:flex; align-items:center; gap:11px; margin-bottom:18px; padding-bottom:14px; border-bottom:1.5px solid var(--border); }
     .tm-section-icon { width:32px; height:32px; border-radius:9px; background:var(--surface-2); border:1.5px solid var(--border); display:flex; align-items:center; justify-content:center; color:var(--text-2); flex-shrink:0; }
@@ -6772,29 +6787,16 @@ e.g. I always start by validating whether the problem is real before evaluating 
     <!-- SCREEN: Team -->
     <div class="screen" id="screen-thought-leaders">
       <div class="main-inner"><div class="screen-inner">
-        <div class="screen-header">
-          <div class="screen-label">People</div>
-          <h2 class="screen-title">Team</h2>
-          <p class="screen-sub">Build the team behind your vision — connect with Thinkers, invite advisors, attract investors, and delegate to staff.</p>
-        </div>
-
-        <!-- Invite Command Strip -->
-        <div class="tm-invite-panel" id="tm-invite-panel">
-          <div class="tm-invite-label">
-            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="6" cy="4" r="2.5"/><path d="M1 12c0-2.76 2.24-5 5-5s5 2.24 5 5"/><line x1="11" y1="6" x2="13" y2="6"/><line x1="12" y1="5" x2="12" y2="7"/></svg>
-            Add team member
+        <div class="tm-page-actions">
+          <div class="tm-page-text">
+            <div class="screen-label">People</div>
+            <h2 class="screen-title">Team</h2>
+            <p class="screen-sub">Build the team behind your vision — connect with Thinkers, invite advisors, attract investors, and delegate to staff.</p>
           </div>
-          <div class="tm-invite-row">
-            <input id="tm-inv-email" type="email" placeholder="Email address" class="tm-inv-input">
-            <input id="tm-inv-name" type="text" placeholder="Name (optional)" class="tm-inv-input">
-            <select id="tm-inv-role" class="tm-inv-select">
-              <option value="advisory">Advisor</option>
-              <option value="investor">Investor</option>
-              <option value="staff">Staff</option>
-              <option value="thinker">Thinker</option>
-            </select>
-            <button class="tm-inv-btn" onclick="tmInviteMember()">Add member</button>
-          </div>
+          <button class="tm-add-btn" onclick="openInviteModal()">
+            <svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"><line x1="6.5" y1="1" x2="6.5" y2="12"/><line x1="1" y1="6.5" x2="12" y2="6.5"/></svg>
+            Add member
+          </button>
         </div>
 
         <!-- Section: Thinkers -->
@@ -6854,6 +6856,39 @@ e.g. I always start by validating whether the problem is real before evaluating 
     </div>
 
   </main>
+</div>
+
+<!-- ── Add Team Member Modal ─────────────────────────────────────────────── -->
+<div id="tm-invite-modal" class="tm-modal-overlay" onclick="if(event.target===this)closeInviteModal()">
+  <div class="tm-modal">
+    <div class="tm-modal-head">
+      <div class="tm-modal-title">Add team member</div>
+      <button class="tm-modal-close" onclick="closeInviteModal()" aria-label="Close">
+        <svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"><line x1="2" y1="2" x2="11" y2="11"/><line x1="11" y1="2" x2="2" y2="11"/></svg>
+      </button>
+    </div>
+    <div class="tm-modal-field">
+      <label class="tm-modal-label" for="tm-inv-email">Email address</label>
+      <input id="tm-inv-email" type="email" placeholder="colleague@company.com" class="tm-inv-input" autocomplete="email">
+    </div>
+    <div class="tm-modal-field">
+      <label class="tm-modal-label" for="tm-inv-name">Name <span style="font-weight:400;color:var(--text-3)">(optional)</span></label>
+      <input id="tm-inv-name" type="text" placeholder="First and last name" class="tm-inv-input" autocomplete="name">
+    </div>
+    <div class="tm-modal-field" style="margin-bottom:0">
+      <label class="tm-modal-label" for="tm-inv-role">Role</label>
+      <select id="tm-inv-role" class="tm-inv-select">
+        <option value="advisory">Advisor — sees team outputs, not finances</option>
+        <option value="investor">Investor — live data room access</option>
+        <option value="staff">Staff — task delegation with protocols</option>
+        <option value="thinker">Thinker — AI perspective contributor</option>
+      </select>
+    </div>
+    <div class="tm-modal-footer">
+      <button class="tm-modal-cancel" onclick="closeInviteModal()">Cancel</button>
+      <button class="tm-modal-submit" onclick="tmInviteMember()">Send invite</button>
+    </div>
+  </div>
 </div>
 
 <!-- ── Rename Chat Modal ────────────────────────────────────────────────── -->
@@ -8983,6 +9018,22 @@ function saveTeamInvestors(a) { localStorage.setItem(TM_INV_KEY, JSON.stringify(
 function loadTeamStaff()      { try { return JSON.parse(localStorage.getItem(TM_STAFF_KEY)||'[]'); } catch(e){ return []; } }
 function saveTeamStaff(a)     { localStorage.setItem(TM_STAFF_KEY, JSON.stringify(a)); }
 
+function openInviteModal() {
+  const modal = document.getElementById('tm-invite-modal');
+  if (!modal) return;
+  modal.classList.add('open');
+  setTimeout(() => { document.getElementById('tm-inv-email')?.focus(); }, 80);
+}
+
+function closeInviteModal() {
+  const modal = document.getElementById('tm-invite-modal');
+  if (modal) modal.classList.remove('open');
+  const email = document.getElementById('tm-inv-email');
+  const name  = document.getElementById('tm-inv-name');
+  if (email) email.value = '';
+  if (name)  name.value  = '';
+}
+
 function tmInviteMember() {
   const email = document.getElementById('tm-inv-email')?.value.trim();
   const name  = document.getElementById('tm-inv-name')?.value.trim();
@@ -9012,6 +9063,7 @@ function tmInviteMember() {
   }
   document.getElementById('tm-inv-email').value = '';
   document.getElementById('tm-inv-name').value  = '';
+  closeInviteModal();
   showToast(email + ' added to your team.', 'success');
   renderTeamPage();
 }
@@ -16501,6 +16553,13 @@ document.addEventListener('DOMContentLoaded', () => { if (typeof currentUser !==
    originate from an input/textarea/select automatically routes to dc-quick-input.
    This lets the user just start typing anywhere on the home screen.
 ────────────────────────────────────────────────────────────────────────── */
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') {
+    const modal = document.getElementById('tm-invite-modal');
+    if (modal && modal.classList.contains('open')) { closeInviteModal(); return; }
+  }
+});
+
 document.addEventListener('keydown', function _lpKeyCapture(e) {
   // Only activate when Launchpad is the visible screen
   const screen = document.getElementById('screen-0');
@@ -23123,29 +23182,16 @@ e.g. I always start by validating whether the problem is real before evaluating 
     <!-- SCREEN: Team -->
     <div class="screen" id="screen-thought-leaders">
       <div class="main-inner"><div class="screen-inner">
-        <div class="screen-header">
-          <div class="screen-label">People</div>
-          <h2 class="screen-title">Team</h2>
-          <p class="screen-sub">Build the team behind your vision — connect with Thinkers, invite advisors, attract investors, and delegate to staff.</p>
-        </div>
-
-        <!-- Invite Command Strip -->
-        <div class="tm-invite-panel" id="tm-invite-panel">
-          <div class="tm-invite-label">
-            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="6" cy="4" r="2.5"/><path d="M1 12c0-2.76 2.24-5 5-5s5 2.24 5 5"/><line x1="11" y1="6" x2="13" y2="6"/><line x1="12" y1="5" x2="12" y2="7"/></svg>
-            Add team member
+        <div class="tm-page-actions">
+          <div class="tm-page-text">
+            <div class="screen-label">People</div>
+            <h2 class="screen-title">Team</h2>
+            <p class="screen-sub">Build the team behind your vision — connect with Thinkers, invite advisors, attract investors, and delegate to staff.</p>
           </div>
-          <div class="tm-invite-row">
-            <input id="tm-inv-email" type="email" placeholder="Email address" class="tm-inv-input">
-            <input id="tm-inv-name" type="text" placeholder="Name (optional)" class="tm-inv-input">
-            <select id="tm-inv-role" class="tm-inv-select">
-              <option value="advisory">Advisor</option>
-              <option value="investor">Investor</option>
-              <option value="staff">Staff</option>
-              <option value="thinker">Thinker</option>
-            </select>
-            <button class="tm-inv-btn" onclick="tmInviteMember()">Add member</button>
-          </div>
+          <button class="tm-add-btn" onclick="openInviteModal()">
+            <svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"><line x1="6.5" y1="1" x2="6.5" y2="12"/><line x1="1" y1="6.5" x2="12" y2="6.5"/></svg>
+            Add member
+          </button>
         </div>
 
         <!-- Section: Thinkers -->
