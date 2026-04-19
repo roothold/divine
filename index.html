@@ -4597,6 +4597,28 @@
 .role-investor  { background:#E8F5E9; color:#2E7D32; }
 .role-staff     { background:#F3F0F8; color:#5C35A0; }
 
+/* ── QBO info tooltip ── */
+.qbo-info-wrap { position:relative; display:inline-flex; align-items:center; }
+.qbo-info-icon { color:var(--text-3); cursor:default; flex-shrink:0; transition:color .12s; }
+.qbo-info-wrap:hover .qbo-info-icon,
+.qbo-info-wrap:focus-within .qbo-info-icon { color:var(--text-1); }
+.qbo-tooltip {
+  display:none; position:absolute;
+  bottom:calc(100% + 8px); left:50%; transform:translateX(-50%);
+  width:210px; background:#1a1917; color:#f0ede8;
+  font-size:11.5px; line-height:1.6;
+  border-radius:10px; padding:12px 14px;
+  box-shadow:0 4px 20px rgba(0,0,0,.26);
+  z-index:600; pointer-events:none;
+  font-weight:400; text-transform:none; letter-spacing:0;
+}
+.qbo-tooltip::after {
+  content:''; position:absolute; top:100%; left:50%; transform:translateX(-50%);
+  border:5px solid transparent; border-top-color:#1a1917;
+}
+.qbo-info-wrap:hover .qbo-tooltip,
+.qbo-info-wrap:focus-within .qbo-tooltip { display:block; }
+
 /* ══ COMPANY PAGE TEAM SECTION ═══════════════════════════════════════ */
 .cp-team-section { margin-top:0; }
 .cp-team-invite-row { display:grid; grid-template-columns:1fr 1fr auto; gap:10px; align-items:end; margin-bottom:16px; }
@@ -4981,23 +5003,14 @@
 
 <!-- QBO Sync CTA — replaces manual trajectory widget -->
                 <div class="dc-panel-section">
-                  <div class="dc-psec-title">Live Financial Data</div>
-                  <div style="font-size:10.5px;color:var(--text-3);margin-bottom:14px;line-height:1.5">Connect QuickBooks Online to activate live projections — verified revenue, real margins, no manual inputs.</div>
-                  <div style="display:flex;flex-direction:column;gap:8px">
-                    <div style="display:flex;align-items:center;gap:8px;font-size:11px;color:var(--text-2)">
-                      <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"><path d="M2 6l2.5 2.5 5.5-5"/></svg>
-                      Revenue — synced from your P&amp;L
-                    </div>
-                    <div style="display:flex;align-items:center;gap:8px;font-size:11px;color:var(--text-2)">
-                      <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"><path d="M2 6l2.5 2.5 5.5-5"/></svg>
-                      Burn rate — computed from your actuals
-                    </div>
-                    <div style="display:flex;align-items:center;gap:8px;font-size:11px;color:var(--text-2)">
-                      <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"><path d="M2 6l2.5 2.5 5.5-5"/></svg>
-                      12-month projection — model-generated, not guessed
-                    </div>
+                  <div class="dc-psec-title" style="display:flex;align-items:center;gap:5px">
+                    Live Financial Data
+                    <span class="qbo-info-wrap" tabindex="0">
+                      <svg class="qbo-info-icon" width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"><circle cx="6" cy="6" r="5"/><path d="M6 5.5v2.5M6 4h.01"/></svg>
+                      <div class="qbo-tooltip">Connect QuickBooks Online to activate live projections — verified revenue, real margins, no manual inputs.<div style="margin-top:8px;display:flex;flex-direction:column;gap:3px"><div>✓ Revenue — synced from your P&amp;L</div><div>✓ Burn rate — computed from your actuals</div><div>✓ 12-month projection — model-generated</div></div></div>
+                    </span>
                   </div>
-                  <button class="is-scenario-challenge" style="margin-top:14px" onclick="openQBOConnect(this)">
+                  <button class="is-scenario-challenge" style="margin-top:10px" onclick="openQBOConnect(this)">
                     Connect QuickBooks →
                   </button>
                 </div>
@@ -5267,23 +5280,14 @@
 
 <!-- QBO Sync CTA — replaces manual trajectory widget -->
             <div class="dc-panel-section">
-              <div class="dc-psec-title">Live Financial Data</div>
-              <div style="font-size:10.5px;color:var(--text-3);margin-bottom:14px;line-height:1.5">Connect QuickBooks Online to activate live projections — verified revenue, real margins, no manual inputs.</div>
-              <div style="display:flex;flex-direction:column;gap:8px">
-                <div style="display:flex;align-items:center;gap:8px;font-size:11px;color:var(--text-2)">
-                  <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"><path d="M2 6l2.5 2.5 5.5-5"/></svg>
-                  Revenue — synced from your P&amp;L
-                </div>
-                <div style="display:flex;align-items:center;gap:8px;font-size:11px;color:var(--text-2)">
-                  <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"><path d="M2 6l2.5 2.5 5.5-5"/></svg>
-                  Burn rate — computed from your actuals
-                </div>
-                <div style="display:flex;align-items:center;gap:8px;font-size:11px;color:var(--text-2)">
-                  <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"><path d="M2 6l2.5 2.5 5.5-5"/></svg>
-                  12-month projection — model-generated, not guessed
-                </div>
+              <div class="dc-psec-title" style="display:flex;align-items:center;gap:5px">
+                Live Financial Data
+                <span class="qbo-info-wrap" tabindex="0">
+                  <svg class="qbo-info-icon" width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"><circle cx="6" cy="6" r="5"/><path d="M6 5.5v2.5M6 4h.01"/></svg>
+                  <div class="qbo-tooltip">Connect QuickBooks Online to activate live projections — verified revenue, real margins, no manual inputs.<div style="margin-top:8px;display:flex;flex-direction:column;gap:3px"><div>✓ Revenue — synced from your P&amp;L</div><div>✓ Burn rate — computed from your actuals</div><div>✓ 12-month projection — model-generated</div></div></div>
+                </span>
               </div>
-              <button class="is-scenario-challenge" style="margin-top:14px" onclick="openQBOConnect(this)">
+              <button class="is-scenario-challenge" style="margin-top:10px" onclick="openQBOConnect(this)">
                 Connect QuickBooks →
               </button>
             </div>
@@ -5536,19 +5540,14 @@
 
 <!-- QBO Sync CTA — replaces manual trajectory widget -->
             <div class="is-scenario-wrap">
-              <div class="is-scenario-label">Live Financial Data</div>
-              <div style="font-size:10px;color:var(--text-3);margin-bottom:10px;line-height:1.5">Connect QuickBooks Online to activate live projections — verified revenue, real margins, no manual inputs.</div>
-              <div style="display:flex;flex-direction:column;gap:7px;margin-bottom:12px">
-                <div style="display:flex;align-items:center;gap:7px;font-size:11px;color:var(--text-2)">
-                  <svg width="10" height="10" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"><path d="M2 6l2.5 2.5 5.5-5"/></svg>
-                  Revenue — synced from your P&amp;L
-                </div>
-                <div style="display:flex;align-items:center;gap:7px;font-size:11px;color:var(--text-2)">
-                  <svg width="10" height="10" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"><path d="M2 6l2.5 2.5 5.5-5"/></svg>
-                  12-month projection — model-generated, not guessed
-                </div>
+              <div class="is-scenario-label" style="display:flex;align-items:center;gap:5px">
+                Live Financial Data
+                <span class="qbo-info-wrap" tabindex="0">
+                  <svg class="qbo-info-icon" width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"><circle cx="6" cy="6" r="5"/><path d="M6 5.5v2.5M6 4h.01"/></svg>
+                  <div class="qbo-tooltip">Connect QuickBooks Online to activate live projections — verified revenue, real margins, no manual inputs.<div style="margin-top:8px;display:flex;flex-direction:column;gap:3px"><div>✓ Revenue — synced from your P&amp;L</div><div>✓ Burn rate — computed from your actuals</div><div>✓ 12-month projection — model-generated</div></div></div>
+                </span>
               </div>
-              <button class="is-scenario-challenge" onclick="openQBOConnect(this)">
+              <button class="is-scenario-challenge" style="margin-top:10px" onclick="openQBOConnect(this)">
                 Connect QuickBooks →
               </button>
             </div>
