@@ -1850,16 +1850,18 @@
     .cc-hero-title { font-size:12.5px; color:var(--text-3); white-space:nowrap;
       overflow:hidden; text-overflow:ellipsis; }
     /* Neural Network Health metric */
+    /* R2: Model signals replace the phantom NNH bar */
     .cc-hero-nnh { text-align:right; flex-shrink:0; padding-right:4px; }
-    .cc-hero-nnh-label { font-size:9.5px; font-weight:700; letter-spacing:.08em;
-      text-transform:uppercase; color:var(--text-3); margin-bottom:3px; }
-    .cc-hero-nnh-val { font-size:24px; font-weight:800; color:var(--accent);
-      line-height:1; font-variant-numeric:tabular-nums; }
-    .cc-hero-nnh-val span { font-size:13px; font-weight:600; }
-    .cc-hero-nnh-bar { width:72px; height:3px; background:var(--border);
-      border-radius:2px; margin-top:5px; margin-left:auto; overflow:hidden; }
-    .cc-hero-nnh-fill { height:100%; border-radius:2px;
-      background:linear-gradient(90deg, var(--accent,#BF452A), var(--violet,#BF452A)); }
+    .cc-model-signals { display:flex; flex-direction:column; gap:5px; align-items:flex-end; }
+    .cc-ms-row { display:flex; align-items:center; gap:8px; }
+    .cc-ms-label {
+      font-size:9px; font-weight:700; letter-spacing:.09em; text-transform:uppercase;
+      color:var(--text-3); white-space:nowrap;
+    }
+    .cc-ms-val {
+      font-size:11.5px; font-weight:600; color:var(--text-0);
+      font-family:var(--font-mono); white-space:nowrap;
+    }
     .cc-hero-badges { display:flex; flex-direction:column; align-items:flex-end;
       gap:6px; flex-shrink:0; }
     .cc-hero-live { display:inline-flex; align-items:center; gap:5px;
@@ -1886,11 +1888,37 @@
       padding:3px 10px; margin-top:8px; width:fit-content; }
 
     /* Action grid */
-    .cc-actions-label { font-size:10.5px; font-weight:700; letter-spacing:.1em;
-      text-transform:uppercase; color:var(--text-3); margin-bottom:12px;
-      font-family:'Cormorant Garamond',serif; font-size:13px; letter-spacing:.06em; }
-    .cc-action-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:12px; }
-    @media (max-width:500px) { .cc-action-grid { grid-template-columns:1fr; } }
+    /* R1: Next Step card — replaces static Quick Actions tiles */
+    .cc-next-step-wrap { margin-bottom:4px; }
+    .cc-next-step {
+      display:flex; align-items:center; gap:14px;
+      background:var(--surface); border:1.5px solid var(--border);
+      border-radius:var(--r); padding:16px 18px;
+      transition:border-color .15s;
+    }
+    .cc-next-step:hover { border-color:var(--border-hi); }
+    .cc-ns-icon {
+      width:38px; height:38px; border-radius:10px;
+      background:var(--surface-2); display:flex; align-items:center; justify-content:center;
+      flex-shrink:0; color:var(--text-2);
+    }
+    .cc-ns-body { flex:1; min-width:0; }
+    .cc-ns-title {
+      font-size:13.5px; font-weight:700; color:var(--text-0);
+      line-height:1.3; margin-bottom:3px;
+    }
+    .cc-ns-sub {
+      font-size:12px; color:var(--text-3); line-height:1.45;
+    }
+    .cc-ns-cta {
+      flex-shrink:0; padding:8px 14px; border-radius:8px;
+      border:1.5px solid var(--border-hi); background:transparent;
+      font-size:12.5px; font-weight:600; color:var(--text-1);
+      cursor:pointer; font-family:'Inter',sans-serif;
+      transition:background .14s, border-color .14s, color .14s;
+      white-space:nowrap;
+    }
+    .cc-ns-cta:hover { background:var(--surface-2); border-color:var(--text-1); color:var(--text-0); }
     .cc-action-tile { background:var(--surface); border:1.5px solid var(--border);
       border-radius:14px; padding:22px 24px; cursor:pointer; text-align:left;
       transition:border-color .15s, box-shadow .15s, transform .15s;
@@ -3846,7 +3874,7 @@
                   </div>
                   <div class="is-scenario-delta" id="dc-scenario-delta" style="margin-top:8px">Enter values to model revenue trajectory</div>
                   <button class="is-scenario-challenge" id="dc-scenario-challenge" onclick="challengeScenarioModel('dc')">
-                    Get the perspective →
+                    Get perspective →
                   </button>
                 </div>
 
@@ -4132,7 +4160,7 @@
               </div>
               <div class="is-scenario-delta" id="chat-scenario-delta" style="margin-top:8px">Enter values to model revenue trajectory</div>
               <button class="is-scenario-challenge" id="chat-scenario-challenge" onclick="challengeScenarioModel('chat')">
-                Get the perspective →
+                Get perspective →
               </button>
             </div>
 
@@ -4406,7 +4434,7 @@
               </div>
               <div class="is-scenario-delta" id="is-scenario-delta">Enter values to model revenue trajectory</div>
               <button class="is-scenario-challenge" id="is-scenario-challenge" onclick="challengeScenarioModel('is')">
-                Get the perspective →
+                Get perspective →
               </button>
             </div>
 
@@ -4734,9 +4762,9 @@
         <svg width="15" height="15" viewBox="0 0 15 15" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="1" y="1" width="5.5" height="5.5" rx="1.2"/><rect x="8.5" y="1" width="5.5" height="5.5" rx="1.2"/><rect x="1" y="8.5" width="5.5" height="5.5" rx="1.2"/><rect x="8.5" y="8.5" width="5.5" height="5.5" rx="1.2"/></svg>
         Summary
       </button>
-      <button class="thinker-tab thinker-tab-launch" onclick="openObFlow()" title="Launch full-screen onboarding">
-        <svg width="15" height="15" viewBox="0 0 15 15" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M7.5 1.5L13 4v4c0 3.3-2.5 5.5-5.5 6C4.5 13.5 2 11.3 2 8V4l5.5-2.5z"/><path d="M5 7.5l2 2 3.5-3.5"/></svg>
-        Initiate
+      <button class="thinker-tab thinker-tab-launch" id="thinker-tab-setup" onclick="openObFlow()" title="Thinker setup wizard">
+        <svg class="tab-setup-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="7.5" cy="7.5" r="6"/><path d="M7.5 5v3l1.5 1.5"/></svg>
+        Setup
       </button>
       <button class="thinker-tab" onclick="switchThinkerTab('train',this)">
         <svg width="15" height="15" viewBox="0 0 15 15" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M7.5 2a5.5 5.5 0 100 11"/><path d="M7.5 5a2.5 2.5 0 100 5 2.5 2.5 0 000-5z"/><path d="M13 7.5h-1M12.2 4l-.7.7M10 2.8l-.7.7"/></svg>
@@ -4793,75 +4821,10 @@
         </div>
       </div>
 
-      <!-- Action tiles -->
-      <div>
-        <div class="cc-actions-label">Quick Actions</div>
-        <div class="cc-action-grid">
-
-          <button class="cc-action-tile" onclick="switchThinkerTab('onboarding', null)">
-            <div class="cc-tile-icon cc-tile-icon-violet">
-              <svg width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M8 1l1.5 3 3.5.5-2.5 2.5.6 3.5L8 9l-3.1 1.5.6-3.5L3 4.5 6.5 4z"/></svg>
-            </div>
-            <div class="cc-tile-body">
-              <div class="cc-tile-title">Onboarding</div>
-              <div class="cc-tile-desc">Set up your identity, cognitive lens, and thinking framework.</div>
-            </div>
-            <div class="cc-tile-cta">Open →</div>
-          </button>
-
-          <button class="cc-action-tile" onclick="switchThinkerTab('train', document.querySelectorAll('.thinker-tab')[2])">
-            <!-- Subtle mesh pattern hint -->
-            <div class="cc-tile-mesh" aria-hidden="true">
-              <svg viewBox="0 0 100 70" fill="none" stroke="currentColor" stroke-width="1">
-                <circle cx="10" cy="35" r="4"/><circle cx="35" cy="15" r="4"/><circle cx="35" cy="55" r="4"/>
-                <circle cx="65" cy="20" r="4"/><circle cx="65" cy="50" r="4"/><circle cx="90" cy="35" r="4"/>
-                <line x1="14" y1="35" x2="31" y2="18"/><line x1="14" y1="35" x2="31" y2="52"/>
-                <line x1="39" y1="15" x2="61" y2="21"/><line x1="39" y1="55" x2="61" y2="49"/>
-                <line x1="39" y1="18" x2="61" y2="48"/><line x1="39" y1="52" x2="61" y2="22"/>
-                <line x1="69" y1="22" x2="86" y2="33"/><line x1="69" y1="48" x2="86" y2="37"/>
-              </svg>
-            </div>
-            <div class="cc-tile-icon cc-tile-icon-coral">
-              <svg width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75"><rect x="4" y="4" width="8" height="8" rx="1.5"/><path d="M6 2.5v1.5M8 2.5v1.5M10 2.5v1.5M6 12v1.5M8 12v1.5M10 12v1.5M2.5 6h1.5M2.5 8h1.5M2.5 10h1.5M12 6h1.5M12 8h1.5M12 10h1.5"/><circle cx="8" cy="8" r="1.5" fill="currentColor" stroke="none"/></svg>
-            </div>
-            <div class="cc-tile-body">
-              <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">
-                <div class="cc-tile-title" style="margin-bottom:0">Train Model</div>
-                <div class="cc-tile-tag cc-tile-tag-green">v1.4 · Active</div>
-              </div>
-              <div class="cc-tile-desc">Encode how you think. Define your domains and decision logic.</div>
-            </div>
-            <div class="cc-tile-cta cc-tile-coral" style="color:var(--coral,#BF452A)">Update →</div>
-          </button>
-
-          <button class="cc-action-tile" onclick="switchThinkerTab('reports', document.querySelectorAll('.thinker-tab')[3])">
-            <!-- Sparkline decoration -->
-            <div class="cc-tile-sparkline" aria-hidden="true">
-              <svg width="48" height="22" viewBox="0 0 48 22" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="color:#16a34a">
-                <polyline points="2,18 8,14 14,16 20,10 26,12 32,6 38,8 46,3"/>
-              </svg>
-            </div>
-            <div class="cc-tile-icon cc-tile-icon-green">
-              <svg width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75"><rect x="2" y="10" width="3" height="4" rx="1"/><rect x="6.5" y="6" width="3" height="8" rx="1"/><rect x="11" y="2" width="3" height="12" rx="1"/></svg>
-            </div>
-            <div class="cc-tile-body">
-              <div class="cc-tile-title">Reports</div>
-              <div class="cc-tile-desc">View your performance, demand analytics, and earnings history.</div>
-            </div>
-            <div class="cc-tile-cta" style="color:#16a34a">View →</div>
-          </button>
-
-          <button class="cc-action-tile cc-tile-coral" onclick="switchThinkerTab('payments', document.querySelectorAll('.thinker-tab')[4])">
-            <div class="cc-tile-icon cc-tile-icon-amber">
-              <svg width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75"><rect x="1" y="4" width="14" height="10" rx="2"/><path d="M11 9a1 1 0 110 2 1 1 0 010-2z" fill="currentColor" stroke="none"/><path d="M1 7h14"/></svg>
-            </div>
-            <div class="cc-tile-body">
-              <div class="cc-tile-title">Payments</div>
-              <div class="cc-tile-desc">Manage royalty payouts. $0.05 issued per verified insight.</div>
-            </div>
-            <div class="cc-tile-cta" style="color:#b45309">Claim →</div>
-          </button>
-
+      <!-- R1: Contextual Next Step card (replaces static Quick Actions tiles) -->
+      <div class="cc-next-step-wrap" id="cc-next-step-wrap">
+        <div class="cc-next-step" id="cc-next-step">
+          <!-- Populated by ccRenderNextStep() in initThinkerHub -->
         </div>
       </div>
 
@@ -11156,6 +11119,153 @@ function loadTkData(key, fallback) {
 }
 function saveTkData(key, val) { localStorage.setItem(key, JSON.stringify(val)); }
 
+/* ── R1: Contextual Next Step card ────────────────────────────────────────
+   Detects the thinker's current state and surfaces exactly one action.
+   Replaces the four static Quick Actions tiles that duplicated the tab bar.
+   States (in priority order):
+     1. Not set up → push to complete Setup
+     2. Domains sparse → push to add domains in Train
+     3. No sessions → confirm live + link to Train for improvements
+     4. Has sessions → surface Reports with earnings signal
+───────────────────────────────────────────────────────────────────────────── */
+function ccRenderNextStep(prof, fw, doms, sessions) {
+  const el = document.getElementById('cc-next-step');
+  if (!el) return;
+
+  const hasIdentity  = prof && prof.name && (prof.title || '').trim().length > 0;
+  const words        = fw ? fw.trim().split(/\s+/).filter(Boolean).length : 0;
+  const hasFramework = words >= 20;
+  const hasDomains   = Array.isArray(doms) && doms.length >= 3;
+  const sessionCount = sessions || 0;
+
+  let icon, title, sub, ctaLabel, ctaAction, ctaStyle = '';
+
+  if (!hasIdentity || !hasFramework) {
+    icon      = `<svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="10" cy="10" r="8.5"/><path d="M10 6v4.5l2.5 2"/></svg>`;
+    title     = 'Complete your setup to go live';
+    sub       = 'Your model isn\'t active until your identity and framework are saved.';
+    ctaLabel  = 'Finish setup';
+    ctaAction = `openObFlow()`;
+    ctaStyle  = 'background:var(--accent);color:#fff;border-color:var(--accent)';
+
+  } else if (!hasDomains) {
+    const needed = 3 - (doms?.length || 0);
+    icon      = `<svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="10" cy="10" r="8.5"/><path d="M7 10l2.5 2.5 4-4"/></svg>`;
+    title     = `Add ${needed} more domain${needed !== 1 ? 's' : ''} to activate your model`;
+    sub       = `Founders use your domains to find the right thinker. You have ${doms?.length || 0} — need at least 3.`;
+    ctaLabel  = 'Add domains';
+    ctaAction = `switchThinkerTab('train', document.querySelectorAll('.thinker-tab')[2])`;
+
+  } else if (sessionCount === 0) {
+    icon      = `<svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="10" cy="10" r="8.5"/><path d="M7 10l2.5 2.5 4-4"/></svg>`;
+    title     = 'Your profile is live — waiting for the first perspective request';
+    sub       = 'Founders can now find and request your perspective. Use this time to deepen your framework.';
+    ctaLabel  = 'Sharpen your model';
+    ctaAction = `switchThinkerTab('train', document.querySelectorAll('.thinker-tab')[2])`;
+
+  } else {
+    const earned = (sessionCount * 0.05).toFixed(2);
+    icon      = `<svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><rect x="2" y="5" width="16" height="12" rx="2"/><path d="M2 9h16"/><circle cx="14" cy="13" r="1.2" fill="currentColor" stroke="none"/></svg>`;
+    title     = `${sessionCount} perspective${sessionCount !== 1 ? 's' : ''} served · $${earned} earned`;
+    sub       = 'View your earnings breakdown, domain demand, and performance by period.';
+    ctaLabel  = 'View Reports';
+    ctaAction = `switchThinkerTab('reports', document.querySelectorAll('.thinker-tab')[3])`;
+  }
+
+  el.innerHTML = `
+    <div class="cc-ns-icon">${icon}</div>
+    <div class="cc-ns-body">
+      <div class="cc-ns-title">${title}</div>
+      <div class="cc-ns-sub">${sub}</div>
+    </div>
+    <button class="cc-ns-cta" style="${ctaStyle}" onclick="${ctaAction}">${ctaLabel} →</button>`;
+}
+
+/* ── R3: Setup tab — completion state ─────────────────────────────────────
+   Detects whether the thinker has completed the three critical setup steps
+   (identity, framework, domains) and reflects the state in the tab label.
+   Incomplete → clock icon, accent color, draws the eye.
+   Complete   → checkmark icon, neutral color, recedes.
+───────────────────────────────────────────────────────────────────────────── */
+function ccUpdateSetupTab(prof, fw, doms) {
+  const tab = document.getElementById('thinker-tab-setup');
+  if (!tab) return;
+
+  const hasIdentity  = prof && prof.name && (prof.title || '').trim().length > 0;
+  const hasFramework = fw && fw.trim().split(/\s+/).filter(Boolean).length >= 20;
+  const hasDomains   = Array.isArray(doms) && doms.length >= 3;
+  const complete     = hasIdentity && hasFramework && hasDomains;
+
+  const checkSvg = `<svg class="tab-setup-icon" width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="2,7 5.5,10.5 12,3"/></svg>`;
+  const clockSvg = `<svg class="tab-setup-icon" width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="7" cy="7" r="6"/><path d="M7 4v3.5l2 1.5"/></svg>`;
+
+  tab.innerHTML = (complete ? checkSvg : clockSvg) + ' Setup';
+  tab.style.color      = complete ? '' : 'var(--accent)';
+  tab.style.fontWeight = complete ? '' : '600';
+  tab.title = complete ? 'Setup complete' : 'Complete your setup to go live';
+}
+
+/* ── R2: Replace phantom metrics with computed signals ─────────────────────
+   Removes the hardcoded 94% Neural Network Health bar and the "—" Cognitive
+   Moat Score. Replaces the hero NNH block with three honest, computable
+   signals: framework depth (word count tier), model version, domain count.
+───────────────────────────────────────────────────────────────────────────── */
+function ccRenderModelSignals(fw, doms, ver) {
+  // Framework depth tier
+  const words = fw ? fw.trim().split(/\s+/).filter(Boolean).length : 0;
+  let depthLabel, depthColor;
+  if (words === 0)       { depthLabel = 'Not written yet';        depthColor = 'var(--text-3)'; }
+  else if (words < 50)   { depthLabel = `${words}w — needs depth`; depthColor = '#f59e0b'; }
+  else if (words < 150)  { depthLabel = `${words}w — solid`;       depthColor = '#22c55e'; }
+  else if (words < 300)  { depthLabel = `${words}w — strong`;      depthColor = '#22c55e'; }
+  else                   { depthLabel = `${words}w — elite`;        depthColor = 'var(--accent)'; }
+
+  // Domain count
+  const domCount = Array.isArray(doms) ? doms.length : 0;
+  const domLabel = domCount === 0 ? 'None defined'
+                 : domCount < 3   ? `${domCount} — add ${3 - domCount} more`
+                 : `${domCount} domain${domCount !== 1 ? 's' : ''}`;
+
+  // Model version
+  const verStr = `v${ver || 1}.0`;
+
+  // Replace the NNH hero block with real signals
+  const nnh = document.querySelector('.cc-hero-nnh');
+  if (nnh) {
+    nnh.innerHTML = `
+      <div class="cc-model-signals">
+        <div class="cc-ms-row">
+          <span class="cc-ms-label">Framework</span>
+          <span class="cc-ms-val" style="color:${depthColor}">${depthLabel}</span>
+        </div>
+        <div class="cc-ms-row">
+          <span class="cc-ms-label">Domains</span>
+          <span class="cc-ms-val">${domLabel}</span>
+        </div>
+        <div class="cc-ms-row">
+          <span class="cc-ms-label">Model</span>
+          <span class="cc-ms-val">${verStr}</span>
+        </div>
+      </div>`;
+  }
+
+  // Replace the "Cognitive Moat Score" stat with Model Version
+  const ratingEl = document.getElementById('cc-stat-rating');
+  if (ratingEl) {
+    ratingEl.textContent = verStr;
+    ratingEl.style.color = 'var(--text-0)';
+    ratingEl.style.fontFamily = 'var(--font-mono)';
+  }
+  // Update label
+  const ratingCard = ratingEl?.closest('.cc-stat');
+  if (ratingCard) {
+    const labelEl = ratingCard.querySelector('.cc-stat-label');
+    const subEl   = ratingCard.querySelector('.cc-stat-sub');
+    if (labelEl) labelEl.textContent = 'Model Version';
+    if (subEl)   subEl.textContent   = domCount + ' domain' + (domCount !== 1 ? 's' : '') + ' · ' + words + ' word framework';
+  }
+}
+
 async function initThinkerHub() {
   const prof = loadTkData(TK.profile, { name: userProfile.name, title: '', bio: '' });
   const lens = loadTkData(TK.lens, activeThinker?.lens || '');
@@ -11231,12 +11341,23 @@ async function initThinkerHub() {
       set('cc-stat-earnings', `$${earnings.toFixed(2)}`);
       set('cc-stat-rating',   ratingDisp);
       set('cc-stat-hours',    hoursSaved);
+      // R1: Re-render Next Step with live session count
+      ccRenderNextStep(prof, fw, doms, inquiries);
       document.getElementById('th-stat-sessions').textContent = inquiries;
       document.getElementById('th-stat-earnings').textContent = `$${earnings.toFixed(2)}`;
       document.getElementById('th-stat-rating').textContent   = ratingDisp;
       document.getElementById('th-stat-hours').textContent    = `${(inquiries*1.5).toFixed(0)} hrs saved`;
     }
   } catch { /* non-fatal */ }
+
+  // R3: Setup tab completion state
+  ccUpdateSetupTab(prof, fw, doms);
+
+  // R2: Replace phantom metrics with real computed signals
+  ccRenderModelSignals(fw, doms, ver);
+
+  // R1: Contextual Next Step card (seeded with local session count, updated after API)
+  ccRenderNextStep(prof, fw, doms, seedSessions);
 
   // Train tab
   const trainFw  = document.getElementById('train-framework');
