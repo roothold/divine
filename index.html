@@ -374,7 +374,7 @@
 
     /* ── Founder setup screen ── */
     .ir-setup-grid {
-      display:grid; grid-template-columns:1fr 1fr; gap:20px;
+      display:grid; grid-template-columns:1fr; gap:20px;
     }
     @media(max-width:680px){ .ir-setup-grid { grid-template-columns:1fr; } }
 
@@ -6232,7 +6232,7 @@ e.g. I always start by validating whether the problem is real before evaluating 
             <!-- Financials -->
             <div class="ir-card">
               <div class="ir-card-title">Key Financials</div>
-              <div class="ir-setup-grid" style="gap:12px">
+              <div class="ir-setup-grid" style="gap:12px;grid-template-columns:1fr 1fr">
                 <div class="ir-field">
                   <label>Cash on hand ($)</label>
                   <input type="number" id="ir-cash" placeholder="1470000" oninput="irAutoSave()">
@@ -12677,7 +12677,7 @@ function applyAuthState(user) {
     // Pass the pre-login guest ID so any locally-created sessions can be migrated.
     _syncSessionsFromServer(user.id, _prevGuestId);
     // Unlock My Stuff nav items + project button
-    ['nav-projects','nav-wallet'].forEach(id => {
+    ['nav-projects','nav-wallet','nav-ir'].forEach(id => {
       document.getElementById(id)?.classList.remove('nav-auth-gate');
     });
     // Unlock mobile bottom nav Projects button
@@ -12692,7 +12692,7 @@ function applyAuthState(user) {
     document.getElementById('thinker-nav-section').style.display  = 'none';
     document.getElementById('mob-nav-thinker').style.display      = 'none';
     // Re-lock My Stuff nav items + dim project button
-    ['nav-projects','nav-wallet'].forEach(id => {
+    ['nav-projects','nav-wallet','nav-ir'].forEach(id => {
       document.getElementById(id)?.classList.add('nav-auth-gate');
     });
     // Re-lock mobile bottom nav Projects button
@@ -16593,7 +16593,7 @@ document.addEventListener('keydown', function _lpKeyCapture(e) {
 
     /* ── Founder setup screen ── */
     .ir-setup-grid {
-      display:grid; grid-template-columns:1fr 1fr; gap:20px;
+      display:grid; grid-template-columns:1fr; gap:20px;
     }
     @media(max-width:680px){ .ir-setup-grid { grid-template-columns:1fr; } }
 
@@ -22422,7 +22422,7 @@ e.g. I always start by validating whether the problem is real before evaluating 
             <!-- Financials -->
             <div class="ir-card">
               <div class="ir-card-title">Key Financials</div>
-              <div class="ir-setup-grid" style="gap:12px">
+              <div class="ir-setup-grid" style="gap:12px;grid-template-columns:1fr 1fr">
                 <div class="ir-field">
                   <label>Cash on hand ($)</label>
                   <input type="number" id="ir-cash" placeholder="1470000" oninput="irAutoSave()">
