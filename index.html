@@ -630,129 +630,99 @@
     }
 
     /* Two-tier info box */
-    .ir-tier-box {
-      background:linear-gradient(135deg,var(--accent-lt) 0%,#FFF 100%);
-      border:1px solid rgba(191,69,42,.15); border-radius:12px;
-      padding:16px 18px; margin-bottom:20px;
-    }
-    .ir-tier-title { font-size:12.5px; font-weight:700; color:var(--accent); margin-bottom:8px; }
-    .ir-tier-row { display:flex; gap:16px; flex-wrap:wrap; }
-    .ir-tier-col { flex:1; min-width:120px; }
-    .ir-tier-col-label { font-size:10.5px; font-weight:700; letter-spacing:.06em;
-      text-transform:uppercase; color:var(--text-3); margin-bottom:4px; }
-    .ir-tier-item { font-size:12px; color:var(--text-2); line-height:1.7; }
+    /* ── IR page — premium redesign ─────────────────────────── */
+    .ir-page-hero { display:flex; align-items:flex-start; justify-content:space-between; gap:16px; margin-bottom:20px; flex-wrap:wrap; }
+    .ir-hero-meta { display:flex; align-items:center; gap:8px; margin-top:8px; }
+    .ir-hero-right { display:flex; flex-direction:column; align-items:flex-end; gap:6px; margin-top:4px; flex-shrink:0; }
+    .ir-last-upd { font-size:11.5px; color:var(--text-3); }
+    .ir-action-row { display:flex; align-items:center; gap:8px; margin-bottom:24px; flex-wrap:wrap; }
+    .ir-action-row .ir-btn-preview { flex-shrink:0; }
+    .ir-action-spacer { flex:1; }
 
-    /* ── Founder setup screen ── */
-    .ir-setup-grid {
-      display:grid; grid-template-columns:1fr; gap:20px;
-    }
+    /* How it works — compact info strip */
+    .ir-how-it-works { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:24px; }
+    @media(max-width:520px){ .ir-how-it-works { grid-template-columns:1fr; } }
+    .ir-how-col { display:flex; align-items:flex-start; gap:10px; padding:13px 14px; border-radius:11px; border:1.5px solid var(--border); background:var(--surface); }
+    .ir-how-col-icon { width:30px; height:30px; border-radius:8px; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+    .ir-how-col-icon.pub { background:rgba(59,130,246,.09); color:#2563EB; }
+    .ir-how-col-icon.prv { background:rgba(245,158,11,.09); color:#B45309; }
+    .ir-how-col-body { flex:1; min-width:0; }
+    .ir-how-col-label { font-size:11.5px; font-weight:700; color:var(--text-0); margin-bottom:3px; }
+    .ir-how-col-desc { font-size:11.5px; color:var(--text-3); line-height:1.55; }
+
+    /* Link cards — always visible */
+    .ir-links-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:24px; }
+    @media(max-width:520px){ .ir-links-grid { grid-template-columns:1fr; } }
+    .ir-link-tile { border:1.5px solid var(--border); border-radius:13px; padding:16px; background:var(--surface); transition:border-color .15s; }
+    .ir-link-tile:hover { border-color:var(--border-md); }
+    .ir-link-tile-head { display:flex; align-items:center; gap:7px; margin-bottom:10px; }
+    .ir-link-tile-icon { width:26px; height:26px; border-radius:7px; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+    .ir-link-tile-icon.pub { background:rgba(59,130,246,.09); color:#2563EB; }
+    .ir-link-tile-icon.prv { background:rgba(245,158,11,.09); color:#B45309; }
+    .ir-link-tile-label { font-size:12px; font-weight:700; color:var(--text-0); flex:1; }
+    .ir-link-tile-bar { display:flex; gap:0; border:1.5px solid var(--border-md); border-radius:9px; overflow:hidden; background:var(--surface-2); }
+    .ir-link-tile-url { flex:1; padding:8px 11px; font-size:11.5px; font-family:var(--font-mono); color:var(--text-2); background:transparent; border:none; outline:none; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .ir-link-tile-copy { padding:8px 14px; background:var(--accent); color:#fff; border:none; cursor:pointer; font-size:12px; font-weight:600; font-family:'Inter',sans-serif; white-space:nowrap; transition:background .15s; flex-shrink:0; }
+    .ir-link-tile-copy:hover { background:#A53922; }
+    .ir-link-tile-hint { font-size:11px; color:var(--text-3); margin-top:7px; }
+    .ir-links-locked .ir-link-tile-bar { opacity:.45; pointer-events:none; }
+    .ir-links-locked .ir-link-tile-hint { color:var(--text-3); font-style:italic; }
+
+    /* Setup grid */
+    .ir-setup-grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
     @media(max-width:680px){ .ir-setup-grid { grid-template-columns:1fr; } }
 
-    .ir-card {
-      background:var(--surface); border:1px solid var(--border);
-      border-radius:var(--r); padding:22px 24px;
-    }
-    .ir-card-title {
-      font-size:12px; font-weight:700; letter-spacing:.07em;
-      text-transform:uppercase; color:var(--text-3); margin-bottom:14px;
-    }
+    /* Section cards */
+    .ir-card { background:var(--surface); border:1.5px solid var(--border); border-radius:14px; padding:22px 24px; transition:border-color .15s; }
+    .ir-card:hover { border-color:var(--border-md); }
+    .ir-card-head { display:flex; align-items:center; gap:10px; margin-bottom:18px; }
+    .ir-card-icon { width:32px; height:32px; border-radius:9px; background:var(--surface-2); border:1.5px solid var(--border); display:flex; align-items:center; justify-content:center; color:var(--text-2); flex-shrink:0; }
+    .ir-card-title { font-size:14px; font-weight:700; color:var(--text-0); flex:1; letter-spacing:-.01em; }
+    .ir-privacy-badge { font-size:10.5px; font-weight:700; padding:3px 9px; border-radius:100px; letter-spacing:.04em; flex-shrink:0; }
+    .ir-badge-public { background:rgba(59,130,246,.09); color:#2563EB; border:1px solid rgba(59,130,246,.2); }
+    .ir-badge-private { background:rgba(245,158,11,.09); color:#B45309; border:1px solid rgba(245,158,11,.2); }
+
     .ir-field { display:flex; flex-direction:column; gap:5px; margin-bottom:14px; }
     .ir-field:last-child { margin-bottom:0; }
     .ir-field label { font-size:12px; font-weight:600; color:var(--text-2); }
-    .ir-field input, .ir-field textarea, .ir-field select {
-      width:100%; padding:9px 12px; font-size:13.5px;
-      font-family:'Inter',sans-serif; color:var(--text-0);
-      background:#fff; border:1.5px solid var(--border-md);
-      border-radius:10px; outline:none; transition:border-color .15s;
-      box-sizing:border-box;
-    }
-    .ir-field input:focus, .ir-field textarea:focus, .ir-field select:focus {
-      border-color:var(--accent);
-    }
-    .ir-field textarea { resize:vertical; min-height:72px; line-height:1.55; }
-    .ir-field-hint { font-size:11px; color:var(--text-3); margin-top:2px; }
+    .ir-field input, .ir-field textarea, .ir-field select { width:100%; padding:9px 12px; font-size:13.5px; font-family:'Inter',sans-serif; color:var(--text-0); background:var(--surface-2); border:1.5px solid var(--border-md); border-radius:10px; outline:none; transition:border-color .15s,background .15s; box-sizing:border-box; }
+    .ir-field input:focus, .ir-field textarea:focus, .ir-field select:focus { border-color:var(--accent); background:#fff; box-shadow:0 0 0 3px rgba(191,69,42,.06); }
+    .ir-field textarea { resize:vertical; min-height:80px; line-height:1.6; }
+    .ir-field-hint { font-size:11px; color:var(--text-3); margin-top:3px; }
+
+    /* Runway display */
+    .ir-runway-hero { display:flex; align-items:center; gap:12px; padding:13px 14px; background:var(--surface-2); border-radius:10px; margin-bottom:16px; }
+    .ir-runway-hero-val { font-size:22px; font-weight:700; color:var(--text-0); font-family:var(--font-mono); line-height:1; }
+    .ir-runway-hero-label { font-size:11px; font-weight:600; letter-spacing:.05em; text-transform:uppercase; color:var(--text-3); margin-top:2px; }
+    .ir-runway-hero-bar { flex:1; }
+    .ir-runway-track { height:5px; background:var(--border-md); border-radius:3px; overflow:hidden; margin-top:6px; }
+    .ir-runway-fill { height:100%; border-radius:3px; transition:width .6s ease; }
 
     /* Invite list */
-    .ir-invite-row {
-      display:flex; align-items:center; gap:8px;
-      padding:8px 10px; background:var(--surface-2);
-      border-radius:8px; margin-bottom:6px;
-    }
-    .ir-invite-dot { width:7px; height:7px; border-radius:50%; background:#22C55E; flex-shrink:0; }
-    .ir-invite-email { font-size:13px; color:var(--text-1); flex:1; min-width:0;
-      white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-    .ir-invite-remove {
-      width:22px; height:22px; border:none; background:transparent; cursor:pointer;
-      color:var(--text-3); border-radius:6px; display:flex; align-items:center; justify-content:center;
-      transition:background .12s,color .12s; flex-shrink:0;
-    }
+    .ir-invite-row { display:flex; align-items:center; gap:10px; padding:9px 12px; background:var(--surface-2); border-radius:10px; margin-bottom:7px; }
+    .ir-invite-avatar { width:32px; height:32px; border-radius:50%; background:var(--accent-lt); color:var(--accent); font-size:11px; font-weight:700; display:flex; align-items:center; justify-content:center; flex-shrink:0; letter-spacing:.02em; }
+    .ir-invite-dot { display:none; }
+    .ir-invite-email { font-size:13px; color:var(--text-1); flex:1; min-width:0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .ir-invite-remove { width:24px; height:24px; border:none; background:transparent; cursor:pointer; color:var(--text-3); border-radius:6px; display:flex; align-items:center; justify-content:center; transition:background .12s,color .12s; flex-shrink:0; }
     .ir-invite-remove:hover { background:#FEE2E2; color:#DC2626; }
-    .ir-invite-add-row { display:flex; gap:8px; margin-top:8px; }
-    .ir-invite-input {
-      flex:1; padding:8px 12px; font-size:13px; font-family:'Inter',sans-serif;
-      border:1.5px solid var(--border-md); border-radius:8px; outline:none; background:#fff;
-      color:var(--text-0); transition:border-color .15s;
-    }
-    .ir-invite-input:focus { border-color:var(--accent); }
-    .ir-invite-btn {
-      padding:8px 14px; font-size:12.5px; font-weight:600;
-      background:var(--accent); color:#fff; border:none;
-      border-radius:8px; cursor:pointer; white-space:nowrap;
-      font-family:'Inter',sans-serif; transition:background .15s;
-    }
+    .ir-invite-add-row { display:flex; gap:8px; margin-top:10px; }
+    .ir-invite-input { flex:1; padding:9px 12px; font-size:13px; font-family:'Inter',sans-serif; border:1.5px solid var(--border-md); border-radius:9px; outline:none; background:var(--surface-2); color:var(--text-0); transition:border-color .15s; }
+    .ir-invite-input:focus { border-color:var(--accent); background:#fff; }
+    .ir-invite-btn { padding:9px 16px; font-size:13px; font-weight:600; background:var(--accent); color:#fff; border:none; border-radius:9px; cursor:pointer; white-space:nowrap; font-family:'Inter',sans-serif; transition:background .15s; }
     .ir-invite-btn:hover { background:#A53922; }
 
-    /* Share link bar */
-    .ir-link-bar {
-      display:flex; gap:0; margin-top:16px; border:1.5px solid var(--border-md);
-      border-radius:10px; overflow:hidden; background:#fff;
-    }
-    .ir-link-text {
-      flex:1; padding:10px 14px; font-size:12px; font-family:var(--font-mono);
-      color:var(--text-2); overflow:hidden; white-space:nowrap;
-      text-overflow:ellipsis; background:#fff; border:none; outline:none;
-    }
-    .ir-link-copy {
-      padding:10px 18px; background:var(--accent); color:#fff; border:none;
-      cursor:pointer; font-size:12.5px; font-weight:600; font-family:'Inter',sans-serif;
-      white-space:nowrap; transition:background .15s; flex-shrink:0;
-    }
+    /* Share link bar (legacy — keep for JS compat) */
+    .ir-link-bar { display:flex; gap:0; margin-top:16px; border:1.5px solid var(--border-md); border-radius:10px; overflow:hidden; background:#fff; }
+    .ir-link-text { flex:1; padding:10px 14px; font-size:12px; font-family:var(--font-mono); color:var(--text-2); overflow:hidden; white-space:nowrap; text-overflow:ellipsis; background:#fff; border:none; outline:none; }
+    .ir-link-copy { padding:10px 18px; background:var(--accent); color:#fff; border:none; cursor:pointer; font-size:12.5px; font-weight:600; font-family:'Inter',sans-serif; white-space:nowrap; transition:background .15s; flex-shrink:0; }
     .ir-link-copy:hover { background:#A53922; }
 
-    /* Publish CTA */
-    .ir-publish-bar {
-      display:flex; align-items:center; justify-content:space-between;
-      padding:18px 24px; background:var(--surface);
-      border:1px solid var(--border); border-radius:var(--r);
-      margin-top:20px; gap:16px; flex-wrap:wrap;
-    }
-    .ir-publish-meta { display:flex; flex-direction:column; gap:3px; }
-    .ir-publish-label { font-size:14px; font-weight:600; color:var(--text-0); }
-    .ir-publish-sub { font-size:12px; color:var(--text-3); }
-    .ir-publish-actions { display:flex; gap:10px; align-items:center; }
-    .ir-btn-publish {
-      display:inline-flex; align-items:center; gap:7px;
-      padding:10px 20px; background:var(--accent); color:#fff;
-      border:none; border-radius:var(--r-pill);
-      font-size:13.5px; font-weight:600; font-family:'Inter',sans-serif;
-      cursor:pointer; transition:background .15s;
-    }
-    .ir-btn-publish:hover { background:#A53922; }
-    .ir-btn-preview {
-      display:inline-flex; align-items:center; gap:6px;
-      padding:10px 18px; background:transparent;
-      border:1px solid var(--border-md); color:var(--text-1);
-      border-radius:var(--r-pill); font-size:13px; font-weight:500;
-      font-family:'Inter',sans-serif; cursor:pointer; transition:all .15s;
-    }
+    /* Action buttons */
+    .ir-btn-publish { display:inline-flex; align-items:center; gap:7px; padding:10px 20px; background:var(--accent); color:#fff; border:none; border-radius:var(--r-pill); font-size:13.5px; font-weight:600; font-family:'Inter',sans-serif; cursor:pointer; transition:opacity .15s,box-shadow .15s; }
+    .ir-btn-publish:hover { opacity:.9; box-shadow:0 4px 14px rgba(191,69,42,.28); }
+    .ir-btn-preview { display:inline-flex; align-items:center; gap:6px; padding:10px 18px; background:transparent; border:1.5px solid var(--border-md); color:var(--text-1); border-radius:var(--r-pill); font-size:13px; font-weight:500; font-family:'Inter',sans-serif; cursor:pointer; transition:all .15s; }
     .ir-btn-preview:hover { border-color:var(--accent); color:var(--accent); }
-
-    /* Status pill */
-    .ir-status-pill {
-      display:inline-flex; align-items:center; gap:5px;
-      padding:4px 10px; border-radius:100px; font-size:11px; font-weight:700;
-      letter-spacing:.04em;
-    }
+    .ir-status-pill { display:inline-flex; align-items:center; gap:5px; padding:5px 12px; border-radius:100px; font-size:11.5px; font-weight:700; letter-spacing:.03em; }
     .ir-status-live { background:rgba(22,163,74,.1); color:#16A34A; border:1px solid rgba(22,163,74,.2); }
     .ir-status-draft { background:var(--surface-2); color:var(--text-3); border:1px solid var(--border); }
 
@@ -6453,74 +6423,92 @@ e.g. I always start by validating whether the problem is real before evaluating 
     <!-- SCREEN: IR Page (founder setup) -->
     <div class="screen" id="screen-ir-page">
       <div class="main-inner"><div class="screen-inner">
-        <div class="screen-header">
-          <div class="screen-label">Investor Relations</div>
-          <h2 class="screen-title">Investor Room</h2>
-          <p class="screen-sub">A live, invite-only financial briefing for your investors. No decks. No delays. One link.</p>
-        </div>
 
-        <!-- Two-tier explainer -->
-        <div class="ir-tier-box">
-          <div class="ir-tier-title">Two-tier access model</div>
-          <div class="ir-tier-row">
-            <div class="ir-tier-col">
-              <div class="ir-tier-col-label"><svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.2" style="vertical-align:-1px;margin-right:3px"><circle cx="5" cy="5" r="4"/><path d="M5 1c-1 1.5-1.5 2.5-1.5 4S4 8.5 5 10M5 1c1 1.5 1.5 2.5 1.5 4S6 8.5 5 10M1 5h8"/></svg>Public page</div>
-              <div class="ir-tier-item">Company name, stage, tagline, industry — no financials. Anyone with the link can view. Use for cold intros.</div>
-            </div>
-            <div class="ir-tier-col">
-              <div class="ir-tier-col-label"><svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.2" style="vertical-align:-1px;margin-right:3px"><rect x="1.5" y="4.5" width="7" height="5" rx="0.7"/><path d="M3 4.5V3a2 2 0 014 0v1.5"/></svg>Private IR room</div>
-              <div class="ir-tier-item">Full financials: cash, burn, runway, revenue. Invite-only by email. Your board and investors only.</div>
-            </div>
+        <!-- Page hero: title + status -->
+        <div class="ir-page-hero">
+          <div>
+            <div class="screen-label">Investor Relations</div>
+            <h2 class="screen-title">Investor Room</h2>
           </div>
-        </div>
-
-        <!-- Status bar -->
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:12px">
-          <div style="display:flex;align-items:center;gap:10px">
+          <div class="ir-hero-right">
             <span class="ir-status-pill ir-status-draft" id="ir-status-pill">
               <svg width="6" height="6" viewBox="0 0 6 6"><circle cx="3" cy="3" r="3" fill="currentColor"/></svg>
               Draft
             </span>
-            <span style="font-size:12px;color:var(--text-3)" id="ir-last-updated">Not yet published</span>
-          </div>
-          <div style="display:flex;gap:8px">
-            <button class="ir-btn-preview" onclick="irPreviewPublicPage()">
-              <svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M1.5 6.5s2-4 5-4 5 4 5 4-2 4-5 4-5-4-5-4z"/><circle cx="6.5" cy="6.5" r="1.5"/></svg>
-              Preview public page
-            </button>
-            <button class="ir-btn-preview" onclick="irPreviewAsInvestor()" style="border-color:var(--accent);color:var(--accent)">
-              <svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="1.75"><rect x="1.5" y="3" width="10" height="7.5" rx="1.5"/><path d="M4 3V2a1.5 1.5 0 013 0v1"/></svg>
-              Preview IR room
-            </button>
-            <button class="ir-btn-publish" onclick="irPublish()">
-              <svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M1.5 9V11h10V9M6.5 1v7M4 4l2.5-3 2.5 3"/></svg>
-              Publish &amp; share
-            </button>
+            <span class="ir-last-upd" id="ir-last-updated">Not yet published</span>
           </div>
         </div>
 
-        <!-- Links (hidden until published) -->
-        <div id="ir-link-section" style="display:none;margin-bottom:24px">
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
-            <div>
-              <div style="font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--text-3);margin-bottom:6px"><svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.2" style="vertical-align:-1px;margin-right:3px"><circle cx="5" cy="5" r="4"/><path d="M5 1c-1 1.5-1.5 2.5-1.5 4S4 8.5 5 10M5 1c1 1.5 1.5 2.5 1.5 4S6 8.5 5 10M1 5h8"/></svg>Public profile link</div>
-              <div class="ir-link-bar">
-                <input class="ir-link-text" id="ir-public-link-display" readonly value="">
-                <button class="ir-link-copy" onclick="irCopyPublicLink()">Copy</button>
-              </div>
-              <div style="font-size:11px;color:var(--text-3);margin-top:4px">No financials — safe for cold intros</div>
+        <!-- Action row -->
+        <div class="ir-action-row">
+          <button class="ir-btn-preview" onclick="irPreviewPublicPage()">
+            <svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M1.5 6.5s2-4 5-4 5 4 5 4-2 4-5 4-5-4-5-4z"/><circle cx="6.5" cy="6.5" r="1.5"/></svg>
+            Preview public page
+          </button>
+          <button class="ir-btn-preview" onclick="irPreviewAsInvestor()" style="border-color:rgba(191,69,42,.4);color:var(--accent)">
+            <svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="1.75"><rect x="1.5" y="3" width="10" height="7.5" rx="1.5"/><path d="M4 3V2a1.5 1.5 0 013 0v1"/></svg>
+            Preview IR room
+          </button>
+          <div class="ir-action-spacer"></div>
+          <button class="ir-btn-publish" onclick="irPublish()">
+            <svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M1.5 9V11h10V9M6.5 1v7M4 4l2.5-3 2.5 3"/></svg>
+            Publish &amp; share
+          </button>
+        </div>
+
+        <!-- Two-tier explainer — compact -->
+        <div class="ir-how-it-works">
+          <div class="ir-how-col">
+            <div class="ir-how-col-icon pub">
+              <svg width="15" height="15" viewBox="0 0 15 15" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="7.5" cy="7.5" r="6"/><path d="M7.5 1.5c-1.5 2-2.5 3.5-2.5 6s1 4.5 2.5 6M7.5 1.5c1.5 2 2.5 3.5 2.5 6s-1 4.5-2.5 6M1.5 7.5h12"/></svg>
             </div>
-            <div>
-              <div style="font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--text-3);margin-bottom:6px"><svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.2" style="vertical-align:-1px;margin-right:3px"><rect x="1.5" y="4.5" width="7" height="5" rx="0.7"/><path d="M3 4.5V3a2 2 0 014 0v1.5"/></svg>Private IR room link</div>
-              <div class="ir-link-bar">
-                <input class="ir-link-text" id="ir-link-display" readonly value="">
-                <button class="ir-link-copy" onclick="irCopyLink()">Copy</button>
-              </div>
-              <div style="font-size:11px;color:var(--text-3);margin-top:4px">Invite-only — shared with listed investors only</div>
+            <div class="ir-how-col-body">
+              <div class="ir-how-col-label">Public page — anyone with link</div>
+              <div class="ir-how-col-desc">Company name, stage, tagline. No financials. Safe for cold outreach.</div>
+            </div>
+          </div>
+          <div class="ir-how-col">
+            <div class="ir-how-col-icon prv">
+              <svg width="15" height="15" viewBox="0 0 15 15" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2.5" y="6.5" width="10" height="7" rx="1"/><path d="M5 6.5V4.5a2.5 2.5 0 015 0v2"/></svg>
+            </div>
+            <div class="ir-how-col-body">
+              <div class="ir-how-col-label">Private IR room — invited only</div>
+              <div class="ir-how-col-desc">Full financials, runway, narrative. Shared by email. Your board and investors only.</div>
             </div>
           </div>
         </div>
 
+        <!-- Share links — always visible -->
+        <div class="ir-links-grid ir-links-locked" id="ir-link-section">
+          <div class="ir-link-tile">
+            <div class="ir-link-tile-head">
+              <div class="ir-link-tile-icon pub">
+                <svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="6.5" cy="6.5" r="5"/><path d="M6.5 1.5c-1.2 1.8-2 3-2 5s.8 3.5 2 5M6.5 1.5c1.2 1.8 2 3 2 5s-.8 3.5-2 5M1.5 6.5h10"/></svg>
+              </div>
+              <div class="ir-link-tile-label">Public profile link</div>
+            </div>
+            <div class="ir-link-tile-bar">
+              <input class="ir-link-tile-url" id="ir-public-link-display" readonly placeholder="Publish to generate link">
+              <button class="ir-link-tile-copy" onclick="irCopyPublicLink()">Copy</button>
+            </div>
+            <div class="ir-link-tile-hint">No financials — safe for cold intros</div>
+          </div>
+          <div class="ir-link-tile">
+            <div class="ir-link-tile-head">
+              <div class="ir-link-tile-icon prv">
+                <svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="5.5" width="9" height="6" rx="1"/><path d="M4 5.5V4a2.5 2.5 0 015 0v1.5"/></svg>
+              </div>
+              <div class="ir-link-tile-label">Private IR room link</div>
+            </div>
+            <div class="ir-link-tile-bar">
+              <input class="ir-link-tile-url" id="ir-link-display" readonly placeholder="Publish to generate link">
+              <button class="ir-link-tile-copy" onclick="irCopyLink()">Copy</button>
+            </div>
+            <div class="ir-link-tile-hint">Invite-only — shared with listed investors only</div>
+          </div>
+        </div>
+
+        <!-- Setup sections -->
         <div class="ir-setup-grid">
 
           <!-- LEFT COLUMN -->
@@ -6528,7 +6516,13 @@ e.g. I always start by validating whether the problem is real before evaluating 
 
             <!-- Company Identity -->
             <div class="ir-card">
-              <div class="ir-card-title">Company Identity</div>
+              <div class="ir-card-head">
+                <div class="ir-card-icon">
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="5" width="12" height="9" rx="1"/><path d="M5 5V3.5A1.5 1.5 0 016.5 2h3A1.5 1.5 0 0111 3.5V5"/><line x1="8" y1="9" x2="8" y2="11"/><line x1="6" y1="10" x2="10" y2="10"/></svg>
+                </div>
+                <div class="ir-card-title">Company Identity</div>
+                <span class="ir-privacy-badge ir-badge-public">Public</span>
+              </div>
               <div class="ir-field">
                 <label>Company name</label>
                 <input type="text" id="ir-company" placeholder="Vela Payments" oninput="irAutoSave();irSuggestSlug()">
@@ -6548,47 +6542,54 @@ e.g. I always start by validating whether the problem is real before evaluating 
                 <label>One-line description <span style="font-weight:400;color:var(--text-3)">(shown on public page)</span></label>
                 <input type="text" id="ir-tagline" placeholder="What your company does in one sentence" oninput="irAutoSave()">
               </div>
-              <div class="ir-field">
-                <label>Industry</label>
-                <select id="ir-industry" onchange="irAutoSave()">
-                  <option value="">Select industry</option>
-                  <option>Fintech</option>
-                  <option>SaaS</option>
-                  <option>Marketplace</option>
-                  <option>HealthTech</option>
-                  <option>EdTech</option>
-                  <option>LegalTech</option>
-                  <option>CleanTech</option>
-                  <option>AI / ML</option>
-                  <option>E-commerce</option>
-                  <option>Real Estate</option>
-                  <option>Media</option>
-                  <option>Other</option>
-                </select>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+                <div class="ir-field">
+                  <label>Industry</label>
+                  <select id="ir-industry" onchange="irAutoSave()">
+                    <option value="">Select</option>
+                    <option>Fintech</option>
+                    <option>SaaS</option>
+                    <option>Marketplace</option>
+                    <option>HealthTech</option>
+                    <option>EdTech</option>
+                    <option>LegalTech</option>
+                    <option>CleanTech</option>
+                    <option>AI / ML</option>
+                    <option>E-commerce</option>
+                    <option>Real Estate</option>
+                    <option>Media</option>
+                    <option>Other</option>
+                  </select>
+                </div>
+                <div class="ir-field">
+                  <label>Founded</label>
+                  <input type="number" id="ir-founded" placeholder="2022" min="1900" max="2099" oninput="irAutoSave()">
+                </div>
               </div>
-              <div class="ir-field">
-                <label>Founded year</label>
-                <input type="number" id="ir-founded" placeholder="2022" min="1900" max="2099" oninput="irAutoSave()" style="max-width:120px">
-              </div>
-              <div class="ir-field">
+              <div class="ir-field" style="margin-bottom:0">
                 <label>Brand colour</label>
                 <div style="display:flex;align-items:center;gap:10px">
                   <input type="color" id="ir-color" value="#BF452A" oninput="irAutoSave()" style="width:44px;height:36px;padding:2px;border:1.5px solid var(--border-md);border-radius:8px;cursor:pointer">
-                  <span style="font-size:12px;color:var(--text-3)">Shown on both pages</span>
+                  <span style="font-size:12px;color:var(--text-3)">Applied to both pages</span>
                 </div>
               </div>
             </div>
 
             <!-- URL Slug -->
             <div class="ir-card">
-              <div class="ir-card-title">Page URL</div>
-              <div style="font-size:12.5px;color:var(--text-3);margin-bottom:12px;line-height:1.5">Your public company profile lives at this URL. Keep it short and recognisable.</div>
-              <div class="ir-field">
+              <div class="ir-card-head">
+                <div class="ir-card-icon">
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6.5 9.5a3.5 3.5 0 005 0l2-2a3.5 3.5 0 00-5-5l-1 1"/><path d="M9.5 6.5a3.5 3.5 0 00-5 0l-2 2a3.5 3.5 0 005 5l1-1"/></svg>
+                </div>
+                <div class="ir-card-title">Page URL</div>
+                <span class="ir-privacy-badge ir-badge-public">Public</span>
+              </div>
+              <div style="font-size:12.5px;color:var(--text-3);margin-bottom:14px;line-height:1.55">Your public profile lives at this URL. Keep it short and recognisable.</div>
+              <div class="ir-field" style="margin-bottom:0">
                 <label>Company URL slug</label>
                 <div class="ir-slug-row">
                   <div class="ir-slug-prefix">divine.uncharted.ventures/c/</div>
-                  <input class="ir-slug-input" id="ir-slug" placeholder="vela-payments"
-                    oninput="irSlugInput(this)">
+                  <input class="ir-slug-input" id="ir-slug" placeholder="vela-payments" oninput="irSlugInput(this)">
                   <div class="ir-slug-check" id="ir-slug-check">✓ available</div>
                 </div>
                 <span class="ir-field-hint">Lowercase letters, numbers, and hyphens only.</span>
@@ -6597,29 +6598,43 @@ e.g. I always start by validating whether the problem is real before evaluating 
 
             <!-- Financials -->
             <div class="ir-card">
-              <div class="ir-card-title">Key Financials</div>
-              <div class="ir-setup-grid" style="gap:12px;grid-template-columns:1fr 1fr">
+              <div class="ir-card-head">
+                <div class="ir-card-icon">
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="1.5" y="10" width="3" height="4.5" rx="0.5"/><rect x="6.5" y="6.5" width="3" height="8" rx="0.5"/><rect x="11.5" y="2.5" width="3" height="12" rx="0.5"/><line x1="1" y1="14.5" x2="15" y2="14.5"/></svg>
+                </div>
+                <div class="ir-card-title">Key Financials</div>
+                <span class="ir-privacy-badge ir-badge-private">Private</span>
+              </div>
+              <!-- Runway visual -->
+              <div class="ir-runway-hero">
+                <div>
+                  <div class="ir-runway-hero-val" id="ir-runway-display">—</div>
+                  <div class="ir-runway-hero-label">Runway</div>
+                </div>
+                <div class="ir-runway-hero-bar">
+                  <div style="font-size:11px;color:var(--text-3);margin-bottom:4px">Logic Health Score: <strong id="ir-lhs-display" style="color:var(--accent)">—</strong></div>
+                  <div class="ir-runway-track"><div class="ir-runway-fill" id="ir-runway-bar" style="width:0%;background:var(--accent)"></div></div>
+                </div>
+              </div>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
                 <div class="ir-field">
                   <label>Cash on hand ($)</label>
-                  <input type="number" id="ir-cash" placeholder="1470000" oninput="irAutoSave()">
+                  <input type="number" id="ir-cash" placeholder="1,470,000" oninput="irAutoSave()">
                   <span class="ir-field-hint">Current bank balance</span>
                 </div>
                 <div class="ir-field">
                   <label>Net burn / month ($)</label>
-                  <input type="number" id="ir-burn" placeholder="82000" oninput="irAutoSave()">
+                  <input type="number" id="ir-burn" placeholder="82,000" oninput="irAutoSave()">
                   <span class="ir-field-hint">Cash out minus cash in</span>
                 </div>
                 <div class="ir-field">
                   <label>Monthly revenue ($)</label>
-                  <input type="number" id="ir-revenue" placeholder="124000" oninput="irAutoSave()">
+                  <input type="number" id="ir-revenue" placeholder="124,000" oninput="irAutoSave()">
                 </div>
                 <div class="ir-field">
                   <label>MoM growth (%)</label>
                   <input type="number" id="ir-growth" placeholder="12" oninput="irAutoSave()">
                 </div>
-              </div>
-              <div style="margin-top:6px;padding:10px 14px;background:var(--surface-2);border-radius:8px;font-size:12.5px;color:var(--text-2)">
-                Runway: <strong id="ir-runway-display" style="color:var(--text-0)">—</strong> &nbsp;·&nbsp; Logic Health Score: <strong id="ir-lhs-display" style="color:var(--accent)">—</strong>
               </div>
             </div>
 
@@ -6628,31 +6643,44 @@ e.g. I always start by validating whether the problem is real before evaluating 
           <!-- RIGHT COLUMN -->
           <div style="display:flex;flex-direction:column;gap:16px">
 
-            <!-- Narrative -->
+            <!-- Founder Signal -->
             <div class="ir-card">
-              <div class="ir-card-title">Founder Signal</div>
-              <div class="ir-field">
-                <label>Last 30 days — what happened</label>
-                <textarea id="ir-highlight" placeholder="We closed 3 new enterprise contracts, launched the new settlement rail…" oninput="irAutoSave()"></textarea>
+              <div class="ir-card-head">
+                <div class="ir-card-icon">
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 2L9.8 5.8 14 6.4 11 9.3l.7 3.9L8 11.4l-3.7 1.8.7-3.9L2 6.4l4.2-.6z"/></svg>
+                </div>
+                <div class="ir-card-title">Founder Signal</div>
+                <span class="ir-privacy-badge ir-badge-private">Private</span>
               </div>
               <div class="ir-field">
+                <label>Last 30 days — what happened</label>
+                <textarea id="ir-highlight" rows="4" placeholder="We closed 3 new enterprise contracts, launched the new settlement rail…" oninput="irAutoSave()"></textarea>
+              </div>
+              <div class="ir-field" style="margin-bottom:0">
                 <label>What investors need to know</label>
-                <textarea id="ir-signal" placeholder="We're raising a $4M bridge in Q3. Looking for investors with fintech distribution…" oninput="irAutoSave()"></textarea>
+                <textarea id="ir-signal" rows="4" placeholder="We're raising a $4M bridge in Q3. Looking for investors with fintech distribution…" oninput="irAutoSave()"></textarea>
               </div>
             </div>
 
-            <!-- Invite list -->
+            <!-- Invited Investors -->
             <div class="ir-card">
-              <div class="ir-card-title">Invited Investors</div>
-              <div style="font-size:12.5px;color:var(--text-3);margin-bottom:12px;line-height:1.5">Only these email addresses can view your IR page. Each address receives its own access — you can revoke at any time.</div>
+              <div class="ir-card-head">
+                <div class="ir-card-icon">
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="6" cy="5" r="2.5"/><path d="M1 14c0-2.76 2.24-5 5-5s5 2.24 5 5"/><line x1="12" y1="5" x2="15" y2="5"/><line x1="13.5" y1="3.5" x2="13.5" y2="6.5"/></svg>
+                </div>
+                <div class="ir-card-title">Invited Investors</div>
+                <span class="ir-privacy-badge ir-badge-private">Private</span>
+              </div>
+              <div style="font-size:12.5px;color:var(--text-3);margin-bottom:14px;line-height:1.55">Only these email addresses can view your IR room. You can revoke access at any time.</div>
               <div id="ir-invite-list">
-                <!-- populated by irRenderInviteList() -->
-                <div style="font-size:13px;color:var(--text-3);text-align:center;padding:16px 0;font-style:italic">No investors invited yet</div>
+                <div style="padding:20px 0;text-align:center;border:1.5px dashed var(--border);border-radius:10px;font-size:13px;color:var(--text-3)">No investors invited yet</div>
               </div>
               <div class="ir-invite-add-row">
-                <input class="ir-invite-input" id="ir-invite-input" type="email" placeholder="investor@fund.com"
-                  onkeydown="if(event.key==='Enter')irAddInvite()">
-                <button class="ir-invite-btn" onclick="irAddInvite()">Add</button>
+                <input class="ir-invite-input" id="ir-invite-input" type="email" placeholder="investor@fund.com" onkeydown="if(event.key==='Enter')irAddInvite()">
+                <button class="ir-invite-btn" onclick="irAddInvite()">
+                  <svg width="11" height="11" viewBox="0 0 11 11" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" style="margin-right:3px"><line x1="5.5" y1="1" x2="5.5" y2="10"/><line x1="1" y1="5.5" x2="10" y2="5.5"/></svg>
+                  Add
+                </button>
               </div>
             </div>
 
@@ -14998,7 +15026,7 @@ function irInitSetup() {
   irRenderInviteList();
   // Status / link
   if (d.published && d.link) {
-    document.getElementById('ir-link-section').style.display = '';
+    document.getElementById('ir-link-section').classList.remove('ir-links-locked');
     document.getElementById('ir-link-display').value = d.link;
     if (d.publicLink) document.getElementById('ir-public-link-display').value = d.publicLink;
     const pill = document.getElementById('ir-status-pill');
@@ -15016,17 +15044,19 @@ function irRenderInviteList() {
   if (!list) return;
   const invites = d.invites || [];
   if (!invites.length) {
-    list.innerHTML = '<div style="font-size:13px;color:var(--text-3);text-align:center;padding:16px 0;font-style:italic">No investors invited yet</div>';
+    list.innerHTML = '<div style="padding:20px 0;text-align:center;border:1.5px dashed var(--border);border-radius:10px;font-size:13px;color:var(--text-3)">No investors invited yet</div>';
     return;
   }
-  list.innerHTML = invites.map((item, i) => `
-    <div class="ir-invite-row" id="ir-inv-${i}">
-      <div class="ir-invite-dot"></div>
-      <div class="ir-invite-email">${item.email}</div>
-      <button class="ir-invite-remove" onclick="irRemoveInvite(${i})" title="Remove">
+  list.innerHTML = invites.map((item, i) => {
+    const ini = (item.email || '??').slice(0,2).toUpperCase();
+    return `<div class="ir-invite-row" id="ir-inv-${i}">
+      <div class="ir-invite-avatar">${ini}</div>
+      <div class="ir-invite-email">${escHtml(item.email)}</div>
+      <button class="ir-invite-remove" onclick="irRemoveInvite(${i})" title="Revoke access">
         <svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.75"><line x1="1" y1="1" x2="9" y2="9"/><line x1="9" y1="1" x2="1" y2="9"/></svg>
       </button>
-    </div>`).join('');
+    </div>`;
+  }).join('');
 }
 
 async function irAddInvite() {
@@ -15106,7 +15136,7 @@ async function irPublish() {
   localStorage.setItem('di_ir_revenue', form.revenue || '');
 
   // Update UI
-  document.getElementById('ir-link-section').style.display = '';
+  document.getElementById('ir-link-section').classList.remove('ir-links-locked');
   document.getElementById('ir-link-display').value = link;
   document.getElementById('ir-public-link-display').value = publicLink;
   const pill = document.getElementById('ir-status-pill');
@@ -22848,74 +22878,92 @@ e.g. I always start by validating whether the problem is real before evaluating 
     <!-- SCREEN: IR Page (founder setup) -->
     <div class="screen" id="screen-ir-page">
       <div class="main-inner"><div class="screen-inner">
-        <div class="screen-header">
-          <div class="screen-label">Investor Relations</div>
-          <h2 class="screen-title">Investor Room</h2>
-          <p class="screen-sub">A live, invite-only financial briefing for your investors. No decks. No delays. One link.</p>
-        </div>
 
-        <!-- Two-tier explainer -->
-        <div class="ir-tier-box">
-          <div class="ir-tier-title">Two-tier access model</div>
-          <div class="ir-tier-row">
-            <div class="ir-tier-col">
-              <div class="ir-tier-col-label"><svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.2" style="vertical-align:-1px;margin-right:3px"><circle cx="5" cy="5" r="4"/><path d="M5 1c-1 1.5-1.5 2.5-1.5 4S4 8.5 5 10M5 1c1 1.5 1.5 2.5 1.5 4S6 8.5 5 10M1 5h8"/></svg>Public page</div>
-              <div class="ir-tier-item">Company name, stage, tagline, industry — no financials. Anyone with the link can view. Use for cold intros.</div>
-            </div>
-            <div class="ir-tier-col">
-              <div class="ir-tier-col-label"><svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.2" style="vertical-align:-1px;margin-right:3px"><rect x="1.5" y="4.5" width="7" height="5" rx="0.7"/><path d="M3 4.5V3a2 2 0 014 0v1.5"/></svg>Private IR room</div>
-              <div class="ir-tier-item">Full financials: cash, burn, runway, revenue. Invite-only by email. Your board and investors only.</div>
-            </div>
+        <!-- Page hero: title + status -->
+        <div class="ir-page-hero">
+          <div>
+            <div class="screen-label">Investor Relations</div>
+            <h2 class="screen-title">Investor Room</h2>
           </div>
-        </div>
-
-        <!-- Status bar -->
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:12px">
-          <div style="display:flex;align-items:center;gap:10px">
+          <div class="ir-hero-right">
             <span class="ir-status-pill ir-status-draft" id="ir-status-pill">
               <svg width="6" height="6" viewBox="0 0 6 6"><circle cx="3" cy="3" r="3" fill="currentColor"/></svg>
               Draft
             </span>
-            <span style="font-size:12px;color:var(--text-3)" id="ir-last-updated">Not yet published</span>
-          </div>
-          <div style="display:flex;gap:8px">
-            <button class="ir-btn-preview" onclick="irPreviewPublicPage()">
-              <svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M1.5 6.5s2-4 5-4 5 4 5 4-2 4-5 4-5-4-5-4z"/><circle cx="6.5" cy="6.5" r="1.5"/></svg>
-              Preview public page
-            </button>
-            <button class="ir-btn-preview" onclick="irPreviewAsInvestor()" style="border-color:var(--accent);color:var(--accent)">
-              <svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="1.75"><rect x="1.5" y="3" width="10" height="7.5" rx="1.5"/><path d="M4 3V2a1.5 1.5 0 013 0v1"/></svg>
-              Preview IR room
-            </button>
-            <button class="ir-btn-publish" onclick="irPublish()">
-              <svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M1.5 9V11h10V9M6.5 1v7M4 4l2.5-3 2.5 3"/></svg>
-              Publish &amp; share
-            </button>
+            <span class="ir-last-upd" id="ir-last-updated">Not yet published</span>
           </div>
         </div>
 
-        <!-- Links (hidden until published) -->
-        <div id="ir-link-section" style="display:none;margin-bottom:24px">
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
-            <div>
-              <div style="font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--text-3);margin-bottom:6px"><svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.2" style="vertical-align:-1px;margin-right:3px"><circle cx="5" cy="5" r="4"/><path d="M5 1c-1 1.5-1.5 2.5-1.5 4S4 8.5 5 10M5 1c1 1.5 1.5 2.5 1.5 4S6 8.5 5 10M1 5h8"/></svg>Public profile link</div>
-              <div class="ir-link-bar">
-                <input class="ir-link-text" id="ir-public-link-display" readonly value="">
-                <button class="ir-link-copy" onclick="irCopyPublicLink()">Copy</button>
-              </div>
-              <div style="font-size:11px;color:var(--text-3);margin-top:4px">No financials — safe for cold intros</div>
+        <!-- Action row -->
+        <div class="ir-action-row">
+          <button class="ir-btn-preview" onclick="irPreviewPublicPage()">
+            <svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M1.5 6.5s2-4 5-4 5 4 5 4-2 4-5 4-5-4-5-4z"/><circle cx="6.5" cy="6.5" r="1.5"/></svg>
+            Preview public page
+          </button>
+          <button class="ir-btn-preview" onclick="irPreviewAsInvestor()" style="border-color:rgba(191,69,42,.4);color:var(--accent)">
+            <svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="1.75"><rect x="1.5" y="3" width="10" height="7.5" rx="1.5"/><path d="M4 3V2a1.5 1.5 0 013 0v1"/></svg>
+            Preview IR room
+          </button>
+          <div class="ir-action-spacer"></div>
+          <button class="ir-btn-publish" onclick="irPublish()">
+            <svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M1.5 9V11h10V9M6.5 1v7M4 4l2.5-3 2.5 3"/></svg>
+            Publish &amp; share
+          </button>
+        </div>
+
+        <!-- Two-tier explainer — compact -->
+        <div class="ir-how-it-works">
+          <div class="ir-how-col">
+            <div class="ir-how-col-icon pub">
+              <svg width="15" height="15" viewBox="0 0 15 15" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="7.5" cy="7.5" r="6"/><path d="M7.5 1.5c-1.5 2-2.5 3.5-2.5 6s1 4.5 2.5 6M7.5 1.5c1.5 2 2.5 3.5 2.5 6s-1 4.5-2.5 6M1.5 7.5h12"/></svg>
             </div>
-            <div>
-              <div style="font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--text-3);margin-bottom:6px"><svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.2" style="vertical-align:-1px;margin-right:3px"><rect x="1.5" y="4.5" width="7" height="5" rx="0.7"/><path d="M3 4.5V3a2 2 0 014 0v1.5"/></svg>Private IR room link</div>
-              <div class="ir-link-bar">
-                <input class="ir-link-text" id="ir-link-display" readonly value="">
-                <button class="ir-link-copy" onclick="irCopyLink()">Copy</button>
-              </div>
-              <div style="font-size:11px;color:var(--text-3);margin-top:4px">Invite-only — shared with listed investors only</div>
+            <div class="ir-how-col-body">
+              <div class="ir-how-col-label">Public page — anyone with link</div>
+              <div class="ir-how-col-desc">Company name, stage, tagline. No financials. Safe for cold outreach.</div>
+            </div>
+          </div>
+          <div class="ir-how-col">
+            <div class="ir-how-col-icon prv">
+              <svg width="15" height="15" viewBox="0 0 15 15" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2.5" y="6.5" width="10" height="7" rx="1"/><path d="M5 6.5V4.5a2.5 2.5 0 015 0v2"/></svg>
+            </div>
+            <div class="ir-how-col-body">
+              <div class="ir-how-col-label">Private IR room — invited only</div>
+              <div class="ir-how-col-desc">Full financials, runway, narrative. Shared by email. Your board and investors only.</div>
             </div>
           </div>
         </div>
 
+        <!-- Share links — always visible -->
+        <div class="ir-links-grid ir-links-locked" id="ir-link-section">
+          <div class="ir-link-tile">
+            <div class="ir-link-tile-head">
+              <div class="ir-link-tile-icon pub">
+                <svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="6.5" cy="6.5" r="5"/><path d="M6.5 1.5c-1.2 1.8-2 3-2 5s.8 3.5 2 5M6.5 1.5c1.2 1.8 2 3 2 5s-.8 3.5-2 5M1.5 6.5h10"/></svg>
+              </div>
+              <div class="ir-link-tile-label">Public profile link</div>
+            </div>
+            <div class="ir-link-tile-bar">
+              <input class="ir-link-tile-url" id="ir-public-link-display" readonly placeholder="Publish to generate link">
+              <button class="ir-link-tile-copy" onclick="irCopyPublicLink()">Copy</button>
+            </div>
+            <div class="ir-link-tile-hint">No financials — safe for cold intros</div>
+          </div>
+          <div class="ir-link-tile">
+            <div class="ir-link-tile-head">
+              <div class="ir-link-tile-icon prv">
+                <svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="5.5" width="9" height="6" rx="1"/><path d="M4 5.5V4a2.5 2.5 0 015 0v1.5"/></svg>
+              </div>
+              <div class="ir-link-tile-label">Private IR room link</div>
+            </div>
+            <div class="ir-link-tile-bar">
+              <input class="ir-link-tile-url" id="ir-link-display" readonly placeholder="Publish to generate link">
+              <button class="ir-link-tile-copy" onclick="irCopyLink()">Copy</button>
+            </div>
+            <div class="ir-link-tile-hint">Invite-only — shared with listed investors only</div>
+          </div>
+        </div>
+
+        <!-- Setup sections -->
         <div class="ir-setup-grid">
 
           <!-- LEFT COLUMN -->
@@ -22923,7 +22971,13 @@ e.g. I always start by validating whether the problem is real before evaluating 
 
             <!-- Company Identity -->
             <div class="ir-card">
-              <div class="ir-card-title">Company Identity</div>
+              <div class="ir-card-head">
+                <div class="ir-card-icon">
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="5" width="12" height="9" rx="1"/><path d="M5 5V3.5A1.5 1.5 0 016.5 2h3A1.5 1.5 0 0111 3.5V5"/><line x1="8" y1="9" x2="8" y2="11"/><line x1="6" y1="10" x2="10" y2="10"/></svg>
+                </div>
+                <div class="ir-card-title">Company Identity</div>
+                <span class="ir-privacy-badge ir-badge-public">Public</span>
+              </div>
               <div class="ir-field">
                 <label>Company name</label>
                 <input type="text" id="ir-company" placeholder="Vela Payments" oninput="irAutoSave();irSuggestSlug()">
@@ -22943,47 +22997,54 @@ e.g. I always start by validating whether the problem is real before evaluating 
                 <label>One-line description <span style="font-weight:400;color:var(--text-3)">(shown on public page)</span></label>
                 <input type="text" id="ir-tagline" placeholder="What your company does in one sentence" oninput="irAutoSave()">
               </div>
-              <div class="ir-field">
-                <label>Industry</label>
-                <select id="ir-industry" onchange="irAutoSave()">
-                  <option value="">Select industry</option>
-                  <option>Fintech</option>
-                  <option>SaaS</option>
-                  <option>Marketplace</option>
-                  <option>HealthTech</option>
-                  <option>EdTech</option>
-                  <option>LegalTech</option>
-                  <option>CleanTech</option>
-                  <option>AI / ML</option>
-                  <option>E-commerce</option>
-                  <option>Real Estate</option>
-                  <option>Media</option>
-                  <option>Other</option>
-                </select>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+                <div class="ir-field">
+                  <label>Industry</label>
+                  <select id="ir-industry" onchange="irAutoSave()">
+                    <option value="">Select</option>
+                    <option>Fintech</option>
+                    <option>SaaS</option>
+                    <option>Marketplace</option>
+                    <option>HealthTech</option>
+                    <option>EdTech</option>
+                    <option>LegalTech</option>
+                    <option>CleanTech</option>
+                    <option>AI / ML</option>
+                    <option>E-commerce</option>
+                    <option>Real Estate</option>
+                    <option>Media</option>
+                    <option>Other</option>
+                  </select>
+                </div>
+                <div class="ir-field">
+                  <label>Founded</label>
+                  <input type="number" id="ir-founded" placeholder="2022" min="1900" max="2099" oninput="irAutoSave()">
+                </div>
               </div>
-              <div class="ir-field">
-                <label>Founded year</label>
-                <input type="number" id="ir-founded" placeholder="2022" min="1900" max="2099" oninput="irAutoSave()" style="max-width:120px">
-              </div>
-              <div class="ir-field">
+              <div class="ir-field" style="margin-bottom:0">
                 <label>Brand colour</label>
                 <div style="display:flex;align-items:center;gap:10px">
                   <input type="color" id="ir-color" value="#BF452A" oninput="irAutoSave()" style="width:44px;height:36px;padding:2px;border:1.5px solid var(--border-md);border-radius:8px;cursor:pointer">
-                  <span style="font-size:12px;color:var(--text-3)">Shown on both pages</span>
+                  <span style="font-size:12px;color:var(--text-3)">Applied to both pages</span>
                 </div>
               </div>
             </div>
 
             <!-- URL Slug -->
             <div class="ir-card">
-              <div class="ir-card-title">Page URL</div>
-              <div style="font-size:12.5px;color:var(--text-3);margin-bottom:12px;line-height:1.5">Your public company profile lives at this URL. Keep it short and recognisable.</div>
-              <div class="ir-field">
+              <div class="ir-card-head">
+                <div class="ir-card-icon">
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6.5 9.5a3.5 3.5 0 005 0l2-2a3.5 3.5 0 00-5-5l-1 1"/><path d="M9.5 6.5a3.5 3.5 0 00-5 0l-2 2a3.5 3.5 0 005 5l1-1"/></svg>
+                </div>
+                <div class="ir-card-title">Page URL</div>
+                <span class="ir-privacy-badge ir-badge-public">Public</span>
+              </div>
+              <div style="font-size:12.5px;color:var(--text-3);margin-bottom:14px;line-height:1.55">Your public profile lives at this URL. Keep it short and recognisable.</div>
+              <div class="ir-field" style="margin-bottom:0">
                 <label>Company URL slug</label>
                 <div class="ir-slug-row">
                   <div class="ir-slug-prefix">divine.uncharted.ventures/c/</div>
-                  <input class="ir-slug-input" id="ir-slug" placeholder="vela-payments"
-                    oninput="irSlugInput(this)">
+                  <input class="ir-slug-input" id="ir-slug" placeholder="vela-payments" oninput="irSlugInput(this)">
                   <div class="ir-slug-check" id="ir-slug-check">✓ available</div>
                 </div>
                 <span class="ir-field-hint">Lowercase letters, numbers, and hyphens only.</span>
@@ -22992,29 +23053,43 @@ e.g. I always start by validating whether the problem is real before evaluating 
 
             <!-- Financials -->
             <div class="ir-card">
-              <div class="ir-card-title">Key Financials</div>
-              <div class="ir-setup-grid" style="gap:12px;grid-template-columns:1fr 1fr">
+              <div class="ir-card-head">
+                <div class="ir-card-icon">
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="1.5" y="10" width="3" height="4.5" rx="0.5"/><rect x="6.5" y="6.5" width="3" height="8" rx="0.5"/><rect x="11.5" y="2.5" width="3" height="12" rx="0.5"/><line x1="1" y1="14.5" x2="15" y2="14.5"/></svg>
+                </div>
+                <div class="ir-card-title">Key Financials</div>
+                <span class="ir-privacy-badge ir-badge-private">Private</span>
+              </div>
+              <!-- Runway visual -->
+              <div class="ir-runway-hero">
+                <div>
+                  <div class="ir-runway-hero-val" id="ir-runway-display">—</div>
+                  <div class="ir-runway-hero-label">Runway</div>
+                </div>
+                <div class="ir-runway-hero-bar">
+                  <div style="font-size:11px;color:var(--text-3);margin-bottom:4px">Logic Health Score: <strong id="ir-lhs-display" style="color:var(--accent)">—</strong></div>
+                  <div class="ir-runway-track"><div class="ir-runway-fill" id="ir-runway-bar" style="width:0%;background:var(--accent)"></div></div>
+                </div>
+              </div>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
                 <div class="ir-field">
                   <label>Cash on hand ($)</label>
-                  <input type="number" id="ir-cash" placeholder="1470000" oninput="irAutoSave()">
+                  <input type="number" id="ir-cash" placeholder="1,470,000" oninput="irAutoSave()">
                   <span class="ir-field-hint">Current bank balance</span>
                 </div>
                 <div class="ir-field">
                   <label>Net burn / month ($)</label>
-                  <input type="number" id="ir-burn" placeholder="82000" oninput="irAutoSave()">
+                  <input type="number" id="ir-burn" placeholder="82,000" oninput="irAutoSave()">
                   <span class="ir-field-hint">Cash out minus cash in</span>
                 </div>
                 <div class="ir-field">
                   <label>Monthly revenue ($)</label>
-                  <input type="number" id="ir-revenue" placeholder="124000" oninput="irAutoSave()">
+                  <input type="number" id="ir-revenue" placeholder="124,000" oninput="irAutoSave()">
                 </div>
                 <div class="ir-field">
                   <label>MoM growth (%)</label>
                   <input type="number" id="ir-growth" placeholder="12" oninput="irAutoSave()">
                 </div>
-              </div>
-              <div style="margin-top:6px;padding:10px 14px;background:var(--surface-2);border-radius:8px;font-size:12.5px;color:var(--text-2)">
-                Runway: <strong id="ir-runway-display" style="color:var(--text-0)">—</strong> &nbsp;·&nbsp; Logic Health Score: <strong id="ir-lhs-display" style="color:var(--accent)">—</strong>
               </div>
             </div>
 
@@ -23023,31 +23098,44 @@ e.g. I always start by validating whether the problem is real before evaluating 
           <!-- RIGHT COLUMN -->
           <div style="display:flex;flex-direction:column;gap:16px">
 
-            <!-- Narrative -->
+            <!-- Founder Signal -->
             <div class="ir-card">
-              <div class="ir-card-title">Founder Signal</div>
-              <div class="ir-field">
-                <label>Last 30 days — what happened</label>
-                <textarea id="ir-highlight" placeholder="We closed 3 new enterprise contracts, launched the new settlement rail…" oninput="irAutoSave()"></textarea>
+              <div class="ir-card-head">
+                <div class="ir-card-icon">
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 2L9.8 5.8 14 6.4 11 9.3l.7 3.9L8 11.4l-3.7 1.8.7-3.9L2 6.4l4.2-.6z"/></svg>
+                </div>
+                <div class="ir-card-title">Founder Signal</div>
+                <span class="ir-privacy-badge ir-badge-private">Private</span>
               </div>
               <div class="ir-field">
+                <label>Last 30 days — what happened</label>
+                <textarea id="ir-highlight" rows="4" placeholder="We closed 3 new enterprise contracts, launched the new settlement rail…" oninput="irAutoSave()"></textarea>
+              </div>
+              <div class="ir-field" style="margin-bottom:0">
                 <label>What investors need to know</label>
-                <textarea id="ir-signal" placeholder="We're raising a $4M bridge in Q3. Looking for investors with fintech distribution…" oninput="irAutoSave()"></textarea>
+                <textarea id="ir-signal" rows="4" placeholder="We're raising a $4M bridge in Q3. Looking for investors with fintech distribution…" oninput="irAutoSave()"></textarea>
               </div>
             </div>
 
-            <!-- Invite list -->
+            <!-- Invited Investors -->
             <div class="ir-card">
-              <div class="ir-card-title">Invited Investors</div>
-              <div style="font-size:12.5px;color:var(--text-3);margin-bottom:12px;line-height:1.5">Only these email addresses can view your IR page. Each address receives its own access — you can revoke at any time.</div>
+              <div class="ir-card-head">
+                <div class="ir-card-icon">
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="6" cy="5" r="2.5"/><path d="M1 14c0-2.76 2.24-5 5-5s5 2.24 5 5"/><line x1="12" y1="5" x2="15" y2="5"/><line x1="13.5" y1="3.5" x2="13.5" y2="6.5"/></svg>
+                </div>
+                <div class="ir-card-title">Invited Investors</div>
+                <span class="ir-privacy-badge ir-badge-private">Private</span>
+              </div>
+              <div style="font-size:12.5px;color:var(--text-3);margin-bottom:14px;line-height:1.55">Only these email addresses can view your IR room. You can revoke access at any time.</div>
               <div id="ir-invite-list">
-                <!-- populated by irRenderInviteList() -->
-                <div style="font-size:13px;color:var(--text-3);text-align:center;padding:16px 0;font-style:italic">No investors invited yet</div>
+                <div style="padding:20px 0;text-align:center;border:1.5px dashed var(--border);border-radius:10px;font-size:13px;color:var(--text-3)">No investors invited yet</div>
               </div>
               <div class="ir-invite-add-row">
-                <input class="ir-invite-input" id="ir-invite-input" type="email" placeholder="investor@fund.com"
-                  onkeydown="if(event.key==='Enter')irAddInvite()">
-                <button class="ir-invite-btn" onclick="irAddInvite()">Add</button>
+                <input class="ir-invite-input" id="ir-invite-input" type="email" placeholder="investor@fund.com" onkeydown="if(event.key==='Enter')irAddInvite()">
+                <button class="ir-invite-btn" onclick="irAddInvite()">
+                  <svg width="11" height="11" viewBox="0 0 11 11" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" style="margin-right:3px"><line x1="5.5" y1="1" x2="5.5" y2="10"/><line x1="1" y1="5.5" x2="10" y2="5.5"/></svg>
+                  Add
+                </button>
               </div>
             </div>
 
