@@ -4948,7 +4948,7 @@
                       12-month projection — model-generated, not guessed
                     </div>
                   </div>
-                  <button class="is-scenario-challenge" style="margin-top:14px" onclick="showView('connections')">
+                  <button class="is-scenario-challenge" style="margin-top:14px" onclick="openQBOConnect(this)">
                     Connect QuickBooks →
                   </button>
                 </div>
@@ -5229,7 +5229,7 @@
                   12-month projection — model-generated, not guessed
                 </div>
               </div>
-              <button class="is-scenario-challenge" style="margin-top:14px" onclick="showView('connections')">
+              <button class="is-scenario-challenge" style="margin-top:14px" onclick="openQBOConnect(this)">
                 Connect QuickBooks →
               </button>
             </div>
@@ -5494,7 +5494,7 @@
                   12-month projection — model-generated, not guessed
                 </div>
               </div>
-              <button class="is-scenario-challenge" onclick="showView('connections')">
+              <button class="is-scenario-challenge" onclick="openQBOConnect(this)">
                 Connect QuickBooks →
               </button>
             </div>
@@ -6497,7 +6497,7 @@ e.g. I always start by validating whether the problem is real before evaluating 
             </div>
             <div class="ir-link-tile-bar">
               <input class="ir-link-tile-url" id="ir-public-link-display" readonly placeholder="Publish to generate link">
-              <button class="ir-link-tile-copy" onclick="irCopyPublicLink()">Copy</button>
+              <button class="ir-link-tile-copy" onclick="irCopyLink()">Copy</button>
             </div>
             <div class="ir-link-tile-hint">No financials — safe for cold intros</div>
           </div>
@@ -7034,6 +7034,22 @@ e.g. I always start by validating whether the problem is real before evaluating 
     <div style="display:flex;gap:8px;justify-content:flex-end;">
       <button onclick="closeRenameModal()" style="padding:9px 18px;font-size:13.5px;font-weight:500;border:1px solid var(--border-md);border-radius:var(--r-pill);background:transparent;cursor:pointer;color:var(--text-1);">Cancel</button>
       <button onclick="commitRenameModal()" style="padding:9px 18px;font-size:13.5px;font-weight:600;border:none;border-radius:var(--r-pill);background:var(--accent);color:#fff;cursor:pointer;">Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── Move to Project Modal ────────────────────────────────────────────── -->
+<div id="move-project-modal-overlay" style="display:none;position:fixed;inset:0;z-index:900;background:rgba(0,0,0,0.35);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);align-items:center;justify-content:center;" onclick="if(event.target===this)closeMoveToProjectModal()">
+  <div id="move-project-modal" style="background:#fff;border-radius:16px;padding:24px 24px 20px;width:min(400px,92vw);box-shadow:0 20px 60px rgba(0,0,0,0.18);display:flex;flex-direction:column;gap:14px;">
+    <div style="display:flex;align-items:center;justify-content:space-between;">
+      <h3 style="font-size:15px;font-weight:700;color:var(--text-0);margin:0;">Move to Project</h3>
+      <button onclick="closeMoveToProjectModal()" style="width:30px;height:30px;border:none;background:transparent;cursor:pointer;border-radius:8px;display:flex;align-items:center;justify-content:center;color:var(--text-3);" onmouseover="this.style.background='var(--surface-2)'" onmouseout="this.style.background='transparent'">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.75"><line x1="2" y1="2" x2="12" y2="12"/><line x1="12" y1="2" x2="2" y2="12"/></svg>
+      </button>
+    </div>
+    <div id="move-project-list" style="display:flex;flex-direction:column;gap:4px;max-height:280px;overflow-y:auto;"></div>
+    <div style="display:flex;gap:8px;justify-content:flex-end;border-top:1px solid var(--border-lt);padding-top:14px;margin-top:2px;">
+      <button onclick="closeMoveToProjectModal()" style="padding:9px 18px;font-size:13.5px;font-weight:500;border:1px solid var(--border-md);border-radius:var(--r-pill);background:transparent;cursor:pointer;color:var(--text-1);">Cancel</button>
     </div>
   </div>
 </div>
@@ -8658,7 +8674,7 @@ function renderDashboardHome() {
     const el = document.getElementById('dc-scenario-' + k);
     if (el && !el.value) el.value = v;
   });
-  try { updateScenario('dc'); } catch(e) {}
+  // QBO-sourced: no manual scenario inputs
 }
 
 /* ── Dashboard quick-input ── */
@@ -9880,6 +9896,23 @@ function openReplay(id) {
   const idx = recents.findIndex(r => r.id === id);
   if (idx !== -1) openRecent(idx);
 }
+
+function openQBOConnect(btn) {
+  // Route to the integrations/Connect tab from whichever panel the button is in
+  const panel = btn?.closest('[id*="panel"]');
+  if (panel) {
+    const ns = panel.id.startsWith('chat') ? 'chat-panel'
+              : panel.id.startsWith('is')  ? 'is-panel'
+              : 'dc';
+    if (ns === 'dc')         { switchDcPanel('integrations', document.querySelectorAll('.dc-ptab')[2]); return; }
+    if (ns === 'chat-panel') { switchPanel('chat-panel','integrations', document.querySelectorAll('#chat-dc-tabs .dc-ptab')[2]); return; }
+    if (ns === 'is-panel')   { switchIsPanel('integrations', null); return; }
+  }
+  // Fallback: open DC integrations tab
+  showView('recents');
+  setTimeout(() => switchDcPanel('integrations', document.querySelectorAll('.dc-ptab')[2]), 100);
+}
+
 
 /* ════════════════════════════════
    INQUIRY STREAM
@@ -13221,6 +13254,8 @@ function openRecentMenu(id, e) {
   const s        = sessions.find(x => x.id === id);
   const isPinned = s?.pinned;
 
+  const inProject = !!s?.projectId;
+
   const menu = document.createElement('div');
   menu.className = 'recent-dropdown';
   menu.id = 'recent-dropdown-' + id;
@@ -13237,6 +13272,20 @@ function openRecentMenu(id, e) {
       </svg>
       Rename
     </button>
+    <button class="recent-dropdown-item" onclick="openMoveToProjectModal('${id}')">
+      <svg width="13" height="13" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.75">
+        <rect x="1.5" y="3" width="11" height="9" rx="1.5"/>
+        <path d="M1.5 6h11M4 3V1.5h6V3"/>
+      </svg>
+      ${inProject ? 'Move to different project' : 'Move to Project'}
+    </button>
+    ${inProject ? `<button class="recent-dropdown-item" onclick="removeSessionFromProject('${id}')">
+      <svg width="13" height="13" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.75">
+        <rect x="1.5" y="3" width="11" height="9" rx="1.5"/>
+        <path d="M1.5 6h11M4 3V1.5h6V3M5 9l4-0M5 9h4"/>
+      </svg>
+      Remove from project
+    </button>` : ''}
     <div class="recent-dropdown-sep"></div>
     <button class="recent-dropdown-item danger" onclick="deleteChatSession('${id}')">
       <svg width="13" height="13" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.75">
@@ -13335,6 +13384,92 @@ function closeRenameModal() {
   const overlay = document.getElementById('rename-modal-overlay');
   if (overlay) overlay.style.display = 'none';
   _renameTargetId = null;
+}
+
+// ── Move to Project ───────────────────────────────────────────────────────────
+let _moveTargetId = null;
+
+function openMoveToProjectModal(id) {
+  closeRecentMenu();
+  _moveTargetId = id;
+
+  const projects = loadProjects();
+  const sessions = loadChatSessions();
+  const s        = sessions.find(x => x.id === id);
+  const list     = document.getElementById('move-project-list');
+  if (!list) return;
+
+  if (!projects.length) {
+    list.innerHTML = `
+      <div style="text-align:center;padding:24px 0;color:var(--text-3);font-size:13px;">
+        No projects yet.
+        <br><button onclick="closeMoveToProjectModal();showView('projects')" style="margin-top:10px;font-size:12px;font-weight:700;color:var(--accent);background:var(--accent-lt);border:1px solid var(--accent-bdr);border-radius:var(--r-pill);padding:5px 14px;cursor:pointer;font-family:'Inter',sans-serif">Create a project →</button>
+      </div>`;
+  } else {
+    list.innerHTML = projects.map(p => {
+      const initials   = _projInitials(p.name);
+      const isCurrent  = s?.projectId === p.id;
+      return `<button onclick="commitMoveToProject('${p.id}')" style="display:flex;align-items:center;gap:10px;width:100%;text-align:left;padding:9px 10px;border:1.5px solid ${isCurrent ? 'var(--accent)' : 'transparent'};border-radius:10px;background:${isCurrent ? 'var(--accent-lt)' : 'transparent'};cursor:pointer;font-family:'Inter',sans-serif;transition:background .12s;" onmouseover="if(!${isCurrent})this.style.background='var(--surface-2)'" onmouseout="if(!${isCurrent})this.style.background='transparent'">
+        <div style="width:32px;height:32px;border-radius:8px;background:${p.color};display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff;flex-shrink:0;">${escHtml(initials)}</div>
+        <div style="flex:1;min-width:0;">
+          <div style="font-size:13.5px;font-weight:600;color:var(--text-0);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${escHtml(p.name)}</div>
+          ${p.tagline ? `<div style="font-size:11px;color:var(--text-3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${escHtml(p.tagline)}</div>` : ''}
+        </div>
+        ${isCurrent ? '<svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="var(--accent)" stroke-width="2.2"><polyline points="2,7 6,11 12,3"/></svg>' : ''}
+      </button>`;
+    }).join('');
+  }
+
+  const overlay = document.getElementById('move-project-modal-overlay');
+  if (overlay) overlay.style.display = 'flex';
+}
+
+function commitMoveToProject(projectId) {
+  const id = _moveTargetId;
+  if (!id) return;
+  closeMoveToProjectModal();
+
+  // Update in di_chats
+  const sessions = loadChatSessions();
+  const s = sessions.find(x => x.id === id);
+  if (s) { s.projectId = projectId; saveChatSessions(sessions); }
+
+  // Update in di_recents
+  const recents = loadRecents();
+  const r = recents.find(x => x.id === id);
+  if (r) { r.projectId = projectId; saveRecents(recents); }
+
+  // Sync live session if open
+  if (_chatSession?.id === id) _chatSession.projectId = projectId;
+
+  const pName = loadProjects().find(p => p.id === projectId)?.name || 'project';
+  showToast('Moved to ' + pName, 'success');
+  renderRecents();
+  renderDcProjects();
+}
+
+function removeSessionFromProject(id) {
+  closeRecentMenu();
+
+  const sessions = loadChatSessions();
+  const s = sessions.find(x => x.id === id);
+  if (s) { delete s.projectId; saveChatSessions(sessions); }
+
+  const recents = loadRecents();
+  const r = recents.find(x => x.id === id);
+  if (r) { delete r.projectId; saveRecents(recents); }
+
+  if (_chatSession?.id === id) delete _chatSession.projectId;
+
+  showToast('Removed from project', 'success');
+  renderRecents();
+  renderDcProjects();
+}
+
+function closeMoveToProjectModal() {
+  const overlay = document.getElementById('move-project-modal-overlay');
+  if (overlay) overlay.style.display = 'none';
+  _moveTargetId = null;
 }
 
 // ── Delete session ────────────────────────────────────────────────────────────
@@ -15748,7 +15883,7 @@ function _renderChatSidebarForSession(session) {
   renderGrowthPanel('chat');
 
   // Auto-calculate scenario with the pre-filled defaults so graph + delta show immediately
-  updateScenario('chat');
+  // QBO-sourced: no manual scenario inputs
 }
 
 /* ── Chat-screen sidebar toggle (kept for keyboard/programmatic use) ── */
