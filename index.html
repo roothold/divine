@@ -1344,6 +1344,22 @@
     .new-project-card { background:transparent; border:1.5px dashed var(--border-hi); border-radius:var(--r); padding:20px 18px; cursor:pointer; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:8px; transition:background 0.15s,border-color 0.15s; min-height:96px; }
     .new-project-card:hover { background:var(--surface); border-color:var(--accent); }
     .new-project-card span { font-size:13px; font-weight:500; color:var(--text-3); }
+    /* Shared-project cards */
+    .projects-shared-header { font-size:11px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:var(--text-3); margin:24px 0 10px; display:flex; align-items:center; gap:8px; }
+    .projects-shared-count { background:var(--surface-2); color:var(--text-2); font-size:11px; font-weight:700; border-radius:100px; padding:2px 8px; }
+    .project-card-shared { border-style:dashed; opacity:.9; }
+    .project-card-shared:hover { opacity:1; }
+    .project-shared-pill { display:inline-flex; align-items:center; gap:4px; margin-top:10px; padding:3px 9px; border-radius:100px; background:var(--surface-2); border:1px solid var(--border); font-size:11px; font-weight:600; color:var(--text-2); }
+    /* Viewer mode — all editable fields become read-only visually */
+    .pd-viewer-mode .pd-title[contenteditable] { pointer-events:none; }
+    .pd-viewer-mode .pd-subtitle[contenteditable] { pointer-events:none; }
+    .pd-viewer-mode [contenteditable] { pointer-events:none; cursor:default; }
+    .pd-viewer-mode input, .pd-viewer-mode textarea, .pd-viewer-mode select { pointer-events:none; opacity:.75; background:var(--surface-2) !important; cursor:default; }
+    .pd-viewer-mode button:not(.pd-back):not(.pd-viewer-dismiss) { opacity:.4; pointer-events:none; }
+    .pd-viewer-banner { display:flex; align-items:center; gap:10px; background:var(--surface-2); border:1px solid var(--border-md); border-radius:var(--r); padding:11px 16px; margin-bottom:20px; font-size:13px; color:var(--text-2); }
+    .pd-viewer-banner svg { flex-shrink:0; color:var(--accent); }
+    .pd-viewer-banner strong { color:var(--text-1); font-weight:600; }
+    .pd-viewer-banner .pd-viewer-role-pill { background:var(--accent); color:#fff; font-size:10.5px; font-weight:700; border-radius:100px; padding:2px 9px; text-transform:capitalize; margin-left:4px; }
     .project-form { background:var(--surface); border:1px solid var(--border); border-radius:var(--r); padding:24px; box-shadow:var(--sh-sm); display:none; margin-bottom:24px; }
     .project-form.visible { display:block; }
     .project-form input { width:100%; border:1.5px solid var(--border-md); border-radius:var(--r-sm); padding:11px 14px; font-family:'Inter',sans-serif; font-size:14px; color:var(--text-0); outline:none; margin-bottom:12px; transition:border-color 0.15s; }
@@ -6883,6 +6899,97 @@ e.g. I always start by validating whether the problem is real before evaluating 
       </div></div>
     </div>
 
+
+<!-- ══ USER PROFILE SCREEN ══════════════════════════════════════════ -->
+<div class="screen" id="screen-user-profile">
+  <div class="main-inner">
+    <div class="profile-screen-wrap">
+
+      <!-- Header -->
+      <div style="margin-bottom:24px">
+        <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--accent);margin-bottom:6px">My Profile</div>
+        <h2 style="font-size:26px;font-weight:700;color:var(--text-0);margin-bottom:4px">Your identity on Divine</h2>
+        <p style="font-size:13.5px;color:var(--text-2)">Your role, expertise, and company affiliation. Visible to your team members.</p>
+      </div>
+
+      <!-- Hero card -->
+      <div class="profile-hero-card">
+        <div class="profile-avatar-lg" id="prof-avatar-lg" onclick="profilePickColor()">MA</div>
+        <div class="profile-hero-body">
+          <div class="profile-name-row">
+            <input class="profile-name-input" id="prof-name" type="text" placeholder="Your full name" value="">
+            <span class="role-badge role-founder" id="prof-role-badge">Founder</span>
+          </div>
+          <div class="profile-email-row" id="prof-email-display"></div>
+          <textarea class="profile-bio-input" id="prof-bio" rows="3" placeholder="Your background in 2–3 sentences. What makes your perspective unique?"></textarea>
+        </div>
+      </div>
+
+      <!-- Role & company -->
+      <div class="profile-section-card">
+        <div class="profile-section-head">Role & Company</div>
+        <div class="profile-field-row">
+          <div>
+            <div class="profile-field-label">Role</div>
+            <select class="profile-role-select" id="prof-role" onchange="profileUpdateRoleBadge()">
+              <option value="founder">Founder</option>
+              <option value="thinker">Thinker</option>
+              <option value="advisory">Advisory Board</option>
+              <option value="investor">Investor</option>
+              <option value="staff">Staff</option>
+            </select>
+          </div>
+          <div>
+            <div class="profile-field-label">Company</div>
+            <input class="profile-field-input" id="prof-company" type="text" placeholder="Your company name">
+          </div>
+        </div>
+        <div class="profile-field-row">
+          <div>
+            <div class="profile-field-label">Title / descriptor</div>
+            <input class="profile-field-input" id="prof-title" type="text" placeholder="e.g. Builder · Designer · Founder">
+          </div>
+          <div>
+            <div class="profile-field-label">Location</div>
+            <input class="profile-field-input" id="prof-location" type="text" placeholder="e.g. Lagos, NG">
+          </div>
+        </div>
+      </div>
+
+      <!-- Expertise -->
+      <div class="profile-section-card">
+        <div class="profile-section-head">Areas of Expertise</div>
+        <div class="profile-expertise-wrap" id="prof-expertise-tags"></div>
+        <div class="profile-tag-add">
+          <input class="profile-tag-input" id="prof-tag-input" type="text" placeholder="Add expertise (e.g. GTM Strategy)" onkeydown="if(event.key==='Enter')profileAddTag()">
+          <button class="adv-invite-btn" onclick="profileAddTag()" style="padding:8px 14px;font-size:12px">Add</button>
+        </div>
+      </div>
+
+      <!-- Activity summary -->
+      <div class="profile-section-card">
+        <div class="profile-section-head">Activity</div>
+        <div class="profile-activity-row">
+          <div class="profile-activity-cell">
+            <div class="profile-activity-val" id="prof-act-sessions">0</div>
+            <div class="profile-activity-lbl">Perspectives</div>
+          </div>
+          <div class="profile-activity-cell">
+            <div class="profile-activity-val" id="prof-act-projects">0</div>
+            <div class="profile-activity-lbl">Projects</div>
+          </div>
+          <div class="profile-activity-cell">
+            <div class="profile-activity-val" id="prof-act-team">0</div>
+            <div class="profile-activity-lbl">Team members</div>
+          </div>
+        </div>
+      </div>
+
+      <button class="profile-save-btn" onclick="profileSave()">Save profile</button>
+    </div>
+  </div>
+</div>
+
   </main>
 </div>
 
@@ -6998,96 +7105,6 @@ e.g. I always start by validating whether the problem is real before evaluating 
       <!-- Populated by showSampleOutput() -->
     </div>
     <div style="font-size:12px;color:var(--text-3);text-align:center">This preview is generated from your saved framework — it costs nothing to preview.</div>
-  </div>
-</div>
-
-<!-- ══ USER PROFILE SCREEN ══════════════════════════════════════════ -->
-<div class="screen" id="screen-user-profile">
-  <div class="main-inner">
-    <div class="profile-screen-wrap">
-
-      <!-- Header -->
-      <div style="margin-bottom:24px">
-        <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--accent);margin-bottom:6px">My Profile</div>
-        <h2 style="font-size:26px;font-weight:700;color:var(--text-0);margin-bottom:4px">Your identity on Divine</h2>
-        <p style="font-size:13.5px;color:var(--text-2)">Your role, expertise, and company affiliation. Visible to your team members.</p>
-      </div>
-
-      <!-- Hero card -->
-      <div class="profile-hero-card">
-        <div class="profile-avatar-lg" id="prof-avatar-lg" onclick="profilePickColor()">MA</div>
-        <div class="profile-hero-body">
-          <div class="profile-name-row">
-            <input class="profile-name-input" id="prof-name" type="text" placeholder="Your full name" value="">
-            <span class="role-badge role-founder" id="prof-role-badge">Founder</span>
-          </div>
-          <div class="profile-email-row" id="prof-email-display"></div>
-          <textarea class="profile-bio-input" id="prof-bio" rows="3" placeholder="Your background in 2–3 sentences. What makes your perspective unique?"></textarea>
-        </div>
-      </div>
-
-      <!-- Role & company -->
-      <div class="profile-section-card">
-        <div class="profile-section-head">Role & Company</div>
-        <div class="profile-field-row">
-          <div>
-            <div class="profile-field-label">Role</div>
-            <select class="profile-role-select" id="prof-role" onchange="profileUpdateRoleBadge()">
-              <option value="founder">Founder</option>
-              <option value="thinker">Thinker</option>
-              <option value="advisory">Advisory Board</option>
-              <option value="investor">Investor</option>
-              <option value="staff">Staff</option>
-            </select>
-          </div>
-          <div>
-            <div class="profile-field-label">Company</div>
-            <input class="profile-field-input" id="prof-company" type="text" placeholder="Your company name">
-          </div>
-        </div>
-        <div class="profile-field-row">
-          <div>
-            <div class="profile-field-label">Title / descriptor</div>
-            <input class="profile-field-input" id="prof-title" type="text" placeholder="e.g. Builder · Designer · Founder">
-          </div>
-          <div>
-            <div class="profile-field-label">Location</div>
-            <input class="profile-field-input" id="prof-location" type="text" placeholder="e.g. Lagos, NG">
-          </div>
-        </div>
-      </div>
-
-      <!-- Expertise -->
-      <div class="profile-section-card">
-        <div class="profile-section-head">Areas of Expertise</div>
-        <div class="profile-expertise-wrap" id="prof-expertise-tags"></div>
-        <div class="profile-tag-add">
-          <input class="profile-tag-input" id="prof-tag-input" type="text" placeholder="Add expertise (e.g. GTM Strategy)" onkeydown="if(event.key==='Enter')profileAddTag()">
-          <button class="adv-invite-btn" onclick="profileAddTag()" style="padding:8px 14px;font-size:12px">Add</button>
-        </div>
-      </div>
-
-      <!-- Activity summary -->
-      <div class="profile-section-card">
-        <div class="profile-section-head">Activity</div>
-        <div class="profile-activity-row">
-          <div class="profile-activity-cell">
-            <div class="profile-activity-val" id="prof-act-sessions">0</div>
-            <div class="profile-activity-lbl">Perspectives</div>
-          </div>
-          <div class="profile-activity-cell">
-            <div class="profile-activity-val" id="prof-act-projects">0</div>
-            <div class="profile-activity-lbl">Projects</div>
-          </div>
-          <div class="profile-activity-cell">
-            <div class="profile-activity-val" id="prof-act-team">0</div>
-            <div class="profile-activity-lbl">Team members</div>
-          </div>
-        </div>
-      </div>
-
-      <button class="profile-save-btn" onclick="profileSave()">Save profile</button>
-    </div>
   </div>
 </div>
 
@@ -10185,11 +10202,28 @@ function renderProjects() {
       `</div>`;
   }).join('');
 
+  const sharedCards = _sharedProjects.map(p => {
+    const typeLabel = { initiative:'<svg width="9" height="10" viewBox="0 0 9 10" fill="currentColor" style="vertical-align:-1px;margin-right:3px"><path d="M5.5 0.5L1.5 5.5H4L3 9.5 7.5 4.5H5z"/></svg> Initiative', company:'<svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.1" style="vertical-align:-1px;margin-right:3px"><rect x="1" y="1.5" width="8" height="7.5" rx="0.4"/><path d="M3.5 9V6H6.5V9"/><line x1="1" y1="4.5" x2="9" y2="4.5"/></svg> Company', theme:'<svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.1" style="vertical-align:-1px;margin-right:3px"><circle cx="5" cy="4" r="2.5"/><path d="M3.5 7h3M3.8 8.3h2.4"/></svg> Theme' }[p.type] || '';
+    const badgeClass = { initiative:'ptb-initiative', company:'ptb-company', theme:'ptb-theme' }[p.type] || '';
+    const ROLE_LABELS = { thinker:'Thinker', advisory:'Advisor', investor:'Investor', staff:'Staff' };
+    return `<div class="project-card project-card-shared" onclick="_openSharedProject('${p.id}','${p._ownerKey}','${p._sharedRole}')">` +
+      `<div class="project-dot" style="background:${p.color}"></div>` +
+      (typeLabel ? `<div class="project-type-badge ${badgeClass}" style="margin-bottom:8px">${typeLabel}</div>` : '') +
+      `<div class="project-name">${escHtml(p.name)}</div>` +
+      (p.tagline ? `<div class="project-tagline">${escHtml(p.tagline)}</div>` : '') +
+      `<div class="project-shared-pill"><svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="3" cy="5" r="1.5"/><circle cx="7" cy="2" r="1.5"/><circle cx="7" cy="8" r="1.5"/><line x1="4.5" y1="4.2" x2="5.5" y2="2.8"/><line x1="4.5" y1="5.8" x2="5.5" y2="7.2"/></svg> Shared · ${escHtml(ROLE_LABELS[p._sharedRole] || p._sharedRole)}</div>` +
+      `</div>`;
+  }).join('');
+
+  const sharedSection = _sharedProjects.length > 0 ? `
+    <div class="projects-shared-header">Shared with me <span class="projects-shared-count">${_sharedProjects.length}</span></div>
+    ${sharedCards}` : '';
+
   grid.innerHTML = cards + `
     <div class="new-project-card" onclick="showProjectForm()">
       <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="var(--text-3)" stroke-width="1.75"><path d="M10 4v12M4 10h12"/></svg>
       <span>New project</span>
-    </div>`;
+    </div>` + sharedSection;
 }
 
 function dcFilterByProject(projectId) {
@@ -10306,11 +10340,89 @@ function saveProject() {
 }
 
 /* ── Project Detail ── */
-let _pdProjectId = null;
+let _pdProjectId   = null;
+let _sharedProjects = [];  // projects shared with currentUser by other owners
+let _isViewerMode   = false; // true when viewing a project you don't own
+let _viewerOwnerKey = null;  // the ownerKey of the shared project
+let _viewerRole     = null;  // role granted on the shared project
+
+// ── Shared-project namespace helpers ──────────────────────────────────────
+const _SHARED_PREFIX = 'di_shared_';
+
+function _sharedKeyForEmail(email) { return _SHARED_PREFIX + email.toLowerCase().trim(); }
+
+/** Write or update the share record for one invitee */
+function _writeShareRecord(email, projectId, role) {
+  if (!email || !projectId) return;
+  const key = _sharedKeyForEmail(email);
+  let list = [];
+  try { list = JSON.parse(localStorage.getItem(key) || '[]'); } catch(e) {}
+  list = list.filter(s => s.projectId !== projectId); // dedupe
+  list.push({ projectId, ownerKey: _sKey('di_projects'), role, addedAt: new Date().toISOString() });
+  localStorage.setItem(key, JSON.stringify(list));
+}
+
+/** Remove the share record for one invitee */
+function _removeShareRecord(email, projectId) {
+  if (!email || !projectId) return;
+  const key = _sharedKeyForEmail(email);
+  let list = [];
+  try { list = JSON.parse(localStorage.getItem(key) || '[]'); } catch(e) {}
+  localStorage.setItem(key, JSON.stringify(list.filter(s => s.projectId !== projectId)));
+}
+
+/** Load all projects shared with an email — called on login */
+function _loadSharedProjects(email) {
+  _sharedProjects = [];
+  if (!email) return;
+  const key = _sharedKeyForEmail(email);
+  let list = [];
+  try { list = JSON.parse(localStorage.getItem(key) || '[]'); } catch(e) {}
+  for (const entry of list) {
+    try {
+      const ownerProjects = JSON.parse(localStorage.getItem(entry.ownerKey) || '[]');
+      const proj = ownerProjects.find(p => p.id === entry.projectId);
+      if (proj) {
+        _sharedProjects.push({
+          ...proj,
+          _isShared:   true,
+          _sharedRole: entry.role,
+          _ownerKey:   entry.ownerKey,
+        });
+      }
+    } catch(e) {}
+  }
+}
+
+/** Open a shared project (read-only viewer) */
+function _openSharedProject(projectId, ownerKey, role) {
+  // Always re-read live from owner's namespace for freshness
+  let ownerProjects = [];
+  try { ownerProjects = JSON.parse(localStorage.getItem(ownerKey) || '[]'); } catch(e) {}
+  const proj = ownerProjects.find(p => p.id === projectId);
+  if (!proj) { showToast('Project not found or access has been revoked.', 'error'); return; }
+  _isViewerMode   = true;
+  _viewerOwnerKey = ownerKey;
+  _viewerRole     = role || 'staff';
+  _pdProjectId    = null; // prevent writes
+  renderProjectDetail(proj);
+  const type   = proj.type || 'initiative';
+  const urlKey = proj.slug  || proj.id;
+  router.push('#/projects/' + type + '/' + encodeURIComponent(urlKey));
+  showView('project-detail', { _noHistory: true });
+}
 
 function openProjectDetail(projectId) {
   const proj = loadProjects().find(p => p.id === projectId);
-  if (!proj) return;
+  if (!proj) {
+    // Check shared projects
+    const shared = _sharedProjects.find(p => p.id === projectId);
+    if (shared) { _openSharedProject(shared.id, shared._ownerKey, shared._sharedRole); return; }
+    return;
+  }
+  _isViewerMode   = false;
+  _viewerOwnerKey = null;
+  _viewerRole     = null;
   _pdProjectId = projectId;
   renderProjectDetail(proj);
   // Push type-specific deep-link URL so refresh restores this project
@@ -10377,6 +10489,24 @@ function renderProjectDetail(proj) {
     }
   }
 
+  // Viewer mode banner + read-only enforcement
+  const pdLayout = document.querySelector('.pd-layout');
+  const existingBanner = document.getElementById('pd-viewer-banner');
+  if (existingBanner) existingBanner.remove();
+  if (_isViewerMode) {
+    const ROLE_LABELS_V = { thinker:'Thinker Lab', advisory:'Advisory Board', investor:'Investor', staff:'Staff' };
+    const roleLabel = ROLE_LABELS_V[_viewerRole] || (_viewerRole || 'Member');
+    const banner = document.createElement('div');
+    banner.id = 'pd-viewer-banner';
+    banner.className = 'pd-viewer-banner';
+    banner.innerHTML = '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="8" cy="8" r="6.5"/><path d="M8 7v4M8 5v.5" stroke-linecap="round"/></svg>' +
+      '<span><strong>Shared with you</strong> &mdash; you\'re viewing as <span class=\"pd-viewer-role-pill\">' + escHtml(roleLabel) + '</span> · Read only</span>';
+    if (pdLayout) pdLayout.insertBefore(banner, pdLayout.firstChild);
+    document.getElementById('screen-project-detail')?.classList.add('pd-viewer-mode');
+  } else {
+    document.getElementById('screen-project-detail')?.classList.remove('pd-viewer-mode');
+  }
+
   // Active perspectives feed
   _renderPdPerspectives(proj.id);
 }
@@ -10427,8 +10557,8 @@ function _buildProjTeamSection(proj) {
           <div class="cp-team-member-email">${escHtml(m.email||'')} · <span class="role-badge role-${escHtml(m.role)}" style="font-size:10px">${escHtml(ROLE_LABELS[m.role]||m.role)}</span></div>
         </div>
         <div class="cp-team-member-actions">
-          ${m.status==='invited' ? `<button class="cp-team-approve-btn" onclick="cpApproveTeamMember(${actualIdx})">Approve</button>` : `<span class="adv-member-status adv-status-active">Active</span>`}
-          <button class="cp-team-remove-btn" onclick="cpRemoveTeamMember(${actualIdx})">Remove</button>
+          ${m.status==='invited' ? (_isViewerMode ? '<span class="adv-member-status" style="opacity:.5">Invited</span>' : `<button class="cp-team-approve-btn" onclick="cpApproveTeamMember(${actualIdx})">Approve</button>`) : `<span class="adv-member-status adv-status-active">Active</span>`}
+          ${_isViewerMode ? '' : `<button class="cp-team-remove-btn" onclick="cpRemoveTeamMember(${actualIdx})">Remove</button>`}
         </div>
       </div>`;
     }).join('')
@@ -10449,7 +10579,7 @@ function _buildProjTeamSection(proj) {
         </div>
       </div>
       <div class="cp-team-section">
-        <div class="cp-team-invite-row">
+        ${_isViewerMode ? '' : `<div class="cp-team-invite-row">
           <div>
             <div class="adv-invite-label" style="margin-bottom:5px">Email</div>
             <input class="adv-invite-input" id="cp-team-email" type="email" placeholder="colleague@yourcompany.com">
@@ -10466,7 +10596,7 @@ function _buildProjTeamSection(proj) {
           <div style="padding-top:21px">
             <button class="adv-invite-btn" onclick="cpAddTeamMember()">Invite →</button>
           </div>
-        </div>
+        </div>`}
         <div class="cp-team-members" id="cp-team-members">
           ${teamHtml || '<div class="staff-empty" style="margin-top:4px">No team members yet. Invite your first collaborator above.</div>'}
         </div>
@@ -13193,6 +13323,10 @@ function applyAuthState(user) {
     const grSub  = document.getElementById('dc-greeting-sub');
     if (grName) grName.textContent = `Hi ${firstName}.`;
     if (grSub)  grSub.textContent  = 'Intelligence active. What are we solving today?';
+    // Load projects shared with this user by other owners
+    try { _loadSharedProjects(user.email); } catch(e) { console.error('[shared]', e); }
+    // Refresh profile screen if already visible (pre-seeded with auth data)
+    try { if (document.getElementById('screen-user-profile')?.classList.contains('active')) initProfileScreen(); } catch(e) {}
     // Re-render project sections now that currentUser is set
     try { renderDcProjects(); } catch(e) {}
     try { renderPortfolioList('chat'); } catch(e) {}
@@ -16275,18 +16409,27 @@ function invHubAddUpdate() {
 /* ══════════════════════════════════════════════════════════════════════
    USER PROFILE
 ══════════════════════════════════════════════════════════════════════ */
-const PROFILE_KEY = 'di_user_profile';
-function loadUserProfile() { try { return JSON.parse(localStorage.getItem(PROFILE_KEY)||'{}'); } catch(e){ return {}; } }
-function saveUserProfile(p) { localStorage.setItem(PROFILE_KEY, JSON.stringify(p)); }
+// Profile data is stored per-user so each account has an independent profile
+function _profileKey() { return _sKey('di_profile'); }
+function loadUserProfile() { try { return JSON.parse(localStorage.getItem(_profileKey())||'{}'); } catch(e){ return {}; } }
+function saveUserProfile(p) { localStorage.setItem(_profileKey(), JSON.stringify(p)); }
 
 const ROLE_CLASS_MAP = { founder:'role-founder', thinker:'role-thinker', advisory:'role-advisory', investor:'role-investor', staff:'role-staff' };
 const ROLE_LABEL_MAP = { founder:'Founder', thinker:'Thinker', advisory:'Advisory Board', investor:'Investor', staff:'Staff' };
 
 function initProfileScreen() {
-  const p = loadUserProfile();
-  const u = currentUser || {};
-  const name = p.name || u.name || '';
-  const email= p.email|| u.email|| '';
+  // Auth guard: profile requires login
+  if (!currentUser) { showView('recents'); return; }
+  const u = currentUser;
+  let p = loadUserProfile();
+  // First-time: seed profile from auth data
+  if (!p.name && !p.email) {
+    p.name  = u.name  || '';
+    p.email = u.email || '';
+    if (p.name || p.email) saveUserProfile(p);
+  }
+  const name  = p.name  || u.name  || '';
+  const email = p.email || u.email || '';
 
   // Avatar initials
   const initials = name ? name.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase() : (email?email[0].toUpperCase():'?');
@@ -16311,13 +16454,15 @@ function initProfileScreen() {
   renderProfileTags(p.expertise||[]);
 
   // Activity stats
-  const sessions = loadRecents?.()?.length || 0;
-  const projects = loadProjects?.()?.length || 0;
-  const team     = loadAdvisors?.()?.length + (loadStaffTasks?.()?.length||0);
+  const sessions = (loadRecents?.() || []).length;
+  const projects = (loadProjects?.() || []).length;
+  const advisors = (loadAdvisors?.() || []).length;
+  const staff    = (loadStaffTasks?.() || []).length;
+  const team     = advisors + staff;
   const setAct = (id, val) => { const el=document.getElementById(id); if(el) el.textContent=val; };
   setAct('prof-act-sessions', sessions);
   setAct('prof-act-projects', projects);
-  setAct('prof-act-team', team||0);
+  setAct('prof-act-team', team);
 
   // Update nav avatar
   _updateNavAvatar(initials, p.color);
@@ -16369,11 +16514,16 @@ function profileSave() {
   p.company  = getVal('prof-company');
   p.title    = getVal('prof-title');
   p.location = getVal('prof-location');
+  // Always preserve the authenticated email
+  if (currentUser?.email) p.email = currentUser.email;
   if (!p.expertise) p.expertise = [];
   saveUserProfile(p);
-  // Update nav avatar
-  const initials = p.name ? p.name.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase() : '?';
+  // Update sidebar nav — name + initials + avatar color
+  const initials = p.name ? p.name.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase() : (currentUser?.email?.[0]?.toUpperCase()||'?');
   _updateNavAvatar(initials, p.color);
+  // Update sidebar name display if visible
+  const pGreeting = document.getElementById('profile-greeting');
+  if (pGreeting && p.name) pGreeting.textContent = 'Hi ' + p.name.split(' ')[0];
   showToast('Profile saved', 'success');
 }
 
@@ -16414,9 +16564,12 @@ function cpAddTeamMember() {
   proj.team.push({ email, role, status:'invited', invitedAt: new Date().toISOString() });
   saveProjects(projects);
 
+  // Write share record so the invitee sees this project on their next login
+  _writeShareRecord(email, proj.id, role);
+
   const emailEl = document.getElementById('cp-team-email');
   if (emailEl) emailEl.value = '';
-  showToast(email + ' added to your team.', 'success');
+  showToast(email + ' added — they'll see this project on login.', 'success');
   // Re-render the team list
   _cpReRenderTeam(proj.team);
 }
@@ -16437,7 +16590,10 @@ function cpRemoveTeamMember(i) {
   const removed = projects[idx].team?.splice(i, 1);
   saveProjects(projects);
   _cpReRenderTeam(projects[idx].team || []);
-  if (removed?.[0]) showToast(removed[0].email + ' removed from team', 'default');
+  if (removed?.[0]) {
+    _removeShareRecord(removed[0].email, projects[idx].id);
+    showToast(removed[0].email + ' removed — access revoked.', 'default');
+  }
 }
 
 function _cpReRenderTeam(teamArr) {
