@@ -2195,20 +2195,38 @@
     /* Tabs pinned at top, no shrink */
     #chat-dc-tabs { flex-shrink: 0; }
 
-    /* ── Mobile: sidebar becomes a card stacked below chat ── */
+    /* ── Mobile: sidebar hidden by default, toggled via Panel chip ── */
     @media (max-width: 768px) {
-      #screen-chat { flex-direction: column; }
+      #screen-chat { flex-direction: column; overflow: hidden; }
+
+      /* Sidebar col hidden by default on mobile */
       .chat-sidebar-col {
-        padding: 0 12px 12px;
-        max-height: 52vh;
+        display: none;
+        padding: 0 0 0;
+        flex-shrink: 0;
+        flex-direction: column;
+        border-top: 1px solid var(--border-lt);
+        max-height: 55vh;
         overflow: hidden;
+      }
+      /* When toggled open */
+      .chat-sidebar-col.mob-panel-open {
+        display: flex;
       }
       #chat-insight-sidebar {
         width: auto !important;
         height: auto !important;
-        max-height: 52vh;
+        max-height: 55vh;
         overflow-y: auto;
+        border-radius: 0;
+        border: none;
+        box-shadow: none;
       }
+
+      /* Panel toggle chip — only visible on mobile */
+      .chat-mob-panel-btn { display: inline-flex; }
+      /* Desktop keyboard hints hidden */
+      .chat-desktop-only { display: none !important; }
     }
 
     /* ── Insight sidebar (right) ── */
@@ -3806,6 +3824,33 @@
     .pf-revel-try { background:transparent; color:#2C2820; border:1px solid rgba(0,0,0,.15); border-radius:100px; padding:11px 20px; font-size:13px; font-weight:500; cursor:pointer; font-family:'Inter',sans-serif; transition:background .15s; }
     .pf-revel-try:hover { background:rgba(0,0,0,.04); }
 
+    /* ── Mobile topbar hamburger (only in chat-mode on mobile) ── */
+    .mob-topbar-hamburger {
+      display: none; /* hidden on desktop + non-chat screens */
+      width: 36px; height: 36px; border-radius: 8px;
+      border: none; background: transparent; cursor: pointer;
+      flex-direction: column; align-items: center; justify-content: center;
+      gap: 4.5px; flex-shrink: 0; transition: background 0.15s; margin-right: 6px;
+    }
+    .mob-topbar-hamburger:hover { background: var(--surface-2); }
+    .mob-topbar-hamburger span { display: block; width: 18px; height: 1.5px; background: var(--text-2); border-radius: 2px; }
+    @media (max-width: 680px) {
+      .content-topbar.chat-mode .mob-topbar-hamburger { display: flex; }
+    }
+
+    /* ── Mobile panel toggle chip ── */
+    .chat-mob-panel-btn {
+      display: none; /* hidden on desktop */
+      align-items: center; gap: 4px;
+      margin-left: auto; padding: 4px 10px;
+      font-size: 11px; font-weight: 600; color: var(--text-2);
+      background: var(--surface); border: 1px solid var(--border-md);
+      border-radius: var(--r-pill); cursor: pointer; flex-shrink: 0;
+      font-family: 'Inter', sans-serif; transition: color .12s, border-color .12s;
+    }
+    .chat-mob-panel-btn:hover { color: var(--accent); border-color: var(--accent-bdr); }
+    .chat-mob-panel-btn.open { color: var(--accent); border-color: var(--accent-bdr); background: var(--accent-lt); }
+
     /* ═══ CHAT SCREEN ═══ */
     #screen-chat { flex-direction:row; height:100%; padding:0; overflow:hidden; background:var(--bg); }
     .chat-col { flex:1; display:flex; flex-direction:column; min-width:0; overflow:hidden; height:100%; }
@@ -4824,6 +4869,10 @@
 
     <!-- Content-level topbar: chat title (chat mode) + perspective switcher -->
     <div class="content-topbar" id="content-topbar">
+      <!-- Mobile-only hamburger to open sidebar / chat history -->
+      <button class="mob-topbar-hamburger" id="mob-topbar-hamburger" onclick="toggleSidebar()" aria-label="Open menu">
+        <span></span><span></span><span></span>
+      </button>
       <a class="content-wordmark" href="#" onclick="goHome(); return false;">Divine</a>
       <input class="content-chat-title" id="chat-title-input"
         placeholder="New conversation" maxlength="80"
@@ -5181,9 +5230,14 @@
               <span id="chat-meta-thinker">Michael Akindele</span>
               <div class="chat-input-meta-sep"></div>
               <span id="chat-meta-model">claude-opus-4-5</span>
-              <div class="chat-input-meta-sep"></div>
-              <span>↵ to send · ⇧↵ new line</span>
+              <div class="chat-input-meta-sep chat-desktop-only"></div>
+              <span class="chat-desktop-only">↵ to send · ⇧↵ new line</span>
               <span class="chat-usage-pill" id="chat-usage-pill"></span>
+              <!-- Mobile-only panel toggle -->
+              <button class="chat-mob-panel-btn" id="chat-mob-panel-btn" onclick="toggleChatMobPanel()" aria-label="Toggle growth panel">
+                <svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" id="chat-mob-panel-chevron"><path d="M2 6.5l3-3 3 3"/></svg>
+                Panel
+              </button>
             </div>
           </div>
         </div>
@@ -7225,7 +7279,7 @@ e.g. I always start by validating whether the problem is real before evaluating 
     <span>Projects</span>
   </button>
   <!-- Profile / Login button — changes on auth state -->
-  <button class="mob-nav-item" id="mob-nav-profile" onclick="currentUser ? (showView('wallet'); closeSidebarOnMobile()) : showView('login')" aria-label="Account">
+  <button class="mob-nav-item" id="mob-nav-profile" onclick="if(currentUser){showView('wallet');closeSidebarOnMobile();}else{showView('login');}" aria-label="Account">
     <div id="mob-nav-profile-icon" style="width:22px;height:22px;border-radius:50%;background:var(--border-hi);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:var(--text-2);flex-shrink:0">
       <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75"><circle cx="8" cy="5.5" r="2.5"/><path d="M2.5 13.5c0-3 2.5-5 5.5-5s5.5 2 5.5 5"/></svg>
     </div>
@@ -7722,6 +7776,20 @@ function toggleSidebar() {
 
 function closeSidebarOnMobile() {
   if (window.innerWidth <= 680 && sidebarOpen) toggleSidebar();
+}
+
+/* ── Mobile chat panel toggle ── */
+function toggleChatMobPanel() {
+  const col     = document.querySelector('.chat-sidebar-col');
+  const btn     = document.getElementById('chat-mob-panel-btn');
+  const chevron = document.getElementById('chat-mob-panel-chevron');
+  if (!col) return;
+  const open = col.classList.toggle('mob-panel-open');
+  btn?.classList.toggle('open', open);
+  // Flip chevron direction
+  if (chevron) {
+    chevron.querySelector('path').setAttribute('d', open ? 'M2 3.5l3 3 3-3' : 'M2 6.5l3-3 3 3');
+  }
 }
 
 /* ── Sidebar drag-to-resize ────────────────────────────────────────────────
@@ -8577,16 +8645,13 @@ function _buildAdvisoryHtml(gridId, onConnectFn) {
     const initials = michael.initials || michael.name.split(' ').map(w => w[0]).join('').slice(0,2).toUpperCase();
     const role     = michael.title ? michael.title.split('·')[0].trim() : 'Thinker';
     const quote    = michael.lens  || 'Strategic intelligence, applied.';
-    const moatBadge = michael.score
-      ? ' <span style="font-size:9.5px;font-weight:700;color:var(--accent);background:var(--accent-lt);border-radius:var(--r-pill);padding:1px 7px;margin-left:4px">' + michael.score + ' CMS</span>'
-      : '';
     parts.push(
       '<div class="dc-adv-card" onclick="acquireFromThinker(0)" style="cursor:pointer">' +
         '<div class="dc-adv-header">' +
           '<div class="dc-adv-avatar" style="background:' + (michael.color || '#BF452A') + '">' + initials + '</div>' +
           '<div style="flex:1;min-width:0">' +
             '<div class="dc-adv-name">' + michael.name + '</div>' +
-            '<div class="dc-adv-title">' + role + moatBadge + '</div>' +
+            '<div class="dc-adv-title">' + role + '</div>' +
           '</div>' +
         '</div>' +
         '<div class="dc-adv-lens">' + quote + '</div>' +
@@ -9288,7 +9353,7 @@ function renderThoughtLeaders() {
       '<div class="tl-card-top">' +
       '<div class="tl-avatar" style="background:' + (t.color || '#BF452A') + '">' + ini + '</div>' +
       '<div><div class="tl-name">' + (firstName ? firstName + ' ' : '') + lastName + '</div>' +
-      '<div class="tl-title">' + (t.title || '') + (t.score ? ' <span style="font-size:9px;font-weight:700;color:var(--accent);background:var(--accent-lt);border-radius:var(--r-pill);padding:1px 6px;margin-left:4px">' + t.score + ' CMS</span>' : '') + '</div></div>' +
+      '<div class="tl-title">' + (t.title || '') + '</div></div>' +
       '</div>' +
       '<div class="tl-lens-label">Signature Lens</div>' +
       '<div class="tl-lens-text">' + (t.lens || 'Cognitive framework defined.') + '</div>' +
