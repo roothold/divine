@@ -271,6 +271,337 @@
     button.nav-thinker:hover { background:var(--accent-lt); }
     .nav-thinker.active { background:var(--accent-lt); color:var(--accent); }
 
+    /* ═══ IR PAGE ═══ */
+    /* ── Public profile page ── */
+    .ir-public-screen {
+      min-height:100vh; background:#F8F7F5;
+      display:flex; flex-direction:column; align-items:center;
+      padding:60px 20px 80px;
+    }
+    .ir-public-card {
+      background:#fff; border-radius:20px; width:min(600px,96vw);
+      box-shadow:0 8px 40px rgba(0,0,0,.09); overflow:hidden;
+    }
+    .ir-public-hero {
+      padding:40px 40px 32px; display:flex; flex-direction:column; gap:0;
+    }
+    .ir-public-logo-row { display:flex; align-items:center; gap:16px; margin-bottom:20px; }
+    .ir-public-logo {
+      width:56px; height:56px; border-radius:14px; flex-shrink:0;
+      display:flex; align-items:center; justify-content:center;
+      font-size:22px; font-weight:800; color:#fff;
+    }
+    .ir-public-company { font-size:26px; font-weight:700; color:var(--text-0); line-height:1.1; }
+    .ir-public-meta { display:flex; align-items:center; gap:8px; margin-top:5px; flex-wrap:wrap; }
+    .ir-public-stage {
+      font-size:11px; font-weight:700; letter-spacing:.06em; text-transform:uppercase;
+      padding:3px 10px; border-radius:100px; background:var(--accent-lt); color:var(--accent);
+    }
+    .ir-public-industry { font-size:12px; color:var(--text-3); }
+    .ir-public-tagline {
+      font-family:'Cormorant Garamond',serif; font-size:18px; color:var(--text-1);
+      line-height:1.6; margin-top:16px;
+    }
+    .ir-public-chips {
+      display:flex; flex-wrap:wrap; gap:8px; margin-top:18px;
+    }
+    .ir-public-chip {
+      padding:5px 12px; background:var(--surface-2); border-radius:100px;
+      font-size:12px; font-weight:500; color:var(--text-2);
+    }
+    .ir-public-divider { height:1px; background:var(--border); margin:0 40px; }
+    .ir-public-cta-section { padding:28px 40px 36px; }
+    .ir-public-cta-label { font-size:13.5px; font-weight:600; color:var(--text-1); margin-bottom:6px; }
+    .ir-public-cta-sub { font-size:12.5px; color:var(--text-3); margin-bottom:18px; line-height:1.5; }
+    .ir-public-request-btn {
+      display:block; width:100%; padding:14px 0; text-align:center;
+      background:var(--accent); color:#fff; border:none; border-radius:var(--r-pill);
+      font-size:14px; font-weight:600; font-family:'Inter',sans-serif;
+      cursor:pointer; transition:background .15s;
+    }
+    .ir-public-request-btn:hover { background:#A53922; }
+    .ir-public-have-access {
+      text-align:center; margin-top:12px;
+      font-size:12.5px; color:var(--text-3);
+    }
+    .ir-public-have-access a {
+      color:var(--accent); text-decoration:none; font-weight:600;
+    }
+    .ir-public-have-access a:hover { text-decoration:underline; }
+    .ir-public-footer {
+      text-align:center; font-size:11.5px; color:var(--text-3);
+      margin-top:28px;
+    }
+    .ir-public-request-sent {
+      display:none; padding:14px 16px; background:rgba(22,163,74,.08);
+      border:1px solid rgba(22,163,74,.2); border-radius:12px;
+      text-align:center; font-size:13.5px; color:#15803D; font-weight:500;
+    }
+
+    /* Slug editor */
+    .ir-slug-row {
+      display:flex; align-items:center; gap:0;
+      border:1.5px solid var(--border-md); border-radius:10px;
+      overflow:hidden; background:#fff;
+    }
+    .ir-slug-prefix {
+      padding:9px 10px 9px 14px; font-size:12.5px; color:var(--text-3);
+      background:var(--surface-2); font-family:var(--font-mono);
+      white-space:nowrap; flex-shrink:0;
+    }
+    .ir-slug-input {
+      flex:1; padding:9px 12px; font-size:13px; font-family:var(--font-mono);
+      border:none; outline:none; color:var(--text-0); background:#fff;
+      min-width:0;
+    }
+    .ir-slug-check {
+      padding:0 12px; font-size:11px; font-weight:700;
+      color:#22C55E; flex-shrink:0; white-space:nowrap;
+    }
+
+    /* Two-tier info box */
+    .ir-tier-box {
+      background:linear-gradient(135deg,var(--accent-lt) 0%,#FFF 100%);
+      border:1px solid rgba(191,69,42,.15); border-radius:12px;
+      padding:16px 18px; margin-bottom:20px;
+    }
+    .ir-tier-title { font-size:12.5px; font-weight:700; color:var(--accent); margin-bottom:8px; }
+    .ir-tier-row { display:flex; gap:16px; flex-wrap:wrap; }
+    .ir-tier-col { flex:1; min-width:120px; }
+    .ir-tier-col-label { font-size:10.5px; font-weight:700; letter-spacing:.06em;
+      text-transform:uppercase; color:var(--text-3); margin-bottom:4px; }
+    .ir-tier-item { font-size:12px; color:var(--text-2); line-height:1.7; }
+
+    /* ── Founder setup screen ── */
+    .ir-setup-grid {
+      display:grid; grid-template-columns:1fr 1fr; gap:20px;
+    }
+    @media(max-width:680px){ .ir-setup-grid { grid-template-columns:1fr; } }
+
+    .ir-card {
+      background:var(--surface); border:1px solid var(--border);
+      border-radius:var(--r); padding:22px 24px;
+    }
+    .ir-card-title {
+      font-size:12px; font-weight:700; letter-spacing:.07em;
+      text-transform:uppercase; color:var(--text-3); margin-bottom:14px;
+    }
+    .ir-field { display:flex; flex-direction:column; gap:5px; margin-bottom:14px; }
+    .ir-field:last-child { margin-bottom:0; }
+    .ir-field label { font-size:12px; font-weight:600; color:var(--text-2); }
+    .ir-field input, .ir-field textarea, .ir-field select {
+      width:100%; padding:9px 12px; font-size:13.5px;
+      font-family:'Inter',sans-serif; color:var(--text-0);
+      background:#fff; border:1.5px solid var(--border-md);
+      border-radius:10px; outline:none; transition:border-color .15s;
+      box-sizing:border-box;
+    }
+    .ir-field input:focus, .ir-field textarea:focus, .ir-field select:focus {
+      border-color:var(--accent);
+    }
+    .ir-field textarea { resize:vertical; min-height:72px; line-height:1.55; }
+    .ir-field-hint { font-size:11px; color:var(--text-3); margin-top:2px; }
+
+    /* Invite list */
+    .ir-invite-row {
+      display:flex; align-items:center; gap:8px;
+      padding:8px 10px; background:var(--surface-2);
+      border-radius:8px; margin-bottom:6px;
+    }
+    .ir-invite-dot { width:7px; height:7px; border-radius:50%; background:#22C55E; flex-shrink:0; }
+    .ir-invite-email { font-size:13px; color:var(--text-1); flex:1; min-width:0;
+      white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .ir-invite-remove {
+      width:22px; height:22px; border:none; background:transparent; cursor:pointer;
+      color:var(--text-3); border-radius:6px; display:flex; align-items:center; justify-content:center;
+      transition:background .12s,color .12s; flex-shrink:0;
+    }
+    .ir-invite-remove:hover { background:#FEE2E2; color:#DC2626; }
+    .ir-invite-add-row { display:flex; gap:8px; margin-top:8px; }
+    .ir-invite-input {
+      flex:1; padding:8px 12px; font-size:13px; font-family:'Inter',sans-serif;
+      border:1.5px solid var(--border-md); border-radius:8px; outline:none; background:#fff;
+      color:var(--text-0); transition:border-color .15s;
+    }
+    .ir-invite-input:focus { border-color:var(--accent); }
+    .ir-invite-btn {
+      padding:8px 14px; font-size:12.5px; font-weight:600;
+      background:var(--accent); color:#fff; border:none;
+      border-radius:8px; cursor:pointer; white-space:nowrap;
+      font-family:'Inter',sans-serif; transition:background .15s;
+    }
+    .ir-invite-btn:hover { background:#A53922; }
+
+    /* Share link bar */
+    .ir-link-bar {
+      display:flex; gap:0; margin-top:16px; border:1.5px solid var(--border-md);
+      border-radius:10px; overflow:hidden; background:#fff;
+    }
+    .ir-link-text {
+      flex:1; padding:10px 14px; font-size:12px; font-family:var(--font-mono);
+      color:var(--text-2); overflow:hidden; white-space:nowrap;
+      text-overflow:ellipsis; background:#fff; border:none; outline:none;
+    }
+    .ir-link-copy {
+      padding:10px 18px; background:var(--accent); color:#fff; border:none;
+      cursor:pointer; font-size:12.5px; font-weight:600; font-family:'Inter',sans-serif;
+      white-space:nowrap; transition:background .15s; flex-shrink:0;
+    }
+    .ir-link-copy:hover { background:#A53922; }
+
+    /* Publish CTA */
+    .ir-publish-bar {
+      display:flex; align-items:center; justify-content:space-between;
+      padding:18px 24px; background:var(--surface);
+      border:1px solid var(--border); border-radius:var(--r);
+      margin-top:20px; gap:16px; flex-wrap:wrap;
+    }
+    .ir-publish-meta { display:flex; flex-direction:column; gap:3px; }
+    .ir-publish-label { font-size:14px; font-weight:600; color:var(--text-0); }
+    .ir-publish-sub { font-size:12px; color:var(--text-3); }
+    .ir-publish-actions { display:flex; gap:10px; align-items:center; }
+    .ir-btn-publish {
+      display:inline-flex; align-items:center; gap:7px;
+      padding:10px 20px; background:var(--accent); color:#fff;
+      border:none; border-radius:var(--r-pill);
+      font-size:13.5px; font-weight:600; font-family:'Inter',sans-serif;
+      cursor:pointer; transition:background .15s;
+    }
+    .ir-btn-publish:hover { background:#A53922; }
+    .ir-btn-preview {
+      display:inline-flex; align-items:center; gap:6px;
+      padding:10px 18px; background:transparent;
+      border:1px solid var(--border-md); color:var(--text-1);
+      border-radius:var(--r-pill); font-size:13px; font-weight:500;
+      font-family:'Inter',sans-serif; cursor:pointer; transition:all .15s;
+    }
+    .ir-btn-preview:hover { border-color:var(--accent); color:var(--accent); }
+
+    /* Status pill */
+    .ir-status-pill {
+      display:inline-flex; align-items:center; gap:5px;
+      padding:4px 10px; border-radius:100px; font-size:11px; font-weight:700;
+      letter-spacing:.04em;
+    }
+    .ir-status-live { background:rgba(22,163,74,.1); color:#16A34A; border:1px solid rgba(22,163,74,.2); }
+    .ir-status-draft { background:var(--surface-2); color:var(--text-3); border:1px solid var(--border); }
+
+    /* ── Investor gate screen ── */
+    .ir-gate-screen {
+      min-height:100vh; display:flex; align-items:center; justify-content:center;
+      padding:40px 20px; background:#F8F7F5;
+    }
+    .ir-gate-card {
+      background:#fff; border-radius:20px; padding:48px 44px;
+      width:min(480px,92vw); box-shadow:0 20px 60px rgba(0,0,0,.12);
+      display:flex; flex-direction:column; align-items:center; gap:0;
+    }
+    .ir-gate-logo {
+      width:52px; height:52px; border-radius:14px;
+      display:flex; align-items:center; justify-content:center;
+      font-size:20px; font-weight:800; color:#fff;
+      margin-bottom:20px; letter-spacing:-.5px;
+    }
+    .ir-gate-company { font-size:22px; font-weight:700; color:var(--text-0); margin-bottom:4px; text-align:center; }
+    .ir-gate-stage { font-size:12px; font-weight:600; letter-spacing:.07em;
+      text-transform:uppercase; color:var(--text-3); margin-bottom:8px; }
+    .ir-gate-tagline { font-family:'Cormorant Garamond',serif; font-size:16px;
+      color:var(--text-2); text-align:center; line-height:1.55; margin-bottom:32px; }
+    .ir-gate-divider { width:100%; height:1px; background:var(--border); margin-bottom:28px; }
+    .ir-gate-prompt { font-size:13.5px; font-weight:600; color:var(--text-1);
+      margin-bottom:6px; align-self:flex-start; }
+    .ir-gate-sub { font-size:12.5px; color:var(--text-3); margin-bottom:16px;
+      line-height:1.5; align-self:flex-start; }
+    .ir-gate-input {
+      width:100%; padding:12px 16px; font-size:14px; font-family:'Inter',sans-serif;
+      border:1.5px solid var(--border-md); border-radius:12px; outline:none;
+      color:var(--text-0); background:#fff; transition:border-color .15s;
+      box-sizing:border-box; margin-bottom:10px;
+    }
+    .ir-gate-input:focus { border-color:var(--accent); }
+    .ir-gate-btn {
+      width:100%; padding:13px 0; background:var(--accent); color:#fff;
+      border:none; border-radius:var(--r-pill); font-size:14px; font-weight:600;
+      font-family:'Inter',sans-serif; cursor:pointer; transition:background .15s;
+    }
+    .ir-gate-btn:hover { background:#A53922; }
+    .ir-gate-error { font-size:12.5px; color:#DC2626; text-align:center;
+      margin-top:8px; display:none; }
+    .ir-gate-poweredby {
+      font-size:11px; color:var(--text-3); margin-top:28px; text-align:center;
+    }
+    .ir-gate-poweredby strong { color:var(--accent); }
+
+    /* ── Investor dashboard view ── */
+    .ir-dashboard { display:none; padding:40px 24px; max-width:760px; margin:0 auto; }
+    .ir-dash-header { display:flex; align-items:center; gap:16px; margin-bottom:32px; }
+    .ir-dash-logo {
+      width:48px; height:48px; border-radius:12px; flex-shrink:0;
+      display:flex; align-items:center; justify-content:center;
+      font-size:18px; font-weight:800; color:#fff;
+    }
+    .ir-dash-company { font-size:22px; font-weight:700; color:var(--text-0); line-height:1.1; }
+    .ir-dash-meta { display:flex; align-items:center; gap:8px; margin-top:4px; flex-wrap:wrap; }
+    .ir-dash-stage {
+      font-size:11px; font-weight:700; letter-spacing:.06em; text-transform:uppercase;
+      padding:3px 9px; border-radius:100px; background:var(--accent-lt); color:var(--accent);
+    }
+    .ir-dash-updated { font-size:11px; color:var(--text-3); }
+    .ir-dash-logout {
+      margin-left:auto; padding:7px 14px; font-size:12px; font-weight:500;
+      border:1px solid var(--border-md); border-radius:100px; background:transparent;
+      cursor:pointer; color:var(--text-2); font-family:'Inter',sans-serif;
+      transition:all .15s; flex-shrink:0;
+    }
+    .ir-dash-logout:hover { border-color:var(--accent); color:var(--accent); }
+
+    .ir-kpi-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-bottom:20px; }
+    @media(max-width:680px){ .ir-kpi-grid { grid-template-columns:repeat(2,1fr); } }
+    .ir-kpi {
+      background:var(--surface); border:1px solid var(--border);
+      border-radius:12px; padding:16px;
+    }
+    .ir-kpi-label { font-size:10.5px; font-weight:700; letter-spacing:.07em;
+      text-transform:uppercase; color:var(--text-3); margin-bottom:6px; }
+    .ir-kpi-val { font-size:24px; font-weight:700; color:var(--text-0); font-family:var(--font-mono); }
+    .ir-kpi-delta { font-size:11px; color:var(--text-3); margin-top:3px; }
+    .ir-kpi.highlight { border-color:var(--accent); background:var(--accent-lt); }
+    .ir-kpi.highlight .ir-kpi-val { color:var(--accent); }
+
+    .ir-burn-bar {
+      padding:12px 16px; border-radius:10px; display:flex;
+      align-items:center; gap:10px; margin-bottom:20px;
+      border:1px solid;
+    }
+    .ir-burn-bar.green { background:rgba(22,163,74,.08); border-color:rgba(22,163,74,.2); }
+    .ir-burn-bar.amber { background:rgba(251,191,36,.1); border-color:rgba(251,191,36,.3); }
+    .ir-burn-bar.red   { background:rgba(220,38,38,.08); border-color:rgba(220,38,38,.2); }
+    .ir-burn-dot { width:8px; height:8px; border-radius:50%; flex-shrink:0; }
+    .ir-burn-bar.green .ir-burn-dot { background:#22C55E; }
+    .ir-burn-bar.amber .ir-burn-dot { background:#F59E0B; }
+    .ir-burn-bar.red   .ir-burn-dot { background:#EF4444; }
+    .ir-burn-text { font-size:13px; font-weight:600; }
+    .ir-burn-bar.green .ir-burn-text { color:#15803D; }
+    .ir-burn-bar.amber .ir-burn-text { color:#B45309; }
+    .ir-burn-bar.red   .ir-burn-text { color:#B91C1C; }
+
+    .ir-section { background:var(--surface); border:1px solid var(--border);
+      border-radius:12px; padding:20px 22px; margin-bottom:16px; }
+    .ir-section-label { font-size:11px; font-weight:700; letter-spacing:.07em;
+      text-transform:uppercase; color:var(--text-3); margin-bottom:10px; }
+    .ir-section-body { font-size:14px; color:var(--text-1); line-height:1.7; }
+    .ir-section-quote {
+      border-left:3px solid var(--accent); padding-left:14px;
+      font-family:'Cormorant Garamond',serif; font-size:16px;
+      color:var(--text-0); line-height:1.6; font-style:italic;
+      margin-top:10px;
+    }
+
+    .ir-dash-footer {
+      text-align:center; font-size:11.5px; color:var(--text-3);
+      padding:24px 0 8px; border-top:1px solid var(--border); margin-top:8px;
+    }
+
     /* ═══ THINKER SCREENS ═══ */
     .thinker-hero { text-align:center; padding:48px 0 32px; }
     .thinker-badge {
@@ -605,6 +936,8 @@
 
     /* Welcome modal steps */
     .di-welcome-step { display:flex; align-items:flex-start; gap:14px; }
+    .di-welcome-dot { width:7px; height:7px; border-radius:50%; background:var(--border-md); transition:background .2s; }
+    .di-welcome-dot.active { background:var(--accent); }
     .di-welcome-step-num { width:28px; height:28px; border-radius:50%; background:var(--accent-lt); color:var(--accent); font-size:12px; font-weight:700; display:flex; align-items:center; justify-content:center; flex-shrink:0; margin-top:1px; }
     .di-welcome-step-title { font-size:13.5px; font-weight:700; color:var(--text-0); margin-bottom:2px; }
     .di-welcome-step-sub { font-size:12.5px; color:var(--text-2); line-height:1.55; }
@@ -3704,6 +4037,172 @@
   <span id="auth-banner-name"></span>
 </div>
 <style>
+/* ══ TEAM HUB — 4-tab structure ══════════════════════════════════════ */
+.team-hub-tabs { display:flex; gap:4px; margin-bottom:24px; border-bottom:1.5px solid var(--border); padding-bottom:0; overflow-x:auto; }
+.team-hub-tab  { display:flex; align-items:center; gap:7px; padding:9px 16px; border:none; background:transparent; color:var(--text-2); font-size:13px; font-weight:500; cursor:pointer; border-bottom:2px solid transparent; margin-bottom:-1.5px; white-space:nowrap; transition:color .15s; font-family:'Inter',sans-serif; border-radius:0; }
+.team-hub-tab:hover { color:var(--text-0); }
+.team-hub-tab.active { color:var(--accent); border-bottom-color:var(--accent); font-weight:600; }
+.team-hub-panel { display:none; }
+.team-hub-panel.active { display:block; }
+
+/* ══ ADVISORY BOARD ══════════════════════════════════════════════════ */
+.adv-board-empty { text-align:center; padding:48px 24px; color:var(--text-3); font-size:14px; }
+.adv-board-empty svg { opacity:.25; margin-bottom:12px; }
+.adv-invite-form { background:var(--surface-2); border-radius:var(--r); padding:20px; margin-bottom:24px; }
+.adv-invite-row  { display:grid; grid-template-columns:1fr 1fr auto; gap:10px; align-items:end; }
+.adv-invite-label { font-size:12px; font-weight:600; color:var(--text-2); margin-bottom:5px; text-transform:uppercase; letter-spacing:.04em; }
+.adv-invite-input { width:100%; padding:9px 12px; border:1.5px solid var(--border-md); border-radius:var(--r-sm); font-size:13.5px; background:#fff; color:var(--text-0); font-family:'Inter',sans-serif; }
+.adv-invite-input:focus { outline:none; border-color:var(--accent); }
+.adv-invite-select { width:100%; padding:9px 12px; border:1.5px solid var(--border-md); border-radius:var(--r-sm); font-size:13.5px; background:#fff; color:var(--text-0); font-family:'Inter',sans-serif; cursor:pointer; }
+.adv-invite-select:focus { outline:none; border-color:var(--accent); }
+.adv-invite-btn { padding:9px 18px; background:var(--accent); color:#fff; border:none; border-radius:var(--r-sm); font-size:13px; font-weight:600; cursor:pointer; font-family:'Inter',sans-serif; white-space:nowrap; }
+.adv-invite-btn:hover { background:var(--accent-mid); }
+.adv-member-list { display:flex; flex-direction:column; gap:10px; }
+.adv-member-card { display:flex; align-items:center; gap:14px; padding:14px 16px; background:#fff; border:1.5px solid var(--border); border-radius:var(--r); }
+.adv-member-avatar { width:38px; height:38px; border-radius:50%; background:var(--accent-lt); display:flex; align-items:center; justify-content:center; font-size:14px; font-weight:700; color:var(--accent); flex-shrink:0; }
+.adv-member-body { flex:1; min-width:0; }
+.adv-member-name { font-size:14px; font-weight:600; color:var(--text-0); }
+.adv-member-domain { font-size:12px; color:var(--text-2); margin-top:2px; }
+.adv-member-status { font-size:11px; font-weight:600; padding:3px 8px; border-radius:var(--r-pill); }
+.adv-status-invited { background:#FFF8E7; color:#A07000; }
+.adv-status-active  { background:#E6F9EE; color:#1A7A42; }
+.adv-member-del { padding:5px 10px; border:1.5px solid var(--border-md); border-radius:var(--r-sm); background:transparent; color:var(--text-3); font-size:12px; cursor:pointer; }
+.adv-member-del:hover { border-color:#F87171; color:#F87171; }
+.adv-section-head { display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; }
+.adv-section-title { font-size:13px; font-weight:700; color:var(--text-0); text-transform:uppercase; letter-spacing:.06em; }
+
+/* ══ STAFF TERMINAL ══════════════════════════════════════════════════ */
+.staff-task-form { background:var(--surface-2); border-radius:var(--r); padding:20px; margin-bottom:24px; }
+.staff-task-form-title { font-size:14px; font-weight:700; color:var(--text-0); margin-bottom:14px; display:flex; align-items:center; gap:8px; }
+.staff-task-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:10px; }
+.staff-task-field { display:flex; flex-direction:column; gap:5px; }
+.staff-task-label { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.05em; color:var(--text-2); }
+.staff-task-input { padding:9px 12px; border:1.5px solid var(--border-md); border-radius:var(--r-sm); font-size:13.5px; background:#fff; color:var(--text-0); font-family:'Inter',sans-serif; }
+.staff-task-input:focus { outline:none; border-color:var(--accent); }
+.staff-task-textarea { padding:9px 12px; border:1.5px solid var(--border-md); border-radius:var(--r-sm); font-size:13.5px; background:#fff; color:var(--text-0); font-family:'Inter',sans-serif; resize:vertical; min-height:72px; }
+.staff-task-textarea:focus { outline:none; border-color:var(--accent); }
+.staff-add-btn { width:100%; padding:10px; background:var(--accent); color:#fff; border:none; border-radius:var(--r-sm); font-size:13px; font-weight:600; cursor:pointer; margin-top:10px; font-family:'Inter',sans-serif; }
+.staff-add-btn:hover { background:var(--accent-mid); }
+.staff-columns { display:grid; grid-template-columns:1fr 1fr 1fr; gap:16px; }
+@media(max-width:700px){ .staff-columns { grid-template-columns:1fr; } }
+.staff-col-head { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.07em; color:var(--text-3); margin-bottom:10px; display:flex; align-items:center; gap:6px; }
+.staff-col-head-dot { width:8px; height:8px; border-radius:50%; flex-shrink:0; }
+.staff-task-card { background:#fff; border:1.5px solid var(--border); border-radius:var(--r); padding:14px; margin-bottom:10px; cursor:default; }
+.staff-task-card:hover { border-color:var(--border-md); box-shadow:var(--sh-sm); }
+.staff-task-title { font-size:13.5px; font-weight:600; color:var(--text-0); margin-bottom:6px; }
+.staff-task-assignee { font-size:12px; color:var(--text-2); margin-bottom:4px; }
+.staff-task-protocol { font-size:12px; color:var(--text-3); line-height:1.5; margin-bottom:8px; border-left:2px solid var(--border-md); padding-left:8px; }
+.staff-task-due { font-size:11px; color:var(--text-3); }
+.staff-task-actions { display:flex; gap:6px; margin-top:10px; flex-wrap:wrap; }
+.staff-action-btn { padding:4px 10px; font-size:11px; font-weight:600; border-radius:var(--r-pill); cursor:pointer; border:1.5px solid var(--border-md); background:transparent; color:var(--text-2); font-family:'Inter',sans-serif; }
+.staff-action-btn:hover { background:var(--surface-2); }
+.staff-action-del { color:#F87171 !important; border-color:#F87171 !important; }
+.staff-empty { text-align:center; padding:24px 12px; color:var(--text-3); font-size:13px; border:1.5px dashed var(--border); border-radius:var(--r); }
+
+/* ══ INVESTOR HUB TAB ════════════════════════════════════════════════ */
+.inv-hub-link-box { background:var(--accent-lt); border:1.5px solid var(--accent-bdr); border-radius:var(--r); padding:20px; margin-bottom:16px; }
+.inv-hub-link-label { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.07em; color:var(--accent); margin-bottom:8px; }
+.inv-hub-link-row { display:flex; align-items:center; gap:10px; }
+.inv-hub-link-val { flex:1; font-size:12px; font-family:var(--font-mono); background:#fff; border:1.5px solid var(--accent-bdr); border-radius:var(--r-sm); padding:8px 12px; color:var(--text-2); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.inv-hub-copy-btn { padding:8px 14px; background:var(--accent); color:#fff; border:none; border-radius:var(--r-sm); font-size:12px; font-weight:600; cursor:pointer; flex-shrink:0; font-family:'Inter',sans-serif; }
+.inv-hub-go-setup { display:inline-flex; align-items:center; gap:6px; padding:10px 18px; background:var(--accent); color:#fff; border:none; border-radius:var(--r-sm); font-size:13px; font-weight:600; cursor:pointer; margin-top:8px; font-family:'Inter',sans-serif; }
+.inv-hub-go-setup:hover { background:var(--accent-mid); }
+.inv-hub-stat-row { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-bottom:16px; }
+.inv-hub-stat { background:#fff; border:1.5px solid var(--border); border-radius:var(--r); padding:14px; text-align:center; }
+.inv-hub-stat-val { font-size:22px; font-weight:700; font-family:var(--font-mono); color:var(--text-0); }
+.inv-hub-stat-lbl { font-size:11px; color:var(--text-3); margin-top:3px; }
+.inv-hub-update-card { background:#fff; border:1.5px solid var(--border); border-radius:var(--r); padding:16px; margin-bottom:10px; }
+.inv-hub-update-date { font-size:11px; color:var(--text-3); margin-bottom:6px; }
+.inv-hub-update-body { font-size:13.5px; color:var(--text-1); line-height:1.6; }
+
+/* ══ USER PROFILE SCREEN ═════════════════════════════════════════════ */
+.profile-screen-wrap { max-width:640px; margin:0 auto; padding:40px 20px; }
+.profile-hero-card { background:#fff; border:1.5px solid var(--border); border-radius:var(--r); padding:28px; margin-bottom:20px; display:flex; gap:22px; align-items:flex-start; }
+.profile-avatar-lg { width:64px; height:64px; border-radius:50%; background:var(--accent); color:#fff; font-size:24px; font-weight:700; display:flex; align-items:center; justify-content:center; flex-shrink:0; cursor:pointer; position:relative; }
+.profile-avatar-lg:hover::after { content:'Edit'; position:absolute; inset:0; border-radius:50%; background:rgba(0,0,0,.35); color:#fff; font-size:10px; display:flex; align-items:center; justify-content:center; }
+.profile-hero-body { flex:1; min-width:0; }
+.profile-name-row { display:flex; align-items:center; gap:10px; margin-bottom:4px; flex-wrap:wrap; }
+.profile-name-input { font-size:18px; font-weight:700; color:var(--text-0); border:none; outline:none; background:transparent; font-family:'Inter',sans-serif; flex:1; min-width:120px; }
+.profile-name-input:focus { border-bottom:1.5px solid var(--accent); }
+.profile-email-row { font-size:13px; color:var(--text-3); margin-bottom:12px; }
+.profile-bio-input { width:100%; font-size:13.5px; color:var(--text-2); border:none; outline:none; background:transparent; font-family:'Inter',sans-serif; resize:none; line-height:1.6; }
+.profile-bio-input:focus { border-bottom:1.5px solid var(--accent); }
+.profile-section-card { background:#fff; border:1.5px solid var(--border); border-radius:var(--r); padding:20px; margin-bottom:16px; }
+.profile-section-head { font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:.07em; color:var(--text-3); margin-bottom:14px; }
+.profile-field-row { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:12px; }
+.profile-field-label { font-size:12px; font-weight:600; color:var(--text-2); margin-bottom:5px; }
+.profile-field-input { width:100%; padding:9px 12px; border:1.5px solid var(--border-md); border-radius:var(--r-sm); font-size:13.5px; background:var(--surface-2); color:var(--text-0); font-family:'Inter',sans-serif; }
+.profile-field-input:focus { outline:none; border-color:var(--accent); background:#fff; }
+.profile-role-select { width:100%; padding:9px 12px; border:1.5px solid var(--border-md); border-radius:var(--r-sm); font-size:13.5px; background:var(--surface-2); color:var(--text-0); font-family:'Inter',sans-serif; cursor:pointer; }
+.profile-role-select:focus { outline:none; border-color:var(--accent); }
+.profile-expertise-wrap { display:flex; flex-wrap:wrap; gap:6px; min-height:36px; padding:8px; border:1.5px solid var(--border-md); border-radius:var(--r-sm); background:var(--surface-2); margin-bottom:8px; }
+.profile-expertise-tag { display:flex; align-items:center; gap:5px; padding:4px 10px; background:var(--accent-lt); color:var(--accent); border-radius:var(--r-pill); font-size:12px; font-weight:600; }
+.profile-expertise-tag button { background:none; border:none; cursor:pointer; color:var(--accent); opacity:.6; font-size:13px; padding:0; line-height:1; }
+.profile-tag-add { display:flex; gap:8px; }
+.profile-tag-input { flex:1; padding:8px 12px; border:1.5px solid var(--border-md); border-radius:var(--r-sm); font-size:13px; font-family:'Inter',sans-serif; }
+.profile-tag-input:focus { outline:none; border-color:var(--accent); }
+.profile-save-btn { width:100%; padding:11px; background:var(--accent); color:#fff; border:none; border-radius:var(--r-sm); font-size:14px; font-weight:600; cursor:pointer; margin-top:4px; font-family:'Inter',sans-serif; }
+.profile-save-btn:hover { background:var(--accent-mid); }
+.profile-activity-row { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; }
+.profile-activity-cell { text-align:center; padding:14px 8px; background:var(--surface-2); border-radius:var(--r-sm); }
+.profile-activity-val { font-size:20px; font-weight:700; font-family:var(--font-mono); color:var(--text-0); }
+.profile-activity-lbl { font-size:11px; color:var(--text-3); margin-top:3px; }
+
+/* ══ ROLE BADGES ═════════════════════════════════════════════════════ */
+.role-badge { display:inline-flex; align-items:center; gap:4px; padding:3px 9px; border-radius:var(--r-pill); font-size:11px; font-weight:700; letter-spacing:.03em; }
+.role-founder   { background:#F4EDE4; color:#7A4A1E; }
+.role-thinker   { background:var(--accent-lt); color:var(--accent); }
+.role-advisory  { background:#EAF3FB; color:#1A5A8B; }
+.role-investor  { background:#E8F5E9; color:#2E7D32; }
+.role-staff     { background:#F3F0F8; color:#5C35A0; }
+
+/* ══ COMPANY PAGE TEAM SECTION ═══════════════════════════════════════ */
+.cp-team-section { margin-top:0; }
+.cp-team-invite-row { display:grid; grid-template-columns:1fr 1fr auto; gap:10px; align-items:end; margin-bottom:16px; }
+.cp-team-members { display:flex; flex-direction:column; gap:8px; }
+.cp-team-member-card { display:flex; align-items:center; gap:12px; padding:11px 14px; background:var(--surface-2); border-radius:var(--r-sm); }
+.cp-team-member-avatar { width:32px; height:32px; border-radius:50%; background:var(--accent-lt); color:var(--accent); font-size:12px; font-weight:700; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+.cp-team-member-body { flex:1; min-width:0; }
+.cp-team-member-name { font-size:13px; font-weight:600; color:var(--text-0); }
+.cp-team-member-email { font-size:11.5px; color:var(--text-3); }
+.cp-team-member-actions { display:flex; gap:6px; align-items:center; }
+.cp-team-approve-btn { padding:4px 10px; font-size:11px; font-weight:600; background:var(--accent); color:#fff; border:none; border-radius:var(--r-pill); cursor:pointer; font-family:'Inter',sans-serif; }
+.cp-team-remove-btn { padding:4px 10px; font-size:11px; font-weight:600; background:transparent; color:var(--text-3); border:1.5px solid var(--border-md); border-radius:var(--r-pill); cursor:pointer; font-family:'Inter',sans-serif; }
+.cp-team-remove-btn:hover { color:#F87171; border-color:#F87171; }
+.cp-team-group-label { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.07em; color:var(--text-3); margin:12px 0 6px; }
+
+/* ══ BMC COLLABORATIVE NOTES ═════════════════════════════════════════ */
+.bmc-note-toggle { display:flex; align-items:center; gap:5px; font-size:11.5px; color:var(--text-3); cursor:pointer; margin-top:6px; padding:0; border:none; background:none; font-family:'Inter',sans-serif; }
+.bmc-note-toggle:hover { color:var(--text-2); }
+.bmc-note-area { display:none; margin-top:8px; }
+.bmc-note-area.open { display:block; }
+.bmc-note-textarea { width:100%; padding:8px 10px; border:1.5px dashed var(--border-md); border-radius:var(--r-sm); font-size:13px; color:var(--text-2); font-family:'Inter',sans-serif; background:var(--surface-2); resize:vertical; min-height:60px; line-height:1.5; }
+.bmc-note-textarea:focus { outline:none; border-color:var(--accent); border-style:solid; background:#fff; }
+.bmc-note-label { font-size:11px; color:var(--text-3); margin-bottom:4px; display:flex; align-items:center; gap:4px; }
+
+/* ══ COMPANY PAGE RESOURCES ══════════════════════════════════════════ */
+.cp-res-add-row { display:grid; grid-template-columns:1fr 1.4fr auto; gap:8px; align-items:center; margin-bottom:10px; }
+.cp-res-input { width:100%; padding:8px 11px; border:1.5px solid var(--border-md); border-radius:var(--r-sm); font-size:13px; font-family:'Inter',sans-serif; background:#fff; color:var(--text-0); }
+.cp-res-input:focus { outline:none; border-color:var(--accent); }
+.cp-res-add-btn { padding:8px 14px; background:var(--accent); color:#fff; border:none; border-radius:var(--r-sm); font-size:12px; font-weight:600; cursor:pointer; white-space:nowrap; font-family:'Inter',sans-serif; }
+.cp-res-list { display:flex; flex-direction:column; gap:6px; }
+.cp-res-item { display:flex; align-items:center; gap:10px; padding:8px 12px; background:var(--surface-2); border-radius:var(--r-sm); }
+.cp-res-link { flex:1; font-size:13px; color:var(--accent); text-decoration:none; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.cp-res-link:hover { text-decoration:underline; }
+.cp-res-label { font-size:12px; color:var(--text-2); flex-shrink:0; }
+.cp-res-del { padding:3px 8px; font-size:11px; color:var(--text-3); border:1.5px solid var(--border-md); border-radius:var(--r-pill); background:transparent; cursor:pointer; font-family:'Inter',sans-serif; }
+.cp-res-del:hover { color:#F87171; border-color:#F87171; }
+
+/* ══ PROFILE NAV ITEM ════════════════════════════════════════════════ */
+.nav-profile-avatar { width:28px; height:28px; border-radius:50%; background:var(--accent); color:#fff; font-size:10px; font-weight:700; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+
+/* ══ ONBOARDING TEAM STEP ════════════════════════════════════════════ */
+.team-role-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin:20px 0; }
+.team-role-card { padding:16px; background:var(--surface-2); border:1.5px solid var(--border); border-radius:var(--r); cursor:default; }
+.team-role-card:hover { border-color:var(--accent-bdr); background:var(--accent-lt); }
+.team-role-icon { font-size:22px; margin-bottom:8px; }
+.team-role-name { font-size:13px; font-weight:700; color:var(--text-0); margin-bottom:4px; }
+.team-role-desc { font-size:12px; color:var(--text-2); line-height:1.5; }
 </style>
 
 <div class="sidebar-backdrop" id="sidebar-backdrop" onclick="toggleSidebar()"></div>
@@ -3763,18 +4262,22 @@
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75"><rect x="1" y="4" width="14" height="10" rx="2"/><path d="M11 9a1 1 0 110 2 1 1 0 010-2z" fill="currentColor" stroke="none"/><path d="M1 7h14"/></svg>
           <span class="nav-item-label">Wallet</span>
         </button>
+        <button class="nav-item nav-auth-gate" id="nav-ir" data-tip="IR Page" onclick="showView('ir-page')">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75"><rect x="2" y="2" width="12" height="12" rx="2"/><path d="M5 8h6M5 5h3M5 11h4"/></svg>
+          <span class="nav-item-label">IR Page</span>
+        </button>
 
-        <!-- Thinker nav — gated: only visible when currentUser.thinker_access === true -->
+        <!-- Team nav — gated: only visible when currentUser.thinker_access === true -->
         <div id="thinker-nav-section" style="display:none">
-        <div class="nav-section-label nav-thinker">Thinker</div>
+        <div class="nav-section-label nav-thinker">Team</div>
 
-        <button class="nav-item nav-thinker cc-parent" id="nav-thinker" data-tip="Command Center"
-          onclick="ccActivate('overview',this); navigateThinkerTab('overview')">
+        <button class="nav-item nav-thinker cc-parent" id="nav-thinker" data-tip="Team Hub"
+          onclick="showView('thinker-hub')">
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75">
             <circle cx="8" cy="5" r="3"/>
             <path d="M2 14c0-3.3 2.7-6 6-6s6 2.7 6 6"/>
           </svg>
-          <span class="nav-item-label">Command Center</span>
+          <span class="nav-item-label">Team Hub</span>
         </button>
 
         <button class="nav-item cc-flat" id="cc-onboarding" data-tip="Onboarding"
@@ -3826,6 +4329,14 @@
         </button>
 
         </div><!-- /thinker-nav-section -->
+
+        <!-- Profile — always visible when logged in -->
+        <div id="nav-profile-section" style="display:none">
+          <button class="nav-item nav-auth-gate" id="nav-profile" data-tip="My Profile" onclick="showView('user-profile')">
+            <div class="nav-profile-avatar" id="nav-profile-avatar">?</div>
+            <span class="nav-item-label">My Profile</span>
+          </button>
+        </div>
 
       </div>
       <div class="recents-header">
@@ -4933,34 +5444,32 @@
       <span id="th-stat-earnings"></span><span id="th-stat-rating"></span>
     </div>
 
-    <!-- Tab nav -->
-    <div class="thinker-tabs">
-      <!-- Overview: person/user — matches sidebar Command Center -->
-      <button class="thinker-tab active" onclick="navigateThinkerTab('overview')">
-        <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75"><circle cx="8" cy="5" r="3"/><path d="M2 14c0-3.3 2.7-6 6-6s6 2.7 6 6"/></svg>
-        Summary
+    <!-- ── Team Hub — 4-section tab bar ── -->
+    <div style="margin-bottom:6px">
+      <div style="font-size:22px;font-weight:700;color:var(--text-0);font-family:'Cormorant Garamond',serif;letter-spacing:-.01em;margin-bottom:4px">Your Team</div>
+      <div style="font-size:13px;color:var(--text-3)">Build your intelligence council, manage operations, and run your investor data room.</div>
+    </div>
+    <div class="team-hub-tabs" id="team-hub-tabs">
+      <button class="team-hub-tab active" id="th-tab-lab"      onclick="switchTeamTab('lab',this)">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75"><rect x="4" y="4" width="8" height="8" rx="1.5"/><path d="M6 2.5v1.5M8 2.5v1.5M10 2.5v1.5M6 12v1.5M8 12v1.5M10 12v1.5M2.5 6h1.5M2.5 8h1.5M2.5 10h1.5M12 6h1.5M12 8h1.5M12 10h1.5"/></svg>
+        Thinker Lab
       </button>
-      <!-- Setup: compass — matches sidebar Onboarding -->
-      <button class="thinker-tab thinker-tab-launch" id="thinker-tab-setup" onclick="openObFlow()" title="Thinker setup wizard">
-        <svg class="tab-setup-icon" width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75"><circle cx="8" cy="8" r="6.5"/><path d="M9.8 6.2l-2.4 1-1 2.4 2.4-1z" fill="currentColor" stroke="none" opacity=".8"/><path d="M6.2 9.8l1-2.4 2.4-1-1 2.4z" fill="currentColor" stroke="none" opacity=".3"/></svg>
-        Setup
+      <button class="team-hub-tab" id="th-tab-advisory" onclick="switchTeamTab('advisory',this)">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75"><circle cx="5" cy="5" r="2.5"/><circle cx="11" cy="5" r="2.5"/><path d="M1 13c0-2.2 1.8-4 4-4M15 13c0-2.2-1.8-4-4-4"/><path d="M8 14c0-2.2 1.8-4 4-4s-4 1.8-4 4"/><circle cx="8" cy="7" r="2.5"/><path d="M4 14c0-2.2 1.8-4 4-4s4 1.8 4 4"/></svg>
+        Advisory Board
       </button>
-      <!-- Train Model: CPU chip — matches sidebar Train Model -->
-      <button class="thinker-tab" onclick="navigateThinkerTab('train')">
-        <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75"><rect x="4" y="4" width="8" height="8" rx="1.5"/><path d="M6 2.5v1.5M8 2.5v1.5M10 2.5v1.5M6 12v1.5M8 12v1.5M10 12v1.5M2.5 6h1.5M2.5 8h1.5M2.5 10h1.5M12 6h1.5M12 8h1.5M12 10h1.5"/></svg>
-        Train Model
+      <button class="team-hub-tab" id="th-tab-investor" onclick="switchTeamTab('investor',this)">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75"><rect x="2" y="2" width="12" height="12" rx="2"/><path d="M5 8h6M5 5h3M5 11h4"/></svg>
+        Investor Hub
       </button>
-      <!-- Reports: fingerprint — matches sidebar Reports -->
-      <button class="thinker-tab" onclick="navigateThinkerTab('reports')">
-        <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"><path d="M8 1.5C5 1.5 2.5 4 2.5 7"/><path d="M8 3.5C6 3.5 4.5 5.1 4.5 7"/><path d="M8 5.5C7 5.5 6.5 6.2 6.5 7"/><path d="M8 1.5c3 0 5.5 2.5 5.5 5.5"/><path d="M8 3.5C10 3.5 11.5 5.1 11.5 7"/><path d="M8 5.5c1 0 1.5.7 1.5 1.5v1.5"/><path d="M4.5 9c.1 2 1.5 5 3.5 5.5"/><path d="M2.5 8.5c0 3 2 6 5.5 6"/><path d="M6.5 7v1c0 2 .5 4.5 1.5 6"/></svg>
-        Reports
-      </button>
-      <!-- Payments: bank/building — matches sidebar Payments -->
-      <button class="thinker-tab" onclick="navigateThinkerTab('payments')">
-        <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M1.5 6h13M8 1.5L1.5 6v8.5h13V6z"/><line x1="4" y1="10" x2="4" y2="14.5"/><line x1="8" y1="10" x2="8" y2="14.5"/><line x1="12" y1="10" x2="12" y2="14.5"/></svg>
-        Payments
+      <button class="team-hub-tab" id="th-tab-staff" onclick="switchTeamTab('staff',this)">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75"><rect x="2" y="3" width="12" height="11" rx="1.5"/><path d="M5 3V2h6v1M6 8h4M6 11h2"/><path d="M10 8l1.5-1.5L10 5"/></svg>
+        Staff Terminal
       </button>
     </div>
+
+    <!-- ══ THINKER LAB PANEL ══════════════════════════════════════════ -->
+    <div class="team-hub-panel active" id="thp-lab">
 
     <!-- ─── COMMAND CENTER OVERVIEW ─── -->
     <div class="thinker-panel cc-dash" id="tp-overview">
@@ -5380,8 +5889,505 @@ e.g. I always start by validating whether the problem is real before evaluating 
       </div>
     </div>
 
+    </div><!-- /thp-lab -->
+
+    <!-- ══ ADVISORY BOARD PANEL ══════════════════════════════════════ -->
+    <div class="team-hub-panel" id="thp-advisory">
+      <div class="adv-section-head">
+        <div class="adv-section-title">Advisory Board</div>
+        <div style="font-size:13px;color:var(--text-3)" id="adv-count-label">0 advisors</div>
+      </div>
+      <p style="font-size:13.5px;color:var(--text-2);margin-bottom:20px;line-height:1.6">Invite domain experts to see your team's outputs. They can review perspectives, session results, and model recommendations — but cannot edit anything.</p>
+
+      <!-- Invite form -->
+      <div class="adv-invite-form">
+        <div style="font-size:13px;font-weight:700;color:var(--text-0);margin-bottom:14px">Invite an advisor</div>
+        <div class="adv-invite-row">
+          <div>
+            <div class="adv-invite-label">Email address</div>
+            <input class="adv-invite-input" id="adv-email" type="email" placeholder="advisor@firm.com">
+          </div>
+          <div>
+            <div class="adv-invite-label">Domain expertise</div>
+            <select class="adv-invite-select" id="adv-domain">
+              <option value="Marketing">Marketing</option>
+              <option value="Product">Product</option>
+              <option value="Sales">Sales</option>
+              <option value="Finance">Finance</option>
+              <option value="Legal">Legal</option>
+              <option value="Operations">Operations</option>
+              <option value="Engineering">Engineering</option>
+              <option value="Design">Design</option>
+              <option value="Fundraising">Fundraising</option>
+              <option value="Strategy">Strategy</option>
+              <option value="HR / Talent">HR / Talent</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+          <div style="padding-top:18px">
+            <button class="adv-invite-btn" onclick="advInvite()">Send invite →</button>
+          </div>
+        </div>
+        <div style="margin-top:10px">
+          <div class="adv-invite-label">Note (optional)</div>
+          <input class="adv-invite-input" id="adv-note" type="text" placeholder="e.g. Reviewing our Q2 GTM strategy">
+        </div>
+      </div>
+
+      <!-- Member list -->
+      <div class="adv-member-list" id="adv-member-list">
+        <div class="adv-board-empty">
+          <svg width="32" height="32" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="10" cy="10" r="5"/><circle cx="22" cy="10" r="5"/><path d="M3 27c0-4 3-7 7-7M29 27c0-4-3-7-7-7"/><circle cx="16" cy="14" r="5"/><path d="M9 27c0-4 3-7 7-7s7 3 7 7"/></svg>
+          <div style="margin-top:12px">No advisors yet. Invite your first advisor above.</div>
+        </div>
+      </div>
+    </div><!-- /thp-advisory -->
+
+    <!-- ══ INVESTOR HUB PANEL ══════════════════════════════════════════ -->
+    <div class="team-hub-panel" id="thp-investor">
+      <div class="adv-section-head">
+        <div class="adv-section-title">Investor Hub</div>
+        <button class="adv-invite-btn" onclick="showView('ir-page')" style="font-size:12px;padding:7px 14px">Open IR Setup →</button>
+      </div>
+      <p style="font-size:13.5px;color:var(--text-2);margin-bottom:20px;line-height:1.6">Your Live Data Room — the source of truth for all financial reporting. Share your private IR link with investors for real-time access to your numbers.</p>
+
+      <!-- Quick stats (populated from IR data) -->
+      <div class="inv-hub-stat-row" id="inv-hub-stats">
+        <div class="inv-hub-stat">
+          <div class="inv-hub-stat-val" id="inv-hub-cash">—</div>
+          <div class="inv-hub-stat-lbl">Cash on Hand</div>
+        </div>
+        <div class="inv-hub-stat">
+          <div class="inv-hub-stat-val" id="inv-hub-runway">—</div>
+          <div class="inv-hub-stat-lbl">Months Runway</div>
+        </div>
+        <div class="inv-hub-stat">
+          <div class="inv-hub-stat-val" id="inv-hub-rev">—</div>
+          <div class="inv-hub-stat-lbl">Monthly Revenue</div>
+        </div>
+      </div>
+
+      <!-- IR link cards -->
+      <div id="inv-hub-links">
+        <div style="background:var(--surface-2);border:1.5px dashed var(--border-md);border-radius:var(--r);padding:28px;text-align:center;color:var(--text-3);">
+          <div style="font-size:28px;margin-bottom:12px">🔒</div>
+          <div style="font-size:14px;font-weight:600;color:var(--text-1);margin-bottom:6px">Your IR Page isn't published yet</div>
+          <div style="font-size:13px;margin-bottom:16px">Complete your IR setup to generate shareable investor links.</div>
+          <button class="inv-hub-go-setup" onclick="showView('ir-page')">
+            <svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="1.5" y="3" width="10" height="7.5" rx="1.5"/><path d="M4 3V2a1.5 1.5 0 013 0v1"/></svg>
+            Set up IR Page
+          </button>
+        </div>
+      </div>
+
+      <!-- Monthly update log -->
+      <div style="margin-top:24px">
+        <div class="adv-section-head" style="margin-bottom:10px">
+          <div class="adv-section-title">Update History</div>
+          <button class="adv-invite-btn" onclick="invHubAddUpdate()" style="font-size:12px;padding:7px 14px">+ Post update</button>
+        </div>
+        <div id="inv-hub-updates">
+          <div class="staff-empty">No updates posted yet. Post your first monthly update for investors.</div>
+        </div>
+      </div>
+    </div><!-- /thp-investor -->
+
+    <!-- ══ STAFF TERMINAL PANEL ════════════════════════════════════════ -->
+    <div class="team-hub-panel" id="thp-staff">
+      <div class="adv-section-head">
+        <div class="adv-section-title">Staff Terminal</div>
+        <div style="font-size:13px;color:var(--text-3)" id="staff-count-label">0 tasks</div>
+      </div>
+      <p style="font-size:13.5px;color:var(--text-2);margin-bottom:20px;line-height:1.6">Delegate operations as structured tasks with clear Success Protocols — so every team member knows exactly what "done" looks like.</p>
+
+      <!-- Task creation form -->
+      <div class="staff-task-form" id="staff-task-form">
+        <div class="staff-task-form-title">
+          <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75"><rect x="2" y="3" width="12" height="11" rx="1.5"/><path d="M5 3V2h6v1M6 8h4M6 11h2"/></svg>
+          Delegate a task
+        </div>
+        <div class="staff-task-grid">
+          <div class="staff-task-field">
+            <div class="staff-task-label">Task title</div>
+            <input class="staff-task-input" id="staff-title" placeholder="e.g. Write Q2 investor update">
+          </div>
+          <div class="staff-task-field">
+            <div class="staff-task-label">Assign to</div>
+            <input class="staff-task-input" id="staff-assignee" placeholder="Name or email">
+          </div>
+          <div class="staff-task-field">
+            <div class="staff-task-label">Due date</div>
+            <input class="staff-task-input" id="staff-due" type="date">
+          </div>
+          <div class="staff-task-field">
+            <div class="staff-task-label">Priority</div>
+            <select class="staff-task-input" id="staff-priority">
+              <option value="High">High</option>
+              <option value="Medium" selected>Medium</option>
+              <option value="Low">Low</option>
+            </select>
+          </div>
+        </div>
+        <div class="staff-task-field" style="margin-bottom:0">
+          <div class="staff-task-label">Success Protocol <span style="font-weight:400;text-transform:none;letter-spacing:0;color:var(--text-3)">— definition of done</span></div>
+          <textarea class="staff-task-textarea" id="staff-protocol" placeholder="This task is complete when… (be specific: deliverable, format, review criteria)"></textarea>
+        </div>
+        <button class="staff-add-btn" onclick="staffAddTask()">Delegate task →</button>
+      </div>
+
+      <!-- Task board -->
+      <div class="staff-columns">
+        <div>
+          <div class="staff-col-head"><div class="staff-col-head-dot" style="background:#F59E0B"></div>Pending</div>
+          <div id="staff-col-pending"></div>
+        </div>
+        <div>
+          <div class="staff-col-head"><div class="staff-col-head-dot" style="background:#3B82F6"></div>Active</div>
+          <div id="staff-col-active"></div>
+        </div>
+        <div>
+          <div class="staff-col-head"><div class="staff-col-head-dot" style="background:#10B981"></div>Done</div>
+          <div id="staff-col-done"></div>
+        </div>
+      </div>
+    </div><!-- /thp-staff -->
+
   </div></div>
 </div>
+
+    <!-- SCREEN: IR Page (founder setup) -->
+    <div class="screen" id="screen-ir-page">
+      <div class="main-inner"><div class="screen-inner">
+        <div class="screen-header">
+          <div class="screen-label">Investor Relations</div>
+          <h2 class="screen-title">IR Page</h2>
+          <p class="screen-sub">A live, invite-only financial briefing for your investors. No decks. No delays. One link.</p>
+        </div>
+
+        <!-- Two-tier explainer -->
+        <div class="ir-tier-box">
+          <div class="ir-tier-title">Two-tier access model</div>
+          <div class="ir-tier-row">
+            <div class="ir-tier-col">
+              <div class="ir-tier-col-label">🌐 Public page</div>
+              <div class="ir-tier-item">Company name, stage, tagline, industry — no financials. Anyone with the link can view. Use for cold intros.</div>
+            </div>
+            <div class="ir-tier-col">
+              <div class="ir-tier-col-label">🔒 Private IR room</div>
+              <div class="ir-tier-item">Full financials: cash, burn, runway, revenue. Invite-only by email. Your board and investors only.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Status bar -->
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:12px">
+          <div style="display:flex;align-items:center;gap:10px">
+            <span class="ir-status-pill ir-status-draft" id="ir-status-pill">
+              <svg width="6" height="6" viewBox="0 0 6 6"><circle cx="3" cy="3" r="3" fill="currentColor"/></svg>
+              Draft
+            </span>
+            <span style="font-size:12px;color:var(--text-3)" id="ir-last-updated">Not yet published</span>
+          </div>
+          <div style="display:flex;gap:8px">
+            <button class="ir-btn-preview" onclick="irPreviewPublicPage()">
+              <svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M1.5 6.5s2-4 5-4 5 4 5 4-2 4-5 4-5-4-5-4z"/><circle cx="6.5" cy="6.5" r="1.5"/></svg>
+              Preview public page
+            </button>
+            <button class="ir-btn-preview" onclick="irPreviewAsInvestor()" style="border-color:var(--accent);color:var(--accent)">
+              <svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="1.5" y="3" width="10" height="7.5" rx="1.5"/><path d="M4 3V2a1.5 1.5 0 013 0v1"/></svg>
+              Preview IR room
+            </button>
+            <button class="ir-btn-publish" onclick="irPublish()">
+              <svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M1.5 9V11h10V9M6.5 1v7M4 4l2.5-3 2.5 3"/></svg>
+              Publish &amp; share
+            </button>
+          </div>
+        </div>
+
+        <!-- Links (hidden until published) -->
+        <div id="ir-link-section" style="display:none;margin-bottom:24px">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+            <div>
+              <div style="font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--text-3);margin-bottom:6px">🌐 Public profile link</div>
+              <div class="ir-link-bar">
+                <input class="ir-link-text" id="ir-public-link-display" readonly value="">
+                <button class="ir-link-copy" onclick="irCopyPublicLink()">Copy</button>
+              </div>
+              <div style="font-size:11px;color:var(--text-3);margin-top:4px">No financials — safe for cold intros</div>
+            </div>
+            <div>
+              <div style="font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--text-3);margin-bottom:6px">🔒 Private IR room link</div>
+              <div class="ir-link-bar">
+                <input class="ir-link-text" id="ir-link-display" readonly value="">
+                <button class="ir-link-copy" onclick="irCopyLink()">Copy</button>
+              </div>
+              <div style="font-size:11px;color:var(--text-3);margin-top:4px">Invite-only — shared with listed investors only</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="ir-setup-grid">
+
+          <!-- LEFT COLUMN -->
+          <div style="display:flex;flex-direction:column;gap:16px">
+
+            <!-- Company Identity -->
+            <div class="ir-card">
+              <div class="ir-card-title">Company Identity</div>
+              <div class="ir-field">
+                <label>Company name</label>
+                <input type="text" id="ir-company" placeholder="Vela Payments" oninput="irAutoSave();irSuggestSlug()">
+              </div>
+              <div class="ir-field">
+                <label>Stage</label>
+                <select id="ir-stage" onchange="irAutoSave()">
+                  <option>Pre-seed</option>
+                  <option>Seed</option>
+                  <option selected>Series A</option>
+                  <option>Series B</option>
+                  <option>Series C+</option>
+                  <option>Growth</option>
+                </select>
+              </div>
+              <div class="ir-field">
+                <label>One-line description <span style="font-weight:400;color:var(--text-3)">(shown on public page)</span></label>
+                <input type="text" id="ir-tagline" placeholder="What your company does in one sentence" oninput="irAutoSave()">
+              </div>
+              <div class="ir-field">
+                <label>Industry</label>
+                <select id="ir-industry" onchange="irAutoSave()">
+                  <option value="">Select industry</option>
+                  <option>Fintech</option>
+                  <option>SaaS</option>
+                  <option>Marketplace</option>
+                  <option>HealthTech</option>
+                  <option>EdTech</option>
+                  <option>LegalTech</option>
+                  <option>CleanTech</option>
+                  <option>AI / ML</option>
+                  <option>E-commerce</option>
+                  <option>Real Estate</option>
+                  <option>Media</option>
+                  <option>Other</option>
+                </select>
+              </div>
+              <div class="ir-field">
+                <label>Founded year</label>
+                <input type="number" id="ir-founded" placeholder="2022" min="1900" max="2099" oninput="irAutoSave()" style="max-width:120px">
+              </div>
+              <div class="ir-field">
+                <label>Brand colour</label>
+                <div style="display:flex;align-items:center;gap:10px">
+                  <input type="color" id="ir-color" value="#BF452A" oninput="irAutoSave()" style="width:44px;height:36px;padding:2px;border:1.5px solid var(--border-md);border-radius:8px;cursor:pointer">
+                  <span style="font-size:12px;color:var(--text-3)">Shown on both pages</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- URL Slug -->
+            <div class="ir-card">
+              <div class="ir-card-title">Page URL</div>
+              <div style="font-size:12.5px;color:var(--text-3);margin-bottom:12px;line-height:1.5">Your public company profile lives at this URL. Keep it short and recognisable.</div>
+              <div class="ir-field">
+                <label>Company URL slug</label>
+                <div class="ir-slug-row">
+                  <div class="ir-slug-prefix">divine.app/c/</div>
+                  <input class="ir-slug-input" id="ir-slug" placeholder="vela-payments"
+                    oninput="irSlugInput(this)">
+                  <div class="ir-slug-check" id="ir-slug-check">✓ available</div>
+                </div>
+                <span class="ir-field-hint">Lowercase letters, numbers, and hyphens only.</span>
+              </div>
+            </div>
+
+            <!-- Financials -->
+            <div class="ir-card">
+              <div class="ir-card-title">Key Financials</div>
+              <div class="ir-setup-grid" style="gap:12px">
+                <div class="ir-field">
+                  <label>Cash on hand ($)</label>
+                  <input type="number" id="ir-cash" placeholder="1470000" oninput="irAutoSave()">
+                  <span class="ir-field-hint">Current bank balance</span>
+                </div>
+                <div class="ir-field">
+                  <label>Net burn / month ($)</label>
+                  <input type="number" id="ir-burn" placeholder="82000" oninput="irAutoSave()">
+                  <span class="ir-field-hint">Cash out minus cash in</span>
+                </div>
+                <div class="ir-field">
+                  <label>Monthly revenue ($)</label>
+                  <input type="number" id="ir-revenue" placeholder="124000" oninput="irAutoSave()">
+                </div>
+                <div class="ir-field">
+                  <label>MoM growth (%)</label>
+                  <input type="number" id="ir-growth" placeholder="12" oninput="irAutoSave()">
+                </div>
+              </div>
+              <div style="margin-top:6px;padding:10px 14px;background:var(--surface-2);border-radius:8px;font-size:12.5px;color:var(--text-2)">
+                Runway: <strong id="ir-runway-display" style="color:var(--text-0)">—</strong> &nbsp;·&nbsp; Logic Health Score: <strong id="ir-lhs-display" style="color:var(--accent)">—</strong>
+              </div>
+            </div>
+
+          </div><!-- /LEFT -->
+
+          <!-- RIGHT COLUMN -->
+          <div style="display:flex;flex-direction:column;gap:16px">
+
+            <!-- Narrative -->
+            <div class="ir-card">
+              <div class="ir-card-title">Founder Signal</div>
+              <div class="ir-field">
+                <label>Last 30 days — what happened</label>
+                <textarea id="ir-highlight" placeholder="We closed 3 new enterprise contracts, launched the new settlement rail…" oninput="irAutoSave()"></textarea>
+              </div>
+              <div class="ir-field">
+                <label>What investors need to know</label>
+                <textarea id="ir-signal" placeholder="We're raising a $4M bridge in Q3. Looking for investors with fintech distribution…" oninput="irAutoSave()"></textarea>
+              </div>
+            </div>
+
+            <!-- Invite list -->
+            <div class="ir-card">
+              <div class="ir-card-title">Invited Investors</div>
+              <div style="font-size:12.5px;color:var(--text-3);margin-bottom:12px;line-height:1.5">Only these email addresses can view your IR page. Each address receives its own access — you can revoke at any time.</div>
+              <div id="ir-invite-list">
+                <!-- populated by irRenderInviteList() -->
+                <div style="font-size:13px;color:var(--text-3);text-align:center;padding:16px 0;font-style:italic">No investors invited yet</div>
+              </div>
+              <div class="ir-invite-add-row">
+                <input class="ir-invite-input" id="ir-invite-input" type="email" placeholder="investor@fund.com"
+                  onkeydown="if(event.key==='Enter')irAddInvite()">
+                <button class="ir-invite-btn" onclick="irAddInvite()">Add</button>
+              </div>
+            </div>
+
+          </div><!-- /RIGHT -->
+
+        </div><!-- /ir-setup-grid -->
+      </div></div>
+    </div><!-- /screen-ir-page -->
+
+    <!-- SCREEN: Public company profile (no financials) -->
+    <div class="screen" id="screen-ir-public">
+      <div class="ir-public-screen">
+        <div class="ir-public-card">
+          <div class="ir-public-hero">
+            <div class="ir-public-logo-row">
+              <div class="ir-public-logo" id="irp-logo">S</div>
+              <div>
+                <div class="ir-public-company" id="irp-company">Loading…</div>
+                <div class="ir-public-meta">
+                  <span class="ir-public-stage" id="irp-stage"></span>
+                  <span class="ir-public-industry" id="irp-industry"></span>
+                </div>
+              </div>
+            </div>
+            <div class="ir-public-tagline" id="irp-tagline"></div>
+            <div class="ir-public-chips" id="irp-chips"></div>
+          </div>
+          <div class="ir-public-divider"></div>
+          <div class="ir-public-cta-section">
+            <div id="irp-request-form">
+              <div class="ir-public-cta-label">This company's financial data is invite-only</div>
+              <div class="ir-public-cta-sub">Enter your email below to request access. The founder will review and send you an invitation.</div>
+              <input class="ir-gate-input" id="irp-req-email" type="email" placeholder="your@fund.com"
+                style="margin-bottom:10px"
+                onkeydown="if(event.key==='Enter')irPublicRequest()">
+              <button class="ir-public-request-btn" onclick="irPublicRequest()">Request access →</button>
+            </div>
+            <div class="ir-public-request-sent" id="irp-request-sent">
+              ✓ Request sent — the founder will be in touch via email.
+            </div>
+            <div class="ir-public-have-access">Already have access? <a href="#" onclick="irPublicGoToGate();return false">View the live IR page →</a></div>
+          </div>
+        </div>
+        <div class="ir-public-footer">Powered by <strong style="color:var(--accent)">Divine</strong> · Financial Intelligence Terminal</div>
+      </div>
+    </div><!-- /screen-ir-public -->
+
+    <!-- SCREEN: IR Investor Gate + Dashboard -->
+    <div class="screen" id="screen-ir-view">
+      <!-- Gate (shown until email verified) -->
+      <div class="ir-gate-screen" id="ir-gate-wrap">
+        <div class="ir-gate-card">
+          <div class="ir-gate-logo" id="ir-gate-logo">V</div>
+          <div class="ir-gate-company" id="ir-gate-company">Loading…</div>
+          <div class="ir-gate-stage" id="ir-gate-stage">—</div>
+          <div class="ir-gate-tagline" id="ir-gate-tagline"></div>
+          <div class="ir-gate-divider"></div>
+          <div class="ir-gate-prompt">Enter your email to continue</div>
+          <div class="ir-gate-sub">This page is invite-only. Enter the email address you were invited with.</div>
+          <input class="ir-gate-input" id="ir-gate-email" type="email" placeholder="your@email.com"
+            onkeydown="if(event.key==='Enter')irVerifyAccess()">
+          <button class="ir-gate-btn" onclick="irVerifyAccess()">Verify access →</button>
+          <div class="ir-gate-error" id="ir-gate-error">Your email isn't on the access list. Contact the founder to request access.</div>
+          <div class="ir-gate-poweredby">Powered by <strong>Divine</strong> · Financial Intelligence Terminal</div>
+        </div>
+      </div>
+
+      <!-- Dashboard (shown after verified) -->
+      <div class="ir-dashboard" id="ir-dashboard-wrap">
+
+        <!-- Header -->
+        <div class="ir-dash-header">
+          <div class="ir-dash-logo" id="ir-dash-logo">V</div>
+          <div>
+            <div class="ir-dash-company" id="ir-dash-company">Company</div>
+            <div class="ir-dash-meta">
+              <span class="ir-dash-stage" id="ir-dash-stage">Seed</span>
+              <span class="ir-dash-updated" id="ir-dash-updated">Updated —</span>
+            </div>
+          </div>
+          <button class="ir-dash-logout" onclick="irLogout()">Sign out</button>
+        </div>
+
+        <!-- Burn status -->
+        <div class="ir-burn-bar" id="ir-burn-bar">
+          <div class="ir-burn-dot"></div>
+          <div class="ir-burn-text" id="ir-burn-text">—</div>
+        </div>
+
+        <!-- KPI grid -->
+        <div class="ir-kpi-grid">
+          <div class="ir-kpi">
+            <div class="ir-kpi-label">Cash on Hand</div>
+            <div class="ir-kpi-val" id="ir-kpi-cash">—</div>
+            <div class="ir-kpi-delta">Current bank balance</div>
+          </div>
+          <div class="ir-kpi">
+            <div class="ir-kpi-label">Net Burn / mo</div>
+            <div class="ir-kpi-val" id="ir-kpi-burn">—</div>
+            <div class="ir-kpi-delta">Cash out minus cash in</div>
+          </div>
+          <div class="ir-kpi">
+            <div class="ir-kpi-label">Monthly Revenue</div>
+            <div class="ir-kpi-val" id="ir-kpi-rev">—</div>
+            <div class="ir-kpi-delta" id="ir-kpi-rev-delta">—</div>
+          </div>
+          <div class="ir-kpi highlight">
+            <div class="ir-kpi-label">Runway</div>
+            <div class="ir-kpi-val" id="ir-kpi-runway">—</div>
+            <div class="ir-kpi-delta">Months at current burn</div>
+          </div>
+        </div>
+
+        <!-- Narrative sections -->
+        <div class="ir-section">
+          <div class="ir-section-label">Last 30 days</div>
+          <div class="ir-section-body" id="ir-dash-highlight">—</div>
+        </div>
+        <div class="ir-section">
+          <div class="ir-section-label">What investors need to know</div>
+          <div class="ir-section-body">
+            <div id="ir-dash-signal">—</div>
+          </div>
+        </div>
+
+        <div class="ir-dash-footer">
+          Powered by <strong style="color:var(--accent)">Divine</strong> · Financial Intelligence Terminal &nbsp;·&nbsp; Data provided by the founder · Not independently verified
+        </div>
+      </div><!-- /ir-dashboard-wrap -->
+    </div><!-- /screen-ir-view -->
 
     <!-- SCREEN: Thought Leaders -->
     <div class="screen" id="screen-thought-leaders">
@@ -5485,38 +6491,164 @@ e.g. I always start by validating whether the problem is real before evaluating 
   </div>
 </div>
 
+<!-- ══ USER PROFILE SCREEN ══════════════════════════════════════════ -->
+<div class="screen" id="screen-user-profile">
+  <div class="main-inner">
+    <div class="profile-screen-wrap">
+
+      <!-- Header -->
+      <div style="margin-bottom:24px">
+        <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--accent);margin-bottom:6px">My Profile</div>
+        <h2 style="font-size:26px;font-weight:700;color:var(--text-0);margin-bottom:4px">Your identity on Divine</h2>
+        <p style="font-size:13.5px;color:var(--text-2)">Your role, expertise, and company affiliation. Visible to your team members.</p>
+      </div>
+
+      <!-- Hero card -->
+      <div class="profile-hero-card">
+        <div class="profile-avatar-lg" id="prof-avatar-lg" onclick="profilePickColor()">MA</div>
+        <div class="profile-hero-body">
+          <div class="profile-name-row">
+            <input class="profile-name-input" id="prof-name" type="text" placeholder="Your full name" value="">
+            <span class="role-badge role-founder" id="prof-role-badge">Founder</span>
+          </div>
+          <div class="profile-email-row" id="prof-email-display"></div>
+          <textarea class="profile-bio-input" id="prof-bio" rows="3" placeholder="Your background in 2–3 sentences. What makes your perspective unique?"></textarea>
+        </div>
+      </div>
+
+      <!-- Role & company -->
+      <div class="profile-section-card">
+        <div class="profile-section-head">Role & Company</div>
+        <div class="profile-field-row">
+          <div>
+            <div class="profile-field-label">Role</div>
+            <select class="profile-role-select" id="prof-role" onchange="profileUpdateRoleBadge()">
+              <option value="founder">Founder</option>
+              <option value="thinker">Thinker</option>
+              <option value="advisory">Advisory Board</option>
+              <option value="investor">Investor</option>
+              <option value="staff">Staff</option>
+            </select>
+          </div>
+          <div>
+            <div class="profile-field-label">Company</div>
+            <input class="profile-field-input" id="prof-company" type="text" placeholder="Your company name">
+          </div>
+        </div>
+        <div class="profile-field-row">
+          <div>
+            <div class="profile-field-label">Title / descriptor</div>
+            <input class="profile-field-input" id="prof-title" type="text" placeholder="e.g. Builder · Designer · Founder">
+          </div>
+          <div>
+            <div class="profile-field-label">Location</div>
+            <input class="profile-field-input" id="prof-location" type="text" placeholder="e.g. Lagos, NG">
+          </div>
+        </div>
+      </div>
+
+      <!-- Expertise -->
+      <div class="profile-section-card">
+        <div class="profile-section-head">Areas of Expertise</div>
+        <div class="profile-expertise-wrap" id="prof-expertise-tags"></div>
+        <div class="profile-tag-add">
+          <input class="profile-tag-input" id="prof-tag-input" type="text" placeholder="Add expertise (e.g. GTM Strategy)" onkeydown="if(event.key==='Enter')profileAddTag()">
+          <button class="adv-invite-btn" onclick="profileAddTag()" style="padding:8px 14px;font-size:12px">Add</button>
+        </div>
+      </div>
+
+      <!-- Activity summary -->
+      <div class="profile-section-card">
+        <div class="profile-section-head">Activity</div>
+        <div class="profile-activity-row">
+          <div class="profile-activity-cell">
+            <div class="profile-activity-val" id="prof-act-sessions">0</div>
+            <div class="profile-activity-lbl">Perspectives</div>
+          </div>
+          <div class="profile-activity-cell">
+            <div class="profile-activity-val" id="prof-act-projects">0</div>
+            <div class="profile-activity-lbl">Projects</div>
+          </div>
+          <div class="profile-activity-cell">
+            <div class="profile-activity-val" id="prof-act-team">0</div>
+            <div class="profile-activity-lbl">Team members</div>
+          </div>
+        </div>
+      </div>
+
+      <button class="profile-save-btn" onclick="profileSave()">Save profile</button>
+    </div>
+  </div>
+</div>
+
 <!-- WELCOME MODAL (first-session guided moment) -->
 <div id="di-welcome-overlay" style="display:none;position:fixed;inset:0;z-index:8000;background:rgba(15,14,12,0.55);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);align-items:center;justify-content:center;">
   <div id="di-welcome-modal" style="background:#fff;border-radius:20px;padding:40px 36px 32px;width:min(480px,92vw);box-shadow:0 24px 72px rgba(0,0,0,0.2);display:flex;flex-direction:column;gap:0;position:relative;">
     <div style="font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);margin-bottom:12px;">Financial Intelligence Terminal</div>
     <h2 style="font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:600;color:var(--text-0);line-height:1.2;margin-bottom:10px;">The operating system for founders who run on data.</h2>
     <p style="font-size:14px;color:var(--text-2);line-height:1.65;margin-bottom:28px;">Divine automates your growth protocols, audits team performance against real benchmarks, and delivers live financial transparency directly to your investors — no decks, no delays.</p>
-    <!-- 3-step loop -->
-    <div style="display:flex;flex-direction:column;gap:12px;margin-bottom:32px;">
-      <div class="di-welcome-step">
-        <div class="di-welcome-step-num">1</div>
-        <div>
-          <div class="di-welcome-step-title">Automate growth protocols</div>
-          <div class="di-welcome-step-sub">Model your revenue trajectory, identify fragile assumptions, and get a structured growth challenge from a verified expert.</div>
-        </div>
-      </div>
-      <div class="di-welcome-step">
-        <div class="di-welcome-step-num">2</div>
-        <div>
-          <div class="di-welcome-step-title">Audit team performance</div>
-          <div class="di-welcome-step-sub">Run your numbers against the five diligence triggers that investors actually use. Know where you stand before they ask.</div>
-        </div>
-      </div>
-      <div class="di-welcome-step">
-        <div class="di-welcome-step-num">3</div>
-        <div>
-          <div class="di-welcome-step-title">Brief your investors in real time</div>
-          <div class="di-welcome-step-sub">Grant sovereign access to your live financial ledger. Your board never has to ask for an update again.</div>
-        </div>
-      </div>
+    <!-- Step dots -->
+    <div style="display:flex;gap:6px;justify-content:center;margin-bottom:24px" id="di-welcome-dots">
+      <div class="di-welcome-dot active" data-step="0"></div>
+      <div class="di-welcome-dot" data-step="1"></div>
     </div>
-    <button onclick="dismissWelcomeModal()" style="width:100%;background:var(--accent);color:#fff;border:none;border-radius:var(--r-pill);padding:13px 0;font-size:14px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;transition:background .15s;" onmouseover="this.style.background='var(--accent-mid)'" onmouseout="this.style.background='var(--accent)'">Open your terminal →</button>
-    <button onclick="dismissWelcomeModal()" style="margin-top:10px;width:100%;background:transparent;color:var(--text-3);border:none;font-size:12.5px;cursor:pointer;font-family:'Inter',sans-serif;">Skip</button>
+    <!-- Step 0: Overview -->
+    <div id="di-welcome-step-0">
+      <div style="display:flex;flex-direction:column;gap:12px;margin-bottom:28px;">
+        <div class="di-welcome-step">
+          <div class="di-welcome-step-num">1</div>
+          <div>
+            <div class="di-welcome-step-title">Automate growth protocols</div>
+            <div class="di-welcome-step-sub">Model your revenue trajectory, identify fragile assumptions, and get a structured growth challenge from a verified expert.</div>
+          </div>
+        </div>
+        <div class="di-welcome-step">
+          <div class="di-welcome-step-num">2</div>
+          <div>
+            <div class="di-welcome-step-title">Audit team performance</div>
+            <div class="di-welcome-step-sub">Run your numbers against the five diligence triggers that investors actually use. Know where you stand before they ask.</div>
+          </div>
+        </div>
+        <div class="di-welcome-step">
+          <div class="di-welcome-step-num">3</div>
+          <div>
+            <div class="di-welcome-step-title">Brief your investors in real time</div>
+            <div class="di-welcome-step-sub">Grant sovereign access to your live financial ledger. Your board never has to ask for an update again.</div>
+          </div>
+        </div>
+      </div>
+      <button onclick="diWelcomeNext()" style="width:100%;background:var(--accent);color:#fff;border:none;border-radius:var(--r-pill);padding:13px 0;font-size:14px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;transition:background .15s;" onmouseover="this.style.background='var(--accent-mid)'" onmouseout="this.style.background='var(--accent)'">See how your team fits in →</button>
+      <button onclick="dismissWelcomeModal()" style="margin-top:10px;width:100%;background:transparent;color:var(--text-3);border:none;font-size:12.5px;cursor:pointer;font-family:'Inter',sans-serif;">Skip</button>
+    </div>
+    <!-- Step 1: Team Structure -->
+    <div id="di-welcome-step-1" style="display:none">
+      <div style="font-size:13.5px;font-weight:700;color:var(--text-0);margin-bottom:4px">Build your intelligence council.</div>
+      <p style="font-size:13px;color:var(--text-2);margin-bottom:16px;line-height:1.6">You're the Founder. Invite your team, advisors, investors, and staff — each with sovereign access to exactly what they need to see.</p>
+      <div class="team-role-grid">
+        <div class="team-role-card">
+          <div class="team-role-icon">🧠</div>
+          <div class="team-role-name">Thinker Lab</div>
+          <div class="team-role-desc">Install the minds of titans. AI-powered brainstorming, QuickBooks audits, and GTM strategy.</div>
+        </div>
+        <div class="team-role-card">
+          <div class="team-role-icon">🎯</div>
+          <div class="team-role-name">Advisory Board</div>
+          <div class="team-role-desc">Invite domain experts in Marketing, Product, Sales. They see your team's outputs — not your finances.</div>
+        </div>
+        <div class="team-role-card">
+          <div class="team-role-icon">📊</div>
+          <div class="team-role-name">Investor Hub</div>
+          <div class="team-role-desc">Live data room. Real-time financial transparency for your investors — no decks, no delays.</div>
+        </div>
+        <div class="team-role-card">
+          <div class="team-role-icon">⚡</div>
+          <div class="team-role-name">Staff Terminal</div>
+          <div class="team-role-desc">Delegate tasks with clear Success Protocols. Everyone knows exactly what "done" looks like.</div>
+        </div>
+      </div>
+      <button onclick="dismissWelcomeModal()" style="width:100%;background:var(--accent);color:#fff;border:none;border-radius:var(--r-pill);padding:13px 0;font-size:14px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;transition:background .15s;margin-top:4px;" onmouseover="this.style.background='var(--accent-mid)'" onmouseout="this.style.background='var(--accent)'">Open your terminal →</button>
+      <button onclick="diWelcomeBack()" style="margin-top:10px;width:100%;background:transparent;color:var(--text-3);border:none;font-size:12.5px;cursor:pointer;font-family:'Inter',sans-serif;">← Back</button>
+    </div>
   </div>
 </div>
 
@@ -5534,9 +6666,9 @@ e.g. I always start by validating whether the problem is real before evaluating 
     <svg width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 7.5L8 2l6 5.5"/><rect x="5" y="9" width="6" height="6" rx="1"/></svg>
     <span>Launchpad</span>
   </button>
-  <button class="mob-nav-item" id="mob-nav-thinker" onclick="showView('thinker-hub'); closeSidebarOnMobile()" aria-label="Thinker" style="display:none">
+  <button class="mob-nav-item" id="mob-nav-thinker" onclick="showView('thinker-hub'); closeSidebarOnMobile()" aria-label="Team" style="display:none">
     <svg width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="8" cy="5" r="3"/><path d="M2 14c0-3.3 2.7-6 6-6s6 2.7 6 6"/></svg>
-    <span>Thinker</span>
+    <span>Team</span>
   </button>
   <button class="mob-nav-item mob-auth-gate" id="mob-nav-projects" onclick="_navMyStuff('projects'); closeSidebarOnMobile()" aria-label="Projects">
     <span class="mob-lock-badge"></span>
@@ -6216,6 +7348,10 @@ const router = (() => {
     'downloads':       '/downloads',
     'thinker-hub':     '/thinker',
     'login':           '/login',
+    'ir-page':         '/ir',
+    'ir-view':         '/ir/view',
+    'ir-public':       '/c',
+    'user-profile':    '/profile',
   };
 
   // Ordered route table — first match wins
@@ -6304,6 +7440,9 @@ function showView(view, opts = {}) {
       setTimeout(() => si && si.focus(), 120);
     },
     'thought-leaders': () => { document.getElementById('nav-search')?.classList.add('active'); setMobNavActive('mob-nav-search'); renderThoughtLeaders(); show('screen-thought-leaders'); },
+    'ir-page':         () => { document.getElementById('nav-ir')?.classList.add('active'); irInitSetup(); show('screen-ir-page'); },
+    'ir-view':         () => { show('screen-ir-view'); },
+    'ir-public':       () => { show('screen-ir-public'); },
     projects:    () => { document.getElementById('nav-projects').classList.add('active'); setMobNavActive('mob-nav-projects'); renderProjects(); show('screen-projects'); },
     'project-detail': () => { document.getElementById('nav-projects')?.classList.add('active'); setMobNavActive('mob-nav-projects'); show('screen-project-detail'); },
     chat:        () => { openChat(); },
@@ -6323,6 +7462,11 @@ function showView(view, opts = {}) {
       setMobNavActive('mob-nav-thinker');
       show('screen-thinker-hub');
       try { initThinkerHub(); } catch(e) { console.error('[thinker-hub init]', e); }
+    },
+    'user-profile': () => {
+      document.getElementById('nav-profile')?.classList.add('active');
+      show('screen-user-profile');
+      try { initProfileScreen(); } catch(e) { console.error('[profile init]', e); }
     },
   };
   (views[view] || (() => {}))();
@@ -8508,7 +9652,88 @@ function _buildCompanyTemplate(proj) {
       <button class="pd-item-del" onclick="pdDeleteWiki(${i})">×</button>
     </div>`).join('');
 
+  const bmcNotes   = proj.bmcNotes   || {};
+  const resources  = Array.isArray(proj.resources) ? proj.resources : [];
+  const teamArr    = Array.isArray(proj.team) ? proj.team : [];
+
+  const resHtml = resources.map((r, i) =>
+    `<div class="cp-res-item">
+      <span class="cp-res-label">${escHtml(r.label || '')}</span>
+      <a class="cp-res-link" href="${escHtml(r.url)}" target="_blank" rel="noopener">${escHtml(r.url)}</a>
+      <button class="cp-res-del" onclick="cpDeleteResource(${i})">×</button>
+    </div>`).join('');
+
+  const teamByRole = {};
+  teamArr.forEach(m => {
+    const r = m.role || 'staff';
+    if (!teamByRole[r]) teamByRole[r] = [];
+    teamByRole[r].push(m);
+  });
+  const ROLE_ORDER = ['thinker','advisory','investor','staff'];
+  const ROLE_LABELS = { thinker:'Thinker Lab', advisory:'Advisory Board', investor:'Investor', staff:'Staff' };
+  const teamHtml = ROLE_ORDER.filter(r => teamByRole[r]?.length).map(role =>
+    `<div class="cp-team-group-label">${ROLE_LABELS[role]}</div>` +
+    teamByRole[role].map((m, mi) => {
+      const initials = (m.name||m.email||'?').split(' ').map(p=>p[0]).join('').slice(0,2).toUpperCase();
+      const actualIdx = teamArr.indexOf(m);
+      return `<div class="cp-team-member-card">
+        <div class="cp-team-member-avatar">${initials}</div>
+        <div class="cp-team-member-body">
+          <div class="cp-team-member-name">${escHtml(m.name||m.email)}</div>
+          <div class="cp-team-member-email">${escHtml(m.email||'')} · <span class="role-badge role-${escHtml(m.role)}" style="font-size:10px">${escHtml(ROLE_LABELS[m.role]||m.role)}</span></div>
+        </div>
+        <div class="cp-team-member-actions">
+          ${m.status==='invited' ? `<button class="cp-team-approve-btn" onclick="cpApproveTeamMember(${actualIdx})">Approve</button>` : `<span class="adv-member-status adv-status-active">Active</span>`}
+          <button class="cp-team-remove-btn" onclick="cpRemoveTeamMember(${actualIdx})">Remove</button>
+        </div>
+      </div>`;
+    }).join('')
+  ).join('');
+
+  function _bmcNote(fieldId, key) {
+    const val = bmcNotes[key] || '';
+    return `<button class="bmc-note-toggle" onclick="bmcToggleNote('${fieldId}-note')">
+        <svg width="11" height="11" viewBox="0 0 11 11" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 3h9M1 6h7M1 9h5"/></svg>
+        ${val ? 'View team note' : 'Add team note'}
+      </button>
+      <div class="bmc-note-area" id="${fieldId}-note">
+        <div class="bmc-note-label">
+          <svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="5" cy="5" r="4"/><path d="M5 3v3M5 7.5v.5"/></svg>
+          Team notes on this section
+        </div>
+        <textarea class="bmc-note-textarea" placeholder="Add a note for the team…" oninput="bmcSaveNote('${key}',this.value)">${escHtml(val)}</textarea>
+      </div>`;
+  }
+
   return `
+    <div class="pd-section">
+      <div class="pd-section-header">
+        <div class="pd-section-title"><div class="pd-section-icon company"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="6" cy="4" r="2"/><path d="M2 10c0-2 1.8-3.5 4-3.5S10 8 10 10"/><path d="M9 6l2 2-2 2"/><path d="M11 8H7"/></svg></div>Team</div>
+      </div>
+      <div class="cp-team-section">
+        <div class="cp-team-invite-row">
+          <div>
+            <div class="adv-invite-label" style="margin-bottom:5px">Email</div>
+            <input class="adv-invite-input" id="cp-team-email" type="email" placeholder="team@yourcompany.com">
+          </div>
+          <div>
+            <div class="adv-invite-label" style="margin-bottom:5px">Role</div>
+            <select class="adv-invite-select" id="cp-team-role">
+              <option value="thinker">Thinker</option>
+              <option value="advisory">Advisory Board</option>
+              <option value="investor">Investor</option>
+              <option value="staff">Staff</option>
+            </select>
+          </div>
+          <div style="padding-top:21px">
+            <button class="adv-invite-btn" onclick="cpAddTeamMember()">Invite →</button>
+          </div>
+        </div>
+        <div class="cp-team-members" id="cp-team-members">
+          ${teamHtml || '<div class="staff-empty" style="margin-top:4px">No team members yet. Invite your first team member above.</div>'}
+        </div>
+      </div>
+    </div>
     <div class="pd-section">
       <div class="pd-section-header">
         <div class="pd-section-title"><div class="pd-section-icon company"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="1" y="2" width="10" height="8" rx="1"/><path d="M1 5h10"/></svg></div>Business Model Canvas</div>
@@ -8517,20 +9742,24 @@ function _buildCompanyTemplate(proj) {
         <div>
           <div class="pd-field-label">Value Propositions</div>
           <textarea class="pd-textarea" id="pd-value-props" placeholder="What unique value do you deliver to customers?" style="min-height:80px">${_sv(proj.valuePropositions)}</textarea>
+          ${_bmcNote('bmc-vp','valuePropositions')}
         </div>
         <div>
           <div class="pd-field-label">Customer Segments</div>
           <textarea class="pd-textarea" id="pd-cust-segs" placeholder="Who are you creating value for?" style="min-height:80px">${_sv(proj.customerSegments)}</textarea>
+          ${_bmcNote('bmc-cs','customerSegments')}
         </div>
       </div>
       <div class="pd-2col">
         <div>
           <div class="pd-field-label">Revenue Streams</div>
           <textarea class="pd-textarea" id="pd-rev-streams" placeholder="How does the business capture value?" style="min-height:80px">${_sv(proj.revenueStreams)}</textarea>
+          ${_bmcNote('bmc-rs','revenueStreams')}
         </div>
         <div>
           <div class="pd-field-label">Cost Structure</div>
           <textarea class="pd-textarea" id="pd-cost-struct" placeholder="What are the most important costs?" style="min-height:80px">${_sv(proj.costStructure)}</textarea>
+          ${_bmcNote('bmc-co','costStructure')}
         </div>
       </div>
     </div>
@@ -8539,6 +9768,20 @@ function _buildCompanyTemplate(proj) {
         <div class="pd-section-title"><div class="pd-section-icon company"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 2l1.5 3 3.5.5-2.5 2.4.6 3.5L6 9.7l-3.1 1.7.6-3.5L1 5.5 4.5 5z"/></svg></div>The Moat</div>
       </div>
       <textarea class="pd-textarea" id="pd-moat" placeholder="What is the proprietary advantage or defensible 'secret sauce' that competitors cannot easily replicate?" style="min-height:90px">${_sv(proj.moat)}</textarea>
+      ${_bmcNote('bmc-moat','moat')}
+    </div>
+    <div class="pd-section">
+      <div class="pd-section-header">
+        <div class="pd-section-title"><div class="pd-section-icon company"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 2h8v8H2z"/><path d="M4 5h4M4 7h2"/></svg></div>Resources</div>
+      </div>
+      <div class="cp-res-add-row">
+        <input class="cp-res-input" id="cp-res-label" type="text" placeholder="Label (e.g. Pitch Deck)">
+        <input class="cp-res-input" id="cp-res-url" type="url" placeholder="https://…" onkeydown="if(event.key==='Enter')cpAddResource()">
+        <button class="cp-res-add-btn" onclick="cpAddResource()">Add link</button>
+      </div>
+      <div class="cp-res-list" id="cp-res-list">
+        ${resHtml || '<div style="font-size:13px;color:var(--text-3)">No resources added yet.</div>'}
+      </div>
     </div>
     <div class="pd-section">
       <div class="pd-section-header">
@@ -11073,11 +12316,19 @@ function applyAuthState(user) {
     const grName = document.getElementById('dc-greeting-name');
     const grSub  = document.getElementById('dc-greeting-sub');
     if (grName) grName.textContent = `Hi ${firstName}.`;
-    if (grSub)  grSub.textContent  = 'Your terminal is live. What are you auditing today?';
+    if (grSub)  grSub.textContent  = 'Intelligence active. What are we solving today?';
     // Re-render project sections now that currentUser is set
     try { renderDcProjects(); } catch(e) {}
     try { renderPortfolioList('chat'); } catch(e) {}
     try { renderPortfolioList('is'); } catch(e) {}
+
+    // Profile nav — always visible when logged in
+    const _profSec = document.getElementById('nav-profile-section');
+    if (_profSec) { _profSec.style.display = ''; }
+    const _p = loadUserProfile ? loadUserProfile() : {};
+    const _nm = _p.name || user.name || user.email || '';
+    const _ini = _nm ? _nm.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase() : (user.email?user.email[0].toUpperCase():'?');
+    try { _updateNavAvatar(_ini, _p.color); } catch(e){}
 
     // Thinker nav
     if (user.thinker_access) {
@@ -11113,6 +12364,7 @@ function applyAuthState(user) {
     document.getElementById('sidebar-signin-area').style.display  = '';
     document.getElementById('thinker-nav-section').style.display  = 'none';
     document.getElementById('mob-nav-thinker').style.display      = 'none';
+    const _pSec = document.getElementById('nav-profile-section'); if (_pSec) _pSec.style.display = 'none';
     // Re-lock My Stuff nav items + dim project button
     ['nav-projects','nav-wallet'].forEach(id => {
       document.getElementById(id)?.classList.add('nav-auth-gate');
@@ -12743,6 +13995,432 @@ function _refreshTkBadge(count) {
   }
 }
 
+/* ══════════════════════════════════════════════════════════
+   IR PAGE — Investor Relations
+   Founder side: setup, invite management, link generation
+   Investor side: email-gated dashboard
+   Sharing: all page data encoded in the URL (base64 JSON)
+   Access: SHA-256 email hashes stored in encoded data
+══════════════════════════════════════════════════════════ */
+
+const IR_STORE_KEY = 'di_ir_page';
+
+/* ── Utility: SHA-256 hash of a string (async) ── */
+async function irHashString(str) {
+  const buf = await crypto.subtle.digest('SHA-256',
+    new TextEncoder().encode(str.toLowerCase().trim()));
+  return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
+}
+
+/* ── Format currency ── */
+function irFmt(n) {
+  if (!n && n !== 0) return '—';
+  const v = parseFloat(n);
+  if (v >= 1000000) return '$' + (v/1000000).toFixed(2) + 'M';
+  if (v >= 1000)    return '$' + (v/1000).toFixed(0) + 'K';
+  return '$' + v.toFixed(0);
+}
+
+/* ── Load/save IR page data to localStorage ── */
+function irLoadData() {
+  try { return JSON.parse(localStorage.getItem(IR_STORE_KEY)) || {}; } catch { return {}; }
+}
+function irSaveData(d) { localStorage.setItem(IR_STORE_KEY, JSON.stringify(d)); }
+
+/* ── Slug helpers ── */
+function irToSlug(name) {
+  return name.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'').slice(0,40);
+}
+function irSuggestSlug() {
+  const name = document.getElementById('ir-company')?.value.trim() || '';
+  const slugEl = document.getElementById('ir-slug');
+  if (slugEl && !slugEl.dataset.edited) slugEl.value = irToSlug(name);
+  irSlugCheck();
+}
+function irSlugInput(el) {
+  el.value = irToSlug(el.value.replace(/[^a-z0-9-]/gi,''));
+  el.dataset.edited = '1';
+  irSlugCheck();
+  irAutoSave();
+}
+function irSlugCheck() {
+  const slug = document.getElementById('ir-slug')?.value || '';
+  const el   = document.getElementById('ir-slug-check');
+  if (!el) return;
+  if (!slug) { el.textContent = ''; return; }
+  // Always "available" in local-only mode — real uniqueness check needs backend
+  el.textContent = '✓ available';
+  el.style.color = '#22C55E';
+}
+
+/* ── Collect form values into a data object ── */
+function irCollectForm() {
+  return {
+    company:   document.getElementById('ir-company')?.value.trim() || '',
+    stage:     document.getElementById('ir-stage')?.value || 'Seed',
+    tagline:   document.getElementById('ir-tagline')?.value.trim() || '',
+    color:     document.getElementById('ir-color')?.value || '#BF452A',
+    industry:  document.getElementById('ir-industry')?.value || '',
+    founded:   document.getElementById('ir-founded')?.value || '',
+    slug:      document.getElementById('ir-slug')?.value || '',
+    cash:      parseFloat(document.getElementById('ir-cash')?.value) || 0,
+    burn:      parseFloat(document.getElementById('ir-burn')?.value) || 0,
+    revenue:   parseFloat(document.getElementById('ir-revenue')?.value) || 0,
+    growth:    parseFloat(document.getElementById('ir-growth')?.value) || 0,
+    highlight: document.getElementById('ir-highlight')?.value.trim() || '',
+    signal:    document.getElementById('ir-signal')?.value.trim() || '',
+  };
+}
+
+/* ── Autosave + runway calc on every field change ── */
+function irAutoSave() {
+  const d = irCollectForm();
+  const saved = irLoadData();
+  irSaveData({ ...saved, ...d });
+  // Runway calc
+  const runway = (d.cash && d.burn) ? Math.round(d.cash / d.burn) : null;
+  const el = document.getElementById('ir-runway-display');
+  if (el) el.textContent = runway ? `${runway} months` : '—';
+  // LHS from Thinker hub if available
+  const lhsEl = document.getElementById('ir-lhs-display');
+  if (lhsEl) {
+    const rating = document.getElementById('cc-stat-rating')?.textContent;
+    lhsEl.textContent = (rating && rating !== '—') ? rating + ' / 100' : 'Connect Thinker hub';
+  }
+}
+
+/* ── Initialise the setup screen ── */
+function irInitSetup() {
+  const d = irLoadData();
+  const setVal = (id, val) => { const el = document.getElementById(id); if (el && val !== undefined) el.value = val; };
+  setVal('ir-company',   d.company   || (currentUser ? (currentUser.name || '').split(' ')[0] + '\'s Company' : ''));
+  setVal('ir-stage',     d.stage     || 'Series A');
+  setVal('ir-tagline',   d.tagline   || '');
+  setVal('ir-color',     d.color     || '#BF452A');
+  setVal('ir-industry',  d.industry  || '');
+  setVal('ir-founded',   d.founded   || '');
+  setVal('ir-slug',      d.slug      || irToSlug(d.company || ''));
+  setVal('ir-cash',      d.cash      || '');
+  setVal('ir-burn',      d.burn      || '');
+  setVal('ir-revenue',   d.revenue   || '');
+  setVal('ir-growth',    d.growth    || '');
+  setVal('ir-highlight', d.highlight || '');
+  setVal('ir-signal',    d.signal    || '');
+  irAutoSave();
+  irRenderInviteList();
+  // Status / link
+  if (d.published && d.link) {
+    document.getElementById('ir-link-section').style.display = '';
+    document.getElementById('ir-link-display').value = d.link;
+    if (d.publicLink) document.getElementById('ir-public-link-display').value = d.publicLink;
+    const pill = document.getElementById('ir-status-pill');
+    if (pill) { pill.className = 'ir-status-pill ir-status-live'; pill.innerHTML = '<svg width="6" height="6" viewBox="0 0 6 6"><circle cx="3" cy="3" r="3" fill="currentColor"/></svg> Live'; }
+    const upd = document.getElementById('ir-last-updated');
+    if (upd && d.publishedAt) upd.textContent = 'Published ' + new Date(d.publishedAt).toLocaleDateString();
+  }
+  irSlugCheck();
+}
+
+/* ── Invite management ── */
+function irRenderInviteList() {
+  const d    = irLoadData();
+  const list = document.getElementById('ir-invite-list');
+  if (!list) return;
+  const invites = d.invites || [];
+  if (!invites.length) {
+    list.innerHTML = '<div style="font-size:13px;color:var(--text-3);text-align:center;padding:16px 0;font-style:italic">No investors invited yet</div>';
+    return;
+  }
+  list.innerHTML = invites.map((item, i) => `
+    <div class="ir-invite-row" id="ir-inv-${i}">
+      <div class="ir-invite-dot"></div>
+      <div class="ir-invite-email">${item.email}</div>
+      <button class="ir-invite-remove" onclick="irRemoveInvite(${i})" title="Remove">
+        <svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="2"><line x1="1" y1="1" x2="9" y2="9"/><line x1="9" y1="1" x2="1" y2="9"/></svg>
+      </button>
+    </div>`).join('');
+}
+
+async function irAddInvite() {
+  const input = document.getElementById('ir-invite-input');
+  const email = input?.value.trim();
+  if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    showToast('Enter a valid email address', 'error'); return;
+  }
+  const d = irLoadData();
+  const invites = d.invites || [];
+  if (invites.some(i => i.email.toLowerCase() === email.toLowerCase())) {
+    showToast('That email is already on the list', 'error'); return;
+  }
+  const hash = await irHashString(email);
+  invites.push({ email, hash });
+  irSaveData({ ...d, invites });
+  if (input) input.value = '';
+  irRenderInviteList();
+  showToast(`${email} added`, 'success');
+}
+
+function irRemoveInvite(index) {
+  const d = irLoadData();
+  const invites = d.invites || [];
+  const removed = invites.splice(index, 1)[0];
+  irSaveData({ ...d, invites });
+  irRenderInviteList();
+  if (removed) showToast(`${removed.email} removed`, 'default');
+}
+
+/* ── Publish and generate shareable link ── */
+async function irPublish() {
+  const form = irCollectForm();
+  if (!form.company) { showToast('Add a company name before publishing', 'error'); return; }
+  const d     = irLoadData();
+  const invites = d.invites || [];
+  if (!invites.length) { showToast('Add at least one investor email before publishing', 'error'); return; }
+
+  const now = new Date().toISOString();
+  const slug = form.slug || irToSlug(form.company);
+
+  // Full page data (private — contains financials)
+  const pageData = {
+    ...form,
+    runway: (form.cash && form.burn) ? Math.round(form.cash / form.burn) : null,
+    inviteHashes: invites.map(i => i.hash),
+    publishedAt: now,
+    v: 1,
+  };
+
+  // Public page data (no financials)
+  const publicData = {
+    company:  form.company,
+    stage:    form.stage,
+    tagline:  form.tagline,
+    color:    form.color,
+    industry: form.industry,
+    founded:  form.founded,
+    slug,
+    publishedAt: now,
+    v: 1,
+  };
+
+  // Encode as base64 JSON
+  const encoded       = btoa(unescape(encodeURIComponent(JSON.stringify(pageData))));
+  const publicEncoded = btoa(unescape(encodeURIComponent(JSON.stringify(publicData))));
+  const base          = `${window.location.origin}${window.location.pathname}`;
+  const link          = `${base}#ir?d=${encoded}`;
+  const publicLink    = `${base}#c/${slug}?d=${publicEncoded}`;
+
+  // Save to local store + expose links for Investor Hub tab
+  irSaveData({ ...d, ...form, published: true, publishedAt: now, link, publicLink, invites });
+  localStorage.setItem('di_ir_priv_link', link);
+  localStorage.setItem('di_ir_pub_link', publicLink);
+  localStorage.setItem('di_ir_cash', form.cash || '');
+  localStorage.setItem('di_ir_burn', form.burn || '');
+  localStorage.setItem('di_ir_revenue', form.revenue || '');
+
+  // Update UI
+  document.getElementById('ir-link-section').style.display = '';
+  document.getElementById('ir-link-display').value = link;
+  document.getElementById('ir-public-link-display').value = publicLink;
+  const pill = document.getElementById('ir-status-pill');
+  if (pill) { pill.className = 'ir-status-pill ir-status-live'; pill.innerHTML = '<svg width="6" height="6" viewBox="0 0 6 6"><circle cx="3" cy="3" r="3" fill="currentColor"/></svg> Live'; }
+  const upd = document.getElementById('ir-last-updated');
+  if (upd) upd.textContent = 'Published ' + new Date().toLocaleDateString();
+  showToast('Published — both links are ready to share', 'success');
+}
+
+function irCopyLink() {
+  const link = document.getElementById('ir-link-display')?.value;
+  if (!link) return;
+  navigator.clipboard.writeText(link).then(() => showToast('Link copied to clipboard', 'success'));
+}
+
+/* ── Preview as investor (opens the view screen with the current data, bypassing gate) ── */
+async function irPreviewAsInvestor() {
+  const form = irCollectForm();
+  if (!form.company) { showToast('Add a company name first', 'error'); return; }
+  irRenderDashboard(form);
+  showView('ir-view');
+  // Hide gate, show dashboard
+  document.getElementById('ir-gate-wrap').style.display = 'none';
+  document.getElementById('ir-dashboard-wrap').style.display = 'block';
+}
+
+/* ── Public page: render + interaction ── */
+let _irPublicData = null;
+
+function irRenderPublicPage(d) {
+  _irPublicData = d;
+  const set = (id, val) => { const el = document.getElementById(id); if (el) el.innerHTML = val; };
+  // Logo
+  const logo = document.getElementById('irp-logo');
+  if (logo) {
+    logo.textContent = (d.company || 'C').charAt(0).toUpperCase();
+    logo.style.background = d.color || 'var(--accent)';
+  }
+  set('irp-company', d.company || 'Company');
+  set('irp-tagline', d.tagline || 'Building something great.');
+  // Chips
+  const chips = document.getElementById('irp-chips');
+  if (chips) {
+    const items = [d.stage, d.industry, d.founded ? 'Est. ' + d.founded : null].filter(Boolean);
+    chips.innerHTML = items.map(i => `<span class="ir-public-chip">${i}</span>`).join('');
+  }
+  // Reset request form
+  const reqEl = document.getElementById('irp-req-email');
+  if (reqEl) reqEl.value = '';
+  const sentEl = document.getElementById('irp-request-sent');
+  if (sentEl) sentEl.style.display = 'none';
+  const reqBtn = document.querySelector('.ir-public-request-btn');
+  if (reqBtn) reqBtn.style.display = 'block';
+}
+
+function irPreviewPublicPage() {
+  const form = irCollectForm();
+  if (!form.company) { showToast('Add a company name first', 'error'); return; }
+  irRenderPublicPage(form);
+  showView('ir-public');
+}
+
+function irPublicRequest() {
+  const emailEl = document.getElementById('irp-req-email');
+  const email   = emailEl ? emailEl.value.trim() : '';
+  if (!email || !email.includes('@')) { showToast('Enter a valid email address', 'error'); return; }
+  // Show confirmation — in a real backend this would POST to an endpoint
+  const sentEl = document.getElementById('irp-request-sent');
+  const reqBtn = document.querySelector('.ir-public-request-btn');
+  if (sentEl) sentEl.style.display = 'flex';
+  if (reqBtn) reqBtn.style.display = 'none';
+  showToast('Access request sent', 'success');
+}
+
+function irPublicGoToGate() {
+  showView('ir-view');
+}
+
+/* ── Investor gate: decode URL and boot the gate screen ── */
+let _irPageData = null;
+
+function irBootFromURL() {
+  const hash = window.location.hash;
+  // Private IR room: #ir?d=BASE64
+  if (hash.startsWith('#ir?d=')) {
+    try {
+      const encoded = hash.slice('#ir?d='.length);
+      const json    = decodeURIComponent(escape(atob(encoded)));
+      _irPageData   = JSON.parse(json);
+      irLoadGateScreen(_irPageData);
+      showView('ir-view');
+      return true;
+    } catch(e) {
+      console.warn('[IR] Could not decode IR page data:', e);
+      return false;
+    }
+  }
+  // Public company page: #c/SLUG?d=BASE64
+  if (hash.startsWith('#c/')) {
+    try {
+      const qIdx    = hash.indexOf('?d=');
+      if (qIdx === -1) return false;
+      const encoded = hash.slice(qIdx + 3);
+      const json    = decodeURIComponent(escape(atob(encoded)));
+      const data    = JSON.parse(json);
+      irRenderPublicPage(data);
+      showView('ir-public');
+      return true;
+    } catch(e) {
+      console.warn('[IR] Could not decode public page data:', e);
+      return false;
+    }
+  }
+  return false;
+}
+
+function irLoadGateScreen(d) {
+  const set = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
+  const logo = document.getElementById('ir-gate-logo');
+  if (logo) {
+    logo.textContent = (d.company || 'C').charAt(0).toUpperCase();
+    logo.style.background = d.color || 'var(--accent)';
+  }
+  set('ir-gate-company', d.company || 'Company');
+  set('ir-gate-stage',   d.stage   || '');
+  set('ir-gate-tagline', d.tagline || '');
+  // Reset gate state
+  const emailEl = document.getElementById('ir-gate-email');
+  if (emailEl) emailEl.value = '';
+  document.getElementById('ir-gate-error').style.display = 'none';
+  document.getElementById('ir-gate-wrap').style.display = 'flex';
+  document.getElementById('ir-dashboard-wrap').style.display = 'none';
+}
+
+async function irVerifyAccess() {
+  const email = document.getElementById('ir-gate-email')?.value.trim();
+  if (!email) { showToast('Enter your email address', 'error'); return; }
+  const d = _irPageData;
+  if (!d) return;
+  const hash    = await irHashString(email);
+  const allowed = Array.isArray(d.inviteHashes) && d.inviteHashes.includes(hash);
+  if (allowed) {
+    irRenderDashboard(d);
+    document.getElementById('ir-gate-wrap').style.display = 'none';
+    document.getElementById('ir-dashboard-wrap').style.display = 'block';
+  } else {
+    const errEl = document.getElementById('ir-gate-error');
+    if (errEl) errEl.style.display = 'block';
+  }
+}
+
+function irRenderDashboard(d) {
+  const set = (id, val) => { const el = document.getElementById(id); if (el) el.innerHTML = val; };
+  const logo = document.getElementById('ir-dash-logo');
+  if (logo) { logo.textContent = (d.company||'C').charAt(0).toUpperCase(); logo.style.background = d.color||'var(--accent)'; }
+  set('ir-dash-company', d.company || 'Company');
+  set('ir-dash-stage',   d.stage   || '');
+  if (d.publishedAt) {
+    const el = document.getElementById('ir-dash-updated');
+    if (el) el.textContent = 'Updated ' + new Date(d.publishedAt).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
+  }
+  // Runway
+  const runway = d.runway || ((d.cash && d.burn) ? Math.round(d.cash/d.burn) : null);
+  // Burn status
+  const bar = document.getElementById('ir-burn-bar');
+  const burnTxt = document.getElementById('ir-burn-text');
+  if (bar && burnTxt) {
+    bar.className = 'ir-burn-bar';
+    if (!runway) { bar.classList.add('amber'); burnTxt.textContent = 'Runway data not provided'; }
+    else if (runway > 12) { bar.classList.add('green'); burnTxt.textContent = `Healthy — ${runway} months runway at current burn rate`; }
+    else if (runway > 6)  { bar.classList.add('amber'); burnTxt.textContent = `${runway} months runway — fundraising conversations should begin now`; }
+    else                  { bar.classList.add('red');   burnTxt.textContent = `${runway} months runway — critical: in fundraising mode`; }
+  }
+  // KPIs
+  set('ir-kpi-cash',    irFmt(d.cash));
+  set('ir-kpi-burn',    irFmt(d.burn));
+  set('ir-kpi-rev',     irFmt(d.revenue));
+  set('ir-kpi-runway',  runway ? runway + ' mo' : '—');
+  const growthEl = document.getElementById('ir-kpi-rev-delta');
+  if (growthEl) growthEl.textContent = d.growth ? `↑ ${d.growth}% MoM` : 'MoM growth not provided';
+  // Narrative
+  set('ir-dash-highlight', d.highlight || '<em style="color:var(--text-3)">No update provided.</em>');
+  set('ir-dash-signal',    d.signal    || '<em style="color:var(--text-3)">No investor signal provided.</em>');
+}
+
+function irLogout() {
+  irLoadGateScreen(_irPageData || {});
+}
+
+/* ── On-load URL detection ── */
+(function() {
+  const h = window.location.hash;
+  if (h.startsWith('#ir?d=') || h.startsWith('#c/')) {
+    // Defer until DOM is ready
+    window.addEventListener('DOMContentLoaded', () => irBootFromURL(), { once: true });
+    // Fallback if DOMContentLoaded already fired
+    if (document.readyState === 'complete' || document.readyState === 'interactive') {
+      irBootFromURL();
+    }
+  }
+})();
+
 /* ── Reports ── */
 let currentReportPeriod = 'last';
 
@@ -13453,6 +15131,534 @@ function hideDeliberation() {
     if (c && c.querySelector('.deli-inline')) c.innerHTML = '';
   }
 }
+
+/* ══════════════════════════════════════════════════════════════════════
+   TEAM HUB — tab switching
+══════════════════════════════════════════════════════════════════════ */
+function switchTeamTab(tab, el) {
+  document.querySelectorAll('.team-hub-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.team-hub-tab').forEach(t => t.classList.remove('active'));
+  const panel = document.getElementById('thp-' + tab);
+  if (panel) panel.classList.add('active');
+  if (el) el.classList.add('active');
+  if (tab === 'advisory')  initAdvisoryBoard();
+  if (tab === 'investor')  initInvestorHubTab();
+  if (tab === 'staff')     initStaffTerminal();
+}
+
+/* ══════════════════════════════════════════════════════════════════════
+   ADVISORY BOARD
+══════════════════════════════════════════════════════════════════════ */
+const ADV_KEY = 'di_advisory_board';
+function loadAdvisors() { try { return JSON.parse(localStorage.getItem(ADV_KEY)||'[]'); } catch(e){ return []; } }
+function saveAdvisors(a) { localStorage.setItem(ADV_KEY, JSON.stringify(a)); }
+
+function initAdvisoryBoard() {
+  const advisors = loadAdvisors();
+  renderAdvisors(advisors);
+}
+
+function renderAdvisors(advisors) {
+  const list = document.getElementById('adv-member-list');
+  const countEl = document.getElementById('adv-count-label');
+  if (!list) return;
+  if (countEl) countEl.textContent = advisors.length + (advisors.length === 1 ? ' advisor' : ' advisors');
+  if (!advisors.length) {
+    list.innerHTML = `<div class="adv-board-empty">
+      <svg width="32" height="32" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="10" cy="10" r="5"/><circle cx="22" cy="10" r="5"/><path d="M3 27c0-4 3-7 7-7M29 27c0-4-3-7-7-7"/><circle cx="16" cy="14" r="5"/><path d="M9 27c0-4 3-7 7-7s7 3 7 7"/></svg>
+      <div style="margin-top:12px">No advisors yet. Invite your first advisor above.</div>
+    </div>`;
+    return;
+  }
+  list.innerHTML = advisors.map((a, i) => {
+    const initials = (a.email||'?').split('@')[0].slice(0,2).toUpperCase();
+    const statusCls = a.status === 'active' ? 'adv-status-active' : 'adv-status-invited';
+    const statusLbl = a.status === 'active' ? 'Active' : 'Invited';
+    return `<div class="adv-member-card">
+      <div class="adv-member-avatar">${initials}</div>
+      <div class="adv-member-body">
+        <div class="adv-member-name">${escHtml(a.name || a.email)}</div>
+        <div class="adv-member-domain">${escHtml(a.domain)} ${a.note ? '· '+escHtml(a.note) : ''}</div>
+      </div>
+      <span class="adv-member-status ${statusCls}">${statusLbl}</span>
+      ${a.status==='invited' ? `<button class="adv-member-del" onclick="advActivate(${i})" style="color:var(--accent);border-color:var(--accent)">Approve</button>` : ''}
+      <button class="adv-member-del" onclick="advRemove(${i})">Remove</button>
+    </div>`;
+  }).join('');
+}
+
+function advInvite() {
+  const email = document.getElementById('adv-email')?.value.trim();
+  const domain= document.getElementById('adv-domain')?.value;
+  const note  = document.getElementById('adv-note')?.value.trim();
+  if (!email || !email.includes('@')) { showToast('Enter a valid email address', 'error'); return; }
+  const advisors = loadAdvisors();
+  if (advisors.find(a => a.email === email)) { showToast('That email is already on your advisory board', 'error'); return; }
+  advisors.push({ email, domain, note, status:'invited', invitedAt: new Date().toISOString() });
+  saveAdvisors(advisors);
+  renderAdvisors(advisors);
+  document.getElementById('adv-email').value = '';
+  document.getElementById('adv-note').value  = '';
+  showToast('Invite sent to ' + email, 'success');
+}
+
+function advActivate(i) {
+  const advisors = loadAdvisors();
+  if (advisors[i]) { advisors[i].status = 'active'; saveAdvisors(advisors); renderAdvisors(advisors); showToast('Advisor approved', 'success'); }
+}
+
+function advRemove(i) {
+  const advisors = loadAdvisors();
+  const removed = advisors.splice(i, 1);
+  saveAdvisors(advisors);
+  renderAdvisors(advisors);
+  if (removed[0]) showToast(removed[0].email + ' removed from advisory board', 'default');
+}
+
+/* ══════════════════════════════════════════════════════════════════════
+   STAFF TERMINAL
+══════════════════════════════════════════════════════════════════════ */
+const STAFF_KEY = 'di_staff_tasks';
+function loadStaffTasks() { try { return JSON.parse(localStorage.getItem(STAFF_KEY)||'[]'); } catch(e){ return []; } }
+function saveStaffTasks(t) { localStorage.setItem(STAFF_KEY, JSON.stringify(t)); }
+
+function initStaffTerminal() { renderStaffBoard(loadStaffTasks()); }
+
+function renderStaffBoard(tasks) {
+  const cols = { pending: document.getElementById('staff-col-pending'), active: document.getElementById('staff-col-active'), done: document.getElementById('staff-col-done') };
+  const countEl = document.getElementById('staff-count-label');
+  if (countEl) countEl.textContent = tasks.length + (tasks.length === 1 ? ' task' : ' tasks');
+  Object.keys(cols).forEach(status => {
+    if (!cols[status]) return;
+    const filtered = tasks.filter(t => t.status === status);
+    if (!filtered.length) { cols[status].innerHTML = `<div class="staff-empty">No ${status} tasks.</div>`; return; }
+    cols[status].innerHTML = filtered.map(t => {
+      const i = tasks.indexOf(t);
+      const due = t.due ? new Date(t.due).toLocaleDateString('en-US',{month:'short',day:'numeric'}) : '';
+      return `<div class="staff-task-card">
+        <div class="staff-task-title">${escHtml(t.title)}</div>
+        ${t.assignee ? `<div class="staff-task-assignee">→ ${escHtml(t.assignee)}</div>` : ''}
+        ${t.protocol ? `<div class="staff-task-protocol">${escHtml(t.protocol)}</div>` : ''}
+        ${due ? `<div class="staff-task-due">Due ${due} · ${escHtml(t.priority||'Medium')}</div>` : ''}
+        <div class="staff-task-actions">
+          ${status!=='active' && status!=='done' ? `<button class="staff-action-btn" onclick="staffMoveTask(${i},'active')">→ Activate</button>` : ''}
+          ${status==='active' ? `<button class="staff-action-btn" onclick="staffMoveTask(${i},'done')" style="color:#10B981;border-color:#10B981">✓ Done</button>` : ''}
+          ${status==='done' ? `<button class="staff-action-btn" onclick="staffMoveTask(${i},'pending')">↩ Reopen</button>` : ''}
+          <button class="staff-action-btn staff-action-del" onclick="staffDeleteTask(${i})">Delete</button>
+        </div>
+      </div>`;
+    }).join('');
+  });
+}
+
+function staffAddTask() {
+  const title    = document.getElementById('staff-title')?.value.trim();
+  const assignee = document.getElementById('staff-assignee')?.value.trim();
+  const due      = document.getElementById('staff-due')?.value;
+  const priority = document.getElementById('staff-priority')?.value || 'Medium';
+  const protocol = document.getElementById('staff-protocol')?.value.trim();
+  if (!title) { showToast('Give the task a title', 'error'); return; }
+  const tasks = loadStaffTasks();
+  tasks.push({ title, assignee, due, priority, protocol, status:'pending', createdAt: new Date().toISOString() });
+  saveStaffTasks(tasks);
+  renderStaffBoard(tasks);
+  ['staff-title','staff-assignee','staff-due','staff-protocol'].forEach(id => { const el=document.getElementById(id); if(el) el.value=''; });
+  showToast('Task delegated', 'success');
+}
+
+function staffMoveTask(i, status) {
+  const tasks = loadStaffTasks();
+  if (tasks[i]) { tasks[i].status = status; saveStaffTasks(tasks); renderStaffBoard(tasks); }
+}
+
+function staffDeleteTask(i) {
+  const tasks = loadStaffTasks();
+  tasks.splice(i, 1);
+  saveStaffTasks(tasks);
+  renderStaffBoard(tasks);
+  showToast('Task removed', 'default');
+}
+
+/* ══════════════════════════════════════════════════════════════════════
+   INVESTOR HUB TAB
+══════════════════════════════════════════════════════════════════════ */
+const INV_UPDATES_KEY = 'di_inv_updates';
+function loadInvUpdates() { try { return JSON.parse(localStorage.getItem(INV_UPDATES_KEY)||'[]'); } catch(e){ return []; } }
+function saveInvUpdates(u) { localStorage.setItem(INV_UPDATES_KEY, JSON.stringify(u)); }
+
+function initInvestorHubTab() {
+  // Pull stats from IR data in localStorage
+  const irData = _irPageData;
+  const tryLoad = () => {
+    try {
+      const lsKeys = Object.keys(localStorage).filter(k => k.startsWith('di_ir_'));
+      // Load from irAutoSave keys
+      const cash    = localStorage.getItem('di_ir_cash')    || '';
+      const burn    = localStorage.getItem('di_ir_burn')    || '';
+      const rev     = localStorage.getItem('di_ir_revenue') || '';
+      if (cash) { const el=document.getElementById('inv-hub-cash'); if(el) el.textContent='$'+parseFloat(cash).toLocaleString(); }
+      if (burn) { const el=document.getElementById('inv-hub-runway'); if(el) el.textContent=cash&&burn?Math.round(parseFloat(cash)/parseFloat(burn))+'mo':'—'; }
+      if (rev)  { const el=document.getElementById('inv-hub-rev');  if(el) el.textContent='$'+parseFloat(rev).toLocaleString(); }
+    } catch(e){}
+  };
+  tryLoad();
+
+  // Show IR links if published
+  const linkEl = document.getElementById('inv-hub-links');
+  if (linkEl) {
+    const pubLink = localStorage.getItem('di_ir_pub_link') || '';
+    const privLink= localStorage.getItem('di_ir_priv_link')|| '';
+    if (pubLink || privLink) {
+      linkEl.innerHTML = `
+        ${privLink ? `<div class="inv-hub-link-box">
+          <div class="inv-hub-link-label">🔒 Private IR Link — share with investors</div>
+          <div class="inv-hub-link-row">
+            <div class="inv-hub-link-val">${escHtml(privLink)}</div>
+            <button class="inv-hub-copy-btn" onclick="navigator.clipboard.writeText('${escHtml(privLink)}').then(()=>showToast('Copied','success'))">Copy</button>
+          </div>
+        </div>` : ''}
+        ${pubLink ? `<div class="inv-hub-link-box" style="background:var(--surface-2);border-color:var(--border)">
+          <div class="inv-hub-link-label" style="color:var(--text-2)">🌐 Public Profile Link</div>
+          <div class="inv-hub-link-row">
+            <div class="inv-hub-link-val">${escHtml(pubLink)}</div>
+            <button class="inv-hub-copy-btn" onclick="navigator.clipboard.writeText('${escHtml(pubLink)}').then(()=>showToast('Copied','success'))" style="background:var(--text-2)">Copy</button>
+          </div>
+        </div>` : ''}`;
+    }
+  }
+
+  // Render updates
+  renderInvUpdates();
+}
+
+function renderInvUpdates() {
+  const el = document.getElementById('inv-hub-updates');
+  if (!el) return;
+  const updates = loadInvUpdates();
+  if (!updates.length) { el.innerHTML = '<div class="staff-empty">No updates posted yet. Post your first monthly update for investors.</div>'; return; }
+  el.innerHTML = updates.map((u, i) =>
+    `<div class="inv-hub-update-card">
+      <div class="inv-hub-update-date">${new Date(u.postedAt).toLocaleDateString('en-US',{month:'long',year:'numeric'})}</div>
+      <div class="inv-hub-update-body">${escHtml(u.body)}</div>
+    </div>`
+  ).reverse().join('');
+}
+
+function invHubAddUpdate() {
+  const body = prompt('Monthly investor update (what happened, what\'s next, what you need):');
+  if (!body) return;
+  const updates = loadInvUpdates();
+  updates.push({ body, postedAt: new Date().toISOString() });
+  saveInvUpdates(updates);
+  renderInvUpdates();
+  showToast('Update posted', 'success');
+}
+
+/* ══════════════════════════════════════════════════════════════════════
+   USER PROFILE
+══════════════════════════════════════════════════════════════════════ */
+const PROFILE_KEY = 'di_user_profile';
+function loadUserProfile() { try { return JSON.parse(localStorage.getItem(PROFILE_KEY)||'{}'); } catch(e){ return {}; } }
+function saveUserProfile(p) { localStorage.setItem(PROFILE_KEY, JSON.stringify(p)); }
+
+const ROLE_CLASS_MAP = { founder:'role-founder', thinker:'role-thinker', advisory:'role-advisory', investor:'role-investor', staff:'role-staff' };
+const ROLE_LABEL_MAP = { founder:'Founder', thinker:'Thinker', advisory:'Advisory Board', investor:'Investor', staff:'Staff' };
+
+function initProfileScreen() {
+  const p = loadUserProfile();
+  const u = currentUser || {};
+  const name = p.name || u.name || '';
+  const email= p.email|| u.email|| '';
+
+  // Avatar initials
+  const initials = name ? name.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase() : (email?email[0].toUpperCase():'?');
+  const avatarEl = document.getElementById('prof-avatar-lg');
+  if (avatarEl) { avatarEl.textContent = initials; avatarEl.style.background = p.color || 'var(--accent)'; }
+
+  // Fields
+  const setVal = (id, val) => { const el=document.getElementById(id); if(el) el.value=val||''; };
+  const setTxt = (id, val) => { const el=document.getElementById(id); if(el) el.textContent=val||''; };
+  setVal('prof-name', name);
+  setTxt('prof-email-display', email);
+  setVal('prof-bio', p.bio||'');
+  setVal('prof-role', p.role||'founder');
+  setVal('prof-company', p.company||'');
+  setVal('prof-title', p.title||'');
+  setVal('prof-location', p.location||'');
+
+  // Role badge
+  profileUpdateRoleBadge();
+
+  // Expertise tags
+  renderProfileTags(p.expertise||[]);
+
+  // Activity stats
+  const sessions = loadRecents?.()?.length || 0;
+  const projects = loadProjects?.()?.length || 0;
+  const team     = loadAdvisors?.()?.length + (loadStaffTasks?.()?.length||0);
+  const setAct = (id, val) => { const el=document.getElementById(id); if(el) el.textContent=val; };
+  setAct('prof-act-sessions', sessions);
+  setAct('prof-act-projects', projects);
+  setAct('prof-act-team', team||0);
+
+  // Update nav avatar
+  _updateNavAvatar(initials, p.color);
+}
+
+function profileUpdateRoleBadge() {
+  const sel = document.getElementById('prof-role');
+  const badge = document.getElementById('prof-role-badge');
+  if (!sel || !badge) return;
+  const role = sel.value;
+  badge.className = 'role-badge ' + (ROLE_CLASS_MAP[role] || 'role-founder');
+  badge.textContent = ROLE_LABEL_MAP[role] || role;
+}
+
+function renderProfileTags(tags) {
+  const wrap = document.getElementById('prof-expertise-tags');
+  if (!wrap) return;
+  wrap.innerHTML = tags.map((t, i) =>
+    `<span class="profile-expertise-tag">${escHtml(t)}<button onclick="profileRemoveTag(${i})">×</button></span>`
+  ).join('');
+}
+
+function profileAddTag() {
+  const inp = document.getElementById('prof-tag-input');
+  const val = inp ? inp.value.trim() : '';
+  if (!val) return;
+  const p = loadUserProfile();
+  const tags = p.expertise || [];
+  if (!tags.includes(val)) { tags.push(val); p.expertise = tags; saveUserProfile(p); }
+  renderProfileTags(tags);
+  if (inp) inp.value = '';
+}
+
+function profileRemoveTag(i) {
+  const p = loadUserProfile();
+  const tags = p.expertise || [];
+  tags.splice(i, 1);
+  p.expertise = tags;
+  saveUserProfile(p);
+  renderProfileTags(tags);
+}
+
+function profileSave() {
+  const p = loadUserProfile();
+  const getVal = id => { const el=document.getElementById(id); return el?el.value.trim():''; };
+  p.name     = getVal('prof-name');
+  p.bio      = getVal('prof-bio');
+  p.role     = getVal('prof-role');
+  p.company  = getVal('prof-company');
+  p.title    = getVal('prof-title');
+  p.location = getVal('prof-location');
+  if (!p.expertise) p.expertise = [];
+  saveUserProfile(p);
+  // Update nav avatar
+  const initials = p.name ? p.name.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase() : '?';
+  _updateNavAvatar(initials, p.color);
+  showToast('Profile saved', 'success');
+}
+
+function profilePickColor() {
+  const colors = ['#BF452A','#1A5A8B','#2E7D32','#5C35A0','#7A4A1E','#1A7A42'];
+  const p = loadUserProfile();
+  const cur = p.color || '#BF452A';
+  const next = colors[(colors.indexOf(cur)+1)%colors.length];
+  p.color = next;
+  saveUserProfile(p);
+  const el = document.getElementById('prof-avatar-lg');
+  if (el) el.style.background = next;
+  _updateNavAvatar(null, next);
+}
+
+function _updateNavAvatar(initials, color) {
+  const el = document.getElementById('nav-profile-avatar');
+  if (!el) return;
+  if (initials) el.textContent = initials;
+  if (color)    el.style.background = color;
+}
+
+/* ══════════════════════════════════════════════════════════════════════
+   COMPANY PAGE — TEAM MEMBERS
+══════════════════════════════════════════════════════════════════════ */
+function cpAddTeamMember() {
+  if (!_pdProjectId) return;
+  const email = document.getElementById('cp-team-email')?.value.trim();
+  const role  = document.getElementById('cp-team-role')?.value || 'staff';
+  if (!email || !email.includes('@')) { showToast('Enter a valid email address', 'error'); return; }
+
+  const projects = loadProjects();
+  const idx = projects.findIndex(p => p.id === _pdProjectId);
+  if (idx < 0) return;
+  const proj = projects[idx];
+  if (!Array.isArray(proj.team)) proj.team = [];
+  if (proj.team.find(m => m.email === email)) { showToast('That email is already on the team', 'error'); return; }
+  proj.team.push({ email, role, status:'invited', invitedAt: new Date().toISOString() });
+  saveProjects(projects);
+
+  const emailEl = document.getElementById('cp-team-email');
+  if (emailEl) emailEl.value = '';
+  showToast('Invite sent to ' + email, 'success');
+  // Re-render the team list
+  _cpReRenderTeam(proj.team);
+}
+
+function cpApproveTeamMember(i) {
+  if (!_pdProjectId) return;
+  const projects = loadProjects();
+  const idx = projects.findIndex(p => p.id === _pdProjectId);
+  if (idx < 0) return;
+  if (projects[idx].team?.[i]) { projects[idx].team[i].status = 'active'; saveProjects(projects); _cpReRenderTeam(projects[idx].team); showToast('Team member approved', 'success'); }
+}
+
+function cpRemoveTeamMember(i) {
+  if (!_pdProjectId) return;
+  const projects = loadProjects();
+  const idx = projects.findIndex(p => p.id === _pdProjectId);
+  if (idx < 0) return;
+  const removed = projects[idx].team?.splice(i, 1);
+  saveProjects(projects);
+  _cpReRenderTeam(projects[idx].team || []);
+  if (removed?.[0]) showToast(removed[0].email + ' removed from team', 'default');
+}
+
+function _cpReRenderTeam(teamArr) {
+  const container = document.getElementById('cp-team-members');
+  if (!container) return;
+  const ROLE_LABELS = { thinker:'Thinker Lab', advisory:'Advisory Board', investor:'Investor', staff:'Staff' };
+  const ROLE_ORDER  = ['thinker','advisory','investor','staff'];
+  const teamByRole  = {};
+  teamArr.forEach(m => { const r=m.role||'staff'; if(!teamByRole[r]) teamByRole[r]=[]; teamByRole[r].push(m); });
+  const html = ROLE_ORDER.filter(r=>teamByRole[r]?.length).map(role =>
+    `<div class="cp-team-group-label">${ROLE_LABELS[role]}</div>` +
+    teamByRole[role].map(m => {
+      const initials = (m.name||m.email||'?').split(' ').map(p=>p[0]).join('').slice(0,2).toUpperCase();
+      const actualIdx = teamArr.indexOf(m);
+      return `<div class="cp-team-member-card">
+        <div class="cp-team-member-avatar">${initials}</div>
+        <div class="cp-team-member-body">
+          <div class="cp-team-member-name">${escHtml(m.name||m.email)}</div>
+          <div class="cp-team-member-email">${escHtml(m.email||'')} · <span class="role-badge role-${escHtml(m.role)}" style="font-size:10px">${escHtml(ROLE_LABELS[m.role]||m.role)}</span></div>
+        </div>
+        <div class="cp-team-member-actions">
+          ${m.status==='invited' ? `<button class="cp-team-approve-btn" onclick="cpApproveTeamMember(${actualIdx})">Approve</button>` : `<span class="adv-member-status adv-status-active">Active</span>`}
+          <button class="cp-team-remove-btn" onclick="cpRemoveTeamMember(${actualIdx})">Remove</button>
+        </div>
+      </div>`;
+    }).join('')
+  ).join('');
+  container.innerHTML = html || '<div class="staff-empty" style="margin-top:4px">No team members yet.</div>';
+}
+
+/* ══════════════════════════════════════════════════════════════════════
+   COMPANY PAGE — RESOURCES
+══════════════════════════════════════════════════════════════════════ */
+function cpAddResource() {
+  if (!_pdProjectId) return;
+  const label = document.getElementById('cp-res-label')?.value.trim();
+  const url   = document.getElementById('cp-res-url')?.value.trim();
+  if (!url) { showToast('Enter a URL', 'error'); return; }
+  const projects = loadProjects();
+  const idx = projects.findIndex(p => p.id === _pdProjectId);
+  if (idx < 0) return;
+  if (!Array.isArray(projects[idx].resources)) projects[idx].resources = [];
+  projects[idx].resources.push({ label: label || url, url });
+  saveProjects(projects);
+  document.getElementById('cp-res-label').value = '';
+  document.getElementById('cp-res-url').value   = '';
+  _cpReRenderResources(projects[idx].resources);
+  showToast('Resource added', 'success');
+}
+
+function cpDeleteResource(i) {
+  if (!_pdProjectId) return;
+  const projects = loadProjects();
+  const idx = projects.findIndex(p => p.id === _pdProjectId);
+  if (idx < 0) return;
+  projects[idx].resources?.splice(i, 1);
+  saveProjects(projects);
+  _cpReRenderResources(projects[idx].resources || []);
+}
+
+function _cpReRenderResources(resources) {
+  const el = document.getElementById('cp-res-list');
+  if (!el) return;
+  el.innerHTML = resources.map((r, i) =>
+    `<div class="cp-res-item">
+      <span class="cp-res-label">${escHtml(r.label||'')}</span>
+      <a class="cp-res-link" href="${escHtml(r.url)}" target="_blank" rel="noopener">${escHtml(r.url)}</a>
+      <button class="cp-res-del" onclick="cpDeleteResource(${i})">×</button>
+    </div>`
+  ).join('') || '<div style="font-size:13px;color:var(--text-3)">No resources added yet.</div>';
+}
+
+/* ══════════════════════════════════════════════════════════════════════
+   BMC COLLABORATIVE NOTES
+══════════════════════════════════════════════════════════════════════ */
+function bmcToggleNote(id) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.classList.toggle('open');
+}
+
+function bmcSaveNote(key, value) {
+  if (!_pdProjectId) return;
+  const projects = loadProjects();
+  const idx = projects.findIndex(p => p.id === _pdProjectId);
+  if (idx < 0) return;
+  if (!projects[idx].bmcNotes) projects[idx].bmcNotes = {};
+  projects[idx].bmcNotes[key] = value;
+  saveProjects(projects);
+}
+
+/* ══════════════════════════════════════════════════════════════════════
+   WELCOME MODAL — multi-step
+══════════════════════════════════════════════════════════════════════ */
+function diWelcomeNext() {
+  const s0 = document.getElementById('di-welcome-step-0');
+  const s1 = document.getElementById('di-welcome-step-1');
+  if (s0) s0.style.display = 'none';
+  if (s1) s1.style.display = 'block';
+  // Update dots
+  document.querySelectorAll('.di-welcome-dot').forEach(d => d.classList.remove('active'));
+  const dot1 = document.querySelector('.di-welcome-dot[data-step="1"]');
+  if (dot1) dot1.classList.add('active');
+}
+
+function diWelcomeBack() {
+  const s0 = document.getElementById('di-welcome-step-0');
+  const s1 = document.getElementById('di-welcome-step-1');
+  if (s0) s0.style.display = 'block';
+  if (s1) s1.style.display = 'none';
+  document.querySelectorAll('.di-welcome-dot').forEach(d => d.classList.remove('active'));
+  const dot0 = document.querySelector('.di-welcome-dot[data-step="0"]');
+  if (dot0) dot0.classList.add('active');
+}
+
+/* ══════════════════════════════════════════════════════════════════════
+   ROUTER — new views (handled in showView + VIEW_TO_PATH above)
+══════════════════════════════════════════════════════════════════════ */
+
+/* ══════════════════════════════════════════════════════════════════════
+   AUTH HOOK — show/hide profile nav + team hub
+══════════════════════════════════════════════════════════════════════ */
+const _origOnAuthChange = typeof onAuthStateChange === 'function' ? onAuthStateChange : null;
+function _afterAuthInit() {
+  const profSection = document.getElementById('nav-profile-section');
+  if (profSection && currentUser) {
+    profSection.style.display = '';
+    // Populate nav avatar from stored profile
+    const p = loadUserProfile();
+    const name = p.name || currentUser.name || currentUser.email || '';
+    const initials = name ? name.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase() : (currentUser.email?currentUser.email[0].toUpperCase():'?');
+    _updateNavAvatar(initials, p.color);
+  }
+}
+
+// Ensure it runs after login
+document.addEventListener('di-auth-ready', _afterAuthInit);
+// Also run on DOMContentLoaded in case already logged in
+document.addEventListener('DOMContentLoaded', () => { if (typeof currentUser !== 'undefined' && currentUser) _afterAuthInit(); });
 </script>
 
 <!-- Top-up Modal -->
