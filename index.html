@@ -5044,11 +5044,6 @@
                   <div class="dc-advisory-grid" id="dc-advisory-grid">
                     <!-- populated by renderDcAdvisoryCircle() -->
                   </div>
-                  <!-- Connect prompt -->
-                  <div class="dc-connect-prompt" onclick="showView('thought-leaders')">
-                    <svg class="dc-connect-prompt-icon" width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"><line x1="6.5" y1="1" x2="6.5" y2="12"/><line x1="1" y1="6.5" x2="12" y2="6.5"/></svg>
-                    Expand your council
-                  </div>
                 </div>
 
               </div>
@@ -10353,16 +10348,12 @@ function renderProjects() {
     const typeLabel = { initiative:'<svg width="9" height="10" viewBox="0 0 9 10" fill="currentColor" style="vertical-align:-1px;margin-right:3px"><path d="M5.5 0.5L1.5 5.5H4L3 9.5 7.5 4.5H5z"/></svg> Initiative', company:'<svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.1" style="vertical-align:-1px;margin-right:3px"><rect x="1" y="1.5" width="8" height="7.5" rx="0.4"/><path d="M3.5 9V6H6.5V9"/><line x1="1" y1="4.5" x2="9" y2="4.5"/></svg> Company', theme:'<svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.1" style="vertical-align:-1px;margin-right:3px"><circle cx="5" cy="4" r="2.5"/><path d="M3.5 7h3M3.8 8.3h2.4"/></svg> Theme' }[p.type] || '';
     const badgeClass = { initiative:'ptb-initiative', company:'ptb-company', theme:'ptb-theme' }[p.type] || '';
     const teamCount = Array.isArray(p.team) ? p.team.filter(m => m.role !== 'admin').length : 0;
-    const isOwner = !p.ownerId || p.ownerId === (currentUser?.id || '');
-    const adminBadge = isOwner
-      ? `<span class="proj-admin-badge">Admin</span>`
-      : '';
     const collabHint = teamCount > 0
       ? `<div class="project-collab-row"><svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="3.5" cy="3" r="1.5"/><circle cx="6.5" cy="3" r="1.5"/><path d="M1 8c0-1.1.9-2 2.5-2s2.5.9 2.5 2"/><path d="M6.5 6c1.2 0 2 .7 2 1.7"/></svg> ${teamCount} collaborator${teamCount!==1?'s':''}</div>`
       : '';
     return `<div class="project-card" onclick="openProjectDetail('${p.id}')">` +
       `<div class="project-dot" style="background:${p.color}"></div>` +
-      (typeLabel ? `<div class="project-type-badge ${badgeClass}" style="margin-bottom:8px">${typeLabel}${adminBadge}</div>` : adminBadge) +
+      (typeLabel ? `<div class="project-type-badge ${badgeClass}" style="margin-bottom:8px">${typeLabel}</div>` : '') +
       `<div class="project-name">${escHtml(p.name)}</div>` +
       (p.tagline ? `<div class="project-tagline">${escHtml(p.tagline)}</div>` : '') +
       `<div class="project-count">${n} perspective${n!==1?'s':''}</div>` +
@@ -16726,8 +16717,9 @@ const ROLE_CLASS_MAP = { founder:'role-founder', thinker:'role-thinker', advisor
 const ROLE_LABEL_MAP = { founder:'Founder', thinker:'Thinker', advisory:'Advisory Board', investor:'Investor', staff:'Staff' };
 
 function initProfileScreen() {
-  // Auth guard: profile requires login
-  if (!currentUser) { showView('recents'); return; }
+  // Auth guard: return silently if auth hasn't resolved yet — the screen stays
+  // active and applyAuthState() will re-call initProfileScreen() once currentUser is set.
+  if (!currentUser) { return; }
   const u = currentUser;
   let p = loadUserProfile();
   // First-time: seed profile from auth data
