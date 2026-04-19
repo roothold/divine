@@ -267,8 +267,8 @@
       margin-bottom:6px;
     }
     .nav-new-perspective:hover { background:#E8E7E5; color:var(--text-0) !important; }
-    .nav-thinker { color:var(--accent) !important; font-weight:600; }
-    .nav-thinker:hover { background:var(--accent-lt); }
+    .nav-thinker { font-weight:600; }
+    button.nav-thinker:hover { background:var(--accent-lt); }
     .nav-thinker.active { background:var(--accent-lt); color:var(--accent); }
 
     /* ═══ THINKER SCREENS ═══ */
@@ -4772,7 +4772,7 @@
     <!-- Tab nav -->
     <div class="thinker-tabs">
       <!-- Overview: person/user — matches sidebar Command Center -->
-      <button class="thinker-tab active" onclick="switchThinkerTab('overview',this)">
+      <button class="thinker-tab active" onclick="navigateThinkerTab('overview')">
         <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75"><circle cx="8" cy="5" r="3"/><path d="M2 14c0-3.3 2.7-6 6-6s6 2.7 6 6"/></svg>
         Summary
       </button>
@@ -4782,17 +4782,17 @@
         Setup
       </button>
       <!-- Train Model: CPU chip — matches sidebar Train Model -->
-      <button class="thinker-tab" onclick="switchThinkerTab('train',this)">
+      <button class="thinker-tab" onclick="navigateThinkerTab('train')">
         <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75"><rect x="4" y="4" width="8" height="8" rx="1.5"/><path d="M6 2.5v1.5M8 2.5v1.5M10 2.5v1.5M6 12v1.5M8 12v1.5M10 12v1.5M2.5 6h1.5M2.5 8h1.5M2.5 10h1.5M12 6h1.5M12 8h1.5M12 10h1.5"/></svg>
         Train Model
       </button>
       <!-- Reports: fingerprint — matches sidebar Reports -->
-      <button class="thinker-tab" onclick="switchThinkerTab('reports',this)">
+      <button class="thinker-tab" onclick="navigateThinkerTab('reports')">
         <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"><path d="M8 1.5C5 1.5 2.5 4 2.5 7"/><path d="M8 3.5C6 3.5 4.5 5.1 4.5 7"/><path d="M8 5.5C7 5.5 6.5 6.2 6.5 7"/><path d="M8 1.5c3 0 5.5 2.5 5.5 5.5"/><path d="M8 3.5C10 3.5 11.5 5.1 11.5 7"/><path d="M8 5.5c1 0 1.5.7 1.5 1.5v1.5"/><path d="M4.5 9c.1 2 1.5 5 3.5 5.5"/><path d="M2.5 8.5c0 3 2 6 5.5 6"/><path d="M6.5 7v1c0 2 .5 4.5 1.5 6"/></svg>
         Reports
       </button>
       <!-- Payments: bank/building — matches sidebar Payments -->
-      <button class="thinker-tab" onclick="switchThinkerTab('payments',this)">
+      <button class="thinker-tab" onclick="navigateThinkerTab('payments')">
         <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M1.5 6h13M8 1.5L1.5 6v8.5h13V6z"/><line x1="4" y1="10" x2="4" y2="14.5"/><line x1="8" y1="10" x2="8" y2="14.5"/><line x1="12" y1="10" x2="12" y2="14.5"/></svg>
         Payments
       </button>
@@ -11513,14 +11513,20 @@ function navigateThinkerTab(tab) {
   router.push(path);
   show('screen-thinker-hub');
   try { initThinkerHub(); } catch(e) {}
-  if (tab && tab !== 'overview') {
-    setTimeout(() => switchThinkerTab(tab, null), 80);
-  }
+  setTimeout(() => switchThinkerTab(tab || 'overview', null), 80);
 }
 
 function switchThinkerTab(tab, btn) {
   document.querySelectorAll('.thinker-tab').forEach(t => t.classList.remove('active'));
-  if (btn) btn.classList.add('active');
+  if (btn) {
+    btn.classList.add('active');
+  } else {
+    // Find the matching tab button by its onclick attribute when called without a ref
+    const tabMap = { overview: 0, train: 2, reports: 3, payments: 4 };
+    const idx = tabMap[tab];
+    const tabs = document.querySelectorAll('.thinker-tab');
+    if (idx !== undefined && tabs[idx]) tabs[idx].classList.add('active');
+  }
   if (tab === 'onboarding') { openObFlow(); return; }
   document.querySelectorAll('.thinker-panel').forEach(p => p.style.display = 'none');
   const panel = document.getElementById(`tp-${tab}`);
