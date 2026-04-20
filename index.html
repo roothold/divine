@@ -11186,16 +11186,17 @@ function _openSharedProject(projectId, ownerKey, role) {
   // Always re-read live from owner's namespace for freshness
   let ownerProjects = [];
   try { ownerProjects = JSON.parse(localStorage.getItem(ownerKey) || '[]'); } catch(e) {}
-  const proj = ownerProjects.find(p => p.id === projectId);
+  // Use `let` so we can merge in _ownerName from the share record below
+  let proj = ownerProjects.find(p => p.id === projectId);
   if (!proj) { showToast('Project not found or access has been revoked.', 'error'); return; }
   _isViewerMode   = true;
   _viewerOwnerKey = ownerKey;
   _viewerRole     = role || 'staff';
   _pdProjectId    = null; // prevent writes
-  // Carry owner name so banner can display it
+  // Carry owner name/email from share record so the banner can display it
   const sharedEntry = _sharedProjects.find(p => p.id === projectId);
   if (sharedEntry && !proj._ownerName) {
-    proj = { ...proj, _ownerName: sharedEntry._ownerName || '' };
+    proj = { ...proj, _ownerName: sharedEntry._ownerName || sharedEntry._ownerEmail || '' };
   }
   renderProjectDetail(proj);
   const type   = proj.type || 'initiative';
@@ -14498,7 +14499,10 @@ function applyAuthState(user) {
     // Refresh profile screen if already visible (pre-seeded with auth data)
     try { if (document.getElementById('screen-user-profile')?.classList.contains('active')) initProfileScreen(); } catch(e) {}
     // Re-render project sections now that currentUser is set
+    // renderProjects() MUST be called here too — on page refresh the router fires it before
+    // auth resolves (so _sharedProjects is empty). This second call repopulates the shared tab.
     try { renderDcProjects(); } catch(e) {}
+    try { renderProjects(); } catch(e) {}
     try { renderPortfolioList('chat'); } catch(e) {}
     try { renderPortfolioList('is'); } catch(e) {}
 
@@ -14552,7 +14556,9 @@ function applyAuthState(user) {
     if (grName) grName.textContent = 'Your Financial Intelligence Terminal';
     if (grSub)  grSub.textContent  = 'Sign in to connect your data and activate your protocols.';
     // Hide all project/portfolio data immediately on logout
+    _sharedProjects = []; // clear so stale data isn't shown if another user logs in
     try { renderDcProjects(); } catch(e) {}
+    try { renderProjects(); } catch(e) {}
     try { renderPortfolioList('chat'); } catch(e) {}
     try { renderPortfolioList('is'); } catch(e) {}
     // Reset mobile nav profile button
