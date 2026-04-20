@@ -11724,37 +11724,7 @@ function _buildInitiativeTemplate(proj) {
 }
 
 function _buildCompanyTemplate(proj) {
-  const ms = Array.isArray(proj.milestones) ? proj.milestones : [];
-  const msHtml = ms.map((m, i) =>
-    `<div class="pd-check-row" id="pd-ms-${i}">
-      <div class="pd-check-box ${m.done?'done':''}" onclick="pdToggleMilestone(${i})">${m.done?'<svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M2 5l2.5 2.5 3.5-4"/></svg>':''}</div>
-      <input class="pd-check-input ${m.done?'done':''}" value="${_sv(m.text)}" placeholder="Milestone…" onchange="pdUpdateMilestone(${i},this.value)">
-      <button class="pd-check-del" onclick="pdDeleteMilestone(${i})">×</button>
-    </div>`
-  ).join('');
-
-  return `
-    <div class="pd-section">
-      <div class="pd-section-header">
-        <div class="pd-section-title"><div class="pd-section-icon company"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.75"><rect x="1" y="1.5" width="10" height="9" rx="1"/><path d="M4 10V6.5H8V10"/><line x1="1" y1="5" x2="11" y2="5"/></svg></div>Company Overview</div>
-      </div>
-      <textarea class="pd-textarea" id="pd-northstar" placeholder="Describe what this company does — the problem it solves, who it serves, and how it creates value…" style="min-height:90px">${_sv(proj.northStar)}</textarea>
-    </div>
-    <div class="pd-section">
-      <div class="pd-section-header">
-        <div class="pd-section-title"><div class="pd-section-icon company"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M2 10V4l4-2 4 2v6"/><path d="M4 10V7h4v3"/></svg></div>Key Milestones</div>
-      </div>
-      <div class="pd-checklist" id="pd-milestones-list">${msHtml}</div>
-      <button class="pd-add-item" onclick="pdAddMilestone()">
-        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M6 2v8M2 6h8"/></svg>Add milestone
-      </button>
-    </div>
-    <div class="pd-section">
-      <div class="pd-section-header">
-        <div class="pd-section-title"><div class="pd-section-icon company"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.75"><rect x="2" y="3" width="8" height="7" rx="1"/><path d="M4 3V2h4v1"/></svg></div>Resource Allocation</div>
-      </div>
-      <textarea class="pd-textarea" id="pd-resources" placeholder="Summarise what is being invested — capital, team bandwidth, time horizon…">${_sv(proj.resourceAllocation)}</textarea>
-    </div>`;
+  return ''; // Company projects: no structured template — use the perspectives input directly
 }
 
 function _buildThemeTemplate(proj) {
