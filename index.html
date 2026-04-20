@@ -4720,10 +4720,6 @@
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75"><rect x="1" y="4" width="14" height="10" rx="2"/><path d="M11 9a1 1 0 110 2 1 1 0 010-2z" fill="currentColor" stroke="none"/><path d="M1 7h14"/></svg>
           <span class="nav-item-label">Wallet</span>
         </button>
-        <button class="nav-item nav-auth-gate" id="nav-ir" data-tip="Investor Room" onclick="showView('ir-page')">
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75"><rect x="2" y="2" width="12" height="12" rx="2"/><path d="M5 8h6M5 5h3M5 11h4"/></svg>
-          <span class="nav-item-label">Investor Room</span>
-        </button>
 
         <!-- Thinker nav — gated: only visible when currentUser.thinker_access === true -->
         <div id="thinker-nav-section" style="display:none">
@@ -4738,18 +4734,7 @@
           <span class="nav-item-label">Command Center</span>
         </button>
 
-        <button class="nav-item cc-flat" id="cc-onboarding" data-tip="Onboarding"
-          onclick="ccActivate('onboarding',this); navigateThinkerTab('onboarding')">
-          <!-- Compass -->
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75">
-            <circle cx="8" cy="8" r="6.5"/>
-            <path d="M9.8 6.2l-2.4 1-1 2.4 2.4-1z" fill="currentColor" stroke="none" opacity=".8"/>
-            <path d="M6.2 9.8l1-2.4 2.4-1-1 2.4z" fill="currentColor" stroke="none" opacity=".3"/>
-          </svg>
-          <span class="nav-item-label">Onboarding</span>
-        </button>
-
-        <button class="nav-item cc-flat" id="cc-train" data-tip="Train Model"
+<button class="nav-item cc-flat" id="cc-train" data-tip="Train Model"
           onclick="ccActivate('train',this); navigateThinkerTab('train')">
           <!-- CPU chip -->
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75">
@@ -5853,8 +5838,8 @@
 
     <!-- ── Team Hub — 4-section tab bar ── -->
     <div style="margin-bottom:6px">
-      <div style="font-size:22px;font-weight:700;color:var(--text-0);font-family:'Cormorant Garamond',serif;letter-spacing:-.01em;margin-bottom:4px">Your Team</div>
-      <div style="font-size:13px;color:var(--text-3)">Build your intelligence council, manage operations, and run your investor data room.</div>
+      <div style="font-size:22px;font-weight:700;color:var(--text-0);font-family:'Cormorant Garamond',serif;letter-spacing:-.01em;margin-bottom:4px">Command Center</div>
+      <div style="font-size:13px;color:var(--text-3)">Manage your thinker profile, train your model, and track your earnings.</div>
     </div>
     <div class="team-hub-tabs" id="team-hub-tabs">
       <button class="team-hub-tab active" id="th-tab-lab"      onclick="switchTeamTab('lab',this)">
@@ -14224,6 +14209,10 @@ function ccRenderModelSignals(fw, doms, ver) {
 }
 
 async function initThinkerHub() {
+  // First-time thinker: auto-route to onboarding until they complete setup
+  if (localStorage.getItem('di_tk_onboarded') !== 'true') {
+    setTimeout(() => switchThinkerTab('onboarding', null), 80);
+  }
   const prof = loadTkData(TK.profile, { name: userProfile.name, title: '', bio: '' });
   const lens = loadTkData(TK.lens, activeThinker?.lens || '');
   const fw   = loadTkData(TK.framework, activeThinker?.aiFrame || '');
