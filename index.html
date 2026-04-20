@@ -1404,7 +1404,7 @@
     /* Two-column layout */
     .pd-cols { display:grid; grid-template-columns:1fr 360px; gap:24px; align-items:start; }
     .pd-col-left { min-width:0; }
-    .pd-col-right { background:#fff; border:1px solid #e8e8e8; border-radius:16px; padding:20px; position:sticky; top:24px; box-shadow:0 1px 4px rgba(0,0,0,.04); }
+    .pd-col-right { position:sticky; top:24px; }
     @media(max-width:900px) { .pd-cols { grid-template-columns:1fr; } .pd-col-right { position:static; } }
     .pd-back { display:inline-flex; align-items:center; gap:6px; font-size:13px; color:var(--text-3); background:none; border:none; cursor:pointer; padding:0; margin-bottom:24px; font-family:'Inter',sans-serif; transition:color .15s; }
     .pd-back:hover { color:var(--text-0); }
@@ -1447,13 +1447,20 @@
     .pd-item-input:focus { border-color:var(--accent-bdr); background:var(--surface); }
     .pd-item-del { color:var(--text-3); cursor:pointer; background:none; border:none; font-size:18px; line-height:1; padding:2px 4px; opacity:.5; transition:opacity .15s; }
     .pd-item-del:hover { opacity:1; color:var(--accent); }
-    /* Active perspectives feed */
-    .pd-perspectives-feed { display:flex; flex-direction:column; gap:10px; }
-    .pd-persp-card { background:var(--surface-2); border:1px solid var(--border); border-radius:10px; padding:14px 16px; cursor:pointer; transition:border-color .15s; }
-    .pd-persp-card:hover { border-color:var(--accent-bdr); }
-    .pd-persp-top-row { display:flex; align-items:center; gap:7px; margin-bottom:4px; }
-    .pd-persp-date { font-size:10.5px; color:var(--text-3); }
-    .pd-persp-chat-badge { font-size:9.5px; font-weight:700; letter-spacing:.04em; text-transform:uppercase; padding:2px 6px; background:var(--accent-lt); color:var(--accent); border-radius:var(--r-pill); }
+    /* Recent perspectives feed — matches dc-recent-row style */
+    .pd-perspectives-feed { display:flex; flex-direction:column; gap:0; }
+    .pd-persp-card { display:flex; align-items:flex-start; gap:12px; padding:13px 15px; background:#fff; border:1px solid var(--border); border-radius:0; cursor:pointer; transition:background .13s; }
+    .pd-persp-card:first-child { border-radius:12px 12px 0 0; }
+    .pd-persp-card:last-child { border-radius:0 0 12px 12px; }
+    .pd-persp-card:only-child { border-radius:12px; }
+    .pd-persp-card:not(:last-child) { border-bottom:1px solid var(--border); }
+    .pd-persp-card:hover { background:var(--surface-2); }
+    .pd-persp-icon { width:30px; height:30px; border-radius:8px; background:var(--surface-2); border:1px solid var(--border); display:flex; align-items:center; justify-content:center; color:var(--text-3); flex-shrink:0; margin-top:1px; }
+    .pd-persp-body { flex:1; min-width:0; }
+    .pd-persp-decision { font-size:13px; font-weight:500; color:var(--text-0); line-height:1.4; margin-bottom:3px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .pd-persp-insight { font-size:11.5px; color:var(--text-3); line-height:1.45; display:-webkit-box; -webkit-line-clamp:1; -webkit-box-orient:vertical; overflow:hidden; }
+    .pd-persp-date { font-size:11px; color:var(--text-3); white-space:nowrap; flex-shrink:0; padding-top:2px; }
+    .pd-persp-chat-badge { display:none; } /* badge now replaced by icon */
     .pd-persp-decision { font-size:13.5px; font-weight:500; color:var(--text-0); margin-bottom:4px; line-height:1.4; }
     .pd-persp-insight { font-size:12px; color:var(--text-2); line-height:1.5; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
     .pd-empty-state { text-align:center; padding:32px 16px; color:var(--text-3); font-size:13px; font-style:italic; }
@@ -1461,9 +1468,18 @@
     /* Description always visible inline */
     .pd-subtitle { margin-top:6px !important; display:block !important; }
 
-    /* Right panel section headers */
-    .pd-rp-label { font-size:11px; font-weight:700; letter-spacing:.07em; text-transform:uppercase; color:#999; margin-bottom:12px; display:flex; align-items:center; justify-content:space-between; }
-    .pd-rp-divider { border-top:1px solid #f0f0f0; margin:18px 0; }
+    /* Right panel — collapsible cards */
+    .pd-rp-card { background:#fff; border:1px solid #e8e8e8; border-radius:14px; margin-bottom:12px; overflow:hidden; }
+    .pd-rp-card-hdr { display:flex; align-items:center; justify-content:space-between; padding:14px 16px; cursor:pointer; user-select:none; }
+    .pd-rp-card-hdr:hover { background:#fafafa; }
+    .pd-rp-card-title { font-size:11px; font-weight:700; letter-spacing:.07em; text-transform:uppercase; color:#888; display:flex; align-items:center; gap:8px; }
+    .pd-rp-card-actions { display:flex; align-items:center; gap:6px; }
+    .pd-rp-card-add { font-size:11px; font-weight:600; color:var(--accent); background:none; border:none; cursor:pointer; padding:3px 7px; border-radius:6px; font-family:'Inter',sans-serif; transition:background .12s; }
+    .pd-rp-card-add:hover { background:var(--accent-lt); }
+    .pd-rp-card-chevron { color:#bbb; transition:transform .2s; flex-shrink:0; }
+    .pd-rp-card-chevron.open { transform:rotate(180deg); }
+    .pd-rp-card-body { padding:0 16px 14px; }
+    .pd-rp-card-body.collapsed { display:none; }
     /* Resource list — hyperlinked labels, URL hidden */
     .pd-res-item { display:flex; align-items:center; gap:8px; padding:8px 0; border-bottom:1px solid #f5f5f5; }
     .pd-res-item:last-child { border-bottom:none; }
@@ -1471,12 +1487,6 @@
     .pd-res-name:hover { text-decoration:underline; }
     .pd-res-del-btn { color:#ccc; background:none; border:none; cursor:pointer; font-size:16px; line-height:1; padding:0 2px; flex-shrink:0; transition:color .12s; }
     .pd-res-del-btn:hover { color:#F87171; }
-    /* Resource add row */
-    .pd-res-add-row { display:flex; flex-direction:column; gap:6px; margin-top:10px; }
-    .pd-res-add-inputs { display:flex; gap:6px; }
-    .pd-res-input { flex:1; padding:7px 10px; border:1.5px solid var(--border-md); border-radius:8px; font-size:12.5px; font-family:'Inter',sans-serif; background:#fafafa; color:var(--text-0); outline:none; transition:border-color .15s; }
-    .pd-res-input:focus { border-color:var(--accent); background:#fff; }
-    .pd-res-add-btn { padding:7px 14px; background:var(--accent); color:#fff; border:none; border-radius:8px; font-size:12px; font-weight:600; cursor:pointer; white-space:nowrap; font-family:'Inter',sans-serif; flex-shrink:0; }
     /* Team member list in right panel */
     .pd-tm-item { display:flex; align-items:center; gap:9px; padding:8px 0; border-bottom:1px solid #f5f5f5; }
     .pd-tm-item:last-child { border-bottom:none; }
@@ -5669,11 +5679,11 @@
               </div>
             </div>
 
-            <!-- Active Perspectives -->
+            <!-- Recent Perspectives -->
             <div id="pd-perspectives-section" style="margin-bottom:20px">
               <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
                 <div style="font-size:11.5px;font-weight:600;color:var(--text-2);display:flex;align-items:center;gap:6px">
-                  Active Perspectives
+                  Recent Perspectives
                   <span class="pd-persp-count" id="pd-persp-count"></span>
                 </div>
                 <button class="pd-section-refresh" onclick="_renderPdPerspectives(_pdProjectId)" title="Sync">
@@ -5689,29 +5699,52 @@
 
           <!-- ── Right column: resources + team ── -->
           <div class="pd-col-right">
-            <!-- Resources -->
-            <div id="pd-right-resources">
-              <div class="pd-rp-label">Resources</div>
-              <div id="pd-res-list-wrap"><div style="font-size:13px;color:var(--text-3);font-style:italic">No resources yet.</div></div>
-              <div class="pd-res-add-row">
-                <div class="pd-res-add-inputs">
-                  <input class="pd-res-input" id="pd-res-label" type="text" placeholder="Label (e.g. Pitch Deck)">
-                  <input class="pd-res-input" id="pd-res-url" type="url" placeholder="https://…" onkeydown="if(event.key==='Enter')pdAddResource()">
+            <!-- Resources card -->
+            <div class="pd-rp-card" id="pd-rp-card-resources">
+              <div class="pd-rp-card-hdr" onclick="toggleRpCard('pd-rp-body-resources','pd-rp-chev-resources')">
+                <div class="pd-rp-card-title">Resources</div>
+                <div class="pd-rp-card-actions">
+                  <button class="pd-rp-card-add" id="pd-res-add-btn" onclick="event.stopPropagation();openResourceModal()">+ Add</button>
+                  <svg class="pd-rp-card-chevron open" id="pd-rp-chev-resources" width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 5l4 4 4-4"/></svg>
                 </div>
-                <button class="pd-res-add-btn" onclick="pdAddResource()" style="align-self:flex-start">+ Add link</button>
+              </div>
+              <div class="pd-rp-card-body" id="pd-rp-body-resources">
+                <div id="pd-res-list-wrap"><div style="font-size:13px;color:var(--text-3);font-style:italic;padding:4px 0">No resources yet.</div></div>
               </div>
             </div>
 
-            <div class="pd-rp-divider"></div>
+            <!-- Team card -->
+            <div class="pd-rp-card" id="pd-rp-card-team">
+              <div class="pd-rp-card-hdr" onclick="toggleRpCard('pd-rp-body-team','pd-rp-chev-team')">
+                <div class="pd-rp-card-title">Team</div>
+                <div class="pd-rp-card-actions">
+                  <button class="pd-rp-card-add pd-add-member-btn" onclick="event.stopPropagation();openTeamMemberModal()">+ Add</button>
+                  <svg class="pd-rp-card-chevron open" id="pd-rp-chev-team" width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 5l4 4 4-4"/></svg>
+                </div>
+              </div>
+              <div class="pd-rp-card-body" id="pd-rp-body-team">
+                <div id="pd-tm-list-wrap"><div style="font-size:13px;color:var(--text-3);font-style:italic;padding:4px 0">No team members yet.</div></div>
+              </div>
+            </div>
+          </div>
+        </div>
 
-            <!-- Team -->
-            <div id="pd-right-team">
-              <div class="pd-rp-label">Team</div>
-              <div id="pd-tm-list-wrap"><div style="font-size:13px;color:var(--text-3);font-style:italic">No team members yet.</div></div>
-              <button class="pd-add-member-btn" onclick="openTeamMemberModal()">
-                <svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M6 2v8M2 6h8"/></svg>
-                Add team member
-              </button>
+        <!-- Resource modal -->
+        <div class="pd-modal-overlay" id="pd-resource-modal" style="display:none" onclick="if(event.target===this)closeResourceModal()">
+          <div class="pd-modal">
+            <div class="pd-modal-title">Add Resource</div>
+            <div class="pd-modal-sub">Link a document, tool, or URL to this project.</div>
+            <div class="pd-modal-field">
+              <div class="pd-modal-label">Label</div>
+              <input class="pd-modal-input" id="pd-modal-res-label" type="text" placeholder="e.g. Pitch Deck, Market Research" onkeydown="if(event.key==='Enter')document.getElementById('pd-modal-res-url').focus()">
+            </div>
+            <div class="pd-modal-field">
+              <div class="pd-modal-label">URL</div>
+              <input class="pd-modal-input" id="pd-modal-res-url" type="url" placeholder="https://…" onkeydown="if(event.key==='Enter')submitResource()">
+            </div>
+            <div class="pd-modal-actions">
+              <button class="pd-modal-cancel" onclick="closeResourceModal()">Cancel</button>
+              <button class="pd-modal-submit" onclick="submitResource()">Add resource →</button>
             </div>
           </div>
         </div>
@@ -11186,7 +11219,8 @@ function _renderRightPanel(proj) {
   if (tmWrap) {
     tmWrap.innerHTML = teamArr.length
       ? teamArr.map((m, i) => {
-          const initials = (m.name||m.email||'?').split(' ').map(p=>p[0]).join('').slice(0,2).toUpperCase();
+          const displayName = m.name || '';
+          const initials = displayName ? displayName.split(' ').map(p=>p[0]).join('').slice(0,2).toUpperCase() : '?';
           const roleLabel = ROLE_LABELS[m.role] || m.role || 'Member';
           const statusDot = m.status === 'invited'
             ? '<span style="font-size:10px;color:var(--warn);font-weight:600"> · Invited</span>'
@@ -11194,7 +11228,7 @@ function _renderRightPanel(proj) {
           return `<div class="pd-tm-item">
             <div class="pd-tm-avatar">${initials}</div>
             <div class="pd-tm-body">
-              <div class="pd-tm-name">${escHtml(m.name || m.email)}</div>
+              <div class="pd-tm-name">${escHtml(displayName || '—')}</div>
               <div class="pd-tm-role">${escHtml(roleLabel)}${statusDot}</div>
             </div>
             ${_isViewerMode ? '' : `<button class="pd-tm-del" onclick="pdRemoveTeamMember(${i})" title="Remove">×</button>`}
@@ -11202,15 +11236,33 @@ function _renderRightPanel(proj) {
         }).join('')
       : '<div style="font-size:13px;color:var(--text-3);font-style:italic;padding:4px 0">No team members yet.</div>';
   }
-  // Show/hide Add button if viewer
-  const addBtn = document.querySelector('.pd-add-member-btn');
-  if (addBtn) addBtn.style.display = _isViewerMode ? 'none' : '';
+  // Show/hide Add buttons if viewer
+  const resAddBtn = document.getElementById('pd-res-add-btn');
+  if (resAddBtn) resAddBtn.style.display = _isViewerMode ? 'none' : '';
+  const tmAddBtn = document.querySelector('.pd-add-member-btn');
+  if (tmAddBtn) tmAddBtn.style.display = _isViewerMode ? 'none' : '';
 }
 
-function pdAddResource() {
+/* ── Resource modal ── */
+function openResourceModal() {
+  const modal = document.getElementById('pd-resource-modal');
+  if (modal) {
+    document.getElementById('pd-modal-res-label').value = '';
+    document.getElementById('pd-modal-res-url').value = '';
+    modal.style.display = 'flex';
+    setTimeout(() => document.getElementById('pd-modal-res-label').focus(), 60);
+  }
+}
+
+function closeResourceModal() {
+  const modal = document.getElementById('pd-resource-modal');
+  if (modal) modal.style.display = 'none';
+}
+
+function submitResource() {
   if (!_pdProjectId) return;
-  const label = document.getElementById('pd-res-label')?.value.trim();
-  const url   = document.getElementById('pd-res-url')?.value.trim();
+  const label = document.getElementById('pd-modal-res-label')?.value.trim();
+  const url   = document.getElementById('pd-modal-res-url')?.value.trim();
   if (!url) { showToast('Enter a URL', 'error'); return; }
   const projects = loadProjects();
   const idx = projects.findIndex(p => p.id === _pdProjectId);
@@ -11218,11 +11270,12 @@ function pdAddResource() {
   if (!Array.isArray(projects[idx].resources)) projects[idx].resources = [];
   projects[idx].resources.push({ label: label || url, url });
   saveProjects(projects);
-  document.getElementById('pd-res-label').value = '';
-  document.getElementById('pd-res-url').value = '';
+  closeResourceModal();
   _renderRightPanel(projects[idx]);
   showToast('Resource added', 'success');
 }
+
+function pdAddResource() { openResourceModal(); }
 
 function pdDeleteResource(i) {
   if (!_pdProjectId) return;
@@ -11245,6 +11298,15 @@ function pdRemoveTeamMember(i) {
   try { if (removed?.[0]) _removeShareRecord(removed[0].email, projects[idx].id); } catch(e) {}
   _renderRightPanel(projects[idx]);
   showToast('Team member removed', 'success');
+}
+
+/* ── Collapsible right-panel cards ── */
+function toggleRpCard(bodyId, chevId) {
+  const body = document.getElementById(bodyId);
+  const chev = document.getElementById(chevId);
+  if (!body) return;
+  const collapsed = body.classList.toggle('collapsed');
+  if (chev) chev.classList.toggle('open', !collapsed);
 }
 
 /* ── Team member modal ── */
@@ -11533,13 +11595,18 @@ function _renderPdPerspectives(projectId) {
 
   feed.innerHTML = all.slice(0, 30).map(r => {
     const date    = r.date ? new Date(r.date).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}) : '';
-    const insight = r.keyInsight?.body ? r.keyInsight.body.replace(/<[^>]*>/g,'').slice(0,140) : '';
+    const insight = r.keyInsight?.body ? r.keyInsight.body.replace(/<[^>]*>/g,'').replace(/\*\*\[BLUF\]\*\*\s*/,'').slice(0,120) : '';
     const onClick = r.type === 'chat' ? `openChatSession('${r.id}')` : `openRecentById('${r.id}')`;
-    const badge   = r.type === 'chat' ? '<span class="pd-persp-chat-badge">Chat</span>' : '';
+    const icon = r.type === 'chat'
+      ? `<svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M17 11.5a7 7 0 01-9.8 6.4L3 19l1.1-4.2A7 7 0 1117 11.5z"/></svg>`
+      : `<svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="10" cy="10" r="7"/><path d="M10 7v3l2 2"/></svg>`;
     return `<div class="pd-persp-card" onclick="${onClick}">
-      <div class="pd-persp-top-row"><div class="pd-persp-date">${date}</div>${badge}</div>
-      <div class="pd-persp-decision">${escHtml(r.decision || r.title || '')}</div>
-      ${insight ? `<div class="pd-persp-insight">${escHtml(insight)}</div>` : ''}
+      <div class="pd-persp-icon">${icon}</div>
+      <div class="pd-persp-body">
+        <div class="pd-persp-decision">${escHtml(r.decision || r.title || '')}</div>
+        ${insight ? `<div class="pd-persp-insight">${escHtml(insight)}</div>` : ''}
+      </div>
+      <div class="pd-persp-date">${date}</div>
     </div>`;
   }).join('');
 
