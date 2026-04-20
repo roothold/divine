@@ -4756,6 +4756,31 @@
 .team-role-name { font-size:13px; font-weight:700; color:var(--text-0); margin-bottom:4px; }
 .team-role-desc { font-size:12px; color:var(--text-2); line-height:1.5; }
 
+/* ══ EARNINGS TAB ══════════════════════════════════════════════════════ */
+.earn-bank-banner { display:flex; align-items:center; gap:12px; padding:12px 16px; background:var(--warn-lt); border:1px solid var(--warn-bdr); border-radius:var(--r); margin-bottom:24px; }
+.earn-bank-banner-icon { color:var(--warn); flex-shrink:0; }
+.earn-bank-banner-body { flex:1; }
+.earn-bank-banner-title { font-size:13px; font-weight:600; color:var(--text-0); margin-bottom:2px; }
+.earn-bank-banner-sub   { font-size:12px; color:var(--text-2); }
+.earn-bank-banner-cta   { padding:6px 14px; background:var(--warn); color:#fff; border:none; border-radius:var(--r-pill); font-size:12px; font-weight:600; cursor:pointer; white-space:nowrap; font-family:'Inter',sans-serif; }
+.earn-bank-banner.hidden { display:none; }
+
+.earn-section { margin-bottom:28px; }
+.earn-section-hdr { display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; padding-bottom:10px; border-bottom:1px solid var(--border); }
+.earn-section-title { font-size:13px; font-weight:700; color:var(--text-0); text-transform:uppercase; letter-spacing:.05em; }
+.earn-section-meta  { font-size:12px; color:var(--text-3); }
+
+/* Pending payout hero */
+.earn-payout-hero { background:var(--surface-2); border:1px solid var(--border); border-radius:var(--r); padding:20px; display:flex; align-items:center; justify-content:space-between; gap:16px; margin-bottom:20px; }
+.earn-payout-amount { font-size:36px; font-weight:700; color:var(--text-0); font-family:'Cormorant Garamond',serif; line-height:1; }
+.earn-payout-label  { font-size:11px; color:var(--text-3); text-transform:uppercase; letter-spacing:.05em; margin-bottom:4px; }
+.earn-payout-next   { font-size:12px; color:var(--text-2); margin-top:4px; }
+.earn-payout-badge  { display:inline-flex; align-items:center; gap:5px; padding:4px 10px; background:var(--success-lt); color:var(--success); border:1px solid var(--success-bdr); border-radius:var(--r-pill); font-size:11px; font-weight:600; }
+
+/* Payout settings */
+.earn-payout-cols { display:grid; grid-template-columns:1fr 1fr; gap:20px; }
+@media (max-width:640px) { .earn-payout-cols { grid-template-columns:1fr; } .earn-payout-hero { flex-direction:column; align-items:flex-start; } }
+
 /* ══ ADMIN PANEL ═══════════════════════════════════════════════════════ */
 .admin-panel { display:flex; flex-direction:column; gap:0; height:100%; overflow-y:auto; }
 .admin-topbar { padding:20px 24px 0; border-bottom:1px solid var(--border); display:flex; align-items:center; gap:16px; flex-wrap:wrap; }
@@ -4909,31 +4934,14 @@
           <span class="nav-item-label">Train Model</span>
         </button>
 
-        <button class="nav-item cc-flat" id="cc-reports" data-tip="Reports"
-          onclick="ccActivate('reports',this); navigateThinkerTab('reports')">
-          <!-- Fingerprint (verified signal) -->
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round">
-            <path d="M8 1.5C5 1.5 2.5 4 2.5 7"/>
-            <path d="M8 3.5C6 3.5 4.5 5.1 4.5 7"/>
-            <path d="M8 5.5C7 5.5 6.5 6.2 6.5 7"/>
-            <path d="M8 1.5c3 0 5.5 2.5 5.5 5.5"/>
-            <path d="M8 3.5C10 3.5 11.5 5.1 11.5 7"/>
-            <path d="M8 5.5c1 0 1.5.7 1.5 1.5v1.5"/>
-            <path d="M4.5 9c.1 2 1.5 5 3.5 5.5"/>
-            <path d="M2.5 8.5c0 3 2 6 5.5 6"/>
-            <path d="M6.5 7v1c0 2 .5 4.5 1.5 6"/>
-          </svg>
-          <span class="nav-item-label">Reports</span>
-        </button>
-
-        <button class="nav-item cc-flat" id="cc-payments" data-tip="Payments"
-          onclick="ccActivate('payments',this); navigateThinkerTab('payments')">
-          <!-- Bank / building -->
+        <button class="nav-item cc-flat" id="cc-earnings" data-tip="Earnings"
+          onclick="ccActivate('earnings',this); navigateThinkerTab('earnings')">
+          <!-- Dollar / earnings icon -->
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M1.5 6h13M8 1.5L1.5 6v8.5h13V6z"/>
-            <line x1="4" y1="10" x2="4" y2="14.5"/><line x1="8" y1="10" x2="8" y2="14.5"/><line x1="12" y1="10" x2="12" y2="14.5"/>
+            <circle cx="8" cy="8" r="6.5"/>
+            <path d="M8 4.5v7M6 6.2c0-.9.9-1.7 2-1.7s2 .8 2 1.7c0 2.1-4 1.7-4 3.8 0 1 .9 1.7 2 1.7s2-.7 2-1.7"/>
           </svg>
-          <span class="nav-item-label">Payments</span>
+          <span class="nav-item-label">Earnings</span>
         </button>
 
         </div><!-- /thinker-nav-section -->
@@ -6061,13 +6069,9 @@
         <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75"><circle cx="8" cy="8" r="5.5"/><path d="M8 5v3l2 2"/></svg>
         Train Model
       </button>
-      <button class="team-hub-tab thinker-tab" id="th-tab-reports" onclick="switchThinkerTab('reports',this)">
-        <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75"><rect x="2" y="2" width="12" height="12" rx="2"/><path d="M5 8h6M5 5h3M5 11h4"/></svg>
-        Reports
-      </button>
-      <button class="team-hub-tab thinker-tab" id="th-tab-payments" onclick="switchThinkerTab('payments',this)">
-        <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75"><rect x="1.5" y="4" width="13" height="9" rx="1.5"/><path d="M1.5 7h13"/><path d="M4.5 10.5h2"/></svg>
-        Payments
+      <button class="team-hub-tab thinker-tab" id="th-tab-earnings" onclick="switchThinkerTab('earnings',this)">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75"><rect x="1.5" y="4" width="13" height="9" rx="1.5"/><path d="M1.5 7h13"/><path d="M4.5 10.5h2"/><path d="M10 2.5v3M12 4.5l-2-2-2 2"/></svg>
+        Earnings
       </button>
     </div>
 
@@ -6369,125 +6373,162 @@ e.g. I always start by validating whether the problem is real before evaluating 
     </div>
 
     <!-- ─── REPORTS ─── -->
-    <div class="thinker-panel" id="tp-reports" style="display:none">
-      <div class="report-period-tabs">
-        <button class="rpt-tab active" onclick="switchReportPeriod('last',this)">Last month</button>
-        <button class="rpt-tab" onclick="switchReportPeriod('this',this)">This month</button>
-        <button class="rpt-tab" onclick="switchReportPeriod('ytd',this)">YTD</button>
-      </div>
+    <!-- ─── EARNINGS (Reports + Payments combined) ─── -->
+    <div class="thinker-panel" id="tp-earnings" style="display:none">
 
-      <div class="report-summary" id="rpt-summary">
-        <div class="rpt-stat"><div class="rpt-stat-val" id="rpt-sessions">0</div><div class="rpt-stat-label">Inquiries Resolved</div><div class="rpt-stat-delta" id="rpt-sessions-delta">—</div></div>
-        <div class="rpt-stat"><div class="rpt-stat-val" id="rpt-revenue">$0</div><div class="rpt-stat-label">Gross revenue</div><div class="rpt-stat-delta" id="rpt-revenue-delta">—</div></div>
-        <div class="rpt-stat"><div class="rpt-stat-val" id="rpt-payout">$0</div><div class="rpt-stat-label">Your payout (70%)</div><div class="rpt-stat-delta">Wisdom Royalties</div></div>
-        <div class="rpt-stat"><div class="rpt-stat-val" id="rpt-unique">0</div><div class="rpt-stat-label">Unique founders</div><div class="rpt-stat-delta">—</div></div>
-      </div>
-
-      <!-- Domain Expertise Heatmap -->
-      <div class="th-heatmap-wrap">
-        <div class="th-heatmap-head">
-          <div class="th-heatmap-title">Domain Expertise Demand</div>
-          <div class="th-heatmap-sub">Which of your topics are trending</div>
+      <!-- Bank setup banner — visible only if bank not yet configured -->
+      <div class="earn-bank-banner" id="earn-bank-banner">
+        <div class="earn-bank-banner-icon">
+          <svg width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"><rect x="1.5" y="4" width="13" height="9" rx="1.5"/><path d="M1.5 7h13"/><path d="M4.5 10.5h2"/></svg>
         </div>
-        <div id="th-heatmap-body"><div class="th-domain-empty">Define your domains in the Train Model tab to see demand analytics.</div></div>
+        <div class="earn-bank-banner-body">
+          <div class="earn-bank-banner-title">Connect your bank account to receive your earnings</div>
+          <div class="earn-bank-banner-sub">Add your payout details below to start receiving Wisdom Royalties.</div>
+        </div>
+        <button class="earn-bank-banner-cta" onclick="document.getElementById('earn-payout-section').scrollIntoView({behavior:'smooth'})">Set up →</button>
       </div>
 
-      <!-- High-Resolution Performance Ledger -->
-      <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--r);overflow:hidden">
-        <div class="th-perf-head">
-          <div class="th-perf-title">
-            <div class="th-perf-dot" id="th-perf-dot"></div>
-            High-Resolution Performance Ledger
+      <!-- ── Section 1: Performance ── -->
+      <div class="earn-section">
+        <div class="earn-section-hdr">
+          <div class="earn-section-title">Performance</div>
+          <div class="report-period-tabs" style="margin:0">
+            <button class="rpt-tab active" onclick="switchReportPeriod('last',this)">Last month</button>
+            <button class="rpt-tab" onclick="switchReportPeriod('this',this)">This month</button>
+            <button class="rpt-tab" onclick="switchReportPeriod('ytd',this)">YTD</button>
           </div>
+        </div>
+
+        <div class="report-summary" id="rpt-summary">
+          <div class="rpt-stat"><div class="rpt-stat-val" id="rpt-sessions">0</div><div class="rpt-stat-label">Sessions served</div><div class="rpt-stat-delta" id="rpt-sessions-delta">—</div></div>
+          <div class="rpt-stat"><div class="rpt-stat-val" id="rpt-revenue">$0</div><div class="rpt-stat-label">Gross revenue</div><div class="rpt-stat-delta" id="rpt-revenue-delta">—</div></div>
+          <div class="rpt-stat"><div class="rpt-stat-val" id="rpt-payout">$0</div><div class="rpt-stat-label">Your earnings (70%)</div><div class="rpt-stat-delta">Wisdom Royalties</div></div>
+          <div class="rpt-stat"><div class="rpt-stat-val" id="rpt-unique">0</div><div class="rpt-stat-label">Unique founders</div><div class="rpt-stat-delta" id="rpt-unique-delta">—</div></div>
+        </div>
+
+        <!-- Domain Expertise Heatmap -->
+        <div class="th-heatmap-wrap" style="margin-top:16px">
+          <div class="th-heatmap-head">
+            <div class="th-heatmap-title">Domain Expertise Demand</div>
+            <div class="th-heatmap-sub">Which of your topics are trending</div>
+          </div>
+          <div id="th-heatmap-body"><div class="th-domain-empty">Define your domains in the Train Model tab to see demand analytics.</div></div>
+        </div>
+      </div>
+
+      <!-- ── Section 2: Transaction History ── -->
+      <div class="earn-section">
+        <div class="earn-section-hdr">
+          <div class="earn-section-title">Transaction History</div>
           <div style="display:flex;align-items:center;gap:12px">
             <button onclick="downloadLedgerCSV()" style="display:inline-flex;align-items:center;gap:5px;padding:4px 12px;font-size:11.5px;font-weight:600;border:1px solid var(--border-md);border-radius:20px;background:transparent;cursor:pointer;color:var(--text-2);font-family:'Inter',sans-serif;transition:all .15s" onmouseover="this.style.borderColor='var(--accent)';this.style.color='var(--accent)'" onmouseout="this.style.borderColor='var(--border-md)';this.style.color='var(--text-2)'">
               <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M6 1v7M3 5.5l3 3 3-3"/><path d="M1 10h10"/></svg>
               Export CSV
             </button>
-            <span style="font-size:11px;color:var(--text-3);font-family:var(--font-mono)" id="rpt-live-label">Live · synced with Railway</span>
+            <span style="font-size:11px;color:var(--text-3);font-family:var(--font-mono)" id="rpt-live-label">Live · synced</span>
           </div>
         </div>
-        <div class="ledger-scroll-wrap">
-        <table class="ledger-table" id="ledger-table">
-          <thead>
-            <tr>
-              <th>Date</th>
-              <th>Stage</th>
-              <th>Decision (summary)</th>
-              <th>Gross</th>
-              <th>Your cut</th>
-            </tr>
-          </thead>
-          <tbody id="ledger-body">
-            <tr><td colspan="5" style="text-align:center;color:var(--text-3);padding:32px;font-family:'Cormorant Garamond',serif;font-size:15px">No transactions yet for this period.</td></tr>
-          </tbody>
-        </table>
-        </div>
-      </div>
-    </div>
-
-    <!-- ─── PAYMENTS ─── -->
-    <div class="thinker-panel" id="tp-payments" style="display:none">
-      <div class="payment-card">
-        <div class="payment-card-title">Bank account</div>
-        <div class="payment-card-sub">Payouts are sent to this account on your chosen schedule.</div>
-        <div class="bank-form-grid">
-          <div class="bank-field" style="grid-column:1/-1">
-            <label class="bank-label">Account holder name</label>
-            <input class="bank-input" id="bank-name" type="text" placeholder="Legal name on account">
+        <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--r);overflow:hidden">
+          <div class="th-perf-head" style="padding:10px 14px">
+            <div class="th-perf-title">
+              <div class="th-perf-dot" id="th-perf-dot"></div>
+              Earnings Ledger
+            </div>
           </div>
-          <div class="bank-field">
-            <label class="bank-label">Routing number</label>
-            <input class="bank-input" id="bank-routing" type="text" placeholder="9 digits" maxlength="9" autocomplete="off">
-            <div class="bank-secure-note"><svg width="11" height="11" viewBox="0 0 11 11" fill="none" stroke="currentColor" stroke-width="1.2" style="vertical-align:-1px;margin-right:4px"><rect x="1.5" y="5" width="8" height="5.5" rx="0.8"/><path d="M3.5 5V3.5a2 2 0 014 0V5"/></svg>Encrypted at rest</div>
-          </div>
-          <div class="bank-field">
-            <label class="bank-label">Account number</label>
-            <input class="bank-input" id="bank-account" type="password" placeholder="Account number" autocomplete="off">
-            <div class="bank-secure-note"><svg width="11" height="11" viewBox="0 0 11 11" fill="none" stroke="currentColor" stroke-width="1.2" style="vertical-align:-1px;margin-right:4px"><rect x="1.5" y="5" width="8" height="5.5" rx="0.8"/><path d="M3.5 5V3.5a2 2 0 014 0V5"/></svg>Encrypted at rest</div>
-          </div>
-          <div class="bank-field">
-            <label class="bank-label">Bank name</label>
-            <input class="bank-input" id="bank-bankname" type="text" placeholder="e.g. Chase, Wells Fargo">
-          </div>
-          <div class="bank-field">
-            <label class="bank-label">Account type</label>
-            <select class="bank-input" id="bank-type">
-              <option value="checking">Checking</option>
-              <option value="savings">Savings</option>
-            </select>
+          <div class="ledger-scroll-wrap">
+            <table class="ledger-table" id="ledger-table">
+              <thead>
+                <tr>
+                  <th>Date</th><th>Stage</th><th>Session summary</th><th>Gross</th><th>Your cut</th>
+                </tr>
+              </thead>
+              <tbody id="ledger-body">
+                <tr><td colspan="5" style="text-align:center;color:var(--text-3);padding:32px;font-family:'Cormorant Garamond',serif;font-size:15px">No transactions yet for this period.</td></tr>
+              </tbody>
+            </table>
           </div>
         </div>
-        <button class="btn-primary" style="margin-top:8px" onclick="saveBankInfo()">Save bank details</button>
       </div>
 
-      <div class="payment-card">
-        <div class="payment-card-title">Payout schedule</div>
-        <div class="payment-card-sub">Choose how often earnings are transferred to your bank.</div>
-        <div class="payout-schedule" id="payout-schedule">
-          <div class="payout-opt selected" onclick="selectPayout(this,'weekly')">
-            <div class="payout-opt-title">Weekly</div>
-            <div class="payout-opt-sub">Every Monday</div>
+      <!-- ── Section 3: Payout Settings ── -->
+      <div class="earn-section" id="earn-payout-section">
+        <div class="earn-section-hdr">
+          <div class="earn-section-title">Payout Settings</div>
+          <div class="earn-section-meta" id="earn-payout-status">Not yet configured</div>
+        </div>
+
+        <!-- Pending payout hero -->
+        <div class="earn-payout-hero">
+          <div>
+            <div class="earn-payout-label">Pending payout</div>
+            <div class="earn-payout-amount" id="pending-payout">$0.00</div>
+            <div class="earn-payout-next" id="earn-next-payout-date">Next transfer date depends on your schedule</div>
           </div>
-          <div class="payout-opt" onclick="selectPayout(this,'biweekly')">
-            <div class="payout-opt-title">Bi-weekly</div>
-            <div class="payout-opt-sub">1st & 15th</div>
+          <span class="earn-payout-badge">
+            <svg width="11" height="11" viewBox="0 0 11 11" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="1" y="4.5" width="9" height="6" rx="1"/><path d="M1 6.5h9"/><path d="M3 4.5V3a2.5 2.5 0 015 0v1.5"/></svg>
+            Secure transfer
+          </span>
+        </div>
+
+        <div class="earn-payout-cols">
+          <!-- Bank account form -->
+          <div class="payment-card" style="margin:0">
+            <div class="payment-card-title">Bank account</div>
+            <div class="payment-card-sub">Payouts are sent to this account on your chosen schedule.</div>
+            <div class="bank-form-grid">
+              <div class="bank-field" style="grid-column:1/-1">
+                <label class="bank-label">Account holder name</label>
+                <input class="bank-input" id="bank-name" type="text" placeholder="Legal name on account">
+              </div>
+              <div class="bank-field">
+                <label class="bank-label">Routing number</label>
+                <input class="bank-input" id="bank-routing" type="text" placeholder="9 digits" maxlength="9" autocomplete="off">
+                <div class="bank-secure-note"><svg width="11" height="11" viewBox="0 0 11 11" fill="none" stroke="currentColor" stroke-width="1.2" style="vertical-align:-1px;margin-right:4px"><rect x="1.5" y="5" width="8" height="5.5" rx="0.8"/><path d="M3.5 5V3.5a2 2 0 014 0V5"/></svg>Encrypted at rest</div>
+              </div>
+              <div class="bank-field">
+                <label class="bank-label">Account number</label>
+                <input class="bank-input" id="bank-account" type="password" placeholder="Account number" autocomplete="off">
+                <div class="bank-secure-note"><svg width="11" height="11" viewBox="0 0 11 11" fill="none" stroke="currentColor" stroke-width="1.2" style="vertical-align:-1px;margin-right:4px"><rect x="1.5" y="5" width="8" height="5.5" rx="0.8"/><path d="M3.5 5V3.5a2 2 0 014 0V5"/></svg>Encrypted at rest</div>
+              </div>
+              <div class="bank-field">
+                <label class="bank-label">Bank name</label>
+                <input class="bank-input" id="bank-bankname" type="text" placeholder="e.g. Chase, Wells Fargo">
+              </div>
+              <div class="bank-field">
+                <label class="bank-label">Account type</label>
+                <select class="bank-input" id="bank-type">
+                  <option value="checking">Checking</option>
+                  <option value="savings">Savings</option>
+                </select>
+              </div>
+            </div>
+            <button class="btn-primary" style="margin-top:12px" onclick="saveBankInfo()">Save bank details</button>
           </div>
-          <div class="payout-opt" onclick="selectPayout(this,'monthly')">
-            <div class="payout-opt-title">Monthly</div>
-            <div class="payout-opt-sub">1st of month</div>
+
+          <!-- Payout schedule -->
+          <div class="payment-card" style="margin:0">
+            <div class="payment-card-title">Payout schedule</div>
+            <div class="payment-card-sub">Choose how often earnings are transferred to your bank.</div>
+            <div class="payout-schedule" id="payout-schedule">
+              <div class="payout-opt selected" onclick="selectPayout(this,'weekly')">
+                <div class="payout-opt-title">Weekly</div>
+                <div class="payout-opt-sub">Every Monday</div>
+              </div>
+              <div class="payout-opt" onclick="selectPayout(this,'biweekly')">
+                <div class="payout-opt-title">Bi-weekly</div>
+                <div class="payout-opt-sub">1st &amp; 15th</div>
+              </div>
+              <div class="payout-opt" onclick="selectPayout(this,'monthly')">
+                <div class="payout-opt-title">Monthly</div>
+                <div class="payout-opt-sub">1st of month</div>
+              </div>
+            </div>
+            <button class="btn-secondary" style="margin-top:16px" onclick="savePayoutSchedule()">Save schedule</button>
           </div>
         </div>
-        <button class="btn-secondary" style="margin-top:16px" onclick="savePayoutSchedule()">Save schedule</button>
       </div>
 
-      <div class="payment-card" style="border-color:#FEE2E2">
-        <div class="payment-card-title">Pending payout</div>
-        <div class="payment-card-sub">Your next scheduled transfer.</div>
-        <div style="font-size:32px;font-weight:700;color:var(--accent);margin-bottom:4px" id="pending-payout">$0.00</div>
-        <div style="font-size:13px;color:var(--text-3)">Transfers on next payout date based on your schedule.</div>
-      </div>
-    </div>
+    </div><!-- /tp-earnings -->
 
 
   </div></div>
@@ -8082,8 +8123,9 @@ function signOut() {
      #/thinker                     → Thinker hub (overview)
      #/thinker/onboarding          → Thinker hub — onboarding tab
      #/thinker/train               → Thinker hub — train tab
-     #/thinker/reports             → Thinker hub — reports tab
-     #/thinker/payments            → Thinker hub — payments tab
+     #/thinker/earnings            → Thinker hub — earnings tab
+     #/thinker/reports             → Thinker hub — earnings tab (legacy alias)
+     #/thinker/payments            → Thinker hub — earnings tab (legacy alias)
      #/profile                     → User profile
      #/settings                    → Settings
      #/help                        → Help & FAQ
@@ -8138,11 +8180,12 @@ const router = (() => {
     { re: /^\/wallet$/,                        fn: ()  => _act('wallet') },
 
     // Thinker hub tabs
-    { re: /^\/thinker\/onboarding$/,         fn: ()  => _actThinkerTab('onboarding') },
-    { re: /^\/thinker\/train$/,              fn: ()  => _actThinkerTab('train') },
-    { re: /^\/thinker\/reports$/,            fn: ()  => _actThinkerTab('reports') },
-    { re: /^\/thinker\/payments$/,           fn: ()  => _actThinkerTab('payments') },
-    { re: /^\/thinker/,                       fn: ()  => _act('thinker-hub') },
+    { re: /^\/thinker\/onboarding$/,  fn: () => _actThinkerTab('onboarding') },
+    { re: /^\/thinker\/train$/,       fn: () => _actThinkerTab('train') },
+    { re: /^\/thinker\/earnings$/,    fn: () => _actThinkerTab('earnings') },
+    { re: /^\/thinker\/reports$/,     fn: () => _actThinkerTab('earnings') },   // legacy alias
+    { re: /^\/thinker\/payments$/,    fn: () => _actThinkerTab('earnings') },   // legacy alias
+    { re: /^\/thinker/,               fn: () => _act('thinker-hub') },
 
     // Standard views
     { re: /^\/$|^\/dashboard$/,              fn: ()  => _act('recents') },
@@ -14442,8 +14485,8 @@ function ccRenderNextStep(prof, fw, doms, sessions) {
     icon      = `<svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"><rect x="2" y="5" width="16" height="12" rx="2"/><path d="M2 9h16"/><circle cx="14" cy="13" r="1.2" fill="currentColor" stroke="none"/></svg>`;
     title     = `${sessionCount} perspective${sessionCount !== 1 ? 's' : ''} served · $${earned} earned`;
     sub       = 'View your earnings breakdown, domain demand, and performance by period.';
-    ctaLabel  = 'View Reports';
-    ctaAction = `switchThinkerTab('reports', document.querySelectorAll('.thinker-tab')[3])`;
+    ctaLabel  = 'View Earnings';
+    ctaAction = `switchThinkerTab('earnings', document.querySelectorAll('.thinker-tab')[2])`;
   }
 
   el.innerHTML = `
@@ -14768,7 +14811,7 @@ async function checkForNewSales() {
     const count = parseInt(s.total_perspectives || s.sessions || s.perspectives || 0, 10);
     if (_lastTxnCount > 0 && count > _lastTxnCount) {
       pingThinkerSaleDot();
-      const panel = document.getElementById('tp-reports');
+      const panel = document.getElementById('tp-earnings');
       if (panel && panel.style.display !== 'none') renderReports(currentReportPeriod);
     }
     _lastTxnCount = count;
@@ -14778,11 +14821,13 @@ async function checkForNewSales() {
 /* ── Tab switching ── */
 // Navigate to a thinker hub sub-tab and push the right URL
 function navigateThinkerTab(tab) {
-  const path = (!tab || tab === 'overview') ? '/thinker' : '/thinker/' + tab;
+  // Alias legacy tab names
+  const resolvedTab = (tab === 'reports' || tab === 'payments') ? 'earnings' : tab;
+  const path = (!resolvedTab || resolvedTab === 'overview') ? '/thinker' : '/thinker/' + resolvedTab;
   router.push(path);
   show('screen-thinker-hub');
   try { initThinkerHub(); } catch(e) {}
-  setTimeout(() => switchThinkerTab(tab || 'overview', null), 80);
+  setTimeout(() => switchThinkerTab(resolvedTab || 'overview', null), 80);
 }
 
 function switchThinkerTab(tab, btn) {
@@ -14791,17 +14836,19 @@ function switchThinkerTab(tab, btn) {
     btn.classList.add('active');
   } else {
     // Find the matching tab button by its onclick attribute when called without a ref
-    const tabMap = { overview: 0, train: 1, reports: 2, payments: 3 };
+    const tabMap = { overview: 0, train: 1, earnings: 2 };
     const idx = tabMap[tab];
     const tabs = document.querySelectorAll('.thinker-tab');
     if (idx !== undefined && tabs[idx]) tabs[idx].classList.add('active');
   }
   if (tab === 'onboarding') { openObFlow(); return; }
   document.querySelectorAll('.thinker-panel').forEach(p => p.style.display = 'none');
-  const panel = document.getElementById(`tp-${tab}`);
+  // Alias legacy tab names to earnings
+  const resolvedTab = (tab === 'reports' || tab === 'payments') ? 'earnings' : tab;
+  const panel = document.getElementById(`tp-${resolvedTab}`);
   if (panel) panel.style.display = 'block';
-  if (tab === 'reports') renderReports(currentReportPeriod);
-  if (tab === 'train')   initTrainModel();
+  if (resolvedTab === 'earnings') initEarnings();
+  if (tab === 'train') initTrainModel();
 }
 
 /* ── Command Center sidebar suite ─────────────────────────── */
@@ -16143,6 +16190,64 @@ async function renderReports(period) {
   }).join('');
 }
 
+/* ── Earnings tab init ── */
+function initEarnings() {
+  // Load bank data and pre-fill the form
+  const bank = loadTkData(TK.bank, null);
+  if (bank) {
+    const setVal = (id, v) => { const el = document.getElementById(id); if (el && v) el.value = v; };
+    setVal('bank-name',    bank.name);
+    setVal('bank-routing', bank.routing);
+    setVal('bank-bankname',bank.bankname);
+    if (bank.type) {
+      const sel = document.getElementById('bank-type');
+      if (sel) sel.value = bank.type;
+    }
+  }
+
+  // Bank banner: hide if bank is configured
+  const banner = document.getElementById('earn-bank-banner');
+  if (banner) banner.classList.toggle('hidden', !!bank && !!(bank.name || bank.routing));
+
+  // Payout status meta
+  const statusEl = document.getElementById('earn-payout-status');
+  if (statusEl) {
+    if (bank && (bank.name || bank.routing)) {
+      const schedule = loadTkData(TK.payout, 'weekly');
+      statusEl.textContent = `${bank.bankname ? bank.bankname + ' · ' : ''}${schedule.charAt(0).toUpperCase() + schedule.slice(1)} payouts`;
+      statusEl.style.color = 'var(--success)';
+    } else {
+      statusEl.textContent = 'Not yet configured';
+      statusEl.style.color = '';
+    }
+  }
+
+  // Payout schedule: restore saved selection
+  const savedSchedule = loadTkData(TK.payout, 'weekly');
+  selectedPayoutSchedule = savedSchedule;
+  document.querySelectorAll('.payout-opt').forEach(o => {
+    const match = o.querySelector('.payout-opt-title')?.textContent?.toLowerCase()
+      .replace('-', '') === savedSchedule.replace('-', '');
+    o.classList.toggle('selected', match);
+  });
+
+  // Pending payout: derive from current transactions
+  const txns = []; // will be populated by renderReports; use stored total for now
+  const pendingEl  = document.getElementById('pending-payout');
+  const nextDateEl = document.getElementById('earn-next-payout-date');
+  if (pendingEl) {
+    // Optimistic display — renderReports will overwrite rpt-payout which is separate
+    pendingEl.textContent = '$0.00';
+  }
+  if (nextDateEl && savedSchedule) {
+    const scheduleLabel = { weekly: 'Every Monday', biweekly: '1st & 15th of each month', monthly: '1st of each month' };
+    nextDateEl.textContent = scheduleLabel[savedSchedule] || 'Next transfer date depends on your schedule';
+  }
+
+  // Kick off reports render for the current period
+  renderReports(currentReportPeriod || 'last');
+}
+
 /* ── Payments ── */
 function saveBankInfo() {
   const bank = {
@@ -16154,6 +16259,15 @@ function saveBankInfo() {
   };
   saveTkData(TK.bank, bank);
   showToast('Bank details saved securely', 'success');
+  // Hide the bank setup banner and update payout status after save
+  const banner = document.getElementById('earn-bank-banner');
+  if (banner && (bank.name || bank.routing)) banner.classList.add('hidden');
+  const statusEl = document.getElementById('earn-payout-status');
+  if (statusEl) {
+    const schedule = loadTkData(TK.payout, selectedPayoutSchedule || 'weekly');
+    statusEl.textContent = `${bank.bankname ? bank.bankname + ' · ' : ''}${schedule.charAt(0).toUpperCase() + schedule.slice(1)} payouts`;
+    statusEl.style.color = 'var(--success)';
+  }
 }
 
 let selectedPayoutSchedule = 'weekly';
