@@ -3824,9 +3824,9 @@
     .pf-revel-try { background:transparent; color:#2C2820; border:1px solid rgba(0,0,0,.15); border-radius:100px; padding:11px 20px; font-size:13px; font-weight:500; cursor:pointer; font-family:'Inter',sans-serif; transition:background .15s; }
     .pf-revel-try:hover { background:rgba(0,0,0,.04); }
 
-    /* ── Mobile topbar hamburger (only in chat-mode on mobile) ── */
+    /* ── Mobile topbar hamburger — always visible on mobile ── */
     .mob-topbar-hamburger {
-      display: none; /* hidden on desktop + non-chat screens */
+      display: none; /* hidden on desktop */
       width: 36px; height: 36px; border-radius: 8px;
       border: none; background: transparent; cursor: pointer;
       flex-direction: column; align-items: center; justify-content: center;
@@ -3834,8 +3834,35 @@
     }
     .mob-topbar-hamburger:hover { background: var(--surface-2); }
     .mob-topbar-hamburger span { display: block; width: 18px; height: 1.5px; background: var(--text-2); border-radius: 2px; }
+
+    /* ── Mobile "+" circle — New Perspective button in topbar ── */
+    .mob-topbar-new {
+      display: none; /* hidden on desktop */
+      width: 34px; height: 34px; border-radius: 50%;
+      border: 1.5px solid var(--border-hi); background: transparent;
+      cursor: pointer; align-items: center; justify-content: center;
+      color: var(--text-1); flex-shrink: 0;
+      transition: background 0.15s, border-color 0.15s;
+    }
+    .mob-topbar-new:hover { background: var(--surface-2); border-color: var(--text-1); }
+
     @media (max-width: 680px) {
-      .content-topbar.chat-mode .mob-topbar-hamburger { display: flex; }
+      /* Show hamburger on every screen */
+      .mob-topbar-hamburger { display: flex; }
+      /* Show "+" circle on every screen; hide on chat-mode (chat has its own controls) */
+      .mob-topbar-new { display: flex; }
+      .content-topbar.chat-mode .mob-topbar-new { display: none; }
+      /* Mobile topbar: full header with background, spread left↔right */
+      .content-topbar {
+        justify-content: space-between;
+        align-items: center;
+        background: rgba(250,248,243,0.97);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border-bottom: 1px solid var(--border);
+        padding: 0 12px;
+        position: sticky; top: 0; z-index: 60;
+      }
     }
 
     /* ── Mobile panel toggle chip ── */
@@ -4716,10 +4743,6 @@
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75"><rect x="2" y="2" width="5" height="5" rx="1.5"/><rect x="9" y="2" width="5" height="5" rx="1.5"/><rect x="2" y="9" width="5" height="5" rx="1.5"/><rect x="9" y="9" width="5" height="5" rx="1.5"/></svg>
           <span class="nav-item-label">Projects</span>
         </button>
-        <button class="nav-item nav-auth-gate" id="nav-wallet" data-tip="Wallet" onclick="_navMyStuff('wallet')">
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75"><rect x="1" y="4" width="14" height="10" rx="2"/><path d="M11 9a1 1 0 110 2 1 1 0 010-2z" fill="currentColor" stroke="none"/><path d="M1 7h14"/></svg>
-          <span class="nav-item-label">Wallet</span>
-        </button>
 
         <!-- Thinker nav — gated: only visible when currentUser.thinker_access === true -->
         <div id="thinker-nav-section" style="display:none">
@@ -4871,7 +4894,7 @@
 
     <!-- Content-level topbar: chat title (chat mode) + perspective switcher -->
     <div class="content-topbar" id="content-topbar">
-      <!-- Mobile-only hamburger to open sidebar / chat history -->
+      <!-- Mobile-only hamburger to open sidebar -->
       <button class="mob-topbar-hamburger" id="mob-topbar-hamburger" onclick="toggleSidebar()" aria-label="Open menu">
         <span></span><span></span><span></span>
       </button>
@@ -4880,7 +4903,10 @@
         placeholder="New conversation" maxlength="80"
         onblur="saveChatTitle()"
         onkeydown="if(event.key==='Enter'){this.blur()}">
-
+      <!-- Mobile-only "+" circle — New Perspective -->
+      <button class="mob-topbar-new" onclick="newPerspective()" aria-label="New perspective" title="New Perspective">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="8" y1="2" x2="8" y2="14"/><line x1="2" y1="8" x2="14" y2="8"/></svg>
+      </button>
     </div>
 
     <!-- SCREEN 0: Home — Divine Command Center -->
@@ -5842,26 +5868,23 @@
       <div style="font-size:13px;color:var(--text-3)">Manage your thinker profile, train your model, and track your earnings.</div>
     </div>
     <div class="team-hub-tabs" id="team-hub-tabs">
-      <button class="team-hub-tab active" id="th-tab-lab"      onclick="switchTeamTab('lab',this)">
+      <button class="team-hub-tab thinker-tab active" id="th-tab-overview" onclick="switchThinkerTab('overview',this)">
         <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75"><rect x="4" y="4" width="8" height="8" rx="1.5"/><path d="M6 2.5v1.5M8 2.5v1.5M10 2.5v1.5M6 12v1.5M8 12v1.5M10 12v1.5M2.5 6h1.5M2.5 8h1.5M2.5 10h1.5M12 6h1.5M12 8h1.5M12 10h1.5"/></svg>
-        Thinker Lab
+        Command Center
       </button>
-      <button class="team-hub-tab" id="th-tab-advisory" onclick="switchTeamTab('advisory',this)">
-        <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75"><circle cx="5" cy="5" r="2.5"/><circle cx="11" cy="5" r="2.5"/><path d="M1 13c0-2.2 1.8-4 4-4M15 13c0-2.2-1.8-4-4-4"/><path d="M8 14c0-2.2 1.8-4 4-4s-4 1.8-4 4"/><circle cx="8" cy="7" r="2.5"/><path d="M4 14c0-2.2 1.8-4 4-4s4 1.8 4 4"/></svg>
-        Advisory Board
+      <button class="team-hub-tab thinker-tab" id="th-tab-train" onclick="switchThinkerTab('train',this)">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75"><circle cx="8" cy="8" r="5.5"/><path d="M8 5v3l2 2"/></svg>
+        Train Model
       </button>
-      <button class="team-hub-tab" id="th-tab-investor" onclick="switchTeamTab('investor',this)">
+      <button class="team-hub-tab thinker-tab" id="th-tab-reports" onclick="switchThinkerTab('reports',this)">
         <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75"><rect x="2" y="2" width="12" height="12" rx="2"/><path d="M5 8h6M5 5h3M5 11h4"/></svg>
-        Investor Hub
+        Reports
       </button>
-      <button class="team-hub-tab" id="th-tab-staff" onclick="switchTeamTab('staff',this)">
-        <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75"><rect x="2" y="3" width="12" height="11" rx="1.5"/><path d="M5 3V2h6v1M6 8h4M6 11h2"/><path d="M10 8l1.5-1.5L10 5"/></svg>
-        Staff Terminal
+      <button class="team-hub-tab thinker-tab" id="th-tab-payments" onclick="switchThinkerTab('payments',this)">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75"><rect x="1.5" y="4" width="13" height="9" rx="1.5"/><path d="M1.5 7h13"/><path d="M4.5 10.5h2"/></svg>
+        Payments
       </button>
     </div>
-
-    <!-- ══ THINKER LAB PANEL ══════════════════════════════════════════ -->
-    <div class="team-hub-panel active" id="thp-lab">
 
     <!-- ─── COMMAND CENTER OVERVIEW ─── -->
     <div class="thinker-panel cc-dash" id="tp-overview">
@@ -6281,168 +6304,6 @@ e.g. I always start by validating whether the problem is real before evaluating 
       </div>
     </div>
 
-    </div><!-- /thp-lab -->
-
-    <!-- ══ ADVISORY BOARD PANEL ══════════════════════════════════════ -->
-    <div class="team-hub-panel" id="thp-advisory">
-      <div class="adv-section-head">
-        <div class="adv-section-title">Advisory Board</div>
-        <div style="font-size:13px;color:var(--text-3)" id="adv-count-label">0 advisors</div>
-      </div>
-      <p style="font-size:13.5px;color:var(--text-2);margin-bottom:20px;line-height:1.6">Authorize domain experts to access your team's outputs. They review verified Perspectives, session results, and model recommendations — but cannot edit anything.</p>
-
-      <!-- Invite form -->
-      <div class="adv-invite-form">
-        <div style="font-size:13px;font-weight:700;color:var(--text-0);margin-bottom:14px">Authorize an Advisor</div>
-        <div class="adv-invite-row">
-          <div>
-            <div class="adv-invite-label">Email address</div>
-            <input class="adv-invite-input" id="adv-email" type="email" placeholder="advisor@firm.com">
-          </div>
-          <div>
-            <div class="adv-invite-label">Domain expertise</div>
-            <select class="adv-invite-select" id="adv-domain">
-              <option value="Marketing">Marketing</option>
-              <option value="Product">Product</option>
-              <option value="Sales">Sales</option>
-              <option value="Finance">Finance</option>
-              <option value="Legal">Legal</option>
-              <option value="Operations">Operations</option>
-              <option value="Engineering">Engineering</option>
-              <option value="Design">Design</option>
-              <option value="Fundraising">Fundraising</option>
-              <option value="Strategy">Strategy</option>
-              <option value="HR / Talent">HR / Talent</option>
-              <option value="Other">Other</option>
-            </select>
-          </div>
-          <div style="padding-top:18px">
-            <button class="adv-invite-btn" onclick="advInvite()">Send invite →</button>
-          </div>
-        </div>
-        <div style="margin-top:10px">
-          <div class="adv-invite-label">Note (optional)</div>
-          <input class="adv-invite-input" id="adv-note" type="text" placeholder="e.g. Reviewing our Q2 GTM strategy">
-        </div>
-      </div>
-
-      <!-- Member list -->
-      <div class="adv-member-list" id="adv-member-list">
-        <div class="adv-board-empty">
-          <svg width="32" height="32" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.75"><circle cx="10" cy="10" r="5"/><circle cx="22" cy="10" r="5"/><path d="M3 27c0-4 3-7 7-7M29 27c0-4-3-7-7-7"/><circle cx="16" cy="14" r="5"/><path d="M9 27c0-4 3-7 7-7s7 3 7 7"/></svg>
-          <div style="margin-top:12px">No advisors yet. Invite your first advisor above.</div>
-        </div>
-      </div>
-    </div><!-- /thp-advisory -->
-
-    <!-- ══ INVESTOR HUB PANEL ══════════════════════════════════════════ -->
-    <div class="team-hub-panel" id="thp-investor">
-      <div class="adv-section-head">
-        <div class="adv-section-title">Investor Hub</div>
-        <button class="adv-invite-btn" onclick="showView('ir-page')" style="font-size:12px;padding:7px 14px">Open Investor Room →</button>
-      </div>
-      <p style="font-size:13.5px;color:var(--text-2);margin-bottom:20px;line-height:1.6">Your Live Data Room — the source of truth for all financial reporting. Share your private IR link with investors for real-time access to your numbers.</p>
-
-      <!-- Quick stats (populated from IR data) -->
-      <div class="inv-hub-stat-row" id="inv-hub-stats">
-        <div class="inv-hub-stat">
-          <div class="inv-hub-stat-val" id="inv-hub-cash">—</div>
-          <div class="inv-hub-stat-lbl">Cash on Hand</div>
-        </div>
-        <div class="inv-hub-stat">
-          <div class="inv-hub-stat-val" id="inv-hub-runway">—</div>
-          <div class="inv-hub-stat-lbl">Months Runway</div>
-        </div>
-        <div class="inv-hub-stat">
-          <div class="inv-hub-stat-val" id="inv-hub-rev">—</div>
-          <div class="inv-hub-stat-lbl">Monthly Revenue</div>
-        </div>
-      </div>
-
-      <!-- IR link cards -->
-      <div id="inv-hub-links">
-        <div style="background:var(--surface-2);border:1.5px dashed var(--border-md);border-radius:var(--r);padding:28px;text-align:center;color:var(--text-3);">
-          <svg width="32" height="32" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.8" style="display:block;margin:0 auto 12px"><rect x="4" y="14" width="24" height="16" rx="2"/><path d="M10 14V10a6 6 0 0112 0v4"/><circle cx="16" cy="22" r="1.5" fill="currentColor" stroke="none"/></svg>
-          <div style="font-size:14px;font-weight:600;color:var(--text-1);margin-bottom:6px">Your Investor Room isn't set up yet</div>
-          <div style="font-size:13px;margin-bottom:16px">Complete your IR setup to generate shareable investor links.</div>
-          <button class="inv-hub-go-setup" onclick="showView('ir-page')">
-            <svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="1.75"><rect x="1.5" y="3" width="10" height="7.5" rx="1.5"/><path d="M4 3V2a1.5 1.5 0 013 0v1"/></svg>
-            Configure Room
-          </button>
-        </div>
-      </div>
-
-      <!-- Monthly update log -->
-      <div style="margin-top:24px">
-        <div class="adv-section-head" style="margin-bottom:10px">
-          <div class="adv-section-title">Update History</div>
-          <button class="adv-invite-btn" onclick="invHubAddUpdate()" style="font-size:12px;padding:7px 14px">+ Post update</button>
-        </div>
-        <div id="inv-hub-updates">
-          <div class="staff-empty">No updates posted yet. Post your first monthly update for investors.</div>
-        </div>
-      </div>
-    </div><!-- /thp-investor -->
-
-    <!-- ══ STAFF TERMINAL PANEL ════════════════════════════════════════ -->
-    <div class="team-hub-panel" id="thp-staff">
-      <div class="adv-section-head">
-        <div class="adv-section-title">Staff Terminal</div>
-        <div style="font-size:13px;color:var(--text-3)" id="staff-count-label">0 tasks</div>
-      </div>
-      <p style="font-size:13.5px;color:var(--text-2);margin-bottom:20px;line-height:1.6">Delegate operations as structured tasks with clear Success Protocols — so every team member knows exactly what "done" looks like.</p>
-
-      <!-- Task creation form -->
-      <div class="staff-task-form" id="staff-task-form">
-        <div class="staff-task-form-title">
-          <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75"><rect x="2" y="3" width="12" height="11" rx="1.5"/><path d="M5 3V2h6v1M6 8h4M6 11h2"/></svg>
-          Delegate a task
-        </div>
-        <div class="staff-task-grid">
-          <div class="staff-task-field">
-            <div class="staff-task-label">Task title</div>
-            <input class="staff-task-input" id="staff-title" placeholder="e.g. Write Q2 investor update">
-          </div>
-          <div class="staff-task-field">
-            <div class="staff-task-label">Assign to</div>
-            <input class="staff-task-input" id="staff-assignee" placeholder="Name or email">
-          </div>
-          <div class="staff-task-field">
-            <div class="staff-task-label">Due date</div>
-            <input class="staff-task-input" id="staff-due" type="date">
-          </div>
-          <div class="staff-task-field">
-            <div class="staff-task-label">Priority</div>
-            <select class="staff-task-input" id="staff-priority">
-              <option value="High">High</option>
-              <option value="Medium" selected>Medium</option>
-              <option value="Low">Low</option>
-            </select>
-          </div>
-        </div>
-        <div class="staff-task-field" style="margin-bottom:0">
-          <div class="staff-task-label">Success Protocol <span style="font-weight:400;text-transform:none;letter-spacing:0;color:var(--text-3)">— definition of done</span></div>
-          <textarea class="staff-task-textarea" id="staff-protocol" placeholder="This task is complete when… (be specific: deliverable, format, review criteria)"></textarea>
-        </div>
-        <button class="staff-add-btn" onclick="staffAddTask()">Delegate task →</button>
-      </div>
-
-      <!-- Task board -->
-      <div class="staff-columns">
-        <div>
-          <div class="staff-col-head"><div class="staff-col-head-dot" style="background:#F59E0B"></div>Pending</div>
-          <div id="staff-col-pending"></div>
-        </div>
-        <div>
-          <div class="staff-col-head"><div class="staff-col-head-dot" style="background:#3B82F6"></div>Active</div>
-          <div id="staff-col-active"></div>
-        </div>
-        <div>
-          <div class="staff-col-head"><div class="staff-col-head-dot" style="background:#10B981"></div>Done</div>
-          <div id="staff-col-done"></div>
-        </div>
-      </div>
-    </div><!-- /thp-staff -->
 
   </div></div>
 </div>
@@ -7172,10 +7033,6 @@ e.g. I always start by validating whether the problem is real before evaluating 
 
 <!-- MOBILE BOTTOM NAV -->
 <nav class="mobile-nav" id="mobile-nav">
-  <button class="mob-nav-item mob-nav-new" onclick="newPerspective(); closeSidebarOnMobile()" aria-label="New perspective">
-    <svg width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="8" y1="2" x2="8" y2="14"/><line x1="2" y1="8" x2="14" y2="8"/></svg>
-    <span>New</span>
-  </button>
   <button class="mob-nav-item" id="mob-nav-search" onclick="showView('search'); closeSidebarOnMobile()" aria-label="Search">
     <svg width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5l3 3"/></svg>
     <span>Search</span>
@@ -7206,13 +7063,6 @@ e.g. I always start by validating whether the problem is real before evaluating 
     <span class="mob-lock-badge"></span>
     <svg width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75"><rect x="2" y="2" width="5" height="5" rx="1.5"/><rect x="9" y="2" width="5" height="5" rx="1.5"/><rect x="2" y="9" width="5" height="5" rx="1.5"/><rect x="9" y="9" width="5" height="5" rx="1.5"/></svg>
     <span>Projects</span>
-  </button>
-  <!-- Profile / Login button — changes on auth state -->
-  <button class="mob-nav-item" id="mob-nav-profile" onclick="if(currentUser){showView('wallet');closeSidebarOnMobile();}else{showView('login');}" aria-label="Account">
-    <div id="mob-nav-profile-icon" style="width:22px;height:22px;border-radius:50%;background:var(--border-hi);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:var(--text-2);flex-shrink:0">
-      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75"><circle cx="8" cy="5.5" r="2.5"/><path d="M2.5 13.5c0-3 2.5-5 5.5-5s5.5 2 5.5 5"/></svg>
-    </div>
-    <span id="mob-nav-profile-label">Login</span>
   </button>
 </nav>
 
@@ -14459,7 +14309,7 @@ function switchThinkerTab(tab, btn) {
     btn.classList.add('active');
   } else {
     // Find the matching tab button by its onclick attribute when called without a ref
-    const tabMap = { overview: 0, train: 2, reports: 3, payments: 4 };
+    const tabMap = { overview: 0, train: 1, reports: 2, payments: 3 };
     const idx = tabMap[tab];
     const tabs = document.querySelectorAll('.thinker-tab');
     if (idx !== undefined && tabs[idx]) tabs[idx].classList.add('active');
