@@ -1425,10 +1425,9 @@
     #screen-project-detail { overflow-y:auto; }
     .pd-layout { max-width:1160px; margin:0 auto; padding:40px 28px 80px; }
     /* Two-column layout */
-    .pd-cols { display:grid; grid-template-columns:1fr 360px; gap:24px; align-items:start; }
-    .pd-col-left { min-width:0; }
-    .pd-col-right { position:sticky; top:24px; }
-    @media(max-width:900px) { .pd-cols { grid-template-columns:1fr; } .pd-col-right { position:static; } }
+    .pd-cols { display:block; }
+    .pd-col-left { min-width:0; max-width:860px; }
+    .pd-col-right { display:none; }
     .pd-back { display:inline-flex; align-items:center; gap:6px; font-size:13px; color:var(--text-3); background:none; border:none; cursor:pointer; padding:0; margin-bottom:24px; font-family:'Inter',sans-serif; transition:color .15s; }
     .pd-back:hover { color:var(--text-0); }
     .pd-header { display:flex; align-items:flex-start; gap:14px; margin-bottom:32px; }
@@ -1492,6 +1491,15 @@
     .pd-subtitle { margin-top:6px !important; display:block !important; }
 
     /* Right panel — collapsible cards */
+    /* Standardized framework divider */
+    .pd-framework-divider { display:flex; align-items:center; gap:12px; margin:28px 0 4px; }
+    .pd-framework-divider::before,.pd-framework-divider::after { content:''; flex:1; height:1px; background:var(--border); }
+    .pd-framework-divider-label { font-size:10.5px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:var(--text-3); white-space:nowrap; }
+    /* Framework section icon — neutral slate */
+    .pd-section-icon.framework { background:var(--surface-2); color:var(--text-2); }
+    /* Inline add button inside section header */
+    .pd-section-add-btn { font-size:11.5px; font-weight:600; color:var(--accent); background:none; border:none; cursor:pointer; padding:4px 10px; border-radius:var(--r-pill); font-family:'Inter',sans-serif; transition:background .12s; border:1px solid var(--border-md); }
+    .pd-section-add-btn:hover { background:var(--accent-lt); border-color:var(--accent-bdr); }
     .pd-rp-card { background:#fff; border:1px solid #e8e8e8; border-radius:14px; margin-bottom:12px; overflow:hidden; }
     .pd-rp-card-hdr { display:flex; align-items:center; justify-content:space-between; padding:14px 16px; cursor:pointer; user-select:none; }
     .pd-rp-card-hdr:hover { background:#fafafa; }
@@ -5748,49 +5756,8 @@
             <div id="pd-template-body"></div>
           </div>
 
-          <!-- ── Right column: resources + team + tools ── -->
+          <!-- Right column retired — Resources/Team/Tools now live in left column framework sections -->
           <div class="pd-col-right">
-            <!-- Resources card -->
-            <div class="pd-rp-card" id="pd-rp-card-resources">
-              <div class="pd-rp-card-hdr" onclick="toggleRpCard('pd-rp-body-resources','pd-rp-chev-resources')">
-                <div class="pd-rp-card-title">Resources</div>
-                <div class="pd-rp-card-actions">
-                  <button class="pd-rp-card-add" id="pd-res-add-btn" onclick="event.stopPropagation();openResourceModal()">+ Add</button>
-                  <svg class="pd-rp-card-chevron open" id="pd-rp-chev-resources" width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 5l4 4 4-4"/></svg>
-                </div>
-              </div>
-              <div class="pd-rp-card-body" id="pd-rp-body-resources">
-                <div id="pd-res-list-wrap"><div style="font-size:13px;color:var(--text-3);font-style:italic;padding:4px 0">No resources yet.</div></div>
-              </div>
-            </div>
-
-            <!-- Team card -->
-            <div class="pd-rp-card" id="pd-rp-card-team">
-              <div class="pd-rp-card-hdr" onclick="toggleRpCard('pd-rp-body-team','pd-rp-chev-team')">
-                <div class="pd-rp-card-title">Team</div>
-                <div class="pd-rp-card-actions">
-                  <button class="pd-rp-card-add pd-add-member-btn" id="pd-tm-add-btn" onclick="event.stopPropagation();openTeamMemberModal()">+ Add</button>
-                  <svg class="pd-rp-card-chevron open" id="pd-rp-chev-team" width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 5l4 4 4-4"/></svg>
-                </div>
-              </div>
-              <div class="pd-rp-card-body" id="pd-rp-body-team">
-                <div id="pd-tm-list-wrap"><div style="font-size:13px;color:var(--text-3);font-style:italic;padding:4px 0">No team members yet.</div></div>
-              </div>
-            </div>
-
-            <!-- Tools card -->
-            <div class="pd-rp-card" id="pd-rp-card-tools">
-              <div class="pd-rp-card-hdr" onclick="toggleRpCard('pd-rp-body-tools','pd-rp-chev-tools')">
-                <div class="pd-rp-card-title">Tools</div>
-                <div class="pd-rp-card-actions">
-                  <button class="pd-rp-card-add" id="pd-tools-add-btn" onclick="event.stopPropagation();openToolsModal()">+ Add</button>
-                  <svg class="pd-rp-card-chevron open" id="pd-rp-chev-tools" width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 5l4 4 4-4"/></svg>
-                </div>
-              </div>
-              <div class="pd-rp-card-body" id="pd-rp-body-tools">
-                <div id="pd-tools-list-wrap"><div style="font-size:13px;color:var(--text-3);font-style:italic;padding:4px 0">No integrations connected.</div></div>
-              </div>
-            </div>
           </div>
         </div>
 
@@ -11258,16 +11225,19 @@ function renderProjectDetail(proj) {
   const sub = document.getElementById('pd-subtitle');
   if (sub) { sub.textContent = proj.tagline || ''; if (!proj.tagline) sub.setAttribute('data-placeholder','Add a description…'); }
 
-  // Template body (left column)
+  // Template body (left column) — type-specific IBM Way sections + shared framework
   const body = document.getElementById('pd-template-body');
   if (body) {
     const type = proj.type || 'initiative';
-    if      (type === 'initiative') body.innerHTML = _buildInitiativeTemplate(proj);
-    else if (type === 'company')    body.innerHTML = _buildCompanyTemplate(proj);
-    else                             body.innerHTML = _buildThemeTemplate(proj);
+    let typeHtml = '';
+    if      (type === 'initiative') typeHtml = _buildInitiativeTemplate(proj);
+    else if (type === 'company')    typeHtml = _buildCompanyTemplate(proj);
+    else                             typeHtml = _buildThemeTemplate(proj);
+    // Always append the standardized Resources · Team · Tools framework
+    body.innerHTML = typeHtml + _buildFrameworkSections(proj);
   }
 
-  // Right panel — resources + team
+  // Populate dynamic lists inside the framework sections
   _renderRightPanel(proj);
 
   // Share page and Investor Room buttons removed from project header
@@ -11678,6 +11648,78 @@ function submitTeamMember() {
   _renderRightPanel(proj);
   const displayName = name || email;
   showToast(`${displayName} added — project access granted.`, 'success');
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   STANDARDIZED FRAMEWORK SECTIONS — Resources · Team · Tools
+   These render identically on every project type (initiative, company, theme)
+   and appear below the type-specific IBM Way sections.
+══════════════════════════════════════════════════════════════════════════ */
+function _buildFrameworkSections(proj) {
+  const viewerHideAdd = _isViewerMode ? 'style="display:none"' : '';
+  return `
+    <div class="pd-framework-divider">
+      <span class="pd-framework-divider-label">Framework</span>
+    </div>
+
+    <!-- Resources -->
+    <div class="pd-section">
+      <div class="pd-section-header">
+        <div class="pd-section-title">
+          <div class="pd-section-icon framework">
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.75">
+              <path d="M2 3h8M2 6h8M2 9h5"/>
+              <rect x="1" y="1.5" width="10" height="9" rx="1.5"/>
+            </svg>
+          </div>
+          Resources
+        </div>
+        <button class="pd-section-add-btn" id="pd-res-add-btn" onclick="openResourceModal()" ${viewerHideAdd}>+ Add</button>
+      </div>
+      <div id="pd-res-list-wrap">
+        <div style="font-size:13px;color:var(--text-3);font-style:italic;padding:4px 0">No resources yet.</div>
+      </div>
+    </div>
+
+    <!-- Team -->
+    <div class="pd-section">
+      <div class="pd-section-header">
+        <div class="pd-section-title">
+          <div class="pd-section-icon framework">
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.75">
+              <circle cx="4" cy="4" r="1.8"/>
+              <circle cx="8" cy="4" r="1.8"/>
+              <path d="M1 9.5c0-1.5 1.3-2.7 3-2.7s3 1.2 3 2.7"/>
+              <path d="M8 6.8a3 2.7 0 012 2.7"/>
+            </svg>
+          </div>
+          Team
+        </div>
+        <button class="pd-section-add-btn pd-add-member-btn" id="pd-tm-add-btn" onclick="openTeamMemberModal()" ${viewerHideAdd}>+ Add</button>
+      </div>
+      <div id="pd-tm-list-wrap">
+        <div style="font-size:13px;color:var(--text-3);font-style:italic;padding:4px 0">No team members yet.</div>
+      </div>
+    </div>
+
+    <!-- Tools -->
+    <div class="pd-section">
+      <div class="pd-section-header">
+        <div class="pd-section-title">
+          <div class="pd-section-icon framework">
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.75">
+              <path d="M9.5 2.5a2.5 2.5 0 00-4 2l-4 4a1 1 0 001.4 1.4l4-4a2.5 2.5 0 002-4z"/>
+              <circle cx="9" cy="3" r=".6" fill="currentColor" stroke="none"/>
+            </svg>
+          </div>
+          Tools
+        </div>
+        <button class="pd-section-add-btn" id="pd-tools-add-btn" onclick="openToolsModal()" ${viewerHideAdd}>+ Connect</button>
+      </div>
+      <div id="pd-tools-list-wrap">
+        <div style="font-size:13px;color:var(--text-3);font-style:italic;padding:4px 0">No integrations connected.</div>
+      </div>
+    </div>`;
 }
 
 /* ── IBM Way: Initiative template ─────────────────────────────────────────
