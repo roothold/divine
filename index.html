@@ -11321,43 +11321,7 @@ function _buildInitiativeTemplate(proj) {
 
 function _buildCompanyTemplate(proj) {
 
-  const bmcNotes   = proj.bmcNotes   || {};
-  const resources  = Array.isArray(proj.resources) ? proj.resources : [];
-  const teamArr    = Array.isArray(proj.team) ? proj.team : [];
-
-  const resHtml = resources.map((r, i) =>
-    `<div class="cp-res-item">
-      <span class="cp-res-label">${escHtml(r.label || '')}</span>
-      <a class="cp-res-link" href="${escHtml(r.url)}" target="_blank" rel="noopener">${escHtml(r.url)}</a>
-      <button class="cp-res-del" onclick="cpDeleteResource(${i})">×</button>
-    </div>`).join('');
-
-  const teamByRole = {};
-  teamArr.forEach(m => {
-    const r = m.role || 'staff';
-    if (!teamByRole[r]) teamByRole[r] = [];
-    teamByRole[r].push(m);
-  });
-  const ROLE_ORDER = ['thinker','advisory','investor','staff'];
-  const ROLE_LABELS = { thinker:'Thinker Lab', advisory:'Advisory Board', investor:'Investor', staff:'Staff' };
-  const teamHtml = ROLE_ORDER.filter(r => teamByRole[r]?.length).map(role =>
-    `<div class="cp-team-group-label">${ROLE_LABELS[role]}</div>` +
-    teamByRole[role].map((m, mi) => {
-      const initials = (m.name||m.email||'?').split(' ').map(p=>p[0]).join('').slice(0,2).toUpperCase();
-      const actualIdx = teamArr.indexOf(m);
-      return `<div class="cp-team-member-card">
-        <div class="cp-team-member-avatar">${initials}</div>
-        <div class="cp-team-member-body">
-          <div class="cp-team-member-name">${escHtml(m.name||m.email)}</div>
-          <div class="cp-team-member-email">${escHtml(m.email||'')} · <span class="role-badge role-${escHtml(m.role)}" style="font-size:10px">${escHtml(ROLE_LABELS[m.role]||m.role)}</span></div>
-        </div>
-        <div class="cp-team-member-actions">
-          ${m.status==='invited' ? `<button class="cp-team-approve-btn" onclick="cpApproveTeamMember(${actualIdx})">Approve</button>` : `<span class="adv-member-status adv-status-active">Active</span>`}
-          <button class="cp-team-remove-btn" onclick="cpRemoveTeamMember(${actualIdx})">Remove</button>
-        </div>
-      </div>`;
-    }).join('')
-  ).join('');
+  const bmcNotes  = proj.bmcNotes || {};
 
   function _bmcNote(fieldId, key) {
     const val = bmcNotes[key] || '';
@@ -11375,34 +11339,6 @@ function _buildCompanyTemplate(proj) {
   }
 
   return `
-    <div class="pd-section">
-      <div class="pd-section-header">
-        <div class="pd-section-title"><div class="pd-section-icon company"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.75"><circle cx="6" cy="4" r="2"/><path d="M2 10c0-2 1.8-3.5 4-3.5S10 8 10 10"/><path d="M9 6l2 2-2 2"/><path d="M11 8H7"/></svg></div>Team</div>
-      </div>
-      <div class="cp-team-section">
-        <div class="cp-team-invite-row">
-          <div>
-            <div class="adv-invite-label" style="margin-bottom:5px">Email</div>
-            <input class="adv-invite-input" id="cp-team-email" type="email" placeholder="team@yourcompany.com">
-          </div>
-          <div>
-            <div class="adv-invite-label" style="margin-bottom:5px">Role</div>
-            <select class="adv-invite-select" id="cp-team-role">
-              <option value="thinker">Thinker</option>
-              <option value="advisory">Advisory Board</option>
-              <option value="investor">Investor</option>
-              <option value="staff">Staff</option>
-            </select>
-          </div>
-          <div style="padding-top:21px">
-            <button class="adv-invite-btn" onclick="cpAddTeamMember()">Invite →</button>
-          </div>
-        </div>
-        <div class="cp-team-members" id="cp-team-members">
-          ${teamHtml || '<div class="staff-empty" style="margin-top:4px">No team members yet. Invite your first team member above.</div>'}
-        </div>
-      </div>
-    </div>
     <div class="pd-section">
       <div class="pd-section-header">
         <div class="pd-section-title"><div class="pd-section-icon company"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.75"><rect x="1" y="2" width="10" height="8" rx="1"/><path d="M1 5h10"/></svg></div>Business Model Canvas</div>
