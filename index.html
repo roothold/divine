@@ -3960,6 +3960,15 @@
     .pf-rf-label { font-size:10px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:#BF452A; margin-bottom:4px; }
     .pf-rf-title { font-family:'Cormorant Garamond',serif; font-size:18px; font-weight:500; color:#1a1a18; line-height:1.25; margin-bottom:6px; }
     .pf-rf-body { font-size:13px; color:#6b6357; line-height:1.6; }
+    /* Next Move — prominent action callout */
+    .pf-next-move { background:#0F0E0C; border-radius:12px; padding:20px 22px; margin-bottom:12px; display:flex; align-items:flex-start; gap:14px; }
+    .pf-next-move-icon { width:32px; height:32px; border-radius:8px; background:rgba(255,255,255,.08); display:flex; align-items:center; justify-content:center; flex-shrink:0; margin-top:1px; }
+    .pf-next-move-label { font-size:9.5px; font-weight:700; letter-spacing:.12em; text-transform:uppercase; color:rgba(255,255,255,.4); margin-bottom:5px; }
+    .pf-next-move-text { font-size:13.5px; font-weight:500; color:#fff; line-height:1.55; }
+    /* Verification Test — subtle bordered card */
+    .pf-verify { border:1px solid rgba(0,0,0,.1); border-radius:12px; padding:18px 20px; margin-bottom:16px; background:#fafaf8; }
+    .pf-verify-label { font-size:9.5px; font-weight:700; letter-spacing:.12em; text-transform:uppercase; color:var(--text-3); margin-bottom:7px; display:flex; align-items:center; gap:6px; }
+    .pf-verify-text { font-size:13px; color:var(--text-1); line-height:1.6; }
     .pf-revel-actions { display:flex; gap:10px; flex-wrap:wrap; padding-top:4px; }
     .pf-revel-save { background:#BF452A; color:#fff; border:none; border-radius:100px; padding:11px 22px; font-size:13px; font-weight:600; cursor:pointer; font-family:'Inter',sans-serif; transition:opacity .15s; }
     .pf-revel-save:hover { opacity:.86; }
@@ -5802,7 +5811,11 @@
         <div class="pd-modal-overlay" id="pd-team-modal" style="display:none" onclick="if(event.target===this)closeTeamMemberModal()">
           <div class="pd-modal">
             <div class="pd-modal-title">Add Team Member</div>
-            <div class="pd-modal-sub">Invite a collaborator to this project.</div>
+            <div class="pd-modal-sub">They'll get access to this project on login.</div>
+            <div class="pd-modal-field">
+              <div class="pd-modal-label">Full name</div>
+              <input class="pd-modal-input" id="pd-modal-name" type="text" placeholder="Jane Smith" onkeydown="if(event.key==='Enter')document.getElementById('pd-modal-email').focus()">
+            </div>
             <div class="pd-modal-field">
               <div class="pd-modal-label">Email address</div>
               <input class="pd-modal-input" id="pd-modal-email" type="email" placeholder="colleague@company.com" onkeydown="if(event.key==='Enter')submitTeamMember()">
@@ -5818,7 +5831,7 @@
             </div>
             <div class="pd-modal-actions">
               <button class="pd-modal-cancel" onclick="closeTeamMemberModal()">Cancel</button>
-              <button class="pd-modal-submit" onclick="submitTeamMember()">Send invite →</button>
+              <button class="pd-modal-submit" onclick="submitTeamMember()">Grant access →</button>
             </div>
           </div>
         </div>
@@ -8697,19 +8710,49 @@ async function callPerspective({ stage, decision, answers, onChunk }) {
   const thinkerName  = activeThinker?.name  || 'a world-class strategic thinker';
   const thinkerTitle = activeThinker?.title || 'Advisor';
 
+  // Inject project context if a project is active
+  let projectContext = '';
+  try {
+    const projId = (typeof _chatSession !== 'undefined' && _chatSession?.projectId)
+      || (typeof _pdProjectId !== 'undefined' && _pdProjectId) || null;
+    if (projId) {
+      const allProj = (typeof loadProjects === 'function') ? loadProjects() : [];
+      const proj = allProj.find(p => p.id === projId);
+      if (proj) {
+        projectContext = ` Project context: "${proj.name}"${proj.type ? ' (' + proj.type + ')' : ''}${proj.tagline ? ' — ' + proj.tagline : ''}.`;
+      }
+    }
+  } catch(e) {}
+
   // Build prompt matching the stage
-  let systemPrompt = `You are ${thinkerName}, ${thinkerTitle}. You think in unconventional frameworks and reveal non-obvious insights. When given a problem, you reframe it through your unique cognitive lens.`;
+  let systemPrompt = `You are ${thinkerName}, ${thinkerTitle}.${projectContext} You surface non-obvious, counter-intuitive insights — the kind that reframe the problem entirely.
+
+Reasoning framework (apply silently — do not label these in your output):
+1. Context: Anchor every insight in the specific operational reality, not generic advice.
+2. Compute: Identify the most efficient sequence of actions to unblock the core bottleneck.
+3. Capital: Every recommendation must have a clear link to NPV, runway, or measurable return.
+4. Culture: Flag how this decision affects team speed, trust, and execution capacity.
+
+Rules: Never say "I think," "maybe," or "it might help." Be direct and confident. Lead with the most counter-intuitive signal first. Every recommendation must be verifiable through a measurable outcome within a defined timeframe.`;
+
   let userPrompt   = '';
 
   if (stage === 'reframe' || stage === 'full') {
-    systemPrompt += ` Respond ONLY with valid JSON (no markdown fences) in this exact shape:
+    systemPrompt += `
+
+Respond ONLY with valid JSON (no markdown fences) in this exact shape — fill every field with substantive content:
 {
-  "keyInsight": { "title": "...", "body": "..." },
+  "keyInsight": {
+    "title": "A single sharp, counter-intuitive headline (10 words max)",
+    "body": "2-3 sentences expanding the insight. Specific, not generic. Lead with the non-obvious signal."
+  },
   "frames": [
-    { "label": "FRAME 1", "title": "...", "body": "..." },
-    { "label": "FRAME 2", "title": "...", "body": "..." },
-    { "label": "FRAME 3", "title": "...", "body": "..." }
-  ]
+    { "label": "Bottleneck", "title": "Name the core constraint", "body": "What is the real blocker and why the obvious fix misses it." },
+    { "label": "Leverage", "title": "Name the asymmetric move", "body": "The highest-leverage action that compounds — why this and not the alternatives." },
+    { "label": "Risk", "title": "Name the failure mode", "body": "The most likely way this goes wrong and the early signal that it is." }
+  ],
+  "verificationTest": "Specific, measurable sentence: 'If this is working, within [X days/weeks] you will see [specific metric or behavior change]. The signal to watch: [one leading indicator].'",
+  "nextMove": "The single highest-leverage action to take in the next 72 hours. One sentence, starts with a verb."
 }`;
     userPrompt = `Problem / decision: "${decision || decisionText}"`;
   } else if (stage === 'questions') {
@@ -8732,7 +8775,7 @@ async function callPerspective({ stage, decision, answers, onChunk }) {
     },
     body: JSON.stringify({
       model:      ACTIVE_MODEL,
-      max_tokens: 1200,
+      max_tokens: 1600,
       system:     systemPrompt,
       messages:   [{ role: 'user', content: userPrompt }],
     }),
@@ -11481,20 +11524,23 @@ function toggleRpCard(bodyId, chevId) {
 function openTeamMemberModal() {
   const modal = document.getElementById('pd-team-modal');
   if (modal) {
+    document.getElementById('pd-modal-name').value  = '';
+    document.getElementById('pd-modal-email').value = '';
     modal.style.display = 'flex';
-    document.getElementById('pd-modal-email')?.focus();
+    setTimeout(() => document.getElementById('pd-modal-name').focus(), 60);
   }
 }
 
 function closeTeamMemberModal() {
   const modal = document.getElementById('pd-team-modal');
   if (modal) modal.style.display = 'none';
-  const emailEl = document.getElementById('pd-modal-email');
-  if (emailEl) emailEl.value = '';
+  document.getElementById('pd-modal-name').value  = '';
+  document.getElementById('pd-modal-email').value = '';
 }
 
 function submitTeamMember() {
   if (!_pdProjectId) return;
+  const name  = document.getElementById('pd-modal-name')?.value.trim();
   const email = document.getElementById('pd-modal-email')?.value.trim();
   const role  = document.getElementById('pd-modal-role')?.value || 'staff';
   if (!email || !email.includes('@')) { showToast('Enter a valid email address', 'error'); return; }
@@ -11506,13 +11552,31 @@ function submitTeamMember() {
   if (idx < 0) return;
   const proj = projects[idx];
   if (!Array.isArray(proj.team)) proj.team = [];
-  if (proj.team.find(m => m.email === email)) { showToast('That email is already on the team', 'error'); return; }
-  proj.team.push({ email, role, status: 'invited', invitedAt: new Date().toISOString() });
+  if (proj.team.find(m => m.email.toLowerCase() === email.toLowerCase())) {
+    showToast('That email is already on the team', 'error'); return;
+  }
+  proj.team.push({ name: name || '', email, role, status: 'active', addedAt: new Date().toISOString() });
   saveProjects(projects);
+
+  // Write share record so they see the project in "Shared with me" on login
   try { _writeShareRecord(email, proj.id, role); } catch(e) {}
+
+  // If that user is already logged in on this device, refresh their view immediately
+  try {
+    if (currentUser?.email?.toLowerCase() !== email.toLowerCase()) {
+      // Check if we can find a stored user matching this email and refresh their shared projects
+      const storedUser = (() => { try { return JSON.parse(localStorage.getItem('di_user') || 'null'); } catch(e) { return null; } })();
+      if (storedUser?.email?.toLowerCase() === email.toLowerCase()) {
+        _loadSharedProjects(email);
+        renderDcProjects();
+      }
+    }
+  } catch(e) {}
+
   closeTeamMemberModal();
   _renderRightPanel(proj);
-  showToast(`${email} invited — they'll see this project on login.`, 'success');
+  const displayName = name || email;
+  showToast(`${displayName} added — project access granted.`, 'success');
 }
 
 function _buildInitiativeTemplate(proj) {
@@ -12621,6 +12685,24 @@ function pfToRevelation(d) {
           <div class="pf-rf-body">${f.body  || ''}</div>
         </div>`).join('')}
     </div>
+    ${d.nextMove ? `
+    <div class="pf-next-move" id="pf-next-move" style="opacity:0;transition:opacity .4s ease">
+      <div class="pf-next-move-icon">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="rgba(255,255,255,.7)" stroke-width="1.75" stroke-linecap="round"><path d="M2 7h10M8 3l4 4-4 4"/></svg>
+      </div>
+      <div>
+        <div class="pf-next-move-label">Next Move — 72 hrs</div>
+        <div class="pf-next-move-text">${d.nextMove}</div>
+      </div>
+    </div>` : ''}
+    ${d.verificationTest ? `
+    <div class="pf-verify" id="pf-verify" style="opacity:0;transition:opacity .4s ease">
+      <div class="pf-verify-label">
+        <svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.75"><circle cx="6" cy="6" r="4.5"/><path d="M6 4v2.5l1.5 1.5"/></svg>
+        Verification Test
+      </div>
+      <div class="pf-verify-text">${d.verificationTest}</div>
+    </div>` : ''}
     <div class="pf-revel-actions">
       <button class="pf-revel-save" onclick="pfSavePerspective()">Save to Perspective</button>
       <button class="pf-revel-view" onclick="pfViewPerspective()">View Perspective</button>
@@ -12634,12 +12716,23 @@ function pfToRevelation(d) {
   pfTypewrite('pf-ri-title', d.keyInsight.title, 26, () => {
     document.getElementById('pf-ri-body').textContent = d.keyInsight.body;
     document.getElementById('pf-ri-body').style.opacity = '.88';
+    const frameCount = d.frames.length;
     d.frames.forEach((_, i) => {
       setTimeout(() => {
         const fc = document.getElementById(`pf-rf-${i}`);
         if (fc) fc.classList.add('pf-in');
       }, 320 + i * 110);
     });
+    // Fade in Next Move and Verification Test after frames settle
+    const postDelay = 320 + frameCount * 110 + 300;
+    setTimeout(() => {
+      const nm = document.getElementById('pf-next-move');
+      if (nm) nm.style.opacity = '1';
+    }, postDelay);
+    setTimeout(() => {
+      const vt = document.getElementById('pf-verify');
+      if (vt) vt.style.opacity = '1';
+    }, postDelay + 200);
   });
 }
 
@@ -13498,20 +13591,6 @@ async function sendChatMsg() {
   const aiId   = 'cm_' + Date.now();
   const aiEl   = _appendChatMsg('assistant', '', { id: aiId, streaming: true, skipSave: _isFirstMsg });
   const bubble = aiEl.querySelector('.chat-msg-bubble');
-
-  // ── Intake flow: first message → show clarifying questions, skip API ────
-  if (_isFirstMsg) {
-    bubble.classList.remove('chat-cursor');
-    _showIntakeCard(text, bubble);
-    // Remove the user message from session (intake exchange is transient —
-    // the compiled message sent after selection becomes the real first turn)
-    _chatSession.messages = _chatSession.messages.filter(m => m !== _chatSession.messages.find(x => x.role === 'user' && x.content === displayText));
-    _chatStreaming = false;
-    document.getElementById('chat-send-btn').disabled = false;
-    const msgs2 = document.getElementById('chat-messages');
-    msgs2.scrollTop = msgs2.scrollHeight;
-    return;
-  }
 
   bubble.classList.add('chat-cursor');
   bubble.textContent = '';
