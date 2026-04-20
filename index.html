@@ -11680,91 +11680,145 @@ function submitTeamMember() {
   showToast(`${displayName} added — project access granted.`, 'success');
 }
 
+/* ── IBM Way: Initiative template ─────────────────────────────────────────
+   Sections: Transformation Objective · Intelligent Workflow · AI & Enablers
+             · Value Metrics
+─────────────────────────────────────────────────────────────────────────── */
 function _buildInitiativeTemplate(proj) {
-  const ms = Array.isArray(proj.milestones) ? proj.milestones : [];
-  const msHtml = ms.map((m, i) =>
-    `<div class="pd-check-row" id="pd-ms-${i}">
-      <div class="pd-check-box ${m.done?'done':''}" onclick="pdToggleMilestone(${i})">${m.done?'<svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M2 5l2.5 2.5 3.5-4"/></svg>':''}</div>
-      <input class="pd-check-input ${m.done?'done':''}" value="${_sv(m.text)}" placeholder="Milestone…" onchange="pdUpdateMilestone(${i},this.value)">
-      <button class="pd-check-del" onclick="pdDeleteMilestone(${i})">×</button>
+  const steps = Array.isArray(proj.workflowSteps) ? proj.workflowSteps : [];
+  const stepsHtml = steps.map((s, i) =>
+    `<div class="pd-check-row" id="pd-step-${i}">
+      <div class="pd-check-box ${s.done?'done':''}" onclick="pdToggleStep(${i})">${s.done?'<svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M2 5l2.5 2.5 3.5-4"/></svg>':''}</div>
+      <input class="pd-check-input ${s.done?'done':''}" value="${_sv(s.text)}" placeholder="Workflow step…" onchange="pdUpdateStep(${i},this.value)">
+      <button class="pd-check-del" onclick="pdDeleteStep(${i})">×</button>
     </div>`
   ).join('');
 
   return `
     <div class="pd-section">
       <div class="pd-section-header">
-        <div class="pd-section-title"><div class="pd-section-icon initiative"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.75"><circle cx="6" cy="6" r="4"/><path d="M6 3.5v2.5l1.5 1.5"/></svg></div>The North Star</div>
+        <div class="pd-section-title">
+          <div class="pd-section-icon initiative"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M6 1l1.5 3 3.5.5-2.5 2.5.5 3.5L6 9l-3 1.5.5-3.5L1 4.5 4.5 4z"/></svg></div>
+          Transformation Objective
+        </div>
       </div>
-      <textarea class="pd-textarea" id="pd-northstar" placeholder="Define the single sentence that describes successful completion of this initiative…">${_sv(proj.northStar)}</textarea>
+      <textarea class="pd-textarea" id="pd-transformation-obj" placeholder="What business outcome does this initiative deliver? Define success in one clear sentence…">${_sv(proj.transformationObjective)}</textarea>
     </div>
+
     <div class="pd-section">
       <div class="pd-section-header">
-        <div class="pd-section-title"><div class="pd-section-icon initiative"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M2 10V4l4-2 4 2v6"/><path d="M4 10V7h4v3"/></svg></div>Key Milestones</div>
+        <div class="pd-section-title">
+          <div class="pd-section-icon initiative"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M2 6h2l1.5-3 2 6 1.5-3H10"/></svg></div>
+          Intelligent Workflow
+        </div>
       </div>
-      <div class="pd-checklist" id="pd-milestones-list">${msHtml}</div>
-      <button class="pd-add-item" onclick="pdAddMilestone()">
-        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M6 2v8M2 6h8"/></svg>Add milestone
+      <div class="pd-checklist" id="pd-steps-list">${stepsHtml}</div>
+      <button class="pd-add-item" onclick="pdAddStep()">
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M6 2v8M2 6h8"/></svg>Add step
       </button>
     </div>
+
     <div class="pd-section">
       <div class="pd-section-header">
-        <div class="pd-section-title"><div class="pd-section-icon initiative"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.75"><rect x="2" y="3" width="8" height="7" rx="1"/><path d="M4 3V2h4v1"/></svg></div>Resource Allocation</div>
+        <div class="pd-section-title">
+          <div class="pd-section-icon initiative"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.75"><circle cx="6" cy="5" r="2.5"/><path d="M1.5 10.5c0-2.5 2-4 4.5-4s4.5 1.5 4.5 4"/><path d="M8.5 2.5l1.5-1M10 4.5h1.5"/></svg></div>
+          AI & Technology Enablers
+        </div>
       </div>
-      <textarea class="pd-textarea" id="pd-resources" placeholder="Summarise what is being invested — time, capital, team bandwidth, social equity…">${_sv(proj.resourceAllocation)}</textarea>
+      <textarea class="pd-textarea" id="pd-ai-enablers" placeholder="Which AI models, data sources, automation tools, or cloud services are being deployed?…">${_sv(proj.aiEnablers)}</textarea>
+    </div>
+
+    <div class="pd-section">
+      <div class="pd-section-header">
+        <div class="pd-section-title">
+          <div class="pd-section-icon initiative"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M2 9l2-4 2 2 2-5 2 7"/><path d="M1 9h10"/></svg></div>
+          Value Metrics
+        </div>
+      </div>
+      <textarea class="pd-textarea" id="pd-value-metrics" placeholder="How will success be measured? Efficiency gains, cost reduction, customer experience, revenue impact…">${_sv(proj.valueMetrics)}</textarea>
     </div>`;
 }
 
 function _buildCompanyTemplate(proj) {
-  return ''; // Company projects: no structured template — use the perspectives input directly
+  return ''; // Company projects: use the perspectives input directly
 }
 
+/* ── IBM Way: Theme template ───────────────────────────────────────────────
+   Sections: Strategic Thesis · AI Opportunities · Integration Points
+             · Open Hypotheses
+─────────────────────────────────────────────────────────────────────────── */
 function _buildThemeTemplate(proj) {
-  const kw = Array.isArray(proj.knowledgeWeb) ? proj.knowledgeWeb : [];
-  const oq = Array.isArray(proj.openQuestions) ? proj.openQuestions : [];
+  const aiOpp  = Array.isArray(proj.aiOpportunities)  ? proj.aiOpportunities  : [];
+  const intPts  = Array.isArray(proj.integrationPoints) ? proj.integrationPoints : [];
+  const hyps    = Array.isArray(proj.openHypotheses)   ? proj.openHypotheses   : [];
 
-  const kwHtml = kw.map((k, i) =>
+  const aiOppHtml = aiOpp.map((o, i) =>
     `<div class="pd-item-row">
-      <input class="pd-item-input" value="${_sv(k.title)}" placeholder="Title…" onchange="pdUpdateKW(${i},'title',this.value)" style="flex:1">
-      <input class="pd-item-input" value="${_sv(k.url)}" placeholder="URL (optional)…" onchange="pdUpdateKW(${i},'url',this.value)" style="flex:1.2">
-      <button class="pd-item-del" onclick="pdDeleteKW(${i})">×</button>
+      <input class="pd-item-input" value="${_sv(o.text)}" placeholder="AI or automation opportunity…" onchange="pdUpdateAIOpp(${i},this.value)" style="flex:1">
+      <button class="pd-item-del" onclick="pdDeleteAIOpp(${i})">×</button>
     </div>`).join('');
 
-  const oqHtml = oq.map((q, i) =>
+  const intPtsHtml = intPts.map((p, i) =>
+    `<div class="pd-item-row">
+      <input class="pd-item-input" value="${_sv(p.system)}" placeholder="System, team, or data source…" onchange="pdUpdateIntPt(${i},'system',this.value)" style="flex:1">
+      <input class="pd-item-input" value="${_sv(p.connection)}" placeholder="Connection type or dependency…" onchange="pdUpdateIntPt(${i},'connection',this.value)" style="flex:1.2">
+      <button class="pd-item-del" onclick="pdDeleteIntPt(${i})">×</button>
+    </div>`).join('');
+
+  const hypsHtml = hyps.map((h, i) =>
     `<div class="pd-check-row">
-      <div class="pd-check-box" style="background:var(--surface-2)"><svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.75"><circle cx="5" cy="5" r="3"/></svg></div>
-      <input class="pd-check-input" value="${_sv(q.text)}" placeholder="Open question…" onchange="pdUpdateOQ(${i},this.value)">
-      <button class="pd-check-del" onclick="pdDeleteOQ(${i})">×</button>
+      <div class="pd-check-box ${h.validated?'done':''}" onclick="pdToggleHyp(${i})">${h.validated?'<svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M2 5l2.5 2.5 3.5-4"/></svg>':''}</div>
+      <input class="pd-check-input ${h.validated?'done':''}" value="${_sv(h.text)}" placeholder="Assumption to validate…" onchange="pdUpdateHyp(${i},this.value)">
+      <button class="pd-check-del" onclick="pdDeleteHyp(${i})">×</button>
     </div>`).join('');
 
   return `
     <div class="pd-section">
       <div class="pd-section-header">
-        <div class="pd-section-title"><div class="pd-section-icon theme"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.75"><circle cx="6" cy="6" r="4.5"/><path d="M6 3.5v2.5l1.5 1.5"/></svg></div>Central Thesis</div>
+        <div class="pd-section-title">
+          <div class="pd-section-icon theme"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M6 1l1.5 3 3.5.5-2.5 2.5.5 3.5L6 9l-3 1.5.5-3.5L1 4.5 4.5 4z"/></svg></div>
+          Strategic Thesis
+        </div>
       </div>
-      <textarea class="pd-textarea" id="pd-thesis" placeholder="What is the core belief or observation that ties these perspectives together?" style="min-height:90px">${_sv(proj.centralThesis)}</textarea>
+      <textarea class="pd-textarea" id="pd-strategic-thesis" placeholder="What is the core transformation belief or hypothesis driving this theme?…" style="min-height:90px">${_sv(proj.strategicThesis)}</textarea>
     </div>
+
     <div class="pd-section">
       <div class="pd-section-header">
-        <div class="pd-section-title"><div class="pd-section-icon theme"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M3 6a3 3 0 006 0A3 3 0 003 6zM6 3v-1M6 10v-1M3 6H2M10 6H9"/></svg></div>Knowledge Web</div>
+        <div class="pd-section-title">
+          <div class="pd-section-icon theme"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.75"><circle cx="6" cy="5" r="2.5"/><path d="M1.5 10.5c0-2.5 2-4 4.5-4s4.5 1.5 4.5 4"/><path d="M8.5 2.5l1.5-1M10 4.5h1.5"/></svg></div>
+          AI Opportunities
+        </div>
       </div>
-      <div class="pd-item-list" id="pd-kw-list">${kwHtml}</div>
-      <button class="pd-add-item" onclick="pdAddKW()">
-        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M6 2v8M2 6h8"/></svg>Add resource
+      <div class="pd-item-list" id="pd-aiopp-list">${aiOppHtml}</div>
+      <button class="pd-add-item" onclick="pdAddAIOpp()">
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M6 2v8M2 6h8"/></svg>Add opportunity
       </button>
     </div>
+
     <div class="pd-section">
       <div class="pd-section-header">
-        <div class="pd-section-title"><div class="pd-section-icon theme"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M2 6h2l2-4 2 8 2-4h2"/></svg></div>Cross-Pollination</div>
+        <div class="pd-section-title">
+          <div class="pd-section-icon theme"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.75"><circle cx="3" cy="3" r="1.5"/><circle cx="9" cy="3" r="1.5"/><circle cx="6" cy="9" r="1.5"/><path d="M4.5 3h3M3.75 4.2L5.25 7.8M8.25 4.2L6.75 7.8"/></svg></div>
+          Integration Points
+        </div>
       </div>
-      <div id="pd-crosspoll-body" style="font-size:13px;color:var(--text-2);line-height:1.6"></div>
+      <div class="pd-item-list" id="pd-intpts-list">${intPtsHtml}</div>
+      <button class="pd-add-item" onclick="pdAddIntPt()">
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M6 2v8M2 6h8"/></svg>Add integration
+      </button>
     </div>
+
     <div class="pd-section">
       <div class="pd-section-header">
-        <div class="pd-section-title"><div class="pd-section-icon theme"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.75"><circle cx="6" cy="6" r="4.5"/><path d="M6 4v3M6 8.5v.5"/></svg></div>Open Questions</div>
+        <div class="pd-section-title">
+          <div class="pd-section-icon theme"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.75"><circle cx="6" cy="6" r="4.5"/><path d="M6 4v3M6 8.5v.5"/></svg></div>
+          Open Hypotheses
+        </div>
       </div>
-      <div class="pd-checklist" id="pd-oq-list">${oqHtml}</div>
-      <button class="pd-add-item" onclick="pdAddOQ()">
-        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M6 2v8M2 6h8"/></svg>Add question
+      <div class="pd-checklist" id="pd-hyp-list">${hypsHtml}</div>
+      <button class="pd-add-item" onclick="pdAddHyp()">
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M6 2v8M2 6h8"/></svg>Add hypothesis
       </button>
     </div>`;
 }
@@ -11917,21 +11971,17 @@ function saveProjectDetailChanges() {
   if (titleEl) proj.name    = titleEl.textContent.trim() || proj.name;
   if (subEl)   proj.tagline = subEl.textContent.trim();
 
-  // Template-specific fields
+  // Template-specific fields (IBM Way framework)
   if (type === 'initiative') {
-    const ns = document.getElementById('pd-northstar');
-    const ra = document.getElementById('pd-resources');
-    if (ns) proj.northStar = ns.value;
-    if (ra) proj.resourceAllocation = ra.value;
-  } else if (type === 'company') {
-    // Company template now uses the same fields as initiative
-    const ns = document.getElementById('pd-northstar');
-    const ra = document.getElementById('pd-resources');
-    if (ns) proj.northStar = ns.value;
-    if (ra) proj.resourceAllocation = ra.value;
+    const to = document.getElementById('pd-transformation-obj');
+    const ae = document.getElementById('pd-ai-enablers');
+    const vm = document.getElementById('pd-value-metrics');
+    if (to) proj.transformationObjective = to.value;
+    if (ae) proj.aiEnablers              = ae.value;
+    if (vm) proj.valueMetrics            = vm.value;
   } else if (type === 'theme') {
-    const th = document.getElementById('pd-thesis');
-    if (th) proj.centralThesis = th.value;
+    const st = document.getElementById('pd-strategic-thesis');
+    if (st) proj.strategicThesis = st.value;
   }
 
   proj.updatedAt = new Date().toISOString();
@@ -11940,7 +11990,7 @@ function saveProjectDetailChanges() {
   showToast('✓ Project saved');
 }
 
-/* ── Project detail list mutations ── */
+/* ── Project detail list mutations (IBM Way framework) ── */
 function _pdSaveAndRerender() {
   const projects = loadProjects();
   const idx = projects.findIndex(p => p.id === _pdProjectId);
@@ -11953,21 +12003,40 @@ function _pdSaveAndRerender() {
 function _pdGetProj() {
   return loadProjects().find(p => p.id === _pdProjectId);
 }
-function pdToggleMilestone(i) {
+
+// Initiative: Intelligent Workflow steps
+function pdToggleStep(i) {
   const p = _pdGetProj(); if (!p) return;
-  if (p.milestones[i]) p.milestones[i].done = !p.milestones[i].done;
+  if (!p.workflowSteps) p.workflowSteps = [];
+  if (p.workflowSteps[i]) p.workflowSteps[i].done = !p.workflowSteps[i].done;
   const ps = loadProjects(); const idx = ps.findIndex(x=>x.id===_pdProjectId); ps[idx]=p; saveProjects(ps);
   renderProjectDetail(p);
 }
-function pdUpdateMilestone(i, val) { const p=_pdGetProj(); if(!p||!p.milestones[i]) return; p.milestones[i].text=val; const ps=loadProjects(); const idx=ps.findIndex(x=>x.id===_pdProjectId); ps[idx]=p; saveProjects(ps); }
-function pdDeleteMilestone(i) { const p=_pdGetProj(); if(!p) return; p.milestones.splice(i,1); const ps=loadProjects(); const idx=ps.findIndex(x=>x.id===_pdProjectId); ps[idx]=p; saveProjects(ps); renderProjectDetail(p); }
-function pdAddMilestone() { const p=_pdGetProj(); if(!p) return; if(!p.milestones) p.milestones=[]; p.milestones.push({text:'',done:false}); const ps=loadProjects(); const idx=ps.findIndex(x=>x.id===_pdProjectId); ps[idx]=p; saveProjects(ps); renderProjectDetail(p); setTimeout(()=>{ const inputs=document.querySelectorAll('#pd-milestones-list .pd-check-input'); if(inputs.length) inputs[inputs.length-1].focus(); },50); }
-function pdUpdateKW(i,key,val) { const p=_pdGetProj(); if(!p||!p.knowledgeWeb[i]) return; p.knowledgeWeb[i][key]=val; const ps=loadProjects(); const idx=ps.findIndex(x=>x.id===_pdProjectId); ps[idx]=p; saveProjects(ps); }
-function pdDeleteKW(i) { const p=_pdGetProj(); if(!p) return; p.knowledgeWeb.splice(i,1); const ps=loadProjects(); const idx=ps.findIndex(x=>x.id===_pdProjectId); ps[idx]=p; saveProjects(ps); renderProjectDetail(p); }
-function pdAddKW() { const p=_pdGetProj(); if(!p) return; if(!p.knowledgeWeb) p.knowledgeWeb=[]; p.knowledgeWeb.push({title:'',url:''}); const ps=loadProjects(); const idx=ps.findIndex(x=>x.id===_pdProjectId); ps[idx]=p; saveProjects(ps); renderProjectDetail(p); }
-function pdUpdateOQ(i,val) { const p=_pdGetProj(); if(!p||!p.openQuestions[i]) return; p.openQuestions[i].text=val; const ps=loadProjects(); const idx=ps.findIndex(x=>x.id===_pdProjectId); ps[idx]=p; saveProjects(ps); }
-function pdDeleteOQ(i) { const p=_pdGetProj(); if(!p) return; p.openQuestions.splice(i,1); const ps=loadProjects(); const idx=ps.findIndex(x=>x.id===_pdProjectId); ps[idx]=p; saveProjects(ps); renderProjectDetail(p); }
-function pdAddOQ() { const p=_pdGetProj(); if(!p) return; if(!p.openQuestions) p.openQuestions=[]; p.openQuestions.push({text:''}); const ps=loadProjects(); const idx=ps.findIndex(x=>x.id===_pdProjectId); ps[idx]=p; saveProjects(ps); renderProjectDetail(p); setTimeout(()=>{ const inputs=document.querySelectorAll('#pd-oq-list .pd-check-input'); if(inputs.length) inputs[inputs.length-1].focus(); },50); }
+function pdUpdateStep(i, val) { const p=_pdGetProj(); if(!p||!p.workflowSteps||!p.workflowSteps[i]) return; p.workflowSteps[i].text=val; const ps=loadProjects(); const idx=ps.findIndex(x=>x.id===_pdProjectId); ps[idx]=p; saveProjects(ps); }
+function pdDeleteStep(i) { const p=_pdGetProj(); if(!p) return; p.workflowSteps.splice(i,1); const ps=loadProjects(); const idx=ps.findIndex(x=>x.id===_pdProjectId); ps[idx]=p; saveProjects(ps); renderProjectDetail(p); }
+function pdAddStep() { const p=_pdGetProj(); if(!p) return; if(!p.workflowSteps) p.workflowSteps=[]; p.workflowSteps.push({text:'',done:false}); const ps=loadProjects(); const idx=ps.findIndex(x=>x.id===_pdProjectId); ps[idx]=p; saveProjects(ps); renderProjectDetail(p); setTimeout(()=>{ const inputs=document.querySelectorAll('#pd-steps-list .pd-check-input'); if(inputs.length) inputs[inputs.length-1].focus(); },50); }
+
+// Theme: AI Opportunities
+function pdUpdateAIOpp(i,val) { const p=_pdGetProj(); if(!p||!p.aiOpportunities||!p.aiOpportunities[i]) return; p.aiOpportunities[i].text=val; const ps=loadProjects(); const idx=ps.findIndex(x=>x.id===_pdProjectId); ps[idx]=p; saveProjects(ps); }
+function pdDeleteAIOpp(i) { const p=_pdGetProj(); if(!p) return; p.aiOpportunities.splice(i,1); const ps=loadProjects(); const idx=ps.findIndex(x=>x.id===_pdProjectId); ps[idx]=p; saveProjects(ps); renderProjectDetail(p); }
+function pdAddAIOpp() { const p=_pdGetProj(); if(!p) return; if(!p.aiOpportunities) p.aiOpportunities=[]; p.aiOpportunities.push({text:''}); const ps=loadProjects(); const idx=ps.findIndex(x=>x.id===_pdProjectId); ps[idx]=p; saveProjects(ps); renderProjectDetail(p); setTimeout(()=>{ const inputs=document.querySelectorAll('#pd-aiopp-list .pd-item-input'); if(inputs.length) inputs[inputs.length-2]?.focus(); },50); }
+
+// Theme: Integration Points
+function pdUpdateIntPt(i,key,val) { const p=_pdGetProj(); if(!p||!p.integrationPoints||!p.integrationPoints[i]) return; p.integrationPoints[i][key]=val; const ps=loadProjects(); const idx=ps.findIndex(x=>x.id===_pdProjectId); ps[idx]=p; saveProjects(ps); }
+function pdDeleteIntPt(i) { const p=_pdGetProj(); if(!p) return; p.integrationPoints.splice(i,1); const ps=loadProjects(); const idx=ps.findIndex(x=>x.id===_pdProjectId); ps[idx]=p; saveProjects(ps); renderProjectDetail(p); }
+function pdAddIntPt() { const p=_pdGetProj(); if(!p) return; if(!p.integrationPoints) p.integrationPoints=[]; p.integrationPoints.push({system:'',connection:''}); const ps=loadProjects(); const idx=ps.findIndex(x=>x.id===_pdProjectId); ps[idx]=p; saveProjects(ps); renderProjectDetail(p); setTimeout(()=>{ const inputs=document.querySelectorAll('#pd-intpts-list .pd-item-input'); if(inputs.length) inputs[inputs.length-2]?.focus(); },50); }
+
+// Theme: Open Hypotheses
+function pdToggleHyp(i) {
+  const p = _pdGetProj(); if (!p) return;
+  if (!p.openHypotheses) p.openHypotheses = [];
+  if (p.openHypotheses[i]) p.openHypotheses[i].validated = !p.openHypotheses[i].validated;
+  const ps = loadProjects(); const idx = ps.findIndex(x=>x.id===_pdProjectId); ps[idx]=p; saveProjects(ps);
+  renderProjectDetail(p);
+}
+function pdUpdateHyp(i,val) { const p=_pdGetProj(); if(!p||!p.openHypotheses||!p.openHypotheses[i]) return; p.openHypotheses[i].text=val; const ps=loadProjects(); const idx=ps.findIndex(x=>x.id===_pdProjectId); ps[idx]=p; saveProjects(ps); }
+function pdDeleteHyp(i) { const p=_pdGetProj(); if(!p) return; p.openHypotheses.splice(i,1); const ps=loadProjects(); const idx=ps.findIndex(x=>x.id===_pdProjectId); ps[idx]=p; saveProjects(ps); renderProjectDetail(p); }
+function pdAddHyp() { const p=_pdGetProj(); if(!p) return; if(!p.openHypotheses) p.openHypotheses=[]; p.openHypotheses.push({text:'',validated:false}); const ps=loadProjects(); const idx=ps.findIndex(x=>x.id===_pdProjectId); ps[idx]=p; saveProjects(ps); renderProjectDetail(p); setTimeout(()=>{ const inputs=document.querySelectorAll('#pd-hyp-list .pd-check-input'); if(inputs.length) inputs[inputs.length-1].focus(); },50); }
 
 /* ════════════════════════════════
    DOWNLOADS
