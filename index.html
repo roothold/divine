@@ -1496,8 +1496,33 @@
     .pd-tm-role { font-size:11px; color:var(--text-3); margin-top:1px; }
     .pd-tm-del { color:#ccc; background:none; border:none; cursor:pointer; font-size:16px; padding:0 2px; flex-shrink:0; transition:color .12s; }
     .pd-tm-del:hover { color:#F87171; }
-    .pd-add-member-btn { display:inline-flex; align-items:center; gap:5px; margin-top:10px; padding:6px 13px; border:1.5px solid var(--border-md); border-radius:var(--r-pill); background:transparent; cursor:pointer; color:var(--text-2); font-size:12px; font-weight:600; font-family:'Inter',sans-serif; transition:border-color .12s,color .12s; }
-    .pd-add-member-btn:hover { border-color:var(--accent); color:var(--accent); }
+    /* Tools / integrations list in right panel */
+    .pd-tool-item { display:flex; align-items:center; gap:10px; padding:9px 0; border-bottom:1px solid #f5f5f5; }
+    .pd-tool-item:last-child { border-bottom:none; }
+    .pd-tool-icon { width:28px; height:28px; border-radius:7px; border:1px solid var(--border); display:flex; align-items:center; justify-content:center; flex-shrink:0; overflow:hidden; background:#fff; }
+    .pd-tool-icon img { width:18px; height:18px; object-fit:contain; }
+    .pd-tool-body { flex:1; min-width:0; }
+    .pd-tool-name { font-size:13px; font-weight:500; color:var(--text-0); }
+    .pd-tool-status { font-size:11px; color:var(--success); margin-top:1px; }
+    .pd-tool-del { color:#ccc; background:none; border:none; cursor:pointer; font-size:16px; padding:0 2px; flex-shrink:0; transition:color .12s; }
+    .pd-tool-del:hover { color:#F87171; }
+    /* Integration connect modal */
+    .pd-int-search { width:100%; padding:9px 12px; border:1.5px solid var(--border-md); border-radius:var(--r-sm); font-size:13px; font-family:'Inter',sans-serif; color:var(--text-0); background:#fafafa; margin-bottom:14px; outline:none; box-sizing:border-box; transition:border-color .15s; }
+    .pd-int-search:focus { border-color:var(--accent-bdr); background:#fff; }
+    .pd-int-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; max-height:340px; overflow-y:auto; padding-right:2px; }
+    .pd-int-tile { border:1.5px solid var(--border); border-radius:12px; padding:14px 12px 12px; display:flex; flex-direction:column; gap:5px; cursor:default; transition:border-color .15s; }
+    .pd-int-tile.connected { border-color:var(--success-bdr); background:var(--success-lt); }
+    .pd-int-tile-top { display:flex; align-items:center; gap:9px; margin-bottom:2px; }
+    .pd-int-tile-icon { width:30px; height:30px; border-radius:7px; border:1px solid var(--border); background:#fff; display:flex; align-items:center; justify-content:center; flex-shrink:0; overflow:hidden; }
+    .pd-int-tile-icon img { width:20px; height:20px; object-fit:contain; }
+    .pd-int-tile-name { font-size:13px; font-weight:600; color:var(--text-0); }
+    .pd-int-tile-desc { font-size:11.5px; color:var(--text-3); line-height:1.45; flex:1; }
+    .pd-int-connect-btn { margin-top:6px; font-size:11.5px; font-weight:600; font-family:'Inter',sans-serif; padding:5px 10px; border-radius:var(--r-pill); border:1.5px solid var(--border-md); background:#fff; color:var(--text-1); cursor:pointer; transition:border-color .12s,color .12s; align-self:flex-start; }
+    .pd-int-connect-btn:hover { border-color:var(--accent); color:var(--accent); }
+    .pd-int-connect-btn.connected { border-color:var(--success-bdr); background:var(--success-lt); color:var(--success); cursor:default; }
+    /* pd-add-member-btn: when used inside pd-rp-card-hdr, inherits pd-rp-card-add styles */
+    .pd-add-member-btn { display:inline-flex; align-items:center; gap:5px; }
+    .pd-rp-card-add.pd-add-member-btn { margin-top:0; padding:3px 7px; border:none; border-radius:6px; background:none; color:var(--accent); font-size:11px; font-weight:600; }
     /* Team member modal */
     .pd-modal-overlay { position:fixed; inset:0; background:rgba(0,0,0,.35); z-index:900; display:flex; align-items:center; justify-content:center; backdrop-filter:blur(2px); animation:fadein .15s ease; }
     .pd-modal { background:#fff; border-radius:16px; padding:28px; width:360px; max-width:calc(100vw - 32px); box-shadow:0 8px 32px rgba(0,0,0,.18); }
@@ -5694,7 +5719,7 @@
             <div id="pd-template-body"></div>
           </div>
 
-          <!-- ── Right column: resources + team ── -->
+          <!-- ── Right column: resources + team + tools ── -->
           <div class="pd-col-right">
             <!-- Resources card -->
             <div class="pd-rp-card" id="pd-rp-card-resources">
@@ -5715,12 +5740,26 @@
               <div class="pd-rp-card-hdr" onclick="toggleRpCard('pd-rp-body-team','pd-rp-chev-team')">
                 <div class="pd-rp-card-title">Team</div>
                 <div class="pd-rp-card-actions">
-                  <button class="pd-rp-card-add pd-add-member-btn" onclick="event.stopPropagation();openTeamMemberModal()">+ Add</button>
+                  <button class="pd-rp-card-add pd-add-member-btn" id="pd-tm-add-btn" onclick="event.stopPropagation();openTeamMemberModal()">+ Add</button>
                   <svg class="pd-rp-card-chevron open" id="pd-rp-chev-team" width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 5l4 4 4-4"/></svg>
                 </div>
               </div>
               <div class="pd-rp-card-body" id="pd-rp-body-team">
                 <div id="pd-tm-list-wrap"><div style="font-size:13px;color:var(--text-3);font-style:italic;padding:4px 0">No team members yet.</div></div>
+              </div>
+            </div>
+
+            <!-- Tools card -->
+            <div class="pd-rp-card" id="pd-rp-card-tools">
+              <div class="pd-rp-card-hdr" onclick="toggleRpCard('pd-rp-body-tools','pd-rp-chev-tools')">
+                <div class="pd-rp-card-title">Tools</div>
+                <div class="pd-rp-card-actions">
+                  <button class="pd-rp-card-add" id="pd-tools-add-btn" onclick="event.stopPropagation();openToolsModal()">+ Add</button>
+                  <svg class="pd-rp-card-chevron open" id="pd-rp-chev-tools" width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 5l4 4 4-4"/></svg>
+                </div>
+              </div>
+              <div class="pd-rp-card-body" id="pd-rp-body-tools">
+                <div id="pd-tools-list-wrap"><div style="font-size:13px;color:var(--text-3);font-style:italic;padding:4px 0">No integrations connected.</div></div>
               </div>
             </div>
           </div>
@@ -5742,6 +5781,19 @@
             <div class="pd-modal-actions">
               <button class="pd-modal-cancel" onclick="closeResourceModal()">Cancel</button>
               <button class="pd-modal-submit" onclick="submitResource()">Add resource →</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tools / integrations modal -->
+        <div class="pd-modal-overlay" id="pd-tools-modal" style="display:none" onclick="if(event.target===this)closeToolsModal()">
+          <div class="pd-modal" style="max-width:480px;width:94vw">
+            <div class="pd-modal-title">Connect a Tool</div>
+            <div class="pd-modal-sub" style="margin-bottom:14px">Integrate your existing workflow tools with this project.</div>
+            <input class="pd-int-search" id="pd-int-search" type="text" placeholder="Search integrations…" oninput="filterIntegrations(this.value)">
+            <div class="pd-int-grid" id="pd-int-grid"></div>
+            <div class="pd-modal-actions" style="margin-top:16px">
+              <button class="pd-modal-cancel" onclick="closeToolsModal()">Done</button>
             </div>
           </div>
         </div>
@@ -11233,11 +11285,52 @@ function _renderRightPanel(proj) {
         }).join('')
       : '<div style="font-size:13px;color:var(--text-3);font-style:italic;padding:4px 0">No team members yet.</div>';
   }
+  // Tools
+  _renderProjectTools();
+
   // Show/hide Add buttons if viewer
   const resAddBtn = document.getElementById('pd-res-add-btn');
   if (resAddBtn) resAddBtn.style.display = _isViewerMode ? 'none' : '';
-  const tmAddBtn = document.querySelector('.pd-add-member-btn');
+  const tmAddBtn = document.getElementById('pd-tm-add-btn');
   if (tmAddBtn) tmAddBtn.style.display = _isViewerMode ? 'none' : '';
+  const toolsAddBtn = document.getElementById('pd-tools-add-btn');
+  if (toolsAddBtn) toolsAddBtn.style.display = _isViewerMode ? 'none' : '';
+}
+
+function _renderProjectTools() {
+  const projects = loadProjects();
+  const idx = _pdProjectId ? projects.findIndex(p => p.id === _pdProjectId) : -1;
+  const tools = idx >= 0 && Array.isArray(projects[idx].tools) ? projects[idx].tools : [];
+  const wrap = document.getElementById('pd-tools-list-wrap');
+  if (!wrap) return;
+  const TOOL_META = {
+    quickbooks: { name:'QuickBooks', color:'#2CA01C' },
+    stripe:     { name:'Stripe',     color:'#635BFF' },
+    salesforce: { name:'Salesforce', color:'#00A1E0' },
+    hubspot:    { name:'HubSpot',    color:'#FF7A59' },
+    xero:       { name:'Xero',       color:'#13B5EA' },
+    notion:     { name:'Notion',     color:'#000000' },
+    slack:      { name:'Slack',      color:'#4A154B' },
+    gdrive:     { name:'Google Drive',color:'#4285F4' },
+    airtable:   { name:'Airtable',   color:'#18BFFF' },
+    zapier:     { name:'Zapier',     color:'#FF4A00' },
+  };
+  wrap.innerHTML = tools.length
+    ? tools.map((t, i) => {
+        const meta = TOOL_META[t.id] || { name: t.name || t.id, color:'#888' };
+        const initials = meta.name.slice(0,2).toUpperCase();
+        return `<div class="pd-tool-item">
+          <div class="pd-tool-icon" style="background:${meta.color}15;border-color:${meta.color}30">
+            <span style="font-size:10px;font-weight:700;color:${meta.color}">${initials}</span>
+          </div>
+          <div class="pd-tool-body">
+            <div class="pd-tool-name">${escHtml(meta.name)}</div>
+            <div class="pd-tool-status">Connected</div>
+          </div>
+          ${_isViewerMode ? '' : `<button class="pd-tool-del" onclick="pdDisconnectTool(${i})" title="Disconnect">×</button>`}
+        </div>`;
+      }).join('')
+    : '<div style="font-size:13px;color:var(--text-3);font-style:italic;padding:4px 0">No integrations connected.</div>';
 }
 
 /* ── Resource modal ── */
@@ -11273,6 +11366,86 @@ function submitResource() {
 }
 
 function pdAddResource() { openResourceModal(); }
+
+/* ── Tools / integrations modal ── */
+const _INTEGRATIONS = [
+  { id:'quickbooks', name:'QuickBooks',    color:'#2CA01C', desc:'Sync P&L, invoices, and expenses in real time.' },
+  { id:'stripe',     name:'Stripe',        color:'#635BFF', desc:'Track revenue, payouts, and payment activity.' },
+  { id:'salesforce', name:'Salesforce',    color:'#00A1E0', desc:'Pull CRM pipeline and deal data into projects.' },
+  { id:'hubspot',    name:'HubSpot',       color:'#FF7A59', desc:'Connect contacts, deals, and marketing metrics.' },
+  { id:'xero',       name:'Xero',          color:'#13B5EA', desc:'Accounting data, bank feeds, and financial reports.' },
+  { id:'notion',     name:'Notion',        color:'#333333', desc:'Link pages, databases, and team wikis.' },
+  { id:'slack',      name:'Slack',         color:'#4A154B', desc:'Post updates and receive alerts in your channels.' },
+  { id:'gdrive',     name:'Google Drive',  color:'#4285F4', desc:'Access shared files and folders from Drive.' },
+  { id:'airtable',   name:'Airtable',      color:'#18BFFF', desc:'Sync bases, tables, and views into your project.' },
+  { id:'zapier',     name:'Zapier',        color:'#FF4A00', desc:'Automate workflows between 5,000+ apps.' },
+];
+
+function openToolsModal() {
+  const modal = document.getElementById('pd-tools-modal');
+  if (!modal) return;
+  document.getElementById('pd-int-search').value = '';
+  _renderIntGrid('');
+  modal.style.display = 'flex';
+}
+
+function closeToolsModal() {
+  const modal = document.getElementById('pd-tools-modal');
+  if (modal) modal.style.display = 'none';
+  _renderProjectTools();
+}
+
+function filterIntegrations(q) { _renderIntGrid(q.toLowerCase().trim()); }
+
+function _renderIntGrid(query) {
+  const projects = loadProjects();
+  const idx = _pdProjectId ? projects.findIndex(p => p.id === _pdProjectId) : -1;
+  const connected = new Set((idx >= 0 && Array.isArray(projects[idx].tools) ? projects[idx].tools : []).map(t => t.id));
+  const list = query ? _INTEGRATIONS.filter(i => i.name.toLowerCase().includes(query) || i.desc.toLowerCase().includes(query)) : _INTEGRATIONS;
+  const grid = document.getElementById('pd-int-grid');
+  if (!grid) return;
+  grid.innerHTML = list.map(i => {
+    const isConn = connected.has(i.id);
+    const initials = i.name.slice(0,2).toUpperCase();
+    return `<div class="pd-int-tile${isConn ? ' connected' : ''}">
+      <div class="pd-int-tile-top">
+        <div class="pd-int-tile-icon" style="background:${i.color}18;border-color:${i.color}30">
+          <span style="font-size:11px;font-weight:800;color:${i.color}">${initials}</span>
+        </div>
+        <div class="pd-int-tile-name">${escHtml(i.name)}</div>
+      </div>
+      <div class="pd-int-tile-desc">${escHtml(i.desc)}</div>
+      <button class="pd-int-connect-btn${isConn ? ' connected' : ''}" onclick="pdToggleTool('${i.id}','${escHtml(i.name)}')" ${isConn ? 'disabled' : ''}>
+        ${isConn ? '✓ Connected' : 'Connect'}
+      </button>
+    </div>`;
+  }).join('') || '<div style="font-size:13px;color:var(--text-3);padding:8px 0">No integrations match your search.</div>';
+}
+
+function pdToggleTool(id, name) {
+  if (!_pdProjectId) return;
+  const projects = loadProjects();
+  const idx = projects.findIndex(p => p.id === _pdProjectId);
+  if (idx < 0) return;
+  if (!Array.isArray(projects[idx].tools)) projects[idx].tools = [];
+  const already = projects[idx].tools.findIndex(t => t.id === id);
+  if (already >= 0) return; // already connected
+  projects[idx].tools.push({ id, name, connectedAt: new Date().toISOString() });
+  saveProjects(projects);
+  showToast(`${name} connected`, 'success');
+  _renderIntGrid(document.getElementById('pd-int-search')?.value.toLowerCase().trim() || '');
+}
+
+function pdDisconnectTool(i) {
+  if (!_pdProjectId) return;
+  const projects = loadProjects();
+  const idx = projects.findIndex(p => p.id === _pdProjectId);
+  if (idx < 0) return;
+  projects[idx].tools.splice(i, 1);
+  saveProjects(projects);
+  _renderProjectTools();
+  showToast('Integration disconnected', 'success');
+}
 
 function pdDeleteResource(i) {
   if (!_pdProjectId) return;
