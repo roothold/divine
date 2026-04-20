@@ -1432,10 +1432,40 @@
     .pd-perspectives-feed { display:flex; flex-direction:column; gap:10px; }
     .pd-persp-card { background:var(--surface-2); border:1px solid var(--border); border-radius:10px; padding:14px 16px; cursor:pointer; transition:border-color .15s; }
     .pd-persp-card:hover { border-color:var(--accent-bdr); }
-    .pd-persp-date { font-size:10.5px; color:var(--text-3); margin-bottom:4px; }
+    .pd-persp-top-row { display:flex; align-items:center; gap:7px; margin-bottom:4px; }
+    .pd-persp-date { font-size:10.5px; color:var(--text-3); }
+    .pd-persp-chat-badge { font-size:9.5px; font-weight:700; letter-spacing:.04em; text-transform:uppercase; padding:2px 6px; background:var(--accent-lt); color:var(--accent); border-radius:var(--r-pill); }
     .pd-persp-decision { font-size:13.5px; font-weight:500; color:var(--text-0); margin-bottom:4px; line-height:1.4; }
     .pd-persp-insight { font-size:12px; color:var(--text-2); line-height:1.5; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
     .pd-empty-state { text-align:center; padding:32px 16px; color:var(--text-3); font-size:13px; font-style:italic; }
+
+    /* Description collapse toggle */
+    .pd-desc-toggle { display:inline-flex; align-items:center; gap:5px; margin-top:7px; padding:3px 9px 3px 7px; border:1px solid var(--border-md); border-radius:var(--r-pill); background:transparent; cursor:pointer; color:var(--text-3); font-size:11.5px; font-family:'Inter',sans-serif; transition:color .12s,border-color .12s; }
+    .pd-desc-toggle:hover { color:var(--text-1); border-color:var(--border-hi); }
+    .pd-desc-toggle.open { color:var(--text-1); border-color:var(--border-hi); }
+    .pd-desc-toggle svg { transition:transform .15s; }
+    .pd-desc-toggle.open svg { transform:rotate(180deg); }
+
+    /* Project input */
+    .pd-proj-input-wrap { background:var(--surface); border:1.5px solid var(--border-md); border-radius:var(--r); padding:14px 16px 12px; margin-bottom:14px; transition:border-color .15s,box-shadow .15s; }
+    .pd-proj-input-wrap:focus-within { border-color:var(--accent-bdr); box-shadow:0 0 0 3px var(--accent-lt); }
+    .pd-proj-input-ta { width:100%; border:none; outline:none; resize:none; font-family:'Inter',sans-serif; font-size:13.5px; color:var(--text-0); background:transparent; line-height:1.55; min-height:48px; max-height:160px; overflow-y:auto; }
+    .pd-proj-input-ta::placeholder { color:var(--text-3); }
+    .pd-proj-input-footer { display:flex; align-items:center; gap:8px; margin-top:10px; border-top:1px solid var(--border-lt); padding-top:10px; }
+    .pd-upload-btn { display:flex; align-items:center; justify-content:center; width:30px; height:30px; border-radius:7px; border:1px solid var(--border-md); background:transparent; cursor:pointer; color:var(--text-2); flex-shrink:0; transition:background .12s,color .12s; }
+    .pd-upload-btn:hover { background:var(--surface-2); color:var(--text-0); }
+    .pd-file-chips { display:flex; flex-wrap:wrap; gap:5px; flex:1; }
+    .pd-file-chip { display:inline-flex; align-items:center; gap:5px; padding:3px 8px; background:var(--accent-lt); border-radius:var(--r-pill); font-size:11px; color:var(--accent); font-weight:500; max-width:160px; }
+    .pd-file-chip span { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+    .pd-file-chip button { background:none; border:none; cursor:pointer; color:var(--accent); font-size:14px; padding:0; line-height:1; opacity:.6; flex-shrink:0; }
+    .pd-file-chip button:hover { opacity:1; }
+    .pd-proj-submit-btn { display:flex; align-items:center; gap:6px; margin-left:auto; padding:7px 14px; background:var(--accent); color:#fff; border:none; border-radius:var(--r-pill); font-size:12.5px; font-weight:600; cursor:pointer; font-family:'Inter',sans-serif; transition:background .15s; flex-shrink:0; }
+    .pd-proj-submit-btn:hover { background:var(--accent-mid); }
+
+    /* Perspectives count + refresh */
+    .pd-persp-count { display:inline-flex; align-items:center; justify-content:center; min-width:18px; height:18px; padding:0 5px; background:var(--accent-lt); color:var(--accent); border-radius:var(--r-pill); font-size:10.5px; font-weight:700; }
+    .pd-section-refresh { border:none; background:transparent; cursor:pointer; color:var(--text-3); padding:5px; border-radius:7px; transition:color .12s,background .12s; }
+    .pd-section-refresh:hover { color:var(--text-0); background:var(--surface-2); }
     /* Two-col grid for BMC fields */
     .pd-2col { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
     @media(max-width:600px) { .pd-2col { grid-template-columns:1fr; } }
@@ -4722,10 +4752,8 @@
           <span class="nav-item-label">Launchpad</span>
         </button>
 
-        <!-- Explore -->
-        <div class="nav-section-label">Explore</div>
+        <!-- Thinkers -->
         <button class="nav-item" id="nav-search" data-tip="Thinkers" onclick="showView('thought-leaders')">
-          <!-- [D] bracket logo mark -->
           <svg width="16" height="16" viewBox="0 0 100 100" fill="none">
             <g stroke="currentColor" stroke-width="9" stroke-linecap="round" fill="none">
               <rect x="18" y="12" width="8" height="76" rx="2"/>
@@ -4737,8 +4765,8 @@
           </svg>
           <span class="nav-item-label">Thinkers</span>
         </button>
-        <!-- My Stuff -->
-        <div class="nav-section-label">My Stuff</div>
+
+        <!-- Projects -->
         <button class="nav-item nav-auth-gate" id="nav-projects" data-tip="Projects" onclick="_navMyStuff('projects')">
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75"><rect x="2" y="2" width="5" height="5" rx="1.5"/><rect x="9" y="2" width="5" height="5" rx="1.5"/><rect x="2" y="9" width="5" height="5" rx="1.5"/><rect x="9" y="9" width="5" height="5" rx="1.5"/></svg>
           <span class="nav-item-label">Projects</span>
@@ -5408,24 +5436,55 @@
           <div class="pd-header-main">
             <div id="pd-type-badge"></div>
             <div class="pd-title" id="pd-title" contenteditable="true" spellcheck="false"></div>
-            <div class="pd-subtitle" id="pd-subtitle" contenteditable="true" spellcheck="false" data-placeholder="Add a description…"></div>
+            <!-- Description toggle -->
+            <button class="pd-desc-toggle" id="pd-desc-toggle" onclick="togglePdDesc()">
+              <svg width="11" height="11" viewBox="0 0 11 11" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"><polyline points="2,4 5.5,7.5 9,4"/></svg>
+              <span id="pd-desc-label">Description</span>
+            </button>
+            <!-- Collapsible description -->
+            <div class="pd-subtitle" id="pd-subtitle" contenteditable="true" spellcheck="false" data-placeholder="Add a description…" style="display:none;margin-top:8px"></div>
           </div>
           <div class="pd-header-actions">
             <button class="pd-save-btn" onclick="saveProjectDetailChanges()">Save</button>
           </div>
         </div>
-        <!-- Template content injected by renderProjectDetail() -->
-        <div id="pd-template-body"></div>
-        <!-- Active Perspectives — always shown -->
-        <div class="pd-section" style="margin-top:8px">
+
+        <!-- ── Project Perspective Input ── -->
+        <div class="pd-proj-input-wrap" id="pd-proj-input-wrap">
+          <textarea class="pd-proj-input-ta" id="pd-proj-input-ta" rows="2"
+            placeholder="Ask a question to generate a new perspective for this project…"
+            oninput="pdInputResize(this)"
+            onkeydown="if(event.key==='Enter'&&(event.metaKey||event.ctrlKey)){pdLaunchPerspective()}"></textarea>
+          <div class="pd-proj-input-footer">
+            <label class="pd-upload-btn" for="pd-file-input" title="Attach file or photo">
+              <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M3.5 9.5l5-5a3.5 3.5 0 015 5l-6 6a2 2 0 01-3-3l5.5-5.5a.7.7 0 011 1l-5 5"/></svg>
+              <input type="file" id="pd-file-input" multiple accept="image/*,.pdf,.doc,.docx,.txt,.csv,.xlsx" onchange="pdHandleFiles(this.files)" style="display:none">
+            </label>
+            <div class="pd-file-chips" id="pd-file-chips"></div>
+            <button class="pd-proj-submit-btn" onclick="pdLaunchPerspective()">
+              <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="8" y1="14" x2="8" y2="2"/><path d="M3 7l5-5 5 5"/></svg>
+              New Perspective
+            </button>
+          </div>
+        </div>
+
+        <!-- Active Perspectives — shown above template body -->
+        <div class="pd-section" id="pd-perspectives-section" style="margin-bottom:16px">
           <div class="pd-section-header">
             <div class="pd-section-title">
               <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"><circle cx="7" cy="7" r="5.5"/><path d="M7 4.5v3l1.5 1.5"/></svg>
               Active Perspectives
+              <span class="pd-persp-count" id="pd-persp-count"></span>
             </div>
+            <button class="pd-section-refresh" onclick="_renderPdPerspectives(_pdProjectId)" title="Sync">
+              <svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"><path d="M13.5 8a5.5 5.5 0 11-1.4-3.6"/><path d="M12 1.5V5h-3.5"/></svg>
+            </button>
           </div>
           <div id="pd-perspectives-feed" class="pd-perspectives-feed"></div>
         </div>
+
+        <!-- Template content injected by renderProjectDetail() -->
+        <div id="pd-template-body"></div>
       </div>
     </div>
 
@@ -10407,6 +10466,17 @@ function openProjectDetail(projectId) {
   _viewerOwnerKey = null;
   _viewerRole     = null;
   _pdProjectId = projectId;
+  // Reset attachment state on each project open
+  _pdAttachments = [];
+  const chips = document.getElementById('pd-file-chips');
+  if (chips) chips.innerHTML = '';
+  const ta = document.getElementById('pd-proj-input-ta');
+  if (ta) { ta.value = ''; pdInputResize(ta); }
+  // Reset description toggle
+  const sub = document.getElementById('pd-subtitle');
+  const toggle = document.getElementById('pd-desc-toggle');
+  if (sub) sub.style.display = 'none';
+  if (toggle) toggle.classList.remove('open');
   renderProjectDetail(proj);
   // Push type-specific deep-link URL so refresh restores this project
   const type    = proj.type || 'initiative';
@@ -10442,35 +10512,7 @@ function renderProjectDetail(proj) {
     else                             body.innerHTML = _buildThemeTemplate(proj);
   }
 
-  // Share button — only for company projects
-  const hdActions = document.querySelector('.pd-header-actions');
-  const existingShare = document.getElementById('pd-share-btn');
-  if (existingShare) existingShare.remove();
-  if (hdActions && (proj.type === 'company')) {
-    const shareBtn = document.createElement('button');
-    shareBtn.id = 'pd-share-btn';
-    shareBtn.style.cssText = 'font-size:12px;font-weight:600;padding:7px 14px;border:1.5px solid var(--border-md);border-radius:var(--r-pill);background:transparent;cursor:pointer;color:var(--text-2);display:flex;align-items:center;gap:5px;transition:all .14s;font-family:Inter,sans-serif;';
-    shareBtn.innerHTML = '<svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"><circle cx="9" cy="2" r="1.5"/><circle cx="2" cy="6" r="1.5"/><circle cx="9" cy="10" r="1.5"/><path d="M3.4 6.9l4.2 2.4M7.6 2.7L3.4 5.1"/></svg>Share page';
-    shareBtn.onmouseover = () => { shareBtn.style.borderColor = 'var(--accent)'; shareBtn.style.color = 'var(--accent)'; };
-    shareBtn.onmouseout  = () => { shareBtn.style.borderColor = 'var(--border-md)'; shareBtn.style.color = 'var(--text-2)'; };
-    shareBtn.onclick = () => _cpSharePublicPage(proj);
-    hdActions.insertBefore(shareBtn, hdActions.firstChild);
-  }
-
-  // Company projects get an "Investor Room" quick-link button
-  if (proj.type === 'company') {
-    const existing = hdActions.querySelector('.pd-ir-btn');
-    if (!existing) {
-      const irBtn = document.createElement('button');
-      irBtn.className = 'pd-header-btn pd-ir-btn';
-      irBtn.style.cssText = 'display:inline-flex;align-items:center;gap:6px;padding:7px 14px;border:1.5px solid var(--border-md);border-radius:var(--r-pill);background:var(--surface);color:var(--text-2);font-size:12.5px;font-weight:600;cursor:pointer;font-family:var(--font-ui);transition:all .15s';
-      irBtn.innerHTML = '<svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="1" y="3" width="10" height="8" rx="1"/><path d="M3.5 3V2a1.5 1.5 0 013 0v1"/></svg>Investor Room';
-      irBtn.onmouseover = () => { irBtn.style.borderColor = 'var(--accent)'; irBtn.style.color = 'var(--accent)'; };
-      irBtn.onmouseout  = () => { irBtn.style.borderColor = 'var(--border-md)'; irBtn.style.color = 'var(--text-2)'; };
-      irBtn.onclick = () => showIRForProject(proj);
-      hdActions.appendChild(irBtn);
-    }
-  }
+  // Share page and Investor Room buttons removed from project header
 
   // Viewer mode banner + read-only enforcement
   const pdLayout = document.querySelector('.pd-layout');
@@ -10853,21 +10895,107 @@ function _buildThemeTemplate(proj) {
     ${_buildProjTeamSection(proj)}`;
 }
 
+/* ── Project detail: description toggle ── */
+function togglePdDesc() {
+  const body = document.getElementById('pd-subtitle');
+  const btn  = document.getElementById('pd-desc-toggle');
+  if (!body || !btn) return;
+  const isOpen = btn.classList.contains('open');
+  body.style.display = isOpen ? 'none' : '';
+  btn.classList.toggle('open', !isOpen);
+  if (!isOpen) setTimeout(() => body.focus(), 60);
+}
+
+/* ── Project input: auto-resize textarea ── */
+function pdInputResize(ta) {
+  ta.style.height = 'auto';
+  ta.style.height = Math.min(ta.scrollHeight, 160) + 'px';
+}
+
+/* ── Project input: file attachment handling ── */
+let _pdAttachments = [];
+function pdHandleFiles(files) {
+  const chipsEl = document.getElementById('pd-file-chips');
+  if (!chipsEl) return;
+  for (const f of files) {
+    _pdAttachments.push({ name: f.name, size: f.size, type: f.type });
+    const chip = document.createElement('span');
+    chip.className = 'pd-file-chip';
+    chip.innerHTML = `<svg width="10" height="10" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.75"><rect x="2" y="1" width="8" height="10" rx="1"/><path d="M4 4h4M4 6.5h4M4 9h2"/></svg><span title="${escHtml(f.name)}">${escHtml(f.name)}</span><button onclick="pdRemoveFile('${escHtml(f.name)}',this.parentElement)">×</button>`;
+    chipsEl.appendChild(chip);
+  }
+  document.getElementById('pd-file-input').value = '';
+}
+function pdRemoveFile(name, chipEl) {
+  _pdAttachments = _pdAttachments.filter(f => f.name !== name);
+  if (chipEl) chipEl.remove();
+}
+
+/* ── Project input: launch perspective pre-assigned to project ── */
+function pdLaunchPerspective() {
+  const ta = document.getElementById('pd-proj-input-ta');
+  if (!ta) return;
+  let text = ta.value.trim();
+  if (!text && !_pdAttachments.length) { ta.focus(); return; }
+  // Append attachment names to message text
+  if (_pdAttachments.length) {
+    const names = _pdAttachments.map(f => f.name).join(', ');
+    text = text ? `${text}\n\n[Attached: ${names}]` : `[Attached: ${names}]`;
+  }
+  // Pre-assign new chat session to this project
+  window._dcPrefillProject = _pdProjectId;
+  // Clear input
+  ta.value = ''; pdInputResize(ta);
+  _pdAttachments = [];
+  const chips = document.getElementById('pd-file-chips');
+  if (chips) chips.innerHTML = '';
+  // Open chat (auto-sends if text is long enough)
+  openChat(text || undefined);
+}
+
 function _renderPdPerspectives(projectId) {
   const feed = document.getElementById('pd-perspectives-feed');
   if (!feed) return;
-  const recents = loadRecents().filter(r => r.projectId === projectId);
-  if (!recents.length) {
-    feed.innerHTML = `<div class="pd-empty-state">No perspectives linked to this project yet. Start a session and assign it here.</div>`;
+
+  // Merge recents + chat sessions linked to this project
+  const recents  = loadRecents().filter(r => r.projectId === projectId);
+  const sessions = loadChatSessions().filter(s => s.projectId === projectId);
+
+  // Normalise chat sessions into the same shape as recents
+  const chatRows = sessions.map(s => {
+    const lastAssist = (s.messages || []).filter(m => m.role === 'assistant').slice(-1)[0];
+    return {
+      id:         s.id,
+      type:       'chat',
+      decision:   s.title || 'Untitled chat',
+      date:       s.updatedAt || s.createdAt,
+      keyInsight: lastAssist ? { body: lastAssist.content?.slice(0, 140) || '' } : null,
+      projectId:  s.projectId,
+    };
+  });
+
+  // Deduplicate by id, then sort newest-first
+  const seen = new Set();
+  const all  = [...recents, ...chatRows].filter(r => { if (seen.has(r.id)) return false; seen.add(r.id); return true; })
+                                         .sort((a,b) => new Date(b.date||0) - new Date(a.date||0));
+
+  // Update count badge
+  const countEl = document.getElementById('pd-persp-count');
+  if (countEl) countEl.textContent = all.length || '';
+
+  if (!all.length) {
+    feed.innerHTML = `<div class="pd-empty-state">No perspectives linked to this project yet.<br>Use the input above to start one — it'll be auto-assigned here.</div>`;
     return;
   }
-  feed.innerHTML = recents.slice(0, 20).map(r => {
-    const date = r.date ? new Date(r.date).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}) : '';
+
+  feed.innerHTML = all.slice(0, 30).map(r => {
+    const date    = r.date ? new Date(r.date).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}) : '';
     const insight = r.keyInsight?.body ? r.keyInsight.body.replace(/<[^>]*>/g,'').slice(0,140) : '';
     const onClick = r.type === 'chat' ? `openChatSession('${r.id}')` : `openRecentById('${r.id}')`;
+    const badge   = r.type === 'chat' ? '<span class="pd-persp-chat-badge">Chat</span>' : '';
     return `<div class="pd-persp-card" onclick="${onClick}">
-      <div class="pd-persp-date">${date}</div>
-      <div class="pd-persp-decision">${escHtml(r.decision || '')}</div>
+      <div class="pd-persp-top-row"><div class="pd-persp-date">${date}</div>${badge}</div>
+      <div class="pd-persp-decision">${escHtml(r.decision || r.title || '')}</div>
       ${insight ? `<div class="pd-persp-insight">${escHtml(insight)}</div>` : ''}
     </div>`;
   }).join('');
