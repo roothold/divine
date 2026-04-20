@@ -1461,6 +1461,49 @@
     /* Description always visible inline */
     .pd-subtitle { margin-top:6px !important; display:block !important; }
 
+    /* Right panel section headers */
+    .pd-rp-label { font-size:11px; font-weight:700; letter-spacing:.07em; text-transform:uppercase; color:#999; margin-bottom:12px; display:flex; align-items:center; justify-content:space-between; }
+    .pd-rp-divider { border-top:1px solid #f0f0f0; margin:18px 0; }
+    /* Resource list — hyperlinked labels, URL hidden */
+    .pd-res-item { display:flex; align-items:center; gap:8px; padding:8px 0; border-bottom:1px solid #f5f5f5; }
+    .pd-res-item:last-child { border-bottom:none; }
+    .pd-res-name { flex:1; font-size:13px; color:var(--accent); text-decoration:none; font-weight:500; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+    .pd-res-name:hover { text-decoration:underline; }
+    .pd-res-del-btn { color:#ccc; background:none; border:none; cursor:pointer; font-size:16px; line-height:1; padding:0 2px; flex-shrink:0; transition:color .12s; }
+    .pd-res-del-btn:hover { color:#F87171; }
+    /* Resource add row */
+    .pd-res-add-row { display:flex; flex-direction:column; gap:6px; margin-top:10px; }
+    .pd-res-add-inputs { display:flex; gap:6px; }
+    .pd-res-input { flex:1; padding:7px 10px; border:1.5px solid var(--border-md); border-radius:8px; font-size:12.5px; font-family:'Inter',sans-serif; background:#fafafa; color:var(--text-0); outline:none; transition:border-color .15s; }
+    .pd-res-input:focus { border-color:var(--accent); background:#fff; }
+    .pd-res-add-btn { padding:7px 14px; background:var(--accent); color:#fff; border:none; border-radius:8px; font-size:12px; font-weight:600; cursor:pointer; white-space:nowrap; font-family:'Inter',sans-serif; flex-shrink:0; }
+    /* Team member list in right panel */
+    .pd-tm-item { display:flex; align-items:center; gap:9px; padding:8px 0; border-bottom:1px solid #f5f5f5; }
+    .pd-tm-item:last-child { border-bottom:none; }
+    .pd-tm-avatar { width:28px; height:28px; border-radius:50%; background:var(--accent); color:#fff; font-size:10px; font-weight:700; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+    .pd-tm-body { flex:1; min-width:0; }
+    .pd-tm-name { font-size:13px; font-weight:500; color:var(--text-0); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+    .pd-tm-role { font-size:11px; color:var(--text-3); margin-top:1px; }
+    .pd-tm-del { color:#ccc; background:none; border:none; cursor:pointer; font-size:16px; padding:0 2px; flex-shrink:0; transition:color .12s; }
+    .pd-tm-del:hover { color:#F87171; }
+    .pd-add-member-btn { display:inline-flex; align-items:center; gap:5px; margin-top:10px; padding:6px 13px; border:1.5px solid var(--border-md); border-radius:var(--r-pill); background:transparent; cursor:pointer; color:var(--text-2); font-size:12px; font-weight:600; font-family:'Inter',sans-serif; transition:border-color .12s,color .12s; }
+    .pd-add-member-btn:hover { border-color:var(--accent); color:var(--accent); }
+    /* Team member modal */
+    .pd-modal-overlay { position:fixed; inset:0; background:rgba(0,0,0,.35); z-index:900; display:flex; align-items:center; justify-content:center; backdrop-filter:blur(2px); animation:fadein .15s ease; }
+    .pd-modal { background:#fff; border-radius:16px; padding:28px; width:360px; max-width:calc(100vw - 32px); box-shadow:0 8px 32px rgba(0,0,0,.18); }
+    .pd-modal-title { font-size:16px; font-weight:700; color:var(--text-0); margin-bottom:4px; }
+    .pd-modal-sub { font-size:13px; color:var(--text-3); margin-bottom:20px; }
+    .pd-modal-field { margin-bottom:14px; }
+    .pd-modal-label { font-size:11.5px; font-weight:600; color:var(--text-2); margin-bottom:5px; text-transform:uppercase; letter-spacing:.05em; }
+    .pd-modal-input { width:100%; padding:9px 12px; border:1.5px solid var(--border-md); border-radius:9px; font-size:13.5px; font-family:'Inter',sans-serif; background:#fafafa; color:var(--text-0); outline:none; box-sizing:border-box; transition:border-color .15s; }
+    .pd-modal-input:focus { border-color:var(--accent); background:#fff; }
+    .pd-modal-select { width:100%; padding:9px 12px; border:1.5px solid var(--border-md); border-radius:9px; font-size:13.5px; font-family:'Inter',sans-serif; background:#fafafa; color:var(--text-0); outline:none; box-sizing:border-box; cursor:pointer; }
+    .pd-modal-actions { display:flex; gap:8px; margin-top:20px; }
+    .pd-modal-submit { flex:1; padding:10px; background:var(--accent); color:#fff; border:none; border-radius:9px; font-size:13.5px; font-weight:600; cursor:pointer; font-family:'Inter',sans-serif; transition:opacity .15s; }
+    .pd-modal-submit:hover { opacity:.88; }
+    .pd-modal-cancel { padding:10px 16px; background:transparent; color:var(--text-2); border:1.5px solid var(--border-md); border-radius:9px; font-size:13.5px; cursor:pointer; font-family:'Inter',sans-serif; transition:border-color .15s; }
+    .pd-modal-cancel:hover { border-color:var(--border-hi); }
+
     /* Project input — borderless inside the white right card */
     .pd-proj-input-wrap { background:transparent; border:none; border-radius:0; padding:0; margin-bottom:0; transition:none; }
     .pd-proj-input-wrap:focus-within { border-color:none; box-shadow:none; }
@@ -5568,7 +5611,7 @@
         </button>
 
         <div class="pd-cols">
-          <!-- ── Left column: project info + template ── -->
+          <!-- ── Left column: project info + perspective input + template ── -->
           <div class="pd-col-left">
             <div class="pd-header">
               <div class="pd-color-dot" id="pd-color-dot"></div>
@@ -5582,43 +5625,55 @@
               </div>
             </div>
 
-            <!-- Template content injected by renderProjectDetail() -->
-            <div id="pd-template-body"></div>
-          </div>
-
-          <!-- ── Right column: perspective input + active perspectives ── -->
-          <div class="pd-col-right">
-            <div style="font-size:11px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:#999;margin-bottom:12px">Get a Perspective</div>
-
-            <!-- Perspective Input -->
-            <div class="pd-proj-input-wrap" id="pd-proj-input-wrap">
-              <textarea class="pd-proj-input-ta" id="pd-proj-input-ta" rows="3"
-                placeholder="What would you like a perspective on for this project?"
-                oninput="pdInputResize(this)"
-                onkeydown="if(event.key==='Enter'&&(event.metaKey||event.ctrlKey)){pdLaunchPerspective()}"
-                style="border:1.5px solid #e8e8e8;border-radius:10px;padding:12px 14px;background:#fafafa;resize:none;width:100%;box-sizing:border-box;font-family:'Inter',sans-serif;font-size:13.5px;color:#111;outline:none;line-height:1.55;min-height:80px;transition:border-color .15s"
-                onfocus="this.style.borderColor='#a0a0a0'" onblur="this.style.borderColor='#e8e8e8'"></textarea>
-              <div class="pd-proj-input-footer" style="border-top:none;padding-top:8px;margin-top:8px">
-                <label class="pd-upload-btn" for="pd-file-input" title="Attach file or photo">
-                  <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M3.5 9.5l5-5a3.5 3.5 0 015 5l-6 6a2 2 0 01-3-3l5.5-5.5a.7.7 0 011 1l-5 5"/></svg>
-                  <input type="file" id="pd-file-input" multiple accept="image/*,.pdf,.doc,.docx,.txt,.csv,.xlsx" onchange="pdHandleFiles(this.files)" style="display:none">
-                </label>
-                <div class="pd-file-chips" id="pd-file-chips"></div>
-                <button class="pd-proj-submit-btn" onclick="pdLaunchPerspective()">
-                  <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="8" y1="14" x2="8" y2="2"/><path d="M3 7l5-5 5 5"/></svg>
-                  Run Perspective
+            <!-- Perspective input — exact homepage greeting card style, no project selector -->
+            <div class="dc-greeting-card" id="pd-proj-input-wrap" style="margin-bottom:20px">
+              <div class="dc-greeting-card-header">
+                <svg class="dc-greeting-d" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <g stroke="currentColor" stroke-width="9" stroke-linecap="round" fill="none">
+                    <rect x="18" y="12" width="8" height="76" rx="2"/>
+                    <rect x="26" y="12" width="8" height="8" rx="1"/>
+                    <rect x="26" y="80" width="8" height="8" rx="1"/>
+                    <path d="M34 18 Q78 18 78 50 Q78 82 34 82"/>
+                    <path d="M34 30 Q66 30 66 50 Q66 70 34 70"/>
+                  </g>
+                </svg>
+                <div class="dc-greeting-card-text">
+                  <div class="dc-greeting-card-name" id="pd-proj-card-name">Project</div>
+                  <div class="dc-greeting-card-sub">What would you like a perspective on?</div>
+                </div>
+              </div>
+              <div class="dc-greeting-divider"></div>
+              <textarea class="dc-input-textarea" id="pd-proj-input-ta" rows="2"
+                placeholder="Describe a challenge, question, or decision for this project…"
+                oninput="pdInputUpdate(this)"></textarea>
+              <div class="dc-attach-chip" id="pd-attach-chip" style="display:none">
+                <div class="dc-attach-chip-icon">
+                  <svg width="13" height="13" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"><rect x="2" y="1" width="8" height="12" rx="1.5"/><path d="M4 4.5h4M4 7h4M4 9.5h2.5"/></svg>
+                </div>
+                <div class="dc-attach-chip-body">
+                  <span class="dc-attach-chip-name" id="pd-attach-name">document.pdf</span>
+                  <span class="dc-attach-chip-ext" id="pd-attach-ext">Document</span>
+                </div>
+                <button class="dc-attach-remove" onclick="pdRemoveAttachment()" title="Remove attachment">
+                  <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"><line x1="2" y1="2" x2="10" y2="10"/><line x1="10" y1="2" x2="2" y2="10"/></svg>
                 </button>
+              </div>
+              <div class="dc-input-footer">
+                <div class="dc-input-proj">
+                  <input type="file" id="pd-file-input" accept=".pdf,.doc,.docx,.txt,.md,.csv,.pptx,.xlsx,image/*" style="display:none" onchange="pdHandleFiles(this.files)">
+                  <button class="dc-proj-add" onclick="document.getElementById('pd-file-input').click()" title="Attach document">
+                    <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.75"><line x1="6" y1="1" x2="6" y2="11"/><line x1="1" y1="6" x2="11" y2="6"/></svg>
+                  </button>
+                </div>
+                <button class="dc-input-submit" id="pd-proj-submit" onclick="pdLaunchPerspective()" disabled>New Perspective</button>
               </div>
             </div>
 
-            <!-- Divider -->
-            <div style="border-top:1px solid #f0f0f0;margin:18px 0"></div>
-
             <!-- Active Perspectives -->
-            <div id="pd-perspectives-section">
-              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
-                <div style="font-size:11px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:#999;display:flex;align-items:center;gap:6px">
-                  Perspectives
+            <div id="pd-perspectives-section" style="margin-bottom:20px">
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+                <div style="font-size:11.5px;font-weight:600;color:var(--text-2);display:flex;align-items:center;gap:6px">
+                  Active Perspectives
                   <span class="pd-persp-count" id="pd-persp-count"></span>
                 </div>
                 <button class="pd-section-refresh" onclick="_renderPdPerspectives(_pdProjectId)" title="Sync">
@@ -5626,6 +5681,62 @@
                 </button>
               </div>
               <div id="pd-perspectives-feed" class="pd-perspectives-feed"></div>
+            </div>
+
+            <!-- Template content injected by renderProjectDetail() -->
+            <div id="pd-template-body"></div>
+          </div>
+
+          <!-- ── Right column: resources + team ── -->
+          <div class="pd-col-right">
+            <!-- Resources -->
+            <div id="pd-right-resources">
+              <div class="pd-rp-label">Resources</div>
+              <div id="pd-res-list-wrap"><div style="font-size:13px;color:var(--text-3);font-style:italic">No resources yet.</div></div>
+              <div class="pd-res-add-row">
+                <div class="pd-res-add-inputs">
+                  <input class="pd-res-input" id="pd-res-label" type="text" placeholder="Label (e.g. Pitch Deck)">
+                  <input class="pd-res-input" id="pd-res-url" type="url" placeholder="https://…" onkeydown="if(event.key==='Enter')pdAddResource()">
+                </div>
+                <button class="pd-res-add-btn" onclick="pdAddResource()" style="align-self:flex-start">+ Add link</button>
+              </div>
+            </div>
+
+            <div class="pd-rp-divider"></div>
+
+            <!-- Team -->
+            <div id="pd-right-team">
+              <div class="pd-rp-label">Team</div>
+              <div id="pd-tm-list-wrap"><div style="font-size:13px;color:var(--text-3);font-style:italic">No team members yet.</div></div>
+              <button class="pd-add-member-btn" onclick="openTeamMemberModal()">
+                <svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M6 2v8M2 6h8"/></svg>
+                Add team member
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Team member modal -->
+        <div class="pd-modal-overlay" id="pd-team-modal" style="display:none" onclick="if(event.target===this)closeTeamMemberModal()">
+          <div class="pd-modal">
+            <div class="pd-modal-title">Add Team Member</div>
+            <div class="pd-modal-sub">Invite a collaborator to this project.</div>
+            <div class="pd-modal-field">
+              <div class="pd-modal-label">Email address</div>
+              <input class="pd-modal-input" id="pd-modal-email" type="email" placeholder="colleague@company.com" onkeydown="if(event.key==='Enter')submitTeamMember()">
+            </div>
+            <div class="pd-modal-field">
+              <div class="pd-modal-label">Role</div>
+              <select class="pd-modal-select" id="pd-modal-role">
+                <option value="thinker">Thinker</option>
+                <option value="advisory">Advisory Board</option>
+                <option value="investor">Investor</option>
+                <option value="staff">Staff</option>
+              </select>
+            </div>
+            <div class="pd-modal-actions">
+              <button class="pd-modal-cancel" onclick="closeTeamMemberModal()">Cancel</button>
+              <button class="pd-modal-submit" onclick="submitTeamMember()">Send invite →</button>
             </div>
           </div>
         </div>
@@ -10878,17 +10989,15 @@ function openProjectDetail(projectId) {
   _pdAttachments = [];
   const chips = document.getElementById('pd-file-chips');
   if (chips) chips.innerHTML = '';
+  // Update the greeting card heading with the project name
+  const cardName = document.getElementById('pd-proj-card-name');
+  if (cardName) cardName.textContent = proj.name || 'Project';
+
+  // Reset textarea and submit button
   const ta = document.getElementById('pd-proj-input-ta');
-  if (ta) {
-    // Default prompt seeded from project name for immediate usability
-    const defaultPrompts = [
-      `What is the biggest opportunity for ${proj.name || 'this project'} right now?`,
-      `What risks should we be aware of with ${proj.name || 'this project'}?`,
-      `What would accelerate growth for ${proj.name || 'this project'}?`,
-    ];
-    ta.value = defaultPrompts[Math.floor(Math.random() * defaultPrompts.length)];
-    pdInputResize(ta);
-  }
+  if (ta) { ta.value = ''; pdInputResize(ta); }
+  const submitBtn = document.getElementById('pd-proj-submit');
+  if (submitBtn) { submitBtn.disabled = true; submitBtn.classList.remove('ready'); }
   renderProjectDetail(proj);
   // Push type-specific deep-link URL so refresh restores this project
   const type    = proj.type || 'initiative';
@@ -10915,7 +11024,7 @@ function renderProjectDetail(proj) {
   const sub = document.getElementById('pd-subtitle');
   if (sub) { sub.textContent = proj.tagline || ''; if (!proj.tagline) sub.setAttribute('data-placeholder','Add a description…'); }
 
-  // Template body
+  // Template body (left column)
   const body = document.getElementById('pd-template-body');
   if (body) {
     const type = proj.type || 'initiative';
@@ -10923,6 +11032,9 @@ function renderProjectDetail(proj) {
     else if (type === 'company')    body.innerHTML = _buildCompanyTemplate(proj);
     else                             body.innerHTML = _buildThemeTemplate(proj);
   }
+
+  // Right panel — resources + team
+  _renderRightPanel(proj);
 
   // Share page and Investor Room buttons removed from project header
 
@@ -11051,6 +11163,128 @@ function _buildProjTeamSection(proj) {
     </div>`;
 }
 
+/* ── Right panel: resources + team ── */
+function _renderRightPanel(proj) {
+  // Resources
+  const resources = Array.isArray(proj.resources) ? proj.resources : [];
+  const resWrap = document.getElementById('pd-res-list-wrap');
+  if (resWrap) {
+    resWrap.innerHTML = resources.length
+      ? resources.map((r, i) =>
+          `<div class="pd-res-item">
+            <a class="pd-res-name" href="${escHtml(r.url)}" target="_blank" rel="noopener">${escHtml(r.label || r.url)}</a>
+            <button class="pd-res-del-btn" onclick="pdDeleteResource(${i})" title="Remove">×</button>
+          </div>`
+        ).join('')
+      : '<div style="font-size:13px;color:var(--text-3);font-style:italic;padding:4px 0">No resources yet.</div>';
+  }
+
+  // Team
+  const teamArr = Array.isArray(proj.team) ? proj.team : [];
+  const ROLE_LABELS = { thinker:'Thinker Lab', advisory:'Advisory Board', investor:'Investor', staff:'Staff' };
+  const tmWrap = document.getElementById('pd-tm-list-wrap');
+  if (tmWrap) {
+    tmWrap.innerHTML = teamArr.length
+      ? teamArr.map((m, i) => {
+          const initials = (m.name||m.email||'?').split(' ').map(p=>p[0]).join('').slice(0,2).toUpperCase();
+          const roleLabel = ROLE_LABELS[m.role] || m.role || 'Member';
+          const statusDot = m.status === 'invited'
+            ? '<span style="font-size:10px;color:var(--warn);font-weight:600"> · Invited</span>'
+            : '<span style="font-size:10px;color:var(--success);font-weight:600"> · Active</span>';
+          return `<div class="pd-tm-item">
+            <div class="pd-tm-avatar">${initials}</div>
+            <div class="pd-tm-body">
+              <div class="pd-tm-name">${escHtml(m.name || m.email)}</div>
+              <div class="pd-tm-role">${escHtml(roleLabel)}${statusDot}</div>
+            </div>
+            ${_isViewerMode ? '' : `<button class="pd-tm-del" onclick="pdRemoveTeamMember(${i})" title="Remove">×</button>`}
+          </div>`;
+        }).join('')
+      : '<div style="font-size:13px;color:var(--text-3);font-style:italic;padding:4px 0">No team members yet.</div>';
+  }
+  // Show/hide Add button if viewer
+  const addBtn = document.querySelector('.pd-add-member-btn');
+  if (addBtn) addBtn.style.display = _isViewerMode ? 'none' : '';
+}
+
+function pdAddResource() {
+  if (!_pdProjectId) return;
+  const label = document.getElementById('pd-res-label')?.value.trim();
+  const url   = document.getElementById('pd-res-url')?.value.trim();
+  if (!url) { showToast('Enter a URL', 'error'); return; }
+  const projects = loadProjects();
+  const idx = projects.findIndex(p => p.id === _pdProjectId);
+  if (idx < 0) return;
+  if (!Array.isArray(projects[idx].resources)) projects[idx].resources = [];
+  projects[idx].resources.push({ label: label || url, url });
+  saveProjects(projects);
+  document.getElementById('pd-res-label').value = '';
+  document.getElementById('pd-res-url').value = '';
+  _renderRightPanel(projects[idx]);
+  showToast('Resource added', 'success');
+}
+
+function pdDeleteResource(i) {
+  if (!_pdProjectId) return;
+  const projects = loadProjects();
+  const idx = projects.findIndex(p => p.id === _pdProjectId);
+  if (idx < 0) return;
+  projects[idx].resources.splice(i, 1);
+  saveProjects(projects);
+  _renderRightPanel(projects[idx]);
+}
+
+function pdRemoveTeamMember(i) {
+  if (!_pdProjectId) return;
+  const projects = loadProjects();
+  const idx = projects.findIndex(p => p.id === _pdProjectId);
+  if (idx < 0) return;
+  if (!projects[idx].team) return;
+  const removed = projects[idx].team.splice(i, 1);
+  saveProjects(projects);
+  try { if (removed?.[0]) _removeShareRecord(removed[0].email, projects[idx].id); } catch(e) {}
+  _renderRightPanel(projects[idx]);
+  showToast('Team member removed', 'success');
+}
+
+/* ── Team member modal ── */
+function openTeamMemberModal() {
+  const modal = document.getElementById('pd-team-modal');
+  if (modal) {
+    modal.style.display = 'flex';
+    document.getElementById('pd-modal-email')?.focus();
+  }
+}
+
+function closeTeamMemberModal() {
+  const modal = document.getElementById('pd-team-modal');
+  if (modal) modal.style.display = 'none';
+  const emailEl = document.getElementById('pd-modal-email');
+  if (emailEl) emailEl.value = '';
+}
+
+function submitTeamMember() {
+  if (!_pdProjectId) return;
+  const email = document.getElementById('pd-modal-email')?.value.trim();
+  const role  = document.getElementById('pd-modal-role')?.value || 'staff';
+  if (!email || !email.includes('@')) { showToast('Enter a valid email address', 'error'); return; }
+  if (email.toLowerCase() === (currentUser?.email || '').toLowerCase()) {
+    showToast("You're already the admin of this project.", 'error'); return;
+  }
+  const projects = loadProjects();
+  const idx = projects.findIndex(p => p.id === _pdProjectId);
+  if (idx < 0) return;
+  const proj = projects[idx];
+  if (!Array.isArray(proj.team)) proj.team = [];
+  if (proj.team.find(m => m.email === email)) { showToast('That email is already on the team', 'error'); return; }
+  proj.team.push({ email, role, status: 'invited', invitedAt: new Date().toISOString() });
+  saveProjects(projects);
+  try { _writeShareRecord(email, proj.id, role); } catch(e) {}
+  closeTeamMemberModal();
+  _renderRightPanel(proj);
+  showToast(`${email} invited — they'll see this project on login.`, 'success');
+}
+
 function _buildInitiativeTemplate(proj) {
   const ms = Array.isArray(proj.milestones) ? proj.milestones : [];
   const msHtml = ms.map((m, i) =>
@@ -11082,8 +11316,7 @@ function _buildInitiativeTemplate(proj) {
         <div class="pd-section-title"><div class="pd-section-icon initiative"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.75"><rect x="2" y="3" width="8" height="7" rx="1"/><path d="M4 3V2h4v1"/></svg></div>Resource Allocation</div>
       </div>
       <textarea class="pd-textarea" id="pd-resources" placeholder="Summarise what is being invested — time, capital, team bandwidth, social equity…">${_sv(proj.resourceAllocation)}</textarea>
-    </div>
-    ${_buildProjTeamSection(proj)}`;
+    </div>`;
 }
 
 function _buildCompanyTemplate(proj) {
@@ -11206,19 +11439,6 @@ function _buildCompanyTemplate(proj) {
       <textarea class="pd-textarea" id="pd-moat" placeholder="What is the proprietary advantage or defensible 'secret sauce' that competitors cannot easily replicate?" style="min-height:90px">${_sv(proj.moat)}</textarea>
       ${_bmcNote('bmc-moat','moat')}
     </div>
-    <div class="pd-section">
-      <div class="pd-section-header">
-        <div class="pd-section-title"><div class="pd-section-icon company"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M2 2h8v8H2z"/><path d="M4 5h4M4 7h2"/></svg></div>Resources</div>
-      </div>
-      <div class="cp-res-add-row">
-        <input class="cp-res-input" id="cp-res-label" type="text" placeholder="Label (e.g. Pitch Deck)">
-        <input class="cp-res-input" id="cp-res-url" type="url" placeholder="https://…" onkeydown="if(event.key==='Enter')cpAddResource()">
-        <button class="cp-res-add-btn" onclick="cpAddResource()">Add link</button>
-      </div>
-      <div class="cp-res-list" id="cp-res-list">
-        ${resHtml || '<div style="font-size:13px;color:var(--text-3)">No resources added yet.</div>'}
-      </div>
-    </div>
     `;
 }
 
@@ -11270,34 +11490,52 @@ function _buildThemeTemplate(proj) {
       <button class="pd-add-item" onclick="pdAddOQ()">
         <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M6 2v8M2 6h8"/></svg>Add question
       </button>
-    </div>
-    ${_buildProjTeamSection(proj)}`;
+    </div>`;
 }
 
+
+/* ── Project input: toggle submit button readiness ── */
+function pdInputUpdate(ta) {
+  const btn = document.getElementById('pd-proj-submit');
+  if (btn) {
+    const hasContent = ta.value.trim().length > 0 || _pdAttachments.length > 0;
+    btn.disabled = !hasContent;
+    btn.classList.toggle('ready', hasContent);
+  }
+}
 
 /* ── Project input: auto-resize textarea ── */
 function pdInputResize(ta) {
   ta.style.height = 'auto';
-  ta.style.height = Math.min(ta.scrollHeight, 160) + 'px';
+  ta.style.height = Math.min(ta.scrollHeight, 200) + 'px';
 }
 
 /* ── Project input: file attachment handling ── */
 let _pdAttachments = [];
+let _pdAttachedFile = null;
 function pdHandleFiles(files) {
-  const chipsEl = document.getElementById('pd-file-chips');
-  if (!chipsEl) return;
-  for (const f of files) {
-    _pdAttachments.push({ name: f.name, size: f.size, type: f.type });
-    const chip = document.createElement('span');
-    chip.className = 'pd-file-chip';
-    chip.innerHTML = `<svg width="10" height="10" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.75"><rect x="2" y="1" width="8" height="10" rx="1"/><path d="M4 4h4M4 6.5h4M4 9h2"/></svg><span title="${escHtml(f.name)}">${escHtml(f.name)}</span><button onclick="pdRemoveFile('${escHtml(f.name)}',this.parentElement)">×</button>`;
-    chipsEl.appendChild(chip);
-  }
+  if (!files || !files.length) return;
+  const f = files[0]; // one file at a time, like the homepage
+  _pdAttachedFile = { name: f.name, size: f.size, type: f.type };
+  _pdAttachments = [_pdAttachedFile];
+  const chip = document.getElementById('pd-attach-chip');
+  const nameEl = document.getElementById('pd-attach-name');
+  const extEl  = document.getElementById('pd-attach-ext');
+  if (chip) chip.style.display = '';
+  if (nameEl) nameEl.textContent = f.name;
+  if (extEl)  extEl.textContent  = f.type.includes('image') ? 'Image' : 'Document';
   document.getElementById('pd-file-input').value = '';
+  // Re-evaluate submit button
+  const ta = document.getElementById('pd-proj-input-ta');
+  if (ta) pdInputUpdate(ta);
 }
-function pdRemoveFile(name, chipEl) {
-  _pdAttachments = _pdAttachments.filter(f => f.name !== name);
-  if (chipEl) chipEl.remove();
+function pdRemoveAttachment() {
+  _pdAttachedFile = null;
+  _pdAttachments  = [];
+  const chip = document.getElementById('pd-attach-chip');
+  if (chip) chip.style.display = 'none';
+  const ta = document.getElementById('pd-proj-input-ta');
+  if (ta) pdInputUpdate(ta);
 }
 
 /* ── Project input: launch perspective pre-assigned to project ── */
@@ -11314,10 +11552,10 @@ function pdLaunchPerspective() {
   // Pre-assign new chat session to this project
   window._dcPrefillProject = _pdProjectId;
   // Clear input
-  ta.value = ''; pdInputResize(ta);
-  _pdAttachments = [];
-  const chips = document.getElementById('pd-file-chips');
-  if (chips) chips.innerHTML = '';
+  ta.value = ''; pdInputResize(ta); pdInputUpdate(ta);
+  _pdAttachments = []; _pdAttachedFile = null;
+  const chip = document.getElementById('pd-attach-chip');
+  if (chip) chip.style.display = 'none';
   // Open chat (auto-sends if text is long enough)
   openChat(text || undefined);
 }
