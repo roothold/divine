@@ -1382,12 +1382,20 @@
     .project-shared-pill { display:none; }
     /* Inline "Shared with me" section header — tabs handle this now */
     .projects-shared-header { display:none; }
-    /* Viewer mode — all editable fields become read-only visually */
+    /* Viewer mode — project metadata fields become read-only; perspectives input stays live */
     .pd-viewer-mode .pd-title[contenteditable] { pointer-events:none; }
     .pd-viewer-mode .pd-subtitle[contenteditable] { pointer-events:none; }
     .pd-viewer-mode [contenteditable] { pointer-events:none; cursor:default; }
-    .pd-viewer-mode input, .pd-viewer-mode textarea, .pd-viewer-mode select { pointer-events:none; opacity:.75; background:var(--surface-2) !important; cursor:default; }
-    .pd-viewer-mode button:not(.pd-back):not(.pd-viewer-dismiss) { opacity:.4; pointer-events:none; }
+    /* Lock project data fields but NOT the perspectives input card */
+    .pd-viewer-mode input:not(#pd-proj-input-ta),
+    .pd-viewer-mode textarea:not(#pd-proj-input-ta),
+    .pd-viewer-mode select { pointer-events:none; opacity:.75; background:var(--surface-2) !important; cursor:default; }
+    /* Lock buttons except: back, perspective submit, upload, thinker chips */
+    .pd-viewer-mode button:not(.pd-back):not(.pd-viewer-dismiss):not(#pd-proj-submit):not(.pd-upload-btn):not(.dc-proj-chip):not(.dc-input-submit) { opacity:.4; pointer-events:none; }
+    /* Keep the perspectives input area fully interactive in viewer mode */
+    .pd-viewer-mode #pd-proj-input-wrap { opacity:1 !important; pointer-events:auto !important; }
+    .pd-viewer-mode #pd-proj-input-ta { pointer-events:auto !important; opacity:1 !important; background:#fff !important; cursor:text !important; }
+    .pd-viewer-mode #pd-proj-submit { opacity:1 !important; pointer-events:auto !important; }
     .pd-viewer-banner { display:flex; align-items:center; gap:10px; background:var(--surface-2); border:1px solid var(--border-md); border-radius:var(--r); padding:11px 16px; margin-bottom:20px; font-size:13px; color:var(--text-2); }
     .pd-viewer-banner svg { flex-shrink:0; color:var(--accent); }
     .pd-viewer-banner strong { color:var(--text-1); font-weight:600; }
@@ -5746,7 +5754,7 @@
                   Recent Perspectives
                   <span class="pd-persp-count" id="pd-persp-count"></span>
                 </div>
-                <button class="pd-section-refresh" onclick="_renderPdPerspectives(_pdProjectId)" title="Sync">
+                <button class="pd-section-refresh" onclick="_renderPdPerspectives(_pdProjectId||_viewerProjectId)" title="Sync">
                   <svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"><path d="M13.5 8a5.5 5.5 0 11-1.4-3.6"/><path d="M12 1.5V5h-3.5"/></svg>
                 </button>
               </div>
@@ -11113,11 +11121,12 @@ function saveProject() {
 }
 
 /* ── Project Detail ── */
-let _pdProjectId   = null;
-let _sharedProjects = [];  // projects shared with currentUser by other owners
-let _isViewerMode   = false; // true when viewing a project you don't own
-let _viewerOwnerKey = null;  // the ownerKey of the shared project
-let _viewerRole     = null;  // role granted on the shared project
+let _pdProjectId     = null;
+let _sharedProjects  = [];  // projects shared with currentUser by other owners
+let _isViewerMode    = false; // true when viewing a project you don't own
+let _viewerOwnerKey  = null;  // the ownerKey of the shared project
+let _viewerRole      = null;  // role granted on the shared project
+let _viewerProjectId = null;  // projectId preserved in viewer mode for perspective creation
 
 // ── Shared-project namespace helpers ──────────────────────────────────────
 const _SHARED_PREFIX = 'di_shared_';
@@ -11189,10 +11198,11 @@ function _openSharedProject(projectId, ownerKey, role) {
   // Use `let` so we can merge in _ownerName from the share record below
   let proj = ownerProjects.find(p => p.id === projectId);
   if (!proj) { showToast('Project not found or access has been revoked.', 'error'); return; }
-  _isViewerMode   = true;
-  _viewerOwnerKey = ownerKey;
-  _viewerRole     = role || 'staff';
-  _pdProjectId    = null; // prevent writes
+  _isViewerMode    = true;
+  _viewerOwnerKey  = ownerKey;
+  _viewerRole      = role || 'staff';
+  _viewerProjectId = projectId; // kept so team members can link new perspectives to this project
+  _pdProjectId     = null;      // null prevents writes to the owner's project data
   // Carry owner name/email from share record so the banner can display it
   const sharedEntry = _sharedProjects.find(p => p.id === projectId);
   if (sharedEntry && !proj._ownerName) {
@@ -11213,10 +11223,11 @@ function openProjectDetail(projectId) {
     if (shared) { _openSharedProject(shared.id, shared._ownerKey, shared._sharedRole); return; }
     return;
   }
-  _isViewerMode   = false;
-  _viewerOwnerKey = null;
-  _viewerRole     = null;
-  _pdProjectId = projectId;
+  _isViewerMode    = false;
+  _viewerOwnerKey  = null;
+  _viewerRole      = null;
+  _viewerProjectId = null;
+  _pdProjectId     = projectId;
   // Reset attachment state on each project open
   _pdAttachments = [];
   const chips = document.getElementById('pd-file-chips');
@@ -11285,7 +11296,9 @@ function renderProjectDetail(proj) {
     const ownerLabel = proj._ownerName ? (' by <strong>' + escHtml(proj._ownerName) + '</strong>') : '';
     banner.innerHTML = '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="8" cy="8" r="6.5"/><path d="M8 7v4M8 5v.5" stroke-linecap="round"/></svg>' +
       '<span>Shared' + ownerLabel + ' · Your role: <span class=\"pd-viewer-role-pill\">' + escHtml(roleLabel) + '</span>' +
-      (_viewerRole === 'thinker' ? ' · <span style=\"color:var(--accent);font-weight:600\">Can edit</span>' : ' · Read only') +
+      (_viewerRole === 'thinker'
+        ? ' · <span style=\"color:var(--accent);font-weight:600\">Can edit project</span>'
+        : ' · <span style=\"color:var(--text-2)\">Your perspectives are private · Project data is read-only</span>') +
       '</span>';
     if (pdLayout) pdLayout.insertBefore(banner, pdLayout.firstChild);
     // Only lock the UI for non-editor roles
@@ -11711,62 +11724,37 @@ function _buildInitiativeTemplate(proj) {
 }
 
 function _buildCompanyTemplate(proj) {
-
-  const bmcNotes  = proj.bmcNotes || {};
-
-  function _bmcNote(fieldId, key) {
-    const val = bmcNotes[key] || '';
-    return `<button class="bmc-note-toggle" onclick="bmcToggleNote('${fieldId}-note')">
-        <svg width="11" height="11" viewBox="0 0 11 11" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M1 3h9M1 6h7M1 9h5"/></svg>
-        ${val ? 'View team note' : 'Add team note'}
-      </button>
-      <div class="bmc-note-area" id="${fieldId}-note">
-        <div class="bmc-note-label">
-          <svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.75"><circle cx="5" cy="5" r="4"/><path d="M5 3v3M5 7.5v.5"/></svg>
-          Team notes on this section
-        </div>
-        <textarea class="bmc-note-textarea" placeholder="Add a note for the team…" oninput="bmcSaveNote('${key}',this.value)">${escHtml(val)}</textarea>
-      </div>`;
-  }
+  const ms = Array.isArray(proj.milestones) ? proj.milestones : [];
+  const msHtml = ms.map((m, i) =>
+    `<div class="pd-check-row" id="pd-ms-${i}">
+      <div class="pd-check-box ${m.done?'done':''}" onclick="pdToggleMilestone(${i})">${m.done?'<svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M2 5l2.5 2.5 3.5-4"/></svg>':''}</div>
+      <input class="pd-check-input ${m.done?'done':''}" value="${_sv(m.text)}" placeholder="Milestone…" onchange="pdUpdateMilestone(${i},this.value)">
+      <button class="pd-check-del" onclick="pdDeleteMilestone(${i})">×</button>
+    </div>`
+  ).join('');
 
   return `
     <div class="pd-section">
       <div class="pd-section-header">
-        <div class="pd-section-title"><div class="pd-section-icon company"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.75"><rect x="1" y="2" width="10" height="8" rx="1"/><path d="M1 5h10"/></svg></div>Business Model Canvas</div>
+        <div class="pd-section-title"><div class="pd-section-icon company"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.75"><rect x="1" y="1.5" width="10" height="9" rx="1"/><path d="M4 10V6.5H8V10"/><line x1="1" y1="5" x2="11" y2="5"/></svg></div>Company Overview</div>
       </div>
-      <div class="pd-2col" style="margin-bottom:10px">
-        <div>
-          <div class="pd-field-label">Value Propositions</div>
-          <textarea class="pd-textarea" id="pd-value-props" placeholder="What unique value do you deliver to customers?" style="min-height:80px">${_sv(proj.valuePropositions)}</textarea>
-          ${_bmcNote('bmc-vp','valuePropositions')}
-        </div>
-        <div>
-          <div class="pd-field-label">Customer Segments</div>
-          <textarea class="pd-textarea" id="pd-cust-segs" placeholder="Who are you creating value for?" style="min-height:80px">${_sv(proj.customerSegments)}</textarea>
-          ${_bmcNote('bmc-cs','customerSegments')}
-        </div>
-      </div>
-      <div class="pd-2col">
-        <div>
-          <div class="pd-field-label">Revenue Streams</div>
-          <textarea class="pd-textarea" id="pd-rev-streams" placeholder="How does the business capture value?" style="min-height:80px">${_sv(proj.revenueStreams)}</textarea>
-          ${_bmcNote('bmc-rs','revenueStreams')}
-        </div>
-        <div>
-          <div class="pd-field-label">Cost Structure</div>
-          <textarea class="pd-textarea" id="pd-cost-struct" placeholder="What are the most important costs?" style="min-height:80px">${_sv(proj.costStructure)}</textarea>
-          ${_bmcNote('bmc-co','costStructure')}
-        </div>
-      </div>
+      <textarea class="pd-textarea" id="pd-northstar" placeholder="Describe what this company does — the problem it solves, who it serves, and how it creates value…" style="min-height:90px">${_sv(proj.northStar)}</textarea>
     </div>
     <div class="pd-section">
       <div class="pd-section-header">
-        <div class="pd-section-title"><div class="pd-section-icon company"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M6 2l1.5 3 3.5.5-2.5 2.4.6 3.5L6 9.7l-3.1 1.7.6-3.5L1 5.5 4.5 5z"/></svg></div>The Moat</div>
+        <div class="pd-section-title"><div class="pd-section-icon company"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M2 10V4l4-2 4 2v6"/><path d="M4 10V7h4v3"/></svg></div>Key Milestones</div>
       </div>
-      <textarea class="pd-textarea" id="pd-moat" placeholder="What is the proprietary advantage or defensible 'secret sauce' that competitors cannot easily replicate?" style="min-height:90px">${_sv(proj.moat)}</textarea>
-      ${_bmcNote('bmc-moat','moat')}
+      <div class="pd-checklist" id="pd-milestones-list">${msHtml}</div>
+      <button class="pd-add-item" onclick="pdAddMilestone()">
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M6 2v8M2 6h8"/></svg>Add milestone
+      </button>
     </div>
-    `;
+    <div class="pd-section">
+      <div class="pd-section-header">
+        <div class="pd-section-title"><div class="pd-section-icon company"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.75"><rect x="2" y="3" width="8" height="7" rx="1"/><path d="M4 3V2h4v1"/></svg></div>Resource Allocation</div>
+      </div>
+      <textarea class="pd-textarea" id="pd-resources" placeholder="Summarise what is being invested — capital, team bandwidth, time horizon…">${_sv(proj.resourceAllocation)}</textarea>
+    </div>`;
 }
 
 function _buildThemeTemplate(proj) {
@@ -11876,8 +11864,10 @@ function pdLaunchPerspective() {
     const names = _pdAttachments.map(f => f.name).join(', ');
     text = text ? `${text}\n\n[Attached: ${names}]` : `[Attached: ${names}]`;
   }
-  // Pre-assign new chat session to this project
-  window._dcPrefillProject = _pdProjectId;
+  // Pre-assign new chat session to this project.
+  // In viewer mode _pdProjectId is null — use _viewerProjectId so team members'
+  // perspectives are still linked to the shared project in their own namespace.
+  window._dcPrefillProject = _pdProjectId || _viewerProjectId;
   // Clear input
   ta.value = ''; pdInputResize(ta); pdInputUpdate(ta);
   _pdAttachments = []; _pdAttachedFile = null;
@@ -11890,10 +11880,13 @@ function pdLaunchPerspective() {
 function _renderPdPerspectives(projectId) {
   const feed = document.getElementById('pd-perspectives-feed');
   if (!feed) return;
+  // In viewer mode _pdProjectId is null — fall back to _viewerProjectId
+  const projId = projectId || _viewerProjectId || _pdProjectId;
+  if (!projId) return;
 
-  // Merge recents + chat sessions linked to this project
-  const recents  = loadRecents().filter(r => r.projectId === projectId);
-  const sessions = loadChatSessions().filter(s => s.projectId === projectId);
+  // Merge recents + chat sessions linked to this project (current user's namespace only)
+  const recents  = loadRecents().filter(r => r.projectId === projId);
+  const sessions = loadChatSessions().filter(s => s.projectId === projId);
 
   // Normalise chat sessions into the same shape as recents
   const chatRows = sessions.map(s => {
@@ -11970,11 +11963,11 @@ function saveProjectDetailChanges() {
     if (ns) proj.northStar = ns.value;
     if (ra) proj.resourceAllocation = ra.value;
   } else if (type === 'company') {
-    ['pd-value-props','pd-cust-segs','pd-rev-streams','pd-cost-struct','pd-moat'].forEach((id, i) => {
-      const el = document.getElementById(id);
-      const key = ['valuePropositions','customerSegments','revenueStreams','costStructure','moat'][i];
-      if (el) proj[key] = el.value;
-    });
+    // Company template now uses the same fields as initiative
+    const ns = document.getElementById('pd-northstar');
+    const ra = document.getElementById('pd-resources');
+    if (ns) proj.northStar = ns.value;
+    if (ra) proj.resourceAllocation = ra.value;
   } else if (type === 'theme') {
     const th = document.getElementById('pd-thesis');
     if (th) proj.centralThesis = th.value;
