@@ -1425,9 +1425,10 @@
     #screen-project-detail { overflow-y:auto; }
     .pd-layout { max-width:1160px; margin:0 auto; padding:40px 28px 80px; }
     /* Two-column layout */
-    .pd-cols { display:block; }
-    .pd-col-left { min-width:0; max-width:860px; }
-    .pd-col-right { display:none; }
+    .pd-cols { display:grid; grid-template-columns:1fr 320px; gap:24px; align-items:start; }
+    .pd-col-left { min-width:0; }
+    .pd-col-right { position:sticky; top:24px; }
+    @media(max-width:900px) { .pd-cols { grid-template-columns:1fr; } .pd-col-right { position:static; } }
     .pd-back { display:inline-flex; align-items:center; gap:6px; font-size:13px; color:var(--text-3); background:none; border:none; cursor:pointer; padding:0; margin-bottom:24px; font-family:'Inter',sans-serif; transition:color .15s; }
     .pd-back:hover { color:var(--text-0); }
     .pd-header { display:flex; align-items:flex-start; gap:14px; margin-bottom:32px; }
@@ -5756,8 +5757,60 @@
             <div id="pd-template-body"></div>
           </div>
 
-          <!-- Right column retired — Resources/Team/Tools now live in left column framework sections -->
+          <!-- ── Right column: collapsible Resources · Team · Tools ── -->
           <div class="pd-col-right">
+
+            <!-- Resources card -->
+            <div class="pd-rp-card" id="pd-rp-card-resources">
+              <div class="pd-rp-card-hdr" onclick="toggleRpCard('pd-rp-body-resources','pd-rp-chev-resources')">
+                <div class="pd-rp-card-title">
+                  <svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M2 3.5h9M2 6.5h9M2 9.5h5.5"/><rect x="1" y="1.5" width="11" height="10" rx="1.5"/></svg>
+                  Resources
+                </div>
+                <div class="pd-rp-card-actions">
+                  <button class="pd-rp-card-add" id="pd-res-add-btn" onclick="event.stopPropagation();openResourceModal()">+ Add</button>
+                  <svg class="pd-rp-card-chevron open" id="pd-rp-chev-resources" width="13" height="13" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 5l4 4 4-4"/></svg>
+                </div>
+              </div>
+              <div class="pd-rp-card-body" id="pd-rp-body-resources">
+                <div id="pd-res-list-wrap"><div style="font-size:13px;color:var(--text-3);font-style:italic;padding:4px 0">No resources yet.</div></div>
+              </div>
+            </div>
+
+            <!-- Team card -->
+            <div class="pd-rp-card" id="pd-rp-card-team">
+              <div class="pd-rp-card-hdr" onclick="toggleRpCard('pd-rp-body-team','pd-rp-chev-team')">
+                <div class="pd-rp-card-title">
+                  <svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="4.5" cy="4.5" r="1.8"/><path d="M1.5 10c0-1.7 1.3-3 3-3s3 1.3 3 3"/><circle cx="9.5" cy="4.5" r="1.5"/><path d="M9.5 7.5a2.5 2.5 0 012 2.5"/></svg>
+                  Team
+                </div>
+                <div class="pd-rp-card-actions">
+                  <button class="pd-rp-card-add pd-add-member-btn" id="pd-tm-add-btn" onclick="event.stopPropagation();openTeamMemberModal()">+ Add</button>
+                  <svg class="pd-rp-card-chevron open" id="pd-rp-chev-team" width="13" height="13" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 5l4 4 4-4"/></svg>
+                </div>
+              </div>
+              <div class="pd-rp-card-body" id="pd-rp-body-team">
+                <div id="pd-tm-list-wrap"><div style="font-size:13px;color:var(--text-3);font-style:italic;padding:4px 0">No team members yet.</div></div>
+              </div>
+            </div>
+
+            <!-- Tools card -->
+            <div class="pd-rp-card" id="pd-rp-card-tools">
+              <div class="pd-rp-card-hdr" onclick="toggleRpCard('pd-rp-body-tools','pd-rp-chev-tools')">
+                <div class="pd-rp-card-title">
+                  <svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M10 2.5a2.5 2.5 0 00-4 2L2 8.5a1 1 0 001.5 1.5L7 6a2.5 2.5 0 002-3.5z"/><circle cx="9.5" cy="3.5" r=".7" fill="currentColor" stroke="none"/></svg>
+                  Tools
+                </div>
+                <div class="pd-rp-card-actions">
+                  <button class="pd-rp-card-add" id="pd-tools-add-btn" onclick="event.stopPropagation();openToolsModal()">+ Connect</button>
+                  <svg class="pd-rp-card-chevron open" id="pd-rp-chev-tools" width="13" height="13" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 5l4 4 4-4"/></svg>
+                </div>
+              </div>
+              <div class="pd-rp-card-body" id="pd-rp-body-tools">
+                <div id="pd-tools-list-wrap"><div style="font-size:13px;color:var(--text-3);font-style:italic;padding:4px 0">No integrations connected.</div></div>
+              </div>
+            </div>
+
           </div>
         </div>
 
@@ -11225,19 +11278,11 @@ function renderProjectDetail(proj) {
   const sub = document.getElementById('pd-subtitle');
   if (sub) { sub.textContent = proj.tagline || ''; if (!proj.tagline) sub.setAttribute('data-placeholder','Add a description…'); }
 
-  // Template body (left column) — type-specific IBM Way sections + shared framework
+  // Left column has no structured template sections — perspectives input is the primary interface
   const body = document.getElementById('pd-template-body');
-  if (body) {
-    const type = proj.type || 'initiative';
-    let typeHtml = '';
-    if      (type === 'initiative') typeHtml = _buildInitiativeTemplate(proj);
-    else if (type === 'company')    typeHtml = _buildCompanyTemplate(proj);
-    else                             typeHtml = _buildThemeTemplate(proj);
-    // Always append the standardized Resources · Team · Tools framework
-    body.innerHTML = typeHtml + _buildFrameworkSections(proj);
-  }
+  if (body) body.innerHTML = '';
 
-  // Populate dynamic lists inside the framework sections
+  // Right panel — populate collapsible Resources · Team · Tools sidebar cards
   _renderRightPanel(proj);
 
   // Share page and Investor Room buttons removed from project header
