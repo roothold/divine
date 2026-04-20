@@ -1,0 +1,6 @@
+## Netlify — SPA catch-all redirect
+## Required for history-mode routing (no # in URLs).
+## Every path that doesn't match a real file is served index.html.
+## The app's JS router then handles which screen to show.
+
+/*    /index.html    200

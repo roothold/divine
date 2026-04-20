@@ -4755,6 +4755,83 @@
 .team-role-icon { width:28px; height:28px; display:flex; align-items:center; justify-content:center; margin-bottom:8px; color:var(--text-1); }
 .team-role-name { font-size:13px; font-weight:700; color:var(--text-0); margin-bottom:4px; }
 .team-role-desc { font-size:12px; color:var(--text-2); line-height:1.5; }
+
+/* ══ ADMIN PANEL ═══════════════════════════════════════════════════════ */
+.admin-panel { display:flex; flex-direction:column; gap:0; height:100%; overflow-y:auto; }
+.admin-topbar { padding:20px 24px 0; border-bottom:1px solid var(--border); display:flex; align-items:center; gap:16px; flex-wrap:wrap; }
+.admin-topbar-title { font-size:20px; font-weight:700; color:var(--text-0); display:flex; align-items:center; gap:10px; }
+.admin-badge { background:var(--danger-lt); color:var(--danger); border:1px solid var(--danger-bdr); border-radius:var(--r-pill); font-size:10px; font-weight:700; padding:2px 8px; letter-spacing:.04em; text-transform:uppercase; }
+.admin-tabs { display:flex; gap:0; margin-top:16px; }
+.admin-tab { padding:8px 18px; font-size:13px; font-weight:500; color:var(--text-2); border-bottom:2px solid transparent; cursor:pointer; background:transparent; border-top:none; border-left:none; border-right:none; font-family:'Inter',sans-serif; transition:color .15s, border-color .15s; }
+.admin-tab:hover { color:var(--text-0); }
+.admin-tab.active { color:var(--accent); border-bottom-color:var(--accent); font-weight:600; }
+.admin-body { padding:24px; flex:1; }
+.admin-section { display:none; }
+.admin-section.active { display:block; }
+
+/* Stats grid */
+.admin-stats-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(160px,1fr)); gap:14px; margin-bottom:28px; }
+.admin-stat-card { background:var(--surface-2); border:1px solid var(--border); border-radius:var(--r); padding:16px; }
+.admin-stat-label { font-size:11px; color:var(--text-2); font-weight:500; text-transform:uppercase; letter-spacing:.04em; margin-bottom:6px; }
+.admin-stat-value { font-size:26px; font-weight:700; color:var(--text-0); font-family:'Inter',sans-serif; line-height:1; }
+.admin-stat-sub { font-size:11.5px; color:var(--text-3); margin-top:4px; }
+
+/* Tables */
+.admin-table-wrap { overflow-x:auto; border:1px solid var(--border); border-radius:var(--r); }
+.admin-table { width:100%; border-collapse:collapse; font-size:13px; }
+.admin-table th { background:var(--surface-2); color:var(--text-2); font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:.04em; padding:10px 14px; text-align:left; border-bottom:1px solid var(--border); white-space:nowrap; }
+.admin-table td { padding:10px 14px; border-bottom:1px solid var(--border); color:var(--text-0); vertical-align:middle; }
+.admin-table tr:last-child td { border-bottom:none; }
+.admin-table tr:hover td { background:var(--surface-2); }
+.admin-table-empty { padding:32px; text-align:center; color:var(--text-3); font-size:13px; }
+
+/* Role pill */
+.admin-role-pill { display:inline-flex; align-items:center; padding:2px 9px; border-radius:var(--r-pill); font-size:11px; font-weight:600; text-transform:capitalize; }
+.admin-role-pill.founder  { background:var(--accent-lt); color:var(--accent); }
+.admin-role-pill.thinker  { background:#EDE9FE; color:#6D28D9; }
+.admin-role-pill.investor { background:var(--success-lt); color:var(--success); }
+.admin-role-pill.advisory { background:#FFF7ED; color:#C2410C; }
+.admin-role-pill.staff    { background:var(--surface-3); color:var(--text-1); }
+.admin-role-pill.admin    { background:var(--danger-lt); color:var(--danger); }
+
+/* Status pill */
+.admin-status-pill { display:inline-flex; align-items:center; gap:5px; padding:2px 9px; border-radius:var(--r-pill); font-size:11px; font-weight:600; }
+.admin-status-pill.active   { background:var(--success-lt); color:var(--success); }
+.admin-status-pill.paused   { background:var(--warn-lt); color:var(--warn); }
+.admin-status-pill.pending  { background:#FFF7ED; color:#C2410C; }
+.admin-status-pill.suspended { background:var(--danger-lt); color:var(--danger); }
+.admin-status-dot { width:6px; height:6px; border-radius:50%; background:currentColor; }
+
+/* Controls */
+.admin-filter-bar { display:flex; align-items:center; gap:10px; margin-bottom:16px; flex-wrap:wrap; }
+.admin-search-input { flex:1; min-width:160px; padding:8px 12px; border:1.5px solid var(--border); border-radius:var(--r-sm); font-size:13px; font-family:'Inter',sans-serif; color:var(--text-0); background:var(--surface-1); }
+.admin-search-input:focus { outline:none; border-color:var(--accent); }
+.admin-select { padding:7px 10px; border:1.5px solid var(--border); border-radius:var(--r-sm); font-size:13px; font-family:'Inter',sans-serif; color:var(--text-0); background:var(--surface-1); cursor:pointer; }
+.admin-btn { padding:6px 14px; border-radius:var(--r-pill); font-size:12px; font-weight:600; cursor:pointer; border:none; font-family:'Inter',sans-serif; transition:opacity .15s; }
+.admin-btn:hover { opacity:.85; }
+.admin-btn-approve { background:var(--success); color:#fff; }
+.admin-btn-reject  { background:var(--surface-3); color:var(--text-1); border:1.5px solid var(--border-md); }
+.admin-btn-revoke  { background:var(--danger-lt); color:var(--danger); border:1.5px solid var(--danger-bdr); }
+.admin-btn-grant   { background:var(--accent); color:#fff; }
+
+/* Section header */
+.admin-section-hdr { display:flex; align-items:center; justify-content:space-between; margin-bottom:16px; }
+.admin-section-title { font-size:15px; font-weight:700; color:var(--text-0); }
+.admin-section-meta  { font-size:12px; color:var(--text-3); }
+
+/* Log */
+.admin-log-item { display:flex; gap:12px; padding:10px 0; border-bottom:1px solid var(--border); font-size:12.5px; align-items:flex-start; }
+.admin-log-item:last-child { border-bottom:none; }
+.admin-log-time { color:var(--text-3); white-space:nowrap; flex-shrink:0; font-family:'Inter',sans-serif; }
+.admin-log-action { color:var(--accent); font-weight:600; margin-right:4px; }
+.admin-log-detail { color:var(--text-1); }
+.admin-log-empty { color:var(--text-3); font-size:13px; padding:24px 0; text-align:center; }
+
+/* Nav separator for admin */
+.nav-admin-sep { height:1px; background:var(--border); margin:8px 12px; }
+.nav-admin-item { color:var(--danger) !important; }
+.nav-admin-item:hover { background:var(--danger-lt) !important; }
+.nav-admin-item.active { background:var(--danger-lt) !important; color:var(--danger) !important; }
 </style>
 
 <div class="sidebar-backdrop" id="sidebar-backdrop" onclick="toggleSidebar()"></div>
@@ -4860,6 +4937,18 @@
         </button>
 
         </div><!-- /thinker-nav-section -->
+
+        <!-- Admin nav — only visible when di_admin === "true" -->
+        <div id="admin-nav-section" style="display:none">
+          <div class="nav-admin-sep"></div>
+          <button class="nav-item nav-admin-item" id="nav-admin" data-tip="Admin Panel" onclick="showView('admin')">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M8 1.5L2 4.5v4c0 3 2.5 5.5 6 6 3.5-.5 6-3 6-6v-4z"/>
+              <path d="M5.5 8l2 2 3-3"/>
+            </svg>
+            <span class="nav-item-label">Admin</span>
+          </button>
+        </div>
 
         <!-- nav-profile-section: profile now lives in bottom-left popup menu -->
 
@@ -6919,6 +7008,172 @@ e.g. I always start by validating whether the problem is real before evaluating 
   </div>
 </div>
 
+<!-- ══ ADMIN PANEL SCREEN ══════════════════════════════════════════════════ -->
+<div class="screen" id="screen-admin">
+  <div class="admin-panel">
+
+    <!-- Top bar -->
+    <div class="admin-topbar">
+      <div class="admin-topbar-title">
+        <svg width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M8 1.5L2 4.5v4c0 3 2.5 5.5 6 6 3.5-.5 6-3 6-6v-4z"/>
+          <path d="M5.5 8l2 2 3-3"/>
+        </svg>
+        Admin Panel
+        <span class="admin-badge">Restricted</span>
+      </div>
+      <div class="admin-tabs">
+        <button class="admin-tab active" data-tab="overview"   onclick="adminSwitchTab('overview')">Overview</button>
+        <button class="admin-tab"        data-tab="users"      onclick="adminSwitchTab('users')">Users</button>
+        <button class="admin-tab"        data-tab="thinkers"   onclick="adminSwitchTab('thinkers')">Thinker Queue</button>
+        <button class="admin-tab"        data-tab="ir"         onclick="adminSwitchTab('ir')">IR Rooms</button>
+        <button class="admin-tab"        data-tab="teams"      onclick="adminSwitchTab('teams')">Teams</button>
+        <button class="admin-tab"        data-tab="log"        onclick="adminSwitchTab('log')">Audit Log</button>
+      </div>
+    </div>
+
+    <div class="admin-body">
+
+      <!-- ── Overview ─────────────────────────────────────────────── -->
+      <div id="admin-sec-overview" class="admin-section active">
+        <div class="admin-stats-grid" id="admin-stats-grid">
+          <!-- Populated by adminRenderOverview() -->
+        </div>
+        <div class="admin-section-hdr">
+          <div class="admin-section-title">Role Breakdown</div>
+        </div>
+        <div class="admin-table-wrap">
+          <table class="admin-table" id="admin-role-table">
+            <thead><tr>
+              <th>Role</th><th>Count</th><th>% of Users</th>
+            </tr></thead>
+            <tbody id="admin-role-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ── Users ─────────────────────────────────────────────────── -->
+      <div id="admin-sec-users" class="admin-section">
+        <div class="admin-filter-bar">
+          <input class="admin-search-input" id="admin-user-search" placeholder="Search by name or email…" oninput="adminFilterUsers()">
+          <select class="admin-select" id="admin-user-role-filter" onchange="adminFilterUsers()">
+            <option value="">All roles</option>
+            <option value="founder">Founder</option>
+            <option value="thinker">Thinker</option>
+            <option value="investor">Investor</option>
+            <option value="advisory">Advisor</option>
+            <option value="staff">Staff</option>
+          </select>
+        </div>
+        <div class="admin-table-wrap">
+          <table class="admin-table">
+            <thead><tr>
+              <th>Name</th><th>Email</th><th>Role</th><th>Status</th><th>Actions</th>
+            </tr></thead>
+            <tbody id="admin-users-tbody">
+              <tr><td colspan="5" class="admin-table-empty">Loading…</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ── Thinker Queue ──────────────────────────────────────────── -->
+      <div id="admin-sec-thinkers" class="admin-section">
+        <div class="admin-section-hdr">
+          <div class="admin-section-title">Pending Thinker Applications</div>
+          <div class="admin-section-meta" id="admin-thinker-pending-count">0 pending</div>
+        </div>
+        <div class="admin-table-wrap" style="margin-bottom:28px">
+          <table class="admin-table">
+            <thead><tr>
+              <th>Name</th><th>Domains</th><th>Moat Score</th><th>Applied</th><th>Actions</th>
+            </tr></thead>
+            <tbody id="admin-thinker-pending-tbody">
+              <tr><td colspan="5" class="admin-table-empty">No pending applications.</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="admin-section-hdr">
+          <div class="admin-section-title">Approved Thinkers</div>
+          <div class="admin-section-meta" id="admin-thinker-approved-count">0 approved</div>
+        </div>
+        <div class="admin-table-wrap">
+          <table class="admin-table">
+            <thead><tr>
+              <th>Name</th><th>Domains</th><th>Moat Score</th><th>Perspectives</th><th>Actions</th>
+            </tr></thead>
+            <tbody id="admin-thinker-approved-tbody">
+              <tr><td colspan="5" class="admin-table-empty">No approved Thinkers yet.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ── IR Rooms ───────────────────────────────────────────────── -->
+      <div id="admin-sec-ir" class="admin-section">
+        <div class="admin-section-hdr">
+          <div class="admin-section-title">Published IR Rooms</div>
+          <div class="admin-section-meta" id="admin-ir-count">0 rooms</div>
+        </div>
+        <div class="admin-table-wrap" style="margin-bottom:28px">
+          <table class="admin-table">
+            <thead><tr>
+              <th>Founder</th><th>Company</th><th>Published</th><th>Investors Granted</th><th>Actions</th>
+            </tr></thead>
+            <tbody id="admin-ir-tbody">
+              <tr><td colspan="5" class="admin-table-empty">No published IR rooms.</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="admin-section-hdr">
+          <div class="admin-section-title">Pending Access Requests</div>
+          <div class="admin-section-meta" id="admin-ir-req-count">0 pending</div>
+        </div>
+        <div class="admin-table-wrap">
+          <table class="admin-table">
+            <thead><tr>
+              <th>Investor</th><th>Requested Access To</th><th>Requested</th><th>Actions</th>
+            </tr></thead>
+            <tbody id="admin-ir-req-tbody">
+              <tr><td colspan="4" class="admin-table-empty">No pending access requests.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ── Teams ─────────────────────────────────────────────────── -->
+      <div id="admin-sec-teams" class="admin-section">
+        <div class="admin-section-hdr">
+          <div class="admin-section-title">Team Assignments</div>
+          <div class="admin-section-meta" id="admin-teams-count">0 assignments</div>
+        </div>
+        <div class="admin-table-wrap">
+          <table class="admin-table">
+            <thead><tr>
+              <th>Member</th><th>Role</th><th>Assigned By (Founder)</th><th>Project / Company</th><th>Actions</th>
+            </tr></thead>
+            <tbody id="admin-teams-tbody">
+              <tr><td colspan="5" class="admin-table-empty">No team assignments found.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ── Audit Log ─────────────────────────────────────────────── -->
+      <div id="admin-sec-log" class="admin-section">
+        <div class="admin-section-hdr">
+          <div class="admin-section-title">Admin Action Log</div>
+          <div class="admin-section-meta" id="admin-log-count">0 entries</div>
+        </div>
+        <div id="admin-log-list">
+          <div class="admin-log-empty">No admin actions logged yet.</div>
+        </div>
+      </div>
+
+    </div><!-- /admin-body -->
+  </div><!-- /admin-panel -->
+</div><!-- /screen-admin -->
+
   </main>
 </div>
 
@@ -7840,32 +8095,30 @@ function signOut() {
      #/share/perspective/:encoded  → Shared perspective
 ════════════════════════════════════════════════════════════════════════ */
 const router = (() => {
-  // View name → canonical hash URL
-  const VIEW_TO_HASH = {
-    'recents':         '#/',
-    'wallet':         '#/wallet',
-    'chat':            '#/chat',
-    'search':          '#/search',
-    'thought-leaders': '#/thinkers',
-    'projects':        '#/projects',
-    'project-detail':  '#/projects',
-    'settings':        '#/settings',
-    'help':            '#/help',
-    'downloads':       '#/downloads',
-    'thinker-hub':     '#/thinker',
-    'login':           '#/login',
-    'ir-page':         '#/ir',
-    'ir-view':         '#/ir/view',
-    'ir-public':       '#/c',
-    'user-profile':    '#/profile',
+  // View name → canonical path (history-mode, no # prefix)
+  const VIEW_TO_PATH = {
+    'recents':         '/',
+    'wallet':          '/wallet',
+    'chat':            '/chat',
+    'search':          '/search',
+    'thought-leaders': '/thinkers',
+    'projects':        '/projects',
+    'project-detail':  '/projects',
+    'settings':        '/settings',
+    'help':            '/help',
+    'downloads':       '/downloads',
+    'thinker-hub':     '/thinker',
+    'login':           '/login',
+    'ir-page':         '/ir',
+    'ir-view':         '/ir/view',
+    'ir-public':       '/c',
+    'user-profile':    '/profile',
+    'admin':           '/admin',
   };
 
-  // Normalise hash → path segment (strips leading # and trailing slashes)
-  function _hashPath() {
-    const h = window.location.hash || '#/';
-    // Public page hashes: #c/... and #ir?... — leave untouched for irBootFromURL
-    if (h.startsWith('#c/') || h.startsWith('#ir?') || h.startsWith('#/share/')) return h;
-    return h.replace(/^#/, '').replace(/\/+$/, '') || '/';
+  // Return normalised pathname for matching (strips trailing slashes)
+  function _currentPath() {
+    return (window.location.pathname || '/').replace(/\/+$/, '') || '/';
   }
 
   // Ordered route table — first match wins
@@ -7894,7 +8147,7 @@ const router = (() => {
     // Standard views
     { re: /^\/$|^\/dashboard$/,              fn: ()  => _act('recents') },
     { re: /^\/search$/,                       fn: ()  => _act('search') },
-    { re: /^\/thinkers$|^\/team$/,             fn: ()  => _act('thought-leaders') },
+    { re: /^\/thinkers$|^\/team$/,           fn: ()  => _act('thought-leaders') },
     { re: /^\/projects$/,                     fn: ()  => _act('projects') },
     { re: /^\/settings$/,                     fn: ()  => _act('settings') },
     { re: /^\/help$/,                         fn: ()  => _act('help') },
@@ -7902,16 +8155,17 @@ const router = (() => {
     { re: /^\/ir\/view$/,                    fn: ()  => _act('ir-view') },
     { re: /^\/ir$/,                           fn: ()  => _act('ir-page') },
     { re: /^\/profile$/,                      fn: ()  => _act('user-profile') },
+    { re: /^\/admin$/,                        fn: ()  => _act('admin') },
     { re: /^\/login$/,                        fn: ()  => showLoginScreen() },
 
     // Shared perspective
     { re: /^\/share\/perspective\/(.+)$/,   fn: (m) => _openSharedPerspective(m[1]) },
 
-    // Public pages handled separately by irBootFromURL
-    { re: /^#c\/|^#ir\?/,                   fn: ()  => { /* handled by irBootFromURL */ } },
+    // Public embedded-data pages — handled by irBootFromURL
+    { re: /^\/c\//,                          fn: ()  => { if (typeof irBootFromURL === 'function') irBootFromURL(); } },
   ]; }
 
-  // Activate a named view without pushing another hash entry
+  // Activate a named view without pushing another history entry
   function _act(view) { showView(view, { _noHistory: true }); }
 
   function _actThinkerTab(tab) {
@@ -7940,46 +8194,52 @@ const router = (() => {
   function _openSharedPerspective(encoded) {
     try {
       const json = JSON.parse(atob(decodeURIComponent(encoded)));
-      // Reconstruct as a recent session and open
       if (json && json.id) openChatSession(json.id);
       else _act('recents');
     } catch(e) { _act('recents'); }
   }
 
-  function resolve(rawHash) {
-    const h = rawHash !== undefined ? rawHash : (window.location.hash || '#/');
+  function resolve(rawPath) {
+    const path = rawPath !== undefined
+      ? rawPath
+      : _currentPath();
+
     // Public embedded-data pages — hand off to irBootFromURL
-    if (h.startsWith('#c/') || h.startsWith('#ir?')) {
+    // /ir?d=BASE64 (private room) or /c/SLUG?d=BASE64 (public profile)
+    if (path === '/ir' && window.location.search.startsWith('?d=')) {
       if (typeof irBootFromURL === 'function') irBootFromURL();
       return;
     }
-    const path = h.replace(/^#/, '').replace(/\/+$/, '') || '/';
+    if (path.startsWith('/c/')) {
+      if (typeof irBootFromURL === 'function') irBootFromURL();
+      return;
+    }
+
     const routes = buildRoutes();
     const route  = routes.find(r => r.re.test(path));
     if (route) route.fn(path.match(route.re));
     else _act('recents');
   }
 
-  function push(hashOrPath) {
-    // Accept both '#/foo' and '/foo' forms, normalise to '#/foo'
-    const h = hashOrPath.startsWith('#') ? hashOrPath : '#' + hashOrPath;
-    if (window.location.hash !== h) {
-      history.pushState({}, '', window.location.pathname + window.location.search + h);
+  function push(path) {
+    // Strip any legacy # prefix so old call-sites still work
+    const p = path.startsWith('#') ? path.slice(1) : path;
+    if (window.location.pathname !== p) {
+      history.pushState({}, '', p);
     }
   }
 
-  function replace(hashOrPath) {
-    const h = hashOrPath.startsWith('#') ? hashOrPath : '#' + hashOrPath;
-    history.replaceState({}, '', window.location.pathname + window.location.search + h);
+  function replace(path) {
+    const p = path.startsWith('#') ? path.slice(1) : path;
+    history.replaceState({}, '', p);
   }
 
   function pathForView(view) {
-    return VIEW_TO_HASH[view] || '#/';
+    return VIEW_TO_PATH[view] || '/';
   }
 
-  // Back / forward button support — hashchange fires on hash navigation
-  window.addEventListener('hashchange', () => resolve(window.location.hash));
-  window.addEventListener('popstate',   () => resolve(window.location.hash));
+  // Back / forward — popstate fires on history.pushState navigation
+  window.addEventListener('popstate', () => resolve(_currentPath()));
 
   return { resolve, push, replace, pathForView };
 })();
@@ -8037,6 +8297,17 @@ function showView(view, opts = {}) {
       document.getElementById('nav-profile')?.classList.add('active');
       show('screen-user-profile');
       try { initProfileScreen(); } catch(e) { console.error('[profile init]', e); }
+    },
+    'admin': () => {
+      // Guard: only accessible to admin users
+      if (localStorage.getItem('di_admin') !== 'true') {
+        showToast('Admin access required.', 'error');
+        showView('recents');
+        return;
+      }
+      document.getElementById('nav-admin')?.classList.add('active');
+      show('screen-admin');
+      try { initAdminPanel(); } catch(e) { console.error('[admin init]', e); }
     },
   };
   (views[view] || (() => {}))();
@@ -10500,7 +10771,7 @@ function _openSharedProject(projectId, ownerKey, role) {
   renderProjectDetail(proj);
   const type   = proj.type || 'initiative';
   const urlKey = proj.slug  || proj.id;
-  router.push('#/projects/' + type + '/' + encodeURIComponent(urlKey));
+  router.push('/projects/' + type + '/' + encodeURIComponent(urlKey));
   showView('project-detail', { _noHistory: true });
 }
 
@@ -10531,7 +10802,7 @@ function openProjectDetail(projectId) {
   // Push type-specific deep-link URL so refresh restores this project
   const type    = proj.type || 'initiative';
   const urlKey  = proj.slug || proj.id;
-  router.push('#/projects/' + type + '/' + encodeURIComponent(urlKey));
+  router.push('/projects/' + type + '/' + encodeURIComponent(urlKey));
   showView('project-detail', { _noHistory: true });
 }
 
@@ -12313,7 +12584,7 @@ function openChat(prefill) {
     _renderChatSidebarForSession(_chatSession);
   }, 60);
   setMobNavActive(null);
-  router.push('#/chat/' + _chatSession.id);
+  router.push('/chat/' + _chatSession.id);
 
   // Pre-fill if coming from dashboard input or URL param
   if (prefill && prefill.trim()) {
@@ -12372,7 +12643,7 @@ function openChatSession(sessionId) {
     ta.focus();
   }, 80);
   setMobNavActive(null);
-  router.push('#/chat/' + sessionId);
+  router.push('/chat/' + sessionId);
 }
 
 function _chatEmptyState() {
@@ -13692,7 +13963,7 @@ async function initAuth() {
     clean.searchParams.delete('topup');
     clean.searchParams.delete('login');
     const qs = clean.search === '?' ? '' : clean.search;
-    history.replaceState({}, '', clean.pathname + qs + (window.location.hash || ''));
+    history.replaceState({}, '', clean.pathname + qs);
   }
 
   if (authError) {
@@ -13946,14 +14217,13 @@ if (!localStorage.getItem('di_welcome_seen')) {
 }
 
 // ── URL-based initial routing ────────────────────────────────────────────
-// Hash-based routing: resolve current hash so a refresh or direct link
-// always opens the correct view. Falls back to Launchpad if hash is empty.
+// History-mode routing: resolve current pathname so a refresh or direct link
+// always opens the correct view. Falls back to Launchpad if path is unknown.
 (function initRouter() {
   // Always pre-render dashboard data for back-navigation
   renderDashboardHome();
-  // Resolve from hash — handles #/projects/company/abc123, #c/slug?d=..., etc.
-  const hash = window.location.hash || '#/';
-  router.resolve(hash);
+  // Resolve from pathname — handles /projects/company/abc123, /c/slug?d=..., etc.
+  router.resolve();
 })();
 
 /* ════════════════════════════════
@@ -13972,7 +14242,7 @@ if (!localStorage.getItem('di_welcome_seen')) {
     const clean = new URL(window.location.href);
     clean.searchParams.delete('q');
     clean.searchParams.delete('thinker');
-    history.replaceState({}, '', clean.pathname + (clean.search === '?' ? '' : clean.search) + (window.location.hash || ''));
+    history.replaceState({}, '', clean.pathname + (clean.search === '?' ? '' : clean.search));
   }
 
   // ?login=1 — handled by initAuth() which checks token first;
@@ -14001,7 +14271,7 @@ if (!localStorage.getItem('di_welcome_seen')) {
 (function checkMockLogin() {
   const p = new URLSearchParams(window.location.search);
   if (p.get('mock_login') !== '1') return;
-  history.replaceState({}, '', window.location.pathname + (window.location.hash || ''));
+  history.replaceState({}, '', window.location.pathname);
   applyAuthState({ id: 'mock-user', name: 'Michael', email: 'michael@surpluspods.com', thinker_access: true });
   setTimeout(() => showToast('✓ Mock login active — display is working'), 200);
 })();
@@ -14474,7 +14744,7 @@ async function checkForNewSales() {
 /* ── Tab switching ── */
 // Navigate to a thinker hub sub-tab and push the right URL
 function navigateThinkerTab(tab) {
-  const path = (!tab || tab === 'overview') ? '#/thinker' : '#/thinker/' + tab;
+  const path = (!tab || tab === 'overview') ? '/thinker' : '/thinker/' + tab;
   router.push(path);
   show('screen-thinker-hub');
   try { initThinkerHub(); } catch(e) {}
@@ -15534,9 +15804,9 @@ async function irPublish() {
   // Encode as base64 JSON
   const encoded       = btoa(unescape(encodeURIComponent(JSON.stringify(pageData))));
   const publicEncoded = btoa(unescape(encodeURIComponent(JSON.stringify(publicData))));
-  const base          = `${window.location.origin}${window.location.pathname}`;
-  const link          = `${base}#ir?d=${encoded}`;
-  const publicLink    = `${base}#c/${slug}?d=${publicEncoded}`;
+  const base          = window.location.origin;
+  const link          = `${base}/ir?d=${encoded}`;
+  const publicLink    = `${base}/c/${slug}?d=${publicEncoded}`;
 
   // Save to local store + expose links for Investor Hub tab
   irSaveData({ ...d, ...form, published: true, publishedAt: now, link, publicLink, invites });
@@ -15630,11 +15900,12 @@ function irPublicGoToGate() {
 let _irPageData = null;
 
 function irBootFromURL() {
-  const hash = window.location.hash;
-  // Private IR room: #ir?d=BASE64
-  if (hash.startsWith('#ir?d=')) {
+  const path   = window.location.pathname;
+  const search = window.location.search;
+  // Private IR room: /ir?d=BASE64
+  if (path === '/ir' && search.startsWith('?d=')) {
     try {
-      const encoded = hash.slice('#ir?d='.length);
+      const encoded = search.slice('?d='.length);
       const json    = decodeURIComponent(escape(atob(encoded)));
       _irPageData   = JSON.parse(json);
       irLoadGateScreen(_irPageData);
@@ -15645,12 +15916,12 @@ function irBootFromURL() {
       return false;
     }
   }
-  // Public company page: #c/SLUG?d=BASE64
-  if (hash.startsWith('#c/')) {
+  // Public company page: /c/SLUG?d=BASE64
+  if (path.startsWith('/c/')) {
     try {
-      const qIdx    = hash.indexOf('?d=');
-      if (qIdx === -1) return false;
-      const encoded = hash.slice(qIdx + 3);
+      const params  = new URLSearchParams(search);
+      const encoded = params.get('d');
+      if (!encoded) return false;
       const json    = decodeURIComponent(escape(atob(encoded)));
       const data    = JSON.parse(json);
       irRenderPublicPage(data);
@@ -15739,8 +16010,9 @@ function irLogout() {
 
 /* ── On-load URL detection ── */
 (function() {
-  const h = window.location.hash;
-  if (h.startsWith('#ir?d=') || h.startsWith('#c/')) {
+  const path = window.location.pathname;
+  const isIR = (path === '/ir' && window.location.search.startsWith('?d=')) || path.startsWith('/c/');
+  if (isIR) {
     // Defer until DOM is ready
     window.addEventListener('DOMContentLoaded', () => irBootFromURL(), { once: true });
     // Fallback if DOMContentLoaded already fired
@@ -17058,6 +17330,484 @@ document.addEventListener('keydown', function _lpKeyCapture(e) {
   if (typeof dcInputUpdate === 'function') dcInputUpdate(ta);
   e.preventDefault();
 });
+
+/* ════════════════════════════════════════════════════════════════════════════
+   ADMIN PANEL
+════════════════════════════════════════════════════════════════════════════ */
+
+// ── Helpers ───────────────────────────────────────────────────────────────────
+function _adminKey(uid) { return `di_profile__${uid}`; }
+function _adminLog(action, targetId, details = '') {
+  const uid = currentUser?.uid || 'anon';
+  const log = JSON.parse(localStorage.getItem('di_admin_log') || '[]');
+  log.unshift({ action, targetId, adminId: uid, timestamp: new Date().toISOString(), details });
+  localStorage.setItem('di_admin_log', JSON.stringify(log.slice(0, 500)));
+}
+
+// Enumerate all user profiles from localStorage
+function _adminGetAllUsers() {
+  const users = [];
+  for (let i = 0; i < localStorage.length; i++) {
+    const k = localStorage.key(i);
+    if (k && k.startsWith('di_profile__')) {
+      try {
+        const p = JSON.parse(localStorage.getItem(k) || '{}');
+        users.push({ uid: k.replace('di_profile__', ''), ...p });
+      } catch(e) {}
+    }
+  }
+  return users;
+}
+
+// ── Tab switcher ──────────────────────────────────────────────────────────────
+function adminSwitchTab(tab) {
+  document.querySelectorAll('.admin-tab').forEach(b => {
+    b.classList.toggle('active', b.dataset.tab === tab);
+  });
+  document.querySelectorAll('.admin-section').forEach(s => {
+    s.classList.remove('active');
+  });
+  const sec = document.getElementById(`admin-sec-${tab}`);
+  if (sec) sec.classList.add('active');
+
+  // Lazy render each section
+  if (tab === 'overview')  adminRenderOverview();
+  if (tab === 'users')     adminRenderUsers();
+  if (tab === 'thinkers')  adminRenderThinkers();
+  if (tab === 'ir')        adminRenderIR();
+  if (tab === 'teams')     adminRenderTeams();
+  if (tab === 'log')       adminRenderLog();
+}
+
+// ── Init ──────────────────────────────────────────────────────────────────────
+function initAdminPanel() {
+  adminRenderOverview();
+}
+
+// ── Overview ──────────────────────────────────────────────────────────────────
+function adminRenderOverview() {
+  const users = _adminGetAllUsers();
+  const total = users.length;
+  const byRole = {};
+  users.forEach(u => {
+    const r = u.role || 'unknown';
+    byRole[r] = (byRole[r] || 0) + 1;
+  });
+
+  // Count active Thinkers
+  let activeThinkers = 0, totalPerspectives = 0;
+  for (let i = 0; i < localStorage.length; i++) {
+    const k = localStorage.key(i);
+    if (k && k.startsWith('di_tk_paused__')) {
+      const paused = localStorage.getItem(k) === 'true';
+      if (!paused) activeThinkers++;
+    }
+    if (k && k.startsWith('di_tk_perspectives_count__')) {
+      totalPerspectives += parseInt(localStorage.getItem(k) || '0', 10);
+    }
+  }
+
+  // Count published IR rooms
+  let irRooms = 0;
+  for (let i = 0; i < localStorage.length; i++) {
+    const k = localStorage.key(i);
+    if (k && k.startsWith('di_ir__')) {
+      try {
+        const d = JSON.parse(localStorage.getItem(k) || '{}');
+        if (d.published) irRooms++;
+      } catch(e) {}
+    }
+  }
+
+  const stats = [
+    { label: 'Total Users', value: total, sub: 'Across all roles' },
+    { label: 'Active Thinkers', value: activeThinkers, sub: 'Available & trained' },
+    { label: 'Perspectives Generated', value: totalPerspectives, sub: 'All-time' },
+    { label: 'Published IR Rooms', value: irRooms, sub: 'Investor-facing' },
+  ];
+
+  const grid = document.getElementById('admin-stats-grid');
+  if (grid) grid.innerHTML = stats.map(s =>
+    `<div class="admin-stat-card">
+      <div class="admin-stat-label">${s.label}</div>
+      <div class="admin-stat-value">${s.value}</div>
+      <div class="admin-stat-sub">${s.sub}</div>
+    </div>`
+  ).join('');
+
+  // Role breakdown table
+  const roles = ['founder','thinker','investor','advisory','staff','unknown'];
+  const tbody = document.getElementById('admin-role-tbody');
+  if (tbody) tbody.innerHTML = roles.map(r => {
+    const count = byRole[r] || 0;
+    const pct = total > 0 ? Math.round(count / total * 100) : 0;
+    return `<tr>
+      <td><span class="admin-role-pill ${r}">${r}</span></td>
+      <td><strong>${count}</strong></td>
+      <td>${pct}%</td>
+    </tr>`;
+  }).join('');
+}
+
+// ── Users ─────────────────────────────────────────────────────────────────────
+let _adminUsersData = [];
+function adminRenderUsers() {
+  _adminUsersData = _adminGetAllUsers();
+  adminFilterUsers();
+}
+
+function adminFilterUsers() {
+  const search = (document.getElementById('admin-user-search')?.value || '').toLowerCase();
+  const roleFilter = document.getElementById('admin-user-role-filter')?.value || '';
+  const filtered = _adminUsersData.filter(u => {
+    const matchSearch = !search ||
+      (u.displayName || '').toLowerCase().includes(search) ||
+      (u.email || '').toLowerCase().includes(search);
+    const matchRole = !roleFilter || (u.role || '') === roleFilter;
+    return matchSearch && matchRole;
+  });
+
+  const tbody = document.getElementById('admin-users-tbody');
+  if (!tbody) return;
+  if (!filtered.length) {
+    tbody.innerHTML = '<tr><td colspan="5" class="admin-table-empty">No users match your filters.</td></tr>';
+    return;
+  }
+
+  tbody.innerHTML = filtered.map(u => {
+    const suspended = u.suspended === true;
+    const name = u.displayName || u.name || '—';
+    const email = u.email || '—';
+    const role = u.role || 'unknown';
+    const status = suspended ? 'suspended' : 'active';
+    const statusLabel = suspended ? 'Suspended' : 'Active';
+    return `<tr>
+      <td><strong>${name}</strong></td>
+      <td style="color:var(--text-2);font-size:12px">${email}</td>
+      <td><span class="admin-role-pill ${role}">${role}</span></td>
+      <td><span class="admin-status-pill ${status}"><span class="admin-status-dot"></span>${statusLabel}</span></td>
+      <td style="display:flex;gap:6px;flex-wrap:wrap">
+        <select class="admin-select" style="padding:4px 6px;font-size:11px" onchange="adminChangeRole('${u.uid}',this.value)">
+          <option value="">Role…</option>
+          ${['founder','thinker','investor','advisory','staff'].map(r =>
+            `<option value="${r}" ${r === role ? 'selected' : ''}>${r}</option>`
+          ).join('')}
+        </select>
+        <button class="admin-btn ${suspended ? 'admin-btn-approve' : 'admin-btn-revoke'}"
+          onclick="adminToggleSuspend('${u.uid}',${!suspended})">
+          ${suspended ? 'Restore' : 'Suspend'}
+        </button>
+      </td>
+    </tr>`;
+  }).join('');
+}
+
+function adminChangeRole(uid, newRole) {
+  if (!newRole) return;
+  const key = `di_profile__${uid}`;
+  const profile = JSON.parse(localStorage.getItem(key) || '{}');
+  const oldRole = profile.role || 'unknown';
+  profile.role = newRole;
+  localStorage.setItem(key, JSON.stringify(profile));
+  _adminLog('role_change', uid, `${oldRole} → ${newRole}`);
+  showToast(`Role updated to ${newRole}`, 'success');
+  adminFilterUsers();
+}
+
+function adminToggleSuspend(uid, suspend) {
+  const key = `di_profile__${uid}`;
+  const profile = JSON.parse(localStorage.getItem(key) || '{}');
+  profile.suspended = suspend;
+  localStorage.setItem(key, JSON.stringify(profile));
+  _adminLog(suspend ? 'user_suspended' : 'user_restored', uid, '');
+  showToast(suspend ? 'User suspended' : 'User restored', suspend ? 'error' : 'success');
+  adminRenderUsers();
+}
+
+// ── Thinkers ──────────────────────────────────────────────────────────────────
+function adminRenderThinkers() {
+  // Collect all Thinker profiles: look for di_tk_onboarding_complete__{uid}
+  const pending = [], approved = [];
+  for (let i = 0; i < localStorage.length; i++) {
+    const k = localStorage.key(i);
+    if (k && k.startsWith('di_tk_onboarding_complete__')) {
+      const complete = localStorage.getItem(k) === 'true';
+      if (!complete) continue;
+      const uid = k.replace('di_tk_onboarding_complete__', '');
+      const profile = JSON.parse(localStorage.getItem(`di_profile__${uid}`) || '{}');
+      const tkApproved = localStorage.getItem(`di_tk_approved__${uid}`) === 'true';
+      const moat = parseInt(localStorage.getItem(`di_tk_moat_score__${uid}`) || '0', 10);
+      const domains = JSON.parse(localStorage.getItem(`di_tk_domains__${uid}`) || '[]');
+      const perspectives = parseInt(localStorage.getItem(`di_tk_perspectives_count__${uid}`) || '0', 10);
+      const entry = { uid, name: profile.displayName || profile.name || uid, domains, moat, perspectives };
+      if (tkApproved) approved.push(entry);
+      else pending.push(entry);
+    }
+  }
+
+  document.getElementById('admin-thinker-pending-count').textContent = `${pending.length} pending`;
+  document.getElementById('admin-thinker-approved-count').textContent = `${approved.length} approved`;
+
+  const pendingTbody = document.getElementById('admin-thinker-pending-tbody');
+  pendingTbody.innerHTML = pending.length ? pending.map(t =>
+    `<tr>
+      <td><strong>${t.name}</strong></td>
+      <td style="font-size:12px;color:var(--text-2)">${t.domains.slice(0,3).join(', ') || '—'}</td>
+      <td>${t.moat || '—'}</td>
+      <td>—</td>
+      <td style="display:flex;gap:6px">
+        <button class="admin-btn admin-btn-approve" onclick="adminApproveThinker('${t.uid}',true)">Approve</button>
+        <button class="admin-btn admin-btn-reject"  onclick="adminApproveThinker('${t.uid}',false)">Reject</button>
+      </td>
+    </tr>`
+  ).join('') : '<tr><td colspan="5" class="admin-table-empty">No pending applications.</td></tr>';
+
+  const approvedTbody = document.getElementById('admin-thinker-approved-tbody');
+  approvedTbody.innerHTML = approved.length ? approved.map(t =>
+    `<tr>
+      <td><strong>${t.name}</strong></td>
+      <td style="font-size:12px;color:var(--text-2)">${t.domains.slice(0,3).join(', ') || '—'}</td>
+      <td>${t.moat || '—'}</td>
+      <td>${t.perspectives}</td>
+      <td>
+        <button class="admin-btn admin-btn-revoke" onclick="adminRevokeThinker('${t.uid}')">Revoke</button>
+      </td>
+    </tr>`
+  ).join('') : '<tr><td colspan="5" class="admin-table-empty">No approved Thinkers yet.</td></tr>';
+}
+
+function adminApproveThinker(uid, approve) {
+  localStorage.setItem(`di_tk_approved__${uid}`, approve ? 'true' : 'false');
+  if (!approve) {
+    const notifKey = `di_notifications__${uid}`;
+    const notifs = JSON.parse(localStorage.getItem(notifKey) || '[]');
+    notifs.unshift({ type: 'thinker_rejected', timestamp: new Date().toISOString(), read: false });
+    localStorage.setItem(notifKey, JSON.stringify(notifs));
+  }
+  _adminLog(approve ? 'thinker_approved' : 'thinker_rejected', uid, '');
+  showToast(approve ? 'Thinker approved — now discoverable.' : 'Thinker application rejected.', approve ? 'success' : 'error');
+  adminRenderThinkers();
+}
+
+function adminRevokeThinker(uid) {
+  localStorage.setItem(`di_tk_approved__${uid}`, 'false');
+  _adminLog('thinker_revoked', uid, 'Approval revoked');
+  showToast('Thinker approval revoked.', 'error');
+  adminRenderThinkers();
+}
+
+// ── IR Rooms ──────────────────────────────────────────────────────────────────
+function adminRenderIR() {
+  const rooms = [], requests = [];
+  const users = _adminGetAllUsers();
+  const userMap = {};
+  users.forEach(u => { userMap[u.uid] = u.displayName || u.name || u.uid; });
+
+  for (let i = 0; i < localStorage.length; i++) {
+    const k = localStorage.key(i);
+    if (k && k.startsWith('di_ir__')) {
+      try {
+        const uid = k.replace('di_ir__', '');
+        const d = JSON.parse(localStorage.getItem(k) || '{}');
+        if (d.published) {
+          rooms.push({ uid, founder: userMap[uid] || uid, company: d.company || '—',
+            published: d.publishedAt || '—', investors: (d.allowedInvestors || []).length });
+        }
+      } catch(e) {}
+    }
+    if (k && k.startsWith('di_ir_requests__')) {
+      try {
+        const founderId = k.replace('di_ir_requests__', '');
+        const reqs = JSON.parse(localStorage.getItem(k) || '[]');
+        reqs.filter(r => r.status === 'pending').forEach(r => {
+          requests.push({ ...r, founderId, founderName: userMap[founderId] || founderId });
+        });
+      } catch(e) {}
+    }
+  }
+
+  document.getElementById('admin-ir-count').textContent = `${rooms.length} rooms`;
+  document.getElementById('admin-ir-req-count').textContent = `${requests.length} pending`;
+
+  const tbody = document.getElementById('admin-ir-tbody');
+  tbody.innerHTML = rooms.length ? rooms.map(r =>
+    `<tr>
+      <td><strong>${r.founder}</strong></td>
+      <td>${r.company}</td>
+      <td style="font-size:12px;color:var(--text-2)">${r.published}</td>
+      <td>${r.investors} granted</td>
+      <td>
+        <button class="admin-btn admin-btn-revoke" onclick="adminRevokeIRRoom('${r.uid}')">Unpublish</button>
+      </td>
+    </tr>`
+  ).join('') : '<tr><td colspan="5" class="admin-table-empty">No published IR rooms.</td></tr>';
+
+  const reqTbody = document.getElementById('admin-ir-req-tbody');
+  reqTbody.innerHTML = requests.length ? requests.map(r =>
+    `<tr>
+      <td><strong>${r.investorName || r.investorId || '—'}</strong></td>
+      <td>${r.founderName}</td>
+      <td style="font-size:12px;color:var(--text-2)">${r.requestedAt ? new Date(r.requestedAt).toLocaleDateString() : '—'}</td>
+      <td style="display:flex;gap:6px">
+        <button class="admin-btn admin-btn-approve" onclick="adminGrantIRAccess('${r.founderId}','${r.investorId}')">Grant Access</button>
+        <button class="admin-btn admin-btn-reject" onclick="adminDenyIRRequest('${r.founderId}','${r.investorId}')">Deny</button>
+      </td>
+    </tr>`
+  ).join('') : '<tr><td colspan="4" class="admin-table-empty">No pending access requests.</td></tr>';
+}
+
+function adminRevokeIRRoom(founderId) {
+  const key = `di_ir__${founderId}`;
+  const d = JSON.parse(localStorage.getItem(key) || '{}');
+  d.published = false;
+  localStorage.setItem(key, JSON.stringify(d));
+  _adminLog('ir_unpublished', founderId, '');
+  showToast('IR room unpublished.', 'error');
+  adminRenderIR();
+}
+
+function adminGrantIRAccess(founderId, investorId) {
+  // Update allowed investors list
+  const irKey = `di_ir__${founderId}`;
+  const d = JSON.parse(localStorage.getItem(irKey) || '{}');
+  const allowed = d.allowedInvestors || [];
+  if (!allowed.includes(investorId)) allowed.push(investorId);
+  d.allowedInvestors = allowed;
+  localStorage.setItem(irKey, JSON.stringify(d));
+  // Mark request as approved
+  const reqKey = `di_ir_requests__${founderId}`;
+  const reqs = JSON.parse(localStorage.getItem(reqKey) || '[]');
+  const req = reqs.find(r => r.investorId === investorId);
+  if (req) req.status = 'approved';
+  localStorage.setItem(reqKey, JSON.stringify(reqs));
+  _adminLog('ir_access_granted', `${founderId}→${investorId}`, '');
+  showToast('IR access granted.', 'success');
+  adminRenderIR();
+}
+
+function adminDenyIRRequest(founderId, investorId) {
+  const reqKey = `di_ir_requests__${founderId}`;
+  const reqs = JSON.parse(localStorage.getItem(reqKey) || '[]');
+  const req = reqs.find(r => r.investorId === investorId);
+  if (req) req.status = 'denied';
+  localStorage.setItem(reqKey, JSON.stringify(reqs));
+  _adminLog('ir_access_denied', `${founderId}→${investorId}`, '');
+  showToast('Access request denied.', 'error');
+  adminRenderIR();
+}
+
+// ── Teams ─────────────────────────────────────────────────────────────────────
+function adminRenderTeams() {
+  const assignments = [];
+  const users = _adminGetAllUsers();
+  const userMap = {};
+  users.forEach(u => { userMap[u.uid] = u.displayName || u.name || u.uid; });
+
+  // Read di_team_advisors, di_team_investors, di_team_staff per founder
+  ['advisors','investors','staff'].forEach(type => {
+    for (let i = 0; i < localStorage.length; i++) {
+      const k = localStorage.key(i);
+      if (k && k.startsWith(`di_team_${type}__`)) {
+        const founderId = k.replace(`di_team_${type}__`, '');
+        try {
+          const members = JSON.parse(localStorage.getItem(k) || '[]');
+          members.forEach(m => {
+            assignments.push({
+              memberName: m.name || m.email || m.id || '—',
+              role: type === 'advisors' ? 'advisory' : type === 'investors' ? 'investor' : 'staff',
+              founderName: userMap[founderId] || founderId,
+              founderId,
+              project: m.project || '—',
+              id: m.id || m.email || Math.random().toString(36).slice(2),
+            });
+          });
+        } catch(e) {}
+      }
+    }
+  });
+
+  document.getElementById('admin-teams-count').textContent = `${assignments.length} assignments`;
+
+  const tbody = document.getElementById('admin-teams-tbody');
+  tbody.innerHTML = assignments.length ? assignments.map(a =>
+    `<tr>
+      <td><strong>${a.memberName}</strong></td>
+      <td><span class="admin-role-pill ${a.role}">${a.role}</span></td>
+      <td>${a.founderName}</td>
+      <td style="font-size:12px;color:var(--text-2)">${a.project}</td>
+      <td>
+        <button class="admin-btn admin-btn-revoke" onclick="adminRemoveTeamMember('${a.founderId}','${a.role}','${a.id}')">Remove</button>
+      </td>
+    </tr>`
+  ).join('') : '<tr><td colspan="5" class="admin-table-empty">No team assignments found.</td></tr>';
+}
+
+function adminRemoveTeamMember(founderId, role, memberId) {
+  const typeMap = { advisory: 'advisors', investor: 'investors', staff: 'staff' };
+  const key = `di_team_${typeMap[role] || role}__${founderId}`;
+  const members = JSON.parse(localStorage.getItem(key) || '[]');
+  const filtered = members.filter(m => (m.id || m.email) !== memberId);
+  localStorage.setItem(key, JSON.stringify(filtered));
+  _adminLog('team_member_removed', `${founderId}→${memberId}`, role);
+  showToast('Team member removed.', 'success');
+  adminRenderTeams();
+}
+
+// ── Audit Log ─────────────────────────────────────────────────────────────────
+function adminRenderLog() {
+  const log = JSON.parse(localStorage.getItem('di_admin_log') || '[]');
+  document.getElementById('admin-log-count').textContent = `${log.length} entries`;
+
+  const container = document.getElementById('admin-log-list');
+  if (!log.length) {
+    container.innerHTML = '<div class="admin-log-empty">No admin actions logged yet.</div>';
+    return;
+  }
+
+  const actionLabels = {
+    role_change: 'Changed role for',
+    user_suspended: 'Suspended',
+    user_restored: 'Restored',
+    thinker_approved: 'Approved Thinker',
+    thinker_rejected: 'Rejected Thinker',
+    thinker_revoked: 'Revoked Thinker approval for',
+    ir_unpublished: 'Unpublished IR room for',
+    ir_access_granted: 'Granted IR access',
+    ir_access_denied: 'Denied IR access',
+    team_member_removed: 'Removed team member',
+  };
+
+  container.innerHTML = log.map(entry => {
+    const dt = new Date(entry.timestamp);
+    const timeStr = dt.toLocaleString();
+    const actionLabel = actionLabels[entry.action] || entry.action;
+    return `<div class="admin-log-item">
+      <div class="admin-log-time">${timeStr}</div>
+      <div>
+        <span class="admin-log-action">${actionLabel}</span>
+        <span class="admin-log-detail">${entry.targetId}${entry.details ? ' — ' + entry.details : ''}</span>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ── Boot: show admin nav if di_admin flag is set ───────────────────────────────
+(function adminBoot() {
+  function _checkAdminAccess() {
+    const isAdmin = localStorage.getItem('di_admin') === 'true';
+    const sec = document.getElementById('admin-nav-section');
+    if (sec) sec.style.display = isAdmin ? 'block' : 'none';
+  }
+  // Check immediately (may run before auth)
+  _checkAdminAccess();
+  // Also re-check on auth state change (Firebase)
+  if (typeof window !== 'undefined') {
+    // Poll once after short delay in case auth runs first
+    setTimeout(_checkAdminAccess, 1200);
+  }
+  // Expose for external use
+  window._checkAdminAccess = _checkAdminAccess;
+})();
 </script>
 
 <!-- Top-up Modal -->
