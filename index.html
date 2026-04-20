@@ -1400,7 +1400,12 @@
 
     /* ─── Project Detail Screen ─── */
     #screen-project-detail { overflow-y:auto; }
-    .pd-layout { max-width:860px; margin:0 auto; padding:40px 28px 80px; }
+    .pd-layout { max-width:1160px; margin:0 auto; padding:40px 28px 80px; }
+    /* Two-column layout */
+    .pd-cols { display:grid; grid-template-columns:1fr 360px; gap:24px; align-items:start; }
+    .pd-col-left { min-width:0; }
+    .pd-col-right { background:#fff; border:1px solid #e8e8e8; border-radius:16px; padding:20px; position:sticky; top:24px; box-shadow:0 1px 4px rgba(0,0,0,.04); }
+    @media(max-width:900px) { .pd-cols { grid-template-columns:1fr; } .pd-col-right { position:static; } }
     .pd-back { display:inline-flex; align-items:center; gap:6px; font-size:13px; color:var(--text-3); background:none; border:none; cursor:pointer; padding:0; margin-bottom:24px; font-family:'Inter',sans-serif; transition:color .15s; }
     .pd-back:hover { color:var(--text-0); }
     .pd-header { display:flex; align-items:flex-start; gap:14px; margin-bottom:32px; }
@@ -1453,16 +1458,12 @@
     .pd-persp-insight { font-size:12px; color:var(--text-2); line-height:1.5; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
     .pd-empty-state { text-align:center; padding:32px 16px; color:var(--text-3); font-size:13px; font-style:italic; }
 
-    /* Description collapse toggle */
-    .pd-desc-toggle { display:inline-flex; align-items:center; gap:5px; margin-top:7px; padding:3px 9px 3px 7px; border:1px solid var(--border-md); border-radius:var(--r-pill); background:transparent; cursor:pointer; color:var(--text-3); font-size:11.5px; font-family:'Inter',sans-serif; transition:color .12s,border-color .12s; }
-    .pd-desc-toggle:hover { color:var(--text-1); border-color:var(--border-hi); }
-    .pd-desc-toggle.open { color:var(--text-1); border-color:var(--border-hi); }
-    .pd-desc-toggle svg { transition:transform .15s; }
-    .pd-desc-toggle.open svg { transform:rotate(180deg); }
+    /* Description always visible inline */
+    .pd-subtitle { margin-top:6px !important; display:block !important; }
 
-    /* Project input */
-    .pd-proj-input-wrap { background:var(--surface); border:1.5px solid var(--border-md); border-radius:var(--r); padding:14px 16px 12px; margin-bottom:14px; transition:border-color .15s,box-shadow .15s; }
-    .pd-proj-input-wrap:focus-within { border-color:var(--accent-bdr); box-shadow:0 0 0 3px var(--accent-lt); }
+    /* Project input — borderless inside the white right card */
+    .pd-proj-input-wrap { background:transparent; border:none; border-radius:0; padding:0; margin-bottom:0; transition:none; }
+    .pd-proj-input-wrap:focus-within { border-color:none; box-shadow:none; }
     .pd-proj-input-ta { width:100%; border:none; outline:none; resize:none; font-family:'Inter',sans-serif; font-size:13.5px; color:var(--text-0); background:transparent; line-height:1.55; min-height:48px; max-height:160px; overflow-y:auto; }
     .pd-proj-input-ta::placeholder { color:var(--text-3); }
     .pd-proj-input-footer { display:flex; align-items:center; gap:8px; margin-top:10px; border-top:1px solid var(--border-lt); padding-top:10px; }
@@ -5565,60 +5566,69 @@
           <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M9 2L4 7l5 5"/></svg>
           Projects
         </button>
-        <div class="pd-header">
-          <div class="pd-color-dot" id="pd-color-dot"></div>
-          <div class="pd-header-main">
-            <div id="pd-type-badge"></div>
-            <div class="pd-title" id="pd-title" contenteditable="true" spellcheck="false"></div>
-            <!-- Description toggle -->
-            <button class="pd-desc-toggle" id="pd-desc-toggle" onclick="togglePdDesc()">
-              <svg width="11" height="11" viewBox="0 0 11 11" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"><polyline points="2,4 5.5,7.5 9,4"/></svg>
-              <span id="pd-desc-label">Description</span>
-            </button>
-            <!-- Collapsible description -->
-            <div class="pd-subtitle" id="pd-subtitle" contenteditable="true" spellcheck="false" data-placeholder="Add a description…" style="display:none;margin-top:8px"></div>
-          </div>
-          <div class="pd-header-actions">
-            <button class="pd-save-btn" onclick="saveProjectDetailChanges()">Save</button>
-          </div>
-        </div>
 
-        <!-- ── Project Perspective Input ── -->
-        <div class="pd-proj-input-wrap" id="pd-proj-input-wrap">
-          <textarea class="pd-proj-input-ta" id="pd-proj-input-ta" rows="2"
-            placeholder="Ask a question to generate a new perspective for this project…"
-            oninput="pdInputResize(this)"
-            onkeydown="if(event.key==='Enter'&&(event.metaKey||event.ctrlKey)){pdLaunchPerspective()}"></textarea>
-          <div class="pd-proj-input-footer">
-            <label class="pd-upload-btn" for="pd-file-input" title="Attach file or photo">
-              <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M3.5 9.5l5-5a3.5 3.5 0 015 5l-6 6a2 2 0 01-3-3l5.5-5.5a.7.7 0 011 1l-5 5"/></svg>
-              <input type="file" id="pd-file-input" multiple accept="image/*,.pdf,.doc,.docx,.txt,.csv,.xlsx" onchange="pdHandleFiles(this.files)" style="display:none">
-            </label>
-            <div class="pd-file-chips" id="pd-file-chips"></div>
-            <button class="pd-proj-submit-btn" onclick="pdLaunchPerspective()">
-              <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="8" y1="14" x2="8" y2="2"/><path d="M3 7l5-5 5 5"/></svg>
-              New Perspective
-            </button>
-          </div>
-        </div>
-
-        <!-- Active Perspectives — shown above template body -->
-        <div class="pd-section" id="pd-perspectives-section" style="margin-bottom:16px">
-          <div class="pd-section-header">
-            <div class="pd-section-title">
-              <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"><circle cx="7" cy="7" r="5.5"/><path d="M7 4.5v3l1.5 1.5"/></svg>
-              Active Perspectives
-              <span class="pd-persp-count" id="pd-persp-count"></span>
+        <div class="pd-cols">
+          <!-- ── Left column: project info + template ── -->
+          <div class="pd-col-left">
+            <div class="pd-header">
+              <div class="pd-color-dot" id="pd-color-dot"></div>
+              <div class="pd-header-main">
+                <div id="pd-type-badge"></div>
+                <div class="pd-title" id="pd-title" contenteditable="true" spellcheck="false"></div>
+                <div class="pd-subtitle" id="pd-subtitle" contenteditable="true" spellcheck="false" data-placeholder="Add a description…"></div>
+              </div>
+              <div class="pd-header-actions">
+                <button class="pd-save-btn" onclick="saveProjectDetailChanges()">Save</button>
+              </div>
             </div>
-            <button class="pd-section-refresh" onclick="_renderPdPerspectives(_pdProjectId)" title="Sync">
-              <svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"><path d="M13.5 8a5.5 5.5 0 11-1.4-3.6"/><path d="M12 1.5V5h-3.5"/></svg>
-            </button>
-          </div>
-          <div id="pd-perspectives-feed" class="pd-perspectives-feed"></div>
-        </div>
 
-        <!-- Template content injected by renderProjectDetail() -->
-        <div id="pd-template-body"></div>
+            <!-- Template content injected by renderProjectDetail() -->
+            <div id="pd-template-body"></div>
+          </div>
+
+          <!-- ── Right column: perspective input + active perspectives ── -->
+          <div class="pd-col-right">
+            <div style="font-size:11px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:#999;margin-bottom:12px">Get a Perspective</div>
+
+            <!-- Perspective Input -->
+            <div class="pd-proj-input-wrap" id="pd-proj-input-wrap">
+              <textarea class="pd-proj-input-ta" id="pd-proj-input-ta" rows="3"
+                placeholder="What would you like a perspective on for this project?"
+                oninput="pdInputResize(this)"
+                onkeydown="if(event.key==='Enter'&&(event.metaKey||event.ctrlKey)){pdLaunchPerspective()}"
+                style="border:1.5px solid #e8e8e8;border-radius:10px;padding:12px 14px;background:#fafafa;resize:none;width:100%;box-sizing:border-box;font-family:'Inter',sans-serif;font-size:13.5px;color:#111;outline:none;line-height:1.55;min-height:80px;transition:border-color .15s"
+                onfocus="this.style.borderColor='#a0a0a0'" onblur="this.style.borderColor='#e8e8e8'"></textarea>
+              <div class="pd-proj-input-footer" style="border-top:none;padding-top:8px;margin-top:8px">
+                <label class="pd-upload-btn" for="pd-file-input" title="Attach file or photo">
+                  <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M3.5 9.5l5-5a3.5 3.5 0 015 5l-6 6a2 2 0 01-3-3l5.5-5.5a.7.7 0 011 1l-5 5"/></svg>
+                  <input type="file" id="pd-file-input" multiple accept="image/*,.pdf,.doc,.docx,.txt,.csv,.xlsx" onchange="pdHandleFiles(this.files)" style="display:none">
+                </label>
+                <div class="pd-file-chips" id="pd-file-chips"></div>
+                <button class="pd-proj-submit-btn" onclick="pdLaunchPerspective()">
+                  <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="8" y1="14" x2="8" y2="2"/><path d="M3 7l5-5 5 5"/></svg>
+                  Run Perspective
+                </button>
+              </div>
+            </div>
+
+            <!-- Divider -->
+            <div style="border-top:1px solid #f0f0f0;margin:18px 0"></div>
+
+            <!-- Active Perspectives -->
+            <div id="pd-perspectives-section">
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+                <div style="font-size:11px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:#999;display:flex;align-items:center;gap:6px">
+                  Perspectives
+                  <span class="pd-persp-count" id="pd-persp-count"></span>
+                </div>
+                <button class="pd-section-refresh" onclick="_renderPdPerspectives(_pdProjectId)" title="Sync">
+                  <svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"><path d="M13.5 8a5.5 5.5 0 11-1.4-3.6"/><path d="M12 1.5V5h-3.5"/></svg>
+                </button>
+              </div>
+              <div id="pd-perspectives-feed" class="pd-perspectives-feed"></div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -10869,12 +10879,16 @@ function openProjectDetail(projectId) {
   const chips = document.getElementById('pd-file-chips');
   if (chips) chips.innerHTML = '';
   const ta = document.getElementById('pd-proj-input-ta');
-  if (ta) { ta.value = ''; pdInputResize(ta); }
-  // Reset description toggle
-  const sub = document.getElementById('pd-subtitle');
-  const toggle = document.getElementById('pd-desc-toggle');
-  if (sub) sub.style.display = 'none';
-  if (toggle) toggle.classList.remove('open');
+  if (ta) {
+    // Default prompt seeded from project name for immediate usability
+    const defaultPrompts = [
+      `What is the biggest opportunity for ${proj.name || 'this project'} right now?`,
+      `What risks should we be aware of with ${proj.name || 'this project'}?`,
+      `What would accelerate growth for ${proj.name || 'this project'}?`,
+    ];
+    ta.value = defaultPrompts[Math.floor(Math.random() * defaultPrompts.length)];
+    pdInputResize(ta);
+  }
   renderProjectDetail(proj);
   // Push type-specific deep-link URL so refresh restores this project
   const type    = proj.type || 'initiative';
@@ -11073,22 +11087,6 @@ function _buildInitiativeTemplate(proj) {
 }
 
 function _buildCompanyTemplate(proj) {
-  const stakeholders = Array.isArray(proj.stakeholders) ? proj.stakeholders : [];
-  const wiki = Array.isArray(proj.wiki) ? proj.wiki : [];
-
-  const stHtml = stakeholders.map((s, i) =>
-    `<div class="pd-item-row">
-      <input class="pd-item-input" value="${_sv(s.name)}" placeholder="Name…" onchange="pdUpdateStakeholder(${i},'name',this.value)" style="flex:1.2">
-      <input class="pd-item-input" value="${_sv(s.role)}" placeholder="Role / relationship…" onchange="pdUpdateStakeholder(${i},'role',this.value)">
-      <button class="pd-item-del" onclick="pdDeleteStakeholder(${i})">×</button>
-    </div>`).join('');
-
-  const wikiHtml = wiki.map((w, i) =>
-    `<div class="pd-item-row">
-      <input class="pd-item-input" value="${_sv(w.label)}" placeholder="Label…" onchange="pdUpdateWiki(${i},'label',this.value)" style="flex:0.8">
-      <input class="pd-item-input" value="${_sv(w.url)}" placeholder="URL…" onchange="pdUpdateWiki(${i},'url',this.value)">
-      <button class="pd-item-del" onclick="pdDeleteWiki(${i})">×</button>
-    </div>`).join('');
 
   const bmcNotes   = proj.bmcNotes   || {};
   const resources  = Array.isArray(proj.resources) ? proj.resources : [];
@@ -11221,24 +11219,7 @@ function _buildCompanyTemplate(proj) {
         ${resHtml || '<div style="font-size:13px;color:var(--text-3)">No resources added yet.</div>'}
       </div>
     </div>
-    <div class="pd-section">
-      <div class="pd-section-header">
-        <div class="pd-section-title"><div class="pd-section-icon company"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.75"><circle cx="6" cy="4" r="2"/><path d="M2 10c0-2 1.8-3.5 4-3.5S10 8 10 10"/></svg></div>Stakeholder Map</div>
-      </div>
-      <div class="pd-item-list" id="pd-stakeholders-list">${stHtml}</div>
-      <button class="pd-add-item" onclick="pdAddStakeholder()">
-        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M6 2v8M2 6h8"/></svg>Add stakeholder
-      </button>
-    </div>
-    <div class="pd-section">
-      <div class="pd-section-header">
-        <div class="pd-section-title"><div class="pd-section-icon company"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M2 2h8v8H2z"/><path d="M4 5h4M4 7h2"/></svg></div>Company Wiki</div>
-      </div>
-      <div class="pd-item-list" id="pd-wiki-list">${wikiHtml}</div>
-      <button class="pd-add-item" onclick="pdAddWiki()">
-        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M6 2v8M2 6h8"/></svg>Add link
-      </button>
-    </div>`;
+    `;
 }
 
 function _buildThemeTemplate(proj) {
@@ -11293,16 +11274,6 @@ function _buildThemeTemplate(proj) {
     ${_buildProjTeamSection(proj)}`;
 }
 
-/* ── Project detail: description toggle ── */
-function togglePdDesc() {
-  const body = document.getElementById('pd-subtitle');
-  const btn  = document.getElementById('pd-desc-toggle');
-  if (!body || !btn) return;
-  const isOpen = btn.classList.contains('open');
-  body.style.display = isOpen ? 'none' : '';
-  btn.classList.toggle('open', !isOpen);
-  if (!isOpen) setTimeout(() => body.focus(), 60);
-}
 
 /* ── Project input: auto-resize textarea ── */
 function pdInputResize(ta) {
@@ -11467,12 +11438,6 @@ function pdToggleMilestone(i) {
 function pdUpdateMilestone(i, val) { const p=_pdGetProj(); if(!p||!p.milestones[i]) return; p.milestones[i].text=val; const ps=loadProjects(); const idx=ps.findIndex(x=>x.id===_pdProjectId); ps[idx]=p; saveProjects(ps); }
 function pdDeleteMilestone(i) { const p=_pdGetProj(); if(!p) return; p.milestones.splice(i,1); const ps=loadProjects(); const idx=ps.findIndex(x=>x.id===_pdProjectId); ps[idx]=p; saveProjects(ps); renderProjectDetail(p); }
 function pdAddMilestone() { const p=_pdGetProj(); if(!p) return; if(!p.milestones) p.milestones=[]; p.milestones.push({text:'',done:false}); const ps=loadProjects(); const idx=ps.findIndex(x=>x.id===_pdProjectId); ps[idx]=p; saveProjects(ps); renderProjectDetail(p); setTimeout(()=>{ const inputs=document.querySelectorAll('#pd-milestones-list .pd-check-input'); if(inputs.length) inputs[inputs.length-1].focus(); },50); }
-function pdUpdateStakeholder(i,key,val) { const p=_pdGetProj(); if(!p||!p.stakeholders[i]) return; p.stakeholders[i][key]=val; const ps=loadProjects(); const idx=ps.findIndex(x=>x.id===_pdProjectId); ps[idx]=p; saveProjects(ps); }
-function pdDeleteStakeholder(i) { const p=_pdGetProj(); if(!p) return; p.stakeholders.splice(i,1); const ps=loadProjects(); const idx=ps.findIndex(x=>x.id===_pdProjectId); ps[idx]=p; saveProjects(ps); renderProjectDetail(p); }
-function pdAddStakeholder() { const p=_pdGetProj(); if(!p) return; if(!p.stakeholders) p.stakeholders=[]; p.stakeholders.push({name:'',role:''}); const ps=loadProjects(); const idx=ps.findIndex(x=>x.id===_pdProjectId); ps[idx]=p; saveProjects(ps); renderProjectDetail(p); }
-function pdUpdateWiki(i,key,val) { const p=_pdGetProj(); if(!p||!p.wiki[i]) return; p.wiki[i][key]=val; const ps=loadProjects(); const idx=ps.findIndex(x=>x.id===_pdProjectId); ps[idx]=p; saveProjects(ps); }
-function pdDeleteWiki(i) { const p=_pdGetProj(); if(!p) return; p.wiki.splice(i,1); const ps=loadProjects(); const idx=ps.findIndex(x=>x.id===_pdProjectId); ps[idx]=p; saveProjects(ps); renderProjectDetail(p); }
-function pdAddWiki() { const p=_pdGetProj(); if(!p) return; if(!p.wiki) p.wiki=[]; p.wiki.push({label:'',url:''}); const ps=loadProjects(); const idx=ps.findIndex(x=>x.id===_pdProjectId); ps[idx]=p; saveProjects(ps); renderProjectDetail(p); }
 function pdUpdateKW(i,key,val) { const p=_pdGetProj(); if(!p||!p.knowledgeWeb[i]) return; p.knowledgeWeb[i][key]=val; const ps=loadProjects(); const idx=ps.findIndex(x=>x.id===_pdProjectId); ps[idx]=p; saveProjects(ps); }
 function pdDeleteKW(i) { const p=_pdGetProj(); if(!p) return; p.knowledgeWeb.splice(i,1); const ps=loadProjects(); const idx=ps.findIndex(x=>x.id===_pdProjectId); ps[idx]=p; saveProjects(ps); renderProjectDetail(p); }
 function pdAddKW() { const p=_pdGetProj(); if(!p) return; if(!p.knowledgeWeb) p.knowledgeWeb=[]; p.knowledgeWeb.push({title:'',url:''}); const ps=loadProjects(); const idx=ps.findIndex(x=>x.id===_pdProjectId); ps[idx]=p; saveProjects(ps); renderProjectDetail(p); }
