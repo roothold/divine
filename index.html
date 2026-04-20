@@ -2027,15 +2027,14 @@
     .dc-market-pct { font-family:var(--font-mono); font-size:11px; color:var(--text-3); width:28px; text-align:right; flex-shrink:0; }
 
     /* ─── Greeting Card (Action Center header) ─── */
-    .dc-greeting-card { background:#fff; border:1.5px solid var(--border); border-radius:16px; padding:22px 22px 16px; margin-bottom:20px; box-shadow:var(--sh-sm); transition:border-color .15s,box-shadow .15s; }
-    .dc-greeting-card:focus-within { border-color:var(--accent-bdr); box-shadow:0 4px 20px rgba(191,69,42,.10); }
-    .dc-greeting-card-header { display:flex; align-items:center; gap:12px; margin-bottom:14px; }
-    .dc-greeting-d { width:34px; height:34px; flex-shrink:0; color:var(--accent); }
-    .dc-greeting-card-text { flex:1; }
+    .dc-greeting-header { display:flex; align-items:center; gap:12px; margin-bottom:14px; }
+    .dc-greeting-header .dc-greeting-d { width:34px; height:34px; flex-shrink:0; color:var(--accent); }
+    .dc-greeting-header-text { flex:1; }
     .dc-greeting-card-name { font-family:'Cormorant Garamond',serif; font-size:clamp(22px,3vw,32px); font-weight:600; color:var(--text-0); line-height:1.15; }
     .dc-greeting-card-sub { font-size:13px; color:var(--text-3); margin-top:2px; font-weight:500; }
+    .dc-greeting-card { background:#fff; border:1.5px solid var(--border); border-radius:16px; padding:16px 22px 16px; margin-bottom:20px; box-shadow:var(--sh-sm); transition:border-color .15s,box-shadow .15s; }
+    .dc-greeting-card:focus-within { border-color:var(--accent-bdr); box-shadow:0 4px 20px rgba(191,69,42,.10); }
     /* divider between greeting header and input */
-    .dc-greeting-divider { height:1px; background:var(--border); margin:0 -22px 16px; }
 
     /* ─── Project Cards (Launchpad) ─── */
     .dc-projects-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:10px; margin-bottom:24px; }
@@ -5188,24 +5187,24 @@
           <div>
 
             <!-- ══ GREETING CARD ══ -->
-            <div class="dc-greeting-card">
-              <div class="dc-greeting-card-header">
-                <svg class="dc-greeting-d" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <g stroke="currentColor" stroke-width="9" stroke-linecap="round" fill="none">
-                    <rect x="18" y="12" width="8" height="76" rx="2"/>
-                    <rect x="26" y="12" width="8" height="8" rx="1"/>
-                    <rect x="26" y="80" width="8" height="8" rx="1"/>
-                    <path d="M34 18 Q78 18 78 50 Q78 82 34 82"/>
-                    <path d="M34 30 Q66 30 66 50 Q66 70 34 70"/>
-                  </g>
-                </svg>
-                <div class="dc-greeting-card-text">
-                  <div class="dc-greeting-card-name" id="dc-greeting-name">Divine Intelligence.</div>
-                  <div class="dc-greeting-card-sub" id="dc-greeting-sub">Sign in to connect your data and activate your protocols.</div>
-                </div>
+            <!-- Greeting header — sits above the input card -->
+            <div class="dc-greeting-header">
+              <svg class="dc-greeting-d" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <g stroke="currentColor" stroke-width="9" stroke-linecap="round" fill="none">
+                  <rect x="18" y="12" width="8" height="76" rx="2"/>
+                  <rect x="26" y="12" width="8" height="8" rx="1"/>
+                  <rect x="26" y="80" width="8" height="8" rx="1"/>
+                  <path d="M34 18 Q78 18 78 50 Q78 82 34 82"/>
+                  <path d="M34 30 Q66 30 66 50 Q66 70 34 70"/>
+                </g>
+              </svg>
+              <div class="dc-greeting-header-text">
+                <div class="dc-greeting-card-name" id="dc-greeting-name">Divine Intelligence.</div>
+                <div class="dc-greeting-card-sub" id="dc-greeting-sub">Sign in to connect your data and activate your protocols.</div>
               </div>
-              <div class="dc-greeting-divider"></div>
+            </div>
 
+            <div class="dc-greeting-card">
               <!-- Quick-input -->
               <textarea class="dc-input-textarea" id="dc-quick-input" rows="2"
                 placeholder="Describe a growth challenge, team question, or investor concern…"
@@ -6314,15 +6313,15 @@
       <div style="font-size:13px;color:var(--text-3)">Manage your thinker profile, train your model, and track your earnings.</div>
     </div>
     <div class="team-hub-tabs" id="team-hub-tabs">
-      <button class="team-hub-tab thinker-tab active" id="th-tab-overview" onclick="switchThinkerTab('overview',this)">
+      <button class="team-hub-tab thinker-tab active" id="th-tab-overview" onclick="navigateThinkerTab('overview')">
         <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75"><rect x="4" y="4" width="8" height="8" rx="1.5"/><path d="M6 2.5v1.5M8 2.5v1.5M10 2.5v1.5M6 12v1.5M8 12v1.5M10 12v1.5M2.5 6h1.5M2.5 8h1.5M2.5 10h1.5M12 6h1.5M12 8h1.5M12 10h1.5"/></svg>
         Command Center
       </button>
-      <button class="team-hub-tab thinker-tab" id="th-tab-train" onclick="switchThinkerTab('train',this)">
+      <button class="team-hub-tab thinker-tab" id="th-tab-train" onclick="navigateThinkerTab('train')">
         <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75"><circle cx="8" cy="8" r="5.5"/><path d="M8 5v3l2 2"/></svg>
         Train Model
       </button>
-      <button class="team-hub-tab thinker-tab" id="th-tab-earnings" onclick="switchThinkerTab('earnings',this)">
+      <button class="team-hub-tab thinker-tab" id="th-tab-earnings" onclick="navigateThinkerTab('earnings')">
         <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75"><rect x="1.5" y="4" width="13" height="9" rx="1.5"/><path d="M1.5 7h13"/><path d="M4.5 10.5h2"/><path d="M10 2.5v3M12 4.5l-2-2-2 2"/></svg>
         Earnings
       </button>
@@ -8482,7 +8481,15 @@ const router = (() => {
       renderProjectDetail(proj);
       showView('project-detail', { _noHistory: true });
     } else {
-      _act('projects');
+      // Not in own projects — check projects shared with this user (populated after auth)
+      const shared = _sharedProjects.find(p =>
+        p.id === idOrSlug || (p.slug && p.slug === idOrSlug)
+      );
+      if (shared) {
+        _openSharedProject(shared.id, shared._ownerKey, shared._sharedRole);
+      } else {
+        _act('projects');
+      }
     }
   }
 
@@ -14468,6 +14475,15 @@ function applyAuthState(user) {
     try { renderProjects(); } catch(e) {}
     try { renderPortfolioList('chat'); } catch(e) {}
     try { renderPortfolioList('is'); } catch(e) {}
+    // Re-resolve deep-link routes that fired before auth was ready.
+    // e.g. /projects/company/abc123 on page refresh — router ran with empty projects list.
+    try {
+      const _rPath = window.location.pathname.replace(/\/+$/, '') || '/';
+      const pdActive = document.getElementById('screen-project-detail')?.classList.contains('active');
+      if (_rPath.startsWith('/projects/') && _rPath !== '/projects' && !pdActive) {
+        router.resolve(_rPath);
+      }
+    } catch(e) {}
 
     // Profile lives in bottom-left popup menu (no separate nav item)
 
