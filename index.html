@@ -7915,7 +7915,7 @@ const router = (() => {
     'wallet':         '#/wallet',
     'chat':            '#/chat',
     'search':          '#/search',
-    'thought-leaders': '#/team',
+    'thought-leaders': '#/thinkers',
     'projects':        '#/projects',
     'project-detail':  '#/projects',
     'settings':        '#/settings',
@@ -7963,7 +7963,7 @@ const router = (() => {
     // Standard views
     { re: /^\/$|^\/dashboard$/,              fn: ()  => _act('recents') },
     { re: /^\/search$/,                       fn: ()  => _act('search') },
-    { re: /^\/team$/,                         fn: ()  => _act('thought-leaders') },
+    { re: /^\/thinkers$|^\/team$/,             fn: ()  => _act('thought-leaders') },
     { re: /^\/projects$/,                     fn: ()  => _act('projects') },
     { re: /^\/settings$/,                     fn: ()  => _act('settings') },
     { re: /^\/help$/,                         fn: ()  => _act('help') },
