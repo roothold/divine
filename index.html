@@ -7302,7 +7302,7 @@ e.g. I always start by validating whether the problem is real before evaluating 
               <button class="ir-public-request-btn" onclick="irPublicRequest()">Express Interest →</button>
             </div>
             <div class="ir-public-request-sent" id="irp-request-sent">
-              ✓ Request sent — the founder will be in touch via email.
+              ✓ Request sent — the owner will be in touch via email.
             </div>
             <div class="ir-public-have-access">Already have access? <a href="#" onclick="irPublicGoToGate();return false">Enter the room →</a></div>
           </div>
@@ -7390,7 +7390,7 @@ e.g. I always start by validating whether the problem is real before evaluating 
         </div>
 
         <div class="ir-dash-footer">
-          Powered by <strong style="color:var(--accent)">Divine</strong> &nbsp;·&nbsp; Data provided by the founder · Not independently verified
+          Powered by <strong style="color:var(--accent)">Divine</strong> &nbsp;·&nbsp; Data provided by the owner · Not independently verified
         </div>
       </div><!-- /ir-dashboard-wrap -->
     </div><!-- /screen-ir-view -->
@@ -7628,7 +7628,7 @@ e.g. I always start by validating whether the problem is real before evaluating 
         <div class="admin-table-wrap" style="margin-bottom:28px">
           <table class="admin-table">
             <thead><tr>
-              <th>Founder</th><th>Company</th><th>Published</th><th>Investors Granted</th><th>Actions</th>
+              <th>Owner</th><th>Company</th><th>Published</th><th>Investors Granted</th><th>Actions</th>
             </tr></thead>
             <tbody id="admin-ir-tbody">
               <tr><td colspan="5" class="admin-table-empty">No published IR rooms.</td></tr>
@@ -7660,7 +7660,7 @@ e.g. I always start by validating whether the problem is real before evaluating 
         <div class="admin-table-wrap">
           <table class="admin-table">
             <thead><tr>
-              <th>Member</th><th>Role</th><th>Assigned By (Founder)</th><th>Project / Company</th><th>Actions</th>
+              <th>Member</th><th>Role</th><th>Assigned By (Owner)</th><th>Project / Company</th><th>Actions</th>
             </tr></thead>
             <tbody id="admin-teams-tbody">
               <tr><td colspan="5" class="admin-table-empty">No team assignments found.</td></tr>
@@ -7825,7 +7825,7 @@ e.g. I always start by validating whether the problem is real before evaluating 
 <div id="di-welcome-overlay" style="display:none;position:fixed;inset:0;z-index:8000;background:rgba(15,14,12,0.55);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);align-items:center;justify-content:center;">
   <div id="di-welcome-modal" style="background:#fff;border-radius:20px;padding:40px 36px 32px;width:min(480px,92vw);box-shadow:0 24px 72px rgba(0,0,0,0.2);display:flex;flex-direction:column;gap:0;position:relative;">
     <div style="font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);margin-bottom:12px;">Divine Intelligence</div>
-    <h2 style="font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:600;color:var(--text-0);line-height:1.2;margin-bottom:10px;">The operating system for founders who run on data.</h2>
+    <h2 style="font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:600;color:var(--text-0);line-height:1.2;margin-bottom:10px;">The operating system for owners, promoters and managers who build on data.</h2>
     <p style="font-size:14px;color:var(--text-2);line-height:1.65;margin-bottom:28px;">Divine automates your growth protocols, audits team performance against real benchmarks, and delivers live financial transparency directly to your investors — no decks, no delays.</p>
     <!-- Step dots -->
     <div style="display:none" id="di-welcome-dots">
@@ -7863,7 +7863,7 @@ e.g. I always start by validating whether the problem is real before evaluating 
     <!-- Step 1: Team Structure -->
     <div id="di-welcome-step-1" style="display:none">
       <div style="font-size:13.5px;font-weight:700;color:var(--text-0);margin-bottom:4px">Build your intelligence council.</div>
-      <p style="font-size:13px;color:var(--text-2);margin-bottom:16px;line-height:1.6">You're the Founder. Invite your team, advisors, investors, and staff — each with sovereign access to exactly what they need to see.</p>
+      <p style="font-size:13px;color:var(--text-2);margin-bottom:16px;line-height:1.6">You're the owner/promoter. Invite your team, advisors, investors, and staff — each with sovereign access to exactly what they need to see.</p>
       <div class="team-role-grid">
         <div class="team-role-card">
           <div class="team-role-icon"><svg width="26" height="26" viewBox="0 0 26 26" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="13" cy="13" r="3"/><circle cx="13" cy="3.5" r="2"/><circle cx="21" cy="8" r="2"/><circle cx="21" cy="18" r="2"/><circle cx="13" cy="22.5" r="2"/><circle cx="5" cy="18" r="2"/><circle cx="5" cy="8" r="2"/><line x1="13" y1="16" x2="13" y2="5.5"/><line x1="15.5" y1="11.2" x2="19" y2="9.8"/><line x1="15.5" y1="14.8" x2="19" y2="16.2"/><line x1="13" y1="16" x2="13" y2="20.5"/><line x1="10.5" y1="14.8" x2="7" y2="16.2"/><line x1="10.5" y1="11.2" x2="7" y2="9.8"/></svg></div>
@@ -8222,75 +8222,114 @@ const PROJECT_COLORS = [
    Entry Analyst  → $19/mo    — 50 Perspectives/mo, 5 projects, 3 team
    Premium Principal → $49/mo — unlimited everything, IR Page, live data
    ═══════════════════════════════════════════════════════════════════════ */
+/* ═══════════════════════════════════════════════════════════════════════
+   DIVINE PRICING — Sovereign Model 2026
+   ─────────────────────────────────────────────────────────────────────
+   Single-Payer principle: The Founder pays. Team, advisors, and investors
+   access Divine as included nodes — no per-seat charges on paid plans.
+
+   Calibration Trial  → $0     — 3 Perspectives, no projects (filters intent)
+   Calibration        → $99/mo — Seed-stage. 100 Perspectives, full team.
+   Sovereign          → $299/mo — Series A+. Unlimited, IR Portal, Thinkers.
+   Institutional      → $999/mo — Funds & multi-entity. Portfolio command centre.
+   ═══════════════════════════════════════════════════════════════════════ */
 const DIVINE_PLANS = {
-  free: {
-    id: 'free',
-    name: 'Free Observer',
+  trial: {
+    id: 'trial',
+    name: 'Calibration Trial',
     price: 0,
-    priceLabel: 'Free',
-    badge: 'Observer',
+    priceLabel: 'Free trial',
+    badge: 'Trial',
     badgeColor: '#6B6357',
     features: {
-      perspectives: 5,          // lifetime
-      perspectivesLabel: '5 lifetime',
-      projects: 1,
-      team: 1,                  // solo — no invites
+      perspectives: 3,              // lifetime — hard gate at 3
+      perspectivesLabel: '3 lifetime',
+      projects: 0,                  // no projects on trial
+      team: 1,                      // solo only
       integrations: 0,
-      aiCredits: 200,
-      decisionLog: true,
+      aiCredits: 100,
+      decisionLog: false,
       irPage: false,
       liveFinancials: false,
       priorityThinker: false,
       customThinker: false,
+      singlePayer: false,
     },
-    tagline: 'Experience the IBM Way — powered by Claude',
-    cta: 'Current Plan',
+    tagline: 'Start your strategic thinking journey — no commitment required.',
+    cta: 'Stay on Trial',
   },
-  entry: {
-    id: 'entry',
-    name: 'Entry Analyst',
-    price: 19,
-    priceLabel: '$19/mo',
-    badge: 'Analyst',
+  calibration: {
+    id: 'calibration',
+    name: 'Calibration',
+    price: 99,
+    priceLabel: '$99/mo',
+    badge: 'Calibration',
     badgeColor: '#1A5276',
     features: {
-      perspectives: 50,         // per month
-      perspectivesLabel: '50 / month',
-      projects: 5,
-      team: 3,
+      perspectives: 100,            // per month
+      perspectivesLabel: '100 / month',
+      projects: Infinity,
+      team: Infinity,               // Single-Payer: unlimited team nodes
       integrations: 3,
       aiCredits: 2000,
       decisionLog: true,
       irPage: false,
-      liveFinancials: false,
+      liveFinancials: true,         // QuickBooks / Xero sync
       priorityThinker: false,
       customThinker: false,
+      singlePayer: true,
     },
-    tagline: 'For founders moving fast with a small team',
-    cta: 'Upgrade to Entry',
+    tagline: 'Skin in the game. Full Ledger Sync + your entire inner circle.',
+    cta: 'Subscribe — $99/mo',
   },
-  premium: {
-    id: 'premium',
-    name: 'Premium Principal',
-    price: 49,
-    priceLabel: '$49/mo',
-    badge: 'Principal',
+  sovereign: {
+    id: 'sovereign',
+    name: 'Sovereign',
+    price: 299,
+    priceLabel: '$299/mo',
+    badge: 'Sovereign',
     badgeColor: '#BF452A',
+    features: {
+      perspectives: Infinity,
+      perspectivesLabel: 'Unlimited',
+      projects: Infinity,
+      team: Infinity,               // Single-Payer: unlimited team nodes
+      integrations: Infinity,
+      aiCredits: 10000,
+      decisionLog: true,
+      irPage: true,                 // Investor Portal
+      liveFinancials: true,
+      priorityThinker: true,        // 1 Thinker Council slot
+      customThinker: false,
+      singlePayer: true,
+    },
+    tagline: 'Automates Investor Relations. Pays for itself in 4 hours saved.',
+    cta: 'Subscribe — $299/mo',
+  },
+  institutional: {
+    id: 'institutional',
+    name: 'Institutional',
+    price: 999,
+    priceLabel: '$999/mo',
+    badge: 'Institutional',
+    badgeColor: '#0D2B45',
     features: {
       perspectives: Infinity,
       perspectivesLabel: 'Unlimited',
       projects: Infinity,
       team: Infinity,
       integrations: Infinity,
-      aiCredits: 10000,
+      aiCredits: Infinity,
       decisionLog: true,
       irPage: true,
       liveFinancials: true,
       priorityThinker: true,
-      customThinker: false,
+      customThinker: true,          // Custom Protocol Encoding
+      portfolioDashboard: true,     // Multi-entity portfolio view
+      singlePayer: true,
     },
-    tagline: 'Full intelligence infrastructure for serious founders',
-    cta: 'Upgrade to Premium',
+    tagline: 'The Command Centre for funds managing 20+ companies.',
+    cta: 'Contact us',
   },
 };
 
@@ -8300,7 +8339,7 @@ function getUserPlan() {
     const stored = localStorage.getItem('di_plan_' + (USER_ID || 'guest'));
     if (stored && DIVINE_PLANS[stored]) return stored;
   } catch(_) {}
-  return 'free';
+  return 'trial';
 }
 function setUserPlan(planId) {
   if (!DIVINE_PLANS[planId]) return;
@@ -8318,20 +8357,24 @@ function _getMonthKey() {
   const d = new Date(); return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0');
 }
 
-/* Returns true if action is allowed; false if blocked (shows upgrade modal). */
+/* Returns true if action is allowed; false if blocked (shows upgrade modal).
+   Single-Payer principle: paid plans (calibration/sovereign/institutional)
+   have NO team seat limits — the Founder pays, the team plays for free. */
 function checkPlanLimit(type, options) {
   const plan    = getUserPlan();
   const planDef = DIVINE_PLANS[plan];
   const usage   = _getPlanUsage();
 
   if (type === 'perspective') {
-    if (plan === 'free') {
+    if (plan === 'trial') {
+      // 3 lifetime Perspectives on trial
       const lifetime = loadChatSessions().length;
       if (lifetime >= planDef.features.perspectives) {
         showUpgradeModal('perspective_limit', { current: lifetime, limit: planDef.features.perspectives });
         return false;
       }
-    } else if (plan === 'entry') {
+    } else if (plan === 'calibration') {
+      // 100 / month
       const mk = _getMonthKey();
       const monthly = (usage.perspectives_monthly || {})[mk] || 0;
       if (monthly >= planDef.features.perspectives) {
@@ -8339,33 +8382,27 @@ function checkPlanLimit(type, options) {
         return false;
       }
     }
-    // premium — unlimited
+    // sovereign / institutional — unlimited
     return true;
   }
 
   if (type === 'project') {
-    const pCount = loadProjects().length;
-    if (planDef.features.projects !== Infinity && pCount >= planDef.features.projects) {
-      showUpgradeModal('project_limit', { current: pCount, limit: planDef.features.projects });
+    // Trial: no projects allowed
+    if (plan === 'trial') {
+      showUpgradeModal('project_limit', { current: 0, limit: 0 });
       return false;
     }
+    // All paid plans: unlimited projects
     return true;
   }
 
   if (type === 'team') {
-    const projId  = options && options.projectId;
-    if (plan === 'free') {
+    // Trial: solo only — no team invites
+    if (plan === 'trial') {
       showUpgradeModal('team_limit', {});
       return false;
     }
-    if (plan === 'entry') {
-      // count current team (excluding owner) — checked at call site
-      const count = (options && options.currentTeamSize) || 0;
-      if (count >= planDef.features.team) {
-        showUpgradeModal('team_limit', { current: count, limit: planDef.features.team });
-        return false;
-      }
-    }
+    // All paid plans: Single-Payer — unlimited team nodes, no seat charges
     return true;
   }
 
@@ -8385,10 +8422,10 @@ function checkPlanLimit(type, options) {
   return true;
 }
 
-/* Track a perspective usage event */
+/* Track a perspective usage event (calibration plan only — monthly cap) */
 function _trackPerspectiveUsage() {
   const plan = getUserPlan();
-  if (plan !== 'entry') return;
+  if (plan !== 'calibration') return;
   const usage = _getPlanUsage();
   const mk = _getMonthKey();
   if (!usage.perspectives_monthly) usage.perspectives_monthly = {};
@@ -8398,43 +8435,46 @@ function _trackPerspectiveUsage() {
 
 /* ── Upgrade modal ─────────────────────────────────────────────────────
    Call showUpgradeModal(trigger, ctx) from anywhere.
-   trigger: 'perspective_limit' | 'project_limit' | 'team_limit' | 'integration_limit' | 'manual'
+   trigger: 'perspective_limit' | 'project_limit' | 'team_limit' |
+            'integration_limit' | 'manual'
    ────────────────────────────────────────────────────────────────────── */
 function showUpgradeModal(trigger, ctx) {
   ctx = ctx || {};
   const currentPlan = getUserPlan();
+  const planOrder   = ['trial','calibration','sovereign','institutional'];
 
   // Build trigger message
   let triggerMsg = '';
   if (trigger === 'perspective_limit') {
-    triggerMsg = `You've used all <strong>${ctx.limit} lifetime Perspectives</strong> on the Free plan.`;
+    triggerMsg = `You've used all <strong>${ctx.limit} Calibration Trial Perspectives</strong>. Subscribe to continue.`;
   } else if (trigger === 'perspective_monthly_limit') {
-    triggerMsg = `You've reached your <strong>${ctx.limit} Perspectives this month</strong> on the Entry plan.`;
+    triggerMsg = `You've reached your <strong>${ctx.limit} Perspectives this month</strong> on Calibration. Upgrade to Sovereign for unlimited access.`;
   } else if (trigger === 'project_limit') {
-    triggerMsg = `You've reached your <strong>${ctx.limit}-project limit</strong> on the ${DIVINE_PLANS[currentPlan].name} plan.`;
+    triggerMsg = `<strong>Projects require a paid subscription.</strong> The Calibration plan starts at $99/mo.`;
   } else if (trigger === 'team_limit') {
-    triggerMsg = `Team invites require an <strong>Entry or Premium plan</strong>.`;
+    triggerMsg = `<strong>Team nodes are included in all paid plans.</strong> The Founder pays — advisors, staff, and investors access Divine for free.`;
   } else if (trigger === 'integration_limit') {
-    triggerMsg = currentPlan === 'free'
-      ? `Tool integrations are available on <strong>Entry and Premium plans</strong>.`
-      : `You've reached your <strong>${ctx.limit}-integration limit</strong> on the Entry plan.`;
+    triggerMsg = currentPlan === 'trial'
+      ? `<strong>Tool integrations are available from Calibration upwards.</strong>`
+      : `You've reached your integration limit on Calibration. Sovereign includes unlimited tool connections.`;
   }
 
   const modal = document.getElementById('upgrade-modal');
   if (!modal) return;
 
-  document.getElementById('upgrade-trigger-msg').innerHTML = triggerMsg || 'Unlock more of Divine Intelligence.';
+  document.getElementById('upgrade-trigger-msg').innerHTML = triggerMsg || 'Unlock the full power of Divine Intelligence.';
   modal.classList.add('open');
   document.body.style.overflow = 'hidden';
 
-  // Highlight recommended plan
-  ['free','entry','premium'].forEach(pid => {
+  // Highlight: current plan + recommended next tier
+  const currentIdx = planOrder.indexOf(currentPlan);
+  planOrder.forEach((pid, idx) => {
     const card = document.getElementById('upm-card-' + pid);
     if (!card) return;
-    const isCurrent = pid === currentPlan;
-    const isRecommended = (currentPlan === 'free' && pid === 'entry') || (currentPlan === 'entry' && pid === 'premium');
+    const isCurrent     = pid === currentPlan;
+    const isRecommended = idx === currentIdx + 1;  // next tier up
     card.classList.toggle('upm-current', isCurrent);
-    card.classList.toggle('upm-recommended', isRecommended);
+    card.classList.toggle('upm-recommended', isRecommended && !isCurrent);
   });
 }
 
@@ -8445,17 +8485,19 @@ function closeUpgradeModal() {
 }
 
 function upgradeSelectPlan(planId) {
-  // In production this would redirect to Stripe. For now, simulate the upgrade.
   const plan = DIVINE_PLANS[planId];
   if (!plan) return;
-  if (planId === 'free') { closeUpgradeModal(); return; }
-
-  // Simulate: set the plan locally + show confirmation toast
+  if (planId === 'trial') { closeUpgradeModal(); return; }
+  if (planId === 'institutional') {
+    closeUpgradeModal();
+    showToast('Our team will be in touch to set up your Institutional account.', 'default');
+    return;
+  }
+  // Simulate upgrade locally (production → Stripe checkout)
   setUserPlan(planId);
   closeUpgradeModal();
   _updatePlanBadge();
-  showToast(`Upgraded to ${plan.name} — ${plan.priceLabel}`, 'success');
-  // Refresh settings if open
+  showToast(`${plan.name} activated — ${plan.priceLabel}`, 'success');
   try { renderSettingsPlanTab && renderSettingsPlanTab(); } catch(_) {}
 }
 
@@ -8470,11 +8512,11 @@ function _updatePlanBadge() {
   // Profile menu plan label
   const menuLabel = document.getElementById('profile-menu-plan-label');
   if (menuLabel) menuLabel.textContent = plan.name;
-  // Hide Upgrade button if on Premium
+  // Hide Upgrade button on Institutional (highest tier)
   const menuPlanRow = document.getElementById('profile-menu-plan-row');
   if (menuPlanRow) {
     const btn = menuPlanRow.querySelector('button');
-    if (btn) btn.style.display = plan.id === 'premium' ? 'none' : '';
+    if (btn) btn.style.display = plan.id === 'institutional' ? 'none' : '';
   }
 }
 
@@ -10910,10 +10952,10 @@ function renderSettingsPlanTab() {
   // Perspective usage
   let perspUsed = 0;
   let perspLimit = planDef.features.perspectives;
-  if (plan === 'free') {
+  if (plan === 'trial') {
     perspUsed  = loadChatSessions().length;
     perspLimit = planDef.features.perspectives;
-  } else if (plan === 'entry') {
+  } else if (plan === 'calibration') {
     const mk = _getMonthKey();
     perspUsed  = (usage.perspectives_monthly || {})[mk] || 0;
     perspLimit = planDef.features.perspectives;
@@ -10931,7 +10973,7 @@ function renderSettingsPlanTab() {
   const projLabel  = projLimit  === Infinity ? `${projUsed} active (unlimited)` : `${projUsed} / ${projLimit} active`;
 
   // Plans above current
-  const planOrder  = ['free', 'entry', 'premium'];
+  const planOrder  = ['trial', 'calibration', 'sovereign', 'institutional'];
   const planIdx    = planOrder.indexOf(plan);
   const upgradePlan = planIdx < planOrder.length - 1 ? DIVINE_PLANS[planOrder[planIdx + 1]] : null;
 
@@ -10985,13 +11027,13 @@ function renderSettingsPlanTab() {
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:20px">
       ${[
         ['Perspectives', planDef.features.perspectivesLabel],
-        ['Projects', planDef.features.projects === Infinity ? 'Unlimited' : String(planDef.features.projects)],
-        ['Team members', planDef.features.team === Infinity ? 'Unlimited' : planDef.features.team === 1 ? 'Solo' : String(planDef.features.team)],
+        ['Projects', planDef.features.projects === Infinity ? 'Unlimited' : planDef.features.projects === 0 ? 'None' : String(planDef.features.projects)],
+        ['Team nodes', planDef.singlePayer ? 'Unlimited — free for all' : 'Solo only'],
         ['Integrations', planDef.features.integrations === Infinity ? 'Unlimited' : planDef.features.integrations === 0 ? 'None' : String(planDef.features.integrations)],
-        ['AI Credits', planDef.features.aiCredits.toLocaleString() + '/mo'],
+        ['AI Credits', planDef.features.aiCredits === Infinity ? 'Unlimited' : planDef.features.aiCredits.toLocaleString() + '/mo'],
         ['IR Data Room', planDef.features.irPage ? 'Included' : 'Not included'],
-        ['Live Financials', planDef.features.liveFinancials ? 'Included' : 'Not included'],
-        ['Priority Thinker', planDef.features.priorityThinker ? 'Included' : 'Not included'],
+        ['Live Financials', planDef.features.liveFinancials ? 'QBO / Xero' : 'Not included'],
+        ['Thinker Council', planDef.features.priorityThinker ? (planDef.features.customThinker ? 'Unlimited + Custom' : '1 Priority slot') : 'Not included'],
       ].map(([label, val]) => `
         <div style="display:flex;align-items:flex-start;gap:6px;font-size:12.5px">
           <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="${val.includes('Not') || val === 'None' || val === 'Solo' ? 'var(--text-3)' : 'var(--success-mid)'}" stroke-width="2" stroke-linecap="round" style="flex-shrink:0;margin-top:2px">${val.includes('Not') || val === 'None' ? '<line x1="2" y1="2" x2="12" y2="12"/><line x1="12" y1="2" x2="2" y2="12"/>' : '<polyline points="1,7 5,11 13,3"/>'}</svg>
@@ -12379,7 +12421,7 @@ function submitTeamMember() {
 /* ══════════════════════════════════════════════════════════════════════════
    STANDARDIZED FRAMEWORK SECTIONS — Resources · Team · Tools
    These render identically on every project type (initiative, company, theme)
-   and appear below the type-specific IBM Way sections.
+   and appear below the type-specific template sections.
 ══════════════════════════════════════════════════════════════════════════ */
 function _buildFrameworkSections(proj) {
   const viewerHideAdd = _isViewerMode ? 'style="display:none"' : '';
@@ -12448,7 +12490,7 @@ function _buildFrameworkSections(proj) {
     </div>`;
 }
 
-/* ── IBM Way: Initiative template ─────────────────────────────────────────
+/* ── Initiative template ──────────────────────────────────────────────────
    Sections: Transformation Objective · Intelligent Workflow · AI & Enablers
              · Value Metrics
 ─────────────────────────────────────────────────────────────────────────── */
@@ -12511,7 +12553,7 @@ function _buildCompanyTemplate(proj) {
   return ''; // Company projects: use the perspectives input directly
 }
 
-/* ── IBM Way: Theme template ───────────────────────────────────────────────
+/* ── Theme template ────────────────────────────────────────────────────────
    Sections: Strategic Thesis · AI Opportunities · Integration Points
              · Open Hypotheses
 ─────────────────────────────────────────────────────────────────────────── */
@@ -12739,7 +12781,7 @@ function saveProjectDetailChanges() {
   if (titleEl) proj.name    = titleEl.textContent.trim() || proj.name;
   if (subEl)   proj.tagline = subEl.textContent.trim();
 
-  // Template-specific fields (IBM Way framework)
+  // Template-specific fields
   if (type === 'initiative') {
     const to = document.getElementById('pd-transformation-obj');
     const ae = document.getElementById('pd-ai-enablers');
@@ -12758,7 +12800,7 @@ function saveProjectDetailChanges() {
   showToast('✓ Project saved');
 }
 
-/* ── Project detail list mutations (IBM Way framework) ── */
+/* ── Project detail list mutations ── */
 function _pdSaveAndRerender() {
   const projects = loadProjects();
   const idx = projects.findIndex(p => p.id === _pdProjectId);
@@ -14103,24 +14145,15 @@ function _chatEmptyState() {
       <button class="chat-wallet-gate-btn" onclick="showView('wallet')">Top up →</button>
     </div>` : '';
 
-  // IBM Way + Powered by Claude badge (shown for Free plan users)
+  // Trial plan badge
   const plan = getUserPlan();
 
-  // ── Free plan: never show wallet gate — plan limits govern access ────────
-  const isEmptyWalletForPlan = plan !== 'free' && currentUser && currentBalance !== null && parseFloat(currentBalance) < 0.05;
+  // ── Trial plan: never show wallet gate — plan limits govern access ────────
+  const isEmptyWalletForPlan = plan !== 'trial' && currentUser && currentBalance !== null && parseFloat(currentBalance) < 0.05;
 
-  const ibmBadge = plan === 'free' ? `
+  const ibmBadge = plan === 'trial' ? `
     <div style="display:inline-flex;align-items:center;gap:6px;padding:5px 12px;border-radius:20px;background:var(--surface-2);border:1px solid var(--border);margin-bottom:16px">
-      <svg width="12" height="12" viewBox="0 0 100 100" fill="none" style="flex-shrink:0">
-        <g stroke="var(--accent)" stroke-width="12" stroke-linecap="round">
-          <rect x="18" y="12" width="8" height="76" rx="2"/>
-          <rect x="26" y="12" width="8" height="8" rx="1"/>
-          <rect x="26" y="80" width="8" height="8" rx="1"/>
-          <path d="M34 18 Q78 18 78 50 Q78 82 34 82"/>
-          <path d="M34 30 Q66 30 66 50 Q66 70 34 70"/>
-        </g>
-      </svg>
-      <span style="font-size:11px;font-weight:600;color:var(--text-2)">IBM Way · Powered by Claude</span>
+      <span style="font-size:11px;font-weight:600;color:var(--text-2)">Calibration Trial · 3 Perspectives</span>
     </div>` : '';
 
   el.innerHTML = `
@@ -14139,7 +14172,7 @@ function _chatEmptyState() {
     </div>
     <div class="chat-empty-headline">Ask your Thinker</div>
     <p class="chat-empty-sub">What growth challenge, team question, or investor concern are you working through? The more specific, the sharper the analysis.</p>
-    ${plan === 'free' ? `<div style="margin-top:12px"><button onclick="showUpgradeModal('manual',{})" style="background:none;border:none;font-size:12px;color:var(--accent);cursor:pointer;font-family:'Inter',sans-serif;font-weight:500">5 lifetime Perspectives on Free — Upgrade for more →</button></div>` : ''}`;
+    ${plan === 'trial' ? `<div style="margin-top:12px"><button onclick="showUpgradeModal('manual',{})" style="background:none;border:none;font-size:12px;color:var(--accent);cursor:pointer;font-family:'Inter',sans-serif;font-weight:500">3 Perspectives on Trial — Subscribe to Calibration for more →</button></div>` : ''}`;
   return el;
 }
 
@@ -14232,10 +14265,10 @@ function _usageRefreshUI() {
   if (currentUser) {
     const _activePlan = getUserPlan();
 
-    if (_activePlan === 'free') {
-      // Free plan: show remaining lifetime perspectives in pill; no wallet gate
+    if (_activePlan === 'trial') {
+      // Calibration Trial: show remaining lifetime perspectives in pill; no wallet gate
       const _used  = loadChatSessions().length;
-      const _limit = DIVINE_PLANS.free.features.perspectives;
+      const _limit = DIVINE_PLANS.trial.features.perspectives;
       const _left  = Math.max(0, _limit - _used);
       if (pill) {
         pill.textContent = `${_left} left`;
@@ -15342,10 +15375,10 @@ function applyAuthState(user) {
     const _plan = getUserPlan();
     const _planDef = DIVINE_PLANS[_plan];
     if (grSub) {
-      if (_plan === 'free') {
-        grSub.innerHTML = 'IBM Way · Powered by Claude &nbsp;·&nbsp; <button onclick="showUpgradeModal(\'manual\',{})" style="background:none;border:none;font-size:12px;color:var(--accent);cursor:pointer;font-family:\'Inter\',sans-serif;font-weight:600;padding:0">Upgrade plan</button>';
+      if (_plan === 'trial') {
+        grSub.innerHTML = 'Calibration Trial &nbsp;·&nbsp; <button onclick="showUpgradeModal(\'manual\',{})" style="background:none;border:none;font-size:12px;color:var(--accent);cursor:pointer;font-family:\'Inter\',sans-serif;font-weight:600;padding:0">Subscribe to unlock</button>';
       } else {
-        grSub.textContent = `${_planDef.name} · Intelligence active. What are we solving today?`;
+        grSub.textContent = `${_planDef.name} · What are we building today?`;
       }
     }
     // Load projects shared with this user by other owners
@@ -19590,77 +19623,70 @@ function adminRenderLog() {
 
 <!-- Deliberation state is rendered inline by showDeliberation() -->
 
-<!-- ══ Upgrade Modal ════════════════════════════════════════════════════ -->
+<!-- ══ Upgrade Modal — Sovereign Pricing 2026 ══════════════════════════ -->
 <div class="upm-overlay modal-overlay" id="upgrade-modal" onclick="if(event.target===this)closeUpgradeModal()">
-  <div class="upm-sheet" role="dialog" aria-modal="true" aria-labelledby="upm-headline">
+  <div class="upm-sheet" role="dialog" aria-modal="true" aria-labelledby="upm-headline" style="width:min(980px,calc(100vw - 32px))">
     <button class="upm-close" onclick="closeUpgradeModal()" aria-label="Close">
       <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="1" y1="1" x2="11" y2="11"/><line x1="11" y1="1" x2="1" y2="11"/></svg>
     </button>
     <div class="upm-header">
-      <div class="upm-eyebrow">Divine Intelligence</div>
-      <div class="upm-headline" id="upm-headline">Unlock your full potential</div>
-      <div class="upm-trigger-msg" id="upgrade-trigger-msg">Upgrade to keep the momentum going.</div>
+      <div class="upm-eyebrow">Divine Intelligence — Sovereign Pricing</div>
+      <div class="upm-headline" id="upm-headline">Your team. Your system. One subscription.</div>
+      <div class="upm-trigger-msg" id="upgrade-trigger-msg">The owner/promoter pays. Advisors, staff and investors access Divine as included nodes — no per-seat charges.</div>
     </div>
-    <div class="upm-plans">
-      <!-- Free Observer -->
-      <div class="upm-card" id="upm-card-free">
-        <div class="upm-recommended-chip">Current</div>
-        <div class="upm-plan-name">Free Observer</div>
-        <div class="upm-plan-tagline">Experience the IBM Way — Powered by Claude</div>
-        <div class="upm-plan-price">$0 <span>/ forever</span></div>
+    <div class="upm-plans" style="grid-template-columns:repeat(4,1fr)">
+
+      <!-- Calibration Trial -->
+      <div class="upm-card" id="upm-card-trial">
+        <div class="upm-recommended-chip">Trial</div>
+        <div class="upm-plan-name">Calibration Trial</div>
+        <div class="upm-plan-tagline">Start your strategic thinking journey — no commitment required.</div>
+        <div class="upm-plan-price">$0 <span>/ trial</span></div>
         <div class="upm-divider"></div>
         <ul class="upm-feature-list">
           <li class="upm-feature-item">
             <svg class="plan-feature-check" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="2,8 6,12 14,4"/></svg>
-            5 lifetime Perspectives
+            3 lifetime Perspectives
           </li>
           <li class="upm-feature-item">
             <svg class="plan-feature-check" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="2,8 6,12 14,4"/></svg>
-            1 Project
-          </li>
-          <li class="upm-feature-item">
-            <svg class="plan-feature-check" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="2,8 6,12 14,4"/></svg>
-            200 AI Credits
-          </li>
-          <li class="upm-feature-item">
-            <svg class="plan-feature-check" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="2,8 6,12 14,4"/></svg>
-            Decision Log
+            100 AI Credits
           </li>
           <li class="upm-feature-item disabled">
             <svg class="plan-feature-x" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="3" x2="13" y2="13"/><line x1="13" y1="3" x2="3" y2="13"/></svg>
-            No team invites
+            No projects
           </li>
           <li class="upm-feature-item disabled">
             <svg class="plan-feature-x" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="3" x2="13" y2="13"/><line x1="13" y1="3" x2="3" y2="13"/></svg>
-            No tool integrations
+            No team nodes
           </li>
           <li class="upm-feature-item disabled">
             <svg class="plan-feature-x" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="3" x2="13" y2="13"/><line x1="13" y1="3" x2="3" y2="13"/></svg>
-            No IR Page
+            No integrations
           </li>
         </ul>
-        <button class="upm-cta upm-cta-ghost" onclick="closeUpgradeModal()">Stay on Free</button>
+        <button class="upm-cta upm-cta-ghost" onclick="closeUpgradeModal()">Stay on Trial</button>
       </div>
 
-      <!-- Entry Analyst -->
-      <div class="upm-card" id="upm-card-entry">
+      <!-- Calibration $99 -->
+      <div class="upm-card" id="upm-card-calibration">
         <div class="upm-recommended-chip">Recommended</div>
-        <div class="upm-plan-name">Entry Analyst</div>
-        <div class="upm-plan-tagline">For founders moving fast with a small team</div>
-        <div class="upm-plan-price">$19 <span>/ mo, billed annually</span></div>
+        <div class="upm-plan-name">Calibration</div>
+        <div class="upm-plan-tagline">Skin in the game. Full Ledger Sync + your entire inner circle.</div>
+        <div class="upm-plan-price">$99 <span>/ mo</span></div>
         <div class="upm-divider"></div>
         <ul class="upm-feature-list">
           <li class="upm-feature-item">
             <svg class="plan-feature-check" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="2,8 6,12 14,4"/></svg>
-            50 Perspectives / month
+            100 Perspectives / month
           </li>
           <li class="upm-feature-item">
             <svg class="plan-feature-check" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="2,8 6,12 14,4"/></svg>
-            5 Projects
+            Unlimited projects
           </li>
           <li class="upm-feature-item">
             <svg class="plan-feature-check" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="2,8 6,12 14,4"/></svg>
-            3 Team members
+            Unlimited team nodes — free for all
           </li>
           <li class="upm-feature-item">
             <svg class="plan-feature-check" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="2,8 6,12 14,4"/></svg>
@@ -19668,26 +19694,26 @@ function adminRenderLog() {
           </li>
           <li class="upm-feature-item">
             <svg class="plan-feature-check" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="2,8 6,12 14,4"/></svg>
-            2,000 AI Credits
+            Live QuickBooks / Xero sync
           </li>
           <li class="upm-feature-item">
             <svg class="plan-feature-check" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="2,8 6,12 14,4"/></svg>
-            Any Thinker, Decision Log
+            2,000 AI Credits · Decision Log
           </li>
           <li class="upm-feature-item disabled">
             <svg class="plan-feature-x" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="3" x2="13" y2="13"/><line x1="13" y1="3" x2="3" y2="13"/></svg>
-            No IR Page
+            No Investor Portal
           </li>
         </ul>
-        <button class="upm-cta upm-cta-primary" onclick="upgradeSelectPlan('entry')">Upgrade to Entry — $19/mo</button>
+        <button class="upm-cta upm-cta-primary" onclick="upgradeSelectPlan('calibration')">Subscribe — $99/mo</button>
       </div>
 
-      <!-- Premium Principal -->
-      <div class="upm-card" id="upm-card-premium">
-        <div class="upm-recommended-chip">Most Powerful</div>
-        <div class="upm-plan-name">Premium Principal</div>
-        <div class="upm-plan-tagline">Full intelligence infrastructure for serious founders</div>
-        <div class="upm-plan-price">$49 <span>/ mo, billed annually</span></div>
+      <!-- Sovereign $299 -->
+      <div class="upm-card" id="upm-card-sovereign">
+        <div class="upm-recommended-chip">Most Popular</div>
+        <div class="upm-plan-name">Sovereign</div>
+        <div class="upm-plan-tagline">Automates Investor Relations. Pays for itself in 4 hours saved.</div>
+        <div class="upm-plan-price">$299 <span>/ mo</span></div>
         <div class="upm-divider"></div>
         <ul class="upm-feature-list">
           <li class="upm-feature-item">
@@ -19696,11 +19722,11 @@ function adminRenderLog() {
           </li>
           <li class="upm-feature-item">
             <svg class="plan-feature-check" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="2,8 6,12 14,4"/></svg>
-            Unlimited Projects + Team
+            Unlimited projects + team nodes
           </li>
           <li class="upm-feature-item">
             <svg class="plan-feature-check" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="2,8 6,12 14,4"/></svg>
-            Unlimited Tool integrations
+            Unlimited tool integrations
           </li>
           <li class="upm-feature-item">
             <svg class="plan-feature-check" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="2,8 6,12 14,4"/></svg>
@@ -19708,22 +19734,62 @@ function adminRenderLog() {
           </li>
           <li class="upm-feature-item">
             <svg class="plan-feature-check" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="2,8 6,12 14,4"/></svg>
-            IR Page (Investor Data Room)
+            IR Page — Investor Data Room
           </li>
           <li class="upm-feature-item">
             <svg class="plan-feature-check" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="2,8 6,12 14,4"/></svg>
-            Live QuickBooks sync
+            1 Thinker Council slot (Priority)
           </li>
           <li class="upm-feature-item">
             <svg class="plan-feature-check" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="2,8 6,12 14,4"/></svg>
-            Priority Thinker access
+            Decision Log + Live financials
           </li>
         </ul>
-        <button class="upm-cta upm-cta-secondary" onclick="upgradeSelectPlan('premium')">Upgrade to Premium — $49/mo</button>
+        <button class="upm-cta upm-cta-primary" onclick="upgradeSelectPlan('sovereign')">Subscribe — $299/mo</button>
+      </div>
+
+      <!-- Institutional $999 -->
+      <div class="upm-card" id="upm-card-institutional">
+        <div class="upm-recommended-chip">Enterprise</div>
+        <div class="upm-plan-name">Institutional</div>
+        <div class="upm-plan-tagline">The Command Centre for funds managing 20+ companies.</div>
+        <div class="upm-plan-price">$999 <span>/ mo + usage</span></div>
+        <div class="upm-divider"></div>
+        <ul class="upm-feature-list">
+          <li class="upm-feature-item">
+            <svg class="plan-feature-check" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="2,8 6,12 14,4"/></svg>
+            Everything in Sovereign
+          </li>
+          <li class="upm-feature-item">
+            <svg class="plan-feature-check" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="2,8 6,12 14,4"/></svg>
+            Full Portfolio Dashboard
+          </li>
+          <li class="upm-feature-item">
+            <svg class="plan-feature-check" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="2,8 6,12 14,4"/></svg>
+            Custom Protocol Encoding
+          </li>
+          <li class="upm-feature-item">
+            <svg class="plan-feature-check" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="2,8 6,12 14,4"/></svg>
+            Unlimited Thinker Council
+          </li>
+          <li class="upm-feature-item">
+            <svg class="plan-feature-check" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="2,8 6,12 14,4"/></svg>
+            Unlimited AI Credits
+          </li>
+          <li class="upm-feature-item">
+            <svg class="plan-feature-check" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="2,8 6,12 14,4"/></svg>
+            Dedicated account manager
+          </li>
+          <li class="upm-feature-item">
+            <svg class="plan-feature-check" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="2,8 6,12 14,4"/></svg>
+            Wisdom Royalty payouts
+          </li>
+        </ul>
+        <button class="upm-cta upm-cta-secondary" onclick="upgradeSelectPlan('institutional')">Contact us</button>
       </div>
     </div>
     <div class="upm-footer">
-      Annual billing. Cancel any time. &nbsp;·&nbsp; <a href="#" onclick="closeUpgradeModal()">View full feature comparison</a>
+      Single-Payer model — the owner/promoter subscribes, the entire team collaborates for free. &nbsp;·&nbsp; <a href="#" onclick="closeUpgradeModal()">See full comparison</a>
     </div>
   </div>
 </div>
