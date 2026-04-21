@@ -2110,31 +2110,34 @@
     @media (max-width:560px) { .dc-projects-grid { grid-template-columns:1fr; } }
 
     /* ── Project card — redesigned ── */
-    .dc-project-card { background:var(--surface); border:1.5px solid var(--border); border-radius:14px; overflow:hidden; position:relative; display:flex; flex-direction:column; cursor:pointer; transition:border-color .18s,box-shadow .2s,transform .18s; }
-    /* Left accent bar replaces top bar */
-    .dc-project-card::before { content:''; position:absolute; top:0; left:0; bottom:0; width:3px; background:var(--vc,#BF452A); border-radius:14px 0 0 14px; }
-    .dc-project-card:hover { border-color:rgba(0,0,0,.15); box-shadow:0 8px 28px rgba(0,0,0,.09); transform:translateY(-2px); }
+    .dc-project-card { background:#fff; border:1.5px solid var(--border); border-radius:14px; overflow:hidden; position:relative; display:flex; flex-direction:column; cursor:pointer; transition:border-color .18s,box-shadow .2s,transform .18s; }
+    .dc-project-card:hover { border-color:rgba(0,0,0,.13); box-shadow:0 6px 22px rgba(0,0,0,.07); transform:translateY(-1px); }
 
     /* Card body — primary click zone */
-    .dc-proj-card-body { display:flex; align-items:flex-start; gap:12px; padding:15px 16px 11px 18px; flex:1; }
-    .dc-proj-avatar { width:40px; height:40px; border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:700; color:#fff; flex-shrink:0; letter-spacing:-.01em; }
+    .dc-proj-card-body { display:flex; align-items:flex-start; gap:12px; padding:15px 16px 10px 16px; flex:1; }
+    .dc-proj-avatar { width:36px; height:36px; border-radius:9px; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:700; color:#fff; flex-shrink:0; letter-spacing:-.01em; opacity:.92; }
     .dc-proj-meta { flex:1; min-width:0; }
     .dc-proj-name { font-size:13.5px; font-weight:700; color:var(--text-0); line-height:1.3; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
     .dc-proj-tagline { font-size:11.5px; color:var(--text-3); margin-top:2px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-    /* Count — plain text, no pill */
-    .dc-proj-count-pill { display:block; margin-top:5px; font-size:11.5px; font-weight:400; color:var(--text-3); white-space:nowrap; }
+    /* Activity row */
+    .dc-proj-activity { display:flex; align-items:center; gap:10px; margin-top:6px; }
+    .dc-proj-count-pill { font-size:11px; font-weight:400; color:var(--text-3); white-space:nowrap; }
     .dc-proj-count-pill.live { color:var(--success); font-weight:500; }
     .dc-proj-count-dot { display:none; }
-    /* Open arrow — subtly visible, brightens on card hover */
-    .dc-proj-open-arrow { display:flex; align-items:center; justify-content:center; width:24px; height:24px; border-radius:50%; border:1.5px solid var(--border); color:var(--text-3); flex-shrink:0; margin-top:2px; transition:all .15s; }
-    .dc-project-card:hover .dc-proj-open-arrow { border-color:var(--vc,var(--accent)); color:var(--vc,var(--accent)); }
+    .dc-proj-team-row { display:flex; align-items:center; gap:4px; }
+    .dc-proj-team-pip { width:18px; height:18px; border-radius:50%; background:var(--surface-2); border:1.5px solid #fff; display:flex; align-items:center; justify-content:center; font-size:8px; font-weight:700; color:var(--text-2); margin-left:-5px; }
+    .dc-proj-team-pip:first-child { margin-left:0; }
+    .dc-proj-team-count { font-size:10.5px; color:var(--text-3); margin-left:5px; }
+    /* Open arrow */
+    .dc-proj-open-arrow { display:flex; align-items:center; justify-content:center; width:24px; height:24px; border-radius:50%; border:1.5px solid var(--border); color:var(--text-3); flex-shrink:0; margin-top:1px; transition:all .15s; }
+    .dc-project-card:hover .dc-proj-open-arrow { border-color:var(--border-hi); color:var(--text-1); }
 
     /* Action chips footer */
-    .dc-proj-actions { display:flex; align-items:center; gap:6px; padding:0 16px 12px 18px; }
+    .dc-proj-actions { display:flex; align-items:center; gap:6px; padding:0 16px 12px 16px; border-top:1px solid var(--border); margin-top:8px; padding-top:9px; }
     .dc-proj-chip { display:inline-flex; align-items:center; gap:5px; padding:5px 10px; border-radius:var(--r-pill); border:1px solid var(--border-md); background:transparent; font-size:11.5px; font-weight:500; color:var(--text-2); cursor:pointer; font-family:'Inter',sans-serif; transition:all .14s; white-space:nowrap; }
-    .dc-proj-chip:hover { border-color:var(--vc,var(--accent)); color:var(--vc,var(--accent)); background:rgba(191,69,42,.06); }
-    .dc-proj-chip-primary { background:var(--vc,var(--accent)); color:#fff; border-color:transparent; font-weight:600; }
-    .dc-proj-chip-primary:hover { opacity:.88; background:var(--vc,var(--accent)) !important; color:#fff !important; border-color:transparent !important; }
+    .dc-proj-chip:hover { border-color:var(--border-hi); color:var(--text-0); background:var(--surface-2); }
+    .dc-proj-chip-primary { background:var(--text-0); color:#fff; border-color:transparent; font-weight:600; }
+    .dc-proj-chip-primary:hover { background:var(--text-1) !important; color:#fff !important; border-color:transparent !important; opacity:1; }
 
     /* Empty state */
     .dc-proj-empty { grid-column:1/-1; display:flex; flex-direction:column; align-items:center; gap:8px; padding:28px 20px; background:var(--surface); border:1.5px dashed var(--border-md); border-radius:14px; cursor:pointer; transition:border-color .15s,background .15s; text-align:center; color:var(--text-3); }
@@ -5083,7 +5086,7 @@
 
         <!-- Projects -->
         <button class="nav-item nav-auth-gate" id="nav-projects" data-tip="Projects" onclick="_navMyStuff('projects')">
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75"><rect x="2" y="2" width="5" height="5" rx="1.5"/><rect x="9" y="2" width="5" height="5" rx="1.5"/><rect x="2" y="9" width="5" height="5" rx="1.5"/><rect x="9" y="9" width="5" height="5" rx="1.5"/></svg>
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M1.5 5.5h13v7a1 1 0 01-1 1h-11a1 1 0 01-1-1v-7z"/><path d="M1.5 5.5V4a1 1 0 011-1h4l1.5 1.5H1.5z"/></svg>
           <span class="nav-item-label">Projects</span>
         </button>
 
@@ -5310,7 +5313,7 @@
 
             <!-- ══ VENTURE CARDS ══ -->
             <div id="dc-projects-head" style="display:none">
-              <div class="dc-section-head" style="margin-bottom:0">
+              <div class="dc-section-head" style="margin-bottom:0;margin-top:28px">
                 <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75"><rect x="1" y="3" width="14" height="11" rx="2"/><path d="M5 3V2a1 1 0 011-1h4a1 1 0 011 1v1"/></svg>
                 Continue where you left off
               </div>
@@ -7769,7 +7772,7 @@ e.g. I always start by validating whether the problem is real before evaluating 
   </button>
   <button class="mob-nav-item mob-auth-gate" id="mob-nav-projects" onclick="_navMyStuff('projects'); closeSidebarOnMobile()" aria-label="Projects">
     <span class="mob-lock-badge"></span>
-    <svg width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75"><rect x="2" y="2" width="5" height="5" rx="1.5"/><rect x="9" y="2" width="5" height="5" rx="1.5"/><rect x="2" y="9" width="5" height="5" rx="1.5"/><rect x="9" y="9" width="5" height="5" rx="1.5"/></svg>
+    <svg width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M1.5 5.5h13v7a1 1 0 01-1 1h-11a1 1 0 01-1-1v-7z"/><path d="M1.5 5.5V4a1 1 0 011-1h4l1.5 1.5H1.5z"/></svg>
     <span>Projects</span>
   </button>
 </nav>
@@ -9002,11 +9005,25 @@ function _projInitials(name) {
 /** Generate two context-aware action prompts for a given project name */
 function _projActions(name) {
   return [
-    { label: 'Explore Strategy', primary: true,
+    { label: 'Open Project', primary: true,
       prompt: 'Give me a strategic overview of ' + name + ' — what are the highest-leverage opportunities right now?' },
-    { label: 'Audit Risks',      primary: false,
+    { label: 'Review Risks', primary: false,
       prompt: 'Run a fragility and risk audit on ' + name + ' — what are the top vulnerabilities I need to address?' }
   ];
+}
+
+/** Format a timestamp as relative time (e.g. "2h ago", "3d ago") */
+function _relativeTime(ts) {
+  if (!ts) return null;
+  const diff = Date.now() - new Date(ts).getTime();
+  const mins = Math.floor(diff / 60000);
+  if (mins < 1)   return 'just now';
+  if (mins < 60)  return mins + 'm ago';
+  const hrs = Math.floor(mins / 60);
+  if (hrs < 24)   return hrs + 'h ago';
+  const days = Math.floor(hrs / 24);
+  if (days < 30)  return days + 'd ago';
+  return Math.floor(days / 30) + 'mo ago';
 }
 
 /* ══ Render project cards on the Launchpad (last 3 opened) ══ */
@@ -9104,25 +9121,44 @@ function renderDcProjects() {
     const hasData   = count > 0;
     const countTxt  = count === 0 ? 'No perspectives yet' : count + (count === 1 ? ' perspective' : ' perspectives');
 
+    // Last activity time
+    const lastTs = lastOpened[p.id] || (p.createdAt ? new Date(p.createdAt).getTime() : null);
+    const relTime = lastTs ? _relativeTime(lastTs) : null;
+
+    // Team member pips (up to 3)
+    const teamMembers = Array.isArray(p.team) ? p.team.filter(m => m.role !== 'admin') : [];
+    const pipColors = ['#C0C8D0','#B8C4B8','#C4BCC8'];
+    const pips = teamMembers.slice(0,3).map((m,i) => {
+      const ini = m.name ? m.name.slice(0,1).toUpperCase() : '?';
+      return `<div class="dc-proj-team-pip" style="background:${pipColors[i%pipColors.length]}">${ini}</div>`;
+    }).join('');
+    const teamRow = teamMembers.length > 0
+      ? `<div class="dc-proj-team-row">${pips}<span class="dc-proj-team-count">${teamMembers.length} member${teamMembers.length!==1?'s':''}</span></div>`
+      : '';
+
     return `<div class="dc-project-card" style="--vc:${color}" onclick="openProjectDetail('${p.id}')">
       <div class="dc-proj-card-body">
         <div class="dc-proj-avatar" style="background:${color}">${initials}</div>
         <div class="dc-proj-meta">
           <div class="dc-proj-name">${escHtml(p.name)}</div>
           <div class="dc-proj-tagline">${escHtml(tagline)}</div>
-          <div class="dc-proj-count-pill${hasData ? ' live' : ''}">${countTxt}</div>
+          <div class="dc-proj-activity">
+            <div class="dc-proj-count-pill${hasData ? ' live' : ''}">${countTxt}</div>
+            ${relTime ? `<span style="font-size:10.5px;color:var(--text-3);opacity:.7">· ${relTime}</span>` : ''}
+          </div>
+          ${teamRow}
         </div>
         <div class="dc-proj-open-arrow">
           <svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"><path d="M2 5h6M5.5 2.5L8 5l-2.5 2.5"/></svg>
         </div>
       </div>
       <div class="dc-proj-actions" onclick="event.stopPropagation()">
-        <button class="dc-proj-chip dc-proj-chip-primary" onclick="dcProjectAction('${escHtml(actions[0].prompt)}')" title="${escHtml(actions[0].label)}">
-          <svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M2 10L6 2l4 8"/><path d="M3.5 7h5"/></svg>
+        <button class="dc-proj-chip dc-proj-chip-primary" onclick="openProjectDetail('${p.id}')" title="${escHtml(actions[0].label)}">
+          <svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"><rect x="1.5" y="2" width="9" height="8" rx="1.2"/><path d="M1.5 5h9"/><path d="M4.5 2V5"/></svg>
           ${escHtml(actions[0].label)}
         </button>
         <button class="dc-proj-chip" onclick="dcProjectAction('${escHtml(actions[1].prompt)}')" title="${escHtml(actions[1].label)}">
-          <svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.75"><circle cx="6" cy="6" r="4.5"/><path d="M6 4v2.5l1.5 1.5"/></svg>
+          <svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"><circle cx="6" cy="6" r="4.5"/><line x1="6" y1="4" x2="6" y2="6.5"/><circle cx="6" cy="8.5" r=".5" fill="currentColor" stroke="none"/></svg>
           ${escHtml(actions[1].label)}
         </button>
       </div>
