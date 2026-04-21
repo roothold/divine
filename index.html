@@ -2159,6 +2159,19 @@
     .dc-connect-cta a { color:var(--accent); font-weight:600; cursor:pointer; text-decoration:none; }
     .dc-connect-cta a:hover { text-decoration:underline; }
 
+    /* ── Connect Tools Bar ── */
+    .dc-tools-bar { display:flex; align-items:center; gap:10px; background:var(--surface-2,#F5F4F2); border:1px solid var(--border); border-radius:12px; padding:9px 14px; margin-top:8px; transition:opacity .2s; }
+    .dc-tools-bar.hidden { display:none; }
+    .dc-tools-bar-left { display:flex; align-items:center; gap:7px; flex:1; min-width:0; cursor:pointer; }
+    .dc-tools-bar-left:hover .dc-tools-bar-label { color:var(--text-0); }
+    .dc-tools-bar-icon { color:var(--text-3); flex-shrink:0; }
+    .dc-tools-bar-label { font-size:12px; font-weight:500; color:var(--text-2); white-space:nowrap; }
+    .dc-tools-bar-apps { display:flex; align-items:center; gap:4px; flex-shrink:0; }
+    .dc-tool-pip { width:22px; height:22px; border-radius:6px; display:flex; align-items:center; justify-content:center; font-size:9.5px; font-weight:800; color:#fff; flex-shrink:0; letter-spacing:-.02em; border:1.5px solid rgba(255,255,255,.35); }
+    .dc-tools-bar-divider { width:1px; height:14px; background:var(--border-md); flex-shrink:0; margin:0 2px; }
+    .dc-tools-bar-dismiss { display:flex; align-items:center; justify-content:center; width:20px; height:20px; border-radius:50%; border:none; background:transparent; color:var(--text-3); cursor:pointer; font-size:14px; line-height:1; padding:0; transition:background .12s,color .12s; flex-shrink:0; font-family:'Inter',sans-serif; }
+    .dc-tools-bar-dismiss:hover { background:var(--border); color:var(--text-1); }
+
     /* ─── Growth: Advisory Circle ─── */
     .dc-advisory-grid { display:flex; flex-direction:column; gap:8px; }
     .dc-advisory-card { display:flex; align-items:flex-start; gap:10px; padding:11px; background:var(--surface-2); border-radius:10px; cursor:pointer; transition:background .14s,box-shadow .14s; }
@@ -5311,6 +5324,19 @@
               </div>
             </div><!-- /dc-greeting-card -->
 
+            <!-- ── Connect Tools Bar (homepage) ── -->
+            <div class="dc-tools-bar" id="dc-tools-bar-home">
+              <div class="dc-tools-bar-left" onclick="showView('settings')">
+                <svg class="dc-tools-bar-icon" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="5" cy="8" r="2.5"/><circle cx="11" cy="4" r="2.5"/><circle cx="11" cy="12" r="2.5"/><line x1="7.4" y1="6.9" x2="8.7" y2="5.5"/><line x1="7.4" y1="9.1" x2="8.7" y2="10.5"/></svg>
+                <span class="dc-tools-bar-label">Connect your tools to Divine</span>
+              </div>
+              <div class="dc-tools-bar-apps" id="dc-tools-bar-apps-home">
+                <!-- populated by renderToolsBar() -->
+              </div>
+              <div class="dc-tools-bar-divider"></div>
+              <button class="dc-tools-bar-dismiss" onclick="dcDismissToolsBar()" title="Dismiss">×</button>
+            </div>
+
             <!-- ══ VENTURE CARDS ══ -->
             <div id="dc-projects-head" style="display:none">
               <div class="dc-section-head" style="margin-bottom:0;margin-top:28px">
@@ -5800,6 +5826,19 @@
                 </div>
                 <button class="dc-input-submit" id="pd-proj-submit" onclick="pdLaunchPerspective()" disabled>New Perspective</button>
               </div>
+            </div>
+
+            <!-- ── Connect Tools Bar (project page) ── -->
+            <div class="dc-tools-bar" id="dc-tools-bar-project">
+              <div class="dc-tools-bar-left" onclick="showView('settings')">
+                <svg class="dc-tools-bar-icon" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="5" cy="8" r="2.5"/><circle cx="11" cy="4" r="2.5"/><circle cx="11" cy="12" r="2.5"/><line x1="7.4" y1="6.9" x2="8.7" y2="5.5"/><line x1="7.4" y1="9.1" x2="8.7" y2="10.5"/></svg>
+                <span class="dc-tools-bar-label">Connect your tools to Divine</span>
+              </div>
+              <div class="dc-tools-bar-apps" id="dc-tools-bar-apps-project">
+                <!-- populated by renderToolsBar() -->
+              </div>
+              <div class="dc-tools-bar-divider"></div>
+              <button class="dc-tools-bar-dismiss" onclick="dcDismissToolsBar()" title="Dismiss">×</button>
             </div>
 
             <!-- Recent Perspectives -->
@@ -9401,6 +9440,43 @@ function renderDashboardHome() {
     if (el && !el.value) el.value = v;
   });
   // QBO-sourced: no manual scenario inputs
+}
+
+/* ── Connect Tools Bar ── */
+const DC_TOOL_PIPS = [
+  { label:'Sl', bg:'#4A154B', title:'Slack' },
+  { label:'Gh', bg:'#24292E', title:'GitHub' },
+  { label:'Gm', bg:'#D44638', title:'Gmail' },
+  { label:'Nt', bg:'#000000', title:'Notion' },
+  { label:'Li', bg:'#E8612C', title:'Linear' },
+  { label:'Gs', bg:'#34A853', title:'Google Sheets' },
+  { label:'Fg', bg:'#A259FF', title:'Figma' },
+  { label:'Jr', bg:'#0052CC', title:'Jira' },
+];
+
+function renderToolsBar() {
+  const dismissed = localStorage.getItem('divine_tools_bar_v1') === 'dismissed';
+  ['dc-tools-bar-home','dc-tools-bar-project'].forEach(id => {
+    const bar = document.getElementById(id);
+    if (!bar) return;
+    if (dismissed) { bar.classList.add('hidden'); return; }
+    bar.classList.remove('hidden');
+  });
+  ['dc-tools-bar-apps-home','dc-tools-bar-apps-project'].forEach(id => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.innerHTML = DC_TOOL_PIPS.map(t =>
+      `<div class="dc-tool-pip" style="background:${t.bg}" title="${t.title}">${t.label}</div>`
+    ).join('');
+  });
+}
+
+function dcDismissToolsBar() {
+  localStorage.setItem('divine_tools_bar_v1','dismissed');
+  ['dc-tools-bar-home','dc-tools-bar-project'].forEach(id => {
+    const bar = document.getElementById(id);
+    if (bar) bar.classList.add('hidden');
+  });
 }
 
 /* ── Dashboard quick-input ── */
@@ -14727,10 +14803,12 @@ function applyAuthState(user) {
     // Re-render project sections now that currentUser is set
     // renderProjects() MUST be called here too — on page refresh the router fires it before
     // auth resolves (so _sharedProjects is empty). This second call repopulates the shared tab.
+    try { renderRecents(); } catch(e) {}    // USER_ID is now set — re-read correct localStorage key
     try { renderDcProjects(); } catch(e) {}
     try { renderProjects(); } catch(e) {}
     try { renderPortfolioList('chat'); } catch(e) {}
     try { renderPortfolioList('is'); } catch(e) {}
+    try { renderToolsBar(); } catch(e) {}
     // Re-resolve deep-link routes that fired before auth was ready.
     // e.g. /projects/company/abc123 on page refresh — router ran with empty projects list.
     try {
@@ -14796,6 +14874,7 @@ function applyAuthState(user) {
     try { renderProjects(); } catch(e) {}
     try { renderPortfolioList('chat'); } catch(e) {}
     try { renderPortfolioList('is'); } catch(e) {}
+    try { renderToolsBar(); } catch(e) {}
     // Reset mobile nav profile button
     const mnIcon  = document.getElementById('mob-nav-profile-icon');
     const mnLabel = document.getElementById('mob-nav-profile-label');
@@ -15148,10 +15227,11 @@ if (!localStorage.getItem('di_welcome_seen')) {
 // after this <script> block in the HTML.
 // Also sync thinker availability from the server so admin toggles take effect.
 if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', () => { initAuth(); syncThinkerAvailability(); }, { once: true });
+  document.addEventListener('DOMContentLoaded', () => { initAuth(); syncThinkerAvailability(); renderToolsBar(); }, { once: true });
 } else {
   initAuth();
   syncThinkerAvailability();
+  renderToolsBar();
 }
 
 document.addEventListener('keydown', e => {
