@@ -4760,6 +4760,85 @@
       .splash-title  { font-size:30px; }
       .splash-btn-login, .splash-btn-signup { padding:13px 28px; font-size:14px; }
     }
+
+    /* ══ Upgrade Modal ═══════════════════════════════════════════════════ */
+    .upm-overlay {
+      display:none; position:fixed; inset:0; z-index:800;
+      background:rgba(15,14,12,0.60); backdrop-filter:blur(6px);
+      align-items:center; justify-content:center; padding:16px;
+    }
+    .upm-overlay.open { display:flex; }
+    .upm-sheet {
+      background:#fff; border-radius:24px;
+      box-shadow:0 32px 80px rgba(0,0,0,0.18);
+      width:min(860px, calc(100vw - 32px)); max-height:90vh;
+      overflow-y:auto; animation:modal-in 0.22s cubic-bezier(.16,1,.3,1);
+      position:relative;
+    }
+    .upm-close {
+      position:sticky; top:16px; float:right; margin:16px 16px -16px 0;
+      background:#F2EEE7; border:none; width:32px; height:32px; border-radius:50%;
+      cursor:pointer; display:flex; align-items:center; justify-content:center;
+      color:var(--text-2); transition:background .15s; z-index:2;
+    }
+    .upm-close:hover { background:var(--surface-3); }
+    .upm-header { padding:36px 36px 0; text-align:center; }
+    .upm-eyebrow { font-size:11px; font-weight:700; letter-spacing:.12em; text-transform:uppercase; color:var(--accent); margin-bottom:8px; }
+    .upm-headline { font-family:'Cormorant Garamond',serif; font-size:28px; font-weight:600; color:var(--text-0); margin-bottom:8px; }
+    .upm-trigger-msg { font-size:14px; color:var(--text-2); max-width:520px; margin:0 auto 32px; line-height:1.55; }
+    .upm-plans { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; padding:0 28px 36px; }
+    @media (max-width:640px) { .upm-plans { grid-template-columns:1fr; } .upm-header { padding:28px 20px 0; } }
+    .upm-card {
+      border:1.5px solid var(--border); border-radius:16px;
+      padding:24px 20px 20px; position:relative; transition:border-color .2s,box-shadow .2s;
+      display:flex; flex-direction:column; gap:0;
+    }
+    .upm-card.upm-recommended {
+      border-color:var(--accent); box-shadow:0 0 0 4px var(--accent-lt);
+    }
+    .upm-card.upm-current { background:var(--surface-2); }
+    .upm-recommended-chip {
+      display:none; position:absolute; top:-11px; left:50%; transform:translateX(-50%);
+      background:var(--accent); color:#fff; font-size:10px; font-weight:700;
+      letter-spacing:.08em; text-transform:uppercase; padding:3px 10px; border-radius:20px;
+    }
+    .upm-recommended .upm-recommended-chip { display:block; }
+    .upm-plan-name { font-size:13px; font-weight:700; color:var(--text-0); margin-bottom:2px; }
+    .upm-plan-tagline { font-size:11.5px; color:var(--text-3); margin-bottom:14px; line-height:1.45; }
+    .upm-plan-price { font-size:26px; font-weight:700; color:var(--text-0); font-family:'Inter',sans-serif; }
+    .upm-plan-price span { font-size:13px; font-weight:500; color:var(--text-3); }
+    .upm-divider { height:1px; background:var(--border); margin:16px 0; }
+    .upm-feature-list { list-style:none; display:flex; flex-direction:column; gap:8px; margin-bottom:20px; flex:1; }
+    .upm-feature-item { display:flex; align-items:flex-start; gap:8px; font-size:12.5px; color:var(--text-1); line-height:1.4; }
+    .upm-feature-item svg { flex-shrink:0; margin-top:1px; }
+    .upm-feature-item.disabled { color:var(--text-3); }
+    .upm-cta {
+      width:100%; padding:11px 0; border-radius:10px; font-size:13px; font-weight:600;
+      cursor:pointer; border:none; transition:opacity .15s,background .15s;
+      font-family:'Inter',sans-serif;
+    }
+    .upm-cta-primary { background:var(--accent); color:#fff; }
+    .upm-cta-primary:hover { opacity:.88; }
+    .upm-cta-secondary { background:var(--surface-2); color:var(--text-1); border:1.5px solid var(--border-md); }
+    .upm-cta-secondary:hover { background:var(--surface-3); }
+    .upm-cta-ghost { background:transparent; color:var(--text-3); font-size:12px; }
+    .upm-footer { text-align:center; font-size:11.5px; color:var(--text-3); padding:0 28px 24px; }
+    .upm-footer a { color:var(--accent); text-decoration:none; }
+
+    /* ── Plan badge in sidebar ── */
+    .sidebar-plan-badge {
+      display:inline-flex; align-items:center; padding:2px 7px; border-radius:20px;
+      font-size:10px; font-weight:700; letter-spacing:.06em; text-transform:uppercase;
+      margin-left:6px; flex-shrink:0;
+    }
+
+    /* ── Settings — Plan tab ── */
+    .plan-usage-bar-wrap { background:var(--surface-2); border-radius:8px; overflow:hidden; height:6px; margin-top:6px; }
+    .plan-usage-bar-fill { height:100%; background:var(--accent); border-radius:8px; transition:width .4s; }
+    .plan-usage-bar-fill.warn { background:var(--warn); }
+    .plan-usage-bar-fill.full { background:var(--danger); }
+    .plan-feature-check { width:16px; height:16px; flex-shrink:0; color:var(--success-mid); }
+    .plan-feature-x { width:16px; height:16px; flex-shrink:0; color:var(--text-3); }
   </style>
   <!-- PDF text extraction -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
@@ -5188,6 +5267,11 @@
           <svg width="15" height="15" viewBox="0 0 15 15" fill="none" stroke="currentColor" stroke-width="1.75"><circle cx="7.5" cy="5" r="2.5"/><path d="M2 13c0-3 2.5-5 5.5-5s5.5 2 5.5 5"/></svg>
           My Profile
         </button>
+        <!-- Plan badge in menu -->
+        <div id="profile-menu-plan-row" style="display:flex;align-items:center;justify-content:space-between;padding:6px 12px 4px">
+          <span id="profile-menu-plan-label" style="font-size:11.5px;color:var(--text-3)">Free Observer</span>
+          <button onclick="showUpgradeModal('manual',{});closeProfileMenu()" style="background:var(--accent);color:#fff;border:none;border-radius:20px;font-size:10px;font-weight:700;padding:3px 9px;cursor:pointer;font-family:'Inter',sans-serif;letter-spacing:.04em">Upgrade</button>
+        </div>
         <div class="profile-menu-sep"></div>
         <!-- Wallet -->
         <button class="profile-menu-item" onclick="showView('wallet');closeProfileMenu()">
@@ -5220,7 +5304,10 @@
         <button class="profile-btn" id="profile-btn" onclick="toggleProfileMenu()">
           <div class="profile-avatar-badge" id="profile-badge">?</div>
           <div class="profile-text">
-            <div class="profile-greeting" id="profile-greeting">Hi there</div>
+            <div class="profile-greeting" id="profile-greeting" style="display:flex;align-items:center;gap:4px;flex-wrap:wrap">
+              <span id="profile-greeting-text">Hi there</span>
+              <span class="sidebar-plan-badge" id="sidebar-plan-badge" style="background:#6B635718;color:#6B6357">Observer</span>
+            </div>
             <div class="profile-email" id="profile-email"></div>
           </div>
           <svg class="profile-chevron" width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><polyline points="3,5 7,9 11,5"/></svg>
@@ -6268,6 +6355,20 @@
 
         <!-- ── Danger Zone ── -->
         <div class="settings-section" style="border-color:#FFCDD2">
+        <!-- ── Plan & Billing ── -->
+        <div class="settings-section" id="settings-plan-section">
+          <div class="settings-section-title">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M1 4h14M1 4v9a1 1 0 001 1h12a1 1 0 001-1V4M1 4V3a1 1 0 011-1h12a1 1 0 011 1v1"/><path d="M6 9h4"/></svg>
+            Plan &amp; Billing
+          </div>
+          <div id="settings-plan-content">
+            <!-- rendered by renderSettingsPlanTab() -->
+            <div style="height:80px;display:flex;align-items:center;justify-content:center">
+              <span style="font-size:13px;color:var(--text-3)">Loading plan details…</span>
+            </div>
+          </div>
+        </div>
+
           <div class="settings-section-title" style="color:var(--danger)">
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M8 2L14 13H2L8 2z"/><line x1="8" y1="7" x2="8" y2="10"/><circle cx="8" cy="12" r=".5" fill="currentColor"/></svg>
             Danger Zone
@@ -8115,6 +8216,268 @@ const PROJECT_COLORS = [
   '#1C2833','#2C3E50','#4A235A',  // midnight / dark slate / deep purple
 ];
 
+/* ═══════════════════════════════════════════════════════════════════════
+   DIVINE PRICING PLANS — Three-tier freemium model
+   Free Observer  → $0        — registered, 5 lifetime Perspectives
+   Entry Analyst  → $19/mo    — 50 Perspectives/mo, 5 projects, 3 team
+   Premium Principal → $49/mo — unlimited everything, IR Page, live data
+   ═══════════════════════════════════════════════════════════════════════ */
+const DIVINE_PLANS = {
+  free: {
+    id: 'free',
+    name: 'Free Observer',
+    price: 0,
+    priceLabel: 'Free',
+    badge: 'Observer',
+    badgeColor: '#6B6357',
+    features: {
+      perspectives: 5,          // lifetime
+      perspectivesLabel: '5 lifetime',
+      projects: 1,
+      team: 1,                  // solo — no invites
+      integrations: 0,
+      aiCredits: 200,
+      decisionLog: true,
+      irPage: false,
+      liveFinancials: false,
+      priorityThinker: false,
+      customThinker: false,
+    },
+    tagline: 'Experience the IBM Way — powered by Claude',
+    cta: 'Current Plan',
+  },
+  entry: {
+    id: 'entry',
+    name: 'Entry Analyst',
+    price: 19,
+    priceLabel: '$19/mo',
+    badge: 'Analyst',
+    badgeColor: '#1A5276',
+    features: {
+      perspectives: 50,         // per month
+      perspectivesLabel: '50 / month',
+      projects: 5,
+      team: 3,
+      integrations: 3,
+      aiCredits: 2000,
+      decisionLog: true,
+      irPage: false,
+      liveFinancials: false,
+      priorityThinker: false,
+      customThinker: false,
+    },
+    tagline: 'For founders moving fast with a small team',
+    cta: 'Upgrade to Entry',
+  },
+  premium: {
+    id: 'premium',
+    name: 'Premium Principal',
+    price: 49,
+    priceLabel: '$49/mo',
+    badge: 'Principal',
+    badgeColor: '#BF452A',
+    features: {
+      perspectives: Infinity,
+      perspectivesLabel: 'Unlimited',
+      projects: Infinity,
+      team: Infinity,
+      integrations: Infinity,
+      aiCredits: 10000,
+      decisionLog: true,
+      irPage: true,
+      liveFinancials: true,
+      priorityThinker: true,
+      customThinker: false,
+    },
+    tagline: 'Full intelligence infrastructure for serious founders',
+    cta: 'Upgrade to Premium',
+  },
+};
+
+/* ── Plan persistence helpers ─────────────────────────────────────────── */
+function getUserPlan() {
+  try {
+    const stored = localStorage.getItem('di_plan_' + (USER_ID || 'guest'));
+    if (stored && DIVINE_PLANS[stored]) return stored;
+  } catch(_) {}
+  return 'free';
+}
+function setUserPlan(planId) {
+  if (!DIVINE_PLANS[planId]) return;
+  localStorage.setItem('di_plan_' + (USER_ID || 'guest'), planId);
+}
+function getPlanData() { return DIVINE_PLANS[getUserPlan()]; }
+
+/* ── Usage tracking ─────────────────────────────────────────────────── */
+function _getPlanUsage() {
+  try { return JSON.parse(localStorage.getItem('di_usage_' + (USER_ID || 'guest')) || '{}'); } catch { return {}; }
+}
+function _savePlanUsage(u) { localStorage.setItem('di_usage_' + (USER_ID || 'guest'), JSON.stringify(u)); }
+
+function _getMonthKey() {
+  const d = new Date(); return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0');
+}
+
+/* Returns true if action is allowed; false if blocked (shows upgrade modal). */
+function checkPlanLimit(type, options) {
+  const plan    = getUserPlan();
+  const planDef = DIVINE_PLANS[plan];
+  const usage   = _getPlanUsage();
+
+  if (type === 'perspective') {
+    if (plan === 'free') {
+      const lifetime = loadChatSessions().length;
+      if (lifetime >= planDef.features.perspectives) {
+        showUpgradeModal('perspective_limit', { current: lifetime, limit: planDef.features.perspectives });
+        return false;
+      }
+    } else if (plan === 'entry') {
+      const mk = _getMonthKey();
+      const monthly = (usage.perspectives_monthly || {})[mk] || 0;
+      if (monthly >= planDef.features.perspectives) {
+        showUpgradeModal('perspective_monthly_limit', { current: monthly, limit: planDef.features.perspectives });
+        return false;
+      }
+    }
+    // premium — unlimited
+    return true;
+  }
+
+  if (type === 'project') {
+    const pCount = loadProjects().length;
+    if (planDef.features.projects !== Infinity && pCount >= planDef.features.projects) {
+      showUpgradeModal('project_limit', { current: pCount, limit: planDef.features.projects });
+      return false;
+    }
+    return true;
+  }
+
+  if (type === 'team') {
+    const projId  = options && options.projectId;
+    if (plan === 'free') {
+      showUpgradeModal('team_limit', {});
+      return false;
+    }
+    if (plan === 'entry') {
+      // count current team (excluding owner) — checked at call site
+      const count = (options && options.currentTeamSize) || 0;
+      if (count >= planDef.features.team) {
+        showUpgradeModal('team_limit', { current: count, limit: planDef.features.team });
+        return false;
+      }
+    }
+    return true;
+  }
+
+  if (type === 'integration') {
+    if (planDef.features.integrations === 0) {
+      showUpgradeModal('integration_limit', {});
+      return false;
+    }
+    const connectedCount = (options && options.connectedCount) || 0;
+    if (planDef.features.integrations !== Infinity && connectedCount >= planDef.features.integrations) {
+      showUpgradeModal('integration_limit', { current: connectedCount, limit: planDef.features.integrations });
+      return false;
+    }
+    return true;
+  }
+
+  return true;
+}
+
+/* Track a perspective usage event */
+function _trackPerspectiveUsage() {
+  const plan = getUserPlan();
+  if (plan !== 'entry') return;
+  const usage = _getPlanUsage();
+  const mk = _getMonthKey();
+  if (!usage.perspectives_monthly) usage.perspectives_monthly = {};
+  usage.perspectives_monthly[mk] = (usage.perspectives_monthly[mk] || 0) + 1;
+  _savePlanUsage(usage);
+}
+
+/* ── Upgrade modal ─────────────────────────────────────────────────────
+   Call showUpgradeModal(trigger, ctx) from anywhere.
+   trigger: 'perspective_limit' | 'project_limit' | 'team_limit' | 'integration_limit' | 'manual'
+   ────────────────────────────────────────────────────────────────────── */
+function showUpgradeModal(trigger, ctx) {
+  ctx = ctx || {};
+  const currentPlan = getUserPlan();
+
+  // Build trigger message
+  let triggerMsg = '';
+  if (trigger === 'perspective_limit') {
+    triggerMsg = `You've used all <strong>${ctx.limit} lifetime Perspectives</strong> on the Free plan.`;
+  } else if (trigger === 'perspective_monthly_limit') {
+    triggerMsg = `You've reached your <strong>${ctx.limit} Perspectives this month</strong> on the Entry plan.`;
+  } else if (trigger === 'project_limit') {
+    triggerMsg = `You've reached your <strong>${ctx.limit}-project limit</strong> on the ${DIVINE_PLANS[currentPlan].name} plan.`;
+  } else if (trigger === 'team_limit') {
+    triggerMsg = `Team invites require an <strong>Entry or Premium plan</strong>.`;
+  } else if (trigger === 'integration_limit') {
+    triggerMsg = currentPlan === 'free'
+      ? `Tool integrations are available on <strong>Entry and Premium plans</strong>.`
+      : `You've reached your <strong>${ctx.limit}-integration limit</strong> on the Entry plan.`;
+  }
+
+  const modal = document.getElementById('upgrade-modal');
+  if (!modal) return;
+
+  document.getElementById('upgrade-trigger-msg').innerHTML = triggerMsg || 'Unlock more of Divine Intelligence.';
+  modal.classList.add('open');
+  document.body.style.overflow = 'hidden';
+
+  // Highlight recommended plan
+  ['free','entry','premium'].forEach(pid => {
+    const card = document.getElementById('upm-card-' + pid);
+    if (!card) return;
+    const isCurrent = pid === currentPlan;
+    const isRecommended = (currentPlan === 'free' && pid === 'entry') || (currentPlan === 'entry' && pid === 'premium');
+    card.classList.toggle('upm-current', isCurrent);
+    card.classList.toggle('upm-recommended', isRecommended);
+  });
+}
+
+function closeUpgradeModal() {
+  const modal = document.getElementById('upgrade-modal');
+  if (modal) modal.classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function upgradeSelectPlan(planId) {
+  // In production this would redirect to Stripe. For now, simulate the upgrade.
+  const plan = DIVINE_PLANS[planId];
+  if (!plan) return;
+  if (planId === 'free') { closeUpgradeModal(); return; }
+
+  // Simulate: set the plan locally + show confirmation toast
+  setUserPlan(planId);
+  closeUpgradeModal();
+  _updatePlanBadge();
+  showToast(`Upgraded to ${plan.name} — ${plan.priceLabel}`, 'success');
+  // Refresh settings if open
+  try { renderSettingsPlanTab && renderSettingsPlanTab(); } catch(_) {}
+}
+
+function _updatePlanBadge() {
+  const plan = getPlanData();
+  const badge = document.getElementById('sidebar-plan-badge');
+  if (badge) {
+    badge.textContent = plan.badge;
+    badge.style.background = plan.badgeColor + '18';
+    badge.style.color = plan.badgeColor;
+  }
+  // Profile menu plan label
+  const menuLabel = document.getElementById('profile-menu-plan-label');
+  if (menuLabel) menuLabel.textContent = plan.name;
+  // Hide Upgrade button if on Premium
+  const menuPlanRow = document.getElementById('profile-menu-plan-row');
+  if (menuPlanRow) {
+    const btn = menuPlanRow.querySelector('button');
+    if (btn) btn.style.display = plan.id === 'premium' ? 'none' : '';
+  }
+}
+
 const FAQS = [
   {
     q: 'What is Divine Intelligence?',
@@ -9918,6 +10281,9 @@ function saveTeamStaff(a)     { localStorage.setItem(TM_STAFF_KEY, JSON.stringif
 
 function openInviteModal() {
   if (!currentUser) { showToast('Sign in to authorize team access', 'error'); showView('login'); return; }
+  // ── Plan limit gate for team invites ─────────────────────────────────
+  const totalTeam = (loadAdvisors()||[]).length + (loadTeamInvestors()||[]).length + (loadTeamStaff()||[]).length;
+  if (!checkPlanLimit('team', { currentTeamSize: totalTeam })) return;
   const modal = document.getElementById('tm-invite-modal');
   if (!modal) return;
   modal.classList.add('open');
@@ -10529,6 +10895,117 @@ function renderSettingsPage() {
     const el = document.getElementById(`notif-${k}`);
     if (el) el.checked = notifs[k] !== false; // default on
   });
+
+  // Render plan tab
+  try { renderSettingsPlanTab(); } catch(_e) {}
+}
+
+function renderSettingsPlanTab() {
+  const el = document.getElementById('settings-plan-content');
+  if (!el) return;
+  const plan    = getUserPlan();
+  const planDef = DIVINE_PLANS[plan];
+  const usage   = _getPlanUsage();
+
+  // Perspective usage
+  let perspUsed = 0;
+  let perspLimit = planDef.features.perspectives;
+  if (plan === 'free') {
+    perspUsed  = loadChatSessions().length;
+    perspLimit = planDef.features.perspectives;
+  } else if (plan === 'entry') {
+    const mk = _getMonthKey();
+    perspUsed  = (usage.perspectives_monthly || {})[mk] || 0;
+    perspLimit = planDef.features.perspectives;
+  }
+
+  const perspPct   = perspLimit === Infinity ? 0 : Math.min(100, Math.round(perspUsed / perspLimit * 100));
+  const projUsed   = loadProjects().length;
+  const projLimit  = planDef.features.projects;
+  const projPct    = projLimit === Infinity ? 0 : Math.min(100, Math.round(projUsed / projLimit * 100));
+
+  const perspClass = perspPct >= 100 ? 'full' : perspPct >= 75 ? 'warn' : '';
+  const projClass  = projPct  >= 100 ? 'full' : projPct  >= 75 ? 'warn' : '';
+
+  const perspLabel = perspLimit === Infinity ? `${perspUsed} used (unlimited)` : `${perspUsed} / ${perspLimit} used`;
+  const projLabel  = projLimit  === Infinity ? `${projUsed} active (unlimited)` : `${projUsed} / ${projLimit} active`;
+
+  // Plans above current
+  const planOrder  = ['free', 'entry', 'premium'];
+  const planIdx    = planOrder.indexOf(plan);
+  const upgradePlan = planIdx < planOrder.length - 1 ? DIVINE_PLANS[planOrder[planIdx + 1]] : null;
+
+  el.innerHTML = `
+    <!-- Current plan banner -->
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:16px;background:var(--surface-2);border-radius:12px;margin-bottom:20px;flex-wrap:wrap;gap:12px">
+      <div>
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:3px">
+          <span style="font-size:15px;font-weight:700;color:var(--text-0)">${planDef.name}</span>
+          <span style="font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:2px 8px;border-radius:20px;background:${planDef.badgeColor}18;color:${planDef.badgeColor}">${planDef.badge}</span>
+        </div>
+        <div style="font-size:12px;color:var(--text-3)">${planDef.tagline}</div>
+      </div>
+      ${upgradePlan ? `<button class="btn-primary" style="font-size:13px;padding:9px 20px;white-space:nowrap" onclick="showUpgradeModal('manual',{})">
+        Upgrade to ${upgradePlan.badge}
+      </button>` : `<span style="font-size:12px;color:var(--success);font-weight:600">✓ Highest tier</span>`}
+    </div>
+
+    <!-- Usage meters -->
+    <div style="display:grid;gap:14px;margin-bottom:20px">
+      <div>
+        <div style="display:flex;justify-content:space-between;margin-bottom:5px">
+          <span style="font-size:12px;font-weight:500;color:var(--text-1)">Perspectives</span>
+          <span style="font-size:12px;color:var(--text-3)">${perspLabel}</span>
+        </div>
+        ${perspLimit === Infinity ? `<div style="font-size:11.5px;color:var(--success-mid)">Unlimited on your plan</div>` : `
+        <div class="plan-usage-bar-wrap">
+          <div class="plan-usage-bar-fill ${perspClass}" style="width:${perspPct}%"></div>
+        </div>`}
+      </div>
+      <div>
+        <div style="display:flex;justify-content:space-between;margin-bottom:5px">
+          <span style="font-size:12px;font-weight:500;color:var(--text-1)">Projects</span>
+          <span style="font-size:12px;color:var(--text-3)">${projLabel}</span>
+        </div>
+        ${projLimit === Infinity ? `<div style="font-size:11.5px;color:var(--success-mid)">Unlimited on your plan</div>` : `
+        <div class="plan-usage-bar-wrap">
+          <div class="plan-usage-bar-fill ${projClass}" style="width:${projPct}%"></div>
+        </div>`}
+      </div>
+      <div>
+        <div style="display:flex;justify-content:space-between;margin-bottom:5px">
+          <span style="font-size:12px;font-weight:500;color:var(--text-1)">AI Credits</span>
+          <span style="font-size:12px;color:var(--text-3)">${planDef.features.aiCredits.toLocaleString()} included</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Feature list -->
+    <div style="font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--text-3);margin-bottom:10px">Your plan includes</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:20px">
+      ${[
+        ['Perspectives', planDef.features.perspectivesLabel],
+        ['Projects', planDef.features.projects === Infinity ? 'Unlimited' : String(planDef.features.projects)],
+        ['Team members', planDef.features.team === Infinity ? 'Unlimited' : planDef.features.team === 1 ? 'Solo' : String(planDef.features.team)],
+        ['Integrations', planDef.features.integrations === Infinity ? 'Unlimited' : planDef.features.integrations === 0 ? 'None' : String(planDef.features.integrations)],
+        ['AI Credits', planDef.features.aiCredits.toLocaleString() + '/mo'],
+        ['IR Data Room', planDef.features.irPage ? 'Included' : 'Not included'],
+        ['Live Financials', planDef.features.liveFinancials ? 'Included' : 'Not included'],
+        ['Priority Thinker', planDef.features.priorityThinker ? 'Included' : 'Not included'],
+      ].map(([label, val]) => `
+        <div style="display:flex;align-items:flex-start;gap:6px;font-size:12.5px">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="${val.includes('Not') || val === 'None' || val === 'Solo' ? 'var(--text-3)' : 'var(--success-mid)'}" stroke-width="2" stroke-linecap="round" style="flex-shrink:0;margin-top:2px">${val.includes('Not') || val === 'None' ? '<line x1="2" y1="2" x2="12" y2="12"/><line x1="12" y1="2" x2="2" y2="12"/>' : '<polyline points="1,7 5,11 13,3"/>'}</svg>
+          <div><div style="color:var(--text-0);font-weight:500">${label}</div><div style="color:var(--text-3)">${val}</div></div>
+        </div>
+      `).join('')}
+    </div>
+
+    ${upgradePlan ? `<div style="text-align:center;padding-top:4px">
+      <button style="background:none;border:none;font-size:13px;color:var(--accent);font-weight:500;cursor:pointer;font-family:'Inter',sans-serif" onclick="showUpgradeModal('manual',{})">
+        Compare all plans →
+      </button>
+    </div>` : ''}
+  `;
 }
 
 function _settingsMsg(id, type, text) {
@@ -11281,6 +11758,8 @@ function showProjectForm() {
     showLoginScreen();
     return;
   }
+  // ── Plan limit gate ──────────────────────────────────────────────────
+  if (!checkPlanLimit('project')) return;
   document.getElementById('project-form').classList.add('visible');
   document.getElementById('project-name-input').focus();
   selectProjectType('initiative');
@@ -13498,6 +13977,12 @@ function saveChatSessions(list) {
 }
 
 function openChat(prefill) {
+  // ── Plan limit gate — only fires when creating a brand-new session ──────
+  //    openChatSession() has its own path and does NOT call openChat()
+  if (!(prefill && typeof prefill === 'object' && prefill._resume)) {
+    if (!checkPlanLimit('perspective')) return;
+  }
+
   // Clear nav active state — no nav item is "active" while in a new chat
   document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
   // Clear any previously highlighted recent item (this is a brand-new session)
@@ -13618,8 +14103,25 @@ function _chatEmptyState() {
       <button class="chat-wallet-gate-btn" onclick="showView('wallet')">Top up →</button>
     </div>` : '';
 
+  // IBM Way + Powered by Claude badge (shown for Free plan users)
+  const plan = getUserPlan();
+  const ibmBadge = plan === 'free' ? `
+    <div style="display:inline-flex;align-items:center;gap:6px;padding:5px 12px;border-radius:20px;background:var(--surface-2);border:1px solid var(--border);margin-bottom:16px">
+      <svg width="12" height="12" viewBox="0 0 100 100" fill="none" style="flex-shrink:0">
+        <g stroke="var(--accent)" stroke-width="12" stroke-linecap="round">
+          <rect x="18" y="12" width="8" height="76" rx="2"/>
+          <rect x="26" y="12" width="8" height="8" rx="1"/>
+          <rect x="26" y="80" width="8" height="8" rx="1"/>
+          <path d="M34 18 Q78 18 78 50 Q78 82 34 82"/>
+          <path d="M34 30 Q66 30 66 50 Q66 70 34 70"/>
+        </g>
+      </svg>
+      <span style="font-size:11px;font-weight:600;color:var(--text-2)">IBM Way · Powered by Claude</span>
+    </div>` : '';
+
   el.innerHTML = `
     ${walletBanner}
+    ${ibmBadge}
     <div class="chat-empty-icon">
       <svg width="22" height="22" viewBox="0 0 100 100" fill="none">
         <g stroke="currentColor" stroke-width="9" stroke-linecap="round">
@@ -13632,7 +14134,8 @@ function _chatEmptyState() {
       </svg>
     </div>
     <div class="chat-empty-headline">Ask your Thinker</div>
-    <p class="chat-empty-sub">What growth challenge, team question, or investor concern are you working through? The more specific, the sharper the analysis.</p>`;
+    <p class="chat-empty-sub">What growth challenge, team question, or investor concern are you working through? The more specific, the sharper the analysis.</p>
+    ${plan === 'free' ? `<div style="margin-top:12px"><button onclick="showUpgradeModal('manual',{})" style="background:none;border:none;font-size:12px;color:var(--accent);cursor:pointer;font-family:'Inter',sans-serif;font-weight:500">5 lifetime Perspectives on Free — Upgrade for more →</button></div>` : ''}`;
   return el;
 }
 
@@ -13932,6 +14435,9 @@ async function sendChatMsg() {
 
   // Detect first message BEFORE anything is saved to session
   const _isFirstMsg = _chatSession.messages.length === 0 && !_intakeOriginalMsg;
+
+  // ── Track perspective usage on first message of each session ──────────
+  if (_isFirstMsg) { try { _trackPerspectiveUsage(); } catch(_e) {} }
 
   // Auto-title from first message
   if (!_chatSession.title && _chatSession.messages.length === 0) {
@@ -14793,9 +15299,13 @@ function applyAuthState(user) {
     // Sidebar profile button
     document.getElementById('sidebar-profile-area').style.display = '';
     document.getElementById('sidebar-signin-area').style.display  = 'none';
-    document.getElementById('profile-greeting').textContent = `Hi ${firstName}`;
+    const _pgText = document.getElementById('profile-greeting-text');
+    if (_pgText) _pgText.textContent = `Hi ${firstName}`;
+    else document.getElementById('profile-greeting').textContent = `Hi ${firstName}`;
     document.getElementById('profile-email').textContent    = user.email || '';
     document.getElementById('profile-badge').textContent    = initials;
+    // Update plan badge
+    try { _updatePlanBadge(); } catch(_e) {}
 
     // Profile menu header
     document.getElementById('profile-menu-name').textContent  = user.name  || 'User';
@@ -14805,7 +15315,16 @@ function applyAuthState(user) {
     const grName = document.getElementById('dc-greeting-name');
     const grSub  = document.getElementById('dc-greeting-sub');
     if (grName) grName.textContent = `Hi ${firstName}.`;
-    if (grSub)  grSub.textContent  = 'Intelligence active. What are we solving today?';
+    // Show IBM Way / plan context in subtitle
+    const _plan = getUserPlan();
+    const _planDef = DIVINE_PLANS[_plan];
+    if (grSub) {
+      if (_plan === 'free') {
+        grSub.innerHTML = 'IBM Way · Powered by Claude &nbsp;·&nbsp; <button onclick="showUpgradeModal(\'manual\',{})" style="background:none;border:none;font-size:12px;color:var(--accent);cursor:pointer;font-family:\'Inter\',sans-serif;font-weight:600;padding:0">Upgrade plan</button>';
+      } else {
+        grSub.textContent = `${_planDef.name} · Intelligence active. What are we solving today?`;
+      }
+    }
     // Load projects shared with this user by other owners
     try { _loadSharedProjects(user.email); } catch(e) { console.error('[shared]', e); }
     // Refresh profile screen if already visible (pre-seeded with auth data)
@@ -19047,6 +19566,144 @@ function adminRenderLog() {
 </div>
 
 <!-- Deliberation state is rendered inline by showDeliberation() -->
+
+<!-- ══ Upgrade Modal ════════════════════════════════════════════════════ -->
+<div class="upm-overlay modal-overlay" id="upgrade-modal" onclick="if(event.target===this)closeUpgradeModal()">
+  <div class="upm-sheet" role="dialog" aria-modal="true" aria-labelledby="upm-headline">
+    <button class="upm-close" onclick="closeUpgradeModal()" aria-label="Close">
+      <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="1" y1="1" x2="11" y2="11"/><line x1="11" y1="1" x2="1" y2="11"/></svg>
+    </button>
+    <div class="upm-header">
+      <div class="upm-eyebrow">Divine Intelligence</div>
+      <div class="upm-headline" id="upm-headline">Unlock your full potential</div>
+      <div class="upm-trigger-msg" id="upgrade-trigger-msg">Upgrade to keep the momentum going.</div>
+    </div>
+    <div class="upm-plans">
+      <!-- Free Observer -->
+      <div class="upm-card" id="upm-card-free">
+        <div class="upm-recommended-chip">Current</div>
+        <div class="upm-plan-name">Free Observer</div>
+        <div class="upm-plan-tagline">Experience the IBM Way — Powered by Claude</div>
+        <div class="upm-plan-price">$0 <span>/ forever</span></div>
+        <div class="upm-divider"></div>
+        <ul class="upm-feature-list">
+          <li class="upm-feature-item">
+            <svg class="plan-feature-check" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="2,8 6,12 14,4"/></svg>
+            5 lifetime Perspectives
+          </li>
+          <li class="upm-feature-item">
+            <svg class="plan-feature-check" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="2,8 6,12 14,4"/></svg>
+            1 Project
+          </li>
+          <li class="upm-feature-item">
+            <svg class="plan-feature-check" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="2,8 6,12 14,4"/></svg>
+            200 AI Credits
+          </li>
+          <li class="upm-feature-item">
+            <svg class="plan-feature-check" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="2,8 6,12 14,4"/></svg>
+            Decision Log
+          </li>
+          <li class="upm-feature-item disabled">
+            <svg class="plan-feature-x" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="3" x2="13" y2="13"/><line x1="13" y1="3" x2="3" y2="13"/></svg>
+            No team invites
+          </li>
+          <li class="upm-feature-item disabled">
+            <svg class="plan-feature-x" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="3" x2="13" y2="13"/><line x1="13" y1="3" x2="3" y2="13"/></svg>
+            No tool integrations
+          </li>
+          <li class="upm-feature-item disabled">
+            <svg class="plan-feature-x" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="3" x2="13" y2="13"/><line x1="13" y1="3" x2="3" y2="13"/></svg>
+            No IR Page
+          </li>
+        </ul>
+        <button class="upm-cta upm-cta-ghost" onclick="closeUpgradeModal()">Stay on Free</button>
+      </div>
+
+      <!-- Entry Analyst -->
+      <div class="upm-card" id="upm-card-entry">
+        <div class="upm-recommended-chip">Recommended</div>
+        <div class="upm-plan-name">Entry Analyst</div>
+        <div class="upm-plan-tagline">For founders moving fast with a small team</div>
+        <div class="upm-plan-price">$19 <span>/ mo, billed annually</span></div>
+        <div class="upm-divider"></div>
+        <ul class="upm-feature-list">
+          <li class="upm-feature-item">
+            <svg class="plan-feature-check" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="2,8 6,12 14,4"/></svg>
+            50 Perspectives / month
+          </li>
+          <li class="upm-feature-item">
+            <svg class="plan-feature-check" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="2,8 6,12 14,4"/></svg>
+            5 Projects
+          </li>
+          <li class="upm-feature-item">
+            <svg class="plan-feature-check" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="2,8 6,12 14,4"/></svg>
+            3 Team members
+          </li>
+          <li class="upm-feature-item">
+            <svg class="plan-feature-check" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="2,8 6,12 14,4"/></svg>
+            3 Tool integrations
+          </li>
+          <li class="upm-feature-item">
+            <svg class="plan-feature-check" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="2,8 6,12 14,4"/></svg>
+            2,000 AI Credits
+          </li>
+          <li class="upm-feature-item">
+            <svg class="plan-feature-check" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="2,8 6,12 14,4"/></svg>
+            Any Thinker, Decision Log
+          </li>
+          <li class="upm-feature-item disabled">
+            <svg class="plan-feature-x" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="3" x2="13" y2="13"/><line x1="13" y1="3" x2="3" y2="13"/></svg>
+            No IR Page
+          </li>
+        </ul>
+        <button class="upm-cta upm-cta-primary" onclick="upgradeSelectPlan('entry')">Upgrade to Entry — $19/mo</button>
+      </div>
+
+      <!-- Premium Principal -->
+      <div class="upm-card" id="upm-card-premium">
+        <div class="upm-recommended-chip">Most Powerful</div>
+        <div class="upm-plan-name">Premium Principal</div>
+        <div class="upm-plan-tagline">Full intelligence infrastructure for serious founders</div>
+        <div class="upm-plan-price">$49 <span>/ mo, billed annually</span></div>
+        <div class="upm-divider"></div>
+        <ul class="upm-feature-list">
+          <li class="upm-feature-item">
+            <svg class="plan-feature-check" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="2,8 6,12 14,4"/></svg>
+            Unlimited Perspectives
+          </li>
+          <li class="upm-feature-item">
+            <svg class="plan-feature-check" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="2,8 6,12 14,4"/></svg>
+            Unlimited Projects + Team
+          </li>
+          <li class="upm-feature-item">
+            <svg class="plan-feature-check" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="2,8 6,12 14,4"/></svg>
+            Unlimited Tool integrations
+          </li>
+          <li class="upm-feature-item">
+            <svg class="plan-feature-check" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="2,8 6,12 14,4"/></svg>
+            10,000 AI Credits
+          </li>
+          <li class="upm-feature-item">
+            <svg class="plan-feature-check" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="2,8 6,12 14,4"/></svg>
+            IR Page (Investor Data Room)
+          </li>
+          <li class="upm-feature-item">
+            <svg class="plan-feature-check" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="2,8 6,12 14,4"/></svg>
+            Live QuickBooks sync
+          </li>
+          <li class="upm-feature-item">
+            <svg class="plan-feature-check" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="2,8 6,12 14,4"/></svg>
+            Priority Thinker access
+          </li>
+        </ul>
+        <button class="upm-cta upm-cta-secondary" onclick="upgradeSelectPlan('premium')">Upgrade to Premium — $49/mo</button>
+      </div>
+    </div>
+    <div class="upm-footer">
+      Annual billing. Cancel any time. &nbsp;·&nbsp; <a href="#" onclick="closeUpgradeModal()">View full feature comparison</a>
+    </div>
+  </div>
+</div>
 
 </body>
 </html>
