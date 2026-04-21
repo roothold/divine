@@ -1464,14 +1464,8 @@
     .project-form input { width:100%; border:1.5px solid var(--border-md); border-radius:var(--r-sm); padding:11px 14px; font-family:'Inter',sans-serif; font-size:14px; color:var(--text-0); outline:none; margin-bottom:12px; transition:border-color 0.15s; }
     .project-form input:focus { border-color:var(--accent-bdr); }
     .project-form input::placeholder { color:var(--text-3); }
-    .color-swatches { display:flex; flex-direction:column; gap:6px; margin-bottom:16px; }
-    .swatch-tier-row { display:flex; align-items:center; gap:10px; padding:6px 8px; border-radius:8px; transition:background .12s; }
-    .swatch-tier-row:hover { background:var(--surface-alt,#f5f5f5); }
-    .swatch-tier-meta { flex:1; min-width:0; }
-    .swatch-tier-label { font-size:10.5px; font-weight:700; letter-spacing:.05em; text-transform:uppercase; color:var(--text-1); line-height:1.2; }
-    .swatch-tier-desc { font-size:10px; color:var(--text-3); margin-top:1px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-    .swatch-tier-dots { display:flex; gap:6px; flex-shrink:0; }
-    .swatch { width:22px; height:22px; border-radius:50%; cursor:pointer; border:2.5px solid transparent; outline:2px solid transparent; outline-offset:1px; transition:border-color 0.15s,transform 0.15s,outline-color 0.15s; }
+    .color-swatches { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:16px; }
+    .swatch { width:24px; height:24px; border-radius:50%; cursor:pointer; border:2px solid transparent; outline:2px solid transparent; outline-offset:1px; transition:border-color 0.15s,transform 0.15s,outline-color 0.15s; }
     .swatch:hover { transform:scale(1.12); }
     .swatch.selected { border-color:#fff; outline-color:var(--text-0); transform:scale(1.15); }
     .form-actions { display:flex; gap:10px; }
@@ -8059,15 +8053,15 @@ const THINKERS = [
    Organised into 6 tiers × 2 hues each. The tier a team assigns to a
    project signals the epistemic confidence of the work inside it.
    ─────────────────────────────────────────────────────────────────────── */
-const PROJECT_COLOR_TIERS = [
-  { label: 'Confirmed',   desc: 'Verified · Primary record of truth',   colors: ['#0D2B45', '#0A3D2B'] },
-  { label: 'Operational', desc: 'Live · Currently executing',           colors: ['#1A5276', '#0E6655'] },
-  { label: 'Analytical',  desc: 'Model-derived · AI-computed',          colors: ['#7B5A00', '#5C3D1E'] },
-  { label: 'Thesis',      desc: 'Working hypothesis · Strategic exploration', colors: ['#4A1F6E', '#6B3520'] },
-  { label: 'Advisory',    desc: 'Pending review · Awaiting sign-off',   colors: ['#7D3C0A', '#2E5D47'] },
-  { label: 'Speculative', desc: 'Early signal · Low confidence',        colors: ['#5C4A7A', '#7A5C20'] },
+const PROJECT_COLORS = [
+  '#0D2B45','#1A5276','#0A3D62',  // navy / steel blues
+  '#0A3D2B','#0E6655','#1E8449',  // forest / emerald greens
+  '#4A1F6E','#6C3483','#7D3C98',  // violet / plum / orchid
+  '#2E4057','#34495E','#566573',  // slate / charcoal / graphite
+  '#7B5A00','#A0522D','#6E4B2A',  // amber / sienna / earth
+  '#2E5D47','#1A7A6E','#148F77',  // teal / jade / seafoam
+  '#1C2833','#2C3E50','#4A235A',  // midnight / dark slate / deep purple
 ];
-const PROJECT_COLORS = PROJECT_COLOR_TIERS.flatMap(t => t.colors);
 
 const FAQS = [
   {
@@ -11008,19 +11002,9 @@ function renderProjects() {
   const mineGrid   = document.getElementById('projects-grid');
   const sharedGrid = document.getElementById('projects-grid-shared');
 
-  // Color swatches — tiered Verifiability Hierarchy picker
-  document.getElementById('color-swatches').innerHTML = PROJECT_COLOR_TIERS.map((tier, ti) => `
-    <div class="swatch-tier-row">
-      <div class="swatch-tier-meta">
-        <div class="swatch-tier-label">T${ti+1} · ${tier.label}</div>
-        <div class="swatch-tier-desc">${tier.desc}</div>
-      </div>
-      <div class="swatch-tier-dots">
-        ${tier.colors.map(c => `
-          <div class="swatch ${c===selectedColor?'selected':''}" style="background:${c}" title="${tier.label}: ${c}" onclick="selectColor('${c}')"></div>
-        `).join('')}
-      </div>
-    </div>
+  // Color swatches for new-project form
+  document.getElementById('color-swatches').innerHTML = PROJECT_COLORS.map(c => `
+    <div class="swatch ${c===selectedColor?'selected':''}" style="background:${c}" onclick="selectColor('${c}')"></div>
   `).join('');
 
   // ── Shared type label helper ──
