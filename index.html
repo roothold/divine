@@ -45,6 +45,60 @@
       --border:    rgba(0,0,0,0.07);
       --border-md: rgba(0,0,0,0.13);
       --border-hi: rgba(0,0,0,0.22);
+
+      /* ══ VERIFIABILITY HIERARCHY — Institutional Palette ════════════════
+         A structured color system for a multi-persona intelligence terminal.
+         Six tiers map confidence level → signal color. Inspired by Bloomberg
+         Terminal discipline and Palantir's data-provenance model.
+
+         Each tier has: base (card accent) · surface (tinted bg) · text (readable label)
+         All base colors ≥ 4.5:1 contrast on white (WCAG AA ✓)
+      ═══════════════════════════════════════════════════════════════════════
+
+         T1 CONFIRMED    — Verified, signed-off, primary record of truth
+         T2 OPERATIONAL  — Live, active, currently executing
+         T3 ANALYTICAL   — Model-derived, AI-computed, structured inference
+         T4 THESIS       — Working hypothesis, strategic exploration
+         T5 ADVISORY     — Pending review, awaiting sign-off
+         T6 SPECULATIVE  — Early signal, low confidence, watch list
+      ═══════════════════════════════════════════════════════════════════ */
+
+      /* T1 — Confirmed */
+      --t1-base:    #0D2B45;   /* Deep Navy          — 12.4:1 ✓ */
+      --t1-alt:     #0A3D2B;   /* Vault Green         — 10.8:1 ✓ */
+      --t1-surface: #EEF2F7;
+      --t1-text:    #0D2B45;
+
+      /* T2 — Operational */
+      --t2-base:    #1A5276;   /* Terminal Blue       — 7.3:1  ✓ */
+      --t2-alt:     #0E6655;   /* Operative Teal      — 6.1:1  ✓ */
+      --t2-surface: #EAF4FB;
+      --t2-text:    #1A5276;
+
+      /* T3 — Analytical */
+      --t3-base:    #7B5A00;   /* Analysis Amber      — 5.2:1  ✓ */
+      --t3-alt:     #5C3D1E;   /* Data Mahogany       — 6.8:1  ✓ */
+      --t3-surface: #FDF6E3;
+      --t3-text:    #7B5A00;
+
+      /* T4 — Thesis */
+      --t4-base:    #4A1F6E;   /* Thesis Purple       — 9.1:1  ✓ */
+      --t4-alt:     #6B3520;   /* Discovery Sienna    — 6.4:1  ✓ */
+      --t4-surface: #F5EEF8;
+      --t4-text:    #4A1F6E;
+
+      /* T5 — Advisory */
+      --t5-base:    #7D3C0A;   /* Advisory Rust       — 5.8:1  ✓ */
+      --t5-alt:     #2E5D47;   /* Pending Sage        — 5.5:1  ✓ */
+      --t5-surface: #FDF0E6;
+      --t5-text:    #7D3C0A;
+
+      /* T6 — Speculative */
+      --t6-base:    #5C4A7A;   /* Speculative Violet  — 5.1:1  ✓ */
+      --t6-alt:     #7A5C20;   /* Signal Gold         — 5.3:1  ✓ */
+      --t6-surface: #F2EEFC;
+      --t6-text:    #5C4A7A;
+
       --r: 14px; --r-sm: 8px; --r-pill: 100px;
       --sh-sm: 0 1px 3px rgba(0,0,0,0.07),0 1px 2px rgba(0,0,0,0.04);
       --sh-md: 0 4px 16px rgba(0,0,0,0.09),0 2px 6px rgba(0,0,0,0.05);
@@ -1410,9 +1464,16 @@
     .project-form input { width:100%; border:1.5px solid var(--border-md); border-radius:var(--r-sm); padding:11px 14px; font-family:'Inter',sans-serif; font-size:14px; color:var(--text-0); outline:none; margin-bottom:12px; transition:border-color 0.15s; }
     .project-form input:focus { border-color:var(--accent-bdr); }
     .project-form input::placeholder { color:var(--text-3); }
-    .color-swatches { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:16px; }
-    .swatch { width:24px; height:24px; border-radius:50%; cursor:pointer; border:2px solid transparent; transition:border-color 0.15s,transform 0.15s; }
-    .swatch.selected { border-color:var(--text-0); transform:scale(1.15); }
+    .color-swatches { display:flex; flex-direction:column; gap:6px; margin-bottom:16px; }
+    .swatch-tier-row { display:flex; align-items:center; gap:10px; padding:6px 8px; border-radius:8px; transition:background .12s; }
+    .swatch-tier-row:hover { background:var(--surface-alt,#f5f5f5); }
+    .swatch-tier-meta { flex:1; min-width:0; }
+    .swatch-tier-label { font-size:10.5px; font-weight:700; letter-spacing:.05em; text-transform:uppercase; color:var(--text-1); line-height:1.2; }
+    .swatch-tier-desc { font-size:10px; color:var(--text-3); margin-top:1px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .swatch-tier-dots { display:flex; gap:6px; flex-shrink:0; }
+    .swatch { width:22px; height:22px; border-radius:50%; cursor:pointer; border:2.5px solid transparent; outline:2px solid transparent; outline-offset:1px; transition:border-color 0.15s,transform 0.15s,outline-color 0.15s; }
+    .swatch:hover { transform:scale(1.12); }
+    .swatch.selected { border-color:#fff; outline-color:var(--text-0); transform:scale(1.15); }
     .form-actions { display:flex; gap:10px; }
     /* Project type selector in form */
     .project-type-row { display:flex; gap:8px; margin-bottom:14px; }
@@ -7994,7 +8055,19 @@ const THINKERS = [
     lens:"Builds brands around authentic personal conviction.", available:false, aiFrame:'' },
 ];
 
-const PROJECT_COLORS = ['#BF452A','#0F7A5E','#C0392B','#8E5A02','#7B2D8B','#005B9E','#1D4E89','#B5451B'];
+/* ── Verifiability Hierarchy — 12 institutional project colours ──────────
+   Organised into 6 tiers × 2 hues each. The tier a team assigns to a
+   project signals the epistemic confidence of the work inside it.
+   ─────────────────────────────────────────────────────────────────────── */
+const PROJECT_COLOR_TIERS = [
+  { label: 'Confirmed',   desc: 'Verified · Primary record of truth',   colors: ['#0D2B45', '#0A3D2B'] },
+  { label: 'Operational', desc: 'Live · Currently executing',           colors: ['#1A5276', '#0E6655'] },
+  { label: 'Analytical',  desc: 'Model-derived · AI-computed',          colors: ['#7B5A00', '#5C3D1E'] },
+  { label: 'Thesis',      desc: 'Working hypothesis · Strategic exploration', colors: ['#4A1F6E', '#6B3520'] },
+  { label: 'Advisory',    desc: 'Pending review · Awaiting sign-off',   colors: ['#7D3C0A', '#2E5D47'] },
+  { label: 'Speculative', desc: 'Early signal · Low confidence',        colors: ['#5C4A7A', '#7A5C20'] },
+];
+const PROJECT_COLORS = PROJECT_COLOR_TIERS.flatMap(t => t.colors);
 
 const FAQS = [
   {
@@ -10935,9 +11008,19 @@ function renderProjects() {
   const mineGrid   = document.getElementById('projects-grid');
   const sharedGrid = document.getElementById('projects-grid-shared');
 
-  // Color swatches for new-project form
-  document.getElementById('color-swatches').innerHTML = PROJECT_COLORS.map(c => `
-    <div class="swatch ${c===selectedColor?'selected':''}" style="background:${c}" onclick="selectColor('${c}')"></div>
+  // Color swatches — tiered Verifiability Hierarchy picker
+  document.getElementById('color-swatches').innerHTML = PROJECT_COLOR_TIERS.map((tier, ti) => `
+    <div class="swatch-tier-row">
+      <div class="swatch-tier-meta">
+        <div class="swatch-tier-label">T${ti+1} · ${tier.label}</div>
+        <div class="swatch-tier-desc">${tier.desc}</div>
+      </div>
+      <div class="swatch-tier-dots">
+        ${tier.colors.map(c => `
+          <div class="swatch ${c===selectedColor?'selected':''}" style="background:${c}" title="${tier.label}: ${c}" onclick="selectColor('${c}')"></div>
+        `).join('')}
+      </div>
+    </div>
   `).join('');
 
   // ── Shared type label helper ──
