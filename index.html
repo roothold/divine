@@ -14089,8 +14089,8 @@ function _chatEmptyState() {
   el.className = 'chat-empty';
   el.id = 'chat-empty';
 
-  // Wallet gate: authenticated user with zero balance
-  const isEmptyWallet = currentUser && currentBalance !== null && parseFloat(currentBalance) < 0.05;
+  // Wallet gate: only for Entry/Premium users — Free plan uses plan limits, not wallet
+  const isEmptyWallet = isEmptyWalletForPlan;
   const walletBanner = isEmptyWallet ? `
     <div class="chat-wallet-gate" id="chat-wallet-gate">
       <div class="chat-wallet-gate-icon">
@@ -14105,6 +14105,10 @@ function _chatEmptyState() {
 
   // IBM Way + Powered by Claude badge (shown for Free plan users)
   const plan = getUserPlan();
+
+  // ── Free plan: never show wallet gate — plan limits govern access ────────
+  const isEmptyWalletForPlan = plan !== 'free' && currentUser && currentBalance !== null && parseFloat(currentBalance) < 0.05;
+
   const ibmBadge = plan === 'free' ? `
     <div style="display:inline-flex;align-items:center;gap:6px;padding:5px 12px;border-radius:20px;background:var(--surface-2);border:1px solid var(--border);margin-bottom:16px">
       <svg width="12" height="12" viewBox="0 0 100 100" fill="none" style="flex-shrink:0">
@@ -14224,9 +14228,28 @@ function _usageRefreshUI() {
   const sendBtn = document.getElementById('chat-send-btn');
   const textarea = document.getElementById('chat-textarea');
 
-  // ── Authenticated users: governed by wallet balance, not local log ──────────
+  // ── Authenticated users: governed by plan limits (Free) or wallet (Entry/Premium) ──
   if (currentUser) {
-    // Show wallet balance as perspective count in the pill
+    const _activePlan = getUserPlan();
+
+    if (_activePlan === 'free') {
+      // Free plan: show remaining lifetime perspectives in pill; no wallet gate
+      const _used  = loadChatSessions().length;
+      const _limit = DIVINE_PLANS.free.features.perspectives;
+      const _left  = Math.max(0, _limit - _used);
+      if (pill) {
+        pill.textContent = `${_left} left`;
+        pill.className   = 'chat-usage-pill' + (_left === 0 ? ' empty' : _left <= 2 ? ' warn' : '');
+      }
+      // Never show wallet banner on Free plan — plan gate handles limits at session creation
+      if (banner) banner.classList.remove('visible');
+      if (sendBtn && !_chatStreaming) sendBtn.disabled = false;
+      if (textarea) textarea.disabled = false;
+      clearInterval(window._rateCountdownInterval);
+      return;
+    }
+
+    // Entry / Premium: governed by wallet balance
     if (pill) {
       if (currentBalance !== null) {
         const perspCount = Math.floor(parseFloat(currentBalance) / 0.05);
