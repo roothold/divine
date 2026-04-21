@@ -1396,10 +1396,15 @@
     .pd-viewer-mode #pd-proj-input-wrap { opacity:1 !important; pointer-events:auto !important; }
     .pd-viewer-mode #pd-proj-input-ta { pointer-events:auto !important; opacity:1 !important; background:#fff !important; cursor:text !important; }
     .pd-viewer-mode #pd-proj-submit { opacity:1 !important; pointer-events:auto !important; }
-    .pd-viewer-banner { display:flex; align-items:center; gap:10px; background:var(--surface-2); border:1px solid var(--border-md); border-radius:var(--r); padding:11px 16px; margin-bottom:20px; font-size:13px; color:var(--text-2); }
-    .pd-viewer-banner svg { flex-shrink:0; color:var(--accent); }
-    .pd-viewer-banner strong { color:var(--text-1); font-weight:600; }
-    .pd-viewer-banner .pd-viewer-role-pill { background:var(--accent); color:#fff; font-size:10.5px; font-weight:700; border-radius:100px; padding:2px 9px; text-transform:capitalize; margin-left:4px; }
+    .pd-viewer-banner { display:flex; align-items:center; gap:14px; background:#fff; border:1.5px solid var(--border); border-radius:14px; padding:14px 18px; margin-bottom:22px; box-shadow:var(--sh-sm); }
+    .pd-viewer-banner-avatar { width:36px; height:36px; border-radius:50%; background:var(--accent-lt); color:var(--accent); font-size:13px; font-weight:700; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+    .pd-viewer-banner-body { flex:1; min-width:0; }
+    .pd-viewer-banner-owner { font-size:13.5px; font-weight:600; color:var(--text-0); margin-bottom:3px; }
+    .pd-viewer-banner-owner span { font-weight:400; color:var(--text-3); font-size:12.5px; }
+    .pd-viewer-banner-meta { display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
+    .pd-viewer-role-pill { display:inline-flex; align-items:center; background:var(--accent); color:#fff; font-size:10.5px; font-weight:700; border-radius:100px; padding:2px 10px; letter-spacing:.02em; }
+    .pd-viewer-banner-dot { color:var(--border-hi); font-size:12px; }
+    .pd-viewer-banner-access { font-size:12px; color:var(--text-3); }
     .project-form { background:var(--surface); border:1px solid var(--border); border-radius:var(--r); padding:24px; box-shadow:var(--sh-sm); display:none; margin-bottom:24px; }
     .project-form.visible { display:block; }
     .project-form input { width:100%; border:1.5px solid var(--border-md); border-radius:var(--r-sm); padding:11px 14px; font-family:'Inter',sans-serif; font-size:14px; color:var(--text-0); outline:none; margin-bottom:12px; transition:border-color 0.15s; }
@@ -11299,13 +11304,21 @@ function renderProjectDetail(proj) {
     const banner = document.createElement('div');
     banner.id = 'pd-viewer-banner';
     banner.className = 'pd-viewer-banner';
-    const ownerLabel = proj._ownerName ? (' by <strong>' + escHtml(proj._ownerName) + '</strong>') : '';
-    banner.innerHTML = '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="8" cy="8" r="6.5"/><path d="M8 7v4M8 5v.5" stroke-linecap="round"/></svg>' +
-      '<span>Shared' + ownerLabel + ' · Your role: <span class=\"pd-viewer-role-pill\">' + escHtml(roleLabel) + '</span>' +
-      (_viewerRole === 'thinker'
-        ? ' · <span style=\"color:var(--accent);font-weight:600\">Can edit project</span>'
-        : ' · <span style=\"color:var(--text-2)\">Your perspectives are private · Project data is read-only</span>') +
-      '</span>';
+    const ownerName  = proj._ownerName || proj._ownerEmail || 'Project Owner';
+    const initials   = ownerName.split(' ').map(p=>p[0]).join('').slice(0,2).toUpperCase();
+    const accessLine = _viewerRole === 'thinker'
+      ? '<span style="color:var(--accent);font-weight:600">Can edit project</span>'
+      : '<span class="pd-viewer-banner-access">Your perspectives are private · Project data is read-only</span>';
+    banner.innerHTML =
+      `<div class="pd-viewer-banner-avatar">${initials}</div>
+       <div class="pd-viewer-banner-body">
+         <div class="pd-viewer-banner-owner">${escHtml(ownerName)} <span>shared this project with you</span></div>
+         <div class="pd-viewer-banner-meta">
+           <span class="pd-viewer-role-pill">${escHtml(roleLabel)}</span>
+           <span class="pd-viewer-banner-dot">·</span>
+           ${accessLine}
+         </div>
+       </div>`;
     if (pdLayout) pdLayout.insertBefore(banner, pdLayout.firstChild);
     // Only lock the UI for non-editor roles
     if (!_canEdit) {
