@@ -2101,8 +2101,11 @@
     .dc-greeting-header-text { flex:1; }
     .dc-greeting-card-name { font-family:'Cormorant Garamond',serif; font-size:clamp(22px,3vw,32px); font-weight:600; color:var(--text-0); line-height:1.15; }
     .dc-greeting-card-sub { font-size:13px; color:var(--text-3); margin-top:2px; font-weight:500; }
-    .dc-greeting-card { background:#fff; border:1.5px solid var(--border); border-radius:16px; padding:16px 22px 16px; margin-bottom:20px; box-shadow:var(--sh-sm); transition:border-color .15s,box-shadow .15s; }
-    .dc-greeting-card:focus-within { border-color:var(--accent-bdr); box-shadow:0 4px 20px rgba(191,69,42,.10); }
+    /* Unified input + tools bar group */
+    .dc-input-group { border:1.5px solid var(--border); border-radius:16px; overflow:hidden; box-shadow:var(--sh-sm); margin-bottom:20px; transition:border-color .15s,box-shadow .15s; }
+    .dc-input-group:focus-within { border-color:var(--accent-bdr); box-shadow:0 4px 20px rgba(191,69,42,.10); }
+    .dc-greeting-card { background:#fff; border:none; border-radius:0; padding:16px 22px 16px; margin-bottom:0; box-shadow:none; }
+    .dc-greeting-card:focus-within { border-color:unset; box-shadow:none; }
     /* divider between greeting header and input */
 
     /* ─── Project Cards (Launchpad) ─── */
@@ -2160,8 +2163,11 @@
     .dc-connect-cta a:hover { text-decoration:underline; }
 
     /* ── Connect Tools Bar ── */
-    .dc-tools-bar { display:flex; align-items:center; gap:10px; background:var(--surface-2,#F5F4F2); border:1px solid var(--border); border-radius:12px; padding:9px 14px; margin-top:8px; transition:opacity .2s; }
+    .dc-tools-bar { display:flex; align-items:center; gap:10px; background:var(--surface-2,#F5F4F2); border:none; border-top:1px solid var(--border); border-radius:0; padding:9px 14px; margin-top:0; }
     .dc-tools-bar.hidden { display:none; }
+    /* When bar is hidden, restore full border-radius on the input group */
+    .dc-input-group:has(.dc-tools-bar.hidden) { border-radius:16px; }
+    .dc-input-group:has(.dc-tools-bar.hidden) .dc-greeting-card { border-radius:0; }
     .dc-tools-bar-left { display:flex; align-items:center; gap:7px; flex:1; min-width:0; cursor:pointer; }
     .dc-tools-bar-left:hover .dc-tools-bar-label { color:var(--text-0); }
     .dc-tools-bar-icon { color:var(--text-3); flex-shrink:0; }
@@ -5289,6 +5295,7 @@
               </div>
             </div>
 
+            <div class="dc-input-group">
             <div class="dc-greeting-card">
               <!-- Quick-input -->
               <textarea class="dc-input-textarea" id="dc-quick-input" rows="2"
@@ -5336,6 +5343,7 @@
               <div class="dc-tools-bar-divider"></div>
               <button class="dc-tools-bar-dismiss" onclick="dcDismissToolsBar()" title="Dismiss">×</button>
             </div>
+            </div><!-- /dc-input-group -->
 
             <!-- ══ VENTURE CARDS ══ -->
             <div id="dc-projects-head" style="display:none">
@@ -5801,7 +5809,8 @@
             </div>
 
             <!-- Perspective input — streamlined, matches homepage card -->
-            <div class="dc-greeting-card" id="pd-proj-input-wrap" style="margin-bottom:20px">
+            <div class="dc-input-group" id="pd-proj-input-group">
+            <div class="dc-greeting-card" id="pd-proj-input-wrap">
               <textarea class="dc-input-textarea" id="pd-proj-input-ta" rows="2"
                 placeholder="Describe a challenge, question, or decision for this project…"
                 oninput="pdInputUpdate(this)"></textarea>
@@ -5840,6 +5849,7 @@
               <div class="dc-tools-bar-divider"></div>
               <button class="dc-tools-bar-dismiss" onclick="dcDismissToolsBar()" title="Dismiss">×</button>
             </div>
+            </div><!-- /dc-input-group -->
 
             <!-- Recent Perspectives -->
             <div id="pd-perspectives-section" style="margin-bottom:20px">
