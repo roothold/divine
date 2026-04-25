@@ -5134,6 +5134,34 @@
 .nav-admin-item { color:var(--danger) !important; }
 .nav-admin-item:hover { background:var(--danger-lt) !important; }
 .nav-admin-item.active { background:var(--danger-lt) !important; color:var(--danger) !important; }
+
+    /* ── Launchpad Intake Card — Sprint 1.5 ────────────────────────── */
+    .lp-intake-card { background:var(--surface-1); border:2px solid var(--border-hi); border-radius:14px; box-shadow:0 4px 20px rgba(0,0,0,.08); padding:22px 22px 18px; margin-bottom:28px; }
+    .lp-intake-card-header { min-height:22px; margin-bottom:16px; }
+    .lp-intake-tier-note { font-size:11.5px; color:var(--text-3); line-height:1.4; }
+    .lp-intake-field { margin-bottom:18px; }
+    .lp-intake-label { font-size:12.5px; font-weight:600; color:var(--text-0); margin-bottom:6px; }
+    .lp-intake-textarea { width:100%; min-height:66px; padding:10px 12px; border:1.5px solid var(--border); border-radius:8px; font-size:13px; font-family:'Inter',sans-serif; color:var(--text-0); background:var(--surface-1); resize:vertical; box-sizing:border-box; transition:border-color .15s; line-height:1.5; }
+    .lp-intake-textarea:focus { outline:none; border-color:var(--accent); }
+    .lp-intake-textarea::placeholder { color:var(--text-3); }
+    .lp-intake-field-footer { display:flex; justify-content:space-between; align-items:flex-start; margin-top:5px; gap:12px; }
+    .lp-intake-helper { font-size:11.5px; color:var(--text-3); line-height:1.5; flex:1; }
+    .lp-intake-counter { font-size:11px; color:var(--text-3); white-space:nowrap; flex-shrink:0; }
+    .lp-intake-footer { display:flex; justify-content:flex-end; margin-top:18px; padding-top:14px; border-top:1px solid var(--border); }
+    .lp-intake-submit { background:#D9D9D6; color:#fff; border:none; border-radius:var(--r-pill); padding:9px 22px; font-size:13px; font-weight:600; cursor:not-allowed; font-family:'Inter',sans-serif; }
+    /* ── Your Thinkers Panel — Sprint 1.5 ──────────────────────────── */
+    .dc-thinkers-panel { padding:20px 18px 24px; }
+    .dc-thinkers-hdr { font-size:13px; font-weight:700; color:var(--text-0); margin-bottom:12px; letter-spacing:.01em; }
+    .dc-thinkers-empty-body { font-size:13px; color:var(--text-2); line-height:1.65; margin-bottom:14px; }
+    .dc-thinkers-link { font-size:12.5px; font-weight:600; color:var(--accent); text-decoration:none; }
+    .dc-thinkers-link:hover { text-decoration:underline; }
+    /* ── Decision Log placeholder screen ───────────────────────────── */
+    .dl-placeholder-wrap { max-width:520px; padding:48px 28px; }
+    .dl-placeholder-hdr { font-size:22px; font-weight:700; color:var(--text-0); margin-bottom:14px; }
+    .dl-placeholder-body { font-size:14px; color:var(--text-2); line-height:1.7; }
+    /* ── Sprint 1.5: hide legacy launchpad project-cards section ────── */
+    #dc-projects-head, #dc-projects-footer { display:none !important; }
+
 </style>
 
 <div class="sidebar-backdrop" id="sidebar-backdrop" onclick="toggleSidebar()"></div>
@@ -5186,6 +5214,12 @@
         <button class="nav-item nav-auth-gate" id="nav-projects" data-tip="Projects" onclick="_navMyStuff('projects')">
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M1.5 5.5h13v7a1 1 0 01-1 1h-11a1 1 0 01-1-1v-7z"/><path d="M1.5 5.5V4a1 1 0 011-1h4l1.5 1.5H1.5z"/></svg>
           <span class="nav-item-label">Projects</span>
+        </button>
+
+        <!-- Decision Log — Sprint 2 placeholder; full implementation Sprint 5 task 5.7 -->
+        <button class="nav-item nav-auth-gate" id="nav-decision-log" data-tip="Decision Log" onclick="showView('decision-log')">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"><rect x="2" y="2" width="12" height="12" rx="1.5"/><line x1="5" y1="5.5" x2="11" y2="5.5"/><line x1="5" y1="8" x2="11" y2="8"/><line x1="5" y1="10.5" x2="8.5" y2="10.5"/></svg>
+          <span class="nav-item-label">Decision Log</span>
         </button>
 
         <!-- Thinker nav — gated: only visible when currentUser.thinker_access === true -->
@@ -5316,7 +5350,7 @@
         <button class="signin-full" onclick="showView('login')" style="width:100%;background:transparent;color:var(--text-1);border:1.5px solid var(--border-hi);border-radius:var(--r-pill);padding:9px 16px;font-size:13px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;transition:border-color .15s,color .15s;text-align:center" onmouseover="this.style.borderColor='var(--text-1)';this.style.color='var(--text-0)'" onmouseout="this.style.borderColor='var(--border-hi)';this.style.color='var(--text-1)'">
           Log in
         </button>
-        <div class="signin-full" style="font-size:11px;color:var(--text-3);text-align:center;margin-top:8px">Council of Thinkers &amp; Live Data Room</div>
+        <div class="signin-full" style="font-size:11px;color:var(--text-3);text-align:center;margin-top:8px">Operator frameworks. Decision power.</div>
         <!-- Icon-only button (collapsed state) -->
         <button class="sidebar-signin-icon" onclick="showView('login')" title="Sign in to Divine">
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75">
@@ -5378,11 +5412,49 @@
               </div>
             </div>
 
-            <div class="dc-input-group">
+
+            <!-- ══ INTAKE CARD — Sprint 1.5 visual placeholder per Launchpad Spec v1.0 §Intake ══
+                 Sprint 2 wires: 40-char minimums, articulation assist, submit logic (Pivot Plan 2.1 task 2.1) -->
+            <div class="lp-intake-card" id="lp-intake-card">
+              <div class="lp-intake-card-header">
+                <span class="lp-intake-tier-note" id="lp-intake-tier-note" style="display:none"></span>
+              </div>
+              <div class="lp-intake-field">
+                <div class="lp-intake-label">The decision you're facing</div>
+                <textarea class="lp-intake-textarea" id="lp-field-decision" rows="3"
+                  oninput="lpIntakeUpdate('decision',this)"></textarea>
+                <div class="lp-intake-field-footer">
+                  <div class="lp-intake-helper">Be specific. 'Should I raise a Series B' is too vague. 'Should I raise a Series B now or wait six months for stronger metrics' is the level we work at.</div>
+                  <div class="lp-intake-counter" id="lp-counter-decision" style="display:none">0 / 500</div>
+                </div>
+              </div>
+              <div class="lp-intake-field">
+                <div class="lp-intake-label">Where you're currently leaning</div>
+                <textarea class="lp-intake-textarea" id="lp-field-leaning" rows="2"
+                  oninput="lpIntakeUpdate('leaning',this)"></textarea>
+                <div class="lp-intake-field-footer">
+                  <div class="lp-intake-helper">What you'd do if forced to decide today. Including a leaning is more useful than asking us cold — it lets the framework engage with your reasoning.</div>
+                  <div class="lp-intake-counter" id="lp-counter-leaning" style="display:none">0 / 500</div>
+                </div>
+              </div>
+              <div class="lp-intake-field" style="margin-bottom:0">
+                <div class="lp-intake-label">What success looks like</div>
+                <textarea class="lp-intake-textarea" id="lp-field-success" rows="2"
+                  oninput="lpIntakeUpdate('success',this)"></textarea>
+                <div class="lp-intake-field-footer">
+                  <div class="lp-intake-helper">The outcome that would tell you the decision was right, six months from now. Not metrics. The actual condition that would prove you chose well.</div>
+                  <div class="lp-intake-counter" id="lp-counter-success" style="display:none">0 / 500</div>
+                </div>
+              </div>
+              <div class="lp-intake-footer">
+                <button class="lp-intake-submit" id="lp-intake-submit" disabled>Run Perspective</button>
+              </div>
+            </div><!-- /lp-intake-card -->
+            <div class="dc-input-group" style="display:none">
             <div class="dc-greeting-card">
               <!-- Quick-input -->
               <textarea class="dc-input-textarea" id="dc-quick-input" rows="2"
-                placeholder="Describe a growth challenge, team question, or investor concern…"
+                placeholder="Describe the decision you're facing…"
                 oninput="dcInputUpdate(this)"></textarea>
               <!-- Attachment chip -->
               <div class="dc-attach-chip" id="dc-attach-chip">
@@ -5447,105 +5519,25 @@
 
             <!-- ══ RECENT SESSIONS ══ -->
             <div id="dc-recents-section" style="margin-bottom:28px;display:none">
-              <div class="dc-section-head">Recent Sessions</div>
+              <div class="dc-section-head">Recent Perspectives</div>
               <div id="dc-recents-grid"></div>
             </div>
 
           </div><!-- /LEFT Action Center -->
 
-          <!-- RIGHT: Growth Intelligence -->
-          <div class="dc-panel">
-            <div class="dc-panel-tabs three">
-              <button class="dc-ptab active" onclick="switchDcPanel('growth',this)">Growth</button>
-              <button class="dc-ptab" onclick="switchDcPanel('portfolio',this)">Decision Log</button>
-              <button class="dc-ptab" onclick="switchDcPanel('integrations',this)">Connect</button>
+          <!-- RIGHT: Your Thinkers — Sprint 1.5 per Launchpad Spec v1.0 §IA -->
+          <div class="dc-panel" id="dc-panel">
+            <div class="dc-thinkers-panel">
+              <div class="dc-thinkers-hdr">Your Thinkers</div>
+              <p class="dc-thinkers-empty-body">Verified operator frameworks are activating. Your first Perspective uses Divine's baseline reasoning until Thinkers come online.</p>
+              <a class="dc-thinkers-link" href="#" onclick="return false" title="Sprint 2 task">How Thinkers work →</a>
             </div>
-
-            <!-- ── GROWTH tab ── -->
-            <div id="dc-panel-growth">
-              <div class="dc-panel-body">
-
-<!-- QBO Sync CTA — only shown after the user has run at least one session -->
-                <div class="dc-panel-section" id="dc-qbo-cta-section" style="display:none">
-                  <div class="dc-psec-title" style="display:flex;align-items:center;gap:5px">
-                    Live Financial Data
-                    <svg class="qbo-info-icon" width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" onmouseenter="showQBOTip(this)" onmouseleave="hideQBOTip()"><circle cx="6" cy="6" r="5"/><path d="M6 5.5v2.5M6 4h.01"/></svg>
-                  </div>
-                  <button class="is-scenario-challenge" style="margin-top:10px" onclick="openQBOConnect(this)">
-                    Connect QuickBooks →
-                  </button>
-                </div>
-
-                <!-- Projected Revenue — locked until tools connected -->
-                <div class="dc-panel-section dc-locked-wrap" id="dc-revenue-section">
-                  <div class="dc-psec-title">Projected Revenue</div>
-                  <div class="dc-revenue-kpis">
-                    <div class="dc-rev-kpi">
-                      <div class="dc-rev-kpi-label">NPV (2030)</div>
-                      <div class="dc-rev-kpi-val" id="dc-npv-val">—</div>
-                      <div class="dc-rev-kpi-delta" id="dc-npv-delta">Calibrate with your own numbers to unlock live projections</div>
-                    </div>
-                    <div class="dc-rev-kpi">
-                      <div class="dc-rev-kpi-label">+$GMV Impact</div>
-                      <div class="dc-rev-kpi-val" id="dc-gmv-val">—</div>
-                      <div class="dc-rev-kpi-delta" id="dc-gmv-delta">Calibrate with your own numbers to unlock live projections</div>
-                    </div>
-                  </div>
-                  <div class="dc-revenue-canvas-wrap">
-                    <canvas id="dc-revenue-canvas" width="260" height="100" style="width:100%;display:block"></canvas>
-                  </div>
-                  <div class="dc-revenue-legend">
-                    <span><span class="dc-revenue-legend-dot" style="background:#BF452A"></span>NPV Growth</span>
-                    <span><span class="dc-revenue-legend-dot" style="background:var(--success-mid,#16A34A)"></span>+GMV Impact</span>
-                  </div>
-                  <!-- Locked overlay — hidden once tools connected -->
-                  <div class="dc-locked-overlay" id="dc-revenue-lock">
-                    <svg class="dc-locked-icon" width="22" height="22" viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"><rect x="4" y="10" width="14" height="10" rx="2.5"/><path d="M7 10V7a4 4 0 018 0v3"/></svg>
-                    <div class="dc-locked-label">Capital picture not yet calibrated</div>
-                    <div class="dc-locked-sub">Calibrate with your own numbers to unlock live projections</div>
-                    <button class="dc-locked-btn" onclick="switchDcPanel('integrations',document.querySelectorAll('.dc-ptab')[2])">Calibrate →</button>
-                  </div>
-                </div>
-
-                <!-- Advisory Circle section -->
-                <div class="dc-panel-section">
-                  <div class="dc-psec-title">Your Intelligence Council</div>
-                  <div class="dc-advisory-grid" id="dc-advisory-grid">
-                    <!-- populated by renderDcAdvisoryCircle() -->
-                  </div>
-                </div>
-
-              </div>
-            </div><!-- /dc-panel-growth -->
-
-            <!-- ── PORTFOLIO tab — Decision Log ── -->
-            <div id="dc-panel-portfolio" style="display:none">
-              <div class="dc-panel-body">
-                <div class="dc-panel-section">
-                  <div class="dl-header">
-                    <div class="dl-header-title">Decision Log</div>
-                    <div class="dl-header-count" id="dc-dl-count"></div>
-                  </div>
-                  <div class="dl-list" id="dc-dl-list">
-                    <!-- populated by renderDcPortfolio() -->
-                  </div>
-                </div>
-              </div>
-            </div><!-- /dc-panel-portfolio -->
-
-            <!-- ── INTEGRATIONS tab ── -->
-            <div id="dc-panel-integrations" style="display:none">
-              <div class="dc-panel-body">
-                <div class="dc-panel-section">
-                  <div class="dc-psec-title">Connected Tools</div>
-                  <p class="dc-integrations-intro">Connect your revenue and operations tools to unlock live projections and improve the quality of insights from your Thinkers.</p>
-                  <div class="dc-integrations-list" id="dc-integrations-list">
-                    <!-- populated by renderDcIntegrations() -->
-                  </div>
-                </div>
-              </div>
-            </div><!-- /dc-panel-integrations -->
-
+            <!-- Legacy panel stubs — kept for switchDcPanel() JS safety (Sprint 5 cleanup) -->
+            <div id="dc-panel-growth"       style="display:none"></div>
+            <div id="dc-panel-portfolio"    style="display:none"></div>
+            <div id="dc-panel-integrations" style="display:none"></div>
+            <!-- dc-advisory-grid kept for renderDcAdvisoryCircle() target -->
+            <div id="dc-advisory-grid"      style="display:none"></div>
           </div><!-- /dc-panel -->
 
         </div><!-- /dc-layout -->
@@ -5555,7 +5547,18 @@
       <textarea id="decision-input" style="display:none"></textarea>
     </div>
 
-    <!-- SCREEN 1: Context -->
+    <!-- SCREEN: Decision Log — Sprint 2 placeholder per Launchpad Spec v1.0 §Empty States
+         Full implementation deferred to Sprint 5 task 5.7 -->
+    <div class="screen" id="screen-decision-log">
+      <div class="screen-inner">
+        <div class="dl-placeholder-wrap">
+          <h2 class="dl-placeholder-hdr">Decision Log</h2>
+          <p class="dl-placeholder-body">Outcomes from your Perspectives appear here. Once you've run a Perspective and 30 days have passed, Divine prompts you to log what actually happened.</p>
+        </div>
+      </div>
+    </div>
+
+        <!-- SCREEN 1: Context -->
     <div class="screen" id="screen-context">
       <div class="progress-wrap"><div class="progress-fill" style="width:25%"></div></div>
       <div class="main-inner"><div class="screen-inner">
@@ -5639,7 +5642,7 @@
               </svg>
             </div>
             <div class="chat-empty-headline">Run a protocol</div>
-            <p class="chat-empty-sub">Describe a growth challenge, a team audit question, or a metric you need to explain to your investors.</p>
+            <p class="chat-empty-sub">Describe the decision you're facing. The more specific, the sharper the analysis.</p>
           </div>
         </div>
 
@@ -6203,7 +6206,7 @@
             <div class="is-panel-section">
               <div class="is-panel-section-title">Cognitive Equity</div>
               <div style="font-size:12px;color:var(--text-3);line-height:1.5">
-                Connect your projects and run analysis sessions to build your portfolio intelligence score. Each session adds a verified data point to your financial model.
+                Connect your projects and run analysis sessions to build structured judgment across your portfolio. Each session adds a verified data point to your decision record.
               </div>
               <div id="is-portfolio-projects" style="margin-top:12px;display:flex;flex-direction:column;gap:8px"></div>
             </div>
@@ -7401,7 +7404,7 @@ e.g. I always start by validating whether the problem is real before evaluating 
           <div class="tm-page-text">
             <div class="screen-label">Explore</div>
             <h2 class="screen-title">Thinkers</h2>
-            <p class="screen-sub">Browse elite thinkers and acquire their perspective protocols to guide your decisions.</p>
+            <p class="screen-sub">Browse Thinkers and run a Perspective through their operator frameworks.</p>
           </div>
         </div>
 
@@ -7838,7 +7841,7 @@ e.g. I always start by validating whether the problem is real before evaluating 
           <div class="di-welcome-step-num">1</div>
           <div>
             <div class="di-welcome-step-title">Automate growth protocols</div>
-            <div class="di-welcome-step-sub">Sync your QuickBooks financials, authorize your Council of Thinkers, and deliver live transparency to your investors — from a single Terminal.</div>
+            <div class="di-welcome-step-sub">Sync your QuickBooks financials, route decisions through your Thinkers, and deliver live transparency to your investors — from a single Terminal.</div>
           </div>
         </div>
         <div class="di-welcome-step">
@@ -7852,7 +7855,7 @@ e.g. I always start by validating whether the problem is real before evaluating 
           <div class="di-welcome-step-num">3</div>
           <div>
             <div class="di-welcome-step-title">Brief your investors in real time</div>
-            <div class="di-welcome-step-sub">Grant sovereign access to your live financial ledger. Your board never has to ask for an update again.</div>
+            <div class="di-welcome-step-sub">Give your board direct access to your live financial ledger. No update requests, no manual reports.</div>
           </div>
         </div>
       </div>
@@ -7861,13 +7864,13 @@ e.g. I always start by validating whether the problem is real before evaluating 
     </div>
     <!-- Step 1: Team Structure -->
     <div id="di-welcome-step-1" style="display:none">
-      <div style="font-size:13.5px;font-weight:700;color:var(--text-0);margin-bottom:4px">Build your intelligence council.</div>
-      <p style="font-size:13px;color:var(--text-2);margin-bottom:16px;line-height:1.6">You're the owner/promoter. Invite your team, advisors, investors, and staff — each with sovereign access to exactly what they need to see.</p>
+      <div style="font-size:13.5px;font-weight:700;color:var(--text-0);margin-bottom:4px">Build your Thinkers.</div>
+      <p style="font-size:13px;color:var(--text-2);margin-bottom:16px;line-height:1.6">You're the owner/promoter. Invite your team, advisors, investors, and staff — each with direct access to exactly what they need.</p>
       <div class="team-role-grid">
         <div class="team-role-card">
           <div class="team-role-icon"><svg width="26" height="26" viewBox="0 0 26 26" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="13" cy="13" r="3"/><circle cx="13" cy="3.5" r="2"/><circle cx="21" cy="8" r="2"/><circle cx="21" cy="18" r="2"/><circle cx="13" cy="22.5" r="2"/><circle cx="5" cy="18" r="2"/><circle cx="5" cy="8" r="2"/><line x1="13" y1="16" x2="13" y2="5.5"/><line x1="15.5" y1="11.2" x2="19" y2="9.8"/><line x1="15.5" y1="14.8" x2="19" y2="16.2"/><line x1="13" y1="16" x2="13" y2="20.5"/><line x1="10.5" y1="14.8" x2="7" y2="16.2"/><line x1="10.5" y1="11.2" x2="7" y2="9.8"/></svg></div>
           <div class="team-role-name">Thinker Lab</div>
-          <div class="team-role-desc">Install the Council of Thinkers. Live financial audits, structured decision protocols, and institutional-grade strategy.</div>
+          <div class="team-role-desc">Connect your Thinkers. Structured decision protocols, expert-verified reasoning, and live financial audits.</div>
         </div>
         <div class="team-role-card">
           <div class="team-role-icon"><svg width="26" height="26" viewBox="0 0 26 26" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="13" cy="13" r="9"/><circle cx="13" cy="13" r="5"/><circle cx="13" cy="13" r="1.5" fill="currentColor" stroke="none"/></svg></div>
@@ -8134,7 +8137,7 @@ e.g. I always start by validating whether the problem is real before evaluating 
           <div class="ob-sig-placeholder" id="ob-sig-placeholder">Sign here</div>
           <button class="ob-sig-clear" onclick="obClearSig()">Clear</button>
         </div>
-        <p class="ob-legal">By signing, you authorize Divine to replicate your cognitive framework as a sovereign intelligence protocol — available to verified founders and institutional investors within the Terminal.</p>
+        <p class="ob-legal">By signing, you authorize Divine to replicate your cognitive framework as a operator framework — available to verified operators and investors within the Terminal.</p>
         <div class="ob-nav-row" style="justify-content:center;gap:16px;flex-wrap:wrap">
           <button class="ob-back-link" onclick="obTo(5)">← Back</button>
           <button class="ob-cta ob-cta-coral" onclick="obBeginEncoding()">Authorize &amp; Encode →</button>
@@ -8218,7 +8221,7 @@ const PROJECT_COLORS = [
    Premium Principal → $49/mo — unlimited everything, IR Page, live data
    ═══════════════════════════════════════════════════════════════════════ */
 /* ═══════════════════════════════════════════════════════════════════════
-   DIVINE PRICING — Sovereign Model 2026
+   DIVINE PRICING — Operator Model 2026 (PRD v8.1 §03)
    ─────────────────────────────────────────────────────────────────────
    Single-Payer principle: The Founder pays. Team, advisors, and investors
    access Divine as included nodes — no per-seat charges on paid plans.
@@ -8353,7 +8356,7 @@ function _getMonthKey() {
 }
 
 /* Returns true if action is allowed; false if blocked (shows upgrade modal).
-   Single-Payer principle: paid plans (calibration/sovereign/institutional)
+   Single-Payer principle: paid plans (operator/principal/enterprise)
    have NO team seat limits — the Founder pays, the team plays for free. */
 function checkPlanLimit(type, options) {
   const plan    = getUserPlan();
@@ -8377,7 +8380,7 @@ function checkPlanLimit(type, options) {
         return false;
       }
     }
-    // sovereign / institutional — unlimited
+    // principal / enterprise — unlimited
     return true;
   }
 
@@ -8417,7 +8420,7 @@ function checkPlanLimit(type, options) {
   return true;
 }
 
-/* Track a perspective usage event (calibration plan only — monthly cap) */
+/* Track a perspective usage event (free plan only — lifetime cap; operator: monthly) */
 function _trackPerspectiveUsage() {
   const plan = getUserPlan();
   if (plan !== 'operator') return;
@@ -8507,7 +8510,7 @@ function _updatePlanBadge() {
   // Profile menu plan label
   const menuLabel = document.getElementById('profile-menu-plan-label');
   if (menuLabel) menuLabel.textContent = plan.name;
-  // Hide Upgrade button on Institutional (highest tier)
+  // Hide Upgrade button on Enterprise (highest tier)
   const menuPlanRow = document.getElementById('profile-menu-plan-row');
   if (menuPlanRow) {
     const btn = menuPlanRow.querySelector('button');
@@ -8518,7 +8521,7 @@ function _updatePlanBadge() {
 const FAQS = [
   {
     q: 'What is Divine Intelligence?',
-    a: 'Divine is an intelligence platform for founders and investors. Founders sync live financials via QuickBooks, run critical decisions through The Council of Thinkers, and maintain a sovereign data room — without decks, delays, or manual inputs. Investors gain a live, permissioned view of the ventures they back: verified numbers, Thinker-audited strategy, and structured transparency on demand. The result is institutional-grade intelligence, grounded in actual financial data.'
+    a: 'Divine is a judgment platform for founders and operators. Route critical decisions through verified operator frameworks, sync live financials via QuickBooks, and deliver structured transparency to your investors — without decks, delays, or manual inputs. Investors gain a live, permissioned view of the ventures they back: verified numbers, expert-audited strategy, and structured transparency on demand. The result is decision power, grounded in actual operator data.'
   },
   {
     q: 'Who are the Thinkers?',
@@ -8715,8 +8718,8 @@ async function _syncSessionsFromServer(userId, guestId) {
    SIDEBAR TOGGLE
 ════════════════════════════════ */
 let sidebarOpen      = window.innerWidth > 680;
-let _isSidebarOpen   = false;  // Growth Intelligence sidebar in IS screen
-let _chatSidebarOpen = false;  // Growth Intelligence sidebar in Chat screen
+let _isSidebarOpen   = false;  // Thinkers sidebar in IS screen
+let _chatSidebarOpen = false;  // Thinkers sidebar in Chat screen
 document.getElementById('sidebar').classList.toggle('collapsed', !sidebarOpen);
 
 function toggleSidebar() {
@@ -8920,6 +8923,7 @@ const router = (() => {
   // View name → canonical path (history-mode, no # prefix)
   const VIEW_TO_PATH = {
     'recents':         '/',
+    'decision-log':    '/decision-log',
     'wallet':          '/wallet',
     'chat':            '/chat',
     'search':          '/search',
@@ -8958,6 +8962,7 @@ const router = (() => {
     // Wallet
     { re: /^\/wallet\/topup$/,               fn: ()  => _act('settings') },   // archived — Sprint 4 Stripe
     { re: /^\/wallet$/,                        fn: ()  => _act('settings') },  // archived — Sprint 4 Stripe
+    { re: /^\/decision-log$/, fn: () => _act('decision-log') },
 
     // Thinker hub tabs
     { re: /^\/thinker\/onboarding$/,  fn: () => _actThinkerTab('onboarding') },
@@ -9111,6 +9116,12 @@ function showView(view, opts = {}) {
     downloads:   () => { setMobNavActive(null); renderDownloads(); show('screen-downloads'); },
     help:        () => { setMobNavActive(null); renderFAQ(); show('screen-help'); },
     wallet:      () => { _act('settings'); },  // wallet archived — redirects to settings
+    'decision-log': () => {
+      document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+      document.getElementById('nav-decision-log')?.classList.add('active');
+      setMobNavActive(null);
+      show('screen-decision-log');
+    },
     recents:     () => {
       setMobNavActive('mob-nav-home');
       document.getElementById('nav-home')?.classList.add('active');
@@ -9501,8 +9512,8 @@ function renderDcProjects() {
     grid.innerHTML =
       '<div class="dc-proj-empty" onclick="showView(\'projects\')">' +
         '<svg width="20" height="20" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"><rect x="1" y="3" width="14" height="11" rx="1.5"/><path d="M5 3V2a1 1 0 011-1h4a1 1 0 011 1v1"/><line x1="8" y1="7" x2="8" y2="11"/><line x1="6" y1="9" x2="10" y2="9"/></svg>' +
-        '<div class="dc-proj-empty-title">Create your first project</div>' +
-        '<div class="dc-proj-empty-sub">Head to Projects to get started.</div>' +
+        '<div class="dc-proj-empty-title">Create your first project.</div>' +
+        '<div class="dc-proj-empty-sub">Projects organize related Perspectives — useful when a single decision needs multiple sessions or when your team is working on something together.</div>' +
       '</div>';
     return;
   }
@@ -9718,39 +9729,18 @@ function _buildAdvisoryHtml(gridId, onConnectFn) {
     );
   });
 
-  // Primary Thinker — always show first available
-  const michael = (typeof THINKERS !== 'undefined' && THINKERS[0]) ? THINKERS[0] : null;
-  if (michael) {
-    const initials = michael.initials || michael.name.split(' ').map(w => w[0]).join('').slice(0,2).toUpperCase();
-    const role     = michael.title ? michael.title.split('·')[0].trim() : 'Thinker';
-    const quote    = michael.lens  || 'Strategic intelligence, applied.';
-    parts.push(
-      '<div class="dc-adv-card" onclick="acquireFromThinker(0)" style="cursor:pointer">' +
-        '<div class="dc-adv-header">' +
-          '<div class="dc-adv-avatar" style="background:' + (michael.color || '#BF452A') + '">' + initials + '</div>' +
-          '<div style="flex:1;min-width:0">' +
-            '<div class="dc-adv-name">' + michael.name + '</div>' +
-            '<div class="dc-adv-title">' + role + '</div>' +
-          '</div>' +
-        '</div>' +
-        '<div class="dc-adv-lens">' + quote + '</div>' +
-        '<button class="dc-adv-btn" onclick="event.stopPropagation();acquireFromThinker(0)">' +
-          '<svg width="11" height="11" viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M6.5 1L8.4 4.7 12.5 5.3 9.5 8.3l.7 4.1L6.5 10.4 2.3 12.4l.7-4.1L0 5.3l4.1-.6z"/></svg>' +
-          'Acquire Perspective' +
-        '</button>' +
-      '</div>'
-    );
-  }
+  // Primary Thinker slot — reserved for verified Thinkers (PRD §18.A: founder ≠ Thinker)
+  // Primary Thinker slot — reserved for verified Thinkers (PRD §18.A). Sprint 4: populate from THINKERS registry.
 
   if (!parts.length) {
-    grid.innerHTML = '<div style="font-size:12px;color:var(--text-3);padding:8px 0">Your council is empty — add advisors and thinkers to build your intelligence network.</div>';
+    grid.innerHTML = '<div style="font-size:12px;color:var(--text-3);padding:8px 0">No advisors added yet — invite domain experts from the Team page.</div>';
     return;
   }
 
   grid.innerHTML = parts.join('') +
     '<div class="dc-advisory-add" onclick="showView(\'thought-leaders\')">' +
       '<svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"><line x1="6.5" y1="1" x2="6.5" y2="12"/><line x1="1" y1="6.5" x2="12" y2="6.5"/></svg>' +
-      'Expand your council' +
+      'Expand your Thinkers' +
     '</div>';
 }
 
@@ -9785,8 +9775,8 @@ function _applyRevenueLock(lockId) {
       '<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="var(--success-mid,#16A34A)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">' +
         '<path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/>' +
       '</svg>' +
-      '<div class="dc-locked-label" style="font-size:12.5px;color:var(--text-0)">Your financial intelligence picture builds here</div>' +
-      '<div class="dc-locked-sub" style="font-size:11.5px;color:var(--text-2);max-width:180px;text-align:center;line-height:1.5">Run your first perspective session to begin building your financial intelligence picture.</div>' +
+      '<div class="dc-locked-label" style="font-size:12.5px;color:var(--text-0)">Your Decision Power starts here</div>' +
+      '<div class="dc-locked-sub" style="font-size:11.5px;color:var(--text-2);max-width:180px;text-align:center;line-height:1.5">Run your first Perspective to activate your operator framework.</div>' +
       '<button class="dc-locked-btn" style="background:var(--accent);color:#fff;border:none" onclick="document.getElementById(\'dc-quick-input\')?.focus()">Start a session →</button>';
   } else {
     // Has sessions but no tools connected → calibration prompt
@@ -9891,6 +9881,41 @@ function dcDismissToolsBar() {
 
 /* ── Dashboard quick-input ── */
 let _dcSelectedProj = null;
+
+
+/* ══════════════════════════════════════
+   LAUNCHPAD INTAKE CARD — Sprint 1.5
+   (Sprint 2: wire submit logic per Pivot Plan 2.1 task 2.1)
+══════════════════════════════════════ */
+function lpIntakeUpdate(field, ta) {
+  // Visual-only counter — Sprint 2 wires 40-char minimum + submit enable logic
+  const counterId = 'lp-counter-' + field;
+  const counter = document.getElementById(counterId);
+  if (!counter) return;
+  const len = (ta && ta.value) ? ta.value.length : 0;
+  if (len >= 200) {
+    counter.textContent = len + ' / 500';
+    counter.style.display = '';
+  } else {
+    counter.style.display = 'none';
+  }
+}
+
+function _initLaunchpadIntakeCard() {
+  // Show tier note for Free plan users per spec §Tier Behaviour
+  const plan = getUserPlan ? getUserPlan() : 'free';
+  const noteEl = document.getElementById('lp-intake-tier-note');
+  if (!noteEl) return;
+  if (plan === 'free') {
+    const used = (typeof loadChatSessions === 'function') ? loadChatSessions().length : 0;
+    const limit = 3;
+    const remaining = Math.max(0, limit - used);
+    noteEl.textContent = 'Free tier: ' + remaining + ' Perspective' + (remaining !== 1 ? 's' : '') + ' remaining';
+    noteEl.style.display = '';
+  } else {
+    noteEl.style.display = 'none';
+  }
+}
 
 function dcInputUpdate(ta) {
   const btn = document.getElementById('dc-input-submit');
@@ -10095,7 +10120,7 @@ function renderDcThinkerGrid() {
       '<div class="dc-lens-text">' + (t.lens || 'Cognitive framework defined.') + '</div>' +
       '<button class="dc-acquire-btn" onclick="acquireFromThinker(' + idx + ')">' +
       '<svg width="12" height="12" viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M6.5 1L8.4 4.7 12.5 5.3 9.5 8.3l.7 4.1L6.5 10.4 2.3 12.4l.7-4.1L0 5.3l4.1-.6z"/></svg>' +
-      'Acquire Perspective</button>' +
+      'Start Perspective</button>' +
       '</div>';
   }).join('');
 }
@@ -10507,13 +10532,13 @@ function renderThoughtLeaders() {
       '</div>' +
       '<div class="tl-lens-label">Signature Lens</div>' +
       '<div class="tl-lens-text">' + (t.lens || 'Cognitive framework defined.') + '</div>' +
-      (t.protocols && t.protocols.length ? '<div class="tl-lens-label" style="margin-top:10px">Sovereign Protocols</div><div style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:4px">' + t.protocols.slice(0,3).map(p => '<span style="font-size:9.5px;font-weight:600;color:var(--accent);background:var(--accent-lt);border-radius:var(--r-pill);padding:2px 7px;border:1px solid var(--accent-bdr)">' + p + '</span>').join('') + (t.protocols.length > 3 ? '<span style="font-size:9.5px;color:var(--text-3);padding:2px 4px">+' + (t.protocols.length - 3) + '</span>' : '') + '</div>' : '') +
+      (t.protocols && t.protocols.length ? '<div class="tl-lens-label" style="margin-top:10px">Operator Protocols</div><div style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:4px">' + t.protocols.slice(0,3).map(p => '<span style="font-size:9.5px;font-weight:600;color:var(--accent);background:var(--accent-lt);border-radius:var(--r-pill);padding:2px 7px;border:1px solid var(--accent-bdr)">' + p + '</span>').join('') + (t.protocols.length > 3 ? '<span style="font-size:9.5px;color:var(--text-3);padding:2px 4px">+' + (t.protocols.length - 3) + '</span>' : '') + '</div>' : '') +
       '<div class="tl-demand-row">' +
       '<div class="tl-demand-bar-bg"><div class="tl-demand-fill" style="width:0%" data-pct="' + demandPct + '"></div></div>' +
       '<span class="tl-demand-label">' + demand + ' req/wk</span></div>' +
       '<button class="tl-acquire-btn" onclick="event.stopPropagation();acquireFromThinker(' + idx + ')">' +
       '<svg width="12" height="12" viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M6.5 1L8.4 4.7 12.5 5.3 9.5 8.3l.7 4.1L6.5 10.4 2.3 12.4l.7-4.1L0 5.3l4.1-.6z"/></svg>' +
-      'Acquire Perspective</button>' +
+      'Start Perspective</button>' +
       '</div>';
   }).join('');
   requestAnimationFrame(() => requestAnimationFrame(() => {
@@ -14148,7 +14173,7 @@ function _chatEmptyState() {
       </svg>
     </div>
     <div class="chat-empty-headline">Ask your Thinker</div>
-    <p class="chat-empty-sub">What growth challenge, team question, or investor concern are you working through? The more specific, the sharper the analysis.</p>
+    <p class="chat-empty-sub">What decision are you working through? The more specific, the sharper the analysis.</p>
     ${plan === 'free' ? `<div style="margin-top:12px"><button onclick="showUpgradeModal('manual',{})" style="background:none;border:none;font-size:12px;color:var(--accent);cursor:pointer;font-family:'Inter',sans-serif;font-weight:500">3 Perspectives on Free — Subscribe to Operator for more →</button></div>` : ''}`;
   return el;
 }
@@ -15318,16 +15343,20 @@ function applyAuthState(user) {
     const grName = document.getElementById('dc-greeting-name');
     const grSub  = document.getElementById('dc-greeting-sub');
     if (grName) grName.textContent = `Hi ${firstName}.`;
-    // Show IBM Way / plan context in subtitle
+    // Show plan tier context in dashboard subtitle
     const _plan = getUserPlan();
     const _planDef = DIVINE_PLANS[_plan];
     if (grSub) {
+      // Spec §IA: tier badge in PRD vocabulary below greeting
+      const _bc = _planDef.badgeColor || '#6B6357';
+      const _badge = `<span style="display:inline-flex;align-items:center;padding:2px 10px;border-radius:20px;background:${_bc}1a;border:1px solid ${_bc}33;font-size:11px;font-weight:600;color:${_bc};letter-spacing:.02em">${_planDef.name}</span>`;
       if (_plan === 'free') {
-        grSub.innerHTML = 'Calibration Trial &nbsp;·&nbsp; <button onclick="showUpgradeModal(\'manual\',{})" style="background:none;border:none;font-size:12px;color:var(--accent);cursor:pointer;font-family:\'Inter\',sans-serif;font-weight:600;padding:0">Subscribe to unlock</button>';
+        grSub.innerHTML = _badge + ' &nbsp;<a href="#" onclick="showUpgradeModal(\'manual\',{});return false" style="font-size:12px;color:var(--accent);text-decoration:none;font-weight:600">Subscribe to unlock more</a>';
       } else {
-        grSub.textContent = `${_planDef.name} · What are we building today?`;
+        grSub.innerHTML = _badge;
       }
     }
+    _initLaunchpadIntakeCard();
     // Load projects shared with this user by other owners
     try { _loadSharedProjects(user.email); } catch(e) { console.error('[shared]', e); }
     // Refresh profile screen if already visible (pre-seeded with auth data)
@@ -15378,6 +15407,7 @@ function applyAuthState(user) {
     });
     // Unlock mobile bottom nav Projects button
     document.getElementById('mob-nav-projects')?.classList.remove('mob-auth-gate');
+    document.getElementById('nav-decision-log')?.classList.remove('nav-auth-gate');
     // Hide any inline My Stuff gate cards left from pre-login browsing
     document.querySelectorAll('.mob-my-stuff-gate').forEach(el => el.style.display = 'none');
     const projBtn = document.getElementById('dc-proj-btn');
@@ -15393,6 +15423,7 @@ function applyAuthState(user) {
     });
     // Re-lock mobile bottom nav Projects button
     document.getElementById('mob-nav-projects')?.classList.add('mob-auth-gate');
+    document.getElementById('nav-decision-log')?.classList.add('nav-auth-gate');
     const projBtn = document.getElementById('dc-proj-btn');
     if (projBtn) { projBtn.style.opacity = '0.4'; projBtn.style.pointerEvents = 'none'; }
     // Dashboard greeting card — logged-out state
@@ -17684,7 +17715,7 @@ function savePayoutSchedule() {
 }
 
 /* ════════════════════════════════
-   GROWTH INTELLIGENCE SIDEBAR
+   YOUR THINKERS SIDEBAR — Chat screen right panel
    Works for both #screen-chat (ns='chat') and #screen-replay (ns='is')
 ════════════════════════════════ */
 
@@ -17808,8 +17839,8 @@ function renderRevenueGraph(ns) {
       return '<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="var(--success-mid,#16A34A)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">' +
         '<path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/>' +
         '</svg>' +
-        '<div class="dc-locked-label" style="font-size:12.5px;color:var(--text-0)">Your financial intelligence picture builds here</div>' +
-        '<div class="dc-locked-sub" style="font-size:11.5px;color:var(--text-2);max-width:180px;text-align:center;line-height:1.5">Run your first perspective session to begin building your financial intelligence picture.</div>' +
+        '<div class="dc-locked-label" style="font-size:12.5px;color:var(--text-0)">Your Decision Power starts here</div>' +
+        '<div class="dc-locked-sub" style="font-size:11.5px;color:var(--text-2);max-width:180px;text-align:center;line-height:1.5">Run your first Perspective to activate your operator framework.</div>' +
         '<button class="dc-locked-btn" style="background:var(--accent);color:#fff;border:none" onclick="document.getElementById(\'dc-quick-input\')?.focus()">Start a session →</button>';
     }
     return '<svg class="dc-locked-icon" width="22" height="22" viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"><rect x="4" y="10" width="14" height="10" rx="2.5"/><path d="M7 10V7a4 4 0 018 0v3"/></svg>' +
@@ -19449,7 +19480,7 @@ function adminRenderLog() {
         <ul class="topup-monthly-features">
           <li><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M2 7l3.5 3.5 6.5-7"/></svg>Unlimited AI perspectives per month</li>
           <li><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M2 7l3.5 3.5 6.5-7"/></svg>Access to all Thinkers, including future additions</li>
-          <li><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M2 7l3.5 3.5 6.5-7"/></svg>Full Growth Intelligence suite</li>
+          <li><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M2 7l3.5 3.5 6.5-7"/></svg>Full operator framework suite</li>
           <li><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M2 7l3.5 3.5 6.5-7"/></svg>Priority session quality &amp; response speed</li>
           <li><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M2 7l3.5 3.5 6.5-7"/></svg>Cancel anytime — no lock-in</li>
         </ul>
@@ -19498,7 +19529,7 @@ function adminRenderLog() {
     <div class="splash-wordmark">Uncharted Ventures</div>
 
     <h1 class="splash-title">Divine Intelligence</h1>
-    <p class="splash-sub">Live data. Institutional intelligence. Sovereign transparency.</p>
+    <p class="splash-sub">Operator frameworks. Verified judgment. Decision power.</p>
 
     <div class="splash-btns">
       <button class="splash-btn-login"  onclick="splashLogin()">Log in</button>
@@ -19583,7 +19614,7 @@ function adminRenderLog() {
     </div>
     <div class="upm-plans" style="grid-template-columns:repeat(4,1fr)">
 
-      <!-- Calibration Trial -->
+      <!-- Free Plan -->
       <div class="upm-card" id="upm-card-free">
         <div class="upm-recommended-chip">Free</div>
         <div class="upm-plan-name">Free</div>
@@ -19615,7 +19646,7 @@ function adminRenderLog() {
         <button class="upm-cta upm-cta-ghost" onclick="closeUpgradeModal()">Stay on Free</button>
       </div>
 
-      <!-- Calibration $99 -->
+      <!-- Operator $99 -->
       <div class="upm-card" id="upm-card-operator">
         <div class="upm-recommended-chip">Recommended</div>
         <div class="upm-plan-name">Operator</div>
