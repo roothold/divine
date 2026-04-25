@@ -5273,12 +5273,8 @@
           <button onclick="showUpgradeModal('manual',{});closeProfileMenu()" style="background:var(--accent);color:#fff;border:none;border-radius:20px;font-size:10px;font-weight:700;padding:3px 9px;cursor:pointer;font-family:'Inter',sans-serif;letter-spacing:.04em">Upgrade</button>
         </div>
         <div class="profile-menu-sep"></div>
-        <!-- Wallet -->
-        <button class="profile-menu-item" onclick="showView('wallet');closeProfileMenu()">
-          <svg width="15" height="15" viewBox="0 0 15 15" fill="none" stroke="currentColor" stroke-width="1.75"><rect x="1" y="4" width="13" height="9" rx="1.5"/><path d="M1 7h13"/><path d="M10 10.5h2"/></svg>
-          My Wallet
-          <span id="profile-menu-balance" style="margin-left:auto;font-size:11.5px;font-weight:700;color:var(--accent);font-family:var(--font-mono)"></span>
-        </button>
+        <!-- Wallet archived — Sprint 4 Stripe replaces this -->
+        <span id="profile-menu-balance" style="display:none"></span>
         <button class="profile-menu-item" onclick="showView('projects');closeProfileMenu()">
           <svg width="15" height="15" viewBox="0 0 15 15" fill="none" stroke="currentColor" stroke-width="1.75"><rect x="1" y="1" width="5.5" height="5.5" rx="1"/><rect x="8.5" y="1" width="5.5" height="5.5" rx="1"/><rect x="1" y="8.5" width="5.5" height="5.5" rx="1"/><rect x="8.5" y="8.5" width="5.5" height="5.5" rx="1"/></svg>
           My Projects
@@ -6476,8 +6472,11 @@
       </div></div>
     </div>
 
-    <!-- SCREEN: Upgrade -->
-    <div class="screen" id="screen-wallet">
+    <!-- SCREEN: Wallet — ARCHIVED Sprint 1. Not linked from navigation.
+         Retained for Sprint 4 Stripe integration reference.
+         Router: /wallet and /wallet/topup both redirect to /settings.
+    -->
+    <div class="screen" id="screen-wallet" style="display:none !important">
       <div class="main-inner"><div class="screen-inner">
         <div class="screen-header">
           <div class="screen-label">Wallet</div>
@@ -6490,7 +6489,7 @@
           <div class="cl-cap-main">
             <div class="cl-cap-label">Available Cognitive Capital</div>
             <div class="cl-cap-amount" id="cl-balance">—</div>
-            <div class="cl-cap-sub">credits available · $0.05 per perspective</div>
+            <div class="cl-cap-sub">credits available</div>
           </div>
           <div class="cl-cap-divider"></div>
           <div class="cl-cap-stat">
@@ -8105,11 +8104,7 @@ e.g. I always start by validating whether the problem is real before evaluating 
         <h2 class="ob-step-title">Set your<br>Insight Tier.</h2>
         <p class="ob-hint">You earn 70% of every session. Choose the access level that fits your positioning.</p>
         <div class="ob-tiers" id="ob-tiers">
-          <div class="ob-tier selected" data-price="0.05" onclick="obSelectTier(this)">
-            <div class="ob-tier-name">Pulse</div>
-            <div class="ob-tier-price">$0.05</div>
-            <div class="ob-tier-sub">High-volume. Entry access.</div>
-          </div>
+          <!-- ob-tier $0.05 archived Sprint 1 — replaced by plan subscription in Sprint 4 -->
           <div class="ob-tier" data-price="0.50" onclick="obSelectTier(this)">
             <div class="ob-tier-name">Strategy</div>
             <div class="ob-tier-price">$0.50</div>
@@ -8228,18 +8223,18 @@ const PROJECT_COLORS = [
    Single-Payer principle: The Founder pays. Team, advisors, and investors
    access Divine as included nodes — no per-seat charges on paid plans.
 
-   Calibration Trial  → $0     — 3 Perspectives, no projects (filters intent)
-   Calibration        → $99/mo — Seed-stage. 100 Perspectives, full team.
-   Sovereign          → $299/mo — Series A+. Unlimited, IR Portal, Thinkers.
-   Institutional      → $999/mo — Funds & multi-entity. Portfolio command centre.
+   Free            → $0     — 3 Perspectives, no projects (filters intent)
+   Operator        → $99/mo — Seed-stage. 100 Perspectives, full team.
+   Principal       → $299/mo — Series A+. Unlimited, IR Portal, Thinkers.
+   Enterprise      → $999/mo — Funds & multi-entity. Portfolio command centre.
    ═══════════════════════════════════════════════════════════════════════ */
 const DIVINE_PLANS = {
-  trial: {
-    id: 'trial',
-    name: 'Calibration Trial',
+  free: {
+    id: 'free',
+    name: 'Free',
     price: 0,
-    priceLabel: 'Free trial',
-    badge: 'Trial',
+    priceLabel: 'Free',
+    badge: 'Free',
     badgeColor: '#6B6357',
     features: {
       perspectives: 3,              // lifetime — hard gate at 3
@@ -8256,14 +8251,14 @@ const DIVINE_PLANS = {
       singlePayer: false,
     },
     tagline: 'Start your strategic thinking journey — no commitment required.',
-    cta: 'Stay on Trial',
+    cta: 'Stay on Free',
   },
-  calibration: {
-    id: 'calibration',
-    name: 'Calibration',
+  operator: {
+    id: 'operator',
+    name: 'Operator',
     price: 99,
     priceLabel: '$99/mo',
-    badge: 'Calibration',
+    badge: 'Operator',
     badgeColor: '#1A5276',
     features: {
       perspectives: 100,            // per month
@@ -8282,12 +8277,12 @@ const DIVINE_PLANS = {
     tagline: 'Skin in the game. Full Ledger Sync + your entire inner circle.',
     cta: 'Subscribe — $99/mo',
   },
-  sovereign: {
-    id: 'sovereign',
-    name: 'Sovereign',
-    price: 299,
-    priceLabel: '$299/mo',
-    badge: 'Sovereign',
+  principal: {
+    id: 'principal',
+    name: 'Principal',
+    price: 499,
+    priceLabel: '$499/mo',
+    badge: 'Principal',
     badgeColor: '#BF452A',
     features: {
       perspectives: Infinity,
@@ -8304,14 +8299,14 @@ const DIVINE_PLANS = {
       singlePayer: true,
     },
     tagline: 'Automates Investor Relations. Pays for itself in 4 hours saved.',
-    cta: 'Subscribe — $299/mo',
+    cta: 'Subscribe — $499/mo',
   },
-  institutional: {
-    id: 'institutional',
-    name: 'Institutional',
+  enterprise: {
+    id: 'enterprise',
+    name: 'Enterprise',
     price: 999,
-    priceLabel: '$999/mo',
-    badge: 'Institutional',
+    priceLabel: 'Contact Sales',
+    badge: 'Enterprise',
     badgeColor: '#0D2B45',
     features: {
       perspectives: Infinity,
@@ -8339,7 +8334,7 @@ function getUserPlan() {
     const stored = localStorage.getItem('di_plan_' + (USER_ID || 'guest'));
     if (stored && DIVINE_PLANS[stored]) return stored;
   } catch(_) {}
-  return 'trial';
+  return 'free';
 }
 function setUserPlan(planId) {
   if (!DIVINE_PLANS[planId]) return;
@@ -8366,14 +8361,14 @@ function checkPlanLimit(type, options) {
   const usage   = _getPlanUsage();
 
   if (type === 'perspective') {
-    if (plan === 'trial') {
+    if (plan === 'free') {
       // 3 lifetime Perspectives on trial
       const lifetime = loadChatSessions().length;
       if (lifetime >= planDef.features.perspectives) {
         showUpgradeModal('perspective_limit', { current: lifetime, limit: planDef.features.perspectives });
         return false;
       }
-    } else if (plan === 'calibration') {
+    } else if (plan === 'operator') {
       // 100 / month
       const mk = _getMonthKey();
       const monthly = (usage.perspectives_monthly || {})[mk] || 0;
@@ -8388,7 +8383,7 @@ function checkPlanLimit(type, options) {
 
   if (type === 'project') {
     // Trial: no projects allowed
-    if (plan === 'trial') {
+    if (plan === 'free') {
       showUpgradeModal('project_limit', { current: 0, limit: 0 });
       return false;
     }
@@ -8398,7 +8393,7 @@ function checkPlanLimit(type, options) {
 
   if (type === 'team') {
     // Trial: solo only — no team invites
-    if (plan === 'trial') {
+    if (plan === 'free') {
       showUpgradeModal('team_limit', {});
       return false;
     }
@@ -8425,7 +8420,7 @@ function checkPlanLimit(type, options) {
 /* Track a perspective usage event (calibration plan only — monthly cap) */
 function _trackPerspectiveUsage() {
   const plan = getUserPlan();
-  if (plan !== 'calibration') return;
+  if (plan !== 'operator') return;
   const usage = _getPlanUsage();
   const mk = _getMonthKey();
   if (!usage.perspectives_monthly) usage.perspectives_monthly = {};
@@ -8441,22 +8436,22 @@ function _trackPerspectiveUsage() {
 function showUpgradeModal(trigger, ctx) {
   ctx = ctx || {};
   const currentPlan = getUserPlan();
-  const planOrder   = ['trial','calibration','sovereign','institutional'];
+  const planOrder   = ['free','operator','principal','enterprise'];
 
   // Build trigger message
   let triggerMsg = '';
   if (trigger === 'perspective_limit') {
-    triggerMsg = `You've used all <strong>${ctx.limit} Calibration Trial Perspectives</strong>. Subscribe to continue.`;
+    triggerMsg = `You've used all <strong>${ctx.limit} Free Perspectives</strong>. Subscribe to continue.`;
   } else if (trigger === 'perspective_monthly_limit') {
-    triggerMsg = `You've reached your <strong>${ctx.limit} Perspectives this month</strong> on Calibration. Upgrade to Sovereign for unlimited access.`;
+    triggerMsg = `You've reached your <strong>${ctx.limit} Perspectives this month</strong> on Operator. Upgrade to Principal for unlimited access.`;
   } else if (trigger === 'project_limit') {
-    triggerMsg = `<strong>Projects require a paid subscription.</strong> The Calibration plan starts at $99/mo.`;
+    triggerMsg = `<strong>Projects require a paid subscription.</strong> The Operator plan starts at \$99/mo.`;
   } else if (trigger === 'team_limit') {
     triggerMsg = `<strong>Team nodes are included in all paid plans.</strong> The Founder pays — advisors, staff, and investors access Divine for free.`;
   } else if (trigger === 'integration_limit') {
-    triggerMsg = currentPlan === 'trial'
-      ? `<strong>Tool integrations are available from Calibration upwards.</strong>`
-      : `You've reached your integration limit on Calibration. Sovereign includes unlimited tool connections.`;
+    triggerMsg = currentPlan === 'free'
+      ? `<strong>Tool integrations are available from Operator upwards.</strong>`
+      : `You've reached your integration limit on Operator. Principal includes unlimited tool connections.`;
   }
 
   const modal = document.getElementById('upgrade-modal');
@@ -8487,10 +8482,10 @@ function closeUpgradeModal() {
 function upgradeSelectPlan(planId) {
   const plan = DIVINE_PLANS[planId];
   if (!plan) return;
-  if (planId === 'trial') { closeUpgradeModal(); return; }
-  if (planId === 'institutional') {
+  if (planId === 'free') { closeUpgradeModal(); return; }
+  if (planId === 'enterprise') {
     closeUpgradeModal();
-    showToast('Our team will be in touch to set up your Institutional account.', 'default');
+    showToast('Our team will be in touch to set up your Enterprise account.', 'default');
     return;
   }
   // Simulate upgrade locally (production → Stripe checkout)
@@ -8516,7 +8511,7 @@ function _updatePlanBadge() {
   const menuPlanRow = document.getElementById('profile-menu-plan-row');
   if (menuPlanRow) {
     const btn = menuPlanRow.querySelector('button');
-    if (btn) btn.style.display = plan.id === 'institutional' ? 'none' : '';
+    if (btn) btn.style.display = plan.id === 'enterprise' ? 'none' : '';
   }
 }
 
@@ -8535,7 +8530,7 @@ const FAQS = [
   },
   {
     q: 'How much does a Perspective cost?',
-    a: 'Each Perspective costs $0.05. Top up your balance using the Wallet in the sidebar. Credits are applied per session and there is no subscription required. You pay only for the thinking you use.'
+    a: 'Perspectives are included in your plan. Free plan includes 3 lifetime Perspectives. Operator ($99/mo) includes 100 Perspectives per month. Principal ($499/mo) and Enterprise include unlimited Perspectives. Upgrade via Plan &amp; Billing in Settings.'
   },
   {
     q: 'How is my data handled?',
@@ -8961,8 +8956,8 @@ const router = (() => {
     { re: /^\/audit\/(.+)$/,                 fn: (m) => openAuditById(m[1]) },
 
     // Wallet
-    { re: /^\/wallet\/topup$/,               fn: ()  => { _act('wallet'); setTimeout(openTopup, 200); } },
-    { re: /^\/wallet$/,                        fn: ()  => _act('wallet') },
+    { re: /^\/wallet\/topup$/,               fn: ()  => _act('settings') },   // archived — Sprint 4 Stripe
+    { re: /^\/wallet$/,                        fn: ()  => _act('settings') },  // archived — Sprint 4 Stripe
 
     // Thinker hub tabs
     { re: /^\/thinker\/onboarding$/,  fn: () => _actThinkerTab('onboarding') },
@@ -9115,7 +9110,7 @@ function showView(view, opts = {}) {
     settings:    () => { setMobNavActive(null); renderSettingsPage(); show('screen-settings'); },
     downloads:   () => { setMobNavActive(null); renderDownloads(); show('screen-downloads'); },
     help:        () => { setMobNavActive(null); renderFAQ(); show('screen-help'); },
-    wallet:      () => { document.getElementById('nav-wallet')?.classList.add('active'); setMobNavActive(null); renderWallet(); show('screen-wallet'); },
+    wallet:      () => { _act('settings'); },  // wallet archived — redirects to settings
     recents:     () => {
       setMobNavActive('mob-nav-home');
       document.getElementById('nav-home')?.classList.add('active');
@@ -9411,9 +9406,9 @@ function updateBalanceDisplay(balance) {
   // Only auto-open top-up when balance RUNS OUT during active use —
   // not on initial login load (prev === null) and not when logging out (balance === null)
   const ranOut = balance !== null && balance !== undefined
-    && balance < 0.05
+    && balance < 0.01 /* archived — threshold preserved for Sprint 4 Stripe reference */
     && prev !== null           // was already loaded (not fresh login)
-    && prev >= 0.05;           // was positive before, now it's gone
+    && prev >= 0.01;           // archived threshold — Sprint 4 Stripe reference
   if (ranOut) {
     setTimeout(openTopup, 600);
   }
@@ -10614,7 +10609,7 @@ async function renderWallet() {
     listEl.innerHTML =
       '<div class="cl-list"><div class="cl-empty">' +
       '<div class="cl-empty-title">Your ledger is empty.<br>Secure your first perspective to begin your archive.</div>' +
-      '<div class="cl-empty-sub" style="margin-top:6px">Each $0.05 perspective will appear here as a permanent record.</div>' +
+      '<div class="cl-empty-sub" style="margin-top:6px">Your session history will appear here.</div>' +
       '</div></div>';
     return;
   }
@@ -10683,7 +10678,7 @@ function _pollBalanceAfterTopup(prevBalance) {
     await fetchBalance();
     const now = parseFloat(currentBalance) || 0;
     if (now > prev) {
-      const persp = Math.floor(now / 0.05);
+      const persp = 0; // archived — Sprint 4 Stripe replaces balance display
       showToast(`✓ ${persp} perspectives now in your account!`);
       // Also refresh the Wallet if it's open
       try { renderWallet(); } catch(e) {}
@@ -10711,7 +10706,7 @@ function openTopup() {
   const balEl = document.getElementById('topup-balance-display');
   // Convert dollar balance → perspective count for display
   if (balEl) {
-    const perspCount = currentBalance != null ? Math.floor(parseFloat(currentBalance) / 0.05) : null;
+    const perspCount = null; // archived — Sprint 4 Stripe replaces balance display
     balEl.textContent = perspCount !== null ? String(perspCount) : '—';
   }
   // Default to one-time tab, pre-select Popular ($10)
@@ -10952,10 +10947,10 @@ function renderSettingsPlanTab() {
   // Perspective usage
   let perspUsed = 0;
   let perspLimit = planDef.features.perspectives;
-  if (plan === 'trial') {
+  if (plan === 'free') {
     perspUsed  = loadChatSessions().length;
     perspLimit = planDef.features.perspectives;
-  } else if (plan === 'calibration') {
+  } else if (plan === 'operator') {
     const mk = _getMonthKey();
     perspUsed  = (usage.perspectives_monthly || {})[mk] || 0;
     perspLimit = planDef.features.perspectives;
@@ -10973,7 +10968,7 @@ function renderSettingsPlanTab() {
   const projLabel  = projLimit  === Infinity ? `${projUsed} active (unlimited)` : `${projUsed} / ${projLimit} active`;
 
   // Plans above current
-  const planOrder  = ['trial', 'calibration', 'sovereign', 'institutional'];
+  const planOrder  = ['free', 'operator', 'principal', 'enterprise'];
   const planIdx    = planOrder.indexOf(plan);
   const upgradePlan = planIdx < planOrder.length - 1 ? DIVINE_PLANS[planOrder[planIdx + 1]] : null;
 
@@ -14131,34 +14126,16 @@ function _chatEmptyState() {
   el.className = 'chat-empty';
   el.id = 'chat-empty';
 
-  // Wallet gate: only for Entry/Premium users — Free plan uses plan limits, not wallet
-  const isEmptyWallet = isEmptyWalletForPlan;
-  const walletBanner = isEmptyWallet ? `
-    <div class="chat-wallet-gate" id="chat-wallet-gate">
-      <div class="chat-wallet-gate-icon">
-        <svg width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75"><rect x="1" y="4" width="14" height="10" rx="2"/><path d="M11 9a1 1 0 110 2 1 1 0 010-2z" fill="currentColor" stroke="none"/><path d="M1 7h14"/></svg>
-      </div>
-      <div class="chat-wallet-gate-body">
-        <div class="chat-wallet-gate-title">Your wallet is empty</div>
-        <div class="chat-wallet-gate-sub">Top up to run a perspective — each one costs $0.05.</div>
-      </div>
-      <button class="chat-wallet-gate-btn" onclick="showView('wallet')">Top up →</button>
-    </div>` : '';
-
-  // Trial plan badge
+  // Plan badge for Free tier
   const plan = getUserPlan();
 
-  // ── Trial plan: never show wallet gate — plan limits govern access ────────
-  const isEmptyWalletForPlan = plan !== 'trial' && currentUser && currentBalance !== null && parseFloat(currentBalance) < 0.05;
-
-  const ibmBadge = plan === 'trial' ? `
+  const planBadge = plan === 'free' ? `
     <div style="display:inline-flex;align-items:center;gap:6px;padding:5px 12px;border-radius:20px;background:var(--surface-2);border:1px solid var(--border);margin-bottom:16px">
-      <span style="font-size:11px;font-weight:600;color:var(--text-2)">Calibration Trial · 3 Perspectives</span>
+      <span style="font-size:11px;font-weight:600;color:var(--text-2)">Free Plan · 3 Perspectives</span>
     </div>` : '';
 
   el.innerHTML = `
-    ${walletBanner}
-    ${ibmBadge}
+    ${planBadge}
     <div class="chat-empty-icon">
       <svg width="22" height="22" viewBox="0 0 100 100" fill="none">
         <g stroke="currentColor" stroke-width="9" stroke-linecap="round">
@@ -14172,7 +14149,7 @@ function _chatEmptyState() {
     </div>
     <div class="chat-empty-headline">Ask your Thinker</div>
     <p class="chat-empty-sub">What growth challenge, team question, or investor concern are you working through? The more specific, the sharper the analysis.</p>
-    ${plan === 'trial' ? `<div style="margin-top:12px"><button onclick="showUpgradeModal('manual',{})" style="background:none;border:none;font-size:12px;color:var(--accent);cursor:pointer;font-family:'Inter',sans-serif;font-weight:500">3 Perspectives on Trial — Subscribe to Calibration for more →</button></div>` : ''}`;
+    ${plan === 'free' ? `<div style="margin-top:12px"><button onclick="showUpgradeModal('manual',{})" style="background:none;border:none;font-size:12px;color:var(--accent);cursor:pointer;font-family:'Inter',sans-serif;font-weight:500">3 Perspectives on Free — Subscribe to Operator for more →</button></div>` : ''}`;
   return el;
 }
 
@@ -14265,54 +14242,24 @@ function _usageRefreshUI() {
   if (currentUser) {
     const _activePlan = getUserPlan();
 
-    if (_activePlan === 'trial') {
-      // Calibration Trial: show remaining lifetime perspectives in pill; no wallet gate
-      const _used  = loadChatSessions().length;
-      const _limit = DIVINE_PLANS.trial.features.perspectives;
-      const _left  = Math.max(0, _limit - _used);
-      if (pill) {
+    // All authenticated users: plan tier governs access, no wallet gate
+    const _planDef = DIVINE_PLANS[_activePlan];
+    const _perspLimit = _planDef?.features?.perspectives ?? Infinity;
+    const _used = loadChatSessions().length;
+    if (pill) {
+      if (_perspLimit === Infinity) {
+        pill.textContent = 'Unlimited';
+        pill.className   = 'chat-usage-pill';
+      } else {
+        const _left = Math.max(0, _perspLimit - _used);
         pill.textContent = `${_left} left`;
         pill.className   = 'chat-usage-pill' + (_left === 0 ? ' empty' : _left <= 2 ? ' warn' : '');
       }
-      // Never show wallet banner on Free plan — plan gate handles limits at session creation
-      if (banner) banner.classList.remove('visible');
-      if (sendBtn && !_chatStreaming) sendBtn.disabled = false;
-      if (textarea) textarea.disabled = false;
-      clearInterval(window._rateCountdownInterval);
-      return;
     }
-
-    // Entry / Premium: governed by wallet balance
-    if (pill) {
-      if (currentBalance !== null) {
-        const perspCount = Math.floor(parseFloat(currentBalance) / 0.05);
-        pill.textContent  = `${perspCount} left`;
-        pill.className    = 'chat-usage-pill' + (perspCount === 0 ? ' empty' : perspCount <= 5 ? ' warn' : '');
-      } else {
-        pill.textContent = '';
-        pill.className   = 'chat-usage-pill';
-      }
-    }
-    // If balance is zero, show the top-up banner; otherwise ensure it's hidden
-    if (currentBalance !== null && parseFloat(currentBalance) < 0.05) {
-      if (banner) {
-        banner.classList.add('visible');
-        const titleEl      = document.getElementById('chat-rate-banner-title');
-        const bannerSub    = document.getElementById('chat-rate-banner-sub');
-        const primaryBtn   = document.getElementById('chat-rate-cta-primary');
-        const secondaryBtn = document.getElementById('chat-rate-cta-secondary');
-        if (titleEl)      titleEl.textContent    = 'Your balance is empty';
-        if (bannerSub)    bannerSub.textContent   = 'Top up to keep the conversation going.';
-        if (primaryBtn)   { primaryBtn.textContent = 'Top up'; primaryBtn.onclick = () => showView('wallet'); }
-        if (secondaryBtn) secondaryBtn.style.display = 'none';
-      }
-      if (sendBtn)  sendBtn.disabled  = true;
-      if (textarea) textarea.disabled = true;
-    } else {
-      if (banner)   banner.classList.remove('visible');
-      if (sendBtn && !_chatStreaming)  sendBtn.disabled  = false;
-      if (textarea) textarea.disabled = false;
-    }
+    // Never show wallet banner — plan gate at session creation handles limits
+    if (banner) banner.classList.remove('visible');
+    if (sendBtn && !_chatStreaming) sendBtn.disabled = false;
+    if (textarea) textarea.disabled = false;
     clearInterval(window._rateCountdownInterval);
     return;
   }
@@ -14337,7 +14284,7 @@ function _usageRefreshUI() {
       if (bannerSub) bannerSub.textContent = 'Create a free account to unlock more, or purchase tokens to continue now.' +
                                              (reset ? ` Resets in ${_usageCountdown(reset)}.` : '');
       if (primaryBtn)   { primaryBtn.textContent = 'Create free account'; primaryBtn.onclick = () => showView('login'); }
-      if (secondaryBtn) { secondaryBtn.style.display = ''; secondaryBtn.textContent = 'Buy tokens'; secondaryBtn.onclick = () => showView('wallet'); }
+      if (secondaryBtn) { secondaryBtn.style.display = 'none'; }
     }
     if (sendBtn)  sendBtn.disabled  = true;
     if (textarea) textarea.disabled = true;
@@ -15375,7 +15322,7 @@ function applyAuthState(user) {
     const _plan = getUserPlan();
     const _planDef = DIVINE_PLANS[_plan];
     if (grSub) {
-      if (_plan === 'trial') {
+      if (_plan === 'free') {
         grSub.innerHTML = 'Calibration Trial &nbsp;·&nbsp; <button onclick="showUpgradeModal(\'manual\',{})" style="background:none;border:none;font-size:12px;color:var(--accent);cursor:pointer;font-family:\'Inter\',sans-serif;font-weight:600;padding:0">Subscribe to unlock</button>';
       } else {
         grSub.textContent = `${_planDef.name} · What are we building today?`;
@@ -15426,7 +15373,7 @@ function applyAuthState(user) {
     // Pass the pre-login guest ID so any locally-created sessions can be migrated.
     _syncSessionsFromServer(user.id, _prevGuestId);
     // Unlock My Stuff nav items + project button
-    ['nav-projects','nav-wallet','nav-ir'].forEach(id => {
+    ['nav-projects','nav-ir'].forEach(id => {
       document.getElementById(id)?.classList.remove('nav-auth-gate');
     });
     // Unlock mobile bottom nav Projects button
@@ -15441,7 +15388,7 @@ function applyAuthState(user) {
     document.getElementById('thinker-nav-section').style.display  = 'none';
     document.getElementById('mob-nav-thinker').style.display      = 'none';
     // Re-lock My Stuff nav items + dim project button
-    ['nav-projects','nav-wallet','nav-ir'].forEach(id => {
+    ['nav-projects','nav-ir'].forEach(id => {
       document.getElementById(id)?.classList.add('nav-auth-gate');
     });
     // Re-lock mobile bottom nav Projects button
@@ -15936,7 +15883,7 @@ function ccRenderNextStep(prof, fw, doms, sessions) {
     ctaAction = `switchThinkerTab('train', document.querySelectorAll('.thinker-tab')[2])`;
 
   } else {
-    const earned = (sessionCount * 0.05).toFixed(2);
+    const earned = (sessionCount * 0).toFixed(2); // archived — Thinker revenue share wired in Sprint 5
     icon      = `<svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"><rect x="2" y="5" width="16" height="12" rx="2"/><path d="M2 9h16"/><circle cx="14" cy="13" r="1.2" fill="currentColor" stroke="none"/></svg>`;
     title     = `${sessionCount} perspective${sessionCount !== 1 ? 's' : ''} served · $${earned} earned`;
     sub       = 'View your earnings breakdown, domain demand, and performance by period.';
@@ -16091,7 +16038,7 @@ async function initThinkerHub() {
 
   // Stats — seeded while API loads
   const seedSessions = loadRecents().length || 0;
-  const seedEarnings = (seedSessions * 0.05).toFixed(2);
+  const seedEarnings = (0).toFixed(2); // archived — Sprint 5
   set('cc-stat-sessions', seedSessions || '—');
   set('cc-stat-earnings', seedSessions ? `$${seedEarnings}` : '$—');
   set('cc-stat-rating',   '—');
@@ -16323,7 +16270,7 @@ function ccActivate(name, el) {
    CINEMATIC ONBOARDING FLOW
 ════════════════════════════════════════ */
 let obCurrentStep  = 1;
-let obSelectedTier = '0.05';
+let obSelectedTier = 'operator'; // updated Sprint 1 — tier-based not credit-based
 let obSelectedDomains = [];
 let obSigDrawing   = false;
 let obSigHasStrokes = false;
@@ -17605,7 +17552,7 @@ async function renderReports(period) {
 
   // Derive all stats from transaction rows (amount = 70% cut, gross = amount / 0.70)
   const totalPayout  = txns.reduce((s, t) => s + parseFloat(t.amount || 0), 0);
-  const totalGross   = txns.length * 0.05; // $0.05 per perspective sold
+  const totalGross   = 0; // archived — Sprint 4 Stripe replaces this
   const uniqueSellers = new Set(txns.map(t => t.thinker_id || tkId)).size; // placeholder
 
   document.getElementById('rpt-sessions').textContent = txns.length || '0';
@@ -19465,20 +19412,20 @@ function adminRenderLog() {
 
     <!-- One-time panel -->
     <div class="topup-panel" id="topup-panel-onetime">
-      <div class="topup-panel-sub">Each perspective is $0.05. Purchase once, use anytime — no subscription required.</div>
+      <div class="topup-panel-sub">Subscription billing via Stripe — available in Sprint 4.</div>
       <div class="topup-packages">
         <div class="topup-pkg" data-credits="100" data-price="5.00" data-mode="payment" onclick="selectPkg(this)">
           <div class="topup-pkg-credits">100</div>
           <div class="topup-pkg-label">perspectives</div>
           <div class="topup-pkg-price">$5</div>
-          <div class="topup-pkg-unit">$0.05 each</div>
+          <div class="topup-pkg-unit">—</div>
         </div>
         <div class="topup-pkg selected" data-credits="200" data-price="10.00" data-mode="payment" onclick="selectPkg(this)">
           <div class="topup-pkg-badge">Popular</div>
           <div class="topup-pkg-credits">200</div>
           <div class="topup-pkg-label">perspectives</div>
           <div class="topup-pkg-price">$10</div>
-          <div class="topup-pkg-unit">$0.05 each</div>
+          <div class="topup-pkg-unit">—</div>
         </div>
         <div class="topup-pkg" data-credits="600" data-price="25.00" data-mode="payment" onclick="selectPkg(this)">
           <div class="topup-pkg-badge best">Best value</div>
@@ -19623,25 +19570,25 @@ function adminRenderLog() {
 
 <!-- Deliberation state is rendered inline by showDeliberation() -->
 
-<!-- ══ Upgrade Modal — Sovereign Pricing 2026 ══════════════════════════ -->
+<!-- ══ Upgrade Modal — PRD v8.1 Pricing ═════════════════════════════════ -->
 <div class="upm-overlay modal-overlay" id="upgrade-modal" onclick="if(event.target===this)closeUpgradeModal()">
   <div class="upm-sheet" role="dialog" aria-modal="true" aria-labelledby="upm-headline" style="width:min(980px,calc(100vw - 32px))">
     <button class="upm-close" onclick="closeUpgradeModal()" aria-label="Close">
       <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="1" y1="1" x2="11" y2="11"/><line x1="11" y1="1" x2="1" y2="11"/></svg>
     </button>
     <div class="upm-header">
-      <div class="upm-eyebrow">Divine Intelligence — Sovereign Pricing</div>
+      <div class="upm-eyebrow">Divine Intelligence — Plans</div>
       <div class="upm-headline" id="upm-headline">Your team. Your system. One subscription.</div>
       <div class="upm-trigger-msg" id="upgrade-trigger-msg">The owner/promoter pays. Advisors, staff and investors access Divine as included nodes — no per-seat charges.</div>
     </div>
     <div class="upm-plans" style="grid-template-columns:repeat(4,1fr)">
 
       <!-- Calibration Trial -->
-      <div class="upm-card" id="upm-card-trial">
-        <div class="upm-recommended-chip">Trial</div>
-        <div class="upm-plan-name">Calibration Trial</div>
+      <div class="upm-card" id="upm-card-free">
+        <div class="upm-recommended-chip">Free</div>
+        <div class="upm-plan-name">Free</div>
         <div class="upm-plan-tagline">Start your strategic thinking journey — no commitment required.</div>
-        <div class="upm-plan-price">$0 <span>/ trial</span></div>
+        <div class="upm-plan-price">$0 <span>/ forever</span></div>
         <div class="upm-divider"></div>
         <ul class="upm-feature-list">
           <li class="upm-feature-item">
@@ -19665,13 +19612,13 @@ function adminRenderLog() {
             No integrations
           </li>
         </ul>
-        <button class="upm-cta upm-cta-ghost" onclick="closeUpgradeModal()">Stay on Trial</button>
+        <button class="upm-cta upm-cta-ghost" onclick="closeUpgradeModal()">Stay on Free</button>
       </div>
 
       <!-- Calibration $99 -->
-      <div class="upm-card" id="upm-card-calibration">
+      <div class="upm-card" id="upm-card-operator">
         <div class="upm-recommended-chip">Recommended</div>
-        <div class="upm-plan-name">Calibration</div>
+        <div class="upm-plan-name">Operator</div>
         <div class="upm-plan-tagline">Skin in the game. Full Ledger Sync + your entire inner circle.</div>
         <div class="upm-plan-price">$99 <span>/ mo</span></div>
         <div class="upm-divider"></div>
@@ -19705,15 +19652,15 @@ function adminRenderLog() {
             No Investor Portal
           </li>
         </ul>
-        <button class="upm-cta upm-cta-primary" onclick="upgradeSelectPlan('calibration')">Subscribe — $99/mo</button>
+        <button class="upm-cta upm-cta-primary" onclick="upgradeSelectPlan('operator')">Subscribe — $99/mo</button>
       </div>
 
-      <!-- Sovereign $299 -->
-      <div class="upm-card" id="upm-card-sovereign">
+      <!-- Principal $499 -->
+      <div class="upm-card" id="upm-card-principal">
         <div class="upm-recommended-chip">Most Popular</div>
-        <div class="upm-plan-name">Sovereign</div>
+        <div class="upm-plan-name">Principal</div>
         <div class="upm-plan-tagline">Automates Investor Relations. Pays for itself in 4 hours saved.</div>
-        <div class="upm-plan-price">$299 <span>/ mo</span></div>
+        <div class="upm-plan-price">$499 <span>/ mo</span></div>
         <div class="upm-divider"></div>
         <ul class="upm-feature-list">
           <li class="upm-feature-item">
@@ -19745,20 +19692,20 @@ function adminRenderLog() {
             Decision Log + Live financials
           </li>
         </ul>
-        <button class="upm-cta upm-cta-primary" onclick="upgradeSelectPlan('sovereign')">Subscribe — $299/mo</button>
+        <button class="upm-cta upm-cta-primary" onclick="upgradeSelectPlan('principal')">Subscribe — $499/mo</button>
       </div>
 
-      <!-- Institutional $999 -->
-      <div class="upm-card" id="upm-card-institutional">
+      <!-- Enterprise — Contact Sales -->
+      <div class="upm-card" id="upm-card-enterprise">
         <div class="upm-recommended-chip">Enterprise</div>
-        <div class="upm-plan-name">Institutional</div>
+        <div class="upm-plan-name">Enterprise</div>
         <div class="upm-plan-tagline">The Command Centre for funds managing 20+ companies.</div>
-        <div class="upm-plan-price">$999 <span>/ mo + usage</span></div>
+        <div class="upm-plan-price">Contact <span>Sales</span></div>
         <div class="upm-divider"></div>
         <ul class="upm-feature-list">
           <li class="upm-feature-item">
             <svg class="plan-feature-check" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="2,8 6,12 14,4"/></svg>
-            Everything in Sovereign
+            Everything in Principal
           </li>
           <li class="upm-feature-item">
             <svg class="plan-feature-check" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="2,8 6,12 14,4"/></svg>
@@ -19785,7 +19732,7 @@ function adminRenderLog() {
             Wisdom Royalty payouts
           </li>
         </ul>
-        <button class="upm-cta upm-cta-secondary" onclick="upgradeSelectPlan('institutional')">Contact us</button>
+        <button class="upm-cta upm-cta-secondary" onclick="upgradeSelectPlan('enterprise')">Contact us</button>
       </div>
     </div>
     <div class="upm-footer">
