@@ -1936,7 +1936,7 @@
     @media (max-width:700px) { .dc-wide-inner { padding:20px 14px 36px; } }
 
     /* 2-column layout */
-    .dc-layout { display:grid; grid-template-columns:1fr 308px; gap:24px; align-items:start; }
+    .dc-layout { display:grid; grid-template-columns:1fr 246px; gap:24px; align-items:start; }
     @media (max-width:900px) { .dc-layout { grid-template-columns:1fr; } }
 
     /* Header */
@@ -5149,6 +5149,7 @@
     .lp-intake-counter { font-size:11px; color:var(--text-3); white-space:nowrap; flex-shrink:0; }
     .lp-intake-footer { display:flex; justify-content:flex-end; margin-top:18px; padding-top:14px; border-top:1px solid var(--border); }
     .lp-intake-submit { background:#D9D9D6; color:#fff; border:none; border-radius:var(--r-pill); padding:9px 22px; font-size:13px; font-weight:600; cursor:not-allowed; font-family:'Inter',sans-serif; }
+    .lp-intake-validation { font-size:11.5px; color:#C0392B; margin-top:5px; display:none; } /* Sprint 2: show via lpIntakeValidate() */
     /* ── Your Thinkers Panel — Sprint 1.5 ──────────────────────────── */
     .dc-thinkers-panel { padding:20px 18px 24px; }
     .dc-thinkers-hdr { font-size:13px; font-weight:700; color:var(--text-0); margin-bottom:12px; letter-spacing:.01em; }
@@ -5160,7 +5161,7 @@
     .dl-placeholder-hdr { font-size:22px; font-weight:700; color:var(--text-0); margin-bottom:14px; }
     .dl-placeholder-body { font-size:14px; color:var(--text-2); line-height:1.7; }
     /* ── Sprint 1.5: hide legacy launchpad project-cards section ────── */
-    #dc-projects-head, #dc-projects-footer { display:none !important; }
+    #dc-projects-head, #dc-projects-grid, #dc-projects-footer { display:none !important; }
 
 </style>
 
@@ -5423,6 +5424,8 @@
                 <div class="lp-intake-label">The decision you're facing</div>
                 <textarea class="lp-intake-textarea" id="lp-field-decision" rows="3"
                   oninput="lpIntakeUpdate('decision',this)"></textarea>
+                <!-- Sprint 2: lpIntakeValidate() shows this when field < 40 chars on submit attempt -->
+                <div class="lp-intake-validation" id="lp-valid-decision">Add at least 40 characters to continue.</div>
                 <div class="lp-intake-field-footer">
                   <div class="lp-intake-helper">Be specific. 'Should I raise a Series B' is too vague. 'Should I raise a Series B now or wait six months for stronger metrics' is the level we work at.</div>
                   <div class="lp-intake-counter" id="lp-counter-decision" style="display:none">0 / 500</div>
@@ -5432,6 +5435,7 @@
                 <div class="lp-intake-label">Where you're currently leaning</div>
                 <textarea class="lp-intake-textarea" id="lp-field-leaning" rows="2"
                   oninput="lpIntakeUpdate('leaning',this)"></textarea>
+                <div class="lp-intake-validation" id="lp-valid-leaning">Add at least 40 characters to continue.</div>
                 <div class="lp-intake-field-footer">
                   <div class="lp-intake-helper">What you'd do if forced to decide today. Including a leaning is more useful than asking us cold — it lets the framework engage with your reasoning.</div>
                   <div class="lp-intake-counter" id="lp-counter-leaning" style="display:none">0 / 500</div>
@@ -5441,6 +5445,7 @@
                 <div class="lp-intake-label">What success looks like</div>
                 <textarea class="lp-intake-textarea" id="lp-field-success" rows="2"
                   oninput="lpIntakeUpdate('success',this)"></textarea>
+                <div class="lp-intake-validation" id="lp-valid-success">Add at least 40 characters to continue.</div>
                 <div class="lp-intake-field-footer">
                   <div class="lp-intake-helper">The outcome that would tell you the decision was right, six months from now. Not metrics. The actual condition that would prove you chose well.</div>
                   <div class="lp-intake-counter" id="lp-counter-success" style="display:none">0 / 500</div>
