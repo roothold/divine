@@ -7903,7 +7903,7 @@ async function renderWallet() {
     const amt      = parseFloat(t.amount || 0);
     const amtStr   = (debit ? '−' : '+') + '$' + Math.abs(amt).toFixed(2);
     // Use the label stored at transaction time; fall back to type-based description
-    const desc     = t.label || (debit ? 'Perspective Acquisition' : 'Capital Infusion');
+    const desc     = t.label || (debit ? 'Perspective' : 'Credit');
     const bal      = t.balance_after != null ? '$' + parseFloat(t.balance_after).toFixed(2) + ' remaining' : '';
     const dateStr  = fmtDate(t.created_at);
     const dateParts = dateStr.split('\n');
@@ -16715,84 +16715,6 @@ function adminRenderLog() {
   window._checkAdminAccess = _checkAdminAccess;
 })();
 </script>
-
-    <!-- Mode tabs -->
-    <div class="topup-tabs">
-      <button class="topup-tab active" id="topup-tab-onetime" onclick="switchTopupTab('onetime')">One-time top-up</button>
-      <button class="topup-tab" id="topup-tab-monthly" onclick="switchTopupTab('monthly')">Monthly plan</button>
-    </div>
-
-    <!-- One-time panel -->
-    <div class="topup-panel" id="topup-panel-onetime">
-      <div class="topup-panel-sub">Subscription billing via Stripe — available in Sprint 4.</div>
-      <div class="topup-packages">
-        <div class="topup-pkg" data-credits="100" data-price="5.00" data-mode="payment" onclick="selectPkg(this)">
-          <div class="topup-pkg-credits">100</div>
-          <div class="topup-pkg-label">perspectives</div>
-          <div class="topup-pkg-price">$5</div>
-          <div class="topup-pkg-unit">—</div>
-        </div>
-        <div class="topup-pkg selected" data-credits="200" data-price="10.00" data-mode="payment" onclick="selectPkg(this)">
-          <div class="topup-pkg-badge">Popular</div>
-          <div class="topup-pkg-credits">200</div>
-          <div class="topup-pkg-label">perspectives</div>
-          <div class="topup-pkg-price">$10</div>
-          <div class="topup-pkg-unit">—</div>
-        </div>
-        <div class="topup-pkg" data-credits="600" data-price="25.00" data-mode="payment" onclick="selectPkg(this)">
-          <div class="topup-pkg-badge best">Best value</div>
-          <div class="topup-pkg-credits">600</div>
-          <div class="topup-pkg-label">perspectives</div>
-          <div class="topup-pkg-price">$25</div>
-          <div class="topup-pkg-unit">$0.042 each</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Monthly panel -->
-    <div class="topup-panel" id="topup-panel-monthly" style="display:none">
-      <div class="topup-monthly-card">
-        <div class="topup-monthly-badge">Best value</div>
-        <div class="topup-monthly-price-row">
-          <div class="topup-monthly-price">$20</div>
-          <div class="topup-monthly-per">/ month</div>
-        </div>
-        <div class="topup-monthly-desc">Unlimited perspectives. Cancel anytime from your account settings.</div>
-        <ul class="topup-monthly-features">
-          <li><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M2 7l3.5 3.5 6.5-7"/></svg>Unlimited AI perspectives per month</li>
-          <li><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M2 7l3.5 3.5 6.5-7"/></svg>Access to all Thinkers, including future additions</li>
-          <li><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M2 7l3.5 3.5 6.5-7"/></svg>Full operator framework suite</li>
-          <li><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M2 7l3.5 3.5 6.5-7"/></svg>Priority session quality &amp; response speed</li>
-          <li><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M2 7l3.5 3.5 6.5-7"/></svg>Cancel anytime — no lock-in</li>
-        </ul>
-      </div>
-    </div>
-
-    <!-- Footer — shared -->
-    <div class="topup-footer">
-      <div class="topup-trust">
-        <span class="topup-trust-item">
-          <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"><rect x="2" y="5.5" width="8" height="5" rx="1"/><path d="M4 5.5V4a2 2 0 014 0v1.5"/></svg>
-          Secured by Stripe
-        </span>
-        <span class="topup-trust-item">
-          <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"><path d="M6 1l1.2 3.1L10.5 4l-2.5 2.5.8 3.5L6 8.5 3.2 10l.8-3.5L1.5 4l3.3-.9z"/></svg>
-          No hidden fees
-        </span>
-        <span class="topup-trust-item">
-          <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"><circle cx="6" cy="6" r="4.5"/><path d="M4 6l1.5 1.5 2.5-3"/></svg>
-          Cancel anytime
-        </span>
-      </div>
-
-      <div class="topup-notice" id="topup-notice"></div>
-
-      <button class="topup-cta" id="topup-cta" onclick="handleTopup()">
-        Get 200 Perspectives · $10
-      </button>
-    </div>
-  </div>
-</div>
 
 <!-- Tier Limit Modal (Sprint 4: CTA replaced by Stripe Checkout) -->
 <div class="modal-overlay" id="tier-limit-overlay" onclick="if(event.target===this)closeTierLimit()" style="display:none">
