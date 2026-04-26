@@ -15347,7 +15347,7 @@ function applyAuthState(user) {
     // Dashboard greeting card
     const grName = document.getElementById('dc-greeting-name');
     const grSub  = document.getElementById('dc-greeting-sub');
-    if (grName) grName.textContent = `Hi ${firstName}.`;
+    if (grName) grName.textContent = `Hi ${firstName}`;
     // Show plan tier context in dashboard subtitle
     const _plan = getUserPlan();
     const _planDef = DIVINE_PLANS[_plan];
