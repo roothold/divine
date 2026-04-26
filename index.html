@@ -14002,7 +14002,8 @@ async function goToMatch() {
         <div class="match-reasoning">${d.reasoning}</div>
       </div>`;
     document.getElementById('match-footer').style.display = 'flex';
-  } catch {
+  } catch(e) {
+    if (e.message === 'INSUFFICIENT_FUNDS') { closePerspectiveFlow(); return; }
     hideDeliberation();
     document.getElementById('match-content').innerHTML =
       `<p style="color:var(--text-2);font-size:14px"><svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="1.4" style="vertical-align:-2px;margin-right:4px"><path d="M6.5 1.5L1 11.5h11z"/><line x1="6.5" y1="5.5" x2="6.5" y2="8.5"/><circle cx="6.5" cy="9.8" r="0.6" fill="currentColor" stroke="none"/></svg>Could not connect to AI — please try again shortly</p>`;
@@ -14042,7 +14043,8 @@ async function goToReframe() {
           </div>`).join('')}</div>`;
     } else throw new Error('parse');
     document.getElementById('reframe-footer').style.display = 'flex';
-  } catch {
+  } catch(e) {
+    if (e.message === 'INSUFFICIENT_FUNDS') { closePerspectiveFlow(); return; }
     hideDeliberation();
     document.getElementById('reframe-content').innerHTML =
       `<p style="color:var(--text-2);font-size:14px"><svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="1.4" style="vertical-align:-2px;margin-right:4px"><path d="M6.5 1.5L1 11.5h11z"/><line x1="6.5" y1="5.5" x2="6.5" y2="8.5"/><circle cx="6.5" cy="9.8" r="0.6" fill="currentColor" stroke="none"/></svg>Could not connect to AI — please try again shortly</p>`;
@@ -14640,6 +14642,14 @@ async function sendChatMsg() {
       msgs.scrollTop = msgs.scrollHeight;
     });
   } catch (err) {
+    if (err.message === 'INSUFFICIENT_FUNDS') {
+      // Tier-limit modal already opened by callPerspective — remove the empty AI bubble silently
+      aiEl.remove();
+      bubble.classList.remove('chat-cursor');
+      _chatStreaming = false;
+      document.getElementById('chat-send-btn').disabled = false;
+      return;
+    }
     const unavailMsg = err.message?.startsWith('THINKER_UNAVAILABLE:')
       ? err.message.replace('THINKER_UNAVAILABLE:', '') : null;
     bubble.textContent = err.message === 'NO_KEY'
