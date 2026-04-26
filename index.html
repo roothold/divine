@@ -2684,9 +2684,10 @@
     /* Session header */
     .is-session-eyebrow { font-size:10px; font-weight:700; letter-spacing:.12em; text-transform:uppercase; color:var(--accent); margin-bottom:8px; }
     .is-session-title { font-family:'Cormorant Garamond',serif; font-size:clamp(22px,3.5vw,32px); font-weight:600; color:var(--text-0); line-height:1.2; margin-bottom:12px; }
-    .is-thinker-row { display:flex; align-items:center; gap:9px; margin-bottom:28px; }
+    .is-thinker-row { display:flex; align-items:center; gap:9px; margin-bottom:12px; }
     .is-thinker-badge { width:26px; height:26px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:9px; font-weight:700; color:#fff; flex-shrink:0; }
     .is-thinker-name { font-size:13px; color:var(--text-2); }
+    .is-baseline-note { font-size:11.5px; color:var(--text-3); line-height:1.5; margin-bottom:20px; padding:8px 12px; border-radius:6px; background:var(--surface-2); border:1px solid var(--border); }
 
     /* Vertical stepper / Divine Ledger */
     .is-ledger { position:relative; }
@@ -4048,6 +4049,10 @@
     /* Stage 4 – Revelation */
     .pf-revelation-scroll { width:100%; max-width:640px; overflow-y:auto; max-height:calc(100vh - 140px); padding:4px 2px 40px; scrollbar-width:thin; }
 
+    /* Baseline reasoning label */
+    .pf-baseline-label { display:flex; align-items:flex-start; gap:9px; padding:10px 14px; border-radius:8px; background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.10); margin-bottom:18px; font-size:12px; line-height:1.5; color:rgba(255,255,255,.60); }
+    .pf-baseline-label-icon { flex-shrink:0; margin-top:1px; opacity:.55; }
+
     /* Thinker identity header */
     .pf-revel-thinker { display:flex; align-items:center; gap:11px; margin-bottom:18px; }
     .pf-revel-thinker-avatar { width:38px; height:38px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:700; color:#fff; flex-shrink:0; }
@@ -4085,6 +4090,45 @@
     .pf-revel-actions { display:flex; gap:10px; flex-wrap:wrap; padding-top:4px; }
     .pf-revel-save { background:#BF452A; color:#fff; border:none; border-radius:100px; padding:11px 22px; font-size:13px; font-weight:600; cursor:pointer; font-family:'Inter',sans-serif; transition:opacity .15s; }
     .pf-revel-save:hover { opacity:.86; }
+
+    /* ── Sprint 2: 4-section answer reveal ───────────────────────── */
+    .pf-s2-recommendation { font-family:'Cormorant Garamond',serif; font-size:clamp(22px,3.8vw,30px); font-weight:600; color:#BF452A; line-height:1.3; margin-bottom:26px; }
+    .pf-s2-diagnosis { margin-bottom:18px; }
+    .pf-s2-section-label { font-size:10px; font-weight:700; letter-spacing:.12em; text-transform:uppercase; color:rgba(255,255,255,.45); margin-bottom:8px; }
+    .pf-s2-diagnosis-body { font-size:14px; color:rgba(255,255,255,.75); line-height:1.65; }
+    .pf-s2-framework { background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.12); border-radius:12px; padding:18px 20px; margin-bottom:18px; }
+    .pf-s2-framework-thinker { display:flex; align-items:center; gap:9px; margin-bottom:10px; }
+    .pf-s2-framework-avatar { width:28px; height:28px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:9px; font-weight:700; color:#fff; flex-shrink:0; }
+    .pf-s2-framework-name { font-size:12px; font-weight:600; color:#fff; }
+    .pf-s2-framework-body { font-size:13px; color:rgba(255,255,255,.75); line-height:1.6; }
+    .pf-s2-conditions { margin-bottom:22px; }
+    .pf-s2-conditions-list { list-style:none; padding:0; margin:0; }
+    .pf-s2-conditions-list li { font-size:13px; color:rgba(255,255,255,.65); line-height:1.55; padding:6px 0; border-bottom:1px solid rgba(255,255,255,.07); }
+    .pf-s2-conditions-list li:last-child { border-bottom:none; }
+    .pf-s2-conditions-list li::before { content:'→ '; color:rgba(255,255,255,.3); }
+    @media (max-width:500px) { .pf-s2-conditions { display:none; } .pf-s2-conditions.pf-expanded { display:block; } }
+
+    /* ── Sprint 2: Loading phase lines ──────────────────────────── */
+    .pf-phase-line { font-size:14px; font-weight:500; color:rgba(255,255,255,.7); letter-spacing:.01em; text-align:center; transition:opacity .5s ease; }
+    .pf-phase-line.pf-phase-fading { opacity:0; }
+
+    /* ── Sprint 2: Thinker match credential ─────────────────────── */
+    .pf-match-credential { font-size:13px; color:rgba(255,255,255,.6); line-height:1.5; margin-top:6px; }
+    .pf-match-confidence { font-size:11.5px; color:rgba(255,255,255,.4); margin-top:4px; }
+
+    /* ── Sprint 2: Founder's Note ────────────────────────────────── */
+    .pf-founder-note { margin-top:18px; border-radius:12px; border:1px solid rgba(255,255,255,.1); overflow:hidden; opacity:0; transition:opacity .4s ease; }
+    .pf-founder-note.pf-fn-visible { opacity:1; }
+    .pf-fn-toggle { display:flex; align-items:center; justify-content:space-between; padding:14px 18px; cursor:pointer; background:rgba(255,255,255,.04); user-select:none; }
+    .pf-fn-toggle-label { font-size:12px; font-weight:600; color:rgba(255,255,255,.55); letter-spacing:.01em; }
+    .pf-fn-toggle-icon { font-size:14px; color:rgba(255,255,255,.3); transition:transform .25s ease; }
+    .pf-founder-note.pf-fn-open .pf-fn-toggle-icon { transform:rotate(180deg); }
+    .pf-fn-body { display:none; padding:16px 18px 18px; }
+    .pf-founder-note.pf-fn-open .pf-fn-body { display:block; }
+    .pf-fn-disclosure { font-size:10.5px; color:rgba(255,255,255,.38); line-height:1.6; margin-bottom:12px; padding-bottom:10px; border-bottom:1px solid rgba(255,255,255,.08); }
+    .pf-fn-content { font-size:13px; color:rgba(255,255,255,.65); line-height:1.65; }
+    .pf-fn-dismiss { display:inline-block; margin-top:12px; font-size:11px; color:rgba(255,255,255,.3); cursor:pointer; text-decoration:underline; }
+    .pf-fn-dismiss:hover { color:rgba(255,255,255,.5); }
     .pf-revel-new { background:transparent; color:#2C2820; border:1px solid rgba(0,0,0,.15); border-radius:100px; padding:11px 20px; font-size:13px; font-weight:500; cursor:pointer; font-family:'Inter',sans-serif; transition:background .15s; }
     .pf-revel-new:hover { background:rgba(0,0,0,.04); }
     .pf-revel-view { background:transparent; color:#BF452A; border:1px solid rgba(191,69,42,.25); border-radius:100px; padding:11px 20px; font-size:13px; font-weight:500; cursor:pointer; font-family:'Inter',sans-serif; transition:background .15s; }
@@ -5149,7 +5193,9 @@
     .lp-intake-counter { font-size:11px; color:var(--text-3); white-space:nowrap; flex-shrink:0; }
     .lp-intake-footer { display:flex; justify-content:flex-end; margin-top:18px; padding-top:14px; border-top:1px solid var(--border); }
     .lp-intake-submit { background:#D9D9D6; color:#fff; border:none; border-radius:var(--r-pill); padding:9px 22px; font-size:13px; font-weight:600; cursor:not-allowed; font-family:'Inter',sans-serif; }
-    .lp-intake-validation { font-size:11.5px; color:#C0392B; margin-top:5px; display:none; } /* Sprint 2: show via lpIntakeValidate() */
+    .lp-intake-validation { font-size:11.5px; color:#C0392B; margin-top:5px; display:none; }
+    .lp-intake-assist { font-size:11.5px; color:var(--accent); line-height:1.55; margin-top:8px; padding:8px 12px; border-radius:6px; background:rgba(191,69,42,.06); border-left:2px solid rgba(191,69,42,.3); display:none; }
+    .lp-intake-privacy-note { font-size:11.5px; color:var(--text-3); line-height:1.4; display:block; }
     /* ── Your Thinkers Panel — Sprint 1.5 ──────────────────────────── */
     .dc-thinkers-panel { padding:20px 18px 24px; }
     .dc-thinkers-hdr { font-size:13px; font-weight:700; color:var(--text-0); margin-bottom:12px; letter-spacing:.01em; }
@@ -5419,13 +5465,16 @@
             <div class="lp-intake-card" id="lp-intake-card">
               <div class="lp-intake-card-header">
                 <span class="lp-intake-tier-note" id="lp-intake-tier-note" style="display:none"></span>
+                <span class="lp-intake-privacy-note" id="lp-intake-privacy-note" style="display:none">Your session is private by default. No one in your organisation can see private sessions.</span>
               </div>
               <div class="lp-intake-field">
                 <div class="lp-intake-label">The decision you're facing</div>
                 <textarea class="lp-intake-textarea" id="lp-field-decision" rows="3"
-                  oninput="lpIntakeUpdate('decision',this)"></textarea>
-                <!-- Sprint 2: lpIntakeValidate() shows this when field < 40 chars on submit attempt -->
+                  oninput="lpIntakeUpdate('decision',this)"
+                  onfocus="lpIntakeFocus('decision')"
+                  onblur="lpIntakeBlur('decision',this)"></textarea>
                 <div class="lp-intake-validation" id="lp-valid-decision">Add at least 40 characters to continue.</div>
+                <div class="lp-intake-assist" id="lp-assist-decision" style="display:none">Take the version of this you'd describe to a senior operator over coffee — concrete situation, specific choice, time horizon. Not the elevator-pitch version.</div>
                 <div class="lp-intake-field-footer">
                   <div class="lp-intake-helper">Be specific. 'Should I raise a Series B' is too vague. 'Should I raise a Series B now or wait six months for stronger metrics' is the level we work at.</div>
                   <div class="lp-intake-counter" id="lp-counter-decision" style="display:none">0 / 500</div>
@@ -5434,8 +5483,11 @@
               <div class="lp-intake-field">
                 <div class="lp-intake-label">Where you're currently leaning</div>
                 <textarea class="lp-intake-textarea" id="lp-field-leaning" rows="2"
-                  oninput="lpIntakeUpdate('leaning',this)"></textarea>
+                  oninput="lpIntakeUpdate('leaning',this)"
+                  onfocus="lpIntakeFocus('leaning')"
+                  onblur="lpIntakeBlur('leaning',this)"></textarea>
                 <div class="lp-intake-validation" id="lp-valid-leaning">Add at least 40 characters to continue.</div>
+                <div class="lp-intake-assist" id="lp-assist-leaning" style="display:none">If you had to commit by end of day, what would you choose? Even a tentative leaning gives the framework something to push against.</div>
                 <div class="lp-intake-field-footer">
                   <div class="lp-intake-helper">What you'd do if forced to decide today. Including a leaning is more useful than asking us cold — it lets the framework engage with your reasoning.</div>
                   <div class="lp-intake-counter" id="lp-counter-leaning" style="display:none">0 / 500</div>
@@ -5444,15 +5496,18 @@
               <div class="lp-intake-field" style="margin-bottom:0">
                 <div class="lp-intake-label">What success looks like</div>
                 <textarea class="lp-intake-textarea" id="lp-field-success" rows="2"
-                  oninput="lpIntakeUpdate('success',this)"></textarea>
+                  oninput="lpIntakeUpdate('success',this)"
+                  onfocus="lpIntakeFocus('success')"
+                  onblur="lpIntakeBlur('success',this)"></textarea>
                 <div class="lp-intake-validation" id="lp-valid-success">Add at least 40 characters to continue.</div>
+                <div class="lp-intake-assist" id="lp-assist-success" style="display:none">Imagine yourself six months out. What would you see, feel, or have evidence of, that would tell you this was the right call?</div>
                 <div class="lp-intake-field-footer">
                   <div class="lp-intake-helper">The outcome that would tell you the decision was right, six months from now. Not metrics. The actual condition that would prove you chose well.</div>
                   <div class="lp-intake-counter" id="lp-counter-success" style="display:none">0 / 500</div>
                 </div>
               </div>
               <div class="lp-intake-footer">
-                <button class="lp-intake-submit" id="lp-intake-submit" disabled>Run Perspective</button>
+                <button class="lp-intake-submit" id="lp-intake-submit" disabled onclick="lpSubmitIntake()">Run Perspective</button>
               </div>
             </div><!-- /lp-intake-card -->
             <div class="dc-input-group" style="display:none">
@@ -7829,73 +7884,62 @@ e.g. I always start by validating whether the problem is real before evaluating 
 </div>
 
 <!-- WELCOME MODAL (first-session guided moment) -->
+<!-- Step 0: Founder Voice "Why Divine exists" module (FV-01, FV-02, FV-06) -->
+<!-- Step 1: Platform overview with correct PRD v8.1 positioning -->
 <div id="di-welcome-overlay" style="display:none;position:fixed;inset:0;z-index:8000;background:rgba(15,14,12,0.55);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);align-items:center;justify-content:center;">
-  <div id="di-welcome-modal" style="background:#fff;border-radius:20px;padding:40px 36px 32px;width:min(480px,92vw);box-shadow:0 24px 72px rgba(0,0,0,0.2);display:flex;flex-direction:column;gap:0;position:relative;">
-    <div style="font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);margin-bottom:12px;">Divine Intelligence</div>
-    <h2 style="font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:600;color:var(--text-0);line-height:1.2;margin-bottom:10px;">The operating system for owners, promoters and managers who build on data.</h2>
-    <p style="font-size:14px;color:var(--text-2);line-height:1.65;margin-bottom:28px;">Divine automates your growth protocols, audits team performance against real benchmarks, and delivers live financial transparency directly to your investors — no decks, no delays.</p>
+  <div id="di-welcome-modal" style="background:#fff;border-radius:20px;padding:36px 34px 28px;width:min(500px,94vw);max-height:90vh;overflow-y:auto;box-shadow:0 24px 72px rgba(0,0,0,0.2);display:flex;flex-direction:column;gap:0;position:relative;">
+
     <!-- Step dots -->
-    <div style="display:none" id="di-welcome-dots">
+    <div style="display:flex;gap:5px;margin-bottom:22px;" id="di-welcome-dots">
       <div class="di-welcome-dot active" data-step="0"></div>
       <div class="di-welcome-dot" data-step="1"></div>
     </div>
-    <!-- Step 0: Overview -->
+
+    <!-- Step 0: Founder Voice module — "Why Divine exists" (FV-06) -->
     <div id="di-welcome-step-0">
-      <div style="display:flex;flex-direction:column;gap:12px;margin-bottom:28px;">
+      <!-- Disclosure block — required verbatim per PRD §21 FV-02 -->
+      <div style="font-size:10.5px;color:var(--text-3);line-height:1.6;padding:9px 12px;background:var(--surface-2);border-radius:7px;border:1px solid var(--border);margin-bottom:20px;">
+        Michael Akindele is the founder of Divine and a principal of Uncharted Ventures LLC, the entity that operates Divine. This reflection is provided as supplementary context. It is not a Thinker recommendation. Thinkers are independent, contractually engaged operators whose frameworks are routed through Divine's verification and quality systems. Founder Voice is not subject to those systems and does not earn revenue from your session.
+      </div>
+      <div style="font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);margin-bottom:10px;">Why Divine exists</div>
+      <p style="font-size:14px;color:var(--text-1);line-height:1.7;margin-bottom:14px;">The decisions that cost operators the most are rarely the ones that feel hard in the moment. They feel clear — a number in front of you, a term sheet on the table, a team member who needs an answer. What makes them expensive is that the framing was wrong before the options were even visible.</p>
+      <p style="font-size:14px;color:var(--text-1);line-height:1.7;margin-bottom:14px;">Most decision tools give you more information. Divine is built around a different conviction: that what changes outcomes is access to the reasoning patterns of operators who have navigated the same category of decision before — and encoded what they actually learned from it.</p>
+      <p style="font-size:14px;color:var(--text-1);line-height:1.7;margin-bottom:26px;">That is what Thinker frameworks are. Not generic expertise. Encoded operator reasoning, structured enough to be applied, verified enough to be trusted. The platform is built to make that available at the moment of decision — not after the fact.</p>
+      <button onclick="diWelcomeNext()" style="width:100%;background:var(--accent);color:#fff;border:none;border-radius:var(--r-pill);padding:13px 0;font-size:14px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;transition:opacity .15s;" onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">Continue →</button>
+      <button onclick="dismissWelcomeModal()" style="margin-top:10px;width:100%;background:transparent;color:var(--text-3);border:none;font-size:12.5px;cursor:pointer;font-family:'Inter',sans-serif;">Skip</button>
+    </div>
+
+    <!-- Step 1: Platform overview -->
+    <div id="di-welcome-step-1" style="display:none">
+      <div style="font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);margin-bottom:10px;">How it works</div>
+      <h2 style="font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:600;color:var(--text-0);line-height:1.25;margin-bottom:18px;">A judgment platform for operators making high-stakes decisions.</h2>
+      <div style="display:flex;flex-direction:column;gap:14px;margin-bottom:26px;">
         <div class="di-welcome-step">
           <div class="di-welcome-step-num">1</div>
           <div>
-            <div class="di-welcome-step-title">Automate growth protocols</div>
-            <div class="di-welcome-step-sub">Sync your QuickBooks financials, route decisions through your Thinkers, and deliver live transparency to your investors — from a single Terminal.</div>
+            <div class="di-welcome-step-title">Describe your decision</div>
+            <div class="di-welcome-step-sub">Three structured fields: what you're deciding, where you're leaning, what success looks like. Specific framing produces sharper output.</div>
           </div>
         </div>
         <div class="di-welcome-step">
           <div class="di-welcome-step-num">2</div>
           <div>
-            <div class="di-welcome-step-title">Audit team performance</div>
-            <div class="di-welcome-step-sub">Run your numbers against the five diligence triggers that investors actually use. Know where you stand before they ask.</div>
+            <div class="di-welcome-step-title">Select a Thinker framework</div>
+            <div class="di-welcome-step-sub">Verified operator frameworks encoded from operators who have navigated similar decisions. Your context is matched to the most relevant reasoning pattern.</div>
           </div>
         </div>
         <div class="di-welcome-step">
           <div class="di-welcome-step-num">3</div>
           <div>
-            <div class="di-welcome-step-title">Brief your investors in real time</div>
-            <div class="di-welcome-step-sub">Give your board direct access to your live financial ledger. No update requests, no manual reports.</div>
+            <div class="di-welcome-step-title">Receive a structured Perspective</div>
+            <div class="di-welcome-step-sub">Recommendation, diagnosis, framework applied, and the conditions that would change the answer — in that order, every time.</div>
           </div>
         </div>
       </div>
-      <button onclick="dismissWelcomeModal()" style="width:100%;background:var(--accent);color:#fff;border:none;border-radius:var(--r-pill);padding:13px 0;font-size:14px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;transition:background .15s;" onmouseover="this.style.background='var(--accent-mid)'" onmouseout="this.style.background='var(--accent)'">Enter your terminal →</button>
-      <button onclick="dismissWelcomeModal()" style="margin-top:10px;width:100%;background:transparent;color:var(--text-3);border:none;font-size:12.5px;cursor:pointer;font-family:'Inter',sans-serif;">Skip</button>
-    </div>
-    <!-- Step 1: Team Structure -->
-    <div id="di-welcome-step-1" style="display:none">
-      <div style="font-size:13.5px;font-weight:700;color:var(--text-0);margin-bottom:4px">Build your Thinkers.</div>
-      <p style="font-size:13px;color:var(--text-2);margin-bottom:16px;line-height:1.6">You're the owner/promoter. Invite your team, advisors, investors, and staff — each with direct access to exactly what they need.</p>
-      <div class="team-role-grid">
-        <div class="team-role-card">
-          <div class="team-role-icon"><svg width="26" height="26" viewBox="0 0 26 26" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="13" cy="13" r="3"/><circle cx="13" cy="3.5" r="2"/><circle cx="21" cy="8" r="2"/><circle cx="21" cy="18" r="2"/><circle cx="13" cy="22.5" r="2"/><circle cx="5" cy="18" r="2"/><circle cx="5" cy="8" r="2"/><line x1="13" y1="16" x2="13" y2="5.5"/><line x1="15.5" y1="11.2" x2="19" y2="9.8"/><line x1="15.5" y1="14.8" x2="19" y2="16.2"/><line x1="13" y1="16" x2="13" y2="20.5"/><line x1="10.5" y1="14.8" x2="7" y2="16.2"/><line x1="10.5" y1="11.2" x2="7" y2="9.8"/></svg></div>
-          <div class="team-role-name">Thinker Lab</div>
-          <div class="team-role-desc">Connect your Thinkers. Structured decision protocols, expert-verified reasoning, and live financial audits.</div>
-        </div>
-        <div class="team-role-card">
-          <div class="team-role-icon"><svg width="26" height="26" viewBox="0 0 26 26" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="13" cy="13" r="9"/><circle cx="13" cy="13" r="5"/><circle cx="13" cy="13" r="1.5" fill="currentColor" stroke="none"/></svg></div>
-          <div class="team-role-name">Advisory Board</div>
-          <div class="team-role-desc">Authorize domain experts across Marketing, Product, Sales. They access verified Perspectivess — not your finances.</div>
-        </div>
-        <div class="team-role-card">
-          <div class="team-role-icon"><svg width="26" height="26" viewBox="0 0 26 26" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="16" width="5" height="7" rx="0.5"/><rect x="10.5" y="10" width="5" height="13" rx="0.5"/><rect x="18" y="4" width="5" height="19" rx="0.5"/><line x1="2" y1="23" x2="24" y2="23"/></svg></div>
-          <div class="team-role-name">Investor Hub</div>
-          <div class="team-role-desc">Live data room. Real-time financial transparency for your investors — no decks, no delays.</div>
-        </div>
-        <div class="team-role-card">
-          <div class="team-role-icon"><svg width="26" height="26" viewBox="0 0 26 26" fill="currentColor"><path d="M15 2L6 14h7l-1.5 10L22 12h-7z"/></svg></div>
-          <div class="team-role-name">Staff Terminal</div>
-          <div class="team-role-desc">Delegate tasks with clear Success Protocols. Everyone knows exactly what "done" looks like.</div>
-        </div>
-      </div>
-      <button onclick="dismissWelcomeModal()" style="width:100%;background:var(--accent);color:#fff;border:none;border-radius:var(--r-pill);padding:13px 0;font-size:14px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;transition:background .15s;margin-top:4px;" onmouseover="this.style.background='var(--accent-mid)'" onmouseout="this.style.background='var(--accent)'">Open your terminal →</button>
+      <button onclick="dismissWelcomeModal()" style="width:100%;background:var(--accent);color:#fff;border:none;border-radius:var(--r-pill);padding:13px 0;font-size:14px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;transition:opacity .15s;" onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">Start your first Perspective →</button>
       <button onclick="diWelcomeBack()" style="margin-top:10px;width:100%;background:transparent;color:var(--text-3);border:none;font-size:12.5px;cursor:pointer;font-family:'Inter',sans-serif;">← Back</button>
     </div>
+
   </div>
 </div>
 
@@ -8204,6 +8248,11 @@ const THINKERS = [
     protocols:['Mission-Driven Brand','Authentic Positioning','Consumer Trust','Retail Strategy','Founder Narrative'],
     lens:"Builds brands around authentic personal conviction.", available:false, aiFrame:'' },
 ];
+
+/* ── Thinker activation helper ───────────────────────────────────────── */
+function _hasActivatedThinkers() {
+  return THINKERS.some(t => t.available && t.role !== 'Founder');
+}
 
 /* ── Verifiability Hierarchy — 12 institutional project colours ──────────
    Organised into 6 tiers × 2 hues each. The tier a team assigns to a
@@ -9326,23 +9375,32 @@ Rules: Never say "I think," "maybe," or "it might help." Be direct and confident
   let userPrompt   = '';
 
   if (stage === 'reframe' || stage === 'full') {
+    // Sprint 2: 4-section structured answer (PRD §07 UXS-07, UXS-08)
     systemPrompt += `
 
 Respond ONLY with valid JSON (no markdown fences) in this exact shape — fill every field with substantive content:
 {
-  "keyInsight": {
-    "title": "A single sharp, counter-intuitive headline (10 words max)",
-    "body": "2-3 sentences expanding the insight. Specific, not generic. Lead with the non-obvious signal."
+  "recommendation": "2-4 sentences. The most direct answer to the decision. Lead with what they should do, not setup. Rust-coloured headline treatment — this is the thing they need to hear most.",
+  "diagnosis": "2-3 sentences. How you read their specific situation given what they told you. Reference their leaning and success condition explicitly. Label: How we read your situation.",
+  "frameworkApplied": {
+    "label": "Why [Thinker name] would say this",
+    "body": "2-3 sentences. The specific reasoning or pattern from this Thinker's framework that drives the recommendation. Not generic — tied to what this operator has actually navigated."
   },
-  "frames": [
-    { "label": "Bottleneck", "title": "Name the core constraint", "body": "What is the real blocker and why the obvious fix misses it." },
-    { "label": "Leverage", "title": "Name the asymmetric move", "body": "The highest-leverage action that compounds — why this and not the alternatives." },
-    { "label": "Risk", "title": "Name the failure mode", "body": "The most likely way this goes wrong and the early signal that it is." }
+  "conditions": [
+    "Condition 1 that would change this recommendation",
+    "Condition 2 that would change this recommendation",
+    "Condition 3 that would change this recommendation"
   ],
-  "verificationTest": "Specific, measurable sentence: 'If this is working, within [X days/weeks] you will see [specific metric or behavior change]. The signal to watch: [one leading indicator].'",
-  "nextMove": "The single highest-leverage action to take in the next 72 hours. One sentence, starts with a verb."
+  "nextMove": "The single highest-leverage action to take in the next 72 hours. One sentence, starts with a verb.",
+  "verificationTest": "Specific, measurable sentence: 'If this is working, within [X days/weeks] you will see [specific metric or behavior change]. The signal to watch: [one leading indicator].'"
 }`;
-    userPrompt = `Problem / decision: "${decision || decisionText}"`;
+    // Build user prompt with all three intake fields
+    const intake = (typeof _lpIntakeData !== 'undefined' && _lpIntakeData) ? _lpIntakeData : null;
+    if (intake?.currentPosition || intake?.successCondition) {
+      userPrompt = `Decision: "${intake.decision || decision || decisionText}"\nCurrent leaning: "${intake.currentPosition || ''}"\nSuccess condition: "${intake.successCondition || ''}"`;
+    } else {
+      userPrompt = `Decision: "${decision || decisionText}"`;
+    }
   } else if (stage === 'questions') {
     systemPrompt += ` Return ONLY a JSON array of 3 sharp diagnostic questions (strings) that would clarify this problem — no extra keys, no markdown.`;
     userPrompt = `Problem: "${decision || decisionText}"`;
@@ -9892,34 +9950,125 @@ let _dcSelectedProj = null;
    LAUNCHPAD INTAKE CARD — Sprint 1.5
    (Sprint 2: wire submit logic per Pivot Plan 2.1 task 2.1)
 ══════════════════════════════════════ */
+/* ── Sprint 2: Structured intake — globals ─────────────────────────── */
+let _lpIntakeData = null;           // Holds {decision, currentPosition, successCondition} on submit
+const _lpArticTimers  = {};         // Per-field 90s timers
+const _lpArticShown   = {};         // Whether assist already shown this focus session
+const LP_MIN_CHARS    = 40;         // Minimum per field
+
 function lpIntakeUpdate(field, ta) {
-  // Visual-only counter — Sprint 2 wires 40-char minimum + submit enable logic
-  const counterId = 'lp-counter-' + field;
-  const counter = document.getElementById(counterId);
-  if (!counter) return;
   const len = (ta && ta.value) ? ta.value.length : 0;
-  if (len >= 200) {
-    counter.textContent = len + ' / 500';
-    counter.style.display = '';
-  } else {
-    counter.style.display = 'none';
+
+  // Character counter at 200+
+  const counter = document.getElementById('lp-counter-' + field);
+  if (counter) {
+    if (len >= 200) { counter.textContent = len + ' / 500'; counter.style.display = ''; }
+    else { counter.style.display = 'none'; }
+  }
+
+  // Hide validation message while typing
+  const valid = document.getElementById('lp-valid-' + field);
+  if (valid && len >= LP_MIN_CHARS) valid.style.display = 'none';
+
+  // Hide articulation assist once user is typing substantively
+  if (len >= LP_MIN_CHARS) {
+    const assist = document.getElementById('lp-assist-' + field);
+    if (assist) assist.style.display = 'none';
+    _lpArticShown[field] = false;
+  }
+
+  // Reset 90s articulation timer on any input
+  _lpArticClear(field);
+  if (len > 0 && len < LP_MIN_CHARS) _lpArticStart(field, ta);
+
+  // Enable submit when all three fields meet the minimum
+  _lpCheckSubmitReady();
+}
+
+function lpIntakeFocus(field) {
+  const ta = document.getElementById('lp-field-' + field);
+  if (!ta) return;
+  if (ta.value.length < LP_MIN_CHARS && !_lpArticShown[field]) {
+    _lpArticStart(field, ta);
   }
 }
 
-function _initLaunchpadIntakeCard() {
-  // Show tier note for Free plan users per spec §Tier Behaviour
-  const plan = getUserPlan ? getUserPlan() : 'free';
-  const noteEl = document.getElementById('lp-intake-tier-note');
-  if (!noteEl) return;
-  if (plan === 'free') {
-    const used = (typeof loadChatSessions === 'function') ? loadChatSessions().length : 0;
-    const limit = 3;
-    const remaining = Math.max(0, limit - used);
-    noteEl.textContent = 'Free tier: ' + remaining + ' Perspective' + (remaining !== 1 ? 's' : '') + ' remaining';
-    noteEl.style.display = '';
-  } else {
-    noteEl.style.display = 'none';
+function lpIntakeBlur(field, ta) {
+  _lpArticClear(field);
+  const len = (ta && ta.value) ? ta.value.length : 0;
+  if (len > 0 && len < LP_MIN_CHARS) {
+    const valid = document.getElementById('lp-valid-' + field);
+    if (valid) valid.style.display = '';
   }
+}
+
+function _lpArticClear(field) {
+  if (_lpArticTimers[field]) { clearTimeout(_lpArticTimers[field]); _lpArticTimers[field] = null; }
+}
+
+function _lpArticStart(field, ta) {
+  _lpArticClear(field);
+  _lpArticTimers[field] = setTimeout(() => {
+    const el = ta || document.getElementById('lp-field-' + field);
+    if (!el) return;
+    if (el.value.length < LP_MIN_CHARS && !_lpArticShown[field]) {
+      const assist = document.getElementById('lp-assist-' + field);
+      if (assist) { assist.style.display = ''; _lpArticShown[field] = true; }
+    }
+  }, 90000);
+}
+
+function _lpCheckSubmitReady() {
+  const fields = ['decision', 'leaning', 'success'];
+  const allMet = fields.every(f => {
+    const ta = document.getElementById('lp-field-' + f);
+    return ta && ta.value.trim().length >= LP_MIN_CHARS;
+  });
+  const btn = document.getElementById('lp-intake-submit');
+  if (btn) btn.disabled = !allMet;
+}
+
+function lpSubmitIntake() {
+  const decision  = (document.getElementById('lp-field-decision')?.value  || '').trim();
+  const leaning   = (document.getElementById('lp-field-leaning')?.value   || '').trim();
+  const success   = (document.getElementById('lp-field-success')?.value   || '').trim();
+
+  // Final guard (button should already be disabled if not met)
+  if (decision.length < LP_MIN_CHARS || leaning.length < LP_MIN_CHARS || success.length < LP_MIN_CHARS) {
+    ['decision','leaning','success'].forEach(f => {
+      const ta = document.getElementById('lp-field-' + f);
+      const vl = document.getElementById('lp-valid-' + f);
+      if (ta && ta.value.trim().length < LP_MIN_CHARS && vl) vl.style.display = '';
+    });
+    return;
+  }
+
+  // Persist structured intake (2.7 — discrete fields)
+  _lpIntakeData = { decision, currentPosition: leaning, successCondition: success, timestamp: Date.now() };
+
+  // Open perspective flow with structured data
+  _openPerspectiveFlowStructured(_lpIntakeData);
+}
+
+function _initLaunchpadIntakeCard() {
+  const plan = getUserPlan ? getUserPlan() : 'free';
+
+  // Tier note for Free
+  const noteEl = document.getElementById('lp-intake-tier-note');
+  if (noteEl) {
+    if (plan === 'free') {
+      const used = (typeof loadChatSessions === 'function') ? loadChatSessions().length : 0;
+      const remaining = Math.max(0, 3 - used);
+      noteEl.textContent = 'Free tier: ' + remaining + ' Perspective' + (remaining !== 1 ? 's' : '') + ' remaining';
+      noteEl.style.display = '';
+    } else {
+      noteEl.style.display = 'none';
+    }
+  }
+
+  // Privacy note for Enterprise (per PRD §07 UXS-02)
+  const privacyEl = document.getElementById('lp-intake-privacy-note');
+  if (privacyEl) privacyEl.style.display = plan === 'enterprise' ? '' : 'none';
 }
 
 function dcInputUpdate(ta) {
@@ -11459,7 +11608,8 @@ function openRecent(i) {
       <div class="is-thinker-row">
         <div class="is-thinker-badge" style="background:${r.thinker?.color||'#BF452A'}">${r.thinker?.initials||'?'}</div>
         <span class="is-thinker-name">${r.thinker?.name||''} · ${r.thinker?.title||''}</span>
-      </div>`;
+      </div>
+      ${!_hasActivatedThinkers() ? `<div class="is-baseline-note">This Perspective uses Divine's baseline reasoning. Verified Thinker frameworks are activating soon.</div>` : ''}`;
   }
 
   // Render initial perspective as first stepper block
@@ -13326,8 +13476,40 @@ let _pfEncTimer      = null;
 let _pfEncStatusIdx  = 0;
 
 function openPerspectiveFlow(prefill) {
-  // Redirect to the new chat screen
+  // Redirect to the new chat screen (legacy path)
   openChat(prefill);
+}
+
+// Sprint 2 path — opened from the structured intake card
+function _openPerspectiveFlowStructured(intake) {
+  _pfActiveThinker = null;
+  _pfEncTimer = null;
+  clearTimeout(_pfEncTimer);
+
+  // Set decision text from structured intake
+  decisionText = intake.decision;
+
+  // Reset dot + progress
+  const dot = document.getElementById('pf-dot');
+  if (dot) dot.style.cssText = '';
+  pfSetProgress(6);
+
+  // Show overlay
+  const ov = document.getElementById('pf-overlay');
+  ov.classList.remove('pf-enc-active');
+  ov.classList.add('open');
+  requestAnimationFrame(() => requestAnimationFrame(() => ov.classList.add('pf-visible')));
+  document.body.style.overflow = 'hidden';
+
+  // Reset invoke button
+  const invokeBtn = document.getElementById('pf-invoke-btn');
+  if (invokeBtn) invokeBtn.classList.remove('pf-ready');
+
+  // Stage 1 is now the launchpad card — go straight to Stage 2 (Thinker selection)
+  pfSetProgress(35);
+  pfSetDot({ size:'16px', color:'#BF452A', opacity:'.7', glow:true });
+  pfShowStage(2);
+  pfRenderThinkers();
 }
 function _openPerspectiveFlowLegacy(prefill) {
   _pfActiveThinker = null;
@@ -13522,36 +13704,56 @@ async function pfToEncoding() {
   setTimeout(() => encDot.classList.add('pf-expanding'), 300);
   setTimeout(() => encDot.classList.add('pf-breathing'), 1700);
 
-  // Cycle status messages
-  const statuses = [
-    `Aligning with ${_pfActiveThinker.name.split(' ')[0]}'s Theory of Victory…`,
-    'Bypassing generic logic…',
-    'Calibrating cognitive lens…',
-    'Synthesising prophetic insight…',
-    'Crystallising your perspective…',
+  // Three-phase loading per Launchpad Spec & PRD §07 UXS-05
+  const phases = [
+    { copy: 'Reading your decision.',           delay: 0,     duration: 8000  },
+    { copy: 'Matching to operator framework.',  delay: 8000,  duration: 10000 },
+    { copy: 'Synthesising recommendation.',     delay: 18000, duration: 99999 },
   ];
-  _pfEncStatusIdx = 0;
-  function cycleStatus() {
-    if (_pfEncStatusIdx >= statuses.length) return;
-    encStatus.innerHTML = `<span class="pf-enc-status-line">${statuses[_pfEncStatusIdx++]}</span>`;
-    _pfEncTimer = setTimeout(cycleStatus, 1900);
+  let _currentPhase = 0;
+  function showPhase(idx) {
+    if (idx >= phases.length) return;
+    // Fade out current
+    encStatus.classList.add('pf-phase-fading');
+    setTimeout(() => {
+      encStatus.innerHTML = `<span class="pf-phase-line">${phases[idx].copy}</span>`;
+      encStatus.classList.remove('pf-phase-fading');
+      _currentPhase = idx;
+      if (idx + 1 < phases.length) {
+        _pfEncTimer = setTimeout(() => showPhase(idx + 1), phases[idx + 1].delay - phases[idx].delay);
+      }
+    }, idx === 0 ? 0 : 400);
   }
-  cycleStatus();
+  showPhase(0);
 
-  // Build session object
+  // Build session object — Sprint 2: discrete intake fields (2.7)
+  const intakeData = (typeof _lpIntakeData !== 'undefined' && _lpIntakeData) ? _lpIntakeData : null;
   currentSession = {
     id: String(Date.now()), date: new Date().toISOString(),
     thinker: { name:_pfActiveThinker.name, initials:_pfActiveThinker.initials, color:_pfActiveThinker.color, title:_pfActiveThinker.title },
-    decision: decisionText, keyInsight:null, frames:[], projectId:null
+    decision:         intakeData?.decision        || decisionText,
+    currentPosition:  intakeData?.currentPosition || '',
+    successCondition: intakeData?.successCondition|| '',
+    keyInsight:null, frames:[], recommendation:null, diagnosis:null, frameworkApplied:null, conditions:[], projectId:null
   };
 
   try {
     const raw = await callPerspective({ stage:'reframe', decision:decisionText, answers:[], onChunk:null });
     clearTimeout(_pfEncTimer);
     const d = parseJSON(raw);
-    if (d?.keyInsight && d?.frames) {
-      currentSession.keyInsight = d.keyInsight;
-      currentSession.frames     = d.frames;
+    // Accept both Sprint 2 format (recommendation/diagnosis) and legacy format (keyInsight/frames)
+    const isS2 = d?.recommendation;
+    const isLegacy = d?.keyInsight && d?.frames;
+    if (isS2 || isLegacy) {
+      if (isS2) {
+        currentSession.recommendation   = d.recommendation;
+        currentSession.diagnosis        = d.diagnosis;
+        currentSession.frameworkApplied = d.frameworkApplied;
+        currentSession.conditions       = d.conditions || [];
+      } else {
+        currentSession.keyInsight = d.keyInsight;
+        currentSession.frames     = d.frames;
+      }
       pfToRevelation(d);
     } else {
       throw new Error('parse');
@@ -13596,12 +13798,78 @@ async function pfToEncoding() {
   }
 }
 
-// Stage 3 → 4 (Revelation)
+// Stage 3 → 4 (Revelation) — Sprint 2: 4-section answer reveal (PRD §07 UXS-07, UXS-08)
 function pfToRevelation(d) {
   pfSetProgress(100);
   document.getElementById('pf-overlay').classList.remove('pf-enc-active');
 
   const t = _pfActiveThinker;
+  const isBaseline = !_hasActivatedThinkers();
+
+  // ── Baseline label (shown when no verified Thinker frameworks active) ──
+  const baselineLabelHtml = isBaseline ? `
+    <div class="pf-baseline-label">
+      <svg class="pf-baseline-label-icon" width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="7" cy="7" r="5.5"/><path d="M7 4.5v3M7 9.5v.5"/></svg>
+      This Perspective uses Divine's baseline reasoning. Verified Thinker frameworks are activating soon.
+    </div>` : '';
+
+  // Determine if we have Sprint 2 structured response or legacy
+  const isS2 = !!(d.recommendation);
+
+  // ── SPRINT 2: 4-section answer reveal ──────────────────────────────────
+  let answerHtml = '';
+  if (isS2) {
+    const thinkerName = t?.name || 'This Thinker';
+    const frameworkLabel = d.frameworkApplied?.label || `Why ${thinkerName.split(' ')[0]} would say this`;
+
+    const conditionsHtml = (d.conditions && d.conditions.length) ? `
+    <div class="pf-s2-conditions" id="pf-s2-conditions">
+      <div class="pf-s2-section-label">This changes if…</div>
+      <ul class="pf-s2-conditions-list">
+        ${d.conditions.slice(0,3).map(c => `<li>${c}</li>`).join('')}
+      </ul>
+    </div>` : '';
+
+    answerHtml = `
+    <!-- Section 1: Recommendation (no label, largest, rust) -->
+    <div class="pf-s2-recommendation" id="pf-s2-rec" style="opacity:0;transition:opacity .5s ease">${d.recommendation || ''}</div>
+
+    <!-- Section 2: Diagnosis -->
+    <div class="pf-s2-diagnosis" id="pf-s2-diag" style="opacity:0;transition:opacity .45s ease .15s">
+      <div class="pf-s2-section-label">How we read your situation.</div>
+      <div class="pf-s2-diagnosis-body">${d.diagnosis || ''}</div>
+    </div>
+
+    <!-- Section 3: Framework Applied -->
+    <div class="pf-s2-framework" id="pf-s2-fw" style="opacity:0;transition:opacity .45s ease .3s">
+      ${t ? `<div class="pf-s2-framework-thinker">
+        <div class="pf-s2-framework-avatar" style="background:${t.color||'var(--accent)'}">${t.initials||''}</div>
+        <div class="pf-s2-framework-name">${frameworkLabel}</div>
+      </div>` : `<div class="pf-s2-section-label" style="margin-bottom:10px">${frameworkLabel}</div>`}
+      <div class="pf-s2-framework-body">${d.frameworkApplied?.body || ''}</div>
+    </div>
+
+    <!-- Section 4: Conditions That Change This -->
+    ${conditionsHtml}`;
+  } else {
+    // ── Legacy format (keyInsight + frames) — backward compat ──────────────
+    answerHtml = `
+    <div class="pf-revel-insight">
+      <div class="pf-ri-label">Key Insight</div>
+      <div class="pf-ri-title" id="pf-ri-title"></div>
+      <div class="pf-ri-body" id="pf-ri-body" style="opacity:0;transition:opacity .55s ease .1s"></div>
+    </div>
+    <div class="pf-revel-frames" id="pf-revel-frames">
+      ${(d.frames||[]).map((f, i) => `
+        <div class="pf-revel-frame" id="pf-rf-${i}">
+          <div class="pf-rf-label">${f.label || ''}</div>
+          <div class="pf-rf-title">${f.title || ''}</div>
+          <div class="pf-rf-body">${f.body  || ''}</div>
+        </div>`).join('')}
+    </div>`;
+  }
+
+  // ── Thinker Match Display (2.4) — credential line ──────────────────────
   const thinkerHtml = t ? `
     <div class="pf-revel-thinker">
       <div class="pf-revel-thinker-avatar" style="background:${t.color || 'var(--accent)'}">
@@ -13609,7 +13877,8 @@ function pfToRevelation(d) {
       </div>
       <div class="pf-revel-thinker-info">
         <div class="pf-revel-thinker-name">${t.name || ''}</div>
-        <div class="pf-revel-thinker-title">${t.title || ''}</div>
+        <div class="pf-match-credential">${t.lens || t.title || ''}</div>
+        <div class="pf-match-confidence">${t.name?.split(' ')[0] || 'This Thinker'} has navigated decisions in ${(t.categories||[]).join(', ') || 'multiple domains'}.</div>
       </div>
     </div>` : '';
 
@@ -13619,28 +13888,23 @@ function pfToRevelation(d) {
       <div class="pf-revel-question-text">${decisionText}</div>
     </div>` : '';
 
-  const el = document.getElementById('pf-revelation');
-  el.innerHTML = `
-    ${thinkerHtml}
-    ${questionHtml}
-    <div class="pf-cost-bar">
-      <span class="pf-cost-badge">Perspective Secured</span>
-      <span class="pf-cost-text">Deducted from your balance</span>
-    </div>
-    <div class="pf-revel-insight">
-      <div class="pf-ri-label">Key Insight</div>
-      <div class="pf-ri-title" id="pf-ri-title"></div>
-      <div class="pf-ri-body" id="pf-ri-body" style="opacity:0;transition:opacity .55s ease .1s"></div>
-    </div>
-    <div class="pf-revel-frames" id="pf-revel-frames">
-      ${d.frames.map((f, i) => `
-        <div class="pf-revel-frame" id="pf-rf-${i}">
-          <div class="pf-rf-label">${f.label || ''}</div>
-          <div class="pf-rf-title">${f.title || ''}</div>
-          <div class="pf-rf-body">${f.body  || ''}</div>
-        </div>`).join('')}
-    </div>
-    ${d.nextMove ? `
+  // ── Founder's Note (2.5) — collapsed, with disclosure block ────────────
+  const fnDismissed = (() => { try { return JSON.parse(localStorage.getItem('_fn_dismissed')||'false'); } catch(e) { return false; } })();
+  const founderNoteHtml = !fnDismissed ? `
+    <div class="pf-founder-note" id="pf-founder-note">
+      <div class="pf-fn-toggle" onclick="pfToggleFounderNote()">
+        <span class="pf-fn-toggle-label">Founder's Note on this decision class</span>
+        <span class="pf-fn-toggle-icon">▾</span>
+      </div>
+      <div class="pf-fn-body">
+        <div class="pf-fn-disclosure">Michael Akindele is the founder of Divine and a principal of Uncharted Ventures LLC, the entity that operates Divine. This reflection is provided as supplementary context. It is not a Thinker recommendation. Thinkers are independent, contractually engaged operators whose frameworks are routed through Divine's verification and quality systems. Founder Voice is not subject to those systems and does not earn revenue from your session.</div>
+        <div class="pf-fn-content">The decisions that are hardest to get right are rarely the ones that feel hard. They feel obvious in the moment — you have a number in front of you, a deadline, a term sheet. The ones that quietly go wrong are the ones where the framing was wrong before you started. That's what this platform is for: catching the frame before you execute against it.</div>
+        <span class="pf-fn-dismiss" onclick="pfDismissFounderNote()">Don't show this again</span>
+      </div>
+    </div>` : '';
+
+  // ── Next Move / Verification (both formats) ─────────────────────────────
+  const nextMoveHtml = d.nextMove ? `
     <div class="pf-next-move" id="pf-next-move" style="opacity:0;transition:opacity .4s ease">
       <div class="pf-next-move-icon">
         <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="rgba(255,255,255,.7)" stroke-width="1.75" stroke-linecap="round"><path d="M2 7h10M8 3l4 4-4 4"/></svg>
@@ -13649,46 +13913,80 @@ function pfToRevelation(d) {
         <div class="pf-next-move-label">Next Move — 72 hrs</div>
         <div class="pf-next-move-text">${d.nextMove}</div>
       </div>
-    </div>` : ''}
-    ${d.verificationTest ? `
+    </div>` : '';
+
+  const verifyHtml = d.verificationTest ? `
     <div class="pf-verify" id="pf-verify" style="opacity:0;transition:opacity .4s ease">
       <div class="pf-verify-label">
         <svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.75"><circle cx="6" cy="6" r="4.5"/><path d="M6 4v2.5l1.5 1.5"/></svg>
         Verification Test
       </div>
       <div class="pf-verify-text">${d.verificationTest}</div>
-    </div>` : ''}
+    </div>` : '';
+
+  const el = document.getElementById('pf-revelation');
+  el.innerHTML = `
+    ${baselineLabelHtml}
+    ${thinkerHtml}
+    ${questionHtml}
+    <div class="pf-cost-bar">
+      <span class="pf-cost-badge">Perspective Secured</span>
+      <span class="pf-cost-text">Deducted from your balance</span>
+    </div>
+    ${answerHtml}
+    ${nextMoveHtml}
+    ${verifyHtml}
     <div class="pf-revel-actions">
       <button class="pf-revel-save" onclick="pfSavePerspective()">Save to Perspective</button>
       <button class="pf-revel-view" onclick="pfViewPerspective()">View Perspective</button>
       <button class="pf-revel-try"  onclick="pfTryAnotherThinker()">Try another Thinker</button>
       <button class="pf-revel-new"  onclick="pfStartNew()">New Perspective</button>
-    </div>`;
+    </div>
+    ${founderNoteHtml}`;
 
   pfShowStage(4);
 
-  // Typewrite key insight title, then fade in body, then stagger frames
-  pfTypewrite('pf-ri-title', d.keyInsight.title, 26, () => {
-    document.getElementById('pf-ri-body').textContent = d.keyInsight.body;
-    document.getElementById('pf-ri-body').style.opacity = '.88';
-    const frameCount = d.frames.length;
-    d.frames.forEach((_, i) => {
+  if (isS2) {
+    // Sprint 2: stagger-fade the 4 sections in sequence
+    const rec  = document.getElementById('pf-s2-rec');
+    const diag = document.getElementById('pf-s2-diag');
+    const fw   = document.getElementById('pf-s2-fw');
+    const cond = document.getElementById('pf-s2-conditions');
+    const nm   = document.getElementById('pf-next-move');
+    const vt   = document.getElementById('pf-verify');
+    const fn   = document.getElementById('pf-founder-note');
+
+    setTimeout(() => { if (rec)  rec.style.opacity  = '1'; }, 80);
+    setTimeout(() => { if (diag) diag.style.opacity = '1'; }, 400);
+    setTimeout(() => { if (fw)   fw.style.opacity   = '1'; }, 700);
+    setTimeout(() => { if (cond) { cond.style.opacity = '1'; cond.style.transition = 'opacity .4s ease'; } }, 950);
+    setTimeout(() => { if (nm)   nm.style.opacity   = '1'; }, 1200);
+    setTimeout(() => { if (vt)   vt.style.opacity   = '1'; }, 1400);
+    // Founder's Note fades in after main content settles (FV-05: at most once per session, frequency cap)
+    const _fnShownThisSession = (typeof sessionStorage !== 'undefined') && sessionStorage.getItem('_fn_shown');
+    if (fn && !_fnShownThisSession) {
       setTimeout(() => {
-        const fc = document.getElementById(`pf-rf-${i}`);
-        if (fc) fc.classList.add('pf-in');
-      }, 320 + i * 110);
+        fn.classList.add('pf-fn-visible');
+        try { sessionStorage.setItem('_fn_shown', '1'); } catch(e) {}
+      }, 1800);
+    }
+  } else {
+    // Legacy: typewrite key insight title, then fade in body + frames
+    pfTypewrite('pf-ri-title', (d.keyInsight?.title || ''), 26, () => {
+      const bodyEl = document.getElementById('pf-ri-body');
+      if (bodyEl) { bodyEl.textContent = d.keyInsight?.body || ''; bodyEl.style.opacity = '.88'; }
+      const frameCount = (d.frames || []).length;
+      (d.frames || []).forEach((_, i) => {
+        setTimeout(() => {
+          const fc = document.getElementById(`pf-rf-${i}`);
+          if (fc) fc.classList.add('pf-in');
+        }, 320 + i * 110);
+      });
+      const postDelay = 320 + frameCount * 110 + 300;
+      setTimeout(() => { const nm = document.getElementById('pf-next-move'); if (nm) nm.style.opacity = '1'; }, postDelay);
+      setTimeout(() => { const vt = document.getElementById('pf-verify');    if (vt) vt.style.opacity = '1'; }, postDelay + 200);
     });
-    // Fade in Next Move and Verification Test after frames settle
-    const postDelay = 320 + frameCount * 110 + 300;
-    setTimeout(() => {
-      const nm = document.getElementById('pf-next-move');
-      if (nm) nm.style.opacity = '1';
-    }, postDelay);
-    setTimeout(() => {
-      const vt = document.getElementById('pf-verify');
-      if (vt) vt.style.opacity = '1';
-    }, postDelay + 200);
-  });
+  }
 }
 
 function pfTypewrite(elId, text, speed, onDone) {
@@ -13732,6 +14030,18 @@ function pfTryAnotherThinker() {
   pfSetDot({ size:'16px', color:'#BF452A', opacity:'.7', glow:true });
   pfShowStage(2);
   pfRenderThinkers();
+}
+
+// Sprint 2: Founder's Note interactions (FV-05)
+function pfToggleFounderNote() {
+  const el = document.getElementById('pf-founder-note');
+  if (el) el.classList.toggle('pf-fn-open');
+}
+
+function pfDismissFounderNote() {
+  try { localStorage.setItem('_fn_dismissed', 'true'); } catch(e) {}
+  const el = document.getElementById('pf-founder-note');
+  if (el) { el.style.opacity = '0'; setTimeout(() => el.remove(), 400); }
 }
 
 /* ════════════════════════════════
